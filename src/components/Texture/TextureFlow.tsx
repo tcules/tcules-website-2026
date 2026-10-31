@@ -13,6 +13,23 @@ export type TextureFlowProps = {
    * (owner, 23 Oct 2026). Absent, the field runs the whole box.
    */
   fade?: 'start';
+  /**
+   * `resolve` (default): loose loops at the start, easing into parallel streams toward the end (the
+   * enquiry close). `turbulent`: the start's loose churn runs the whole box and never settles, for a
+   * ground with no direction to resolve toward (owner, 31 Oct 2026, About's Lab card).
+   */
+  flow?: 'resolve' | 'turbulent';
+  /**
+   * Fade the field out toward the box's edge as a rounded rectangle (--tex-flow-feather wide, its
+   * levels rounded at --tex-flow-feather-radius), rather than stopping at the edge: for a paper island
+   * on paper, where the field alone draws the island (owner, 31 Oct 2026).
+   */
+  feather?: boolean;
+  /**
+   * Reach past the box's top and bottom into the neighbouring bands' air (--tex-flow-bleed), for a
+   * field on an open band (Section `density="open"`, which raises the band so it shows).
+   */
+  bleed?: boolean;
 };
 
 /* The grid's rows as GLSL: the same cells Texture draws (pixel-grid.json), so the moving field and
@@ -34,7 +51,7 @@ const COL_WIDTH = grid.cells[0]?.width ?? 3;
 const FRAG = `
 precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform vec4 uCalm;
-uniform float uFade; uniform vec3 uInk;
+uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec4 uFocus; uniform float uFaint; uniform vec3 uInk;
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -60,8 +77,10 @@ void main(){
   vec2 c = floor(px / P) * P + P * 0.5;            // the field is read once per cell
   float calm = uCalm.z > uCalm.x ? box(uCalm, c, 160.0) : 0.0;
   float lx = clamp((c.x - 0.12 * W.x) / (0.5 * W.x), 0.0, 1.0);
-  float settle = lx * lx * lx * (lx * (lx * 6.0 - 15.0) + 10.0);
-  float loose = (1.0 - settle) * (1.0 - calm);
+  float settle = uSettle * lx * lx * lx * (lx * (lx * 6.0 - 15.0) + 10.0);
+  // Resolving, the water behind the words is still; turbulent (uSettle 0), it keeps churning and is
+  // only quieter there, so a formless island reads turbulent across (owner, 31 Oct 2026).
+  float loose = (1.0 - settle) * (1.0 - calm * uSettle);
 
   vec2 T = vec2(W.x + 900.0, W.y * 0.5);
   vec2 d = T - c;
@@ -82,6 +101,19 @@ void main(){
   float cx = clamp((hw - abs(lp.x)) / (2.0 * aa) + 0.5, 0.0, 1.0);
   float cy = clamp((P * 0.5 - abs(lp.y)) / (2.0 * aa) + 0.5, 0.0, 1.0);
   float a = cx * cy * rowAlpha(floor(lp.y + P * 0.5)) * tone;
+  if (uFeather.x > 0.0) {
+    // A rounded-rectangle fade: full strength inside the box inset by the feather, gone at the box's
+    // edge, every level of the fade a rounded rectangle (radius uFeather.y) so no corner is drawn.
+    vec2 hb = W * 0.5;
+    vec2 q = abs(px - hb) - (hb - vec2(uFeather.x + uFeather.y));
+    float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uFeather.y;
+    a *= 1.0 - smoothstep(0.0, uFeather.x, d);
+  }
+  if (uFocus.z > uFocus.x) {
+    // Full strength around the words (\`data-texture-focus\`), faint (uFaint) everywhere else, the step
+    // between them feathered wide so the focus has no edge.
+    a *= mix(uFaint, 1.0, box(uFocus, c, 160.0));
+  }
   gl_FragColor = vec4(uInk * a, a);
 }`;
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
@@ -97,21 +129,34 @@ const FRAME_MS = 1000 / 30;
  *
  * Fills its nearest positioned ancestor, as Texture does, between the ground and the content. The
  * words it must stay quiet behind are any descendant of that ancestor marked `data-texture-calm`
- * (the first one), so the caller composes and this never reaches for a pattern.
+ * (the first one), so the caller composes and this never reaches for a pattern. A descendant marked
+ * `data-texture-focus` is the reverse: the field is at full strength around it and faint
+ * (--tex-flow-faint) everywhere else (owner, 31 Oct 2026, About's studio links).
  *
  * Decorative: hidden from assistive tech, no pointer events. Motion only while on screen and the
  * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
  * nothing and the ground stands plain.
  */
-export function TextureFlow({ fade }: TextureFlowProps) {
+export function TextureFlow({
+  fade,
+  flow = 'resolve',
+  feather = false,
+  bleed = false,
+}: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
+  const settleOn = flow === 'turbulent' ? 0 : 1;
+  const featherOn = feather;
 
   useEffect(() => {
     const canvas = ref.current;
     const host = canvas?.parentElement;
     if (!canvas || !host) return;
-    const gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false, alpha: true });
+    const gl = canvas.getContext('webgl', {
+      premultipliedAlpha: true,
+      antialias: false,
+      alpha: true,
+    });
     if (!gl) return;
     /* A lost context (a GPU reset, or the browser's cap on live contexts when a page carries many
        fields, as the CtaSection specimen does) leaves the canvas painting the browser's own
@@ -127,7 +172,8 @@ export function TextureFlow({ fade }: TextureFlowProps) {
       gl.compileShader(s);
       return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
     };
-    const vs = shader(gl.VERTEX_SHADER, VERT), fs = shader(gl.FRAGMENT_SHADER, FRAG);
+    const vs = shader(gl.VERTEX_SHADER, VERT),
+      fs = shader(gl.FRAGMENT_SHADER, FRAG);
     const prog = gl.createProgram();
     if (!vs || !fs || !prog) return;
     gl.attachShader(prog, vs);
@@ -137,20 +183,40 @@ export function TextureFlow({ fade }: TextureFlowProps) {
     gl.useProgram(prog);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      gl.STATIC_DRAW,
+    );
     const loc = gl.getAttribLocation(prog, 'p');
     gl.enableVertexAttribArray(loc);
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
     const u = (n: string) => gl.getUniformLocation(prog, n);
-    const U = { res: u('uRes'), dpr: u('uDpr'), time: u('uTime'), calm: u('uCalm'), fade: u('uFade'), ink: u('uInk') };
+    const U = {
+      res: u('uRes'),
+      dpr: u('uDpr'),
+      time: u('uTime'),
+      calm: u('uCalm'),
+      fade: u('uFade'),
+      settle: u('uSettle'),
+      feather: u('uFeather'),
+      focus: u('uFocus'),
+      faint: u('uFaint'),
+      ink: u('uInk'),
+    };
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     /* Start mid-flow, so the first frame is already a composed field. */
     const T0 = 12;
-    let held = T0, start = performance.now(), raf = 0, last = 0, visible = true;
+    let held = T0,
+      start = performance.now(),
+      raf = 0,
+      last = 0,
+      visible = true;
 
     const measure = () => {
-      const box = host.getBoundingClientRect();
+      /* The canvas's own box: the host's, or taller where the field bleeds past it. */
+      const box = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(box.width * dpr);
       canvas.height = Math.round(box.height * dpr);
@@ -158,11 +224,49 @@ export function TextureFlow({ fade }: TextureFlowProps) {
       gl.uniform2f(U.res, canvas.width, canvas.height);
       gl.uniform1f(U.dpr, dpr);
       gl.uniform1f(U.fade, fadeOn);
+      gl.uniform1f(U.settle, settleOn);
+      /* The feather's width and corner radius, from the surface's tokens (--tex-flow-feather*). */
+      const cs = getComputedStyle(canvas);
+      gl.uniform2f(
+        U.feather,
+        featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather')) || 0 : 0,
+        featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather-radius')) || 0 : 0,
+      );
+      const focusEl = host.querySelector('[data-texture-focus]');
+      const f = focusEl?.getBoundingClientRect();
+      gl.uniform4f(
+        U.focus,
+        ...(f
+          ? ([
+              f.left - box.left,
+              f.top - box.top,
+              f.right - box.left,
+              f.bottom - box.top,
+            ] as const)
+          : ([0, 0, 0, 0] as const)),
+      );
+      gl.uniform1f(
+        U.faint,
+        parseFloat(getComputedStyle(canvas).getPropertyValue('--tex-flow-faint')) || 0.3,
+      );
       const calmEl = host.querySelector('[data-texture-calm]');
       const r = calmEl?.getBoundingClientRect();
-      gl.uniform4f(U.calm, ...(r ? [r.left - box.left, r.top - box.top, r.right - box.left, r.bottom - box.top] as const : [0, 0, 0, 0] as const));
+      gl.uniform4f(
+        U.calm,
+        ...(r
+          ? ([
+              r.left - box.left,
+              r.top - box.top,
+              r.right - box.left,
+              r.bottom - box.top,
+            ] as const)
+          : ([0, 0, 0, 0] as const)),
+      );
       /* --tex-ink, per surface: read from the canvas's own colour, which the class sets. */
-      const [r0 = 255, g0 = 255, b0 = 255] = getComputedStyle(canvas).color.match(/[\d.]+/g)?.map(Number) ?? [];
+      const [r0 = 255, g0 = 255, b0 = 255] =
+        getComputedStyle(canvas)
+          .color.match(/[\d.]+/g)
+          ?.map(Number) ?? [];
       gl.uniform3f(U.ink, r0 / 255, g0 / 255, b0 / 255);
     };
     const draw = (sec: number) => {
@@ -211,7 +315,13 @@ export function TextureFlow({ fade }: TextureFlowProps) {
       document.removeEventListener('visibilitychange', run);
       reduce.removeEventListener('change', run);
     };
-  }, [fadeOn]);
+  }, [fadeOn, settleOn, featherOn]);
 
-  return <canvas ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden="true"
+      className={cx(styles.texture, styles.flow, bleed && styles.flowBleed)}
+    />
+  );
 }

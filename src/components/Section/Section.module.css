@@ -57,7 +57,7 @@
    hero does not open on a void under the nav. Only the TOP: its foot keeps the page's one seam.
    `main >` because the first band of the page is the first child of the layout's main — or the
    band straight after a leading announcement strip, which sits above the hero. */
-main > .section:first-child:not(.flush, .strip),
+main > .section:first-child:not(.flush, .strip, .open),
 main > .strip:first-child + .section:not(.flush, .strip) {
   padding-block-start: var(--sec-padding-y-first);
 }
@@ -69,6 +69,15 @@ main > .strip:first-child + .section:not(.flush, .strip) {
 
 .flush {
   padding-block: 0;
+}
+
+/* The open band: room for a moving field to fade out around its words (owner, 31 Oct 2026). Its
+   field reaches into the air of the bands either side (TextureFlow `bleed`), so the band sits one
+   layer above its siblings: the next band's ground would otherwise paint over the field's lower
+   reach. Still far below the sticky nav (--z-sticky). */
+.open {
+  padding-block: var(--sec-padding-y-open);
+  z-index: calc(var(--z-base) + 1);
 }
 
 /* ── Two bands, two paddings (30 Sep 2026) ─────────────────────────────────────────────────────

@@ -797,3 +797,7 @@ statements, the format the owner rejected on 30 Oct. FinTech's first item ("**a 
 one that was already titled.
 
 **Found in.** Expertise pages pass, tracker 2.32.
+
+- **/about, the studio's links (31 Oct 2026).** LinkedIn, Clutch and Careers left "The practice keeps moving" for a
+  block of their own (owner). The block's title is ours, not the copy's: "Follow the studio, read its reviews,
+  join the team". For Jatin to keep or replace.

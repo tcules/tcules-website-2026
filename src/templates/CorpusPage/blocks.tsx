@@ -78,7 +78,7 @@ export function head(band: CorpusBand) {
 
 export type CorpusHeroProps = {
   page: CorpusPage;
-  arrangement?: 'stacked' | 'beside';
+  arrangement?: 'stacked' | 'beside' | 'centred';
   media?: HeroMedia;
   /** A bare run of facts (home's studio record), one tag each, after the actions. */
   tags?: readonly string[];

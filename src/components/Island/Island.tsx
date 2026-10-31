@@ -25,6 +25,12 @@ export type IslandProps = {
    * a paper band draws nothing. The primitive cannot see its band, so the patterns enforce that.
    */
   surface: IslandSurface;
+  /**
+   * `default`: the island's own inset (48). `band`: the band's own air (96; 64 and 32 below 768), for
+   * an island on a `flush` band whose texture runs through that air (owner, 31 Oct 2026, About's
+   * studio links).
+   */
+  inset?: 'default' | 'band';
   children: ReactNode;
 };
 
@@ -45,9 +51,12 @@ export type IslandProps = {
  * `className`, by design — its ground, inset and radius are the whole component, and a class that
  * moved any of them would be rule 5 (never override a surface from outside) one level down.
  */
-export function Island({ surface, children }: IslandProps) {
+export function Island({ surface, inset = 'default', children }: IslandProps) {
   return (
-    <div className={styles.island} data-surface={surface}>
+    <div
+      className={inset === 'band' ? `${styles.island} ${styles.insetBand}` : styles.island}
+      data-surface={surface}
+    >
       {children}
     </div>
   );

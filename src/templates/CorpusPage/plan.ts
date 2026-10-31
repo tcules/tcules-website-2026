@@ -157,6 +157,14 @@ function labelIsQuoted(block: CorpusBlock): boolean {
 /** The kind a band takes when its id alone does not decide it: read from the band's shape. */
 type ShapeRule = (band: CorpusBand, sig: string) => OfferKind;
 
+/** A band whose list items each open on a bold label ("**Who you work with.** One senior…"). */
+const boldLedList = (band: CorpusBand): boolean =>
+  band.blocks.some(
+    (block) =>
+      block.type === 'list' &&
+      block.items.every((runs) => boldLead(runs) !== null),
+  );
+
 const personaOrChallenges: ShapeRule = (band) =>
   isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'challenges';
 /** A term index (`A` lines) where the copy uses the same id for a tool group (`L` + `P`). */
@@ -233,7 +241,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'service-guide': 'table',
   services: (_band, sig) => (/^[KU]$/.test(sig) ? 'router' : 'text'),
   /* ── G13 · labelled claim sets ── */
-  'how-we-work': (_band, sig) => (/[ULI]/.test(sig) ? 'outcomes' : 'text'),
+  /* About's working terms, bold-led bullets: a drawn set of how the work runs (owner, 31 Oct 2026). */
+  'how-we-work': (band, sig) =>
+    /^UK?$/.test(sig) && boldLedList(band) ? 'tiles' : /[ULI]/.test(sig) ? 'outcomes' : 'text',
   'what-we-look-for': 'outcomes',
   'people-decide': 'outcomes',
   contents: 'outcomes',
@@ -249,7 +259,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'every-number': 'method',
   discovery: 'method',
   /* ── G15 · argued item sets ── */
-  difference: 'outcomes',
+  /* About's five stances on why Tcules over another studio: reasons to choose us (owner, 31 Oct 2026). */
+  difference: 'reasons',
   'who-uses-tcules': 'outcomes',
   'product-responsibility': 'outcomes',
   'why-join': 'outcomes',
@@ -347,7 +358,7 @@ export const TEMPLATE_BANDS = {
     'expertise',
     'insights',
   ],
-  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record'],
+  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record', 'work-with-tcules'],
   /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
   '/contact': ['brief', 'next-steps', 'confidentiality'],
   /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,
@@ -466,7 +477,9 @@ export function registerOf(
   page: CorpusPage,
   drawn: ReadonlySet<string>,
 ): VisualRegister {
-  const bound = page.composition.mediaBindings.some((m) => m.bound && m.supportsSection === band.id);
+  const bound = page.composition.mediaBindings.some(
+    (m) => m.bound && m.supportsSection === band.id,
+  );
   switch (kind) {
     case 'cases':
     case 'caseStories':
@@ -547,7 +560,8 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
                   ? exampleLink(block.runs) !== undefined
                   : block.type === 'item' &&
                     block.blocks.some(
-                      (inner) => inner.type === 'paragraph' && exampleLink(inner.runs) !== undefined,
+                      (inner) =>
+                        inner.type === 'paragraph' && exampleLink(inner.runs) !== undefined,
                     ),
               )),
       ...extra,

@@ -1260,7 +1260,9 @@ export function PageHero({
     const copyTrack = stack;
 
     const mediaTrack =
-      mediaNode === null ? null : centredHead ? (
+      mediaNode === null ? null : centredHead && isIllustration ? (
+        /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
+           centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
       ) : split && !isIllustration ? (
         /* Its own box, so the row's stretch reaches the copy track and never the photograph. */
