@@ -10,6 +10,7 @@ import {
   ContentSection,
   EnquiryForm,
   type EnquiryDress,
+  type EnquiryNextStep,
   ListCard,
   LogoGrid,
   PageHero,
@@ -676,6 +677,8 @@ export type EnquiryIsland = {
   illustration?: boolean;
   /** Set inside another band (the contact hero's `panel`) rather than as a band of its own. */
   inBand?: boolean;
+  /** What happens after a send, shown by the form's success view (the page's own steps). */
+  nextSteps?: readonly EnquiryNextStep[];
 };
 
 export function EnquiryBand({
@@ -716,6 +719,7 @@ export function EnquiryBand({
   };
   const surface = island.surface ?? 'blue';
   const dress = ENQUIRY_DRESS[island.dress ?? 'card'];
+  const treatment = { dress, nextSteps: island.nextSteps };
   const drawn = island.illustration ?? true;
   if ((island.arrangement ?? 'halves') === 'halves') {
     return (
@@ -730,7 +734,7 @@ export function EnquiryBand({
         heading={band.headingText}
         body={body}
         {...contactProps}
-        form={corpusEnquiryForm(page, band, { dress })}
+        form={corpusEnquiryForm(page, band, treatment)}
       />
     );
   }
@@ -743,7 +747,7 @@ export function EnquiryBand({
       art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}
       body={body}
-      form={corpusEnquiryForm(page, band, { dress })}
+      form={corpusEnquiryForm(page, band, treatment)}
     />
   );
 }
@@ -757,7 +761,7 @@ export function corpusEnquiryForm(
   page: CorpusPage,
   band?: CorpusBand,
   /** The island close's treatment: a dress for the form. Default: lg boxes, the full submit. */
-  treatment: { dress?: EnquiryDress } = {},
+  treatment: { dress?: EnquiryDress; nextSteps?: readonly EnquiryNextStep[] } = {},
 ) {
   const conversion = page.conversion;
   /* The band's own "After sending:" line ("We'll reply within one business day.") is the caption
@@ -778,6 +782,7 @@ export function corpusEnquiryForm(
       fieldScale={treatment.dress ? 'md' : 'lg'}
       submit={treatment.dress ? 'inline' : 'full'}
       caption={after}
+      nextSteps={treatment.nextSteps}
       success={
         conversion?.onSuccess
           ? { heading: conversion.onSuccess.heading, body: conversion.onSuccess.body }

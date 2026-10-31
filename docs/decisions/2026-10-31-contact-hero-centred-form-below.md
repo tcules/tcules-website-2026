@@ -2,7 +2,7 @@
 title: "Contact: a centred hero that carries the form where an image would sit, and two bands for brief and next steps"
 date: 2026-10-31
 status: active
-area: [layout]
+area: [layout, forms]
 source: "Devagya, 31 Oct 2026, contact page pass (branch design/contact)"
 supersedes: []
 dbf: []
@@ -26,6 +26,11 @@ longer a muted footnote under a grey glyph.
 
 The form is the default card that the copy's `conversion` names (email, what you're working on, link).
 "If the content suggests to use the default form then we should use that." It is not the chip form.
+
+After a send, the panel shows the page's own three steps from `next-steps`, word for word. Step 01's
+numeral takes the accent as the current step, and the later numerals stay neutral. On every enquiry
+form, what someone types or picks is kept in session storage, per placement, until the enquiry sends,
+so leaving the page doesn't lose it ("do #1", 31 Oct 2026).
 
 **Why.** The page exists for the form. A placeholder image beside the hero pushed the form about 950px
 down at 1440.

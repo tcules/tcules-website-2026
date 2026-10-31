@@ -92,23 +92,32 @@ function Brief({ band }: { band: CorpusBand }) {
   );
 }
 
-/** What happens next: the head beside the numbered claims as Steps (Steps numbers them, so the
-    copy's "1." goes; the record line is the hero's figures). */
-function NextSteps({ band }: { band: CorpusBand }) {
+/** The numbered claims of `next-steps` as a title and its body, and the blocks that are not steps. */
+function stepsOf(band: CorpusBand) {
   const blocks = content(band).filter((block) => !recordLineOf(block));
-  const steps: Step[] = [];
+  const steps: { title: string; body: InlineRun[] }[] = [];
   const rest: CorpusBlock[] = [];
   for (const block of blocks) {
     const found = leadOf(block);
     const lead = found ? sentenceLead(found) : null;
     if (lead) {
-      const body = trimStart(lead.body);
       steps.push({
         title: labelTitle(lead.label).replace(/^\d+\.\s*/, ''),
-        ...(body.length > 0 ? rowBody(body) : {}),
+        body: trimStart(lead.body),
       });
     } else rest.push(block);
   }
+  return { steps, rest };
+}
+
+/** What happens next: the head beside the numbered claims as Steps (Steps numbers them, so the
+    copy's "1." goes; the record line is the hero's figures). */
+function NextSteps({ band }: { band: CorpusBand }) {
+  const { steps: parsed, rest } = stepsOf(band);
+  const steps: Step[] = parsed.map(({ title, body }) => ({
+    title,
+    ...(body.length > 0 ? rowBody(body) : {}),
+  }));
   return (
     <ContentSection {...head(band)} data-band="C-steps" arrangement="beside">
       <Layout rowGap="stack">
@@ -162,7 +171,19 @@ export function ContactPage({ page, ...rest }: ContactPageProps) {
             <EnquiryBand
               page={page}
               band={enquiry}
-              island={{ surface: 'blue', dress: 'card', arrangement: 'halves', inBand: true }}
+              island={{
+                surface: 'blue',
+                dress: 'card',
+                arrangement: 'halves',
+                inBand: true,
+                /* After a send the panel shows the page's own three steps (owner, 31 Oct 2026). */
+                nextSteps: next
+                  ? stepsOf(next).steps.map(({ title, body }) => ({
+                      label: title,
+                      ...(body.length > 0 ? { detail: plain(body) } : {}),
+                    }))
+                  : undefined,
+              }}
             />
           ) : undefined
         }
