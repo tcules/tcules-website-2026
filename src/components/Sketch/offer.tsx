@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { OfferSceneName } from '@/lib/sketches';
 
 import styles from './Sketch.module.css';
-import { CURSOR, Chip, Focus, GrowIn, Glyph, Hatched, TraceIn } from './scenes';
+import { CURSOR, Chip, Focus, Glide, GrowIn, Glyph, Hatched, TraceIn } from './scenes';
 
 /**
  * The OFFER scenes: the drawings a service page's bands show beside what each item says (product-design
@@ -410,7 +410,7 @@ function SpecialistIa() {
       {/* The map's parts, loose until the route draws the structure between them. */}
       <Rect x={176} y={20} w={68} h={20} className={styles.frame} />
       <Copy x={196} y={30} w={28} />
-      {kids.map((x) => (
+      {kids.filter((x) => x !== 186).map((x) => (
         <g key={x}>
           <Rect x={x} y={110} w={48} h={24} className={styles.tile} />
           <Copy x={x + 12} y={122} w={20} quiet />
@@ -418,11 +418,11 @@ function SpecialistIa() {
       ))}
       {/* The place the work belongs lights only when the structure reaches it (neutral at rest, so the
           answer is not given away before the route draws). */}
+      {/* Highlighted as in Audits: the halo grows and the branch, neutral at rest, fills. */}
       <GrowIn>
         <Rect x={180} y={104} w={60} h={36} rx={10} className={styles.halo} />
-        <Rect x={186} y={110} w={48} h={24} className={styles.region} />
-        <path className={styles.regionCopy} d="M198,122 L222,122" />
       </GrowIn>
+      <Rect x={186} y={110} w={48} h={24} className={styles.press} />
       <circle className={styles.node} cx="110" cy="90" r="2.5" />
       <TraceIn d="M110,90 L124,90 A6,6 0 0 0 130,84 L130,36 A6,6 0 0 1 136,30 L169,30" />
       <TraceIn d="M210,40 L210,110 M150,110 L150,76 A6,6 0 0 1 156,70 L264,70 A6,6 0 0 1 270,76 L270,110" />
@@ -433,28 +433,26 @@ function SpecialistIa() {
   );
 }
 
-/** Interaction & UI Design: three look-alike buttons leave the person guessing; the way from the
- *  person to the one that matters draws itself, and that one becomes the clear primary action. */
+/** Interaction & UI Design: three look-alike buttons leave the person guessing which to press; on hover
+ *  the third becomes the clear primary action (its halo grows, it fills) and the cursor goes straight to it. */
 function SpecialistUi() {
   return (
     <>
       <Rect x={30} y={30} w={260} h={120} rx={8} className={styles.frame} />
       <Copy x={50} y={50} w={56} quiet />
       <Copy x={50} y={62} w={112} />
-      {/* The halo first, so the route's head sits on it. */}
+      {/* The halo first, so the primary sits on it. */}
       <GrowIn>
-        <Rect x={220} y={76} w={60} h={32} rx={10} className={styles.halo} />
+        <Rect x={204} y={76} w={60} h={32} rx={10} className={styles.halo} />
       </GrowIn>
-      {[66, 146, 226].map((x) => (
+      {[50, 130].map((x) => (
         <Rect key={x} x={x} y={82} w={48} h={20} className={styles.tile} />
       ))}
-      <Glyph name="user" cx={50} cy={130} size={20} className={styles.glyph} />
-      <TraceIn d="M70,130 L244,130 A6,6 0 0 0 250,124 L250,109" />
-      <circle className={styles.node} cx="70" cy="130" r="2.5" />
-      <GrowIn>
-        <Rect x={226} y={82} w={48} h={20} className={styles.solid} />
-        <ArrowUp x={250} y={102} />
-      </GrowIn>
+      <Rect x={210} y={82} w={48} h={20} className={styles.press} />
+      {/* At rest the cursor waits below the first two, undecided; on hover it glides onto the primary. */}
+      <Glide x={-124} y={30}>
+        <Cursor x={244} y={94} />
+      </Glide>
     </>
   );
 }
@@ -513,6 +511,9 @@ function SpecialistDataviz() {
   );
 }
 
+/** Prototyping & Usability Testing: a person tries two directions and the test picks one. At rest the
+ *  person sits beside two outlined screens; on hover the route draws from the person to direction A,
+ *  which lights: its halo grows and its call to action fills, while direction B stays an outline. */
 function SpecialistPrototype() {
   return (
     <>
@@ -527,6 +528,11 @@ function SpecialistPrototype() {
       <Rect x={170} y={25} w={100} h={50} rx={8} className={styles.frame} />
       <Copy x={184} y={41} w={40} quiet />
       <Rect x={184} y={51} w={40} h={14} rx={7} className={styles.tile} />
+      {/* Chosen: direction A's heading darkens and its call to action fills, as Audits' part lights. */}
+      <GrowIn>
+        <Copy x={184} y={41} w={40} />
+        <Rect x={184} y={51} w={40} h={14} rx={7} className={styles.solid} />
+      </GrowIn>
       {/* Direction B: a heading and two options. */}
       <Rect x={170} y={105} w={100} h={50} rx={8} className={styles.frame} />
       <Copy x={184} y={121} w={40} quiet />
@@ -537,7 +543,6 @@ function SpecialistPrototype() {
       <circle className={styles.node} cx={90} cy={90} r="2.5" />
       <GrowIn>
         <ArrowRight x={170} y={50} />
-        <Chip x={244} y={42} glyph="check-circle" />
       </GrowIn>
     </>
   );
@@ -545,7 +550,8 @@ function SpecialistPrototype() {
 
 /** New Product Design & First Release: the idea, sketched and not yet built, stepped up into a live
  *  product: rest, a dashed idea and an empty slot on the product's screen; hover, the route climbs from
- *  the idea to the screen, the slot fills with the idea's block, built, and the release flag goes up. */
+ *  the idea to the screen (the line draws) and the slot fills with the idea's block, built, its halo
+ *  marking it (the Audits highlight). Two patterns; the built screen itself is the first release. */
 function SpecialistNewProduct() {
   return (
     <>
@@ -564,56 +570,50 @@ function SpecialistNewProduct() {
       <Glyph name="user" cx={210} cy={50} size={14} className={styles.glyph} />
       <Copy x={224} y={50} w={28} quiet />
       <Copy x={204} y={68} w={52} />
-      {/* Live: the product ships when the route lands. */}
-      <GrowIn>
-        <Chip x={266} y={40} glyph="flag" />
-      </GrowIn>
       {/* The idea's block, the same size, now built. */}
       <Rect x={204} y={90} w={52} h={20} rx={4} className={styles.trailFrame} />
       <GrowIn>
         <Rect x={198} y={84} w={64} h={32} rx={10} className={styles.halo} />
-        <Rect x={204} y={90} w={52} h={20} rx={4} className={styles.region} />
+        <Rect x={204} y={90} w={52} h={20} rx={4} className={styles.solid} />
       </GrowIn>
       <Copy x={204} y={130} w={60} quiet />
     </>
   );
 }
 
-/** UX & Product Audit: the team's "something is wrong" traced across the screen to the one part that is.
- *  At rest the question sits beside a screen whose three parts all look fine; on hover its route draws
- *  over them and drops onto the third, which lights with the warning. */
+/** UX & Product Audit: the whole product checked, the one thing actually wrong found. At rest a screen
+ *  of four rows that all look fine; on hover the audit's line leaves the screen's right edge beside the
+ *  first row, runs down outside it past the rows, and comes back in at the third, which lights with the
+ *  warning. */
 function SpecialistAudit() {
+  const rows = [
+    { y: 50, w: 84 },
+    { y: 76, w: 64 },
+    { y: 102, w: 76 },
+    { y: 128, w: 90 },
+  ];
   return (
     <>
-      {/* The hunch: something is wrong, not yet what. */}
-      <Rect x={30} y={76} w={40} h={28} rx={14} className={styles.frame} />
-      <Glyph name="question-circle" cx={50} cy={90} size={18} className={styles.glyph} />
-      <Rect x={108} y={30} w={180} h={120} rx={8} className={styles.frame} />
-      <Copy x={124} y={50} w={48} quiet />
-      <Copy x={124} y={62} w={76} />
-      {[124, 176].map((x) => (
-        <g key={x}>
-          <Rect x={x} y={104} w={44} h={32} className={styles.tile} />
-          <Copy x={x + 8} y={116} w={24} quiet />
-          <Copy x={x + 8} y={128} w={16} quiet />
+      <Rect x={30} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      {rows.map(({ y, w }) => (
+        <g key={y}>
+          <Rect x={44} y={y} w={132} h={16} className={styles.tile} />
+          <Copy x={52} y={y + 8} w={w} quiet />
         </g>
       ))}
-      <Rect x={228} y={104} w={44} h={32} className={styles.tile} />
-      <Copy x={236} y={116} w={24} quiet />
-      <Copy x={236} y={128} w={16} quiet />
-      {/* Found: the third part lights, its halo first so the arrowhead sits on it. */}
+      {/* Found: the third row lights as in Audits, its halo first, then the row solid with the warning
+          knocked out of it. */}
       <GrowIn>
-        <Rect x={222} y={98} w={56} h={44} rx={10} className={styles.halo} />
-        <Rect x={228} y={104} w={44} h={32} className={styles.region} />
-        <Glyph name="danger-triangle" cx={250} cy={120} size={16} className={styles.glyphAccent} />
+        <Rect x={38} y={96} w={144} h={28} rx={10} className={styles.halo} />
+        <Rect x={44} y={102} w={132} h={16} className={styles.solid} />
+        <Glyph name="danger-triangle" cx={110} cy={110} size={12} className={styles.glyphOn} />
       </GrowIn>
-      <TraceIn d="M70,90 L244,90 A6,6 0 0 1 250,96 L250,97" />
+      {/* The audit: down the screen's side, then in at the one row. */}
+      <TraceIn d="M190,50 L204,50 A6,6 0 0 1 210,56 L210,104 A6,6 0 0 1 204,110 L197,110" />
       <GrowIn>
-        <path className={styles.solid} d="M250,104 L246,97 L254,97 Z" />
+        <ArrowLeft x={190} y={110} />
       </GrowIn>
-      <circle className={styles.node} cx="70" cy="90" r="2.5" />
-      {/* Where the route enters the screen: a port on its edge, as the research route runs through the user's. */}
-      <circle className={styles.node} cx="108" cy="90" r="2.5" />
+      <circle className={styles.node} cx="190" cy="50" r="2.5" />
     </>
   );
 }
@@ -790,7 +790,7 @@ export const OFFER_DRAWN: Partial<
   'specialist-dataviz': [26, 36, 268, 108],
   'specialist-prototype': [36, 15, 244, 144],
   'specialist-new-product': [26, 26, 268, 128],
-  'specialist-audit': [26, 26, 266, 128],
+  'specialist-audit': [26, 26, 190, 128],
   'specialist-readiness': [26, 26, 294, 154],
   'offer-route': [26, 26, 268, 128],
 };

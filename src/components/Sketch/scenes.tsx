@@ -181,24 +181,33 @@ export function Chip({ x, y, glyph }: { x: number; y: number; glyph: IconName })
 const LENS = { x: 154, y: 88, r: 26 } as const;
 const HANDLE = 'M134.9,107.1 L118.6,123.4';
 
+/**
+ * "New Product Design & First Release": the product is mostly still to come (its outline dashed, the
+ * later parts hatched), and the one part built first goes out as its release. At rest the built part
+ * sits inside the unbuilt product, only its port lit; on hover the route draws from it out through the
+ * product's edge, and the launch flag grows at its end.
+ */
 function NewProduct() {
   return (
     <>
       <rect className={styles.trailFrame} x="30" y="30" width="200" height="120" rx="8" />
-      <rect className={styles.region} x="50" y="50" width="80" height="80" rx="4" />
-      <path className={styles.regionCopy} d="M62,70 L114,70" />
-      <path className={styles.copy} d="M62,82 L110,82" />
-      <path className={styles.copy} d="M62,94 L92,94" />
-      <rect className={styles.solid} x="62" y="108" width="36" height="12" rx="6" />
+      {/* The first release: the one part built, neutral until it ships. */}
+      <rect className={styles.frame} x="50" y="50" width="80" height="80" rx="4" />
+      <path className={styles.copyQuiet} d="M62,66 L106,66" />
+      <path className={styles.copy} d="M62,78 L114,78" />
+      <path className={styles.copy} d="M62,90 L96,90" />
+      <rect className={styles.tile} x="62" y="106" width="36" height="12" rx="6" />
+      {/* The parts still to come. */}
       <Hatched x={150} y={50} w={60} h={20} />
       <Hatched x={150} y={110} w={60} h={20} />
-      <path className={styles.line} d="M130,90 L258,90" />
-      <circle className={styles.nodeOpen} cx="230" cy="90" r="3" />
-      {/* The release travels to its milestone (lands on 230,90). */}
-      <Move x={100}>
-        <circle className={styles.node} cx="130" cy="90" r="2.5" />
-      </Move>
-      <Focus x={270} y={90} glyph="flag" size={12} />
+      <circle className={styles.node} cx="130" cy="90" r="2.5" />
+      <TraceIn d="M130,90 L259,90" />
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="230" cy="90" r="3" />
+      </GrowIn>
+      <GrowIn>
+        <Focus x={270} y={90} glyph="flag" size={12} />
+      </GrowIn>
     </>
   );
 }

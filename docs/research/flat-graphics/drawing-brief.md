@@ -28,7 +28,7 @@ four patterns, derived from the seven S.3 service stories (`src/components/Sketc
 |---|---|---|---|
 | 1 | **A line draws** over the course of the animation | `TraceIn` (the route), its arrowhead or end port in a `GrowIn` | product-design, design-systems, design-engineering, software-development, audits |
 | 2 | **A circle icon grows from 0**, or is **unfilled and fills** | `GrowIn` around a `Focus` / node / halo; or a circle drawn `release` with its glyph `releaseMark` | specialist-research's tick; software-development's release |
-| 3 | **An element is highlighted**, as in Audits | a halo in a `GrowIn` behind a `block` (it fills solid) | audits, product-modernisation |
+| 3 | **An element is highlighted**, as in Audits | a halo in a `GrowIn` behind the element drawn `press` (neutral at rest, fills solid). The stories use `block`, which is already blue at rest; a tile uses `press` so rest gives nothing away | audits, product-modernisation |
 | 4 | **A cursor moves to the button** | the cursor in a `Glide x y` (its rest offset), the button drawn `press` (it fills) | ai-product-ux |
 
 - **Two patterns at most** in one drawing. A line that lands on a highlight (1+3) or a line that ends in a
