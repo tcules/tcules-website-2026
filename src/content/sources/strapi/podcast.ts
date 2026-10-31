@@ -69,11 +69,12 @@ function cmsPodcastSlug(slug: string): string {
 function mapImage(
   file: StrapiPodcastFile | null | undefined,
   title: string,
-  context: string,
+  /** What the image is, for the fallback alt; `null` for a body image, whose alt is authored or empty. */
+  context: string | null,
   graphqlUrl: string,
 ): PodcastImage | undefined {
   const image = mapUploadImage(file, graphqlUrl, {
-    fallbackAlt: `${title} — ${context}`,
+    ...(context === null ? {} : { fallbackAlt: `${title} — ${context}` }),
     requireImageMime: true,
   });
   return image && file ? { ...image, mime: value(file.mime) } : undefined;
@@ -172,7 +173,7 @@ function mapBlock(
     case 'ComponentBlogAndCasestudiesVideo': {
       const src = absoluteUrl(block.videoFile?.url, graphqlUrl);
       const mime = value(block.videoFile?.mime);
-      const thumbnail = mapImage(block.thumbnail, title, 'video thumbnail', graphqlUrl);
+      const thumbnail = mapImage(block.thumbnail, title, null, graphqlUrl);
       const width =
         typeof block.videoFile?.width === 'number' && block.videoFile.width > 0
           ? block.videoFile.width
@@ -223,12 +224,9 @@ function mapBlock(
     }
 
     case 'ComponentBlogAndCasestudiesSectionImage': {
-      const figures = (block.imageSection ?? []).flatMap((file, imageIndex) => {
-        const imageNumber =
-          (block.imageSection?.length ?? 0) > 1
-            ? `${index + 1}.${imageIndex + 1}`
-            : `${index + 1}`;
-        const image = mapImage(file, title, `podcast image ${imageNumber}`, graphqlUrl);
+      const figures = (block.imageSection ?? []).flatMap((file) => {
+        /* No invented alt: an upload without authored alt text renders alt="" (TRACKER 2.44). */
+        const image = mapImage(file, title, null, graphqlUrl);
         if (!image) return [];
         return [
           {
