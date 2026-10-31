@@ -485,19 +485,12 @@
   max-inline-size: var(--lcrd-stacked-body-measure);
 }
 
-/* Two columns. Every grid row is as tall as its taller item and each frame fills its cell, so the
-   closing rules run level across the column seam. From 768 (Layout's md, where the two tracks
-   begin) the second item is also first in its column and starts on the top edge with the first;
-   the query follows the ARRANGEMENT, and changes no distance. */
-.readdownTwo .root,
+/* Two columns: a grid of tiles with no rule and no inset (owner, 31 Oct 2026: a ruled row only when
+   one item stands per row). The Layout's row seam is the only distance between items. */
 .readdownTwo .frame {
-  block-size: 100%;
-}
-
-@media (min-width: 768px) {
-  .readdownTwo > :nth-child(2) .frame {
-    padding-block-start: 0;
-  }
+  padding-block: 0;
+  border-block-start: none;
+  border-block-end: none;
 }
 
 /* The photo form (ReadDown `photo`). The outer box is the inline-size container and the grid item

@@ -282,9 +282,12 @@ type CtaOpenProps = {
   media?: never;
   contact?: never;
   rating?: never;
-  /* No `island` prop: the open close is ALWAYS an ink island with the moving field on it (owner,
-     29 Oct 2026; decisions/2026-10-29-cta-band-is-an-ink-island). */
-  island?: never;
+  /**
+   * The island: ink by default, with the moving field on it (owner, 29 Oct 2026;
+   * decisions/2026-10-29-cta-band-is-an-ink-island). `blue` where the page closes on brandeis, as
+   * About does (owner, 31 Oct 2026): the same content and structure on the other close ground.
+   */
+  island?: CtaFormIsland;
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
@@ -784,11 +787,14 @@ export function CtaSection(props: CtaSectionProps) {
        (`TextureFlow`) runs across the island, still and quieter behind the lede alone
        (`data-texture-calm` on a box the lede's own width, so the field keeps its strength across
        the rest of the island), as on the enquiry island. */
-    const band: SectionSurface = props.surface ?? ISLAND_BAND[OPEN_ISLAND];
-    const islandSurface = closeIslandOn(band, OPEN_ISLAND);
+    const requested = props.island ?? OPEN_ISLAND;
+    const band: SectionSurface = props.surface ?? ISLAND_BAND[requested];
+    const islandSurface = closeIslandOn(band, requested);
     const field = (content: ReactNode) => (
       <Island surface={islandSurface}>
-        <TextureFlow />
+        {/* Turbulent: an island with no form has no side to resolve toward (owner, 31 Oct 2026;
+            decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). */}
+        <TextureFlow flow="turbulent" />
         {content}
       </Island>
     );

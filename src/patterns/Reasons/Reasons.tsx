@@ -286,14 +286,16 @@ export function Reasons({
   figureSize = 'sm',
 }: ReasonsProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
-  if (process.env.NODE_ENV !== 'production' && ![3, 4, 6].includes(shown.length)) {
+  if (process.env.NODE_ENV !== 'production' && ![3, 4, 5, 6].includes(shown.length)) {
     console.warn(
-      `Reasons: ${shown.length} reasons; the set is built for four (or three or six), which fill whole rows.`,
+      `Reasons: ${shown.length} reasons; the set is built for four (or three, five or six), which fill whole rows.`,
     );
   }
 
-  /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. */
+  /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. Five, open,
+     is the standard three-track grid, 3 + 2 (owner, 31 Oct 2026, About's difference). */
   const four = shown.length === 4;
+  const five = shown.length === 5;
 
   const eyebrowEl = eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null;
   const headingEl = (
@@ -378,6 +380,32 @@ export function Reasons({
     items.some((i) => i.proof?.kind === 'cover') &&
     !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const allProof = shown.length > 0 && shown.every((i) => i.proof);
+  /* A reason's picture: its proof, else its drawing at the set's figure size. */
+  const visualOf = (item: (typeof shown)[number]) =>
+    item.proof ? (
+      <Proof proof={item.proof} flat={flatProofs} />
+    ) : item.figure ? (
+      <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
+        <Media
+          image={{ ...item.figure, alt: '' }}
+          sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
+          fit="contain"
+          focus={FIGURE_START}
+        />
+      </div>
+    ) : null;
+  const itemNode = (item: (typeof shown)[number], index: number) => (
+    <li key={`${index}-${item.title}`} className={styles.item}>
+      <Layout rowGap="block" justifyItems="start">
+        {visualOf(item)}
+        <Layout rowGap="tight">
+          <h3 className={styles.title}>{item.title}</h3>
+          <p className={styles.body}>{item.body}</p>
+        </Layout>
+      </Layout>
+    </li>
+  );
+  const colGap = allProof ? 'gutter' : 'column';
   const set = (
     <Layout
       as="ul"
@@ -390,40 +418,21 @@ export function Reasons({
         open
           ? shown.length === 3
             ? { base: 1, lg: 3 }
-            : four
-              ? { base: 1, md: 2 }
-              : { base: 1, md: 2, xl: 3 }
+            : five
+              ? { base: 1, md: 2, lg: 3 }
+              : four
+                ? { base: 1, md: 2 }
+                : { base: 1, md: 2, xl: 3 }
           : shown.length === 3
             ? { base: 1, xl: 3 }
             : four
               ? { base: 1, lg: 2 }
               : { base: 1, lg: 2, xl: 3 }
       }
-      colGap={open ? (allProof ? 'gutter' : 'column') : 'none'}
+      colGap={open ? colGap : 'none'}
       rowGap={open ? 'column' : 'none'}
     >
-      {shown.map((item, index) => (
-        <li key={`${index}-${item.title}`} className={styles.item}>
-          <Layout rowGap="block" justifyItems="start">
-            {item.proof ? (
-              <Proof proof={item.proof} flat={flatProofs} />
-            ) : item.figure ? (
-              <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
-                <Media
-                  image={{ ...item.figure, alt: '' }}
-                  sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
-                  fit="contain"
-                  focus={FIGURE_START}
-                />
-              </div>
-            ) : null}
-            <Layout rowGap="tight">
-              <h3 className={styles.title}>{item.title}</h3>
-              <p className={styles.body}>{item.body}</p>
-            </Layout>
-          </Layout>
-        </li>
-      ))}
+      {shown.map(itemNode)}
     </Layout>
   );
 

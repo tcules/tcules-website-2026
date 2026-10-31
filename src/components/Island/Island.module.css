@@ -28,3 +28,10 @@
      view and a focus ring is never trapped in a scrollport. */
   overflow: clip;
 }
+
+/* The band's air inside the island (`inset="band"`): for a paper island on a flush paper band whose
+   moving field runs through it (owner, 31 Oct 2026). */
+.insetBand {
+  padding-block: var(--isl-inset-band-block);
+  padding-inline: var(--isl-inset-band-inline);
+}

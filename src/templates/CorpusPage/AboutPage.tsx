@@ -1,6 +1,17 @@
+import { getKitPhoto } from '@/lib/photos';
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, Prose } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Island,
+  Layout,
+  Prose,
+  Section,
+  TextureFlow,
+  type MediaImage,
+} from '@/components';
 import {
   Banner,
   Bento,
@@ -11,10 +22,10 @@ import {
   CtaSection,
   DataTable,
   EngagementOptions,
+  ListCard,
   OfferSheet,
   ProfileCard,
   ProfileFollow,
-  ReadDown,
   VoiceLedger,
   type BentoItem,
   type BlockCardSetItem,
@@ -24,7 +35,6 @@ import {
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import type { IconName } from '@/components';
 import { glyphForRoute } from '@/lib/glyphs';
-import { FULL_COLUMN } from '@/lib/image-sizes';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
@@ -39,9 +49,10 @@ import {
   headingIdOf,
   type RatingsById,
 } from './blocks';
+import { corpusImage } from '@/lib/corpus-images';
 import { coverFor, slotImage } from './images';
 import styles from './CorpusPage.module.css';
-import { LinkActions } from './CopyBands';
+import { CloseBand, LinkActions } from './CopyBands';
 import { recordStats as homeRecordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
@@ -101,6 +112,8 @@ const ABOUT_BANDS: Readonly<
   'who-uses-tcules': WhoUsesBand,
   leadership: LeadershipBand,
   'company-record': ({ page }) => <CompanyRecord page={page} />,
+  /* About ends on a blue island, the same content and structure as the ink close (owner, 31 Oct 2026). */
+  'work-with-tcules': ({ page, band }) => <CloseBand page={page} band={band} island="blue" />,
 };
 
 /**
@@ -115,6 +128,13 @@ function aboutLedes(page: CorpusPage): InlineRun[][] {
   return [...standfirst, ...page.hero.lede];
 }
 
+/* The studio's own wide frame; faces cluster at 0.42 of its height. */
+const ABOUT_HERO_PHOTO = {
+  ...getKitPhoto('studio-team-holi'),
+  focus: { x: 0.5, y: 0.42 },
+  alt: 'The Tcules team in the Ahmedabad studio, faces and hands coloured for Holi',
+};
+
 /** The 26 Oct copy's About: the hero with the record as figures, then every band in order. */
 function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
   const units = planOffer(page);
@@ -126,6 +146,9 @@ function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
         ledes={aboutLedes(page)}
         proofLine={false}
         stats={homeRecordStats(page)}
+        /* The studio, wide, under the words, the head centred (owner, 31 Oct 2026). */
+        arrangement="centred"
+        media={{ type: 'image', image: ABOUT_HERO_PHOTO, ratio: { base: '3/2', lg: '2/1' } }}
       />
       {units.map((unit) => {
         const Band =
@@ -197,6 +220,12 @@ const AUDIENCE_GLYPHS = [
   'layers',
 ] as const satisfies readonly IconName[];
 
+/** The first link in a run of paragraphs (the Lab line's own link), for the card's action. */
+function labLink(paragraphs: readonly InlineRun[][]) {
+  for (const runs of paragraphs) for (const run of runs) if (run.type === 'link') return run;
+  return undefined;
+}
+
 function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
   const blocks = b.blocks.filter((block) => block.type !== 'comment');
   const [leadBlock] = blocks;
@@ -243,36 +272,78 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
       <Layout rowGap="section">
         <Layout rowGap="stack">
           {list ? (
-            <ReadDown
-              columns={2}
-              rows={list.items.map((runs, index) => ({
-                title: sentenceCase(plain(runs)),
-                ...(AUDIENCE_GLYPHS[index] ? { icon: AUDIENCE_GLYPHS[index] } : {}),
-              }))}
-            />
+            /* The five audiences as list cards, one per row: the glyph, then the title (owner,
+               31 Oct 2026). A ruled row stands alone on its line, never in a grid. */
+            /* In the start half, the end half left open (owner, 31 Oct 2026). */
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column">
+              <Layout as="ul" rowGap="none">
+                {list.items.map((runs, index) => (
+                  <ListCard
+                    key={index}
+                    size="md"
+                    titleAs="h3"
+                    title={sentenceCase(plain(runs))}
+                    {...(AUDIENCE_GLYPHS[index]
+                      ? { marker: { type: 'icon' as const, name: AUDIENCE_GLYPHS[index] } }
+                      : {})}
+                  />
+                ))}
+              </Layout>
+            </Layout>
           ) : null}
           {lines.length > 0 ? <Text paragraphs={lines.map((block) => block.runs)} /> : null}
         </Layout>
         {work ? (
-          <Layout rowGap="block">
-            <h3 id={`${b.id}-work-heading`}>{work.headingText}</h3>
-            <Layout rowGap="stack">
-              <BlockCardSet
-                items={cards}
-                lead="none"
-                across={4}
-                size="sm"
-                cue="title"
-                scroll="never"
-                titleAs="h4"
-              />
-              {afterText.length > 0 || afterLinks.length > 0 ? (
-                <Layout rowGap="block">
-                  {afterText.length > 0 ? <Text paragraphs={afterText} /> : null}
-                  {afterLinks.length > 0 ? <LinkActions links={afterLinks} /> : null}
-                </Layout>
-              ) : null}
+          <Layout rowGap="stack">
+            {/* The way to every case at the head's end, centred on it (owner, 31 Oct 2026). */}
+            <Layout
+              columns={{ base: 1, md: [1, 'auto'] }}
+              colGap="column"
+              rowGap="block"
+              align="center"
+            >
+              <h3 id={`${b.id}-work-heading`}>{work.headingText}</h3>
+              {afterLinks.length > 0 ? <LinkActions links={afterLinks} /> : null}
             </Layout>
+            <BlockCardSet
+              items={cards}
+              lead="none"
+              across={4}
+              size="sm"
+              cue="title"
+              scroll="never"
+              titleAs="h4"
+            />
+            {afterText.length > 0 ? (
+              /* The Lab line as a card of its own, an ink island (owner, 31 Oct 2026): the sentence as
+                 authored, its link lifted into the card's action. */
+              <Island surface="ink">
+                {/* The moving field, turbulent across the whole card with no side to resolve toward;
+                    quiet behind the sentence (owner, 31 Oct 2026). */}
+                <TextureFlow flow="turbulent" />
+                <Layout
+                  columns={{ base: 1, lg: [1, 'auto'] }}
+                  colGap="column"
+                  rowGap="block"
+                  align="center"
+                >
+                  <div data-texture-calm>
+                    <Text paragraphs={afterText} />
+                  </div>
+                  {labLink(afterText) ? (
+                    <Button
+                      as="a"
+                      href={labLink(afterText)!.href}
+                      emphasis="solid"
+                      tone="primary"
+                      size="md"
+                    >
+                      {plain(labLink(afterText)!.children)}
+                    </Button>
+                  ) : null}
+                </Layout>
+              </Island>
+            ) : null}
           </Layout>
         ) : null}
       </Layout>
@@ -285,6 +356,24 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
  * 2026-10-12-people-get-profile-cards); then the studio's two `###` (The Ahmedabad studio, The
  * practice keeps moving) as a part of their own beside the team photograph, with the closing links.
  */
+/**
+ * The studio bands' photographs, in the order of the copy's two stories (owner, 31 Oct 2026: "images
+ * from studio"): the Ahmedabad studio is the review in its room; the practice keeps moving is a pair
+ * working at one screen.
+ */
+const STUDIO_PHOTOS: readonly ((page: CorpusPage) => MediaImage)[] = [
+  (page) => {
+    const binding = page.composition.mediaBindings.find((m) => m.id === 'about_studio_review');
+    return binding
+      ? { ...corpusImage(binding), alt: 'A design review in the Tcules studio in Ahmedabad' }
+      : slotImage(page, 'leadership');
+  },
+  () =>
+    getKitPhoto('studio-pair-at-monitor', {
+      alt: 'Two Tcules designers working through a screen together',
+    }),
+];
+
 function LeadershipBand({ page, band: b }: AboutBandProps) {
   const blocks = b.blocks.filter((block) => block.type !== 'comment');
   const lead = blocks[0]?.type === 'paragraph' ? plain(blocks[0].runs) : undefined;
@@ -295,6 +384,9 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
     ),
   );
   const studio = items(b).filter((item) => !people.includes(item));
+  const studioLinks = studio.flatMap((item) =>
+    item.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
+  );
   return (
     <>
       <ContentSection {...head(b)} data-band="P" lead={lead}>
@@ -317,34 +409,71 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           })}
         </Layout>
       </ContentSection>
-      {studio.length > 0 ? (
-        /* The studio and the practice, the team photograph across the column over the two as peer
-           halves (component-map § E /about 5 part b). Beside the photograph, the two items ran ~600
-           past its foot and left a hole under it; across, the photograph is the band's large thing and
-           the two stories read side by side, each closing on its own links. */
-        <ContentSection id={`${b.id}-2`} data-band="B-wide">
-          <Layout rowGap="stack">
-            <Media
-              image={slotImage(page, b.id)}
-              ratio={{ base: '4/3', lg: '2/1' }}
-              sizes={FULL_COLUMN}
-            />
-            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
-              {studio.map((item) => {
-                const links = item.blocks.flatMap((block) =>
-                  block.type === 'links' ? block.links : [],
-                );
-                return (
-                  <Layout key={item.headingText} rowGap="block">
-                    <h3>{item.headingText}</h3>
-                    <Prose html={paragraphRuns(item.blocks).map(html).join('')} />
-                    {links.length > 0 ? <LinkActions links={links} /> : null}
-                  </Layout>
-                );
-              })}
-            </Layout>
+      {/* The studio and the practice, each its own band with a photograph from the studio beside it,
+          the sides zig-zagging (owner, 31 Oct 2026). Their links are the page's way out to the
+          studio's other places, so they leave the story for a block of their own. */}
+      {studio.map((item, index) => {
+        const photo = STUDIO_PHOTOS[index];
+        return (
+          <ContentSection
+            key={item.headingText}
+            id={`${b.id}-${index + 2}`}
+            data-band="B"
+            heading={item.headingText}
+            headingId={`${b.id}-${index + 2}-heading`}
+            arrangement="media"
+            media={{
+              image: photo ? photo(page) : slotImage(page, b.id),
+              side: index % 2 === 0 ? 'start' : 'end',
+              weight: 'photo',
+            }}
+          >
+            <ContentSectionText>
+              <Prose html={paragraphRuns(item.blocks).map(html).join('')} />
+            </ContentSectionText>
+          </ContentSection>
+        );
+      })}
+      {studioLinks.length > 0 ? (
+        /* The studio elsewhere (owner, 31 Oct 2026: "a separate cta block with some relevant title"),
+           as a paper island on the paper band, read by its moving light-blue field and its rounding
+           (decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). The title is ours,
+           not the copy's: logged in docs/content-changes.md. */
+        <Section
+          id={`${b.id}-elsewhere`}
+          data-band="C-links"
+          aria-labelledby={`${b.id}-elsewhere-heading`}
+          density="open"
+        >
+          {/* The field across the band, edges blurred wide and rounded; at full strength around the
+              words, faint in the space around them (owner, 31 Oct 2026). */}
+          <TextureFlow flow="turbulent" feather bleed />
+          <Layout
+            rowGap="stack"
+            justifyItems="center"
+            className={styles.centred}
+            data-texture-focus
+          >
+            <h2 id={`${b.id}-elsewhere-heading`}>
+              Follow the studio, read its reviews, join the team
+            </h2>
+            <Cluster colGap="stack" rowGap="block" justify="center">
+              {studioLinks.map((link) => (
+                <Button
+                  key={link.href}
+                  as="a"
+                  href={link.href}
+                  emphasis="link"
+                  tone="primary"
+                  size="md"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {link.labelText}
+                </Button>
+              ))}
+            </Cluster>
           </Layout>
-        </ContentSection>
+        </Section>
       ) : null}
     </>
   );

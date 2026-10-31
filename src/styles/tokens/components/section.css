@@ -47,6 +47,10 @@
    rather than flush plus inner padding, so no element inside a strip writes a padding-block that
    would collide with Section's own (the shorthand collision Breadcrumbs.module.css documents). */
 --sec-padding-y-strip:var(--gap-block);
+/* The open band (owner, 31 Oct 2026, About's studio links): a band whose moving field needs the room
+   to fade out around its words takes the gap scale's open section step, 128 (96 on a phone). The
+   one exception to one-value-per-width besides the strip and flush. */
+--sec-padding-y-open:var(--gap-section-open);
 --sec-gutter:var(--gap-gutter);
 --sec-rule-width:var(--border-width-hairline);
 --sec-container:1240px;  /* literal: the content column. Not a scale step — it is the
@@ -72,6 +76,7 @@
 :root{
 --sec-padding-y:var(--gap-column);
 --sec-padding-y-first:var(--gap-gutter);
+--sec-padding-y-open:var(--gap-section);
 }
 }
 

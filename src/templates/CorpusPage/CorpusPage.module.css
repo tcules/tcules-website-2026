@@ -134,3 +134,9 @@
 .ledgerLink:focus-visible {
   color: var(--cpg-mark);
 }
+
+/* About's studio-links island: the heading centred on the island's axis, as the links' Cluster is.
+   Type only, no arrangement (owner, 31 Oct 2026). */
+.centred {
+  text-align: center;
+}

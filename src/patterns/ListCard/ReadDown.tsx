@@ -129,16 +129,27 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', photo, rail }: Rea
   const list = (
     <Layout
       as="ul"
-      columns={columns === 2 ? { md: 2 } : undefined}
+      /* Five or fewer titles with no body (About's audiences) are one row from 1024: two columns
+         would leave the fifth alone on its row. */
+      columns={
+        columns === 2
+          ? rows.length <= 5 && rows.every((row) => !row.body && !row.bodyHtml)
+            ? { md: 2, lg: rows.length as 2 | 3 | 4 | 5 }
+            : { md: 2 }
+          : undefined
+      }
       colGap={columns === 2 ? 'column' : undefined}
-      rowGap="none"
+      /* Two columns are a grid of items, so no rules (owner, 31 Oct 2026: a ruled row only when one
+         item stands per row): each item is a tile, its glyph heading it, and the borderless set's row
+         seam stands between rows. */
+      rowGap={columns === 2 ? 'column' : 'none'}
       className={cx(styles.readdown, columns === 2 && styles.readdownTwo)}
     >
       {rows.map((row, index) => (
         <Row
           key={`${index}-${row.title}`}
           size={size}
-          arrangement="stacked"
+          {...(columns === 2 ? { form: 'tile' as const } : { arrangement: 'stacked' as const })}
           titleAs={titleAs}
           title={row.title}
           body={row.body}
