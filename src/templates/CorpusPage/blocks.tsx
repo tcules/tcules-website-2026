@@ -78,7 +78,8 @@ export function head(band: CorpusBand) {
 
 export type CorpusHeroProps = {
   page: CorpusPage;
-  arrangement?: 'stacked' | 'beside';
+  /** `centred` (contact, owner 31 Oct 2026): the head centred on the column, no media, the island under it. */
+  arrangement?: 'stacked' | 'beside' | 'centred';
   media?: HeroMedia;
   /** A bare run of facts (home's studio record), one tag each, after the actions. */
   tags?: readonly string[];
@@ -113,7 +114,13 @@ export function CorpusHero({
      src/lib/hero-media.ts): where its template handed none, its own bound hero asset, else its
      labelled placeholder, beside the words. */
   const heroMedia = media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined);
-  const heroArrangement = media ? arrangement : heroMedia ? 'beside' : 'stacked';
+  const heroArrangement = media
+    ? arrangement
+    : heroMedia
+      ? 'beside'
+      : arrangement === 'centred'
+        ? 'centred'
+        : 'stacked';
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
   const actions = hero.actions.slice(0, 2).map((action) => ({
