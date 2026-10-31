@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Layout, Prose, Section } from '@/components';
+import { Layout, Media, Prose, Section } from '@/components';
 import {
   LongformRoute,
   isCorpusLongform,
@@ -38,6 +38,10 @@ function requestedSlug(slug: readonly string[]): string {
     .join('/');
 }
 
+/* Figure's own `sizes` (Figure.tsx): the full content column, which over-fetches in the narrower
+   article track rather than ever under-fetching. */
+const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+
 function figureImage(image: BlogImage) {
   return {
     src: image.src,
@@ -70,13 +74,23 @@ function renderBlogBlock(block: BlogBlock, blogTitle: string) {
           colGap={block.figures.length > 1 ? 'gutter' : undefined}
           rowGap="gutter"
         >
-          {block.figures.map((figure, index) => (
-            <Figure
-              key={`${block.id}-${figure.image.src}-${index}`}
-              image={figureImage(figure.image)}
-              caption={figure.caption}
-            />
-          ))}
+          {block.figures.map((figure, index) =>
+            /* A body image with no authored caption renders bare, through Figure's own Media:
+               a Figure's caption is required, and the words under an image are never invented. */
+            figure.caption ? (
+              <Figure
+                key={`${block.id}-${figure.image.src}-${index}`}
+                image={figureImage(figure.image)}
+                caption={figure.caption}
+              />
+            ) : (
+              <Media
+                key={`${block.id}-${figure.image.src}-${index}`}
+                image={figureImage(figure.image)}
+                sizes={BODY_IMAGE_SIZES}
+              />
+            ),
+          )}
         </Layout>
       );
 
@@ -294,10 +308,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
         dates={published ? { published } : undefined}
         media={heroMedia}
         surface="paper"
-      
+
         labels={labels}
       />
-
 
       {blog.blocks.length > 0 ? (
         <Section as="div" surface="paper">
@@ -335,7 +348,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
           (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
-      <InsightResources heading="Explore other resources" items={resourceItems(blog.resources)} />
+      <InsightResources
+        heading="Explore other resources"
+        items={resourceItems(blog.resources)}
+      />
 
       {blog.cta ? (
         <CtaSection

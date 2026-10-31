@@ -8,7 +8,7 @@ import type {
   PodcastPage,
 } from '../../types';
 import { mapUploadImage } from './image';
-import { markdownToHtml, type BodyHeading } from './markdown';
+import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { PODCAST_BY_SLUG_QUERY } from './podcast-query';
 import type {
   StrapiPodcast,
@@ -233,7 +233,9 @@ function mapBlock(
         return [
           {
             image,
-            caption: value(file.alternativeText) || `${title} — podcast image ${imageNumber}`,
+            /* The upload's caption, or none. The alt is not a caption (Figure: alt must not restate it),
+               and a caption nobody wrote is not one either: an image without one renders bare. */
+            ...(value(file.caption) ? { caption: value(file.caption) } : {}),
           },
         ];
       });
@@ -321,10 +323,14 @@ function mapResource(resource: StrapiPodcastResource, index: number, graphqlUrl:
     slug,
     title,
     kind: blogKind(slug),
-    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
+    ...(value(resource.seo?.metaDescription)
+      ? { description: value(resource.seo?.metaDescription) }
+      : {}),
     /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
     ...(authored ? { publishedAt: authored } : {}),
-    ...(image ? { image } : { ...(COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}) }),
+    ...(image
+      ? { image }
+      : { ...(COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}) }),
   };
 }
 
@@ -352,17 +358,19 @@ function mapPodcast(
      blocks: reading it from a later key of the same object literal would make the result depend on
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
-  const blocks = sections.flatMap((block, index) => {
-    const mapped = mapBlock(
-      block,
-      index,
-      title,
-      graphqlUrl,
-      outline,
-      index === heroVideoBlockIndex,
-    );
-    return mapped ? [mapped] : [];
-  });
+  const blocks = resolveInPageAnchors(
+    sections.flatMap((block, index) => {
+      const mapped = mapBlock(
+        block,
+        index,
+        title,
+        graphqlUrl,
+        outline,
+        index === heroVideoBlockIndex,
+      );
+      return mapped ? [mapped] : [];
+    }),
+  );
 
   return {
     documentId: value(rawPodcast.documentId) || slug,

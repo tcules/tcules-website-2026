@@ -1,6 +1,8 @@
 export type StrapiPodcastFile = {
   url?: string | null;
   alternativeText?: string | null;
+  /** The upload's own caption: the visible words under a body image. Never the alt. */
+  caption?: string | null;
   width?: number | null;
   height?: number | null;
   /** Strapi's generated derived widths, a JSON scalar; read only by sources/strapi/image.ts. */

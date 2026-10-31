@@ -22,7 +22,7 @@ import type {
   StrapiBlogResponse,
   StrapiBlogSeo,
 } from './blog-types';
-import { markdownToHtml, type BodyHeading } from './markdown';
+import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { authoredDate, publishedLine } from './published-line';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
@@ -134,6 +134,35 @@ function embedUrl(block: StrapiBlogBlock): string | undefined {
     : undefined;
 }
 
+/**
+ * The words an embed carries for a reader who cannot see it: the authored `aria-label`, else the
+ * SVG's `<desc>`, else the `<figcaption>`. Read as TEXT only, never rendered as markup.
+ *
+ * The one live embed without a `src` is an authored inline SVG figure (1 Nov 2026,
+ * /insights/9-ux-design-tips-to-boost-your-ecommerce-conversion-rates) with its own colours and
+ * font stacks. Injecting it would put CMS markup and off-token values on the page, so the diagram
+ * is said in its own words until the CMS carries it as an image upload (open question, TRACKER
+ * 2.44). An embed with a `src` is unaffected: it renders as an iframe.
+ */
+function embedTextAlternative(embedCode: string | null | undefined): string {
+  const code = value(embedCode);
+  if (!code) return '';
+  const raw =
+    code.match(/\baria-label\s*=\s*"([^"]+)"/iu)?.[1] ??
+    code.match(/<desc>([\s\S]*?)<\/desc>/iu)?.[1] ??
+    code.match(/<figcaption>([\s\S]*?)<\/figcaption>/iu)?.[1] ??
+    '';
+  return raw
+    .replace(/<[^>]+>/gu, '')
+    .replace(/&#x27;|&#39;/gu, "'")
+    .replace(/&quot;/gu, '"')
+    .replace(/&lt;/gu, '<')
+    .replace(/&gt;/gu, '>')
+    .replace(/&amp;/gu, '&')
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
 function iframePublishedContent(block: StrapiBlogBlock): string {
   if (block.__typename !== 'ComponentBlogAndCasestudiesIframe') return '';
   if (value(block.url) || value(block.embedCode) || block.thumbnail) return '';
@@ -203,7 +232,9 @@ function mapBlock(
         return [
           {
             image,
-            caption: value(file.alternativeText) || `${title} — article image ${imageNumber}`,
+            /* The upload's caption, or none. The alt is not a caption (Figure: alt must not restate it),
+               and a caption nobody wrote is not one either: an image without one renders bare. */
+            ...(value(file.caption) ? { caption: value(file.caption) } : {}),
           },
         ];
       });
@@ -268,7 +299,9 @@ function mapBlock(
       const thumbnail = mapImage(block.thumbnail, title, 'embed thumbnail', graphqlUrl);
 
       if (!url && !thumbnail) {
-        const copy = [blockTitle, description].filter(Boolean).join(' — ');
+        const copy = [blockTitle, description, embedTextAlternative(block.embedCode)]
+          .filter(Boolean)
+          .join(' — ');
         return copy ? { id, type: 'prose', html: `<p>${escapeHtml(copy)}</p>` } : undefined;
       }
 
@@ -432,8 +465,12 @@ function mapResource(
     slug,
     title,
     kind: blogKind(slug),
-    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
-    ...(!(thumbnail || featureImage) && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
+    ...(value(resource.seo?.metaDescription)
+      ? { description: value(resource.seo?.metaDescription) }
+      : {}),
+    ...(!(thumbnail || featureImage) && COVER_SCENES[slug]
+      ? { coverScene: COVER_SCENES[slug] }
+      : {}),
     /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
     ...(authored ? { publishedAt: authored } : {}),
     ...(thumbnail || featureImage ? { image: thumbnail ?? featureImage } : {}),
@@ -489,18 +526,20 @@ function mapBlog(
      blocks: reading it from a later key of the same object literal would make the result depend on
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
-  const blocks = sections.flatMap((block, index) => {
-    if (index === publishedContentBlockIndex) return [];
-    const mapped = mapBlock(
-      block,
-      index,
-      title,
-      graphqlUrl,
-      index === heroVideoBlockIndex,
-      outline,
-    );
-    return mapped ? [mapped] : [];
-  });
+  const blocks = resolveInPageAnchors(
+    sections.flatMap((block, index) => {
+      if (index === publishedContentBlockIndex) return [];
+      const mapped = mapBlock(
+        block,
+        index,
+        title,
+        graphqlUrl,
+        index === heroVideoBlockIndex,
+        outline,
+      );
+      return mapped ? [mapped] : [];
+    }),
+  );
 
   return {
     documentId: value(rawBlog.documentId) || slug,

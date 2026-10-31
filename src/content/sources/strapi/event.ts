@@ -18,7 +18,7 @@ import type {
   StrapiEventResponse,
   StrapiEventSeo,
 } from './event-types';
-import { markdownToHtml, type BodyHeading } from './markdown';
+import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { escapeHtml, safeContentHref } from './rich-text';
 import { COVER_SCENES } from '../cover-scenes';
 import { blogKind } from './insights';
@@ -236,7 +236,9 @@ function mapBlock(
         return [
           {
             image,
-            caption: value(file.alternativeText) || `${title} — event image ${imageNumber}`,
+            /* The upload's caption, or none. The alt is not a caption (Figure: alt must not restate it),
+               and a caption nobody wrote is not one either: an image without one renders bare. */
+            ...(value(file.caption) ? { caption: value(file.caption) } : {}),
           },
         ];
       });
@@ -319,10 +321,14 @@ function mapResource(resource: StrapiEventResource, index: number, graphqlUrl: s
     slug,
     title,
     kind: blogKind(slug),
-    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
+    ...(value(resource.seo?.metaDescription)
+      ? { description: value(resource.seo?.metaDescription) }
+      : {}),
     /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
     ...(authored ? { publishedAt: authored } : {}),
-    ...(image ? { image } : { ...(COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}) }),
+    ...(image
+      ? { image }
+      : { ...(COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}) }),
   };
 }
 
@@ -343,10 +349,12 @@ function mapEvent(
      blocks: reading it from a later key of the same object literal would make the result depend on
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
-  const blocks = (rawEvent.mainSection ?? []).flatMap((block, index) => {
-    const mapped = mapBlock(block, index, title, graphqlUrl, outline);
-    return mapped ? [mapped] : [];
-  });
+  const blocks = resolveInPageAnchors(
+    (rawEvent.mainSection ?? []).flatMap((block, index) => {
+      const mapped = mapBlock(block, index, title, graphqlUrl, outline);
+      return mapped ? [mapped] : [];
+    }),
+  );
 
   return {
     documentId: value(rawEvent.documentId) || slug,
