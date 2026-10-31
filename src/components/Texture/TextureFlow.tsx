@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { cx } from '@/lib/cx';
 import grid from '@/styles/textures/pixel-grid.json';
@@ -89,6 +89,12 @@ const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`
 /* The churn is slow (a loop reshapes over tens of seconds), so 30 frames a second is plenty. */
 const FRAME_MS = 1000 / 30;
 
+/* How far beyond the viewport a field holds its WebGL context: one screen above and below, so it is
+   drawn before it scrolls in. Past that it hands the context back, because browsers cap live
+   contexts (Chrome at 16) and evict the oldest — a page carrying many fields lost the ones at its
+   top (the CtaSection specimen, 29 fields, 31 Oct 2026). */
+const LIVE_MARGIN = '100% 0px';
+
 /**
  * TextureFlow — the pixel grid as a FIELD IN MOTION (owner, 23 Oct 2026; the enquiry close). The
  * grid's cells keep their shape, size and strength; each "=" turns to follow one designed flow, and
@@ -102,12 +108,34 @@ const FRAME_MS = 1000 / 30;
  * Decorative: hidden from assistive tech, no pointer events. Motion only while on screen and the
  * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
  * nothing and the ground stands plain.
+ *
+ * A WebGL context is held only while the field is within a screen of the viewport (LIVE_MARGIN), so
+ * any number of fields can share a page. Each time it comes near it draws on a fresh canvas (`key`),
+ * since a context once released cannot be taken up again on the same element.
  */
 export function TextureFlow({ fade }: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
+  /* `generation` moves whenever `near` does, so every approach gets a canvas that never held a context. */
+  const [{ near, generation }, setLife] = useState({ near: false, generation: 0 });
+
+  /* Nearness is read off the host, which outlives every canvas generation. */
+  useEffect(() => {
+    const host = ref.current?.parentElement;
+    if (!host) return;
+    const watch = new IntersectionObserver(
+      ([entry]) => {
+        const next = entry?.isIntersecting ?? true;
+        setLife((was) => (was.near === next ? was : { near: next, generation: was.generation + 1 }));
+      },
+      { rootMargin: LIVE_MARGIN },
+    );
+    watch.observe(host);
+    return () => watch.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!near) return;
     const canvas = ref.current;
     const host = canvas?.parentElement;
     if (!canvas || !host) return;
@@ -205,13 +233,16 @@ export function TextureFlow({ fade }: TextureFlowProps) {
     reduce.addEventListener('change', run);
     return () => {
       canvas.removeEventListener('webglcontextlost', lost);
+      /* Hand the context back now rather than at garbage collection, so it stops counting against
+         the browser's cap the moment the field leaves. */
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
       cancelAnimationFrame(raf);
       resize.disconnect();
       seen.disconnect();
       document.removeEventListener('visibilitychange', run);
       reduce.removeEventListener('change', run);
     };
-  }, [fadeOn]);
+  }, [fadeOn, near]);
 
-  return <canvas ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
+  return <canvas key={generation} ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
 }
