@@ -128,6 +128,16 @@ export function Move({
   );
 }
 
+/**
+ * A route that draws itself along its own length when the link the drawing sits in is hovered or
+ * focused (live scenes only): the tile scenes' motion lives on a line, as the home stories' does, never
+ * on a small part (owner, 31 Oct 2026). Anywhere else, and under reduced motion, it is the plain route,
+ * drawn. Accent, the subject route's weight; what it reaches arrives with it in a `GrowIn`.
+ */
+export function TraceIn({ d }: { d: string }) {
+  return <path className={styles.traceIn} d={d} pathLength={1} />;
+}
+
 /** A part that arrives on hover: absent at rest in a live scene, there in every still one (plates never change). */
 export function GrowIn({ children }: { children: ReactNode }) {
   return <g className={styles.growIn}>{children}</g>;
