@@ -1,5 +1,5 @@
 ---
-title: "Contact: a centred hero with the form right under it, and two bands for brief and next steps"
+title: "Contact: a centred hero that carries the form where an image would sit, and two bands for brief and next steps"
 date: 2026-10-31
 status: active
 area: [layout]
@@ -12,7 +12,10 @@ enforced_by: "structure (src/templates/CorpusPage/ContactPage.tsx; /contact is o
 
 "hero -> vertical stack variant, text centered, form right below it." /contact's hero is PageHero's
 `centred` arrangement with no media: trail, title, lead and the studio's figures centred on the column.
-The enquiry island follows it directly, and the island's drawing is the first screen's picture. This
+Then: "move the form into the header, just like how an image would be placed (48px from the stats
+row)." The enquiry island is the hero's `panel`, set inside the hero's band a stack (48) under the
+figures across the full column (CtaSection `inBand`), and the island's drawing is the first screen's
+picture. This
 narrows 2026-10-29-high-traffic-heroes-carry-media: /about and the level-1 services keep their hero
 media, and /contact does not take any.
 
@@ -30,5 +33,5 @@ down at 1440.
 **The mistake it prevents.** A contact hero that holds an image slot, or anything else, between the
 title and the form, and a page form different from the one the copy authors.
 
-**How to apply.** Leave /contact out of `HERO_MEDIA_ROUTES`. Nothing goes between ContactPage's
-CorpusHero (`arrangement="centred"`) and the enquiry island.
+**How to apply.** Leave /contact out of `HERO_MEDIA_ROUTES`. ContactPage passes the enquiry island to
+CorpusHero (`arrangement="centred"`) as its `panel`, and the band loop skips it.

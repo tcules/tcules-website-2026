@@ -12,7 +12,7 @@ import {
   type Step,
 } from '@/patterns';
 
-import { CorpusHero, headingIdOf, head } from './blocks';
+import { CorpusHero, EnquiryBand, headingIdOf, head } from './blocks';
 import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
@@ -148,10 +148,27 @@ export function ContactPage({ page, ...rest }: ContactPageProps) {
   const units = planOffer(page);
   const ctx: OfferContext = { page, ...rest };
   const next = page.bands.find((b) => b.id === ('next-steps' satisfies ContactBand));
+  /* The form sits in the hero where an image would (owner, 31 Oct 2026): the enquiry island, as
+     every close carries it, set inside the hero's band a stack under the figures. */
+  const enquiry = page.bands.find((b) => b.id === page.conversion?.anchor);
   return (
     <>
-      <CorpusHero page={page} arrangement="centred" stats={contactStats(page, next)} />
+      <CorpusHero
+        page={page}
+        arrangement="centred"
+        stats={contactStats(page, next)}
+        panel={
+          enquiry ? (
+            <EnquiryBand
+              page={page}
+              band={enquiry}
+              island={{ surface: 'blue', dress: 'card', arrangement: 'halves', inBand: true }}
+            />
+          ) : undefined
+        }
+      />
       {units.map((unit) => {
+        if (enquiry && unit.part !== 'b' && unit.band === enquiry) return null;
         if (unit.part === 'b') return <UnitView key={unit.id} unit={unit} ctx={ctx} />;
         switch (unit.band.id as ContactBand | string) {
           case 'brief':

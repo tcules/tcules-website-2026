@@ -90,6 +90,8 @@ export type CorpusHeroProps = {
   /** The record as figures, a row under the actions (PageHero `stats`, home round 3). */
   stats?: readonly HeroStat[];
   texture?: boolean;
+  /** A composed object in the media's place (PageHero `panel`): the contact hero's enquiry island. */
+  panel?: ReactNode;
 };
 
 /**
@@ -108,12 +110,16 @@ export function CorpusHero({
   proofLine = true,
   stats,
   texture,
+  panel,
 }: CorpusHeroProps) {
   const { hero } = page;
   /* A high-traffic page's hero always carries an illustration or an image (owner, 29 Oct 2026;
      src/lib/hero-media.ts): where its template handed none, its own bound hero asset, else its
      labelled placeholder, beside the words. */
-  const heroMedia = media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined);
+  const heroMedia =
+    panel != null
+      ? undefined
+      : (media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined));
   const heroArrangement = media
     ? arrangement
     : heroMedia
@@ -154,6 +160,7 @@ export function CorpusHero({
       actions={actions}
       arrangement={heroArrangement}
       media={heroMedia}
+      panel={panel}
       tags={tags}
       stats={figures && figures.length > 0 ? figures : undefined}
       texture={texture}
@@ -667,6 +674,8 @@ export type EnquiryIsland = {
   arrangement?: 'beside' | 'halves';
   /** With the drawing (default) or without (owner, 29 Oct 2026). */
   illustration?: boolean;
+  /** Set inside another band (the contact hero's `panel`) rather than as a band of its own. */
+  inBand?: boolean;
 };
 
 export function EnquiryBand({
@@ -715,6 +724,7 @@ export function EnquiryBand({
         data-band="L"
         island={surface}
         islandArrangement="halves"
+        inBand={island.inBand}
         islandTexture="flow"
         art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}

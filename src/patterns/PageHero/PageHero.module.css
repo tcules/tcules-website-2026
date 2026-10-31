@@ -373,6 +373,21 @@ a.name:hover {
   inline-size: min(100%, var(--hero-media-size-centred));
 }
 
+/* ── panel · a composed object in the media's place (the contact hero's island) ───────
+   The whole content column: a centred head's justifyItems would otherwise shrink it to its
+   content. */
+/* The row holding a panel spans the column: a centred trail row would otherwise shrink it to the
+   widest line of copy. */
+.withPanel {
+  justify-self: stretch;
+}
+
+.panel {
+  justify-self: stretch;
+  inline-size: 100%;
+  text-align: start;
+}
+
 /* ── announcement · one line above the hero, two on a phone ───────────────────────
    The flag is the label voice in blue, after a blue pixel (.mark): news, marked by the accent
    rather than by a grey pill. The note is body-sm at the body's ink, a step under the lead. It is
