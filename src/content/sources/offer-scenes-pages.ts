@@ -4,7 +4,7 @@ import { offerSceneKey } from '../../lib/sketches.ts';
 /**
  * Which drawing each "What you get" item of a level-2 service or expertise page carries (owner, 1 Nov
  * 2026), keyed by the item's title as authored. Merged into OFFER_SCENES; each drawing is drawn for its one
- * item (components/Sketch/pages), so a row here is a decision about one item, never a keyword match.
+ * item (components/Sketch/wyg-*.tsx), so a row here is a decision about one item, never a keyword match.
  */
 const by = (rows: Record<string, string>) =>
   Object.fromEntries(Object.entries(rows).map(([title, scene]) => [offerSceneKey(title), scene]));
@@ -140,23 +140,6 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-fintech',
         'What we need from you': 'needs-fintech',
         'Where our part stops': 'stops-fintech',
-      }),
-    },
-    stories: {},
-  },
-  '/expertise/fintech-insurtech': {
-    items: {
-      'what-you-get': by({
-        'A status map': 'wyg-fintech-insurtech-status-map',
-        'Customer journeys': 'wyg-fintech-insurtech-customer-journeys',
-        'Review and approval screens': 'wyg-fintech-insurtech-review-approval-screens',
-        'Reasons, disclosures and consent wording': 'wyg-fintech-insurtech-reasons-disclosures-consent-wording',
-        'Research with the people the product is for': 'wyg-fintech-insurtech-research-people-product-is',
-        'Prototypes with realistic figures': 'wyg-fintech-insurtech-prototypes-realistic-figures',
-        'Designs ready for your engineers': 'wyg-fintech-insurtech-designs-ready-engineers',
-        'Who does the work': 'team-fintech-insurtech',
-        'What we need from you': 'needs-fintech-insurtech',
-        'Where our part stops': 'stops-fintech-insurtech',
       }),
     },
     stories: {},

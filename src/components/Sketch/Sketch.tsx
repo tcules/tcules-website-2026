@@ -9,7 +9,7 @@ import { L1_OUTCOMES } from './l1-outcomes';
 import { L1_SPECIALISTS, L1_SPECIALISTS_DRAWN } from './l1-specialists';
 import { L1_TERMS } from './l1-terms';
 import { OFFER, OFFER_DRAWN } from './offer';
-import { PAGES } from './pages';
+import { PAGES } from './wyg';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
 import type { SketchName } from '@/lib/sketches';

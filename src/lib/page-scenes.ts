@@ -1,7 +1,7 @@
 /**
  * The WHAT-YOU-GET scenes of the level-2 service and expertise pages (owner, 1 Nov 2026: "any page that
  * already has a placeholder"): one drawing per deliverable and per term (who does the work, what we need,
- * where our part stops), each drawn from that item's own words in components/Sketch/pages/<page>.tsx.
+ * where our part stops), each drawn from that item's own words in components/Sketch/wyg-<page>.tsx.
  * Named here so SketchName covers them; which item takes which is content/sources/offer-scenes-pages.ts.
  */
 export const PAGE_SCENE_NAMES = [
@@ -91,17 +91,6 @@ export const PAGE_SCENE_NAMES = [
   'team-fintech',
   'needs-fintech',
   'stops-fintech',
-  /* /expertise/fintech-insurtech */
-  'wyg-fintech-insurtech-status-map',
-  'wyg-fintech-insurtech-customer-journeys',
-  'wyg-fintech-insurtech-review-approval-screens',
-  'wyg-fintech-insurtech-reasons-disclosures-consent-wording',
-  'wyg-fintech-insurtech-research-people-product-is',
-  'wyg-fintech-insurtech-prototypes-realistic-figures',
-  'wyg-fintech-insurtech-designs-ready-engineers',
-  'team-fintech-insurtech',
-  'needs-fintech-insurtech',
-  'stops-fintech-insurtech',
   /* /expertise/healthtech */
   'wyg-healthtech-each-roles-journey-around',
   'wyg-healthtech-consent-sharing-access-steps',

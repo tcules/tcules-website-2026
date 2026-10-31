@@ -2,7 +2,7 @@ export const meta = {
   name: 'flat-drawings-pages',
   description: 'Draw every still flat drawing a page is missing, one designer per page, blind-checked per page',
   whenToUse:
-    'Filling empty Sketch plates (placeholders) page by page: a "What you get" band or any band of still drawings. args: {pages:[{page, slug, file?, scenes?:[...]}], maxRounds?: 2} (file defaults to components/Sketch/pages/<slug>.tsx; scenes default to every key in that file, in order); each item’s title and words are the comment above its scene in the page file. Each page owns one file (components/Sketch/pages/<page>.tsx) whose scene names are already wired (lib/page-scenes.ts, content/sources/offer-scenes-pages.ts). For moving tile drawings use flat-drawings instead. Needs `npm run dev` running in the checkout.',
+    'Filling empty Sketch plates (placeholders) page by page: a "What you get" band or any band of still drawings. args: {pages:[{page, slug, file?, scenes?:[...]}], maxRounds?: 2} (file defaults to components/Sketch/wyg-<slug>.tsx; scenes default to every key in that file, in order); each item’s title and words are the comment above its scene in the page file. Each page owns one file (components/Sketch/wyg-<page>.tsx) whose scene names are already wired (lib/page-scenes.ts, content/sources/offer-scenes-pages.ts). For moving tile drawings use flat-drawings instead. Needs `npm run dev` running in the checkout.',
   phases: [
     { title: 'Draw', detail: 'one designer per page: an idea per item in words, draw the set, capture, self-check' },
     { title: 'Check', detail: 'blind critic per page on its contact sheet, fix loop on the failing items' },
@@ -60,7 +60,7 @@ const REVIEW = {
   required: ['items'],
 }
 
-const fileOf = p => p.file ?? `src/components/Sketch/pages/${p.slug}.tsx`
+const fileOf = p => p.file ?? `src/components/Sketch/wyg-${p.slug}.tsx`
 const ALL = null // every scene key in the page's file, in file order
 const list = scenes =>
   scenes === ALL ? '(every scene key in the file, in file order)' : scenes.map((sc, i) => `${i + 1}. \`${sc}\``).join('\n')
@@ -70,7 +70,7 @@ const cmd = (p, scenes, sheet) =>
 function drawPrompt(p, scenes, feedback) {
   return `You are drawing the still flat drawings for one page of the Tcules site: ${p.page}, its "What you get" band. Read ${BRIEF} whole first (the drawing rules; these plates are STILL, so the motion section applies only as "plates are held finished": draw the finished picture, a route as a plain TraceIn or line). Then read the helpers in src/components/Sketch/offer.tsx and scenes.tsx and the classes in Sketch.module.css. The approved standard for these plates is .shots/frames/sheet-guides-still.png (product design's What you get; source in src/components/Sketch/offer.tsx and l1-terms.tsx). If that file is missing, run \`${GUIDE_CMD}\`.
 
-You own ONE file: \`${fileOf(p)}\`. It already lists every item's scene name with its words in a comment, set to undefined. Replace each undefined with a function you write in the same file (Write or Edit freely; no one else touches it). Import helpers from '../offer', '../scenes' and styles from '../Sketch.module.css'. Do not edit any other file and do not commit.
+You own ONE file: \`${fileOf(p)}\`. It already lists every item's scene name with its words in a comment, set to undefined. Replace each undefined with a function you write in the same file (Write or Edit freely; no one else touches it). Import helpers from './offer', './scenes' and styles from './Sketch.module.css' (same folder: a ../ import fails the tier lint). Do not edit any other file and do not commit.
 
 ${feedback ? `A blind critic rejected these items; fix exactly these, keep everything else:\n${feedback}` : `The items, in page order (each one's title and words are the comment above its scene in your file; the last three are usually the terms Who does the work, What we need from you, Where our part stops):\n${list(scenes)}`}
 
