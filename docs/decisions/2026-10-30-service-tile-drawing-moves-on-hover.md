@@ -1,7 +1,7 @@
 ---
 title: "A service tile's drawing always moves on hover"
 date: 2026-10-30
-status: active
+status: superseded
 area: [cards, illustration]
 source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the L1 service pages"
 supersedes: []

@@ -4,6 +4,7 @@
  *
  *   npm run sketch:frames -- specialist-research specialist-ui     these scenes
  *   npm run sketch:frames -- --base=http://localhost:3000 ...      an explicit server
+ *   npm run sketch:frames -- --surface=ink ...                     on another surface (default paper)
  *
  * For each scene it hovers that scene's live tile on /design/sketch (S.7, paper) and writes to
  * `.shots/frames/` (gitignored):
@@ -25,6 +26,8 @@ const OUT = join('.shots', 'frames');
 const args = process.argv.slice(2);
 const baseArg = args.find((a) => a.startsWith('--base='))?.slice(7);
 const names = args.filter((a) => !a.startsWith('--'));
+const surface = args.find((a) => a.startsWith('--surface='))?.slice(10) ?? 'paper';
+const sfx = surface === 'paper' ? '' : `-${surface}`;
 
 function ownDevServer() {
   try {
@@ -57,11 +60,11 @@ async function shot(el) {
 
 let failed = false;
 for (const name of names) {
-  let link = page.locator(`#tile-paper-${name}`);
-  if (!(await link.count())) link = page.locator(`#story-paper-${name}`);
+  let link = page.locator(`#tile-${surface}-${name}`);
+  if (!(await link.count())) link = page.locator(`#story-${surface}-${name}`);
   if (!(await link.count())) {
     /* A still scene (a plate: cards, What you get): no move to measure, one capture of it as drawn. */
-    const plate = page.locator(`svg[data-scene="${name}"]`).first();
+    const plate = page.locator(`[data-surface="${surface}"] svg[data-scene="${name}"]`).first();
     if (!(await plate.count())) {
       console.log(JSON.stringify({ scene: name, error: 'not on /design/sketch' }));
       failed = true;
@@ -69,12 +72,12 @@ for (const name of names) {
     }
     await plate.scrollIntoViewIfNeeded();
     const still = await shot(plate);
-    await sharp(still).png().toFile(join(OUT, `${name}.png`));
+    await sharp(still).png().toFile(join(OUT, `${name}${sfx}.png`));
     await sharp(still)
       .resize(Math.round((await sharp(still).metadata()).width / 2))
       .png()
-      .toFile(join(OUT, `${name}@1x.png`));
-    console.log(JSON.stringify({ scene: name, still: true, strip: join(OUT, `${name}.png`) }));
+      .toFile(join(OUT, `${name}${sfx}@1x.png`));
+    console.log(JSON.stringify({ scene: name, still: true, strip: join(OUT, `${name}${sfx}.png`) }));
     continue;
   }
   const svg = link.locator('svg');
@@ -128,11 +131,11 @@ for (const name of names) {
       { input: moved, left: (width + gap) * 2, top: 0 },
     ])
     .png()
-    .toFile(join(OUT, `${name}.png`));
+    .toFile(join(OUT, `${name}${sfx}.png`));
   await sharp(moved)
     .resize(Math.round(width / 2))
     .png()
-    .toFile(join(OUT, `${name}@1x.png`));
+    .toFile(join(OUT, `${name}${sfx}@1x.png`));
 
   const pct = (n) => Math.round(n * 100);
   console.log(
@@ -142,7 +145,7 @@ for (const name of names) {
       spanX: x1 < 0 ? 0 : pct((x1 - x0) / width),
       spanY: y1 < 0 ? 0 : pct((y1 - y0) / height),
       traceUnits: Math.round(traceUnits),
-      strip: join(OUT, `${name}.png`),
+      strip: join(OUT, `${name}${sfx}.png`),
     }),
   );
 }

@@ -129,18 +129,42 @@ export function Move({
 }
 
 /**
- * A route that draws itself along its own length when the link the drawing sits in is hovered or
- * focused (live scenes only): the tile scenes' motion lives on a line, as the home stories' does, never
- * on a small part (owner, 31 Oct 2026). Anywhere else, and under reduced motion, it is the plain route,
- * drawn. Accent, the subject route's weight; what it reaches arrives with it in a `GrowIn`.
+ * MOTION PATTERN 1 · a line draws. The route draws itself along its length when the link the drawing
+ * sits in is hovered or focused, as the S.3 stories' routes do (owner, 31 Oct 2026: "if there's a line,
+ * it draws over the course of animation"). Held still (a plate), it is the plain finished route.
  */
 export function TraceIn({ d }: { d: string }) {
-  return <path className={styles.traceIn} d={d} pathLength={1} />;
+  return <path className={styles.trace} d={d} pathLength={1} />;
 }
 
-/** A part that arrives on hover: absent at rest in a live scene, there in every still one (plates never change). */
+/**
+ * MOTION PATTERN 4 · the cursor moves to the button. The cursor rests (x, y) drawing units away from
+ * where it is drawn and glides onto it; pair it with the button it presses drawn `press` (it fills).
+ */
+export function Glide({ x, y, children }: { x: number; y: number; children: ReactNode }) {
+  return (
+    <g
+      className={styles.glide}
+      style={
+        {
+          '--skt-glide-x': `calc(${x} * var(--skt-unit))`,
+          '--skt-glide-y': `calc(${y} * var(--skt-unit))`,
+        } as CSSProperties
+      }
+    >
+      {children}
+    </g>
+  );
+}
+
+/**
+ * MOTION PATTERN 2 · a circle grows from nothing (the tick, the flag, the arrowhead, a halo): absent at
+ * rest in a live scene, there in every still one. Pattern 2's other form, unfilled to filled, is the
+ * `release` class (with `releaseMark` on its glyph); pattern 3, a highlight, is a halo in a GrowIn
+ * around a `block`, which fills (the Audits story).
+ */
 export function GrowIn({ children }: { children: ReactNode }) {
-  return <g className={styles.growIn}>{children}</g>;
+  return <g className={styles.grow}>{children}</g>;
 }
 
 /** A glyph in its chip, at a frame's top-left corner. */

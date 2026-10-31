@@ -92,7 +92,6 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   /* Any scene moves where it is asked to, in the bare frame; anywhere else it is held at rest (a story
      scene solved, every other scene as drawn: its Move parts at rest, its GrowIn parts present). */
   const live = story && bare;
-  const moving = storyDrawing !== undefined && live;
   const Still = name
     ? (STILL[name] ??
       (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
@@ -118,8 +117,10 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
       className={cx(
         styles.sketch,
         bare && styles.bare,
-        storyDrawing !== undefined && !moving && styles.still,
-        storyDrawing !== undefined && (end || !moving) && styles.end,
+        /* Every scene not asked to move is held finished: its routes drawn, what arrives there,
+           what lights lit (a plate never moves, owner 25 Oct 2026). */
+        !live && styles.still,
+        (end || !live) && styles.end,
         live && styles.live,
         end && styles.solved,
       )}

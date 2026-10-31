@@ -20,25 +20,35 @@ conflict, a logged ruling wins.
 
 ## How it moves (tile drawings, inside a link)
 
-The motion lives on a **line**, never on a small object (owner, 31 Oct 2026).
+**Rest and end must differ, visibly** (owner, 31 Oct 2026; decisions/2026-10-31-tile-drawings-move-in-four-patterns).
+A tile whose start and end look the same fails, however correct it is. The motion comes only from these
+four patterns, derived from the seven S.3 service stories (`src/components/Sketch/stories.tsx`, all approved):
 
+| # | Pattern | Built with | In the stories |
+|---|---|---|---|
+| 1 | **A line draws** over the course of the animation | `TraceIn` (the route), its arrowhead or end port in a `GrowIn` | product-design, design-systems, design-engineering, software-development, audits |
+| 2 | **A circle icon grows from 0**, or is **unfilled and fills** | `GrowIn` around a `Focus` / node / halo; or a circle drawn `release` with its glyph `releaseMark` | specialist-research's tick; software-development's release |
+| 3 | **An element is highlighted**, as in Audits | a halo in a `GrowIn` behind a `block` (it fills solid) | audits, product-modernisation |
+| 4 | **A cursor moves to the button** | the cursor in a `Glide x y` (its rest offset), the button drawn `press` (it fills) | ai-product-ux |
+
+- **Two patterns at most** in one drawing. A line that lands on a highlight (1+3) or a line that ends in a
+  tick (1+2) is the usual pair; three is too much.
+- **No other motion.** No `Move` nudges, no scaling a part a few percent, no small object popping alone.
+  If the drawing has a line, the line draws.
 - **The guiding examples** are the four home `#product-design` tiles: `product-design`, `design-systems`,
-  `design-engineering`, `software-development` (`src/components/Sketch/stories.tsx`). In each one a blue
-  route draws itself from the cause to the result, the arrowhead or port lands as it arrives, and the
-  thing it reaches lights up. The eye follows the line across the drawing.
-- **The failing examples** are the seven tiles of `/services/product-design#services-on-their-own` as they
-  stood on 31 Oct: an eye badge popping in, a button shrinking 4%, a bar growing a few units. All correct,
-  and you can't see them move.
-- **Build it with `TraceIn`** (`src/components/Sketch/scenes.tsx`): the route, hidden at rest, draws
-  along its length on hover. What it reaches arrives with it (`GrowIn`: the arrowhead, a halo, a tick).
-  `Move` is for at most one big part that travels with the line, never the motion on its own.
-- **Rest tells the problem, hover shows it solved.** At rest the drawing still reads (the route simply
-  isn't drawn yet); on hover the line connects the problem to its answer.
-- **The bar it must clear**, measured by `npm run sketch:frames -- <scene>`: `traceUnits` ≥ 80 (the
-  guiding four run 84–164) and `changed` ≥ 25% (they run 23–43; the failing seven ran 12–30 with 0 trace).
-  The numbers are a floor, not the goal: the line has to read as the drawing's main event.
-- **Plates never move.** The same scene on a 16:9 plate (cards, What you get, Starting points) is drawn
-  still, with `TraceIn` showing as the plain finished route. So check that the *finished* state reads too.
+  `design-engineering`, `software-development`. The eye follows the line across the drawing.
+- **The failing examples**: the 31 Oct tiles `new-product` (start and end the same), `specialist-ai-hitl`,
+  `-ai-engineering`, `-ai-readiness`, `-ds-strategy`, `-ds-implementation`, `-ds-alignment`, `-redesign`:
+  a part nudged, a badge popped in, nothing anyone notices.
+- **Rest tells the problem, hover shows it solved.** At rest the drawing still reads (the route isn't
+  drawn yet); on hover the line connects the problem to its answer.
+- **The bar**, measured by `npm run sketch:frames -- <scene>`: `changed` ≥ 25% (the guiding four run
+  23–43), and with a line `traceUnits` ≥ 80 (they run 84–164). A floor, not the goal.
+- **Plates never move.** The same scene on a 16:9 plate (cards, What you get, Starting points) is held
+  finished: routes drawn, what arrives there, what lights lit. Check that the finished state reads too.
+- **On ink, peridot leads** (decisions/2026-10-31-peridot-leads-flat-drawings-on-ink): the `--skt-*`
+  tokens repaint the accent; a drawing never names a colour, so nothing in the scene changes.
+  `npm run sketch:frames -- --surface=ink <scene>` shows it.
 
 ## Drawing rules that keep getting broken
 

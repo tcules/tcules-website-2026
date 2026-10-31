@@ -401,48 +401,4 @@
   }
 }
 
-/* A live scene's arriving part (GrowIn): from nothing about its own centre, as a story's `grow`. */
-.live .growIn {
-  transform: scale(0);
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform var(--skt-duration) var(--skt-easing);
-}
-:global(a:hover) .live .growIn,
-:global(a:focus-visible) .live .growIn,
-.solved .growIn {
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .live .growIn {
-    transition-duration: var(--duration-instant);
-  }
-}
 
-/* A live scene's route (TraceIn): the plain subject route wherever the scene is still; in a live scene it
-   is hidden at rest and draws itself along its length on hover, on the tile's one curve. Measured as the
-   story `trace` is: pathLength 1, a gap twice the path, and a width divided by the drawing's scale
-   because a dash on a non-scaling stroke is measured in screen pixels. Reduced motion keeps it drawn. */
-.traceIn {
-  fill: none;
-  stroke: var(--skt-accent);
-  stroke-width: var(--skt-line-width);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .live .traceIn {
-    stroke-width: calc(var(--skt-line-width) / var(--skt-scale));
-    stroke-linecap: butt;
-    stroke-dasharray: 1 2;
-    stroke-dashoffset: 1;
-    vector-effect: none;
-    transition: stroke-dashoffset var(--skt-duration) var(--skt-easing);
-  }
-  :global(a:hover) .live .traceIn,
-  :global(a:focus-visible) .live .traceIn,
-  .solved .traceIn {
-    stroke-dashoffset: 0;
-  }
-}
