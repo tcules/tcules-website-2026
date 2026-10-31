@@ -5,6 +5,10 @@
  *   npm run sketch:frames -- specialist-research specialist-ui     these scenes
  *   npm run sketch:frames -- --base=http://localhost:3000 ...      an explicit server
  *   npm run sketch:frames -- --surface=ink ...                     on another surface (default paper)
+ *   npm run sketch:frames -- --page=/services/x/y ...              a still scene from the page it sits on
+ *   npm run sketch:frames -- --sheet=name ...                      also one contact sheet of every scene's
+ *                                                                  @1x, in the order named, numbered from 1
+ *                                                                  (.shots/frames/sheet-<name>.png)
  *
  * For each scene it hovers that scene's live tile on /design/sketch (S.7, paper) and writes to
  * `.shots/frames/` (gitignored):
@@ -26,6 +30,8 @@ const OUT = join('.shots', 'frames');
 const args = process.argv.slice(2);
 const baseArg = args.find((a) => a.startsWith('--base='))?.slice(7);
 const names = args.filter((a) => !a.startsWith('--'));
+const sheetArg = args.find((a) => a.startsWith('--sheet='))?.slice(8);
+const pageArg = args.find((a) => a.startsWith('--page='))?.slice(7);
 const surface = args.find((a) => a.startsWith('--surface='))?.slice(10) ?? 'paper';
 const sfx = surface === 'paper' ? '' : `-${surface}`;
 
@@ -52,19 +58,22 @@ mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 2 });
-await page.goto(`${base}/design/sketch`, { waitUntil: 'networkidle' });
+await page.goto(`${base}${pageArg ?? '/design/sketch'}`, { waitUntil: 'networkidle' });
 
 async function shot(el) {
   return el.screenshot({ animations: 'allow' });
 }
 
 let failed = false;
+const sheet = [];
 for (const name of names) {
   let link = page.locator(`#tile-${surface}-${name}`);
   if (!(await link.count())) link = page.locator(`#story-${surface}-${name}`);
   if (!(await link.count())) {
     /* A still scene (a plate: cards, What you get): no move to measure, one capture of it as drawn. */
-    const plate = page.locator(`[data-surface="${surface}"] svg[data-scene="${name}"]`).first();
+    const plate = pageArg
+      ? page.locator(`svg[data-scene="${name}"]`).first()
+      : page.locator(`[data-surface="${surface}"] svg[data-scene="${name}"]`).first();
     if (!(await plate.count())) {
       console.log(JSON.stringify({ scene: name, error: 'not on /design/sketch' }));
       failed = true;
@@ -77,6 +86,7 @@ for (const name of names) {
       .resize(Math.round((await sharp(still).metadata()).width / 2))
       .png()
       .toFile(join(OUT, `${name}${sfx}@1x.png`));
+    sheet.push(join(OUT, `${name}${sfx}@1x.png`));
     console.log(JSON.stringify({ scene: name, still: true, strip: join(OUT, `${name}${sfx}.png`) }));
     continue;
   }
@@ -137,6 +147,7 @@ for (const name of names) {
     .png()
     .toFile(join(OUT, `${name}${sfx}@1x.png`));
 
+  sheet.push(join(OUT, `${name}${sfx}@1x.png`));
   const pct = (n) => Math.round(n * 100);
   console.log(
     JSON.stringify({
@@ -151,4 +162,29 @@ for (const name of names) {
 }
 
 await browser.close();
+
+/* The contact sheet: three across, each cell numbered in the order the scenes were named. */
+if (sheetArg && sheet.length) {
+  const metas = await Promise.all(sheet.map((f) => sharp(f).metadata()));
+  const cw = Math.max(...metas.map((m) => m.width)) + 24;
+  const ch = Math.max(...metas.map((m) => m.height)) + 40;
+  const cols = 3;
+  const rows = Math.ceil(sheet.length / cols);
+  const cells = await Promise.all(
+    sheet.map(async (f, i) => {
+      const label = Buffer.from(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="24"><text x="0" y="18" font-family="sans-serif" font-size="18" fill="#000">${i + 1}</text></svg>`,
+      );
+      return [
+        { input: f, left: (i % cols) * cw, top: Math.floor(i / cols) * ch + 28 },
+        { input: label, left: (i % cols) * cw, top: Math.floor(i / cols) * ch },
+      ];
+    }),
+  );
+  await sharp({ create: { width: cw * cols, height: ch * rows, channels: 4, background: '#ffffff' } })
+    .composite(cells.flat())
+    .png()
+    .toFile(join(OUT, `sheet-${sheetArg}.png`));
+  console.log(JSON.stringify({ sheet: join(OUT, `sheet-${sheetArg}.png`) }));
+}
 process.exit(failed ? 1 : 0);
