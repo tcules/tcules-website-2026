@@ -165,8 +165,8 @@ a template before the single pages it serves, since one pass there fixes every p
 29 Oct critic's (`docs/page-build/review-29-oct.md`), not a brief.
 
 **Design order (owner, 1 Nov 2026):** 2.40 `/how-we-work` → 2.41 `/why-tcules` → 2.37 `/services` hub → 2.38
-`/expertise` hub → 2.32 the 12 expertise pages → 2.36 audit pages → 2.42 `/careers` → 2.35 Future Interfaces Lab →
-2.43 `/matter-design-system`. Every page designed gets its record in `docs/page-build/pages/<page>.md` (decisions
+`/expertise` hub → 2.32 the 12 expertise pages → 2.36 audit pages → 2.39 glossary → 2.42 `/careers` → 2.35 Future Interfaces Lab →
+2.43 `/matter-design-system`. 2.46 level-2 sub-services are low priority, after these. One PR per large page or per template group (how-we-work and its two subpages; the two hubs; the 12 expertise pages). Every page designed gets its record in `docs/page-build/pages/<page>.md` (decisions
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
