@@ -103,6 +103,15 @@ const TERMS: readonly SketchName[] = [
   'stops-product-modernisation',
   'stops-software-development',
 ];
+/** About's working terms (owner, 1 Nov 2026): one scene per term, drawn as a set. */
+const WORKING_TERMS: readonly SketchName[] = [
+  'scope-who',
+  'scope-communication',
+  'scope-response',
+  'scope-getting-started',
+  'scope-turnaround',
+  'scope-hours',
+];
 /** "Who does the work" (round 7): our team frame with the roles beside it, one per service page. */
 const TEAM: readonly SketchName[] = [
   'team-product-design',
@@ -283,6 +292,19 @@ export default function SketchSpecimen() {
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {TEAM.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.10 · the working terms · ${surface}`}
+            note="Owner, 1 Nov 2026: About's six terms of how Tcules works with clients, one scene per term from its own sentence, drawn as one set."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {WORKING_TERMS.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
                   <code>{name}</code>

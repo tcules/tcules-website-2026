@@ -281,14 +281,16 @@ function liftTrailingLink(runs: readonly InlineRun[]) {
  * draws only what the name says). A name none of these fit shows no drawing rather than a wrong one.
  */
 /**
- * About's working terms, by their authored titles, each to the scene drawn for the same claim in the
- * 11 Oct "How Tcules works" band (owner, 31 Oct 2026). Who you work with, response time and getting
- * started argue something no scene draws yet: they take the empty plate until drawn.
+ * About's working terms, by their authored titles, each to its own scene, drawn for it as one set
+ * (owner, 1 Nov 2026; Sketch/terms.tsx). None borrows How we work together's scopes.
  */
 const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
-  communication: 'inside',
-  turnaround: 'commercial',
-  'working hours': 'overlap',
+  'who you work with': 'who',
+  communication: 'communication',
+  'response time': 'response',
+  'getting started': 'getting-started',
+  turnaround: 'turnaround',
+  'working hours': 'hours',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
