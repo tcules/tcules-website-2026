@@ -2,7 +2,8 @@
    Tier 2. A semantic scope note rendered through Prose, built to docs/specs/Callout.md.
 
    Naming: --call-{part}-{role}
-     parts: content | label
+     parts: content | label | glyph
+     tones: (note) | example | band
 
    Callout has two surface-dependent roles and one piece of geometry. Body-small, the eyebrow
    role and body measure are existing system roles, read directly rather than aliased. There is
@@ -28,6 +29,8 @@
   --call-example-content-ink: var(--color-neutral-900); /* 14.62:1 */
   --call-example-label-ink: var(--color-brandeis-500); /* 6.17:1 */
   --call-example-rule-ink: var(--color-brandeis-500); /* a mark */
+  --call-band-content-ink: var(--color-neutral-900); /* 14.62:1 */
+  --call-band-glyph-ink: var(--color-brandeis-500); /* a mark */
 }
 
 [data-surface='tint'] {
@@ -36,6 +39,8 @@
   --call-example-content-ink: var(--color-neutral-900); /* 13.06:1 */
   --call-example-label-ink: var(--color-brandeis-500); /* 5.51:1 */
   --call-example-rule-ink: var(--color-brandeis-500); /* a mark */
+  --call-band-content-ink: var(--color-neutral-900); /* 13.06:1 */
+  --call-band-glyph-ink: var(--color-brandeis-500); /* a mark */
 }
 
 [data-surface='ink'] {
@@ -44,6 +49,8 @@
   --call-example-content-ink: var(--color-white); /* 17.26:1 */
   --call-example-label-ink: var(--color-brandeis-300); /* 7.32:1 */
   --call-example-rule-ink: var(--color-brandeis-300); /* a mark */
+  --call-band-content-ink: var(--color-white); /* 17.26:1 */
+  --call-band-glyph-ink: var(--color-brandeis-300); /* a mark */
 }
 
 [data-surface='blue'] {
@@ -52,4 +59,6 @@
   --call-example-content-ink: var(--color-white); /* 6.23:1 */
   --call-example-label-ink: var(--color-white); /* 6.23:1 */
   --call-example-rule-ink: var(--color-white); /* a mark */
+  --call-band-content-ink: var(--color-white); /* 6.23:1 */
+  --call-band-glyph-ink: var(--color-white); /* a mark */
 }

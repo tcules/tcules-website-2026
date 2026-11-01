@@ -139,14 +139,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own slot (critic, B2: the 16:9 cover master cropped to the story split lost its label). The story is a case card beside its client's quote; 16:9 since home round 3 (every card cover is 16:9, it was 2:1). If the case page later binds a cover, that cover replaces this panel.",
   },
-  '/contact#hero': {
-    src: '/placeholders/contact--hero.svg',
-    width: 1600,
-    height: 1280,
-    kind: 'illustration',
-    shows:
-      "A first message reaching the studio: a product link, a screenshot and two lines about the problem arriving at a senior designer's desk, the reply already being written. A high-traffic page always has a hero image or illustration (owner, 29 Oct 2026); this panel holds the slot until the drawing arrives.",
-  },
   '/expertise/healthtech#approach': {
     src: '/placeholders/expertise-healthtech--approach.svg',
     width: 1280,

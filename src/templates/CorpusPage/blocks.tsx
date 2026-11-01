@@ -10,6 +10,7 @@ import {
   ContentSection,
   EnquiryForm,
   type EnquiryDress,
+  type EnquiryNextStep,
   ListCard,
   LogoGrid,
   PageHero,
@@ -78,6 +79,7 @@ export function head(band: CorpusBand) {
 
 export type CorpusHeroProps = {
   page: CorpusPage;
+  /** `centred`: the head centred on the column, with its media (about) or the island `panel` (contact, owner 31 Oct 2026) under it. */
   arrangement?: 'stacked' | 'beside' | 'centred';
   media?: HeroMedia;
   /** A bare run of facts (home's studio record), one tag each, after the actions. */
@@ -89,6 +91,8 @@ export type CorpusHeroProps = {
   /** The record as figures, a row under the actions (PageHero `stats`, home round 3). */
   stats?: readonly HeroStat[];
   texture?: boolean;
+  /** A composed object in the media's place (PageHero `panel`): the contact hero's enquiry island. */
+  panel?: ReactNode;
 };
 
 /**
@@ -107,13 +111,23 @@ export function CorpusHero({
   proofLine = true,
   stats,
   texture,
+  panel,
 }: CorpusHeroProps) {
   const { hero } = page;
   /* A high-traffic page's hero always carries an illustration or an image (owner, 29 Oct 2026;
      src/lib/hero-media.ts): where its template handed none, its own bound hero asset, else its
      labelled placeholder, beside the words. */
-  const heroMedia = media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined);
-  const heroArrangement = media ? arrangement : heroMedia ? 'beside' : 'stacked';
+  const heroMedia =
+    panel != null
+      ? undefined
+      : (media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined));
+  const heroArrangement = media
+    ? arrangement
+    : heroMedia
+      ? 'beside'
+      : arrangement === 'centred'
+        ? 'centred'
+        : 'stacked';
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
   const actions = hero.actions.slice(0, 2).map((action) => ({
@@ -147,6 +161,7 @@ export function CorpusHero({
       actions={actions}
       arrangement={heroArrangement}
       media={heroMedia}
+      panel={panel}
       tags={tags}
       stats={figures && figures.length > 0 ? figures : undefined}
       texture={texture}
@@ -660,6 +675,10 @@ export type EnquiryIsland = {
   arrangement?: 'beside' | 'halves';
   /** With the drawing (default) or without (owner, 29 Oct 2026). */
   illustration?: boolean;
+  /** Set inside another band (the contact hero's `panel`) rather than as a band of its own. */
+  inBand?: boolean;
+  /** What happens after a send, shown by the form's success view (the page's own steps). */
+  nextSteps?: readonly EnquiryNextStep[];
 };
 
 export function EnquiryBand({
@@ -700,6 +719,7 @@ export function EnquiryBand({
   };
   const surface = island.surface ?? 'blue';
   const dress = ENQUIRY_DRESS[island.dress ?? 'card'];
+  const treatment = { dress, nextSteps: island.nextSteps };
   const drawn = island.illustration ?? true;
   if ((island.arrangement ?? 'halves') === 'halves') {
     return (
@@ -708,12 +728,13 @@ export function EnquiryBand({
         data-band="L"
         island={surface}
         islandArrangement="halves"
+        inBand={island.inBand}
         islandTexture="flow"
         art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}
         body={body}
         {...contactProps}
-        form={corpusEnquiryForm(page, band, { dress })}
+        form={corpusEnquiryForm(page, band, treatment)}
       />
     );
   }
@@ -726,7 +747,7 @@ export function EnquiryBand({
       art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}
       body={body}
-      form={corpusEnquiryForm(page, band, { dress })}
+      form={corpusEnquiryForm(page, band, treatment)}
     />
   );
 }
@@ -740,7 +761,7 @@ export function corpusEnquiryForm(
   page: CorpusPage,
   band?: CorpusBand,
   /** The island close's treatment: a dress for the form. Default: lg boxes, the full submit. */
-  treatment: { dress?: EnquiryDress } = {},
+  treatment: { dress?: EnquiryDress; nextSteps?: readonly EnquiryNextStep[] } = {},
 ) {
   const conversion = page.conversion;
   /* The band's own "After sending:" line ("We'll reply within one business day.") is the caption
@@ -761,6 +782,7 @@ export function corpusEnquiryForm(
       fieldScale={treatment.dress ? 'md' : 'lg'}
       submit={treatment.dress ? 'inline' : 'full'}
       caption={after}
+      nextSteps={treatment.nextSteps}
       success={
         conversion?.onSuccess
           ? { heading: conversion.onSuccess.heading, body: conversion.onSuccess.body }

@@ -1,6 +1,4 @@
-import type { ReactNode } from 'react';
-
-import { Icon, Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, type IconName } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import {
@@ -14,7 +12,7 @@ import {
   type Step,
 } from '@/patterns';
 
-import { CorpusHero, headingIdOf, head } from './blocks';
+import { CorpusHero, EnquiryBand, headingIdOf, head } from './blocks';
 import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
@@ -67,20 +65,9 @@ const BRIEF_GLYPHS = [
   'users-group-rounded',
 ] as const satisfies readonly IconName[];
 
-/** One half of the peer band: its own h2 over its body, the half's id the band's anchor. */
-function Half({ band, children }: { band: CorpusBand; children: ReactNode }) {
-  return (
-    <section id={band.id} aria-labelledby={headingIdOf(band)}>
-      <Layout rowGap="block">
-        <h2 id={headingIdOf(band)}>{band.headingText}</h2>
-        {children}
-      </Layout>
-    </section>
-  );
-}
-
-/** What to include: the four parts of a first message as a read-down, then the line under them. */
-function BriefHalf({ band }: { band: CorpusBand }) {
+/** What to include: the head above, the four parts of a first message as a two-column read-down
+    under it, then the line that closes the band. */
+function Brief({ band }: { band: CorpusBand }) {
   const blocks = content(band);
   const list = blocks.find(
     (block): block is Extract<CorpusBlock, { type: 'list' }> => block.type === 'list',
@@ -96,55 +83,48 @@ function BriefHalf({ band }: { band: CorpusBand }) {
   });
   const rest = blocks.filter((block) => block !== list);
   return (
-    <Half band={band}>
+    <ContentSection {...head(band)} data-band="C-brief">
       <Layout rowGap="stack">
         {rows.length > 0 ? <ReadDown rows={rows} columns={2} /> : null}
         {rest.length > 0 ? <BandBody blocks={rest} labelledBy={headingIdOf(band)} /> : null}
       </Layout>
-    </Half>
+    </ContentSection>
   );
 }
 
-/** What happens next: the numbered claims as Steps (Steps numbers them, so the copy's "1." goes). */
-function NextStepsHalf({ band }: { band: CorpusBand }) {
+/** The numbered claims of `next-steps` as a title and its body, and the blocks that are not steps. */
+function stepsOf(band: CorpusBand) {
   const blocks = content(band).filter((block) => !recordLineOf(block));
-  const steps: Step[] = [];
+  const steps: { title: string; body: InlineRun[] }[] = [];
   const rest: CorpusBlock[] = [];
   for (const block of blocks) {
     const found = leadOf(block);
     const lead = found ? sentenceLead(found) : null;
     if (lead) {
-      const body = trimStart(lead.body);
       steps.push({
         title: labelTitle(lead.label).replace(/^\d+\.\s*/, ''),
-        ...(body.length > 0 ? rowBody(body) : {}),
+        body: trimStart(lead.body),
       });
     } else rest.push(block);
   }
+  return { steps, rest };
+}
+
+/** What happens next: the head beside the numbered claims as Steps (Steps numbers them, so the
+    copy's "1." goes; the record line is the hero's figures). */
+function NextSteps({ band }: { band: CorpusBand }) {
+  const { steps: parsed, rest } = stepsOf(band);
+  const steps: Step[] = parsed.map(({ title, body }) => ({
+    title,
+    ...(body.length > 0 ? rowBody(body) : {}),
+  }));
   return (
-    <Half band={band}>
+    <ContentSection {...head(band)} data-band="C-steps" arrangement="beside">
       <Layout rowGap="stack">
         {steps.length > 0 ? <Steps steps={steps} /> : null}
         {rest.length > 0 ? <BandBody blocks={rest} labelledBy={headingIdOf(band)} /> : null}
       </Layout>
-    </Half>
-  );
-}
-
-/**
- * `brief` and `next-steps` as ONE band of two PEER halves (component-map § E /contact, Q18 default,
- * 29 Oct 2026): what to send and what happens after are the two halves of one job, so they share a
- * row at the peer gap (`column`), each with its own h2, in the authored order, start to end. Stacked,
- * they were two text bands in a row directly under the island. Below 1024 the halves stack.
- */
-function BriefAndNextSteps({ brief, next }: { brief?: CorpusBand; next?: CorpusBand }) {
-  return (
-    <Section as="div" data-band="C-peers">
-      <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="section">
-        {brief ? <BriefHalf band={brief} /> : null}
-        {next ? <NextStepsHalf band={next} /> : null}
-      </Layout>
-    </Section>
+    </ContentSection>
   );
 }
 
@@ -160,36 +140,62 @@ function Confidentiality({ band }: { band: CorpusBand }) {
   return (
     <ContentSection {...head(band)} data-band="C-note" arrangement="beside">
       <ContentSectionText>
-        <Callout html={html} icon={<Icon name="shield-check" size="xl" />} />
+        <Callout html={html} tone="band" icon={<Icon name="shield-check" size="xl" />} />
       </ContentSectionText>
     </ContentSection>
   );
 }
 
 /**
- * TIER 3 — the contact page from the `_pages/` copy (component-map § E /contact, 29 Oct 2026). The
- * hero with the studio's record as figures (the line `next-steps` ends on, Q10), the enquiry island,
- * then the brief and the next steps as peer halves, the client wall on tint, the confidentiality note
- * and the questions. Every other band renders as the plan names it.
+ * TIER 3 — the contact page from the `_pages/` copy (component-map § E /contact). The hero centred
+ * with the studio's record as figures (the line `next-steps` ends on, Q10) and no media, the enquiry
+ * island straight under it (owner, 31 Oct 2026), then the brief (head above its read-down) and the
+ * next steps (head beside its steps) as two bands, the quotes on tint, the confidentiality note and
+ * the questions. Every other band renders as the plan names it.
  */
 export function ContactPage({ page, ...rest }: ContactPageProps) {
   const units = planOffer(page);
   const ctx: OfferContext = { page, ...rest };
-  const bandOf = (id: ContactBand) => page.bands.find((b) => b.id === id);
-  const next = bandOf('next-steps');
+  const next = page.bands.find((b) => b.id === ('next-steps' satisfies ContactBand));
+  /* The form sits in the hero where an image would (owner, 31 Oct 2026): the enquiry island, as
+     every close carries it, set inside the hero's band a stack under the figures. */
+  const enquiry = page.bands.find((b) => b.id === page.conversion?.anchor);
   return (
     <>
-      <CorpusHero page={page} stats={contactStats(page, next)} />
+      <CorpusHero
+        page={page}
+        arrangement="centred"
+        stats={contactStats(page, next)}
+        panel={
+          enquiry ? (
+            <EnquiryBand
+              page={page}
+              band={enquiry}
+              island={{
+                surface: 'blue',
+                dress: 'card',
+                arrangement: 'halves',
+                inBand: true,
+                /* After a send the panel shows the page's own three steps (owner, 31 Oct 2026). */
+                nextSteps: next
+                  ? stepsOf(next).steps.map(({ title, body }) => ({
+                      label: title,
+                      ...(body.length > 0 ? { detail: plain(body) } : {}),
+                    }))
+                  : undefined,
+              }}
+            />
+          ) : undefined
+        }
+      />
       {units.map((unit) => {
+        if (enquiry && unit.part !== 'b' && unit.band === enquiry) return null;
         if (unit.part === 'b') return <UnitView key={unit.id} unit={unit} ctx={ctx} />;
         switch (unit.band.id as ContactBand | string) {
           case 'brief':
-            return <BriefAndNextSteps key={unit.id} brief={unit.band} next={next} />;
+            return <Brief key={unit.id} band={unit.band} />;
           case 'next-steps':
-            /* Drawn as the brief's peer half; alone only if the copy drops the brief. */
-            return bandOf('brief') ? null : (
-              <BriefAndNextSteps key={unit.id} next={unit.band} />
-            );
+            return <NextSteps key={unit.id} band={unit.band} />;
           case 'confidentiality':
             return <Confidentiality key={unit.id} band={unit.band} />;
           default:

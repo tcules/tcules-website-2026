@@ -9,9 +9,12 @@ import { ROUTES, servicePath } from './routes';
  * placeholder from docs/image-register.md (`<route>#hero`) until the art arrives. One list, read by
  * every template that draws these heroes (CorpusPage's CorpusHero and the Strapi service route), so
  * a page cannot drop its image by changing templates.
+ *
+ * /contact left the list on 31 Oct 2026 (owner; decisions/2026-10-31-contact-hero-centred-form-below):
+ * its hero is the centred stack with the enquiry island straight under it, and the island's drawing
+ * is the first screen's picture.
  */
 export const HERO_MEDIA_ROUTES: ReadonlySet<string> = new Set([
-  ROUTES.contact,
   ROUTES.about,
   servicePath('product-design'),
   servicePath('design-systems'),
