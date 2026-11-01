@@ -601,14 +601,21 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
           person.portrait ? (
             <span key={`${person.name}-${index}`} className={styles.avatar}>
               <Media
-                image={{ ...person.portrait, alt: '', focus: person.portrait.focus ?? PORTRAIT_FOCUS }}
+                image={{
+                  ...person.portrait,
+                  alt: '',
+                  focus: person.portrait.focus ?? PORTRAIT_FOCUS,
+                }}
                 fit="fill"
                 edge="placement"
                 sizes="32px"
               />
             </span>
           ) : (
-            <span key={`${person.name}-${index}`} className={cx(styles.avatar, styles.initials)}>
+            <span
+              key={`${person.name}-${index}`}
+              className={cx(styles.avatar, styles.initials)}
+            >
               {initialsOf(person.name)}
             </span>
           ),
@@ -741,7 +748,9 @@ export function PageHero({
 
   /* Any credited portrait sets every value in the strip to the portrait's height (board G), so the
      keys share one top line and the dates sit level with the names beside the faces. */
-  const hasPortraits = credits.some((credit) => credit.people.some((person) => person.portrait));
+  const hasPortraits = credits.some((credit) =>
+    credit.people.some((person) => person.portrait),
+  );
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this

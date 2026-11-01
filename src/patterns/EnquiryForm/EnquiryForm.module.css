@@ -266,8 +266,8 @@
 
 .bubble {
   padding: var(--enq-cell-inset-block) var(--enq-cell-inset-inline);
-  border-radius: var(--enq-bubble-radius-origin) var(--enq-bubble-radius) var(--enq-bubble-radius)
-    var(--enq-bubble-radius);
+  border-radius: var(--enq-bubble-radius-origin) var(--enq-bubble-radius)
+    var(--enq-bubble-radius) var(--enq-bubble-radius);
   background: var(--enq-bubble-ground);
   font: var(--text-body);
   color: var(--enq-bubble-ink);

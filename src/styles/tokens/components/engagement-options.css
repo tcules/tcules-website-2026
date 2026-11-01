@@ -33,8 +33,10 @@
   --eop-body-measure: var(--measure-lead);
   /* A shared term reads at body size (16), one plain row under the set (30 Oct 2026, engagement-terms-plain-row). */
   --eop-term-text: var(--text-body);
-  /* The rule over an option's facts and over the set's closing note. */
+  /* The rule over an option's facts. */
   --eop-rule-width: var(--border-width-hairline);
+  /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
+  --eop-key-optical-offset: var(--space-2);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

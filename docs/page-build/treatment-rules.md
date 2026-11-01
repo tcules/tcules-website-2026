@@ -140,9 +140,10 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **Options with an eyebrow and several paragraphs each are sections**: EngagementOptions `rows`, not a
   three-column card set. An italic first line naming the option's kind is its eyebrow, never body.
 - **An option's labelled lines are facts**: "**How it works:**", "*Typical starting points:*", "*Best when:*" are
-  keyed blocks under the option's description, never more body; a sentence-list of starting points becomes
-  one entry a line. A set's closing statement and its worked example are a coda under a rule, never a
-  terms row that reads as the last option's.
+  a spec sheet under the option's description (mono key in a narrow track, value beside it), never more
+  body; a sentence-list of starting points runs as one line parted by middle dots. A set's closing
+  reassurance with its worked example is an ask: an open CtaSection island after the set, never a terms
+  row that reads as the last option's.
 - **Practical terms (getting started, time zones, fees, ownership) are drawn cards**, as About's working terms;
   never an OfferSheet. A term with no scene takes the empty plate.
 - **Bands that unpack one promise share one register**: on /how-we-work the four "what working with us is

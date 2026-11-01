@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, Sketch, type SectionSurface } from '@/components';
+import { Cluster, Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
@@ -43,17 +43,6 @@ export type EngagementFact = {
   label: string;
   body?: ReactNode;
   items?: readonly ReactNode[];
-};
-
-/**
- * What holds for the whole set, set apart from the last option by a rule: a statement (its title and
- * sentence) under the drawings' track, and a worked example under the words' track, with its own key and
- * its link as an action (owner, 1 Nov 2026, /how-we-work: the note "doesn't read as a part of it").
- */
-export type EngagementCoda = {
-  title: string;
-  body: ReactNode;
-  example?: { label: string; body: ReactNode; action?: ReactNode };
 };
 
 export type EngagementOption = {
@@ -112,8 +101,6 @@ export type EngagementOptionsProps = {
    * (decisions/2026-10-30-engagement-terms-plain-row).
    */
   terms?: readonly EngagementTerm[];
-  /** What holds for every option, closing the set under a rule. See `EngagementCoda`. */
-  coda?: EngagementCoda;
   /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
@@ -157,7 +144,6 @@ export function EngagementOptions({
   options,
   note,
   terms = [],
-  coda,
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -275,26 +261,6 @@ export function EngagementOptions({
               ))}
             </Layout>
           )}
-          {coda ? (
-            <Layout
-              columns={{ base: 1, md: [5, 7] }}
-              colGap="column"
-              rowGap="block"
-              className={styles.coda}
-            >
-              <Layout rowGap="text">
-                <h3 className={styles.title}>{coda.title}</h3>
-                <p className={styles.body}>{coda.body}</p>
-              </Layout>
-              {coda.example ? (
-                <Layout rowGap="text">
-                  <p className={styles.eyebrow}>{coda.example.label}</p>
-                  <p className={styles.body}>{coda.example.body}</p>
-                  {coda.example.action}
-                </Layout>
-              ) : null}
-            </Layout>
-          ) : null}
           {terms.length > 0 ? (
             <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
               {terms.map((term, index) => (
@@ -311,26 +277,30 @@ export function EngagementOptions({
   );
 }
 
-/** The option's facts: a key over each value, two across from 1024, under a rule. */
+/**
+ * The option's facts as a spec sheet: one row a fact, the mono key in a narrow track and its value
+ * beside it, every row on the same two tracks so the keys align down the option (owner, 1 Nov 2026,
+ * round 3: two narrow columns of small text "don't look very good"). A list value runs as one wrapping
+ * line, its entries parted by a middle dot. Under one rule, the facts are the option's terms.
+ */
 function Facts({ facts }: { facts: readonly EngagementFact[] }) {
   return (
-    <Layout
-      as="dl"
-      columns={{ base: 1, lg: facts.length > 1 ? 2 : 1 }}
-      colGap="gutter"
-      rowGap="block"
-      className={styles.facts}
-    >
+    <Layout as="dl" rowGap="text" className={styles.facts}>
       {facts.map((fact) => (
-        <Layout key={fact.label} rowGap="tight">
-          <dt className={styles.eyebrow}>{fact.label}</dt>
+        <Layout
+          key={fact.label}
+          columns={{ base: 1, md: [1, 2] }}
+          colGap="gutter"
+          rowGap="tight"
+        >
+          <dt className={styles.factKey}>{fact.label}</dt>
           <dd className={cx(styles.body, styles.factValue)}>
             {fact.items ? (
-              <Layout as="ul" rowGap="tight" className={styles.factItems}>
+              <Cluster as="ul" colGap="tight" rowGap="inline" className={styles.factItems}>
                 {fact.items.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
-              </Layout>
+              </Cluster>
             ) : (
               fact.body
             )}

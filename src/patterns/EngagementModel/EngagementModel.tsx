@@ -97,11 +97,19 @@ function geometry({ top, axis }: Frame) {
   /* The region between the curve and the level, closed along the level. Clipped above the level it
      is the stretch; clipped below, the absorbed idle time. */
   const region = `${curve} L${r(last[0])},${level} L${r(first[0])},${level} Z`;
-  const ticks = Array.from({ length: WEEKS + 1 }, (_, i) => r(INSET + (i * (WIDTH - INSET * 2)) / WEEKS));
+  const ticks = Array.from({ length: WEEKS + 1 }, (_, i) =>
+    r(INSET + (i * (WIDTH - INSET * 2)) / WEEKS),
+  );
   return { curve, region, level, first, last, ticks };
 }
 
-function Drawing({ arrangement, uid }: { arrangement: EngagementModelArrangement; uid: string }) {
+function Drawing({
+  arrangement,
+  uid,
+}: {
+  arrangement: EngagementModelArrangement;
+  uid: string;
+}) {
   const frame = FRAMES[arrangement];
   const g = geometry(frame);
   const id = (part: string) => `${uid}-${part}`;
@@ -133,19 +141,50 @@ function Drawing({ arrangement, uid }: { arrangement: EngagementModelArrangement
         </clipPath>
       </defs>
 
-      <rect x="0" y={frame.top - 10} width={WIDTH} height={frame.axis - frame.top + 10} fill={`url(#${id('grid')})`} />
+      <rect
+        x="0"
+        y={frame.top - 10}
+        width={WIDTH}
+        height={frame.axis - frame.top + 10}
+        fill={`url(#${id('grid')})`}
+      />
 
       <path className={styles.stretch} d={g.region} clipPath={`url(#${id('above')})`} />
       <path d={g.region} fill={`url(#${id('idle')})`} clipPath={`url(#${id('below')})`} />
 
       <line className={styles.level} x1={INSET} y1={g.level} x2={WIDTH - INSET} y2={g.level} />
 
-      <line className={styles.rule} x1={INSET} y1={frame.axis} x2={WIDTH - INSET} y2={frame.axis} />
+      <line
+        className={styles.rule}
+        x1={INSET}
+        y1={frame.axis}
+        x2={WIDTH - INSET}
+        y2={frame.axis}
+      />
       {g.ticks.map((x) => (
-        <line key={x} className={styles.rule} x1={x} y1={frame.axis} x2={x} y2={frame.axis + 5} />
+        <line
+          key={x}
+          className={styles.rule}
+          x1={x}
+          y1={frame.axis}
+          x2={x}
+          y2={frame.axis + 5}
+        />
       ))}
-      <line className={styles.drop} x1={g.first[0]} y1={g.first[1]} x2={g.first[0]} y2={frame.axis} />
-      <line className={styles.drop} x1={g.last[0]} y1={g.last[1]} x2={g.last[0]} y2={frame.axis} />
+      <line
+        className={styles.drop}
+        x1={g.first[0]}
+        y1={g.first[1]}
+        x2={g.first[0]}
+        y2={frame.axis}
+      />
+      <line
+        className={styles.drop}
+        x1={g.last[0]}
+        y1={g.last[1]}
+        x2={g.last[0]}
+        y2={frame.axis}
+      />
 
       <path className={styles.line} d={g.curve} />
 
@@ -171,7 +210,13 @@ function Swatch({ index, uid }: { index: 0 | 1 | 2; uid: string }) {
       {index === 1 ? (
         <>
           <defs>
-            <pattern id={hatch} width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <pattern
+              id={hatch}
+              width="5"
+              height="5"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(45)"
+            >
               <line className={styles.hatch} x1="0" y1="0" x2="0" y2="5" />
             </pattern>
           </defs>
@@ -271,7 +316,12 @@ export function EngagementModel({
 
   if (compact) {
     return (
-      <Section as="section" surface={surface} aria-labelledby={headingId} data-band="USP-compact">
+      <Section
+        as="section"
+        surface={surface}
+        aria-labelledby={headingId}
+        data-band="USP-compact"
+      >
         <Layout columns={{ lg: [2, 3] }} colGap="column" rowGap="stack" align="center">
           <Layout rowGap="stack">
             <Layout rowGap="block">

@@ -24,18 +24,21 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
 - Media splits' heads take `lg` (the h2 role) everywhere on the composer, so a band with an image beside it no
   longer out-sizes the plain band next to it.
 
-- Round 2 (owner): "How it works" and "Typical starting points" read as blocks, not text; the closing note
-  must not read as part of the last option. EngagementOptions takes `facts` (a mono key over each value, two
-  across under a rule) and a `coda` (statement under the drawings' track, the worked example under the words'
-  track with its key and link action, set apart by a full-width rule). Starting points are split into entries
-  (`listEntries`: commas and the final "or" are the joints; a leading article and the full stop drop).
+- Round 2–3 (owner): "How it works" / "Typical starting points" must read as blocks, and beautifully; the
+  closing note "feels like floating text". EngagementOptions takes `facts`, set as a spec sheet: under one rule,
+  a row a fact, the mono key in the 1 of [1, 2] tracks and the value beside it, keys aligned down the option.
+  Starting points run as one wrapping line, entries parted by a middle dot at each entry's end (a wrap never
+  opens on a dot); split by `listEntries` (commas and the final "or" are the joints; a leading article and the
+  full stop drop). The closing note is an open CtaSection island after the set, as Product Design's ways to
+  work: "Start wherever the work is" as its heading, the sentence and the Dealpath example as its two lines,
+  "Start a project" and the example's own link as its actions (`closingAsk`).
 
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
 | client-recognition | recognition · LogoGrid (H) | |
-| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts per option; coda: start wherever + Dealpath example |
+| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet; then an open CtaSection island (start wherever + Dealpath) |
 | your-team | text · B + illustration, image start | |
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |

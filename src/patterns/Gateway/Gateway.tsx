@@ -104,7 +104,12 @@ const EXPAND_INTENT_MS = 140;
  * mirror: `aria-hidden`, its link out of the tab order, because the title the reader is on already
  * goes to the same place.
  */
-export function Gateway({ items, arrangement = 'select', titleAs = 'h3', className }: GatewayProps) {
+export function Gateway({
+  items,
+  arrangement = 'select',
+  titleAs = 'h3',
+  className,
+}: GatewayProps) {
   const Title = titleAs;
   const uid = useId();
   const [active, setActive] = useState(0);
@@ -119,7 +124,8 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
   };
   const pointTo = (i: number) => {
     clearIntent();
-    if (arrangement === 'expand') intent.current = setTimeout(() => setActive(i), EXPAND_INTENT_MS);
+    if (arrangement === 'expand')
+      intent.current = setTimeout(() => setActive(i), EXPAND_INTENT_MS);
     else setActive(i);
   };
   useEffect(() => clearIntent, []);
@@ -231,7 +237,12 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
               <span className={styles.detailInner}>
                 {/* The sentence keeps a reading measure: the leading 7 of [7, 5] in a full-width
                     row (expand); in the selector's 8-of-12 track it is already a column. */}
-                <Layout columns={{ lg: [7, 5] }} colGap="column" rowGap="none" className={styles.detailBody}>
+                <Layout
+                  columns={{ lg: [7, 5] }}
+                  colGap="column"
+                  rowGap="none"
+                  className={styles.detailBody}
+                >
                   <Layout rowGap="text">
                     <span id={descId} className={styles.body}>
                       {item.body}
@@ -269,7 +280,11 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
       className={cx(styles.root, styles.select, className)}
     >
       <div ref={trackRef} className={styles.track} style={placed}>
-        <span className={styles.marker} aria-hidden="true" data-ready={geo.markH ? '' : undefined} />
+        <span
+          className={styles.marker}
+          aria-hidden="true"
+          data-ready={geo.markH ? '' : undefined}
+        />
         <Layout as="ul" rowGap="none" className={styles.list}>
           {items.map(situation)}
         </Layout>
@@ -282,7 +297,9 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
               item, so its drawing and words re-enter with a short fade and rise as the pointer moves
               — the micro-animation is the only motion on this side. */}
           <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
-            {lit.visual != null ? <div className={styles.answerVisual}>{lit.visual}</div> : null}
+            {lit.visual != null ? (
+              <div className={styles.answerVisual}>{lit.visual}</div>
+            ) : null}
             <p className={styles.answerText}>{lit.body}</p>
             <span>
               <Button

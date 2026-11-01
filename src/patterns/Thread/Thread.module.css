@@ -235,9 +235,7 @@
   .laneFirst::after {
     content: '';
     position: absolute;
-    inset-block-start: calc(
-      -1 * var(--thread-head-size) / 2 - var(--thread-line-width) / 2
-    );
+    inset-block-start: calc(-1 * var(--thread-head-size) / 2 - var(--thread-line-width) / 2);
     inset-inline-end: 0;
     inline-size: var(--thread-head-size);
     block-size: var(--thread-head-size);
@@ -257,9 +255,7 @@
     content: '';
     position: absolute;
     inset-block-start: calc(50% - var(--thread-marker-size) / 2);
-    inset-inline-start: calc(
-      -1 * var(--thread-marker-size) / 2 - var(--thread-line-width) / 2
-    );
+    inset-inline-start: calc(-1 * var(--thread-marker-size) / 2 - var(--thread-line-width) / 2);
     inline-size: var(--thread-marker-size);
     block-size: var(--thread-marker-size);
     background: var(--thread-line-ink);

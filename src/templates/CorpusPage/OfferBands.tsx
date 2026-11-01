@@ -22,7 +22,6 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
-  type EngagementCoda,
   type EngagementFact,
   type EngagementScope,
   type TraceScene,
@@ -301,47 +300,35 @@ function listEntries(runs: readonly InlineRun[]): InlineRun[][] {
 }
 
 /**
- * The set's closing note as a coda: a paragraph led by a bold sentence is the statement (its title and
- * sentence), a paragraph opening "Example:" is the worked example, its trailing link lifted out as the
- * action. Anything else stays a plain term.
+ * The set's closing note as an ask (owner, 1 Nov 2026, /how-we-work round 3: the note "feels like floating
+ * text"): a paragraph led by a bold sentence is the island's heading and first line, a paragraph opening
+ * "Example:" its second line, the example's trailing link the island's second action. Anything else stays
+ * a plain term under the set.
  */
-function codaOf(band: CorpusBand): { coda?: EngagementCoda; rest: InlineRun[][] } {
-  const runsList = itemCoda(band);
-  let title: string | undefined;
-  let body: ReactNode = null;
-  let example: EngagementCoda['example'];
+function closingAsk(band: CorpusBand): {
+  ask?: { heading: string; body: string[]; example?: { href: string; label: string } };
+  rest: InlineRun[][];
+} {
+  let heading: string | undefined;
+  const body: string[] = [];
+  let example: { href: string; label: string } | undefined;
   const rest: InlineRun[][] = [];
-  for (const runs of runsList) {
+  for (const runs of itemCoda(band)) {
     const lead = firstRun(runs);
-    if (!title && lead?.type === 'strong') {
-      title = inlineToText(lead.children).trim().replace(/[.:]$/, '');
-      body = renderInline(trimStart(runs.slice(runs.indexOf(lead) + 1)));
+    if (!heading && lead?.type === 'strong') {
+      heading = inlineToText(lead.children).trim().replace(/[.:]$/, '');
+      body.unshift(inlineToText(runs.slice(runs.indexOf(lead) + 1)).trim());
       continue;
     }
-    if (!example && lead?.type === 'text' && /^\s*Example:\s*/.test(lead.text)) {
-      const at = runs.indexOf(lead);
-      const stripped = [
-        ...runs.slice(0, at),
-        { type: 'text', text: lead.text.replace(/^\s*Example:\s*/, '') } as InlineRun,
-        ...runs.slice(at + 1),
-      ];
-      const { runs: words, link } = liftTrailingLink(trimStart(stripped));
-      example = {
-        label: 'Example',
-        body: renderInline(words),
-        action: link ? (
-          <LinkActions
-            links={[
-              { href: link.href, label: link.children, labelText: inlineToText(link.children) },
-            ]}
-          />
-        ) : undefined,
-      };
+    if (!example && lead?.type === 'text' && /^\s*Example:/.test(lead.text)) {
+      const { runs: words, link } = liftTrailingLink(runs);
+      body.push(inlineToText(words).trim());
+      if (link) example = { href: link.href, label: inlineToText(link.children).trim() };
       continue;
     }
     rest.push(runs);
   }
-  return { coda: title ? { title, body, example } : undefined, rest };
+  return { ask: heading ? { heading, body, example } : undefined, rest };
 }
 
 /**
@@ -724,7 +711,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
-      const closing = codaOf(band);
+      const closing = closingAsk(band);
       const terms = [...closing.rest, ...trailingParagraphs(band)];
       const links = bandLinks(band);
       const options =
@@ -758,10 +745,28 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={options}
             arrangement={rich ? 'rows' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
-            coda={closing.coda}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
-          {links[1] ? (
+          {closing.ask ? (
+            <CtaSection
+              data-band="L"
+              arrangement="open"
+              heading={closing.ask.heading}
+              body={
+                closing.ask.body[1] !== undefined
+                  ? [closing.ask.body[0] ?? '', closing.ask.body[1]]
+                  : [closing.ask.body[0] ?? '']
+              }
+              actions={
+                closing.ask.example
+                  ? [
+                      { label: 'Start a project', href: ROUTES.contact },
+                      { label: closing.ask.example.label, href: closing.ask.example.href },
+                    ]
+                  : [{ label: 'Start a project', href: ROUTES.contact }]
+              }
+            />
+          ) : links[1] ? (
             <CtaSection
               data-band="L"
               arrangement="open"

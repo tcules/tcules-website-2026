@@ -68,15 +68,26 @@
   padding-block-start: var(--gap-block);
 }
 
-/* A fact's value and each starting point open as a sentence or an entry does: the first letter is set
-   in CSS, the authored words kept ("an agreed scope…" under its key). */
-.factValue::first-letter,
-.factItems > li::first-letter {
+/* A fact's key: the eyebrow's mono voice, set on the value's first line. */
+.factKey {
+  font: var(--eop-eyebrow-text);
+  letter-spacing: var(--eop-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eop-eyebrow-ink);
+  padding-block-start: var(--eop-key-optical-offset);
+}
+
+/* A fact's value opens as a sentence does: the first letter is set in CSS, the authored words kept
+   ("an agreed scope…" under its key). */
+.factValue::first-letter {
   text-transform: uppercase;
 }
 
-/* What holds for the whole set closes it under a full-width rule, a stack below it. */
-.coda {
-  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
-  padding-block-start: var(--gap-stack);
+/* A list value runs as one wrapping line: each entry but the last carries its middle dot at its own
+   end, inside its own box (the Cluster owns the distance between entries), so a wrapped line never
+   opens on a dot. */
+.factItems > li:not(:last-child)::after {
+  content: '·';
+  padding-inline-start: var(--gap-tight);
+  color: var(--eop-eyebrow-ink);
 }
