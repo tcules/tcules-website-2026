@@ -401,20 +401,4 @@
   }
 }
 
-/* A live scene's arriving part (GrowIn): from nothing about its own centre, as a story's `grow`. */
-.live .growIn {
-  transform: scale(0);
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform var(--skt-duration) var(--skt-easing);
-}
-:global(a:hover) .live .growIn,
-:global(a:focus-visible) .live .growIn,
-.solved .growIn {
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .live .growIn {
-    transition-duration: var(--duration-instant);
-  }
-}
+

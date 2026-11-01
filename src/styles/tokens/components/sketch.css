@@ -99,11 +99,14 @@
   --skt-frame-ink: var(--color-neutral-400);
   --skt-quiet-ink: var(--color-neutral-600);
   --skt-copy-ink: var(--color-neutral-700);
-  --skt-accent: var(--color-brandeis-300);
+  /* Peridot is the drawing's subject on ink (owner, 31 Oct 2026; decisions/2026-10-31-peridot-leads-
+     flat-drawings-on-ink): the route, the focal point and what lights. No band is ink yet; for the
+     future and the FIL page. */
+  --skt-accent: var(--color-peridot-500); /* 11.3:1 on neutral-950, 9.6:1 on the 900 plate */
   --skt-accent-on: var(--color-neutral-950);
-  --skt-region-fill: var(--color-neutral-800);
-  --skt-region-copy-ink: var(--color-neutral-600); /* decoration: copy inside a region */
-  --skt-soft-fill: var(--color-neutral-700); /* a part not yet placed */
+  --skt-region-fill: var(--color-peridot-950); /* decoration: a halo, a lit region */
+  --skt-region-copy-ink: var(--color-peridot-700); /* decoration: copy inside a region */
+  --skt-soft-fill: var(--color-peridot-900); /* a part not yet placed */
   --skt-chip-fill: var(--color-neutral-900); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-200);
   --skt-lift-under: var(--color-neutral-800); /* the flat offset under what floats */

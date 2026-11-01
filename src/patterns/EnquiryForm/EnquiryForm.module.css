@@ -154,6 +154,10 @@
   min-inline-size: 0;
 }
 
+.stepNow {
+  color: var(--enq-accent-ink);
+}
+
 .stepLabel {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
