@@ -10,6 +10,7 @@ import { L1_SPECIALISTS, L1_SPECIALISTS_DRAWN } from './l1-specialists';
 import { L1_TERMS } from './l1-terms';
 import { TERMS } from './terms';
 import { OFFER, OFFER_DRAWN } from './offer';
+import { PAGES } from './wyg';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
 import type { SketchName } from '@/lib/sketches';
@@ -53,8 +54,9 @@ export type SketchProps = {
    */
   frame?: 'plate' | 'bare';
   /**
-   * Let a scene move when the link it sits in is hovered or focused (bare frame only, because the
-   * moving route assumes its scale). A STORY scene (./stories) tells its story, the problem at rest and
+   * Let a scene move when the link it sits in is hovered or focused, in either frame (owner, 1 Nov
+   * 2026: every hover tile that carries a drawing animates it). A bare parent sets `--skt-scale` so the
+   * route lands at the line weight; on a plate it scales with the plate. A STORY scene (./stories) tells its story, the problem at rest and
    * solved (owner, 25 Oct 2026, home What we do); every other tile scene makes its one `Move`/`GrowIn`
    * move (decisions/2026-10-30-service-tile-drawing-moves-on-hover). Without it a scene is drawn still,
    * as every plate draws it: a cover or a card image does not move.
@@ -92,8 +94,7 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   const storyDrawing = name ? STORY[name] : undefined;
   /* Any scene moves where it is asked to, in the bare frame; anywhere else it is held at rest (a story
      scene solved, every other scene as drawn: its Move parts at rest, its GrowIn parts present). */
-  const live = story && bare;
-  const moving = storyDrawing !== undefined && live;
+  const live = story;
   const Still = name
     ? (STILL[name] ??
       (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
@@ -104,7 +105,8 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
         ? L1_SPECIALISTS[name as keyof typeof L1_SPECIALISTS]
         : undefined) ??
       (name in L1_TERMS ? L1_TERMS[name as keyof typeof L1_TERMS] : undefined) ??
-      (name in TERMS ? TERMS[name as keyof typeof TERMS] : undefined))
+      (name in TERMS ? TERMS[name as keyof typeof TERMS] : undefined) ??
+      PAGES[name as keyof typeof PAGES])
     : undefined;
   const [x, y, w, h] =
     (bare &&
@@ -120,8 +122,10 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
       className={cx(
         styles.sketch,
         bare && styles.bare,
-        storyDrawing !== undefined && !moving && styles.still,
-        storyDrawing !== undefined && (end || !moving) && styles.end,
+        /* Every scene not asked to move is held finished: its routes drawn, what arrives there,
+           what lights lit (a plate never moves, owner 25 Oct 2026). */
+        !live && styles.still,
+        (end || !live) && styles.end,
         live && styles.live,
         end && styles.solved,
       )}

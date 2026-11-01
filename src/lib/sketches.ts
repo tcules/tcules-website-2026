@@ -1,3 +1,5 @@
+import type { PageSceneName } from './page-scenes';
+
 /**
  * The Sketch scenes (components/Sketch) and which one a service page takes. Named here, once, so the
  * About services selector and home's situation selector draw the same scene for the same service
@@ -201,6 +203,7 @@ export type WorkingTermSceneName =
 export type L1SceneName = L1BandScene | L1OutcomeScene | L1SpecialistScene | L1TermScene;
 
 export type SketchName =
+  | PageSceneName
   | ServiceSceneName
   | ArticleSceneName
   | ScopeSceneName

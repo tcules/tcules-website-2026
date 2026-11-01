@@ -420,6 +420,14 @@ type PageHeroBaseProps = {
    */
   media?: HeroMedia;
   /**
+   * A composed object in the media's place, below the copy, a `stack` (48) under it: the contact
+   * hero's enquiry island (owner, 31 Oct 2026: "move the form into the header, just like how an
+   * image would be placed"). The caller composes it, so the hero only places it. It takes the whole
+   * content column, never the centred media cap, and it renders in the single column whatever the
+   * arrangement says, because nothing sits beside a form. Not with `media`.
+   */
+  panel?: ReactNode;
+  /**
    * Media below the copy (`stacked`, the default) or beside it from 1024 (`beside`). Set by the page template, never by content.
    *
    * The first sentence leads for the design agent's `.prompt.md`, as `surface`'s does. Ruling H1:
@@ -677,6 +685,7 @@ export function PageHero({
   labels = [],
   actions = [],
   media,
+  panel,
   arrangement = 'stacked',
   surface = 'paper',
   tags = [],
@@ -1260,7 +1269,9 @@ export function PageHero({
     const copyTrack = stack;
 
     const mediaTrack =
-      mediaNode === null ? null : centredHead && isIllustration ? (
+      panel != null ? (
+        <div className={styles.panel}>{panel}</div>
+      ) : mediaNode === null ? null : centredHead && isIllustration ? (
         /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
            centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
@@ -1283,6 +1294,7 @@ export function PageHero({
         colGap={columns ? 'section' : undefined}
         align={centred ? 'center' : columns ? 'stretch' : 'start'}
         justifyItems={justify}
+        className={panel != null ? styles.withPanel : undefined}
       >
         {copyColumn}
         {mediaTrack}

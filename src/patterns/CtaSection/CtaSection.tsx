@@ -268,6 +268,13 @@ type CtaSplitProps = {
    *           open ground, which is what `islandTexture="flow"` is for. Below 1024 it stacks.
    */
   islandArrangement?: 'beside' | 'above' | 'halves';
+  /**
+   * The island set INSIDE another band rather than as a band of its own (owner, 31 Oct 2026: the
+   * contact hero carries the form "just like how an image would be placed"). No Section: a labelled
+   * `<section>` keeps the id, `data-band` and the heading relationship, and the enclosing band owns
+   * the column, the ground and the air. Island only.
+   */
+  inBand?: boolean;
 };
 
 type CtaOpenProps = {
@@ -291,6 +298,7 @@ type CtaOpenProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  inBand?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -317,6 +325,7 @@ type CtaOfferWithActionsProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  inBand?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -1023,12 +1032,12 @@ export function CtaSection(props: CtaSectionProps) {
     if (props.islandArrangement === 'halves') {
       const art = present(props.art);
       return (
-        <Section
+        <IslandBand
+          inBand={props.inBand}
           surface={band}
           id={props.id}
           data-band={props['data-band']}
           aria-labelledby={headingId}
-          data-arrangement="split"
         >
           <Island surface={islandSurface}>
             {props.islandTexture === 'flow' ? <TextureFlow fade={art ? 'start' : undefined} /> : null}
@@ -1052,18 +1061,18 @@ export function CtaSection(props: CtaSectionProps) {
               </div>
             </Layout>
           </Island>
-        </Section>
+        </IslandBand>
       );
     }
 
     if (props.islandArrangement === 'above') {
       return (
-        <Section
+        <IslandBand
+          inBand={props.inBand}
           surface={band}
           id={props.id}
           data-band={props['data-band']}
           aria-labelledby={headingId}
-          data-arrangement="split"
         >
           <Island surface={islandSurface}>
             {props.islandTexture === 'frame' ? <TextureFrame panel="foot" /> : null}
@@ -1086,17 +1095,17 @@ export function CtaSection(props: CtaSectionProps) {
               {panel}
             </Layout>
           </Island>
-        </Section>
+        </IslandBand>
       );
     }
 
     return (
-      <Section
+      <IslandBand
+        inBand={props.inBand}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
         aria-labelledby={headingId}
-        data-arrangement="split"
       >
         <Island surface={islandSurface}>
           {props.islandTexture === 'frame' ? <TextureFrame /> : null}
@@ -1112,6 +1121,42 @@ export function CtaSection(props: CtaSectionProps) {
             {panel}
           </Layout>
         </Island>
-      </Section>
+      </IslandBand>
     );
+}
+
+/**
+ * The island close's band: its own Section, or (`inBand`) a labelled `<section>` with no band of its
+ * own, for an island set inside another band (the contact hero).
+ */
+function IslandBand({
+  inBand,
+  surface,
+  id,
+  'data-band': dataBand,
+  'aria-labelledby': labelledBy,
+  children,
+}: {
+  inBand?: boolean;
+  surface: SectionSurface;
+  id?: string;
+  'data-band'?: string;
+  'aria-labelledby'?: string;
+  children: ReactNode;
+}) {
+  return inBand ? (
+    <section id={id} data-band={dataBand} aria-labelledby={labelledBy}>
+      {children}
+    </section>
+  ) : (
+    <Section
+      surface={surface}
+      id={id}
+      data-band={dataBand}
+      aria-labelledby={labelledBy}
+      data-arrangement="split"
+    >
+      {children}
+    </Section>
+  );
 }

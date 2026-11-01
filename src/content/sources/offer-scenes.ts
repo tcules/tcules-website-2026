@@ -1,4 +1,5 @@
 import { offerSceneKey, type OfferScenes, type SketchName } from '../../lib/sketches.ts';
+import { PAGE_OFFER_SCENES } from './offer-scenes-pages.ts';
 
 /**
  * The drawings a corpus offer page's items carry (owner, 26 Oct 2026, product-design page, mock
@@ -12,6 +13,8 @@ const by = (rows: Record<string, SketchName>) =>
   );
 
 export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
+  /* The level-2 service and expertise pages' What you get (owner, 1 Nov 2026): offer-scenes-pages.ts. */
+  ...PAGE_OFFER_SCENES,
   '/services/product-design': {
     items: {
       outcomes: by({

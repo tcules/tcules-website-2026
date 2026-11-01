@@ -486,6 +486,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
   const successRef = useRef<HTMLDivElement>(null);
   const submittedCallbackFired = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
   /* The chip groups' answers, for what the form SAYS about them (the message field's example, the
@@ -506,15 +507,88 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const statusId = idFor('status');
   const urlId = idFor('url');
 
+  /* The draft (owner, 31 Oct 2026, the contact page pass): what someone has typed or picked is kept
+     in their own browser's session storage while they look around, and comes back when they return
+     to this form. One key per form placement; it is dropped once the enquiry sends. A per-viewer
+     convenience, so every read and write is guarded: private windows and blocked storage simply
+     start empty. Hidden context is never saved, it is the page's. */
+  const draftKey = `tcules:enquiry-draft:${props.action}:${
+    props.variant === 'contact'
+      ? 'contact'
+      : `${props.context.originRoute}:${props.context.placement}`
+  }`;
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    let saved: Record<string, string[]> | null = null;
+    try {
+      const raw = window.sessionStorage.getItem(draftKey);
+      saved = raw ? (JSON.parse(raw) as Record<string, string[]>) : null;
+    } catch {
+      saved = null;
+    }
+    if (!saved) return;
+    const restoredNeeds: string[] = [];
+    for (const control of Array.from(form.elements)) {
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
+        continue;
+      if (control.type === 'hidden' || !control.name) continue;
+      const values = saved[control.name];
+      if (!values) continue;
+      if (
+        control instanceof HTMLInputElement &&
+        (control.type === 'checkbox' || control.type === 'radio')
+      ) {
+        control.checked = values.includes(control.value);
+        if (control.checked && control.name === 'needs') restoredNeeds.push(control.value);
+        if (control.checked && control.name === 'stage') setStageValue(control.value);
+      } else {
+        control.value = values[0] ?? '';
+      }
+    }
+    if (restoredNeeds.length > 0) setPicked(restoredNeeds);
+    // Restore once, on mount: the key is fixed for a placement.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function saveDraft(form: HTMLFormElement) {
+    const draft: Record<string, string[]> = {};
+    for (const control of Array.from(form.elements)) {
+      if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
+        continue;
+      if (control.type === 'hidden' || !control.name) continue;
+      if (
+        control instanceof HTMLInputElement &&
+        (control.type === 'checkbox' || control.type === 'radio')
+      ) {
+        if (control.checked) (draft[control.name] ??= []).push(control.value);
+      } else if (control.value.trim() !== '') {
+        draft[control.name] = [control.value];
+      }
+    }
+    try {
+      if (Object.keys(draft).length === 0) window.sessionStorage.removeItem(draftKey);
+      else window.sessionStorage.setItem(draftKey, JSON.stringify(draft));
+    } catch {
+      /* Storage blocked or full: the form works the same without a draft. */
+    }
+  }
+
   useEffect(() => {
     if (lifecycle !== 'success') return;
+    try {
+      window.sessionStorage.removeItem(draftKey);
+    } catch {
+      /* Nothing to clear where storage is blocked. */
+    }
 
     successRef.current?.focus();
     if (!submittedCallbackFired.current) {
       submittedCallbackFired.current = true;
       onSubmitted?.();
     }
-  }, [lifecycle, onSubmitted]);
+  }, [lifecycle, onSubmitted, draftKey]);
 
   function setMessage(field: keyof FieldMessages, message: string) {
     setMessages((current) => ({ ...current, [field]: message }));
@@ -581,7 +655,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
         : [[FIELD.email('email')], [FIELD.work], 'url'];
 
   /* The dress, when the enquiry set wears one (see EnquiryDress). */
-  const dress = props.variant === undefined || props.variant === 'enquiry' ? props.dress : undefined;
+  const dress =
+    props.variant === undefined || props.variant === 'enquiry' ? props.dress : undefined;
 
   /* The required fields a send checks, in the order they render, so focus lands on the FIRST
      failing field on the page. The plain sets read their rows; the dresses that add a name state
@@ -613,7 +688,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       autoComplete: spec.autoComplete,
       /* The visible cue (r7-form): the label's own words, since the label is hidden. A dress
          passes its own example instead, or `null` for none (the card). */
-      placeholder: dressed.placeholder === null ? undefined : (dressed.placeholder ?? spec.label),
+      placeholder:
+        dressed.placeholder === null ? undefined : (dressed.placeholder ?? spec.label),
       required: true,
       disabled: submitting,
       appearance: dressed.look ?? appearance,
@@ -655,7 +731,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
   }
 
   /** The optional link field in a dress: the same control and normalising as the plain set's. */
-  function renderDressedUrl(look: 'fill' | 'bare', visibleLabel: boolean, placeholder?: string) {
+  function renderDressedUrl(
+    look: 'fill' | 'bare',
+    visibleLabel: boolean,
+    placeholder?: string,
+  ) {
     return (
       <FieldGroup key="url" id={urlId} label={urlLabel} optional visibleLabel={visibleLabel}>
         <Input
@@ -810,10 +890,16 @@ export function EnquiryForm(props: EnquiryFormProps) {
           </Layout>
           {steps.length > 0 ? (
             <Layout as="ol" rowGap="block">
+              {/* The first step is the one under way the moment the enquiry lands (owner, 31 Oct
+                  2026): its numeral takes the accent and it is the list's current step; the rest
+                  keep the neutral numerals of steps still to come. */}
               {steps.map((step, index) => (
-                <li key={step.label}>
+                <li key={step.label} aria-current={index === 0 ? 'step' : undefined}>
                   <Cluster nowrap colGap="text" align="baseline">
-                    <span aria-hidden="true" className={styles.stepMarker}>
+                    <span
+                      aria-hidden="true"
+                      className={cx(styles.stepMarker, index === 0 && styles.stepNow)}
+                    >
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <Layout rowGap="inline" className={styles.stepContent}>
@@ -977,6 +1063,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       'aria-label': 'Send an enquiry',
       'aria-busy': submitting || undefined,
       onSubmit: handleSubmit,
+      onInput: (event: FormEvent<HTMLFormElement>) => saveDraft(event.currentTarget),
+      ref: formRef,
     } as const;
     /* The foot's one line: "or write to …" and the note at rest; the status of a send replaces it,
        in the same live region the plain set uses. */
@@ -988,7 +1076,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
             or write to <a href={`mailto:${writeTo}`}>{writeTo}</a>
           </>
         ) : null}
-        {dress.kind === 'card' && dress.note ? (writeTo ? ` · ${dress.note}` : dress.note) : null}
+        {dress.kind === 'card' && dress.note
+          ? writeTo
+            ? ` · ${dress.note}`
+            : dress.note
+          : null}
       </>
     );
     const line = (
@@ -1025,7 +1117,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const echo =
         chosen.length > 0 || stageWords ? (
           <>
-            {chosen.length > 0 ? <strong className={styles.echoPick}>{listOf(chosen)}</strong> : null}
+            {chosen.length > 0 ? (
+              <strong className={styles.echoPick}>{listOf(chosen)}</strong>
+            ) : null}
             {stageWords ? (
               <>
                 {chosen.length > 0 ? ', for ' : 'For '}
@@ -1051,7 +1145,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
       return (
         <form {...formAttrs}>
           <Layout rowGap="block">
-            <Layout columns={{ lg: [1, 1] }} reverse={{ lg: true }} colGap="gutter" rowGap="block">
+            <Layout
+              columns={{ lg: [1, 1] }}
+              reverse={{ lg: true }}
+              colGap="gutter"
+              rowGap="block"
+            >
               <div className={styles.choiceSide}>
                 <Layout rowGap="block">
                   {renderChoiceGroup(dress.needs, 'needs')}
@@ -1061,7 +1160,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
               </div>
               <Layout rowGap="text" fillLast>
                 <Layout columns="fit" minTrack="xs" colGap="text" rowGap="text">
-                  {renderField(name, { visibleLabel: true, placeholder: 'Your name', look: 'fill' })}
+                  {renderField(name, {
+                    visibleLabel: true,
+                    placeholder: 'Your name',
+                    look: 'fill',
+                  })}
                   {renderField(email, {
                     visibleLabel: true,
                     placeholder: 'you@company.com',
@@ -1255,6 +1358,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       }
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
+      onInput={(event) => saveDraft(event.currentTarget)}
+      ref={formRef}
     >
       {/* Compact by nesting (r7-form): the fields are one group at `text` — with no labels and no
           reserved message lines, field to field is the 16 between two controls — and the actions

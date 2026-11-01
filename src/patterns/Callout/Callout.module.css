@@ -53,3 +53,15 @@
 .example .label {
   color: var(--call-example-label-ink);
 }
+
+/* ── tone="band" ─────────────────────────────────────────────────────────────────
+   The note is the band's whole body, beside its heading (owner, 31 Oct 2026). Body role in the
+   surface's full ink, the glyph in the accent: a statement, not a footnote. */
+.band .content {
+  font: var(--text-body);
+  color: var(--call-band-content-ink);
+}
+
+.band .glyph {
+  color: var(--call-band-glyph-ink);
+}

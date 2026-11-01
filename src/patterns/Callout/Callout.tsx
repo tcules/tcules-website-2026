@@ -30,6 +30,11 @@ export type CalloutProps = {
    *            the surface's ink, a blue key, and a blue rule down its start edge (a mark, not a
    *            box — nothing closes the other three sides). As a footnote-quiet note it read as a
    *            caption floating above the steps.
+   *   band     the note IS a band's whole body, beside the band's own heading (the contact page's
+   *            confidentiality boundary; owner, 31 Oct 2026: "something is off about this"). Set as a
+   *            footnote — body-sm in the secondary ink under a grey glyph — the band's one statement
+   *            read as disabled text. It takes the body role in the surface's full ink, and its
+   *            glyph the accent.
    */
   tone?: CalloutTone;
   /**
@@ -41,7 +46,7 @@ export type CalloutProps = {
   icon?: ReactNode;
 };
 
-export type CalloutTone = 'note' | 'example';
+export type CalloutTone = 'note' | 'example' | 'band';
 
 /**
  * Callout — a quiet boundary on the claim immediately before it.
@@ -65,7 +70,11 @@ export function Callout({ html, label, tone = 'note', icon }: CalloutProps) {
   }
 
   const keyText = label?.trim();
-  const root = cx(styles.root, tone === 'example' && styles.example);
+  const root = cx(
+    styles.root,
+    tone === 'example' && styles.example,
+    tone === 'band' && styles.band,
+  );
 
   const glyph = icon ? (
     <span className={styles.glyph} aria-hidden="true">

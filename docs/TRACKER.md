@@ -181,19 +181,34 @@ a template before the single pages it serves, since one pass there fixes every p
       relief (lowest score on 29 Oct, 4/10).
 
 *More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
+
+**Every page in 2.32–2.47 renders (checked 1 Nov 2026 on main at 6815435e).** #181 routed each one through the
+generic composer (`_corpus/`), the legal pages through the article shell and the tools through `_corpus/tool`. A
+production build serves all 95 routes in `_pages/` with a 200, so none of them 404s and no "make it render" pass is
+needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:check` on that build reports 7
+problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
+`/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
+choice (2.34).
 - [ ] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
-- [ ] **2.41** `/why-tcules`: every service page links to it, and today it 404s. Crucial.
+- [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
-- [ ] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+- [~] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
-      Needs no design pass, only full coverage.
-- [ ] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
-      but they need no design. A plain text-page template is enough.
+      Needs no design pass, only full coverage. Coverage run started 1 Nov on `feat/insights-rich-text`.
+- [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
+      but they need no design. A plain text-page template is enough. They render in the article shell (#181).
 - [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
       that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
       designed no-visual state.
-- [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
+- [x] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap). All seven
+      render from the copy through `_corpus/tool` (#181).
+- [x] **2.48** Flat drawings (owner, 31 Oct–1 Nov 2026, branch design/flat-line-motion): every tile drawing moves in
+      the four patterns, two at most, start and end different (decisions/2026-10-31-tile-drawings-move-in-four-patterns),
+      in any hover tile; the 29 service tiles redrawn; the 310 empty What-you-get plates on 33 level-2 pages drawn
+      (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
+      `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
+      plates; the three term rows read as one template across pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -258,6 +273,10 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
       with Ask AI).
+- [ ] /contact enquiry form: an animation that celebrates a sent enquiry, played as the panel turns into
+      the next steps (owner, 1 Nov 2026). It must still respect reduced motion and
+      decisions/2026-10-19-hover-is-a-move; anything beyond transform-only motion needs a new ruling.
+- [ ] /contact enquiry form: pre-fill from the page the visitor came from (owner, 31 Oct 2026).
 
 **Content asks, addressed later.** The design is content-agnostic for now, so nothing here blocks
 a phase: `TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in

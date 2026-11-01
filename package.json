@@ -38,7 +38,8 @@
     "decisions": "node scripts/decisions.mjs",
     "illustrations:engagement": "node scripts/illustrations/engagement.mjs",
     "illustrations:reasons": "node scripts/illustrations/reasons.mjs",
-    "illustrations:claims": "node scripts/illustrations/claims.mjs"
+    "illustrations:claims": "node scripts/illustrations/claims.mjs",
+    "sketch:frames": "node scripts/sketch-frames.mjs"
   },
   "engines": {
     "node": ">=20.11.1"
