@@ -47,8 +47,8 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
 /**
  * One credited person. `href` is their page (an author page, from `@/lib/routes`); absent, the name
  * is plain text. `portrait` is their photograph, cropped round at 32; a person without one shows
- * their initials in an outlined disc when anyone else in the same group has a portrait, so a
- * group's faces never stop half way. What they DO is not here: the byline carries faces and names
+ * their initials in an outlined disc, so every byline carries a face in the same place (owner,
+ * 1 Nov 2026; decisions/2026-11-01-byline-initials-without-a-photo). What they DO is not here: the byline carries faces and names
  * only, and who each person is belongs to the page's end (owner, 30 Oct 2026: byline board G).
  */
 export type HeroPerson = { name: string; href?: string; portrait?: MediaImage };
@@ -232,12 +232,17 @@ export type { HeroTrail };
  *            inside the first screen. No media and no ask (a listing's ask is its list). Below 1024
  *            it stacks and renders exactly as `stacked`.
  *
+ *   watch    a piece whose media IS the piece, a video (owner, 1 Nov 2026: video insights): the
+ *            trail, then the media at the full column, then the title, lead, labels and byline. The
+ *            player opens the page instead of following the byline. With no media it renders
+ *            exactly as `stacked`.
+ *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
  * the no-visual state, which is the common one, and it is not an error.
  */
 export type HeroArrangement =
-  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead';
+  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead' | 'watch';
 
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
@@ -593,7 +598,6 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
       )}
     </span>
   ));
-  if (!people.some((person) => person.portrait)) return <>{names}</>;
   return (
     <Cluster nowrap colGap="tight" align="center">
       <span className={styles.avatars} aria-hidden="true">
@@ -601,14 +605,21 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
           person.portrait ? (
             <span key={`${person.name}-${index}`} className={styles.avatar}>
               <Media
-                image={{ ...person.portrait, alt: '', focus: person.portrait.focus ?? PORTRAIT_FOCUS }}
+                image={{
+                  ...person.portrait,
+                  alt: '',
+                  focus: person.portrait.focus ?? PORTRAIT_FOCUS,
+                }}
                 fit="fill"
                 edge="placement"
                 sizes="32px"
               />
             </span>
           ) : (
-            <span key={`${person.name}-${index}`} className={cx(styles.avatar, styles.initials)}>
+            <span
+              key={`${person.name}-${index}`}
+              className={cx(styles.avatar, styles.initials)}
+            >
               {initialsOf(person.name)}
             </span>
           ),
@@ -739,9 +750,10 @@ export function PageHero({
 
   if (readingTime) pairs.push({ id: 'reading', label: READING_LABEL, value: readingTime });
 
-  /* Any credited portrait sets every value in the strip to the portrait's height (board G), so the
-     keys share one top line and the dates sit level with the names beside the faces. */
-  const hasPortraits = credits.some((credit) => credit.people.some((person) => person.portrait));
+  /* A credit always carries a disc (a portrait, or initials without one), and it sets every value in
+     the strip to the disc's height (board G), so the keys share one top line and the dates sit level
+     with the names beside the faces. */
+  const hasPortraits = credits.length > 0;
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
@@ -757,6 +769,7 @@ export function PageHero({
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
   const masthead = arrangement === 'masthead';
+  const watch = arrangement === 'watch' && media !== undefined;
   const across = titleAcross && split && !wide;
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
@@ -1151,6 +1164,18 @@ export function PageHero({
             {labelsNode}
           </Layout>
         ) : null
+      ) : watch ? (
+        /* `watch`: the media first (under the trail, which is always the hero's first item), then
+           the head and what is said about it. Media to head is the same `stack` as copy to byline. */
+        <>
+          {mediaNode}
+          <Layout rowGap="block" justifyItems={justify}>
+            {eyebrowNode}
+            {titleNode}
+            {copyNode}
+            {labelsNode}
+          </Layout>
+        </>
       ) : (
         <Layout rowGap="block" justifyItems={justify}>
           {eyebrowNode}
@@ -1271,7 +1296,7 @@ export function PageHero({
     const mediaTrack =
       panel != null ? (
         <div className={styles.panel}>{panel}</div>
-      ) : mediaNode === null ? null : centredHead && isIllustration ? (
+      ) : mediaNode === null || watch ? null : centredHead && isIllustration ? (
         /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
            centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
@@ -1335,15 +1360,17 @@ export function PageHero({
             ? 'hero-display'
             : masthead
               ? 'hero-masthead'
-              : split
-                ? isIllustration
-                  ? 'hero-illustration'
-                  : wide
-                    ? 'hero-wide'
-                    : 'hero-media'
-                : media === undefined
-                  ? 'hero-text'
-                  : 'hero-stacked'
+              : watch
+                ? 'hero-watch'
+                : split
+                  ? isIllustration
+                    ? 'hero-illustration'
+                    : wide
+                      ? 'hero-wide'
+                      : 'hero-media'
+                  : media === undefined
+                    ? 'hero-text'
+                    : 'hero-stacked'
       }
     >
       {faded ? (

@@ -21,7 +21,7 @@ import type {
   StrapiCaseStudyResponse,
   StrapiCaseStudySeo,
 } from './case-study-types';
-import { markdownToHtml, type BodyHeading } from './markdown';
+import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
@@ -435,10 +435,12 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
      blocks: reading it from a later key of the same object literal would make the result depend on
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
-  const blocks = (raw.caseStudyContents ?? []).flatMap((block, index) => {
-    const mapped = mapBlock(block, index, title, graphqlUrl, outline);
-    return mapped ? [mapped] : [];
-  });
+  const blocks = resolveInPageAnchors(
+    (raw.caseStudyContents ?? []).flatMap((block, index) => {
+      const mapped = mapBlock(block, index, title, graphqlUrl, outline);
+      return mapped ? [mapped] : [];
+    }),
+  );
 
   return {
     documentId: value(raw.documentId) || slug,

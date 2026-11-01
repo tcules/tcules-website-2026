@@ -193,9 +193,11 @@ choice (2.34).
 - [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
-- [~] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+- [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
-      Needs no design pass, only full coverage. Coverage run started 1 Nov on `feat/insights-rich-text`.
+      Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
+      match their Strapi bodies; `docs/page-build/insights-rich-text-report.md`. The copy's articles and glossary
+      terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
 - [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components

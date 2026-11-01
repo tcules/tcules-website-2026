@@ -10,37 +10,64 @@ function renderMarks(source: string): string {
     },
   );
 
+  /* A code span is parked before the marks run, so an underscore or asterisk inside it
+     (`service_role`) can never pair with one outside it. An underscore mark needs a non-word
+     character either side, as in CommonMark, so `snake_case` stays a word. */
+  const codeSpans: string[] = [];
   return escapeHtml(protectedSource)
-    .replace(/`([^`]+)`/gu, '<code>$1</code>')
+    .replace(/`([^`]+)`/gu, (_, code: string) => `\uE005${codeSpans.push(code) - 1}\uE006`)
     .replace(/\*\*([^*]+)\*\*/gu, '<strong>$1</strong>')
-    .replace(/__([^_]+)__/gu, '<strong>$1</strong>')
+    .replace(/(?<![\p{L}\p{N}_])__([^_]+)__(?![\p{L}\p{N}_])/gu, '<strong>$1</strong>')
     .replace(/~~([^~]+)~~/gu, '<del>$1</del>')
     .replace(/(?<!\*)\*([^*]+)\*(?!\*)/gu, '<em>$1</em>')
-    .replace(/(?<!_)_([^_]+)_(?!_)/gu, '<em>$1</em>')
+    .replace(/(?<![\p{L}\p{N}_])_([^_]+)_(?![\p{L}\p{N}_])/gu, '<em>$1</em>')
+    .replace(
+      /\uE005(\d+)\uE006/gu,
+      (_, index: string) => `<code>${codeSpans[Number(index)] ?? ''}</code>`,
+    )
     .replace(/\uE000(\d+)\uE001/gu, (_, index: string) =>
       escapeHtml(escapedCharacters[Number(index)] ?? ''),
     );
 }
 
+/* A hard break: two or more trailing spaces at the end of a line that the paragraph continues
+   past. Lines are joined with this marker rather than with a space, and the marker becomes `<br>`
+   only after the marks are applied, so a mark can still run across the break. */
+const HARD_BREAK = '\uE004';
+
+/**
+ * A line of Markdown as inline HTML. Links are rendered FIRST and parked as placeholders, then the
+ * marks run over the whole line, then the links are put back. The marks have to see the whole
+ * line: `**[label](url)**` puts its two `**` either side of the link, and marking each slice
+ * between links separately left both halves unpaired and printed literally (28 live links, 1 Nov
+ * 2026). A mark INSIDE a label is the label's own and is applied when the link is rendered.
+ */
 function renderInline(source: string): string {
   const linkPattern = /(?<!!)(?<!\\)\[([^\]]+)\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/gu;
-  let html = '';
-  let offset = 0;
-
-  for (const match of source.matchAll(linkPattern)) {
-    const index = match.index;
-    if (index === undefined) continue;
-
-    html += renderMarks(source.slice(offset, index));
-    const label = match[1] ?? '';
-    const href = safeContentHref(match[2]);
-    html += href
+  const links: string[] = [];
+  const parked = source.replace(linkPattern, (_, label: string, target: string) => {
+    const href = safeContentHref(target);
+    const html = href
       ? `<a href="${escapeHtml(href)}">${renderMarks(label)}</a>`
       : renderMarks(label);
-    offset = index + match[0].length;
-  }
+    return `\uE002${links.push(html) - 1}\uE003`;
+  });
 
-  return html + renderMarks(source.slice(offset));
+  return renderMarks(parked)
+    .replace(/\uE002(\d+)\uE003/gu, (_, index: string) => links[Number(index)] ?? '')
+    .replaceAll(HARD_BREAK, '<br>');
+}
+
+/** The lines of one paragraph (or one quoted paragraph) joined: a space, or a hard break. */
+function joinLines(lines: readonly string[]): string {
+  return lines
+    .map((line, index) =>
+      index < lines.length - 1 && / {2,}$/u.test(line)
+        ? `${line.trim()}${HARD_BREAK}`
+        : `${line.trim()} `,
+    )
+    .join('')
+    .trim();
 }
 
 /* A GFM table's delimiter row: `|---|---|`, optionally with alignment colons, which are read and
@@ -49,7 +76,10 @@ const TABLE_DELIMITER = /^\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$/u;
 
 /* A row's cells: split on unescaped pipes, outer pipes dropped, `\|` kept as a literal pipe. */
 function tableCells(line: string): string[] {
-  const trimmed = line.trim().replace(/^\|/u, '').replace(/(?<!\\)\|$/u, '');
+  const trimmed = line
+    .trim()
+    .replace(/^\|/u, '')
+    .replace(/(?<!\\)\|$/u, '');
   return trimmed.split(/(?<!\\)\|/u).map((cell) => cell.trim().replaceAll('\\|', '|'));
 }
 
@@ -132,12 +162,29 @@ function headingLabel(html: string): string {
     .trim();
 }
 
+/**
+ * The field as plain lines. Two invisible characters arrive from the CMS's paste path (1 Nov
+ * 2026): U+2028 (line separator) ends lines, and since `.` and `$` do not cross it a heading line
+ * carrying one failed to parse and printed its hashes; and lines holding nothing but zero-width
+ * characters (U+200D and kin) rendered as empty paragraphs. A line separator is a newline, and a
+ * line with nothing visible on it is a blank line.
+ */
+function normaliseSource(markdown: string): string {
+  return markdown
+    .replaceAll('\r\n', '\n')
+    .replace(/[\u2028\u2029]/gu, '\n')
+    .split('\n')
+    .map((line) => (/^[\s\u200B-\u200D\u2060\uFEFF]*$/u.test(line) ? '' : line))
+    .join('\n')
+    .trim();
+}
+
 export function markdownToHtml(
   markdown: string | null | undefined,
   context: string,
   outline?: OutlineSink,
 ): string {
-  const source = typeof markdown === 'string' ? markdown.replaceAll('\r\n', '\n').trim() : '';
+  const source = typeof markdown === 'string' ? normaliseSource(markdown) : '';
   if (!source) return '';
 
   if (/!\[[^\]]*\]\([^)]+\)/u.test(source)) {
@@ -213,12 +260,30 @@ export function markdownToHtml(
     }
 
     if (/^>\s?/u.test(line)) {
-      const quote: string[] = [];
+      /* A bare `>` line ends one quoted paragraph and starts the next, inside the same quote: an
+         attribution after a blank `>` is its own paragraph rather than running on from the quote
+         (22 live quotes, 1 Nov 2026). Prose spaces the paragraphs (`blockquote > * + *`). */
+      const paragraphs: string[][] = [[]];
       while (index < lines.length && /^>\s?/u.test(lines[index] ?? '')) {
-        quote.push((lines[index] ?? '').replace(/^>\s?/u, ''));
+        const quoted = (lines[index] ?? '').replace(/^>\s?/u, '');
+        if (quoted.trim()) paragraphs[paragraphs.length - 1]?.push(quoted);
+        else if (paragraphs[paragraphs.length - 1]?.length) paragraphs.push([]);
         index += 1;
       }
-      blocks.push(`<blockquote><p>${renderInline(quote.join(' '))}</p></blockquote>`);
+      const filled = paragraphs.filter((paragraph) => paragraph.length);
+      /* The attribution is the cite (owner, 1 Nov 2026: the name in a smaller, lighter body face,
+         which is how Prose sets `blockquote cite`). It is the last of two or more paragraphs when
+         that paragraph is one short line that does not open on a quotation mark: every one of the
+         22 live multi-paragraph quotes ends that way ("Name, role ([12:17](…))" or a bare timestamp). */
+      const last = filled.length > 1 ? filled[filled.length - 1] : undefined;
+      const attribution =
+        last && last.length === 1 && isAttribution(last[0] ?? '') ? last : undefined;
+      const inner =
+        (attribution ? filled.slice(0, -1) : filled)
+          .map((paragraph) => `<p>${renderInline(joinLines(paragraph))}</p>`)
+          .join('') +
+        (attribution ? `<cite>${renderInline(joinLines(attribution))}</cite>` : '');
+      if (inner) blocks.push(`<blockquote>${inner}</blockquote>`);
       continue;
     }
 
@@ -243,18 +308,134 @@ export function markdownToHtml(
       continue;
     }
 
-    const paragraph = [line.trim()];
+    const paragraph = [line];
     index += 1;
     while (
       index < lines.length &&
       (lines[index] ?? '').trim() &&
       !isBlockStart(lines[index] ?? '')
     ) {
-      paragraph.push((lines[index] ?? '').trim());
+      paragraph.push(lines[index] ?? '');
       index += 1;
     }
-    blocks.push(`<p>${renderInline(paragraph.join(' '))}</p>`);
+    blocks.push(`<p>${renderInline(joinLines(paragraph))}</p>`);
   }
 
   return blocks.join('');
+}
+
+/** A heading's words as an author writes an anchor to it: lower case, punctuation dropped, words
+    joined by hyphens ("Lazarev.agency" → `lazarev-agency`, "AI's search" → `ais-search`). */
+function anchorSlug(words: string): string {
+  return words
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ'’]/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/gu, '');
+}
+
+/**
+ * The heading an authored `#anchor` names, as an index into `slugs`, or `undefined`. The anchors
+ * were written against the previous site's heading ids, which were not always the full heading
+ * (1 Nov 2026, 40 links on 9 pages): `#fuselab` for "Fuselab Creative", `#hire-first-anyway` for
+ * "When should you hire a designer first anyway?". So: the exact slug; else the one heading that
+ * begins with the anchor's words; else the one heading that holds all of them in order. A tie at
+ * any step resolves nothing rather than guessing between two headings.
+ */
+function anchorTarget(anchor: string, slugs: readonly string[]): number | undefined {
+  const words = anchorSlug(anchor).split('-').filter(Boolean);
+  if (!words.length) return undefined;
+  const wanted = words.join('-');
+  const only = (matches: number[]) => (matches.length === 1 ? matches[0] : undefined);
+  const indices = slugs.map((_, index) => index);
+
+  const exact = indices.filter((index) => slugs[index] === wanted);
+  if (exact.length) return only(exact);
+
+  const prefix = indices.filter((index) => slugs[index]?.startsWith(`${wanted}-`));
+  if (prefix.length) return only(prefix);
+
+  return only(
+    indices.filter((index) => {
+      let at = 0;
+      for (const word of (slugs[index] ?? '').split('-')) if (word === words[at]) at += 1;
+      return at === words.length;
+    }),
+  );
+}
+
+const HEADING_TAG = /<h([2-6])((?: id="[^"]*")?)>([\s\S]*?)<\/h\1>/gu;
+const ANCHOR_HREF = /href="#([^"]+)"/gu;
+
+/**
+ * Point an entry's authored in-page links (`[label](#slug)`) at the headings they name.
+ *
+ * Run once per ENTRY over its mapped blocks, after every block is rendered, because a link usually
+ * comes before the heading it points to and often sits in a different block. The headings keep
+ * their ids: an h2 already carries its opaque `toc-<n>` (see BodyHeading), and that is what the
+ * link is rewritten to, so the TOC and the author's link land on the same element. A heading
+ * below h2 carries no id, so one that a link names is given `heading-<n>` — opaque in the same
+ * way, and only where something points at it. An anchor that names no heading is left as
+ * written: it is a content defect to fix in the CMS, not something to guess at here.
+ *
+ * Blocks without `html`, and entries with no in-page link, come back unchanged.
+ */
+export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[] {
+  const htmlOf = (block: B): string | undefined => {
+    const html = (block as { html?: unknown }).html;
+    return typeof html === 'string' ? html : undefined;
+  };
+  if (!blocks.some((block) => /href="#/u.test(htmlOf(block) ?? ''))) return [...blocks];
+
+  const headings: { slug: string; id?: string }[] = [];
+  for (const block of blocks) {
+    for (const match of (htmlOf(block) ?? '').matchAll(HEADING_TAG)) {
+      const id = match[2]?.match(/id="([^"]*)"/u)?.[1];
+      headings.push({ slug: anchorSlug(headingLabel(match[3] ?? '')), ...(id ? { id } : {}) });
+    }
+  }
+  const slugs = headings.map((heading) => heading.slug);
+
+  const targets = new Map<string, string>();
+  let added = 0;
+  for (const block of blocks) {
+    for (const match of (htmlOf(block) ?? '').matchAll(ANCHOR_HREF)) {
+      const anchor = match[1] ?? '';
+      if (targets.has(anchor)) continue;
+      const heading = headings[anchorTarget(anchor, slugs) ?? -1];
+      if (!heading) continue;
+      if (!heading.id) {
+        added += 1;
+        heading.id = `heading-${added}`;
+      }
+      targets.set(anchor, heading.id);
+    }
+  }
+  if (!targets.size) return [...blocks];
+
+  let headingIndex = 0;
+  return blocks.map((block) => {
+    const html = htmlOf(block);
+    if (html === undefined) return block;
+    const rewritten = html
+      .replace(HEADING_TAG, (whole, level: string, attributes: string, inner: string) => {
+        const heading = headings[headingIndex];
+        headingIndex += 1;
+        return heading?.id && !attributes
+          ? `<h${level} id="${escapeHtml(heading.id)}">${inner}</h${level}>`
+          : whole;
+      })
+      .replace(ANCHOR_HREF, (whole, anchor: string) => {
+        const id = targets.get(anchor);
+        return id ? `href="#${escapeHtml(id)}"` : whole;
+      });
+    return { ...block, html: rewritten };
+  });
+}
+
+/** One short line that names who spoke rather than continuing what they said. */
+function isAttribution(line: string): boolean {
+  const text = line.replace(/\[([^\]]*)\]\([^)]*\)/gu, '$1').trim();
+  return text.length > 0 && !/^[“"‘'«]/u.test(text) && text.split(/\s+/u).length <= 16;
 }

@@ -29,8 +29,16 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 
 /* Two portraits for the credited people (byline board G): the leadership placeholders, so the specimen
    shows the overlap without a real photograph. */
-const ALICE = { name: 'Alice Chen', href: '#', portrait: placeholderImage('/about', 'leadership', 'jatin-leuva') };
-const BEN = { name: 'Ben Ndlovu', href: '#', portrait: placeholderImage('/about', 'leadership', 'rakesh-chitroda') };
+const ALICE = {
+  name: 'Alice Chen',
+  href: '#',
+  portrait: placeholderImage('/about', 'leadership', 'jatin-leuva'),
+};
+const BEN = {
+  name: 'Ben Ndlovu',
+  href: '#',
+  portrait: placeholderImage('/about', 'leadership', 'rakesh-chitroda'),
+};
 
 /**
  * PageHero specimen — one variant, one size, SLOT PRESENCE, and (blocks 16–20) the two
@@ -263,7 +271,7 @@ const MEDIA_CASES: readonly { key: string; label: string; media?: HeroMedia; not
     },
   ];
 
-const ARRANGEMENTS: readonly HeroArrangement[] = ['stacked', 'beside'];
+const ARRANGEMENTS: readonly HeroArrangement[] = ['stacked', 'beside', 'watch'];
 
 /* CU04's budgets, at the floor and the ceiling: H1 4–10 words, hero support 15–35. */
 const CU_TITLE_MIN = 'Design systems, shipped properly';
@@ -524,7 +532,7 @@ const CREDIT_SHAPES: readonly {
   {
     key: 'host-guests',
     title: 'Host and three guests',
-    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. A guest without a portrait shows initials in an outlined disc beside those who have one; a group with no portraits at all is names only.',
+    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. A guest without a portrait shows initials in an outlined disc beside those who have one.',
     credits: [
       { role: 'host', people: [ALICE] },
       { role: 'guest', people: [BEN, { name: 'Cara Whitfield' }, { name: 'Dev Anand' }] },
@@ -533,7 +541,7 @@ const CREDIT_SHAPES: readonly {
   {
     key: 'author-detail',
     title: 'Author without a portrait, and a reading time',
-    note: 'No portrait in the group, so no disc: the name alone, then the dates and `readingTime`. Who they are sits after the content, in Contributors (board G).',
+    note: 'No portrait, so their initials in the outlined disc (owner, 1 Nov 2026: every byline carries a face), then the dates and `readingTime`. Who they are sits after the content, in Contributors (board G).',
     credits: [{ role: 'author', people: [{ name: 'Rakesh Chitroda' }] }],
   },
   {
@@ -1313,7 +1321,9 @@ export default async function PageHeroSpecimenPage() {
                   ? `From 1024: copy and media in two equal tracks, 96 apart (--gap-section), the media at its own ratio inside a 572 track (sizes: HERO_BESIDE). An illustration is centred on the copy; every other kind is top-aligned. ${entry.note}`
                   : arrangement === 'stacked' && entry.media
                     ? `The media below the copy as a full-column block, 48 under the actions (sizes: FULL_COLUMN). This is ruling H1's "below". ${entry.note}`
-                    : entry.note
+                    : arrangement === 'watch' && entry.media
+                      ? `The media first, under the trail, then the title, lead and the rest, 48 apart: for a piece whose media is the piece, a video (owner, 1 Nov 2026). With no media it is \`stacked\`. ${entry.note}`
+                      : entry.note
               }
             />
           </div>

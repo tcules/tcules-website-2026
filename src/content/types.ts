@@ -1490,7 +1490,7 @@ export type PodcastBlock =
   | {
       id: string;
       type: 'figures';
-      figures: Array<{ image: PodcastImage; caption: string }>;
+      figures: Array<{ image: PodcastImage; caption?: string }>;
     }
   | {
       id: string;
@@ -1626,7 +1626,7 @@ export type BlogBlock =
   | {
       id: string;
       type: 'figures';
-      figures: Array<{ image: BlogImage; caption: string }>;
+      figures: Array<{ image: BlogImage; caption?: string }>;
     }
   | {
       id: string;
