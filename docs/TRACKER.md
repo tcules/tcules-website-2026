@@ -124,12 +124,12 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 **Review with Jatin, 22 Oct.** Triaged with the owner's answers in the review checklist
 (https://claude.ai/artifact/HLnxA2opHsfw47YkfSXcnf). Batch 1 lands and is reviewed before batch 2 starts (owner, 22 Oct).
 
-*Batch 1: small items, one PR each.*
-- [~] **2.19** FAQ question at 20px, as a standard step in the type ladder.
-- [~] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
-- [~] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
-- [~] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
-- [~] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
+*Batch 1: small items, one PR each.* Closed 1 Nov 2026 (owner): each item was approved or has changed since.
+- [x] **2.19** FAQ question at 20px, as a standard step in the type ladder.
+- [x] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
+- [x] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
+- [x] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
+- [x] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
 
 *Batch 2: exploratory, after batch 1 is reviewed.*
 - [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
@@ -163,12 +163,19 @@ design pass (#174, #175). Everything below still renders the 26 Oct copy through
 and each can take many design changes. Work in the order listed: polished-tier pages first (launch roadmap), and
 a template before the single pages it serves, since one pass there fixes every page on it. Starting notes are the
 29 Oct critic's (`docs/page-build/review-29-oct.md`), not a brief.
+
+**Design order (owner, 1 Nov 2026):** 2.40 `/how-we-work` → 2.41 `/why-tcules` → 2.37 `/services` hub → 2.38
+`/expertise` hub → 2.32 the 12 expertise pages → 2.36 audit pages → 2.39 glossary → 2.42 `/careers` → 2.35 Future Interfaces Lab →
+2.43 `/matter-design-system`. 2.46 level-2 sub-services are low priority, after these. One PR per large page or per template group (how-we-work and its two subpages; the two hubs; the 12 expertise pages). Every page designed gets its record in `docs/page-build/pages/<page>.md` (decisions
+and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
+the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
+pass on another account; a page ships with its placeholders until then.
 - [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
       from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
       carry sector photos. Polished tier.
-- [ ] **2.33** `/about`: two OfferSheets read the same; the leadership band has no portraits yet; the difference
+- [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
-- [ ] **2.34** `/contact`: the hero's right half is empty, and the page ends in text bands. Polished tier.
+- [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
 - [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).

@@ -871,3 +871,18 @@ headings to `##`:
 reader check the person is real.
 
 **Found in.** Author pages, tracker 2.49.
+
+## Client marks with no file (1 Nov 2026)
+
+**Page / section.** Logo strips on `/expertise`, `/how-we-work`, `/services` and `/why-tcules` (reported by
+`npm run kinds:check`).
+
+**What's needed.** A mark file for each of five clients: **Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier**.
+SVG preferred, single colour or with a version that can go single colour, into `public/clients/`. Eden AI
+already has a PNG there (used by the home logo wall), so it only needs an SVG if one exists; wiring the PNG
+into these strips is on us.
+
+**Why.** A strip without the file renders the client's name in place of the mark, and the strip reads as
+unfinished beside the nine that have one.
+
+**Found in.** `kinds:check`, 1 Nov 2026 (tracker 2.32–2.43 note).
