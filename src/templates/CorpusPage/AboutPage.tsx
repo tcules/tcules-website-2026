@@ -33,7 +33,6 @@ import {
   type HeroStat,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
-import type { IconName } from '@/components';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { placeholderImage } from '@/lib/placeholders';
@@ -205,21 +204,12 @@ function WhatWeDoBento({ band: b }: AboutBandProps) {
 }
 
 /**
- * Who uses Tcules (component-map § E /about 4), ONE band so it reads as the visual one after the text
- * of `difference`: the head and its lead; the five audiences as a two-column read-down, each with the
- * glyph of the service line it comes for (first release, growth, modernisation, AI, design systems);
- * the SaaS line; then the authored h3 "Work you can inspect" over the four cases as covered cards
+ * Who uses Tcules (component-map § E /about 4): the head and its lead beside the five audiences, one
+ * ruled row each, and the SaaS line (owner, 1 Nov 2026); then, full width in a band of its own, the
+ * authored h3 "Work you can inspect" over the four cases as covered cards
  * (each its own cover, its authored sentence the body), and the Lab line with "Explore all case
  * studies" under them. The cards sit under their own full-width head with nothing beside them.
  */
-const AUDIENCE_GLYPHS = [
-  'flag',
-  'graph-up',
-  'shield-check',
-  'stars',
-  'layers',
-] as const satisfies readonly IconName[];
-
 /** The first link in a run of paragraphs (the Lab line's own link), for the card's action. */
 function labLink(paragraphs: readonly InlineRun[][]) {
   for (const runs of paragraphs) for (const run of runs) if (run.type === 'link') return run;
@@ -268,32 +258,23 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
   const afterLinks = after.flatMap((block) => (block.type === 'links' ? block.links : []));
   const afterText = paragraphRuns(after);
   return (
-    <ContentSection {...head(b)} data-band="M" lead={lead}>
-      <Layout rowGap="section">
-        <Layout rowGap="stack">
-          {list ? (
-            /* The five audiences as list cards, one per row: the glyph, then the title (owner,
-               31 Oct 2026). A ruled row stands alone on its line, never in a grid. */
-            /* In the start half, the end half left open (owner, 31 Oct 2026). */
-            <Layout columns={{ base: 1, lg: 2 }} colGap="column">
-              <Layout as="ul" rowGap="none">
-                {list.items.map((runs, index) => (
-                  <ListCard
-                    key={index}
-                    size="md"
-                    titleAs="h3"
-                    title={sentenceCase(plain(runs))}
-                    {...(AUDIENCE_GLYPHS[index]
-                      ? { marker: { type: 'icon' as const, name: AUDIENCE_GLYPHS[index] } }
-                      : {})}
-                  />
-                ))}
-              </Layout>
-            </Layout>
-          ) : null}
-          {lines.length > 0 ? <Text paragraphs={lines.map((block) => block.runs)} /> : null}
-        </Layout>
-        {work ? (
+    <>
+      {/* The heading and lead in the leading track, the five audiences reading down the trailing
+          one, a ruled row each and no glyph (owner, 1 Nov 2026): head | body, never heading | lead.
+          A ruled row stands alone on its line, never in a grid. */}
+      <ContentSection {...head(b)} data-band="M" lead={lead} arrangement="beside">
+        {list ? (
+          <Layout as="ul" rowGap="none">
+            {list.items.map((runs, index) => (
+              <ListCard key={index} size="md" titleAs="h3" title={sentenceCase(plain(runs))} />
+            ))}
+          </Layout>
+        ) : null}
+        {lines.length > 0 ? <Text paragraphs={lines.map((block) => block.runs)} /> : null}
+      </ContentSection>
+      {/* The work, full width under the audiences: clickable cards sit under their own head. */}
+      {work ? (
+        <Section>
           <Layout rowGap="stack">
             {/* The way to every case at the head's end, centred on it (owner, 31 Oct 2026). */}
             <Layout
@@ -345,9 +326,9 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
               </Island>
             ) : null}
           </Layout>
-        ) : null}
-      </Layout>
-    </ContentSection>
+        </Section>
+      ) : null}
+    </>
   );
 }
 

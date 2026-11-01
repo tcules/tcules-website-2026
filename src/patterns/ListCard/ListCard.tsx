@@ -499,12 +499,14 @@ export function ListCard({
      inside Cluster. */
   const rowCopy = isSplit ? (
     <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
-      {headNode(styles.splitTitle)}
+      {headNode(cx(styles.splitTitle, !hasBody && styles.titleSentence))}
       {bodyNode(cx(styles.body, styles.splitBody))}
     </Cluster>
   ) : (
     <Layout rowGap="text" className={styles.content}>
-      {headNode()}
+      {/* A row with no body is its sentence alone, so the title runs to the lead measure rather
+          than the title's 32ch (owner, 1 Nov 2026: About's audiences wrapped at half their track). */}
+      {headNode(hasBody ? undefined : styles.titleSentence)}
       {bodyNode(styles.body)}
     </Layout>
   );
