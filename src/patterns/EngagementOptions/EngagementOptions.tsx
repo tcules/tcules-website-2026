@@ -70,11 +70,13 @@ export type EngagementOption = {
  * How the options are set (owner, 11 Oct 2026).
  *   grid  image cards two by two (one column below 768): the scope drawing on its plate at 16:9 as
  *         each card's image, then the name and what it is. THE BAND (product design).
+ *   compare  the options three across, then each fact as one ruled row, its values aligned under
+ *         their option (owner, 1 Nov 2026, /how-we-work). Below 1024, `rows`.
  *   rows  one alternating row per option, the drawing in 5 of [5, 7] beside its words, sides
  *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
  *         1440).
  */
-export type EngagementArrangement = 'grid' | 'rows';
+export type EngagementArrangement = 'grid' | 'rows' | 'compare';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -238,35 +240,21 @@ export function EngagementOptions({
                 return <li key={option.title}>{card}</li>;
               })}
             </Layout>
+          ) : arrangement === 'compare' ? (
+            <>
+              {/* From 1024: the options head the set three across, then each fact runs as one ruled
+                  row, its key over the three values aligned under their option, so a read across a
+                  row compares the deals (owner, 1 Nov 2026, /how-we-work). Below 1024 there is no
+                  across to read: the rows arrangement, one option a section. */}
+              <div className={styles.compareWide}>
+                <Compare shown={shown} />
+              </div>
+              <div className={styles.compareNarrow}>
+                <Rows shown={shown} />
+              </div>
+            </>
           ) : (
-            <Layout as="ul" rowGap="column">
-              {shown.map((option, index) => (
-                <li key={option.title}>
-                  {/* One row per option, the drawing and the words side by side, swapping sides row
-                      by row from 768. Below 768 the drawing heads its words, full width at 2:1:
-                      beside them, the column gap left both too narrow. */}
-                  <Layout
-                    columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-                    reverse={{ md: index % 2 === 1 }}
-                    colGap="column"
-                    rowGap="block"
-                    align="center"
-                  >
-                    {option.scope ? <Drawing scope={option.scope} /> : null}
-                    <Layout rowGap="block">
-                      <OptionHead option={option} className={styles.title} />
-                      <OptionBody
-                        option={option}
-                        className={cx(styles.body, styles.bodyRows)}
-                      />
-                      {option.facts && option.facts.length > 0 ? (
-                        <Facts facts={option.facts} />
-                      ) : null}
-                    </Layout>
-                  </Layout>
-                </li>
-              ))}
-            </Layout>
+            <Rows shown={shown} />
           )}
           {closing ? (
             <Layout rowGap="block">
@@ -321,6 +309,88 @@ function Facts({ facts }: { facts: readonly EngagementFact[] }) {
               fact.body
             )}
           </dd>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
+/** One row per option, the drawing beside its words, sides swapping row by row. */
+function Rows({ shown }: { shown: readonly EngagementOption[] }) {
+  return (
+    <Layout as="ul" rowGap="column">
+      {shown.map((option, index) => (
+        <li key={option.title}>
+          {/* One row per option, the drawing and the words side by side, swapping sides row
+              by row from 768. Below 768 the drawing heads its words, full width at 2:1:
+              beside them, the column gap left both too narrow. */}
+          <Layout
+            columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+            reverse={{ md: index % 2 === 1 }}
+            colGap="column"
+            rowGap="block"
+            align="center"
+          >
+            {option.scope ? <Drawing scope={option.scope} /> : null}
+            <Layout rowGap="block">
+              <OptionHead option={option} className={styles.title} />
+              <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
+              {option.facts && option.facts.length > 0 ? <Facts facts={option.facts} /> : null}
+            </Layout>
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  );
+}
+
+/** The labels a fact row carries: each option's label at that row, distinct, in option order. */
+function rowLabel(shown: readonly EngagementOption[], index: number): string {
+  return [
+    ...new Set(shown.flatMap((o) => (o.facts?.[index] ? [o.facts[index].label] : []))),
+  ].join(' / ');
+}
+
+/** The comparison: the heads three across, then one ruled row a fact. */
+function Compare({ shown }: { shown: readonly EngagementOption[] }) {
+  const rows = Math.max(0, ...shown.map((o) => o.facts?.length ?? 0));
+  const tracks = { base: 1, lg: shown.length as 2 | 3 | 4 } as const;
+  return (
+    <Layout rowGap="stack">
+      <Layout as="ul" columns={tracks} colGap="gutter" rowGap="column">
+        {shown.map((option) => (
+          <li key={option.title}>
+            <Layout rowGap="block">
+              {option.scope ? <Drawing scope={option.scope} /> : <Sketch />}
+              <Layout rowGap="text">
+                <OptionHead option={option} className={styles.title} />
+                <OptionBody option={option} className={styles.body} />
+              </Layout>
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+      {Array.from({ length: rows }, (_, index) => (
+        <Layout key={index} rowGap="block" className={styles.compareRow}>
+          <p className={styles.factKey}>{rowLabel(shown, index)}</p>
+          <Layout columns={tracks} colGap="gutter" rowGap="block">
+            {shown.map((option) => {
+              const fact = option.facts?.[index];
+              return (
+                <div key={option.title} className={cx(styles.body, styles.factValue)}>
+                  {fact?.items ? (
+                    <Layout as="ul" rowGap="tight">
+                      {fact.items.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </Layout>
+                  ) : (
+                    fact?.body
+                  )}
+                </div>
+              );
+            })}
+          </Layout>
         </Layout>
       ))}
     </Layout>

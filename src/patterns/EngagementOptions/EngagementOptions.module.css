@@ -79,7 +79,8 @@
 
 /* A fact's value opens as a sentence does: the first letter is set in CSS, the authored words kept
    ("an agreed scope…" under its key). */
-.factValue::first-letter {
+.factValue::first-letter,
+.factValue li::first-letter {
   text-transform: uppercase;
 }
 
@@ -98,4 +99,25 @@
   letter-spacing: var(--eop-closing-tracking);
   text-wrap: var(--text-title-wrap);
   color: var(--eop-heading-ink);
+}
+
+/* `compare`: a fact row is ruled above, the block step inside its own box. */
+.compareRow {
+  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+/* `compare` reads across from 1024; below it the rows arrangement stands in. One of the two renders. */
+.compareWide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .compareWide {
+    display: block;
+  }
+
+  .compareNarrow {
+    display: none;
+  }
 }

@@ -783,30 +783,37 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
       return (
         <Fragment>
-          <EngagementOptions
-            {...head(band)}
-            surface={unit.surface}
-            lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={options}
-            arrangement={rich ? 'rows' : 'grid'}
-            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
-            closing={
-              closing.note
-                ? {
-                    heading: closing.note.heading,
-                    lead: closing.note.body[0],
-                    proof: closing.note.example ? (
-                      <CaseTeaser
-                        ctx={ctx}
-                        example={closing.note.example}
-                        words={closing.note.body[1]}
-                      />
-                    ) : undefined,
-                  }
-                : undefined
-            }
-            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
-          />
+          {(rich ? (['rows', 'compare'] as const) : (['grid'] as const)).map((arrangement) => (
+            /* REVIEW ONLY (owner, 1 Nov 2026): a rich set renders twice, the rows and then the
+               comparison, so both can be judged on the route. One is removed when the owner picks. */
+            <EngagementOptions
+              key={arrangement}
+              {...(arrangement === 'compare'
+                ? { heading: band.headingText, headingId: `${head(band).headingId}-compare` }
+                : head(band))}
+              surface={unit.surface}
+              lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
+              options={options}
+              arrangement={arrangement}
+              terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+              closing={
+                closing.note
+                  ? {
+                      heading: closing.note.heading,
+                      lead: closing.note.body[0],
+                      proof: closing.note.example ? (
+                        <CaseTeaser
+                          ctx={ctx}
+                          example={closing.note.example}
+                          words={closing.note.body[1]}
+                        />
+                      ) : undefined,
+                    }
+                  : undefined
+              }
+              action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+            />
+          ))}
           {links[1] ? (
             <CtaSection
               data-band="L"
