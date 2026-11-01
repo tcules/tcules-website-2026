@@ -327,3 +327,14 @@ view). Until the record carries the stage, the filing is a PLACEHOLDER fixture
 the CMS lands under "Other stages" until someone files it there.
 
 **Found in.** Jatin review, 22 Oct 2026 (`feat/case-cards-stage`).
+
+## 22. Author profiles are readable, and a byline points at one
+
+**Today.** The `Profile` collection (name, designation, description, linkedInProfile, profilePicture) exists, but
+public `find` is forbidden, so the site cannot read it. Bylines are a component copied onto each blog
+(`blogProfileSection`: name, designation, profilePicture), with no link to a Profile.
+
+**Needed (owner, 1 Nov 2026).** Allow public `find`/`findOne` on `Profile`, and add a `slug`. Ideally the
+blog's byline becomes a relation to `Profile`, not a copy. The site's author pages
+(`src/content/sources/strapi/authors.ts`) then read the bio and LinkedIn from the Profile, matched by slug,
+and the repo's fallback (`src/content/sources/people.ts`) empties itself.
