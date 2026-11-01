@@ -33,6 +33,7 @@ import {
   type HeroStat,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
+import type { IconName } from '@/components';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { placeholderImage } from '@/lib/placeholders';
@@ -210,6 +211,16 @@ function WhatWeDoBento({ band: b }: AboutBandProps) {
  * (each its own cover, its authored sentence the body), and the Lab line with "Explore all case
  * studies" under them. The cards sit under their own full-width head with nothing beside them.
  */
+/* Each audience's glyph: the service line it comes for (first release, growth, modernisation, AI,
+   design systems). */
+const AUDIENCE_GLYPHS = [
+  'flag',
+  'graph-up',
+  'shield-check',
+  'stars',
+  'layers',
+] as const satisfies readonly IconName[];
+
 /** The first link in a run of paragraphs (the Lab line's own link), for the card's action. */
 function labLink(paragraphs: readonly InlineRun[][]) {
   for (const runs of paragraphs) for (const run of runs) if (run.type === 'link') return run;
@@ -259,14 +270,27 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
   const afterText = paragraphRuns(after);
   return (
     <>
-      {/* The heading and lead in the leading track, the five audiences reading down the trailing
-          one, a ruled row each and no glyph (owner, 1 Nov 2026): head | body, never heading | lead.
+      {/* The heading and lead in the start half, the five audiences reading down the end half, a ruled row each and no glyph (owner, 1 Nov 2026): head | body, never heading | lead.
           A ruled row stands alone on its line, never in a grid. */}
-      <ContentSection {...head(b)} data-band="M" lead={lead} arrangement="beside">
+      <ContentSection
+        {...head(b)}
+        data-band="M"
+        lead={lead}
+        arrangement="beside"
+        split="halves"
+      >
         {list ? (
           <Layout as="ul" rowGap="none">
             {list.items.map((runs, index) => (
-              <ListCard key={index} size="md" titleAs="h3" title={sentenceCase(plain(runs))} />
+              <ListCard
+                key={index}
+                size="md"
+                titleAs="h3"
+                title={sentenceCase(plain(runs))}
+                {...(AUDIENCE_GLYPHS[index]
+                  ? { marker: { type: 'icon' as const, name: AUDIENCE_GLYPHS[index] } }
+                  : {})}
+              />
             ))}
           </Layout>
         ) : null}

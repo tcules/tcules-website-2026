@@ -504,8 +504,7 @@ export function ListCard({
     </Cluster>
   ) : (
     <Layout rowGap="text" className={styles.content}>
-      {/* A row with no body is its sentence alone, so the title runs to the lead measure rather
-          than the title's 32ch (owner, 1 Nov 2026: About's audiences wrapped at half their track). */}
+      {/* A row with no body is its sentence alone: the sentence measure (owner, 1 Nov 2026). */}
       {headNode(hasBody ? undefined : styles.titleSentence)}
       {bodyNode(styles.body)}
     </Layout>

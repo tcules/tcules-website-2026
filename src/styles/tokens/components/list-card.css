@@ -147,6 +147,10 @@
      two lines at 12–20 words and one at ≤ 10. Named for the stacked body both modes set, not for
      Steps, which introduced it (renamed from its Steps-only name, cmp-readdown fix round 1). */
   --lcrd-stacked-body-measure: var(--measure-lead);
+  /* A bodiless row's title, which is the item's whole sentence. Set so a one-clause sentence at md
+     (50–80 characters) takes two balanced lines at full width (owner, 1 Nov 2026): wide enough for
+     the longest to stay at two, narrow enough that the shortest still breaks. */
+  --lcrd-sentence-measure: 40ch;
 
   /* ReadDown's photo form (ReadDown.tsx): the photograph's box height as a multiple of its own width
      while it sits ABOVE the rows, below 1024 — 3:2. From 1024 the box has no ratio: it stretches to
