@@ -4,7 +4,7 @@
    and names; who each person is lives here, so the page is not front-loaded with supporting content.
    Naming: --ctb-{part}-{role}
      parts  label · rule · portrait · initials · name · role
-     roles  ink · text · tracking · size · radius · width · edge
+     roles  ink · text · tracking · size · radius · width · ground
    No state tokens: nothing here responds to a pointer but the links, which are Buttons.
    Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -19,8 +19,10 @@
      holds 64, and it is the hero's portrait doubled so the end section reads as the fuller account. */
   --ctb-portrait-size: var(--space-64);
   --ctb-portrait-radius: var(--radius-8);
-  --ctb-initials-text: var(--text-ui);
-  --ctb-initials-tracking: var(--text-ui-tracking);
+  /* The initials at the h4 role (22): the serif roles start at h3's 34, too large for 64 (owner,
+     1 Nov 2026: smaller initials in the box). */
+  --ctb-initials-text: var(--text-h4);
+  --ctb-initials-tracking: var(--text-h4-tracking);
   --ctb-name-text: var(--text-h5);
   --ctb-name-tracking: var(--text-h5-tracking);
   --ctb-role-text: var(--text-body-sm);
@@ -31,8 +33,8 @@
 [data-surface='paper'] {
   --ctb-label-ink: var(--color-neutral-600);
   --ctb-rule-ink: var(--color-neutral-300); /* decoration */
-  --ctb-initials-edge: var(--color-neutral-300); /* decoration */
-  --ctb-initials-ink: var(--color-neutral-700);
+  --ctb-portrait-ground: var(--color-neutral-200); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-900);
   --ctb-name-ink: var(--color-neutral-900);
   --ctb-role-ink: var(--color-neutral-700);
 }
@@ -41,8 +43,8 @@
 [data-surface='tint'] {
   --ctb-label-ink: var(--color-neutral-600);
   --ctb-rule-ink: var(--color-neutral-400); /* decoration */
-  --ctb-initials-edge: var(--color-neutral-400); /* decoration */
-  --ctb-initials-ink: var(--color-neutral-700);
+  --ctb-portrait-ground: var(--color-neutral-100); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-900);
   --ctb-name-ink: var(--color-neutral-900);
   --ctb-role-ink: var(--color-neutral-700);
 }
@@ -51,8 +53,8 @@
 [data-surface='ink'] {
   --ctb-label-ink: var(--color-neutral-400);
   --ctb-rule-ink: var(--color-neutral-700); /* decoration */
-  --ctb-initials-edge: var(--color-neutral-700); /* decoration */
-  --ctb-initials-ink: var(--color-neutral-300);
+  --ctb-portrait-ground: var(--color-neutral-800); /* decoration */
+  --ctb-initials-ink: var(--color-white);
   --ctb-name-ink: var(--color-white);
   --ctb-role-ink: var(--color-neutral-300);
 }
@@ -61,8 +63,8 @@
 [data-surface='blue'] {
   --ctb-label-ink: var(--color-brandeis-100);
   --ctb-rule-ink: var(--color-brandeis-300); /* decoration */
-  --ctb-initials-edge: var(--color-brandeis-300); /* decoration */
-  --ctb-initials-ink: var(--color-brandeis-50);
+  --ctb-portrait-ground: var(--color-neutral-100); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-900);
   --ctb-name-ink: var(--color-white);
   --ctb-role-ink: var(--color-brandeis-50);
 }

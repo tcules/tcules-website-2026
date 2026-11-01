@@ -109,6 +109,7 @@ The one border-width above zero in section 7 belongs to `media` and to nothing e
 ```ts
 type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer'
 type HeroPerson     = { name: string; href?: string; portrait?: MediaImage }   // 30 Oct 2026, byline board G
+type HeroPortrait   = { name: string; image?: MediaImage }   // 1 Nov 2026, author pages: the face of the page's subject
 type HeroCredit     = { role: HeroCreditRole; people: readonly [HeroPerson, ...HeroPerson[]] }
 type HeroDates      = { published: string; modified?: string }
 type HeroAction     = { label: string; href: string }
@@ -1081,3 +1082,63 @@ Owner: no body text above 16 anywhere; only the hero lead (and a testimonial's q
 `leadSize` and `--hero-lead-text-lg` are removed; `--hero-lead-text` reads `--text-lead-lg`, now
 18 / 1.5 at every width (its 767 step is gone). `--text-lead`, the section lead every other band
 takes, is 16. The amendments above that mention `leadSize="lg"` and a 20px lead are history.
+
+## Amendment · 1 Nov 2026 — a page about a person: `portrait` and `titleSize="h1"`
+
+The author pages (owner, 1 Nov 2026; decisions/2026-11-01-author-pages-one-template-from-strapi) put a
+person's face at the head of the page, and the hero had no slot for one. `media` is the wrong slot: a
+Strapi profile picture is 146 to 984 pixels, and the media slot fills the whole track (572 beside, 1240
+stacked), so a portrait would be blown up past its pixels and read as a hero photograph of a face.
+
+- **`portrait?: HeroPortrait`** (`{ name, image? }`): a fixed square, `--hero-portrait-size` (128, a
+  component size from the space ramp under the same stated exception as `--hero-avatar-size`), at the 8
+  radius as ProfileCard and Contributors crop a portrait, placed first in the opening, a `block` (24)
+  above the eyebrow and title. A photograph renders through Media (`fit="fill"`, `edge="placement"`,
+  `sizes="128px"`, `priority`, the portrait focus); without one the person's initials hold the square at
+  the h2 role on the byline disc's outlined ground (`--hero-avatar-ring`, `-edge`, `-initials-ink`), so a
+  stand-in reads the same at 32 and at 128 (decisions/2026-11-01-byline-initials-without-a-photo). The
+  portrait is decoration (alt=""): the h1 says whose face it is. Absent renders no element and no seam.
+- **`titleSize="h1"`**: a name as the title, at `--text-h1` (54 · 43 · 34) rather than display. A name
+  at display scale shouts over the portrait above it, and the face carries the band.
+
+Specimen: block 23a (a photograph with a bio, then initials on paper, tint and ink).
+
+
+## Amendment · 1 Nov 2026 — `arrangement="profile"`: the face beside the opening
+
+The owner's design pass on the author pages (1 Nov 2026: "a real profile page… the face at a confident
+size beside the name, role, bio and LinkedIn as one composed head"). The 128 portrait above the title read as
+a small face over a name, and the hero as a thumbnail and a heading.
+
+- **`arrangement="profile"`**, with a `portrait`: from 768 a `Layout` of `['auto', 1]`, the portrait in the
+  content-sized track and the whole opening (title, copy, labels, byline, extras, actions, stats, tags) in
+  the other, top-aligned, a `stack` (48) apart. Not a split's 96: a split is two regions of different
+  kind, and the face and the name are one person's head, as ProfileCard's portrait and name are at
+  `block` beside an 80 portrait. Below 768 it is one column, the portrait a `block` above the title.
+- **`--hero-portrait-size-profile`**: 240 from 1024, 192 from 768 to 1023, the default portrait's 128 below.
+  A component size, so it may step by width (the no-responsive-step rule is about distances). Literal
+  pixels, as `--lay-track-*` are, because no ladder holds them. The `<img sizes>` is written once more in
+  `PageHero.tsx` (`PROFILE_PORTRAIT_SIZES`) and the two move together.
+- **Initials** in the profile square take `--hero-portrait-text-profile` (the display role, since the
+  critic pass below), so two letters fill a square nearly twice the size.
+- Without a `portrait` the arrangement renders `stacked`; `media` is not a profile's (a person's page has
+  their face, not a hero image). `data-arrangement="hero-profile"`.
+
+Supply note: a Strapi profile picture as small as 146 px (Rakesh Chitroda's) upscales in the 240 square;
+the content ask is a portrait of at least 480 px.
+
+Specimen: block 23b (a photograph with labels and the LinkedIn link on the role line; initials with no
+LinkedIn on paper and ink).
+
+### Critic pass · 1 Nov 2026 — `leadAside`, and one portrait ground
+
+- **`leadAside?: ReactNode`**: a control on the lead's own line. The lead and it share one wrapping
+  `Cluster`, a `block` apart on their baseline; on a narrow column it wraps under the lead at `tight`.
+  The author page passes its LinkedIn link here: in the extras slot it floated a `stack` under the labels,
+  cut off from the name it belongs to. A link-emphasis Button, the LinkedIn mark before its label as on
+  every LinkedIn link. Ignored without a `body`; absent, the lead renders exactly as before.
+- **The portrait frame has a ground**: `--hero-portrait-ground`, a filled tint declared per surface (paper
+  and tint neutral-200, ink neutral-800, blue brandeis-600). It sits under a photograph too, so a source cut
+  to a circle on transparency still reads as the rounded square.
+- **One initials treatment** with ProfileCard: the tint ground and `--hero-portrait-initials-ink`, the
+  title's full ink (neutral-900; white on ink and blue). The outlined disc stays the byline's only.

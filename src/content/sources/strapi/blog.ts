@@ -10,7 +10,7 @@ import type {
 } from '../../types';
 import { mapUploadImage } from './image';
 import { COVER_SCENES } from '../cover-scenes';
-import { teamPortrait } from '../people';
+import { personSlug, teamPortrait } from '../people';
 import { blogKind } from './insights';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
@@ -617,6 +617,8 @@ function mapBlog(
         {
           id: value(author.id) || `blog-author-${index}`,
           name,
+          /* Every person a live byline names has an author page (sources/strapi/authors.ts). */
+          ...(personSlug(name) ? { slug: personSlug(name) } : {}),
           ...(value(author.designation) ? { designation: value(author.designation) } : {}),
           ...(image ? { image } : {}),
         },

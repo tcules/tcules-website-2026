@@ -1,4 +1,5 @@
 import {
+  BrandMark,
   Button,
   Cluster,
   Layout,
@@ -22,7 +23,7 @@ import { getNavigation } from '@/content';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
-import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
+import { ROUTES, authorPath, glossaryPath, servicePath } from '@/lib/routes';
 import { heroTrail, type Trail } from '@/lib/trail';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
@@ -1479,6 +1480,111 @@ export default async function PageHeroSpecimenPage() {
           note="One size since 19 Oct 2026 (owner: no body text above 16, and the hero lead is the one place 18 is allowed). --text-lead-lg, 18, over --text-body paragraphs at 16: the lead is the larger, shorter line, so it reads as the lead without shouting over the title. The 20px opt-in (leadSize) was removed."
         />
       </div>
+
+      {/* ── 23a · A page about a person ───────────────────────────────────────────
+           The author page (owner, 1 Nov 2026): `portrait` above the title, `titleSize="h1"` for
+           a name. With a photograph, then without one (the initials hold the square), then on
+           the tint and ink grounds the initials' tint is declared for. */}
+      <div>
+        <PageHero
+          trail={heroTrail(
+            [
+              { label: 'Home', href: ROUTES.home },
+              { label: 'Insights', href: ROUTES.insights },
+              { label: 'Authors', href: ROUTES.authors },
+              { label: ALICE.name, href: authorPath('alice-chen') },
+            ],
+            ALICE.name,
+            crumbs,
+          )}
+          portrait={{ name: ALICE.name, image: ALICE.portrait }}
+          title={ALICE.name}
+          titleSize="h1"
+          body={['Founder and CEO', PARAS[0] ?? '']}
+          texture
+        />
+        <Note
+          title="23a · portrait · a photograph · h1 title · role as the lead, a bio under it"
+          note="The face of the person a page is about, a fixed 128 square at the 8 radius, a block above the title. Not `media`: a portrait of a few hundred pixels would be blown up to the full track. The name is set at the h1 role, a step under display. The bio is a body paragraph only when the CMS sends one; without it the hero is the face, the name and the role."
+        />
+      </div>
+      {(['paper', 'tint', 'ink'] as const).map((surface) => (
+        <div key={`portrait-initials-${surface}`}>
+          <PageHero
+            portrait={{ name: 'Yash Gidwani' }}
+            title="Yash Gidwani"
+            titleSize="h1"
+            body={['Product Designer']}
+            surface={surface}
+          />
+          <Note
+            title={`23a · portrait · no photograph, initials · ${surface}`}
+            note="Without a photograph the initials hold the square on the portrait's filled tint in the title's full ink, at the h2 role: one treatment with ProfileCard. The byline disc keeps its outline (decisions/2026-11-01-byline-initials-without-a-photo)."
+            surface={surface}
+          />
+        </div>
+      ))}
+
+      {/* ── 23b · arrangement="profile" ────────────────────────────────────────────
+           The author page's composed head (owner, 1 Nov 2026: "a real profile page"): the portrait
+           at 240 beside the whole opening from 1024 (192 from 768, stacked at 128 below), the
+           name, the role and bio, the topics as labels and the LinkedIn link on the role line
+           (`leadAside`). With a photograph and every slot, then initials with no LinkedIn, on paper and
+           ink. */}
+      <div>
+        <PageHero
+          trail={heroTrail(
+            [
+              { label: 'Home', href: ROUTES.home },
+              { label: 'Insights', href: ROUTES.insights },
+              { label: 'Authors', href: ROUTES.authors },
+              { label: ALICE.name, href: authorPath('alice-chen') },
+            ],
+            ALICE.name,
+            crumbs,
+          )}
+          arrangement="profile"
+          portrait={{ name: ALICE.name, image: ALICE.portrait }}
+          title={ALICE.name}
+          titleSize="h1"
+          body={['Founder and CEO', PARAS[0] ?? '']}
+          labels={['AI Product UX', 'Design Systems', 'B2B SaaS & Workflow Software']}
+          leadAside={
+            <Button
+              as="a"
+              href="#"
+              emphasis="link"
+              tone="primary"
+              iconLeft={<BrandMark name="linkedin" />}
+            >
+              LinkedIn
+            </Button>
+          }
+          texture
+        />
+        <Note
+          title="23b · arrangement=profile · a photograph · labels · LinkedIn on the role line (leadAside)"
+          note="The face beside the whole opening, a `stack` (48) apart, top-aligned: one composed head. 240 from 1024, 192 from 768, and below 768 the portrait stacks above the name at the default 128. The frame carries the tint ground, so a photograph cut to a circle on transparency still reads as the rounded square. The LinkedIn link is the caller's, passed as `leadAside`: it shares the role's line, a `block` apart on the baseline, the LinkedIn BrandMark before the label, and wraps under the role on a narrow column."
+        />
+      </div>
+      {(['paper', 'ink'] as const).map((surface) => (
+        <div key={`profile-initials-${surface}`}>
+          <PageHero
+            arrangement="profile"
+            portrait={{ name: 'Yash Gidwani' }}
+            title="Yash Gidwani"
+            titleSize="h1"
+            body={['Product Designer', PARAS[1] ?? '']}
+            labels={['Onboarding & Engagement', 'UX Audits']}
+            surface={surface}
+          />
+          <Note
+            title={`23b · arrangement=profile · initials, no LinkedIn · ${surface}`}
+            note="Without a photograph the initials hold the larger square at the display role, on the frame's filled tint in the title's full ink (ProfileCard's treatment). Without a LinkedIn URL nothing renders on the role line."
+            surface={surface}
+          />
+        </div>
+      ))}
 
       {/* ── 24 · What this page cannot show ─────────────────────────────────────── */}
       <Section>

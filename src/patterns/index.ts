@@ -275,6 +275,7 @@ export type {
   PageHeroProps,
   HeroCredit,
   HeroPerson,
+  HeroPortrait,
   HeroCreditRole,
   HeroDates,
   HeroFact,

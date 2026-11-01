@@ -3,10 +3,10 @@ import { notFound } from 'next/navigation';
 
 import { getInsightsFixturePage, type InsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { ListingIndex, type CaseView } from '@/templates';
+import { AuthorPieces, ListingClose, ListingIndex, type CaseView } from '@/templates';
 
 import { caseIndexProps } from '../../_corpus/case-index';
-import { insightsIndexProps } from '../../_insights/hub';
+import { closingOf, insightCards, insightsIndexProps } from '../../_insights/hub';
 
 export const metadata: Metadata = {
   title: 'ListingIndex · both listings | Design',
@@ -89,6 +89,9 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
  *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
+ *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
+ *                         pieces, one with many and no covers, one with two and none; then the close
+ *                         with its `lead` set, as the authors index sets it
  *
  * A template's specimen is the page itself rather than Specimen blocks: what is judged is the
  * composition down its length, which a row of crops cannot show.
@@ -106,6 +109,28 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   }
 
   const fixture = await getInsightsFixturePage();
+
+  if (one(query.data) === 'author') {
+    const all = fixture.resources.items.filter((item) => item.kind !== 'event');
+    const bare = all.map((item) => ({ ...item, image: undefined, coverScene: undefined }));
+    /* Covers among the pieces: the fixture's catalogue photographs are stand-ins the hub never shows,
+       so every third piece that has one shows it here as its own cover. */
+    const mixed = all.map((item, at) =>
+      item.image && at % 3 === 1 ? { ...item, image: { ...item.image, standIn: false } } : item,
+    );
+    return (
+      <>
+        <AuthorPieces heading="17 pieces by Alice" items={insightCards(fixture, mixed.slice(0, 17))} />
+        <AuthorPieces heading="12 pieces by Ben" items={insightCards(fixture, bare.slice(0, 12))} />
+        <AuthorPieces heading="2 pieces by Cleo" items={insightCards(fixture, bare.slice(0, 2))} />
+        <ListingClose
+          closing={closingOf(fixture, PATH, 'design-specimen')}
+          lead="If one of these writers works on the problem in your own product, tell us about it."
+        />
+      </>
+    );
+  }
+
   const page =
     state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
   /* The finder's links and form come back to the specimen, the state kept. */

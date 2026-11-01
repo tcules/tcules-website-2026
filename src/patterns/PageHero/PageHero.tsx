@@ -54,6 +54,16 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
 export type HeroPerson = { name: string; href?: string; portrait?: MediaImage };
 
 /**
+ * The face of the person a page is ABOUT (an author page, owner 1 Nov 2026;
+ * decisions/2026-11-01-author-pages-one-template-from-strapi): their photograph, cropped square at
+ * the 8 radius at a fixed 128, or their initials holding the square when there is none
+ * (decisions/2026-11-01-byline-initials-without-a-photo). Not `media`: a head-and-shoulders portrait
+ * is a few hundred pixels, and the media slot would blow it up to the full track. `name` is whose
+ * initials to draw; the h1 already says it, so the portrait is decoration (alt="").
+ */
+export type HeroPortrait = { name: string; image?: MediaImage };
+
+/**
  * One credit group — one label, one or more people, one <dd>.
  *
  * `people` is a non-empty tuple, so `{ role: 'guest', people: [] }` does not compile. That
@@ -237,12 +247,21 @@ export type { HeroTrail };
  *            player opens the page instead of following the byline. With no media it renders
  *            exactly as `stacked`.
  *
+ *   profile  a page about a person (owner, 1 Nov 2026: the author pages): the `portrait` at a
+ *            confident size BESIDE the whole opening from 768 — the name, the role and bio, the
+ *            labels, the extras and the figures in one column against the face — so the face and
+ *            the words are one composed head, as ProfileCard's portrait and name are at card scale.
+ *            The portrait steps 128 · 192 · 240 (`--hero-portrait-size-profile`); below 768 it
+ *            stacks above the title at 128, exactly as the default portrait does. No media: a
+ *            person's page has their face, not a hero image. Without a `portrait` it renders
+ *            `stacked`.
+ *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
  * the no-visual state, which is the common one, and it is not an error.
  */
 export type HeroArrangement =
-  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead' | 'watch';
+  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead' | 'watch' | 'profile';
 
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
@@ -308,9 +327,11 @@ type PageHeroBaseProps = {
    * The title's scale. `display` (default) is every hero's. `mark` is for a title that is ONE WORD —
    * a format page's "Articles" (beauty round 3, 16 Oct 2026): the word set at twice display's size
    * so it becomes the band's graphic, and the texture drawn in against it rather than in a separate
-   * gutter. Never for a sentence: a mark title is meant to stand on one line.
+   * gutter. Never for a sentence: a mark title is meant to stand on one line. `h1` is a NAME, for a
+   * page about a person (an author page, 1 Nov 2026): a name at display scale shouts, and the
+   * portrait beside the hero's copy is what carries the band.
    */
-  titleSize?: 'display' | 'mark';
+  titleSize?: 'display' | 'mark' | 'h1';
   /**
    * `beside` only: the eyebrow and title read ACROSS the column above the split, at their own
    * measure, and the lead, actions and figures sit in the copy track beside the media. For a title
@@ -339,6 +360,14 @@ type PageHeroBaseProps = {
    */
   body?: readonly [string, ...string[]];
   /**
+   * A control on the lead's own line (an author page's LinkedIn, 1 Nov 2026: the link belongs to
+   * the person's identity, not to a row of its own under the labels). The lead and it share one
+   * wrapping row, a `block` apart on their baseline; on a narrow column it wraps under the lead.
+   * Pass a link-emphasis Button: it sits in running text's line, so it takes no box. Ignored
+   * without a `body`. Absent renders exactly as before: the lead alone.
+   */
+  leadAside?: ReactNode;
+  /**
    * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`,
    * `Case study · Fintech`). Never a crumb's words: a name the trail says ("Product Design
    * specialist" under "… / Product design"), or a section crumb on its own (`Case study` under
@@ -362,6 +391,11 @@ type PageHeroBaseProps = {
   eyebrow?: string;
   /** A score in the eyebrow's place. See `HeroRating`. */
   rating?: HeroRating;
+  /**
+   * The face of the person the page is about, above the title, a `block` over it. See
+   * `HeroPortrait`. Absent renders no element and no seam.
+   */
+  portrait?: HeroPortrait;
   /**
    * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
    * above the split.
@@ -491,6 +525,11 @@ type PageHeroBaseProps = {
 
 /** One figure in the hero's record row. Structurally `Stat`'s value, unit and label. */
 export type HeroStat = { value: string; unit?: string; label: string };
+
+/* The profile portrait's rendered widths, KEPT IN STEP with --hero-portrait-size-profile's steps in
+   tokens/components/page-hero.css (240 from 1024, 192 from 768, 128 below): a CSS custom property
+   cannot be read into an <img sizes>, so the three widths are written twice. */
+const PROFILE_PORTRAIT_SIZES = '(min-width: 1024px) 240px, (min-width: 768px) 192px, 128px';
 
 /** The record row's limits: two to four figures read as one row in the copy column. */
 const MAX_STATS = 4;
@@ -686,8 +725,10 @@ export function PageHero({
   titleSize = 'display',
   titleAcross = false,
   body,
+  leadAside,
   eyebrow,
   rating,
+  portrait,
   trail,
   credits = [],
   dates,
@@ -769,6 +810,7 @@ export function PageHero({
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
   const masthead = arrangement === 'masthead';
+  const profile = arrangement === 'profile' && portrait !== undefined;
   const watch = arrangement === 'watch' && media !== undefined;
   const across = titleAcross && split && !wide;
 
@@ -886,15 +928,59 @@ export function PageHero({
     </Cluster>
   ) : null;
   const titleNode = (
-    <h1 className={cx(styles.title, titleSize === 'mark' && styles.titleMark)}>{title}</h1>
+    <h1
+      className={cx(
+        styles.title,
+        titleSize === 'mark' && styles.titleMark,
+        titleSize === 'h1' && styles.titleH1,
+      )}
+    >
+      {title}
+    </h1>
   );
+  /* The person's face, ahead of the eyebrow and title in the opening (see `HeroPortrait`). A
+     photograph is the LCP element on the page it heads, so it is priority like every hero image. */
+  const portraitNode =
+    portrait === undefined ? null : portrait.image ? (
+      <span className={cx(styles.portrait, profile && styles.portraitProfile)}>
+        <Media
+          image={{
+            ...portrait.image,
+            alt: '',
+            focus: portrait.image.focus ?? PORTRAIT_FOCUS,
+          }}
+          fit="fill"
+          edge="placement"
+          sizes={profile ? PROFILE_PORTRAIT_SIZES : '128px'}
+          priority
+        />
+      </span>
+    ) : (
+      <span
+        className={cx(
+          styles.portrait,
+          styles.portraitInitials,
+          profile && styles.portraitProfile,
+        )}
+        aria-hidden="true"
+      >
+        {initialsOf(portrait.name)}
+      </span>
+    );
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
   const copyNode =
     lead === undefined ? null : (
       <Layout rowGap="text">
-        {lead !== undefined ? <p className={styles.lead}>{lead}</p> : null}
+        {lead === undefined ? null : leadAside == null ? (
+          <p className={styles.lead}>{lead}</p>
+        ) : (
+          <Cluster colGap="block" rowGap="tight" align="baseline">
+            <p className={styles.lead}>{lead}</p>
+            {leadAside}
+          </Cluster>
+        )}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}
@@ -1170,6 +1256,7 @@ export function PageHero({
         <>
           {mediaNode}
           <Layout rowGap="block" justifyItems={justify}>
+            {portraitNode}
             {eyebrowNode}
             {titleNode}
             {copyNode}
@@ -1178,6 +1265,7 @@ export function PageHero({
         </>
       ) : (
         <Layout rowGap="block" justifyItems={justify}>
+          {profile ? null : portraitNode}
           {eyebrowNode}
           {titleNode}
           {copyNode}
@@ -1209,7 +1297,19 @@ export function PageHero({
     );
 
   let top: ReactNode;
-  if (masthead) {
+  if (profile) {
+    /* ── profile · the face beside the whole opening ─────────────────────────────────
+       From 768 the portrait in a content-sized track and the stack in the rest, top-aligned so the
+       face's top edge and the name's share a line. `stack` (48) between them: the face and the name
+       are one head, as ProfileCard's are at `block` beside an 80 portrait, scaled with the portrait
+       rather than set as a split's 96 (a split is two regions of different kind; this is one person). */
+    top = withTrail(
+      <Layout columns={{ md: ['auto', 1] }} colGap="stack" rowGap="block" align="start">
+        {portraitNode}
+        {stack}
+      </Layout>,
+    );
+  } else if (masthead) {
     /* ── masthead · the title, and the lede on its last baseline ─────────────────────────
        A [2, 1] split: the title alone in the 2 (wide enough for its own measure, so it sets the lines
        it would stacked), the lede and its figures in the 1, both halves sharing the title's last baseline (`align="baseline"`).
@@ -1218,6 +1318,7 @@ export function PageHero({
     top = withTrail(
       <Layout columns={{ lg: [2, 1] }} colGap="section" rowGap="block" align="baseline">
         <Layout rowGap="block">
+          {portraitNode}
           {eyebrowNode}
           {titleNode}
         </Layout>
@@ -1245,6 +1346,7 @@ export function PageHero({
       <Layout rowGap="stack">
         <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="baseline">
           <Layout rowGap="block">
+            {portraitNode}
             {eyebrowNode}
             {titleNode}
             {copyNode}
@@ -1330,6 +1432,7 @@ export function PageHero({
     const headed = across ? (
       <Layout rowGap="stack">
         <Layout rowGap="block">
+          {portraitNode}
           {eyebrowNode}
           {titleNode}
         </Layout>
@@ -1354,23 +1457,25 @@ export function PageHero({
       data-band={dataBand}
       data-fold-hero={dataFoldHero}
       data-arrangement={
-        centredHead
-          ? 'hero-centred'
-          : display
-            ? 'hero-display'
-            : masthead
-              ? 'hero-masthead'
-              : watch
-                ? 'hero-watch'
-                : split
-                  ? isIllustration
-                    ? 'hero-illustration'
-                    : wide
-                      ? 'hero-wide'
-                      : 'hero-media'
-                  : media === undefined
-                    ? 'hero-text'
-                    : 'hero-stacked'
+        profile
+          ? 'hero-profile'
+          : centredHead
+            ? 'hero-centred'
+            : display
+              ? 'hero-display'
+              : masthead
+                ? 'hero-masthead'
+                : watch
+                  ? 'hero-watch'
+                  : split
+                    ? isIllustration
+                      ? 'hero-illustration'
+                      : wide
+                        ? 'hero-wide'
+                        : 'hero-media'
+                    : media === undefined
+                      ? 'hero-text'
+                      : 'hero-stacked'
       }
     >
       {faded ? (

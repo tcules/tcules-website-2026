@@ -36,8 +36,11 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
   --pfc-bio-ink: var(--color-neutral-800);
-  --pfc-initials-ground: var(--color-neutral-200);
-  --pfc-initials-ink: var(--color-neutral-700);
+  /* The portrait's frame: a filled tint under a photograph (a source cut to a circle on transparency
+     still reads as the rounded square) and under initials, which take the name's full ink. One
+     treatment with PageHero's profile portrait (1 Nov 2026). */
+  --pfc-portrait-ground: var(--color-neutral-200);
+  --pfc-initials-ink: var(--color-neutral-900);
   --pfc-rule: var(--color-neutral-300); /* decoration */
 }
 
@@ -47,8 +50,8 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
   --pfc-bio-ink: var(--color-neutral-800);
-  --pfc-initials-ground: var(--color-neutral-100);
-  --pfc-initials-ink: var(--color-neutral-700);
+  --pfc-portrait-ground: var(--color-neutral-100);
+  --pfc-initials-ink: var(--color-neutral-900);
   --pfc-rule: var(--color-neutral-200); /* decoration */
 }
 
@@ -58,8 +61,8 @@
   --pfc-name-ink: var(--color-white);
   --pfc-role-ink: var(--color-neutral-400);
   --pfc-bio-ink: var(--color-neutral-200);
-  --pfc-initials-ground: var(--color-neutral-800);
-  --pfc-initials-ink: var(--color-neutral-200);
+  --pfc-portrait-ground: var(--color-neutral-800);
+  --pfc-initials-ink: var(--color-white);
   --pfc-rule: var(--color-neutral-700); /* decoration */
 }
 
@@ -69,7 +72,7 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-600);
   --pfc-bio-ink: var(--color-neutral-800);
-  --pfc-initials-ground: var(--color-neutral-100);
-  --pfc-initials-ink: var(--color-neutral-700);
+  --pfc-portrait-ground: var(--color-neutral-100);
+  --pfc-initials-ink: var(--color-neutral-900);
   --pfc-rule: var(--color-neutral-200); /* decoration */
 }

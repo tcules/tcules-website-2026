@@ -122,6 +122,10 @@
 /* The one-word title (`titleSize="mark"`): the mark role, twice display (136 · 104 · 64). */
 --hero-title-text-mark:var(--text-mark);
 --hero-title-tracking-mark:var(--text-mark-tracking);
+/* A person's name as the title (`titleSize="h1"`, an author page, 1 Nov 2026): the h1 role, a step
+   under display, because a name at display scale shouts over the portrait above it. */
+--hero-title-text-h1:var(--text-h1);
+--hero-title-tracking-h1:var(--text-h1-tracking);
 /* The lead: --text-lead-lg, 18, two px over the 16 paragraphs below it, which is enough for the
    lead to read as the lead because it is also the shorter line (--hero-lead-measure). The hero is
    the only band whose lead takes 18 (owner, 19 Oct 2026); every other lead is 16. The 20px opt-in
@@ -148,6 +152,24 @@
 --hero-avatar-ring-width:var(--border-width-2);
 --hero-avatar-text:var(--text-micro);
 --hero-avatar-tracking:var(--text-micro-tracking);
+/* The face of the person a page is about (`portrait`, an author page, 1 Nov 2026). A component SIZE,
+   read from the space ramp under the same stated exception as --hero-avatar-size: no size ladder
+   holds 128. Square at the house photograph corner, as ProfileCard and Contributors crop a portrait.
+   Without a photograph the initials hold the square at the h2 role, as ProfileCard's do at h3 in 80,
+   on the frame's filled tint in the title's ink (--hero-portrait-ground, -initials-ink, per surface):
+   the one initials treatment ProfileCard shares (1 Nov 2026). The byline disc keeps its own outline. */
+--hero-portrait-size:var(--space-128);
+--hero-portrait-radius:var(--radius-8);
+--hero-portrait-text:var(--text-h2);
+--hero-portrait-tracking:var(--text-h2-tracking);
+/* `arrangement="profile"` (an author page, 1 Nov 2026: "the face at a confident size beside the
+   name"): the same square, a component SIZE stepped by width, 240 from 1024, 192 from 768 and the
+   default 128 below, where it stacks above the name. No ladder holds these, so they are literals,
+   as --lay-track-* are; PageHero.tsx's PROFILE_PORTRAIT_SIZES keeps the <img sizes> in step. The
+   initials take the display role so two letters fill a square almost twice the size. */
+--hero-portrait-size-profile:240px;
+--hero-portrait-text-profile:var(--text-display);
+--hero-portrait-tracking-profile:var(--text-display-tracking);
 /* The visually hidden key (an article's "Written by"): the one-pixel box screen readers still read.
    A size, not a distance; the ramp's 1 under the same stated exception, as ListCard's hidden size. */
 --hero-hidden-size:var(--space-1);
@@ -245,6 +267,21 @@
   --hero-media-size-centred: 860px;
 }
 
+/* The profile portrait's steps (see --hero-portrait-size-profile): 192 from 768 to 1023, and the
+   default portrait's 128 below 768, where it stacks above the name. A component size, not a
+   distance, so it may step by width. */
+@media (max-width: 1023px) {
+  :root {
+    --hero-portrait-size-profile: 192px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --hero-portrait-size-profile: var(--hero-portrait-size);
+  }
+}
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────
    The baseline, and a three-step ramp read from loudest down. The title at neutral-900 is
    the loudest ink on the page; the lead and the byline values sit together at neutral-800;
@@ -266,6 +303,10 @@
 --hero-avatar-ring:var(--color-paper);          /* the ground, so overlapping portraits part */
 --hero-avatar-edge:var(--color-neutral-300);    /* decoration: the initials disc's outline */
 --hero-avatar-initials-ink:var(--color-neutral-700); /*  8.14:1 */
+   /* the profile portrait's frame: a filled tint, so a photo cut to a circle on transparency still
+      reads as the rounded square, and initials on it at the title's full ink (1 Nov 2026) */
+--hero-portrait-ground:var(--color-neutral-200);
+--hero-portrait-initials-ink:var(--color-neutral-900);
 --hero-byline-rule-ink:var(--color-neutral-300); /* decoration */
 
 --hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
@@ -305,6 +346,8 @@
 --hero-avatar-ring:var(--color-paper-deep);
 --hero-avatar-edge:var(--color-neutral-400);    /* decoration */
 --hero-avatar-initials-ink:var(--color-neutral-700); /*  7.27:1 */
+--hero-portrait-ground:var(--color-neutral-200);
+--hero-portrait-initials-ink:var(--color-neutral-900);
 --hero-byline-rule-ink:var(--color-neutral-400); /* decoration */
 
 --hero-title-ink:var(--color-neutral-900);    /* 13.06:1 — §6 of the spec rounds this to 13.05 */
@@ -342,6 +385,8 @@
 --hero-avatar-ring:var(--color-neutral-950);
 --hero-avatar-edge:var(--color-neutral-700);    /* decoration */
 --hero-avatar-initials-ink:var(--color-neutral-300); /* 11.07:1 */
+--hero-portrait-ground:var(--color-neutral-800);
+--hero-portrait-initials-ink:var(--color-white);
 --hero-byline-rule-ink:var(--color-neutral-700); /* decoration */
 
 --hero-title-ink:var(--color-white);          /* 17.26:1 */
@@ -383,6 +428,8 @@
 --hero-avatar-ring:var(--color-brandeis-500);
 --hero-avatar-edge:var(--color-brandeis-300);   /* decoration */
 --hero-avatar-initials-ink:var(--color-brandeis-50);
+--hero-portrait-ground:var(--color-brandeis-600);
+--hero-portrait-initials-ink:var(--color-white);
 --hero-byline-rule-ink:var(--color-brandeis-300); /* decoration */
 
 --hero-title-ink:var(--color-white);          /*  6.23:1 */

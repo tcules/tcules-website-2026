@@ -845,3 +845,29 @@ headings to `##`:
 - `events/product-design-and-filmmaking`
 
 **Found in.** Tracker 2.44, the live insights rendered from Strapi.
+
+## Author pages: bios, LinkedIn links, and repeated bylines (1 Nov 2026, owner)
+
+**Page / section.** `/insights/authors` and every `/insights/authors/<person>`; the bodies of four live guides.
+
+**What's needed.**
+- **A short bio for everyone (one or two sentences).** Until Strapi's `Profile.description` is readable
+  (strapi-changes), the site carries a fallback in the repo. Eight are trimmed from the 26 Oct copy's author
+  profiles. Three are drafted from the pieces each person is credited on, and the content team should
+  confirm or replace them: Chirag Patel, Rishabh Choudhary and Anshu Jain. The copy's profile for "Yash Bhatt"
+  is used for Yash Gidwani, the name Strapi sends.
+- **LinkedIn URLs.** The cards and profiles show a LinkedIn link when there is one. Only Jatin Leuva's and
+  Rakesh Chitroda's are known. The content team should supply the rest (Strapi `Profile.linkedInProfile`).
+- **A larger portrait for Rakesh Chitroda.** The profile page sets the face at 240 px; Rakesh's Strapi
+  picture is 146 px square and upscales visibly. Upload one of at least 480 px. Five people have no
+  photo at all (Yash, Chirag, Rishabh, Anshu, Varun) and show initials until one is uploaded.
+- **Portraits: square, not transparent, at least 480 px.** Every author photo should be a square image on
+  a real background, at least 480 px on each side. Some uploaded today (Rakesh Chitroda, Rushali Bhatt) are
+  cut to a circle on a transparent background, so on the profile's rounded square they read as a circle.
+- **Remove the body bylines.** Four live guides start their body with an authored "By <name> · Published …"
+  line, which repeats the byline the page already shows at the top. Delete that line in Strapi.
+
+**Why.** Every author page should say who the person is, not only what they wrote. A LinkedIn link lets a
+reader check the person is real.
+
+**Found in.** Author pages, tracker 2.49.

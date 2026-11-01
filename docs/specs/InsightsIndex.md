@@ -406,3 +406,23 @@ surface).
 - Patterns reused: PageHero, BlockCardSet, BlockCard, ListCard, Slider, ContentSection, CtaRow,
   CtaSection, Breadcrumbs; primitives: Section, Layout, Cluster, Button, Icon, Tag.
 - New patterns: 0. New template: 1. Pattern extended: ListCard (`eyebrow`, `date` marker).
+
+## Amendment · 1 Nov 2026 — the author pages: `AuthorPieces` and `ListingClose` `lead`
+
+The author pages sit in the listing's family (src/templates/ListingIndex/), so their parts live here.
+
+- **`AuthorPieces({ heading, items })`** (`authors.tsx`): one person's pieces, newest first, in three
+  registers, each drawn one way and never mixed (decisions/2026-10-11-card-variants-stay-distinct). The
+  latest piece WITH a picture is the wide feature, the hub lead's horizontal BlockCard, its cover beside its
+  words. A piece without a picture never leads (owner, 1 Nov 2026, rejecting the text-only split), and a
+  person with no pictured piece has no feature. Where TWO or more of the rest have a picture, they follow as the hub's cards (`CardGrid`,
+  `facts`), at most six, every card a cover. Everything else is the resource ledger, one piece per ruled
+  row (Teaser `row`, `metaAside`, `ruled`, `arrow`; home's "Selected thinking"), the format glyph and name
+  with the date in the meta column. Not grouped by type: a person with two pieces would get two one-item
+  sections, and every row names its format. Nothing is hidden. The hub's `InsightResources` and every
+  other use of the hub's cards are unchanged.
+- **`ListingClose` `lead?: string`**: the close's lead line where the page around it cannot use the
+  listing's own (the authors index shows people, not pieces). Absent, the closing's `body`, so `/insights`
+  is unchanged.
+
+Specimen: `/design/listing-index?data=author` (many pieces with covers, many without, two without).

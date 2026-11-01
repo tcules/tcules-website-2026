@@ -14,7 +14,7 @@ export type Contributor = {
   name: string;
   /** Who they are, as authored: "Product Designer, Tcules", "Host · Founder and CEO, Tcules". */
   role?: string;
-  /** Their photograph, cropped square at the 8 radius. Absent, their initials in an outlined square. */
+  /** Their photograph, cropped square at the 8 radius. Absent, their initials in full ink on the portrait's ground. */
   portrait?: MediaImage;
   /** Their page. Absent (a podcast guest has none), the name is plain and there is no link. */
   link?: ContributorLink;
@@ -48,7 +48,9 @@ export function Contributors({ label, people }: ContributorsProps) {
         <Cluster as="ul" colGap="stack" rowGap="block" align="start">
           {people.map((person, index) => (
             <li key={`${person.name}-${index}`}>
-              <Cluster nowrap colGap="text" align="center">
+              {/* Top-aligned: the name sits on the portrait's top edge, so a row with a link and a
+                  row without one start on the same line. */}
+              <Cluster nowrap colGap="text" align="start">
                 {person.portrait ? (
                   <span className={styles.portrait}>
                     <Media
@@ -67,9 +69,13 @@ export function Contributors({ label, people }: ContributorsProps) {
                     {initialsOf(person.name)}
                   </span>
                 )}
-                <Layout rowGap="inline">
-                  <h3 className={styles.name}>{person.name}</h3>
-                  {person.role ? <p className={styles.role}>{person.role}</p> : null}
+                {/* Name and role are one identity, 4 apart; the link is an action after it, a
+                    paragraph's step below (owner, 1 Nov 2026: the link sat too close to the role). */}
+                <Layout rowGap="text">
+                  <Layout rowGap="inline">
+                    <h3 className={styles.name}>{person.name}</h3>
+                    {person.role ? <p className={styles.role}>{person.role}</p> : null}
+                  </Layout>
                   {person.link ? (
                     <Button
                       as="a"
