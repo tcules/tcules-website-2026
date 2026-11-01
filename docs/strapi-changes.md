@@ -179,7 +179,7 @@ restatement of the title or a 40-word paragraph; a card has room for one line, a
 the content team can apply without a judgement about each entry.
 
 **Found in.** BlockCard revision, 29 Sep 2026 (`docs/specs/BlockCard.md` § Revision 3). Content side:
-`docs/content-changes.md`, "Case-study cards".
+`docs/content-changes.md` §2.
 
 ## 14. The case-study listing hero: name and message, no action
 
@@ -221,7 +221,7 @@ header (§10). A block that names its job removes the guess. Ordering, too, beco
 
 **Why.** The trail sits 32px above the h1 (kit `fdn-top`), and its last crumb names the page only when the h1 does not. Today these records have only a title, so their trails stop at the parent ("Home / Services") rather than repeating the headline. With a name the trail can say where you are *and* what the page is called, as the six designed service pages already do from `story.name`. The hero eyebrow on services and expertise ("Product Design services", "Product Design specialist") is doing this job today without being meant for it. *6 Oct 2026, second fix round:* the live service route no longer waits on this field for the trail to name the page. It builds the leaf from the slug ("Product design"), or from the CMS eyebrow where that is the same name spelled out ("Trust, control and recovery"; and, with the parent crumb's words set aside, "Design-system governance and adoption"), so every service trail ends at the page. The slug reading is a stand-in, and it shows on the three pages whose eyebrow is not their name: "Information architecture workflow design", "Interaction UI design" and "Prototyping usability testing" are the words of a URL, not of a name. (Their h1s open with the right spelling, and taking it was tried and dropped: a crumb that is the headline's first five words reads the headline twice.) When this field exists the route maps it as the leaf and both stand-ins go, along with the eyebrow on these types. Expertise and case studies still end at the parent until then.
 
-**Found in.** Kit `fdn-top` review round, 5 Oct 2026. Content side: `docs/content-changes.md` § 5 (removed 1 Nov 2026 with the pre-26 Oct copy; in git history at `92511e23`).
+**Found in.** Kit `fdn-top` review round, 5 Oct 2026. Content side: `docs/content-changes.md` § 5.
 
 ## 17. Actions say whether they convert — withdrawn 8 Oct 2026
 
