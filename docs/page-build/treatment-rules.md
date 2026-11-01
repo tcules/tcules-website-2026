@@ -144,7 +144,8 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   body; a sentence-list of starting points runs as one line parted by middle dots. A set's closing
   claim with its worked example is claim-then-proof inside the band: the claim as a sub-head, the example as
   a case teaser (horizontal BlockCard of the case) under it. Never an ask: an example is evidence, and an
-  island that carries one mixes the two jobs.
+  island that carries one mixes the two jobs. Never a band of its own when its words point back at the set
+  ("any of the three"): a conclusion stays in the band it concludes.
 - **Practical terms (getting started, time zones, fees, ownership) are drawn cards**, as About's working terms;
   never an OfferSheet. A term with no scene takes the empty plate.
 - **Bands that unpack one promise share one register**: on /how-we-work the four "what working with us is

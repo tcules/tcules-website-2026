@@ -35,6 +35,9 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   (its cover, "Example · Dealpath" as eyebrow, the case's own title, the example's words; the whole card the
   link, title cue). Claim, then proof, inside the band (`closingNote`, `CaseTeaser`). The paper-deep CaseCard
   stays home's.
+- Round 5, tried and reverted: the claim and teaser as a band of their own on tint. Rejected because the copy
+  ("Begin with any of the three…") refers to the options above; a separate band cuts the sentence off from what
+  it points at. The claim is the set's conclusion, so it stays inside the set's band.
 
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
