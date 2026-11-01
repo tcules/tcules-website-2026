@@ -19,9 +19,10 @@
      holds 64, and it is the hero's portrait doubled so the end section reads as the fuller account. */
   --ctb-portrait-size: var(--space-64);
   --ctb-portrait-radius: var(--radius-8);
-  /* Serif initials at the h3 role, as ProfileCard draws them in its 80 and the hero in 240. */
-  --ctb-initials-text: var(--text-h3);
-  --ctb-initials-tracking: var(--text-h3-tracking);
+  /* The initials at the h4 role (22): the serif roles start at h3's 34, too large for 64 (owner,
+     1 Nov 2026: smaller initials in the box). */
+  --ctb-initials-text: var(--text-h4);
+  --ctb-initials-tracking: var(--text-h4-tracking);
   --ctb-name-text: var(--text-h5);
   --ctb-name-tracking: var(--text-h5-tracking);
   --ctb-role-text: var(--text-body-sm);

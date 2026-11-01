@@ -190,11 +190,16 @@
   color: var(--hero-portrait-initials-ink);
   font: var(--hero-portrait-text);
   letter-spacing: var(--hero-portrait-tracking);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--hero-portrait-tracking);
 }
 
 .portraitInitials.portraitProfile {
   font: var(--hero-portrait-text-profile);
   letter-spacing: var(--hero-portrait-tracking-profile);
+  text-indent: var(--hero-portrait-tracking-profile);
 }
 
 /* ── The copy · two roles, two measures ───────────────────────────────────
@@ -354,6 +359,10 @@ a.name:hover {
   color: var(--hero-avatar-initials-ink);
   font: var(--hero-avatar-text);
   letter-spacing: var(--hero-avatar-tracking);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--hero-avatar-tracking);
   text-transform: var(--text-mono-case);
 }
 

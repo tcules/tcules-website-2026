@@ -37,6 +37,10 @@
   color: var(--ctb-initials-ink);
   font: var(--ctb-initials-text);
   letter-spacing: var(--ctb-initials-tracking);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--ctb-initials-tracking);
   text-transform: var(--text-mono-case);
 }
 

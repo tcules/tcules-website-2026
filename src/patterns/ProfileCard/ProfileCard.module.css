@@ -36,6 +36,10 @@
   font: var(--pfc-initials-text);
   letter-spacing: var(--pfc-initials-tracking);
   color: var(--pfc-initials-ink);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--pfc-initials-tracking);
 }
 
 .circle {
