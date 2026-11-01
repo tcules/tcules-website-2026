@@ -22,15 +22,18 @@
   block-size: var(--ctb-portrait-size);
   overflow: hidden;
   border-radius: var(--ctb-portrait-radius);
+  /* A ground under every portrait, so a source cut to a circle on transparency still reads as the
+     rounded square (decisions/2026-11-01-portrait-shapes-by-place), and under the initials. */
+  background: var(--ctb-portrait-ground);
 }
 
-/* No portrait: the initials, centred in an outlined square on the ground, a stand-in by design.
+/* No portrait: the initials, in full ink on the portrait's ground, as ProfileCard and the author
+   page's hero draw them (1 Nov 2026), so one person's stand-in reads the same everywhere.
    The grid centres two glyphs in their own fixed box; it arranges no siblings, so it is not a
    Layout's job (the same argument SiteNav makes for its icon boxes). */
 .initials {
   display: grid;
   place-items: center;
-  border: var(--ctb-rule-width) solid var(--ctb-initials-edge);
   color: var(--ctb-initials-ink);
   font: var(--ctb-initials-text);
   letter-spacing: var(--ctb-initials-tracking);
