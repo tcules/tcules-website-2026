@@ -33,47 +33,50 @@ export function teamPortrait(name: string): ImageRecord | undefined {
  * Three are drafted from the pieces each person is credited on and marked DRAFTED: the content team
  * confirms or replaces them (docs/content-changes.md, "Author pages"). LinkedIn URLs are only the
  * ones the site already publishes (fixtures/ideal/about.ts); never guess one.
+ *
+ * A bio opens on what the person does or writes about ("Writes about…", "Leads…"), never on their
+ * name and role: it is set directly under both, so "<Name>, a <role> at Tcules," only said them twice.
  */
 export type TeamProfile = { bio: string; linkedin?: string };
 
 const PROFILES: Record<string, TeamProfile> = {
   /* DRAFTED (1 Nov 2026) from the pieces credited to Anshu: hiring design help, UX audits. */
   'Anshu Jain': {
-    bio: 'Anshu Jain is a Business Development Specialist at Tcules who writes for SaaS teams hiring design help: choosing a design agency or studio, hiring a product designer, and choosing a UX audit.',
+    bio: 'Writes for SaaS teams hiring design help: choosing a design agency or studio, hiring a product designer, and choosing a UX audit.',
   },
   'Shoghi Bagul': {
-    bio: 'Shoghi Bagul, a Product Designer at Tcules, writes about AI product UX, generative AI patterns for SaaS and design systems.',
+    bio: 'Writes about AI product UX, generative AI patterns for SaaS and design systems.',
   },
   'Rushali Bhatt': {
-    bio: 'Rushali Bhatt is a Product Designer at Tcules who writes about AI product UX: how to design review steps in AI features so that people keep control of the output. Rushali also writes about UX audits and enterprise software.',
+    bio: 'Writes about AI product UX: how to design review steps in AI features so that people keep control of the output. Also writes about UX audits and enterprise software.',
   },
   'Rakesh Chitroda': {
-    bio: 'Rakesh Chitroda is Co-founder of Tcules. Rakesh writes for teams choosing outside design help, including how to choose a product design agency and when to hire a design system consultant.',
+    bio: 'Writes for teams choosing outside design help, including how to choose a product design agency and when to hire a design system consultant.',
     linkedin: 'https://www.linkedin.com/in/rakeshchitroda',
   },
   /* DRAFTED (1 Nov 2026) from the pieces credited to Rishabh: design systems, sector UX, inclusive design. */
   'Rishabh Choudhary': {
-    bio: 'Rishabh Choudhary is a Product Designer at Tcules who writes about design systems, inclusive design, and UX for fintech, healthcare and eLearning products.',
+    bio: 'Writes about design systems, inclusive design, and UX for fintech, healthcare and eLearning products.',
   },
   'Yash Gidwani': {
-    bio: 'Yash Gidwani is a Product Designer at Tcules. Yash writes guides on SaaS onboarding and engagement, ecommerce, UX audits, enterprise software and legacy product redesign.',
+    bio: 'Writes guides on SaaS onboarding and engagement, ecommerce, UX audits, enterprise software and legacy product redesign.',
   },
   'Jatin Leuva': {
-    bio: 'Jatin Leuva is Founder and CEO of Tcules, a digital product design studio in Ahmedabad. He writes about AI product UX and mobile apps for B2B SaaS, and the My Experiments with UX interviews with people who ship products.',
+    bio: 'Leads Tcules, a digital product design studio in Ahmedabad. Writes about AI product UX and mobile apps for B2B SaaS, and runs the My Experiments with UX interviews with people who ship products.',
     linkedin: 'https://in.linkedin.com/in/jatinuva',
   },
   'Preksha Kharidia': {
-    bio: 'Preksha Kharidia is a Product Designer at Tcules who writes about SaaS onboarding and engagement, with Yash Gidwani.',
+    bio: 'Writes about SaaS onboarding and engagement, with Yash Gidwani.',
   },
   'Varun Mashru': {
-    bio: 'Varun Mashru is a Product Designer at Tcules who writes about object-oriented UX, and about how a SaaS team should answer an urgent feature request.',
+    bio: 'Writes about object-oriented UX, and about how a SaaS team should answer an urgent feature request.',
   },
   /* DRAFTED (1 Nov 2026) from the pieces credited to Chirag: AI product UX, agents, design to code. */
   'Chirag Patel': {
-    bio: 'Chirag Patel is a Product Designer at Tcules who writes about AI product UX, agentic interfaces, and keeping a front-end build true to its design.',
+    bio: 'Writes about AI product UX, agentic interfaces, and keeping a front-end build true to its design.',
   },
   'Devagya Sharma': {
-    bio: 'Devagya Sharma is a Product Designer at Tcules who writes about protecting existing customer work at each release: silent interface regressions, legacy software modernisation and design systems.',
+    bio: 'Writes about protecting existing customer work at each release: silent interface regressions, legacy software modernisation and design systems.',
   },
 };
 

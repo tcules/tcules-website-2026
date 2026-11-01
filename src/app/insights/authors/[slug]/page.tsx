@@ -7,7 +7,7 @@ import { jsonLdMarkup, ORGANIZATION_ID, schemaId } from '@/lib/json-ld';
 import { authorPath, ROUTES, SITE_ORIGIN } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, PageHero, type BreadcrumbItem } from '@/patterns';
-import { InsightResources, ListingClose } from '@/templates';
+import { AuthorPieces, ListingClose } from '@/templates';
 
 import { closingOf, insightCards } from '../../../_insights/hub';
 
@@ -15,8 +15,9 @@ import { closingOf, insightCards } from '../../../_insights/hub';
  * One person's author page (owner, 1 Nov 2026; decisions/2026-11-01-author-pages-one-template-from-strapi):
  * the ONE template every person a live byline names is plugged into. One composed head (owner, 1 Nov
  * 2026: "a real profile page"): their face at a confident size beside their name, role, bio, the
- * topics they write about as labels and their LinkedIn where known. Then every live piece that
- * credits them as the hub's own cards, newest first and all visible, under a head that counts them,
+ * topics they write about as labels and their LinkedIn on the role line where known. Then every live
+ * piece that credits them, newest first and all visible, under a head that counts them (AuthorPieces:
+ * the latest as the wide feature, a row of covers where there are enough, the rest as the ledger),
  * then the hub's close.
  *
  * It is the `url` Google's author markup asks for (decisions/2026-10-29-author-pages-ship-at-launch),
@@ -189,29 +190,31 @@ export default async function AuthorProfilePage({ params }: AuthorPageProps) {
         titleSize="h1"
         body={body.length > 0 ? (body as [string, ...string[]]) : undefined}
         labels={author.topics.slice(0, TOPIC_LABELS)}
+        leadAside={
+          /* Their LinkedIn, only where one is known, on the role line: it belongs to who the person
+             is, not to a row of its own under the labels. A link, the mark before the label as on
+             every LinkedIn link, opening beside the page. Never the blue solid: that is the page's
+             one main action, and a profile asks nothing of the reader. */
+          author.linkedin ? (
+            <Button
+              as="a"
+              href={author.linkedin}
+              {...NEW_TAB}
+              emphasis="link"
+              tone="primary"
+              iconLeft={<BrandMark name="linkedin" />}
+              aria-label={`${author.name} on LinkedIn (opens in a new tab)`}
+            >
+              LinkedIn
+            </Button>
+          ) : undefined
+        }
         texture
         surface="paper"
-      >
-        {/* Their LinkedIn, only where one is known: an outlined control with the mark naming where
-            it goes, opening beside the page. Never the blue solid: that is the page's one main
-            action, and a profile asks nothing of the reader. */}
-        {author.linkedin ? (
-          <Button
-            as="a"
-            href={author.linkedin}
-            {...NEW_TAB}
-            emphasis="outline"
-            tone="primary"
-            iconLeft={<BrandMark name="linkedin" />}
-            aria-label={`${author.name} on LinkedIn (opens in a new tab)`}
-          >
-            LinkedIn
-          </Button>
-        ) : null}
-      </PageHero>
+      />
 
       {hub ? (
-        <InsightResources heading={piecesHeading(author)} items={insightCards(hub, author.pieces)} />
+        <AuthorPieces heading={piecesHeading(author)} items={insightCards(hub, author.pieces)} />
       ) : null}
 
       {hub ? (

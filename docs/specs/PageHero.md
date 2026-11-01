@@ -1119,13 +1119,26 @@ a small face over a name, and the hero as a thumbnail and a heading.
   A component size, so it may step by width (the no-responsive-step rule is about distances). Literal
   pixels, as `--lay-track-*` are, because no ladder holds them. The `<img sizes>` is written once more in
   `PageHero.tsx` (`PROFILE_PORTRAIT_SIZES`) and the two move together.
-- **Initials** in the profile square take `--hero-portrait-text-profile` (the h1 role), so two letters hold
-  a square nearly twice the size.
+- **Initials** in the profile square take `--hero-portrait-text-profile` (the display role, since the
+  critic pass below), so two letters fill a square nearly twice the size.
 - Without a `portrait` the arrangement renders `stacked`; `media` is not a profile's (a person's page has
   their face, not a hero image). `data-arrangement="hero-profile"`.
 
 Supply note: a Strapi profile picture as small as 146 px (Rakesh Chitroda's) upscales in the 240 square;
 the content ask is a portrait of at least 480 px.
 
-Specimen: block 23b (a photograph with labels and the LinkedIn control in the extras slot; initials with no
+Specimen: block 23b (a photograph with labels and the LinkedIn link on the role line; initials with no
 LinkedIn on paper and ink).
+
+### Critic pass · 1 Nov 2026 — `leadAside`, and one portrait ground
+
+- **`leadAside?: ReactNode`**: a control on the lead's own line. The lead and it share one wrapping
+  `Cluster`, a `block` apart on their baseline; on a narrow column it wraps under the lead at `tight`.
+  The author page passes its LinkedIn link here: in the extras slot it floated a `stack` under the labels,
+  cut off from the name it belongs to. A link-emphasis Button, the LinkedIn mark before its label as on
+  every LinkedIn link. Ignored without a `body`; absent, the lead renders exactly as before.
+- **The portrait frame has a ground**: `--hero-portrait-ground`, a filled tint declared per surface (paper
+  and tint neutral-200, ink neutral-800, blue brandeis-600). It sits under a photograph too, so a source cut
+  to a circle on transparency still reads as the rounded square.
+- **One initials treatment** with ProfileCard: the tint ground and `--hero-portrait-initials-ink`, the
+  title's full ink (neutral-900; white on ink and blue). The outlined disc stays the byline's only.

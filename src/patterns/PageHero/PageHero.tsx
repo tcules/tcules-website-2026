@@ -360,6 +360,14 @@ type PageHeroBaseProps = {
    */
   body?: readonly [string, ...string[]];
   /**
+   * A control on the lead's own line (an author page's LinkedIn, 1 Nov 2026: the link belongs to
+   * the person's identity, not to a row of its own under the labels). The lead and it share one
+   * wrapping row, a `block` apart on their baseline; on a narrow column it wraps under the lead.
+   * Pass a link-emphasis Button: it sits in running text's line, so it takes no box. Ignored
+   * without a `body`. Absent renders exactly as before: the lead alone.
+   */
+  leadAside?: ReactNode;
+  /**
    * A category or format the trail cannot say (`Fintech · Platform rebuild`, `Ep 12 · 48 min`,
    * `Case study · Fintech`). Never a crumb's words: a name the trail says ("Product Design
    * specialist" under "… / Product design"), or a section crumb on its own (`Case study` under
@@ -717,6 +725,7 @@ export function PageHero({
   titleSize = 'display',
   titleAcross = false,
   body,
+  leadAside,
   eyebrow,
   rating,
   portrait,
@@ -964,7 +973,14 @@ export function PageHero({
   const copyNode =
     lead === undefined ? null : (
       <Layout rowGap="text">
-        {lead !== undefined ? <p className={styles.lead}>{lead}</p> : null}
+        {lead === undefined ? null : leadAside == null ? (
+          <p className={styles.lead}>{lead}</p>
+        ) : (
+          <Cluster colGap="block" rowGap="tight" align="baseline">
+            <p className={styles.lead}>{lead}</p>
+            {leadAside}
+          </Cluster>
+        )}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}

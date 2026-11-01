@@ -18,7 +18,7 @@ export type ProfileCardProps = {
   /** What they lead and care about: plain text, or inline content the caller renders. */
   bio?: ReactNode;
   /**
-   * Their portrait, cropped square from the centre. Absent, their initials hold the square on a plain
+   * Their portrait, cropped square from the centre. Absent, their initials hold the square on the frame's tint
    * ground, so a set keeps one head height and nothing reads as a broken image. Never pass a labelled
    * placeholder panel here: at 80px its label cannot be read (review 29 Oct).
    */
@@ -71,7 +71,9 @@ export function ProfileCard({
   return (
     <Root className={styles.item}>
       <Layout rowGap="block" pinLast={Boolean(linkedin || link)} className={styles.card}>
-        <Cluster nowrap colGap="block" align="center">
+        {/* Top-aligned: the name starts on the portrait's top edge, so a two-line role never
+            pushes one card's name out of line with its row's (1 Nov 2026). */}
+        <Cluster nowrap colGap="block" align="start">
           {portrait ? (
             <span className={cx(styles.portrait, portraitShape === 'circle' && styles.circle)}>
               <Media
@@ -119,7 +121,7 @@ export function ProfileCard({
                 {...NEW_TAB}
                 emphasis="link"
                 tone="primary"
-                icon={<BrandMark name="linkedin" />}
+                iconLeft={<BrandMark name="linkedin" />}
               >
                 {linkedin.label}
               </Button>
@@ -165,7 +167,7 @@ export function ProfileFollow({ body, link, image }: ProfileFollowProps) {
             {...NEW_TAB}
             emphasis="link"
             tone="primary"
-            icon={<BrandMark name="linkedin" />}
+            iconLeft={<BrandMark name="linkedin" />}
           >
             {link.label}
           </Button>

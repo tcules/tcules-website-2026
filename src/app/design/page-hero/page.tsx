@@ -1484,7 +1484,7 @@ export default async function PageHeroSpecimenPage() {
       {/* ── 23a · A page about a person ───────────────────────────────────────────
            The author page (owner, 1 Nov 2026): `portrait` above the title, `titleSize="h1"` for
            a name. With a photograph, then without one (the initials hold the square), then on
-           the tint and ink grounds the initials' outline is drawn for. */}
+           the tint and ink grounds the initials' tint is declared for. */}
       <div>
         <PageHero
           trail={heroTrail(
@@ -1519,7 +1519,7 @@ export default async function PageHeroSpecimenPage() {
           />
           <Note
             title={`23a · portrait · no photograph, initials · ${surface}`}
-            note="Without a photograph the initials hold the square on the byline disc's outlined ground, at the h2 role (decisions/2026-11-01-byline-initials-without-a-photo)."
+            note="Without a photograph the initials hold the square on the portrait's filled tint in the title's full ink, at the h2 role: one treatment with ProfileCard. The byline disc keeps its outline (decisions/2026-11-01-byline-initials-without-a-photo)."
             surface={surface}
           />
         </div>
@@ -1528,8 +1528,8 @@ export default async function PageHeroSpecimenPage() {
       {/* ── 23b · arrangement="profile" ────────────────────────────────────────────
            The author page's composed head (owner, 1 Nov 2026: "a real profile page"): the portrait
            at 240 beside the whole opening from 1024 (192 from 768, stacked at 128 below), the
-           name, the role and bio, the topics as labels and the LinkedIn control in the extras
-           slot. With a photograph and every slot, then initials with no LinkedIn, on paper and
+           name, the role and bio, the topics as labels and the LinkedIn link on the role line
+           (`leadAside`). With a photograph and every slot, then initials with no LinkedIn, on paper and
            ink. */}
       <div>
         <PageHero
@@ -1549,21 +1549,22 @@ export default async function PageHeroSpecimenPage() {
           titleSize="h1"
           body={['Founder and CEO', PARAS[0] ?? '']}
           labels={['AI Product UX', 'Design Systems', 'B2B SaaS & Workflow Software']}
+          leadAside={
+            <Button
+              as="a"
+              href="#"
+              emphasis="link"
+              tone="primary"
+              iconLeft={<BrandMark name="linkedin" />}
+            >
+              LinkedIn
+            </Button>
+          }
           texture
-        >
-          <Button
-            as="a"
-            href="#"
-            emphasis="outline"
-            tone="primary"
-            iconLeft={<BrandMark name="linkedin" />}
-          >
-            LinkedIn
-          </Button>
-        </PageHero>
+        />
         <Note
-          title="23b · arrangement=profile · a photograph · labels · LinkedIn in the extras"
-          note="The face beside the whole opening, a `stack` (48) apart, top-aligned: one composed head. 240 from 1024, 192 from 768, and below 768 the portrait stacks above the name at the default 128. The LinkedIn control is the caller's, passed as children: an outlined Button with the LinkedIn BrandMark leading, never the blue solid."
+          title="23b · arrangement=profile · a photograph · labels · LinkedIn on the role line (leadAside)"
+          note="The face beside the whole opening, a `stack` (48) apart, top-aligned: one composed head. 240 from 1024, 192 from 768, and below 768 the portrait stacks above the name at the default 128. The frame carries the tint ground, so a photograph cut to a circle on transparency still reads as the rounded square. The LinkedIn link is the caller's, passed as `leadAside`: it shares the role's line, a `block` apart on the baseline, the LinkedIn BrandMark before the label, and wraps under the role on a narrow column."
         />
       </div>
       {(['paper', 'ink'] as const).map((surface) => (
@@ -1579,7 +1580,7 @@ export default async function PageHeroSpecimenPage() {
           />
           <Note
             title={`23b · arrangement=profile · initials, no LinkedIn · ${surface}`}
-            note="Without a photograph the initials hold the larger square at the h1 role. Without a LinkedIn URL nothing renders in its place."
+            note="Without a photograph the initials hold the larger square at the display role, on the frame's filled tint in the title's full ink (ProfileCard's treatment). Without a LinkedIn URL nothing renders on the role line."
             surface={surface}
           />
         </div>

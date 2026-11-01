@@ -46,7 +46,19 @@ export type ListingHero = {
  * under it, the open close an ink island on paper (decisions/2026-10-29-cta-band-is-an-ink-island).
  * A conversation glyph is the eye's entry into it, as every corpus close has.
  */
-export function ListingClose({ closing }: { closing?: ListingClosing }) {
+export function ListingClose({
+  closing,
+  lead,
+}: {
+  closing?: ListingClosing;
+  /**
+   * The close's lead line, where the page around it says something the listing's own line cannot
+   * (the authors index shows people, not pieces, so "If one of these pieces…" points at nothing).
+   * Absent, the closing's own `body`: the hub and every page that leaves it unset are unchanged.
+   */
+  lead?: string;
+}) {
+  const body = (lead ?? closing?.body)?.trim();
   if (closing?.form) {
     return (
       <CtaSection
@@ -57,7 +69,7 @@ export function ListingClose({ closing }: { closing?: ListingClosing }) {
         art={closing.island?.art}
         eyebrow={closing.eyebrow || undefined}
         heading={closing.heading}
-        body={closing.body?.trim() ? [closing.body] : undefined}
+        body={body ? [body] : undefined}
         form={closing.form}
       />
     );
@@ -70,7 +82,7 @@ export function ListingClose({ closing }: { closing?: ListingClosing }) {
         eyebrow={closing.eyebrow || undefined}
         mark={<Icon name="chat-round-dots" size="xl" />}
         heading={closing.heading}
-        body={closing.body?.trim() ? [closing.body] : undefined}
+        body={body ? [body] : undefined}
         actions={[closing.action]}
       />
     );

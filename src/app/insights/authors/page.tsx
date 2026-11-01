@@ -50,6 +50,9 @@ const bySurname = (a: Author, b: Author) =>
 
 const firstName = (name: string) => name.trim().split(/\s+/)[0] ?? name;
 
+/** The close's lead, in the hub's voice: the hub's line points at pieces, and this page shows people. */
+const CLOSE_LEAD = 'If one of these writers works on the problem in your own product, tell us about it.';
+
 export default async function AuthorsIndexPage() {
   const [authors, hub] = await Promise.all([listAuthors(), getInsightsPage(INSIGHTS_SLUG)]);
   const people = [...authors].sort(bySurname);
@@ -117,7 +120,12 @@ export default async function AuthorsIndexPage() {
         </Layout>
       </Section>
 
-      {hub ? <ListingClose closing={closingOf(hub, ROUTES.authors, 'authors-index')} /> : null}
+      {hub ? (
+        <ListingClose
+          closing={closingOf(hub, ROUTES.authors, 'authors-index')}
+          lead={CLOSE_LEAD}
+        />
+      ) : null}
     </>
   );
 }

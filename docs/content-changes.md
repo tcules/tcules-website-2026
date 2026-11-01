@@ -861,6 +861,9 @@ headings to `##`:
 - **A larger portrait for Rakesh Chitroda.** The profile page sets the face at 240 px; Rakesh's Strapi
   picture is 146 px square and upscales visibly. Upload one of at least 480 px. Five people have no
   photo at all (Yash, Chirag, Rishabh, Anshu, Varun) and show initials until one is uploaded.
+- **Portraits: square, not transparent, at least 480 px.** Every author photo should be a square image on
+  a real background, at least 480 px on each side. Some uploaded today (Rakesh Chitroda, Rushali Bhatt) are
+  cut to a circle on a transparent background, so on the profile's rounded square they read as a circle.
 - **Remove the body bylines.** Four live guides start their body with an authored "By <name> · Published …"
   line, which repeats the byline the page already shows at the top. Delete that line in Strapi.
 
