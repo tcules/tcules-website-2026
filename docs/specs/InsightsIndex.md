@@ -413,9 +413,9 @@ The author pages sit in the listing's family (src/templates/ListingIndex/), so t
 
 - **`AuthorPieces({ heading, items })`** (`authors.tsx`): one person's pieces, newest first, in three
   registers, each drawn one way and never mixed (decisions/2026-10-11-card-variants-stay-distinct). The
-  LATEST piece is the wide feature, the hub lead's horizontal BlockCard: its cover beside its words, or,
-  without one, the card's text-only split (head beside standfirst and action), so no empty cover box is
-  ever reserved. Where TWO or more of the rest have a picture, they follow as the hub's cards (`CardGrid`,
+  latest piece WITH a picture is the wide feature, the hub lead's horizontal BlockCard, its cover beside its
+  words. A piece without a picture never leads (owner, 1 Nov 2026, rejecting the text-only split), and a
+  person with no pictured piece has no feature. Where TWO or more of the rest have a picture, they follow as the hub's cards (`CardGrid`,
   `facts`), at most six, every card a cover. Everything else is the resource ledger, one piece per ruled
   row (Teaser `row`, `metaAside`, `ruled`, `arrow`; home's "Selected thinking"), the format glyph and name
   with the date in the meta column. Not grouped by type: a person with two pieces would get two one-item

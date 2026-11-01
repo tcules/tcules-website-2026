@@ -20,9 +20,10 @@ import {
    panels beside covers, and an empty cover box on every piece without a picture. So the set has
    three registers, each drawn ONE way, never mixed (decisions/2026-10-11-card-variants-stay-distinct):
 
-     the latest piece   the wide feature: the hub lead's horizontal card. With its cover, the cover
-                        beside its words; without, the card's own text-only split, its head beside its
-                        standfirst and action, so it never reserves a box for a picture it lacks.
+     the feature        the latest piece WITH a picture, as the hub lead's horizontal card: the cover
+                        beside its words. A piece without one never leads (owner, 1 Nov 2026: the
+                        text-only split, a head beside its standfirst, was rejected), and a person with
+                        no pictured piece has no feature: the ledger is the set.
      the pictured ones  where two or more of the rest have a picture, the hub's cards in rows of
                         three (two in two of the tracks, one row, or two rows where there are six),
                         as the hub's groups take them: every card a cover, no panels.
@@ -64,9 +65,8 @@ function Ledger({ items }: { items: readonly InsightItem[] }) {
 
 /**
  * AuthorPieces — every live piece credited to one person, under a head that counts them: the latest
- * as the wide feature, the pictured rest as the hub's cards where there are two or more,
- * then the ledger. A person with two pieces gets the feature and one row; with twenty-five, the
- * feature, a row or two of covers and the ledger. Renders nothing for no pieces.
+ * pictured piece as the wide feature, the pictured rest as the hub's cards where there are two or more,
+ * then the ledger. A person whose pieces have no pictures gets the ledger alone. Renders nothing for no pieces.
  */
 export function AuthorPieces({
   heading,
@@ -77,8 +77,9 @@ export function AuthorPieces({
   items: readonly InsightItem[];
 }) {
   const headingId = useId();
-  const [latest, ...rest] = items;
-  if (!latest) return null;
+  if (items.length === 0) return null;
+  const latest = items.find(hasPicture);
+  const rest = latest ? items.filter((item) => item.id !== latest.id) : items;
 
   const pictured = rest.filter(hasPicture);
   const cards = pictured.length >= 2 ? pictured.slice(0, followCount(pictured.length)) : [];
@@ -90,19 +91,21 @@ export function AuthorPieces({
       <Layout rowGap="stack">
         <h2 id={headingId}>{heading}</h2>
         <Layout rowGap="column">
-          <ul>
-            <BlockCard
-              {...cardOf(latest, { withKind: true })}
-              aside={dateOf(latest.publishedAt)}
-              orientation="horizontal"
-              size="lg"
-              titleAs="h3"
-              tracks={2}
-              cue="cta"
-              ctaLabel={ACTION[latest.kind]}
-              split="grid"
-            />
-          </ul>
+          {latest ? (
+            <ul>
+              <BlockCard
+                {...cardOf(latest, { withKind: true })}
+                aside={dateOf(latest.publishedAt)}
+                orientation="horizontal"
+                size="lg"
+                titleAs="h3"
+                tracks={2}
+                cue="cta"
+                ctaLabel={ACTION[latest.kind]}
+                split="grid"
+              />
+            </ul>
+          ) : null}
           <CardGrid cards={cards} meta={{ withKind: true }} facts />
           <Ledger items={listed} />
         </Layout>
