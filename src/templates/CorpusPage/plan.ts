@@ -160,9 +160,7 @@ type ShapeRule = (band: CorpusBand, sig: string) => OfferKind;
 /** A band whose list items each open on a bold label ("**Who you work with.** One senior…"). */
 const boldLedList = (band: CorpusBand): boolean =>
   band.blocks.some(
-    (block) =>
-      block.type === 'list' &&
-      block.items.every((runs) => boldLead(runs) !== null),
+    (block) => block.type === 'list' && block.items.every((runs) => boldLead(runs) !== null),
   );
 
 const personaOrChallenges: ShapeRule = (band) =>
@@ -358,7 +356,13 @@ export const TEMPLATE_BANDS = {
     'expertise',
     'insights',
   ],
-  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record', 'work-with-tcules'],
+  '/about': [
+    'what-we-do',
+    'who-uses-tcules',
+    'leadership',
+    'company-record',
+    'work-with-tcules',
+  ],
   /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
   '/contact': ['brief', 'next-steps', 'confidentiality'],
   /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,
@@ -640,8 +644,11 @@ export function planOffer(
       continue;
     }
 
+    /* Prose with a photograph of its own is a media split (B) too: without this every one of them
+       took the start side, and /how-we-work's three ran image-left down the page (1 Nov 2026). */
     const carriesMedia =
-      MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b');
+      (MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b')) ||
+      (draft.kind === 'text' && draft.register === 'photo');
     /* Two media splits already in a row: a third would be a third B. A read-down with the
        photograph beside its head says the same thing in a different shape (page-mapping M11). */
     const variant: OfferUnit['variant'] =

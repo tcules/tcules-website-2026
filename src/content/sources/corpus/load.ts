@@ -52,7 +52,9 @@ function mediaBinding(raw: unknown): CorpusMediaBinding {
     altIntent: str(b.alt_intent),
     status,
     bound:
-      status === 'BOUND_EXISTING_PUBLIC_ASSET' && !!assetUri && /^https?:\/\//.test(assetUri),
+      (status === 'BOUND_EXISTING_PUBLIC_ASSET' || status === 'SATISFIED_BY_EXISTING_ASSET') &&
+      !!assetUri &&
+      /^https?:\/\//.test(assetUri),
     source: str(b.source),
     caption: str(b.caption),
     attribution: str(b.attribution),

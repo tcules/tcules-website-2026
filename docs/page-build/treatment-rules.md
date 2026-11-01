@@ -131,3 +131,11 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **Heroes:** the seven L1 service pages, /expertise and /audits carry the owner-approved isometric heroes from the illustration canvas (public/illustrations/heroes/, text flattened to paths, viewBox trimmed to the drawing).
 - **Standing lesson:** render the copy as authored with existing components; change the arrangement before adding parts; use the full width.
 
+
+## Added 1 Nov 2026 (/how-we-work)
+
+- **A page with no hero art of its own** reuses a studio photograph bound on /about, named per route in
+  `images.ts` `STUDIO_HERO`, never guessed. Use the photo whose subject matches the page's claim (team, review,
+  work wall).
+- **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
+  photo bands that all sit image-left is a planner bug, not a design.
