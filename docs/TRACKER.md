@@ -258,6 +258,10 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
       with Ask AI).
+- [ ] /contact enquiry form: an animation that celebrates a sent enquiry, played as the panel turns into
+      the next steps (owner, 1 Nov 2026). It must still respect reduced motion and
+      decisions/2026-10-19-hover-is-a-move; anything beyond transform-only motion needs a new ruling.
+- [ ] /contact enquiry form: pre-fill from the page the visitor came from (owner, 31 Oct 2026).
 
 **Content asks, addressed later.** The design is content-agnostic for now, so nothing here blocks
 a phase: `TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in
