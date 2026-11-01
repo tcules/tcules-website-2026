@@ -74,7 +74,8 @@ export function GatewayPaths({ paths, titleAs = 'h3', className }: GatewayPathsP
                       align="center"
                     >
                       <span className={styles.serviceArt} aria-hidden="true">
-                        <Sketch name={link.scene} />
+                        {/* The card is a link: its drawing makes its move on hover (owner, 1 Nov 2026). */}
+                        <Sketch name={link.scene} story />
                       </span>
                       <span className={styles.serviceLabel}>
                         {link.label}

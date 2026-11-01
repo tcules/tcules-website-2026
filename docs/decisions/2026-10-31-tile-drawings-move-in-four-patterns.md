@@ -31,6 +31,11 @@ follows a line across the drawing and the thing it reaches answers.
 `specialist-ai-hitl`, `-ai-engineering`, `-ai-readiness`, `-ds-strategy`, `-ds-implementation`,
 `-ds-alignment`, `-redesign` "plus almost every new diagram" failed the same way.
 
+**Every hover tile (1 Nov 2026).** "Anywhere a tile has hover that also has this graphic should get animation":
+the drawing moves in any link it sits in, plate or bare frame, starting with home's product-situations cards
+(GatewayPaths). Article covers stay still (owner, 25 Oct 2026: "an article card image doesn't need to be
+animated").
+
 **How to apply.** `docs/research/flat-graphics/drawing-brief.md` § How it moves holds the table of
 patterns and their parts; `.claude/workflows/flat-drawings.js` applies it per band. `Move` is not one
 of the patterns: no nudges, no small scales. Story scenes keep their approved stories. Plates never move and

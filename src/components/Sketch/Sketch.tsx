@@ -53,8 +53,9 @@ export type SketchProps = {
    */
   frame?: 'plate' | 'bare';
   /**
-   * Let a scene move when the link it sits in is hovered or focused (bare frame only, because the
-   * moving route assumes its scale). A STORY scene (./stories) tells its story, the problem at rest and
+   * Let a scene move when the link it sits in is hovered or focused, in either frame (owner, 1 Nov
+   * 2026: every hover tile that carries a drawing animates it). A bare parent sets `--skt-scale` so the
+   * route lands at the line weight; on a plate it scales with the plate. A STORY scene (./stories) tells its story, the problem at rest and
    * solved (owner, 25 Oct 2026, home What we do); every other tile scene makes its one `Move`/`GrowIn`
    * move (decisions/2026-10-30-service-tile-drawing-moves-on-hover). Without it a scene is drawn still,
    * as every plate draws it: a cover or a card image does not move.
@@ -92,7 +93,7 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   const storyDrawing = name ? STORY[name] : undefined;
   /* Any scene moves where it is asked to, in the bare frame; anywhere else it is held at rest (a story
      scene solved, every other scene as drawn: its Move parts at rest, its GrowIn parts present). */
-  const live = story && bare;
+  const live = story;
   const Still = name
     ? (STILL[name] ??
       (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
