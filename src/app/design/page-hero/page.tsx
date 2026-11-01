@@ -532,7 +532,7 @@ const CREDIT_SHAPES: readonly {
   {
     key: 'host-guests',
     title: 'Host and three guests',
-    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. A guest without a portrait shows initials in an outlined disc beside those who have one; a group with no portraits at all is names only.',
+    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. A guest without a portrait shows initials in an outlined disc beside those who have one.',
     credits: [
       { role: 'host', people: [ALICE] },
       { role: 'guest', people: [BEN, { name: 'Cara Whitfield' }, { name: 'Dev Anand' }] },
@@ -541,7 +541,7 @@ const CREDIT_SHAPES: readonly {
   {
     key: 'author-detail',
     title: 'Author without a portrait, and a reading time',
-    note: 'No portrait in the group, so no disc: the name alone, then the dates and `readingTime`. Who they are sits after the content, in Contributors (board G).',
+    note: 'No portrait, so their initials in the outlined disc (owner, 1 Nov 2026: every byline carries a face), then the dates and `readingTime`. Who they are sits after the content, in Contributors (board G).',
     credits: [{ role: 'author', people: [{ name: 'Rakesh Chitroda' }] }],
   },
   {

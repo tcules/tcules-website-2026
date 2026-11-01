@@ -303,8 +303,8 @@ a.name:hover {
   margin-inline-start: calc(-1 * var(--hero-avatar-overlap));
 }
 
-/* A person with no portrait in a group that has them: initials in an outlined disc on the ground,
-   so it reads as a stand-in by design rather than a missing photograph. */
+/* A person with no portrait: initials in an outlined disc on the ground, so it reads as a stand-in
+   by design rather than a missing photograph (owner, 1 Nov 2026). */
 .initials {
   display: flex;
   align-items: center;

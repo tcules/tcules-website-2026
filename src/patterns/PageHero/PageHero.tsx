@@ -47,8 +47,8 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
 /**
  * One credited person. `href` is their page (an author page, from `@/lib/routes`); absent, the name
  * is plain text. `portrait` is their photograph, cropped round at 32; a person without one shows
- * their initials in an outlined disc when anyone else in the same group has a portrait, so a
- * group's faces never stop half way. What they DO is not here: the byline carries faces and names
+ * their initials in an outlined disc, so every byline carries a face in the same place (owner,
+ * 1 Nov 2026; decisions/2026-11-01-byline-initials-without-a-photo). What they DO is not here: the byline carries faces and names
  * only, and who each person is belongs to the page's end (owner, 30 Oct 2026: byline board G).
  */
 export type HeroPerson = { name: string; href?: string; portrait?: MediaImage };
@@ -598,7 +598,6 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
       )}
     </span>
   ));
-  if (!people.some((person) => person.portrait)) return <>{names}</>;
   return (
     <Cluster nowrap colGap="tight" align="center">
       <span className={styles.avatars} aria-hidden="true">
@@ -751,11 +750,10 @@ export function PageHero({
 
   if (readingTime) pairs.push({ id: 'reading', label: READING_LABEL, value: readingTime });
 
-  /* Any credited portrait sets every value in the strip to the portrait's height (board G), so the
-     keys share one top line and the dates sit level with the names beside the faces. */
-  const hasPortraits = credits.some((credit) =>
-    credit.people.some((person) => person.portrait),
-  );
+  /* A credit always carries a disc (a portrait, or initials without one), and it sets every value in
+     the strip to the disc's height (board G), so the keys share one top line and the dates sit level
+     with the names beside the faces. */
+  const hasPortraits = credits.length > 0;
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
