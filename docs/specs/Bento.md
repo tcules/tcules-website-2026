@@ -92,7 +92,7 @@ hover, ring colour.
 ## 7 · Owner decisions (19 Oct 2026)
 
 1. Layout: Supabase's asymmetric grid over Customer.io's ruled six-box (references round, then S1/C1).
-2. Software Development's line cut to its opening clause, one or two lines like the others (`docs/content-changes.md`).
+2. Software Development's line cut to its opening clause, one or two lines like the others (was in `docs/content-changes.md`; removed 1 Nov 2026 with the pre-26 Oct copy, in git history at `92511e23`).
 3. A texture behind the drawings, "a little character"; light blue and soft, then continuous across each
    row from the owner's sketch, clipped clean by every tile; no hard edge; lighter, twice.
 4. Neutral texture at rest, blue on the hovered tile.
