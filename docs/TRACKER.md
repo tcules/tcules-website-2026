@@ -194,6 +194,12 @@ a template before the single pages it serves, since one pass there fixes every p
       that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
       designed no-visual state.
 - [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
+- [x] **2.48** Flat drawings (owner, 31 Oct–1 Nov 2026, branch design/flat-line-motion): every tile drawing moves in
+      the four patterns, two at most, start and end different (decisions/2026-10-31-tile-drawings-move-in-four-patterns),
+      in any hover tile; the 29 service tiles redrawn; the 310 empty What-you-get plates on 33 level-2 pages drawn
+      (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
+      `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
+      plates; the three term rows read as one template across pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
