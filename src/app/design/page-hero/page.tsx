@@ -1322,7 +1322,7 @@ export default async function PageHeroSpecimenPage() {
                   : arrangement === 'stacked' && entry.media
                     ? `The media below the copy as a full-column block, 48 under the actions (sizes: FULL_COLUMN). This is ruling H1's "below". ${entry.note}`
                     : arrangement === 'watch' && entry.media
-                      ? `The media straight under the title, 48 apart, then the lead and the rest: for a piece whose media is the piece, a video (owner, 1 Nov 2026). With no media it is \`stacked\`. ${entry.note}`
+                      ? `The media first, under the trail, then the title, lead and the rest, 48 apart: for a piece whose media is the piece, a video (owner, 1 Nov 2026). With no media it is \`stacked\`. ${entry.note}`
                       : entry.note
               }
             />

@@ -233,9 +233,9 @@ export type { HeroTrail };
  *            it stacks and renders exactly as `stacked`.
  *
  *   watch    a piece whose media IS the piece, a video (owner, 1 Nov 2026: video insights): the
- *            trail and title, then the media at the full column, then the lead, labels and byline.
- *            The player starts inside the first screen at 1440 instead of after the byline. With no
- *            media it renders exactly as `stacked`.
+ *            trail, then the media at the full column, then the title, lead, labels and byline. The
+ *            player opens the page instead of following the byline. With no media it renders
+ *            exactly as `stacked`.
  *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
@@ -1158,20 +1158,16 @@ export function PageHero({
           </Layout>
         ) : null
       ) : watch ? (
-        /* `watch`: the head, the media, then what is said about it. Head to media is the same
-           `stack` as copy to byline: the media is the next block, not part of the head. */
+        /* `watch`: the media first (under the trail, which is always the hero's first item), then
+           the head and what is said about it. Media to head is the same `stack` as copy to byline. */
         <>
+          {mediaNode}
           <Layout rowGap="block" justifyItems={justify}>
             {eyebrowNode}
             {titleNode}
+            {copyNode}
+            {labelsNode}
           </Layout>
-          {mediaNode}
-          {copyNode || labelsNode ? (
-            <Layout rowGap="block" justifyItems={justify}>
-              {copyNode}
-              {labelsNode}
-            </Layout>
-          ) : null}
         </>
       ) : (
         <Layout rowGap="block" justifyItems={justify}>
