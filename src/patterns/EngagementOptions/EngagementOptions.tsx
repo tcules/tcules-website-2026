@@ -35,6 +35,11 @@ export type EngagementTerm = {
 };
 
 export type EngagementOption = {
+  /**
+   * What kind of engagement the option is ("A focused engagement"), set as the mono eyebrow over its
+   * name. Authored case is kept; the transform is CSS (owner, 1 Nov 2026, /how-we-work).
+   */
+  eyebrow?: string;
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
   title: string;
   /** What it is: plain text, or inline content the caller renders (a link to the team that builds). */
@@ -196,9 +201,10 @@ export function EngagementOptions({
                       <Sketch />
                     ) : null}
                     <Layout rowGap="text">
-                      <h3 className={cx(styles.title, dense && styles.titleDense)}>
-                        {option.title}
-                      </h3>
+                      <OptionHead
+                        option={option}
+                        className={cx(styles.title, dense && styles.titleDense)}
+                      />
                       <OptionBody
                         option={option}
                         className={cx(styles.body, dense && styles.bodyDense)}
@@ -225,7 +231,7 @@ export function EngagementOptions({
                   >
                     {option.scope ? <Drawing scope={option.scope} /> : null}
                     <Layout rowGap="block">
-                      <h3 className={styles.title}>{option.title}</h3>
+                      <OptionHead option={option} className={styles.title} />
                       <OptionBody
                         option={option}
                         className={cx(styles.body, styles.bodyRows)}
@@ -249,6 +255,18 @@ export function EngagementOptions({
         {note}
       </Layout>
     </Section>
+  );
+}
+
+/** The option's name, with its eyebrow over it a `tight` step when it has one. */
+function OptionHead({ option, className }: { option: EngagementOption; className?: string }) {
+  const title = <h3 className={className}>{option.title}</h3>;
+  if (!option.eyebrow) return title;
+  return (
+    <Layout rowGap="tight">
+      <p className={styles.eyebrow}>{option.eyebrow}</p>
+      {title}
+    </Layout>
   );
 }
 

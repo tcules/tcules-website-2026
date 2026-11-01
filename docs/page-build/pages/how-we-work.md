@@ -1,38 +1,44 @@
-# /how-we-work, with /ai-native-product-design and /ai-transparency: designed 1 Nov 2026 (PR #190)
+# /how-we-work, with /ai-native-product-design and /ai-transparency: round 2, 1 Nov 2026 (draft PR #190)
 
 Composed from the library: OfferPage's plan, no new components.
 
+## The narrative
+The hero promises designers and engineers working closely with your team, the thinking in view, and the
+people responsible for the result. The page is: how you can engage (three ways) → what working with us is
+like (your team · you see the thinking · into working software · the understanding grows) → the practical
+details → what clients say → FAQ → enquiry. The middle four are ONE story and share one register.
+
 ## Decisions
-- Hero: a studio photograph reused from /about, named per route in `images.ts` `STUDIO_HERO`. The team outside
-  the studio on /how-we-work; the work wall on ai-native; the review session on ai-transparency. Owner to judge
-  on the route.
-- A media slot authored `SATISFIED_BY_EXISTING_ASSET` with a URL counts as bound (`load.ts`). The copy uses it
-  once: the studio photograph on `your-team`, which had silently rendered as text.
-- Prose bands with their own photograph join the side alternation (`plan.ts`). The three photo bands now run
-  end · start · end instead of all image-left.
-- An option set authored as `###` items: whatever follows the last option's italic closing line
-  ("*Best when:* …") is the set's closing note, rendered as the terms row under the set (`itemCoda`).
+- Round 1 (owner review): engagement shapes are three sections, not three columns; the italic first line is
+  the option's eyebrow; practical details are drawn, never an OfferSheet; one heading size down the page; every
+  image rounded (decisions/2026-11-01-every-image-rounded).
+- Engagement shapes → EngagementOptions `rows`: an option whose kind is named in an eyebrow and told in several
+  paragraphs is a section. Scenes from the eyebrow: focused → feature, defined project → area, ongoing → embedded.
+  "Start wherever the work is" + the Dealpath example are the terms row under the rows (`itemCoda`).
+- The middle four → B media splits with an isometric illustration each (`ILLUSTRATED_PROSE`, plan.ts), alternating
+  sides, 6:5 at the photo weight, head `lg`. The copy's bound studio photo, Benchmark prototype and Doodle model are
+  NOT used here (owner: "illustrations here"). Slots in docs/image-register.md (`/_illustrations`).
+- Practical details → EngagementOptions grid (kind `tiles`), as About's working terms: getting started → start,
+  time zones → overlap, fees and notice → commercial, who decides / owns → empty plate.
+- Heroes reuse /about studio photographs per route (`STUDIO_HERO`, images.ts).
+- Media splits' heads take `lg` (the h2 role) everywhere on the composer, so a band with an image beside it no
+  longer out-sizes the plain band next to it.
 
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
-| hero | CorpusHero beside, studio photo, record figures | |
-| client-recognition | recognition · LogoGrid (H) | named clients without a file fall back to the default marks |
-| engagement-shapes | tiles · EngagementOptions | three options; "Start wherever…" + Dealpath as the terms row |
-| your-team | text with photo · B, image end | studio review photo |
-| working-loop | text · C-text | the one prose band, between two photo bands |
-| design-to-release | text with photo · B, image start | Benchmark coded prototype |
-| product-knowledge | text with photo · B, image end | Doodle object model |
-| essentials | outcomes · OfferSheet 2×2 | |
+| hero | CorpusHero beside, studio photo (team), record figures | |
+| client-recognition | recognition · LogoGrid (H) | |
+| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | terms row: start wherever + Dealpath |
+| your-team | text · B + illustration, image start | |
+| working-loop | text · B + illustration, image end | |
+| design-to-release | text · B + illustration, image start | |
+| product-knowledge | text · B + illustration, image end | |
+| essentials | tiles · EngagementOptions grid, 4 across | empty plate on "who decides" |
 | testimonials | quotes · G | |
-| enquiry, faq | L, D-faq | form before FAQ |
-
-## Content mapping
-- Copy rendered as authored; no words moved except the engagement closing note (above).
+| enquiry, faq | L, D-faq | |
 
 ## Open
-- EngagementOptions draws no plate: the three option names match no drawn scope. Illustrations pass.
-- ai-native and ai-transparency run three to four prose bands in a row; each needs a drawing (illustrations
-  pass) or an owner call on which bands take a studio photograph.
-- Logos: Dealpath, Benchmark Gensuite, JoVE, Ringier and Primelis are named, but only some have files
-  (content-changes, "Client marks with no file").
+- Four illustrations to draw (register rows), and a flat scene for "who decides, who owns the work".
+- ai-native and ai-transparency still run three to four prose bands in a row.
+- Missing client marks (content-changes, "Client marks with no file").

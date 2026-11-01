@@ -61,7 +61,7 @@
    is read from the gap scale in Media.module.css, not aliased here — a second name for
    --gap-text would be the renaming token rule 6 forbids. */
 :root {
-  --media-radius: var(--radius-0);
+  --media-radius: var(--radius-8); /* every image, captures included (owner, 1 Nov 2026; decisions/2026-11-01-every-image-rounded) */
   --media-capture-rule-width: var(--border-width-hairline);
   --media-cutout-shadow: var(--shadow-crop);
   --media-panel-inset: var(--gap-gutter);

@@ -8,7 +8,14 @@ export { LongformPage } from './LongformPage';
 export type { LongformFamily, LongformPageProps } from './LongformPage';
 export { ToolPage } from './ToolPage';
 export type { ToolPageProps } from './ToolPage';
-export { corpusEnquiryForm, ENQUIRY_DESK, ENQUIRY_DRESS, ENQUIRY_SKETCH_TO_SHIPPED, proofQuote, testimonialItem } from './blocks';
+export {
+  corpusEnquiryForm,
+  ENQUIRY_DESK,
+  ENQUIRY_DRESS,
+  ENQUIRY_SKETCH_TO_SHIPPED,
+  proofQuote,
+  testimonialItem,
+} from './blocks';
 export type { RatingsById } from './blocks';
 export { coverFor, slugOf } from './images';
 export { AboutPage } from './AboutPage';

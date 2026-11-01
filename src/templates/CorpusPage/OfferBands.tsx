@@ -218,13 +218,18 @@ function itemOptions(band: CorpusBand) {
             ? inner.items
             : [],
     );
-    const [first, ...more] = paragraphs;
+    /* A first paragraph that is wholly italic ("*A focused engagement*") names the kind of option:
+       it is the option's eyebrow, not its first line of body (owner, 1 Nov 2026). */
+    const only = paragraphs[0]?.length === 1 ? paragraphs[0][0] : undefined;
+    const eyebrowRun = only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
+    const [first, ...more] = eyebrowRun ? paragraphs.slice(1) : paragraphs;
     return [
       {
+        eyebrow: eyebrowRun,
         title: block.headingText,
         body: first ? renderInline(first) : null,
         more: more.map((runs) => renderInline(runs)),
-        scope: scopeOf(block.headingText),
+        scope: scopeOf(block.headingText) ?? (eyebrowRun ? scopeOf(eyebrowRun) : undefined),
       },
     ];
   });
@@ -326,6 +331,11 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   communication: 'inside',
   turnaround: 'commercial',
   'working hours': 'overlap',
+  /* /how-we-work's practical details (owner, 1 Nov 2026): the same scenes for the same claims. Who
+     decides and who owns the work draws something no scene does yet: the empty plate. */
+  'getting started': 'start',
+  'working across time zones': 'overlap',
+  'fees and notice': 'commercial',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -607,23 +617,37 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const opening = leadingParagraphs(band);
       const terms = [...itemCoda(band), ...trailingParagraphs(band)];
       const links = bandLinks(band);
+      const options =
+        leads(band).length > 0
+          ? leads(band).map((row) => ({
+              title: row.title,
+              body: renderInline(row.body),
+              scope: scopeOf(row.title),
+            }))
+          : listOptions(band).length > 0
+            ? listOptions(band)
+            : itemOptions(band);
+      /* Options told in several paragraphs each (how it works, where it starts) are sections, not
+         cards: one row per option (owner, 1 Nov 2026, /how-we-work: "3 sections and not 1 with 3
+         columns"). */
+      /* Sections, not cards: options that name their kind in an eyebrow and are each told in
+         several paragraphs. One long card in a set of short ones stays a card. */
+      const rich = options.every(
+        (option) =>
+          'eyebrow' in option &&
+          Boolean(option.eyebrow) &&
+          'more' in option &&
+          Array.isArray(option.more) &&
+          option.more.length > 0,
+      );
       return (
         <Fragment>
           <EngagementOptions
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={
-              leads(band).length > 0
-                ? leads(band).map((row) => ({
-                    title: row.title,
-                    body: renderInline(row.body),
-                    scope: scopeOf(row.title),
-                  }))
-                : listOptions(band).length > 0
-                  ? listOptions(band)
-                  : itemOptions(band)
-            }
+            options={options}
+            arrangement={rich ? 'rows' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />

@@ -18,6 +18,13 @@
   max-inline-size: var(--eop-lead-measure);
 }
 
+.eyebrow {
+  font: var(--eop-eyebrow-text);
+  letter-spacing: var(--eop-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eop-eyebrow-ink);
+}
+
 .title {
   font: var(--eop-title-text);
   letter-spacing: var(--eop-title-tracking);

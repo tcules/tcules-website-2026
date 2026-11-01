@@ -157,7 +157,8 @@ export function ArticleSection({
   const out: ReactNode[] = [];
   let flow = '';
   const flush = () => {
-    if (flow) out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
+    if (flow)
+      out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
     flow = '';
   };
 

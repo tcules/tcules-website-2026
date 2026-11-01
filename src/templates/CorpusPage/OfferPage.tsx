@@ -44,7 +44,16 @@ export function OfferPage({
     new Set(Object.keys(scenes?.items ?? {})),
     drawing ? 'isometric' : 'photo',
   );
-  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure, claimFigure };
+  const ctx: OfferContext = {
+    page,
+    caseRefs,
+    shared,
+    ratings,
+    avatars,
+    scenes,
+    reasonFigure,
+    claimFigure,
+  };
 
   const media = drawing
     ? ({

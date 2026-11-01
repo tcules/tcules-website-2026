@@ -137,5 +137,12 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **A page with no hero art of its own** reuses a studio photograph bound on /about, named per route in
   `images.ts` `STUDIO_HERO`, never guessed. Use the photo whose subject matches the page's claim (team, review,
   work wall).
+- **Options with an eyebrow and several paragraphs each are sections**: EngagementOptions `rows`, not a
+  three-column card set. An italic first line naming the option's kind is its eyebrow, never body.
+- **Practical terms (getting started, time zones, fees, ownership) are drawn cards**, as About's working terms;
+  never an OfferSheet. A term with no scene takes the empty plate.
+- **Bands that unpack one promise share one register**: on /how-we-work the four "what working with us is
+  like" bands each take an isometric illustration of their claim, alternating sides.
+- **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
 - **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
   photo bands that all sit image-left is a planner bug, not a design.

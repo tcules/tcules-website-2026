@@ -265,7 +265,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'who-we-are-looking-for': 'outcomes',
   'what-youll-gain': 'outcomes',
   'what-youll-do': 'outcomes',
-  essentials: 'outcomes',
+  /* /how-we-work's practical details: drawn cards, as About's working terms (owner, 1 Nov 2026). */
+  essentials: 'tiles',
   'engagement-shapes': 'tiles',
   /* Why Tcules' principles are reasons to choose us, so they take Reasons (treatment rules § 6). */
   principles: (_band, sig) => (/I/.test(sig) ? 'reasons' : 'text'),
@@ -471,6 +472,19 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
 ]);
 
 /**
+ * Prose bands that carry an isometric illustration of their own claim beside them, in place of any
+ * photograph the copy binds. /how-we-work's four "what working with us is like" bands unpack the
+ * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
+ * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
+ */
+export const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
+  'your-team',
+  'working-loop',
+  'design-to-release',
+  'product-knowledge',
+]);
+
+/**
  * The register a band is drawn in, from its kind, whether the page draws it (`drawn`, the scenes it was
  * given) and whether a photograph is bound to it. Claims and reasons take isometric illustrations,
  * items take flat drawings, proof is cases and records (decisions/2026-10-30-claim-visual-depicts-the-claim).
@@ -510,6 +524,7 @@ export function registerOf(
     case 'table':
     case 'method':
     case 'text':
+      if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
       return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
     default:
       return 'none';
@@ -548,6 +563,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             band.blocks.some(
               (block) =>
@@ -648,7 +664,7 @@ export function planOffer(
        took the start side, and /how-we-work's three ran image-left down the page (1 Nov 2026). */
     const carriesMedia =
       (MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b')) ||
-      (draft.kind === 'text' && draft.register === 'photo');
+      (draft.kind === 'text' && (draft.register === 'photo' || draft.register === 'isometric'));
     /* Two media splits already in a row: a third would be a third B. A read-down with the
        photograph beside its head says the same thing in a different shape (page-mapping M11). */
     const variant: OfferUnit['variant'] =
