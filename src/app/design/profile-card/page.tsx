@@ -1,5 +1,6 @@
 import { Layout, Section, type SectionSurface } from '@/components';
 import { placeholderImage } from '@/lib/placeholders';
+import { authorPath } from '@/lib/routes';
 import { ProfileCard, ProfileFollow } from '@/patterns';
 
 import { Specimen } from '../_specimen/Specimen';
@@ -50,6 +51,31 @@ export default function ProfileCardSpecimen() {
                   body="The wider studio brings designers and engineers together around the products they are responsible for."
                   link={LINK}
                   image={placeholderImage('/about', 'careers')}
+                />
+              </Layout>
+            </Specimen>
+            <Specimen
+              title={`P.1a · a link to their page (the authors index), with and without LinkedIn · ${surface}`}
+            >
+              <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+                <ProfileCard
+                  name="Jatin Leuva"
+                  role="Founder and CEO"
+                  portrait={portrait}
+                  link={{ label: 'More from Jatin', href: authorPath('jatin-leuva') }}
+                />
+                <ProfileCard
+                  name="Yash Gidwani"
+                  role="Product Designer"
+                  link={{ label: 'More from Yash', href: authorPath('yash-gidwani') }}
+                />
+                <ProfileCard
+                  name="Rakesh Chitroda"
+                  role="Co-founder"
+                  bio={BIO}
+                  portrait={portrait}
+                  link={{ label: 'More from Rakesh', href: authorPath('rakesh-chitroda') }}
+                  linkedin={LINK}
                 />
               </Layout>
             </Specimen>

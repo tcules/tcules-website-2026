@@ -10,7 +10,7 @@ import type {
 } from '../../types';
 import { mapUploadImage } from './image';
 import { COVER_SCENES } from '../cover-scenes';
-import { teamPortrait } from '../people';
+import { personSlug, teamPortrait } from '../people';
 import { blogKind } from './insights';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
@@ -22,7 +22,7 @@ import type {
   StrapiBlogResponse,
   StrapiBlogSeo,
 } from './blog-types';
-import { markdownToHtml, type BodyHeading } from './markdown';
+import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { authoredDate, publishedLine } from './published-line';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
@@ -64,11 +64,12 @@ function absoluteUrl(
 function mapImage(
   file: StrapiBlogFile | null | undefined,
   title: string,
-  context: string,
+  /** What the image is, for the fallback alt; `null` for a body image, whose alt is authored or empty. */
+  context: string | null,
   graphqlUrl: string,
 ): BlogImage | undefined {
   const image = mapUploadImage(file, graphqlUrl, {
-    fallbackAlt: `${title} — ${context}`,
+    ...(context === null ? {} : { fallbackAlt: `${title} — ${context}` }),
     requireImageMime: true,
   });
   return image && file ? { ...image, mime: value(file.mime) } : undefined;
@@ -134,6 +135,84 @@ function embedUrl(block: StrapiBlogBlock): string | undefined {
     : undefined;
 }
 
+/** Decode the five XML entities an authored attribute or text node may carry. */
+function decodeEntities(raw: string): string {
+  return raw
+    .replace(/&#x27;|&#39;/gu, "'")
+    .replace(/&quot;/gu, '"')
+    .replace(/&lt;/gu, '<')
+    .replace(/&gt;/gu, '>')
+    .replace(/&amp;/gu, '&');
+}
+
+function plainText(raw: string | undefined): string {
+  return decodeEntities((raw ?? '').replace(/<[^>]+>/gu, ''))
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
+/**
+ * The words an embed carries for a reader who cannot see it: the authored `aria-label`, else the
+ * SVG's `<desc>`, else its `<title>`. Read as TEXT only, never rendered as markup.
+ */
+function embedTextAlternative(code: string): string {
+  return plainText(
+    code.match(/\baria-label\s*=\s*"([^"]+)"/iu)?.[1] ??
+      code.match(/<desc>([\s\S]*?)<\/desc>/iu)?.[1] ??
+      code.match(/<title>([\s\S]*?)<\/title>/iu)?.[1],
+  );
+}
+
+/**
+ * An embed with no `src` whose code is an authored inline SVG, as an IMAGE: the one live case is a
+ * diagram on /insights/9-ux-design-tips-to-boost-your-ecommerce-conversion-rates (1 Nov 2026,
+ * TRACKER 2.44). It renders through Figure like any uploaded image, so no CMS markup reaches the
+ * DOM: the SVG becomes a `data:` URL on an `<img>`, where a browser runs no script and loads nothing
+ * external. Its own colours and fonts stay inside the file, exactly as they would in an upload. The
+ * alt is the SVG's authored text alternative and the caption its authored `<figcaption>`; neither
+ * is invented. Scripts, event handlers, `<foreignObject>` and external references are removed
+ * anyway, and the root takes a real SVG namespace and the viewBox's size (the authored `xmlns=""`
+ * and `width="100%"` only work inline), so the image keeps its intrinsic ratio.
+ */
+function inlineSvgImage(code: string): { image: BlogImage; caption?: string } | undefined {
+  const svg = code.match(/<svg\b[\s\S]*<\/svg>/iu)?.[0];
+  if (!svg) return undefined;
+  const viewBox = svg
+    .match(/^<svg\b[^>]*\bviewBox\s*=\s*"([^"]+)"/iu)?.[1]
+    ?.trim()
+    .split(/[\s,]+/u)
+    .map(Number);
+  const width = viewBox?.[2];
+  const height = viewBox?.[3];
+  if (!width || !height || !Number.isFinite(width) || !Number.isFinite(height)) return undefined;
+
+  const cleaned = svg
+    .replace(/<script\b[\s\S]*?<\/script>/giu, '')
+    .replace(/<foreignObject\b[\s\S]*?<\/foreignObject>/giu, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*')/giu, '')
+    .replace(/\s(?:xlink:)?href\s*=\s*("(?!#)[^"]*"|'(?!#)[^']*')/giu, '')
+    .replace(/^<svg\b[^>]*>/iu, (root) =>
+      root
+        .replace(/\s(?:xmlns|width|height|style)\s*=\s*("[^"]*"|'[^']*')/giu, '')
+        .replace(
+          /^<svg/iu,
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"`,
+        ),
+    );
+  const caption = plainText(code.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/iu)?.[1]);
+
+  return {
+    image: {
+      src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(cleaned)}`,
+      alt: embedTextAlternative(code),
+      width,
+      height,
+      mime: 'image/svg+xml',
+    },
+    ...(caption ? { caption } : {}),
+  };
+}
+
 function iframePublishedContent(block: StrapiBlogBlock): string {
   if (block.__typename !== 'ComponentBlogAndCasestudiesIframe') return '';
   if (value(block.url) || value(block.embedCode) || block.thumbnail) return '';
@@ -193,17 +272,16 @@ function mapBlock(
     }
 
     case 'ComponentBlogAndCasestudiesSectionImage': {
-      const figures = (block.imageSection ?? []).flatMap((file, imageIndex) => {
-        const imageNumber =
-          (block.imageSection?.length ?? 0) > 1
-            ? `${index + 1}.${imageIndex + 1}`
-            : `${index + 1}`;
-        const image = mapImage(file, title, `article image ${imageNumber}`, graphqlUrl);
+      const figures = (block.imageSection ?? []).flatMap((file) => {
+        /* No invented alt: an upload without authored alt text renders alt="" (TRACKER 2.44). */
+        const image = mapImage(file, title, null, graphqlUrl);
         if (!image) return [];
         return [
           {
             image,
-            caption: value(file.alternativeText) || `${title} — article image ${imageNumber}`,
+            /* The upload's caption, or none. The alt is not a caption (Figure: alt must not restate it),
+               and a caption nobody wrote is not one either: an image without one renders bare. */
+            ...(value(file.caption) ? { caption: value(file.caption) } : {}),
           },
         ];
       });
@@ -221,7 +299,7 @@ function mapBlock(
 
       const src = absoluteUrl(block.videoFile?.url, graphqlUrl);
       const mime = value(block.videoFile?.mime);
-      const thumbnail = mapImage(block.thumbnail, title, 'video thumbnail', graphqlUrl);
+      const thumbnail = mapImage(block.thumbnail, title, null, graphqlUrl);
       const width =
         typeof block.videoFile?.width === 'number' && block.videoFile.width > 0
           ? block.videoFile.width
@@ -265,10 +343,14 @@ function mapBlock(
         typeof block.width === 'number' && block.width > 0 ? block.width : undefined;
       const height =
         typeof block.height === 'number' && block.height > 0 ? block.height : undefined;
-      const thumbnail = mapImage(block.thumbnail, title, 'embed thumbnail', graphqlUrl);
+      const thumbnail = mapImage(block.thumbnail, title, null, graphqlUrl);
 
       if (!url && !thumbnail) {
-        const copy = [blockTitle, description].filter(Boolean).join(' — ');
+        const figure = inlineSvgImage(value(block.embedCode));
+        if (figure) return { id, type: 'figures', figures: [figure] };
+        const copy = [blockTitle, description, embedTextAlternative(value(block.embedCode))]
+          .filter(Boolean)
+          .join(' — ');
         return copy ? { id, type: 'prose', html: `<p>${escapeHtml(copy)}</p>` } : undefined;
       }
 
@@ -432,8 +514,12 @@ function mapResource(
     slug,
     title,
     kind: blogKind(slug),
-    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
-    ...(!(thumbnail || featureImage) && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
+    ...(value(resource.seo?.metaDescription)
+      ? { description: value(resource.seo?.metaDescription) }
+      : {}),
+    ...(!(thumbnail || featureImage) && COVER_SCENES[slug]
+      ? { coverScene: COVER_SCENES[slug] }
+      : {}),
     /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
     ...(authored ? { publishedAt: authored } : {}),
     ...(thumbnail || featureImage ? { image: thumbnail ?? featureImage } : {}),
@@ -489,18 +575,20 @@ function mapBlog(
      blocks: reading it from a later key of the same object literal would make the result depend on
      key order, which is the kind of correctness nobody sees in review. */
   const outline: PageOutlineEntry[] = [];
-  const blocks = sections.flatMap((block, index) => {
-    if (index === publishedContentBlockIndex) return [];
-    const mapped = mapBlock(
-      block,
-      index,
-      title,
-      graphqlUrl,
-      index === heroVideoBlockIndex,
-      outline,
-    );
-    return mapped ? [mapped] : [];
-  });
+  const blocks = resolveInPageAnchors(
+    sections.flatMap((block, index) => {
+      if (index === publishedContentBlockIndex) return [];
+      const mapped = mapBlock(
+        block,
+        index,
+        title,
+        graphqlUrl,
+        index === heroVideoBlockIndex,
+        outline,
+      );
+      return mapped ? [mapped] : [];
+    }),
+  );
 
   return {
     documentId: value(rawBlog.documentId) || slug,
@@ -529,6 +617,8 @@ function mapBlog(
         {
           id: value(author.id) || `blog-author-${index}`,
           name,
+          /* Every person a live byline names has an author page (sources/strapi/authors.ts). */
+          ...(personSlug(name) ? { slug: personSlug(name) } : {}),
           ...(value(author.designation) ? { designation: value(author.designation) } : {}),
           ...(image ? { image } : {}),
         },

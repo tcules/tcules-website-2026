@@ -200,9 +200,11 @@ choice (2.34).
 - [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
-- [~] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+- [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
-      Needs no design pass, only full coverage. Coverage run started 1 Nov on `feat/insights-rich-text`.
+      Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
+      match their Strapi bodies; `docs/page-build/insights-rich-text-report.md`. The copy's articles and glossary
+      terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
 - [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
@@ -216,6 +218,14 @@ choice (2.34).
       (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
       `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
       plates; the three term rows read as one template across pages.
+- [x] **2.49** Author pages, moved back into phase 1 (owner, 1 Nov 2026;
+      decisions/2026-11-01-author-pages-one-template-from-strapi, superseding the 30 Oct move to phase 2):
+      `/insights/authors` and one `/insights/authors/<person>` template filled from Strapi's bylines (11 people),
+      each person's live pieces as the hub's cards, `ProfilePage` + `Person` markup; the bylines and "About the
+      author" link to the page. Built on `feat/insights-rich-text`. Design pass (owner, 1 Nov 2026): a bio for
+      everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
+      hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
+      name, role, bio, topic labels and LinkedIn).
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -274,9 +284,6 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 - [ ] `/clients` (owner, 31 Oct 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
-- [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
-      links (owner, 30 Oct; pulled forward only if the weekend leaves time;
-      decisions/2026-10-30-author-pages-move-to-phase-2).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
       with Ask AI).

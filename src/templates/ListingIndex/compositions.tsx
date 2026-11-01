@@ -194,7 +194,7 @@ export function partition(items: readonly InsightItem[]) {
 export const followCount = (available: number) => (available >= 6 ? 6 : 3);
 
 /** A piece as the site's card: its topic (or, in a mixed set, its format) as the eyebrow. */
-function cardOf(item: InsightItem, meta: MetaOptions = {}) {
+export function cardOf(item: InsightItem, meta: MetaOptions = {}) {
   const picture = pictureOf(item);
   return {
     title: item.title,
@@ -215,7 +215,7 @@ function cardOf(item: InsightItem, meta: MetaOptions = {}) {
 }
 
 /** The lead's action, in the verb its format takes. Authored case; the button sets the case. */
-const ACTION: Record<InsightKind, string> = {
+export const ACTION: Record<InsightKind, string> = {
   article: 'Read more',
   guide: 'Read the guide',
   research: 'Read the research',

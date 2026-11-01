@@ -1431,6 +1431,43 @@ export type InsightsContentSource = {
   getInsightsPage(slug: string): Promise<InsightsPage | null>;
 };
 
+/**
+ * A person who writes for Tcules: one author page each (owner, 1 Nov 2026;
+ * decisions/2026-11-01-author-pages-one-template-from-strapi). Today the record is derived from the
+ * bylines on every live piece, so a name, a role and a photograph are all it can carry; a real author
+ * collection in the CMS replaces the derivation without a page learning of it. Nothing here is
+ * invented: a field the source does not send is absent.
+ */
+export type Author = {
+  /** The URL segment (`authorPath`): the name, slugified. */
+  slug: string;
+  /** As the CMS sends it ("Yash Gidwani"). */
+  name: string;
+  /** Their position, as authored ("Product Designer"). */
+  role?: string;
+  /** Their photograph. Absent, a page shows their initials. */
+  image?: ImageRecord;
+  /** A sentence or two about them: the CMS's, else the repo's fallback (`teamProfile`). */
+  bio?: string;
+  /** Their LinkedIn profile URL, only where one is known. Never guessed. */
+  linkedin?: string;
+  /** How many live pieces credit them. */
+  pieceCount: number;
+};
+
+export type AuthorPage = Author & {
+  /** Every live piece that credits them, newest first, as the insights hub lists it. */
+  pieces: InsightResource[];
+  /** What they write about: their pieces' topics, most frequent first. */
+  topics: string[];
+};
+
+export type AuthorsContentSource = {
+  /** Everyone a live byline names, in no promised order. */
+  listAuthors(): Promise<Author[]>;
+  getAuthorPage(slug: string): Promise<AuthorPage | null>;
+};
+
 export type CaseStudyListingImage = {
   src: string;
   alt: string;
@@ -1490,7 +1527,7 @@ export type PodcastBlock =
   | {
       id: string;
       type: 'figures';
-      figures: Array<{ image: PodcastImage; caption: string }>;
+      figures: Array<{ image: PodcastImage; caption?: string }>;
     }
   | {
       id: string;
@@ -1614,6 +1651,8 @@ export type BlogImage = CaseStudyImage;
 export type BlogAuthor = {
   id: string;
   name: string;
+  /** Their author page's slug (`authorPath`). Every person a live byline names has one. */
+  slug?: string;
   designation?: string;
   image?: BlogImage;
 };
@@ -1626,7 +1665,7 @@ export type BlogBlock =
   | {
       id: string;
       type: 'figures';
-      figures: Array<{ image: BlogImage; caption: string }>;
+      figures: Array<{ image: BlogImage; caption?: string }>;
     }
   | {
       id: string;

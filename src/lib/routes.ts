@@ -75,6 +75,9 @@ export const ROUTES = {
   videos: '/insights/videos',
   events: '/insights/events',
   interviews: '/insights/interviews',
+  /* Everyone a live byline names, and each person's page under it (owner, 1 Nov 2026;
+     decisions/2026-11-01-author-pages-one-template-from-strapi). */
+  authors: '/insights/authors',
   tools: '/tools',
   glossary: '/glossary',
 
@@ -354,6 +357,11 @@ export function blogPath(slug: string): string {
     .join('/');
 
   return encodedSlug ? `${ROUTES.insights}/${encodedSlug}` : ROUTES.insights;
+}
+
+/** Build one person's author page from their slug (the name, slugified: "Yash Gidwani" → yash-gidwani). */
+export function authorPath(slug: string): string {
+  return `${ROUTES.authors}/${encodeURIComponent(slug)}`;
 }
 
 /** Build one canonical glossary-detail path from the named route family. */

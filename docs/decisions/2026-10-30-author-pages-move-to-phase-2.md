@@ -1,7 +1,7 @@
 ---
 title: Author pages move to phase 2
 date: 2026-10-30
-status: active
+status: superseded
 area: [content, process]
 source: "Owner, 30 Oct 2026, after PR #171 merged"
 supersedes: [2026-10-29-author-pages-ship-at-launch]

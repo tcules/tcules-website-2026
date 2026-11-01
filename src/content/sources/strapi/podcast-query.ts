@@ -141,6 +141,7 @@ export const PODCAST_BY_SLUG_QUERY = /* GraphQL */ `
   fragment PodcastFileFields on UploadFile {
     url
     alternativeText
+    caption
     width
     height
     formats

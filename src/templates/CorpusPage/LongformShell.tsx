@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Layout, Media, Prose, Section } from '@/components';
-import { DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
+import { Accordion, DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
@@ -9,7 +9,8 @@ import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
 
-import { bodyOf, headingIdOf } from './blocks';
+import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
+import { isFaqBand } from './order';
 import styles from './CorpusPage.module.css';
 import { html, plain, trimStart } from './text';
 
@@ -141,6 +142,7 @@ export function ArticleSection({
   );
   const items = withMethods(band.blocks.filter((block) => block.type !== 'comment'));
   const diagramAt = diagramIndex(page, band, items);
+  const isFaq = isFaqBand(band);
 
   let mediaAfter = -1;
   if (binding) {
@@ -157,7 +159,8 @@ export function ArticleSection({
   const out: ReactNode[] = [];
   let flow = '';
   const flush = () => {
-    if (flow) out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
+    if (flow)
+      out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
     flow = '';
   };
 
@@ -193,8 +196,20 @@ export function ArticleSection({
           />,
         );
         break;
+      /* A quote stays in the reading flow; its attribution is a cite, which Prose sets apart from the
+         quoted words. */
       case 'quote':
+        flow += `<blockquote>${item.paragraphs.map((runs) => `<p>${inlineToHtml(runs)}</p>`).join('')}${
+          item.attribution ? `<cite>${inlineToHtml(item.attribution)}</cite>` : ''
+        }</blockquote>`;
+        break;
+      /* A subsection is its h3 (or h4) and its words, in the same flow. In the FAQ band the
+         subsections are the questions, set once as the accordion below. Dropping them lost every
+         subsection and every FAQ on the copy's articles. */
       case 'item':
+        if (!isFaq)
+          flow += `<h${item.level}>${inlineToHtml(item.heading)}</h${item.level}>${blocksHtml(item.blocks)}`;
+        break;
       case 'links':
       case 'form':
         break;
@@ -217,6 +232,7 @@ export function ArticleSection({
     }
   });
   flush();
+  if (isFaq) out.push(<Accordion key={`faq-${out.length}`} items={faqItems(band)} />);
 
   const headless = band.headingText === '';
   return (
