@@ -91,3 +91,11 @@
   padding-inline-start: var(--gap-tight);
   color: var(--eop-eyebrow-ink);
 }
+
+/* The set's closing statement: the h3 role, a step under the band's h2 and over each option's name. */
+.closingHeading {
+  font: var(--eop-closing-text);
+  letter-spacing: var(--eop-closing-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eop-heading-ink);
+}

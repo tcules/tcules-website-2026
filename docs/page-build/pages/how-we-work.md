@@ -29,16 +29,19 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   a row a fact, the mono key in the 1 of [1, 2] tracks and the value beside it, keys aligned down the option.
   Starting points run as one wrapping line, entries parted by a middle dot at each entry's end (a wrap never
   opens on a dot); split by `listEntries` (commas and the final "or" are the joints; a leading article and the
-  full stop drop). The closing note is an open CtaSection island after the set, as Product Design's ways to
-  work: "Start wherever the work is" as its heading, the sentence and the Dealpath example as its two lines,
-  "Start a project" and the example's own link as its actions (`closingAsk`).
+  full stop drop). - Round 4 (owner): the island was wrong: "there's an example in" and an example is evidence, not an ask; the
+  grouping was wrong. The closing note is the set's `closing`: "Start wherever the work is" as an h3 sub-head
+  with its sentence, then its proof as a case teaser under it: a horizontal BlockCard of the Dealpath case
+  (its cover, "Example · Dealpath" as eyebrow, the case's own title, the example's words; the whole card the
+  link, title cue). Claim, then proof, inside the band (`closingNote`, `CaseTeaser`). The paper-deep CaseCard
+  stays home's.
 
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
 | client-recognition | recognition · LogoGrid (H) | |
-| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet; then an open CtaSection island (start wherever + Dealpath) |
+| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet; closing: sub-head + Dealpath case teaser (horizontal BlockCard) |
 | your-team | text · B + illustration, image start | |
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |

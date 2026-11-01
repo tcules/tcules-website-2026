@@ -300,18 +300,51 @@ function listEntries(runs: readonly InlineRun[]): InlineRun[][] {
 }
 
 /**
- * The set's closing note as an ask (owner, 1 Nov 2026, /how-we-work round 3: the note "feels like floating
- * text"): a paragraph led by a bold sentence is the island's heading and first line, a paragraph opening
- * "Example:" its second line, the example's trailing link the island's second action. Anything else stays
+ * One case as the proof under a claim: a horizontal BlockCard, the case's cover beside its client, its own
+ * title and the example's words, the whole card the link (the paper-deep CaseCard is home's alone, owner
+ * 29 Oct 2026). The words are the example's as authored, its "Example:" and client name lifted into the
+ * eyebrow.
+ */
+function CaseTeaser({
+  ctx,
+  example,
+  words,
+}: {
+  ctx: OfferContext;
+  example: { href: string; label: string; client?: string };
+  words?: string;
+}) {
+  const ref = ctx.caseRefs[example.href];
+  const client = example.client ?? '';
+  return (
+    /* A BlockCard is a list item: a set of one. */
+    <Layout as="ul" rowGap="block">
+      <BlockCard
+        orientation="horizontal"
+        eyebrow={client ? `Example · ${client}` : 'Example'}
+        title={ref?.title ?? example.label}
+        body={words}
+        href={example.href}
+        ctaLabel={example.label}
+        media={{ type: 'image', image: caseCover(client || example.label, ref) }}
+      />
+    </Layout>
+  );
+}
+
+/**
+ * The set’s closing note (owner, 1 Nov 2026, /how-we-work rounds 3–4: the note "feels like floating
+ * text"; an example is evidence, not an ask): a paragraph led by a bold sentence is the closing's heading and
+ * lead, a paragraph opening "Example:" the case teaser's words and its link. Anything else stays
  * a plain term under the set.
  */
-function closingAsk(band: CorpusBand): {
-  ask?: { heading: string; body: string[]; example?: { href: string; label: string } };
+function closingNote(band: CorpusBand): {
+  note?: { heading: string; body: string[]; example?: { href: string; label: string } };
   rest: InlineRun[][];
 } {
   let heading: string | undefined;
   const body: string[] = [];
-  let example: { href: string; label: string } | undefined;
+  let example: { href: string; label: string; client?: string } | undefined;
   const rest: InlineRun[][] = [];
   for (const runs of itemCoda(band)) {
     const lead = firstRun(runs);
@@ -322,13 +355,25 @@ function closingAsk(band: CorpusBand): {
     }
     if (!example && lead?.type === 'text' && /^\s*Example:/.test(lead.text)) {
       const { runs: words, link } = liftTrailingLink(runs);
-      body.push(inlineToText(words).trim());
-      if (link) example = { href: link.href, label: inlineToText(link.children).trim() };
+      /* "Example: **Dealpath.** A focused audit…": the bold name is the client, the rest the words. */
+      const named = words.find((run) => run.type === 'strong');
+      const client =
+        named?.type === 'strong'
+          ? inlineToText(named.children).trim().replace(/[.:]$/, '')
+          : undefined;
+      const after = named ? words.slice(words.indexOf(named) + 1) : words;
+      body.push(
+        inlineToText(after)
+          .replace(/^\s*Example:\s*/, '')
+          .trim(),
+      );
+      if (link)
+        example = { href: link.href, label: inlineToText(link.children).trim(), client };
       continue;
     }
     rest.push(runs);
   }
-  return { ask: heading ? { heading, body, example } : undefined, rest };
+  return { note: heading ? { heading, body, example } : undefined, rest };
 }
 
 /**
@@ -711,7 +756,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
-      const closing = closingAsk(band);
+      const closing = closingNote(band);
       const terms = [...closing.rest, ...trailingParagraphs(band)];
       const links = bandLinks(band);
       const options =
@@ -745,28 +790,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={options}
             arrangement={rich ? 'rows' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            closing={
+              closing.note
+                ? {
+                    heading: closing.note.heading,
+                    lead: closing.note.body[0],
+                    proof: closing.note.example ? (
+                      <CaseTeaser
+                        ctx={ctx}
+                        example={closing.note.example}
+                        words={closing.note.body[1]}
+                      />
+                    ) : undefined,
+                  }
+                : undefined
+            }
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
-          {closing.ask ? (
-            <CtaSection
-              data-band="L"
-              arrangement="open"
-              heading={closing.ask.heading}
-              body={
-                closing.ask.body[1] !== undefined
-                  ? [closing.ask.body[0] ?? '', closing.ask.body[1]]
-                  : [closing.ask.body[0] ?? '']
-              }
-              actions={
-                closing.ask.example
-                  ? [
-                      { label: 'Start a project', href: ROUTES.contact },
-                      { label: closing.ask.example.label, href: closing.ask.example.href },
-                    ]
-                  : [{ label: 'Start a project', href: ROUTES.contact }]
-              }
-            />
-          ) : links[1] ? (
+          {links[1] ? (
             <CtaSection
               data-band="L"
               arrangement="open"
