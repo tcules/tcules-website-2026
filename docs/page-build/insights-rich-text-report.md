@@ -124,6 +124,17 @@ changing.**
 6. **Quote attribution.** It renders as a second `<p>` in the quote. Should it become `<cite>`, which
    `Prose` already styles?
 7. **Already logged as out of scope.**
-   - The hub caps blogs at 100, so 2 live articles are missing from `/insights`.
+   - The hub capped blogs at 100, so 2 live articles were missing from `/insights`. Fixed 1 Nov: the limit is 500.
    - 8 links point at `/insights/authors/*`, which has no route.
    - 508 absolute `https://www.tcules.com/…` links could be made root-relative at the seam.
+
+## Owner answers, 1 Nov 2026
+
+1. Alt text: content fills it. Listed in `docs/content-changes.md` (live insights, item 1).
+2. Dead anchors: content fixes them. Listed there, item 2.
+3. Bodies opening at h3: keep what is authored; listed there, item 3.
+4. Embed host allowlist: not now.
+5. SVG diagrams are fine; content flattens type to outlines before export so the fonts are baked in.
+6. `/insights/cpq-ux-design` on the corpus: fine, content moves to the new Strapi server anyway.
+7. Hub cap: raised to 500.
+8. `/insights/authors/*`: the author pages are being built (phase 1 now).

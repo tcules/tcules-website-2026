@@ -801,3 +801,47 @@ one that was already titled.
 - **/about, the studio's links (31 Oct 2026).** LinkedIn, Clutch and Careers left "The practice keeps moving" for a
   block of their own (owner). The block's title is ours, not the copy's: "Follow the studio, read its reviews,
   join the team". For Jatin to keep or replace.
+
+## Live insights in Strapi: alt text, dead anchor links, bodies that open at h3 (1 Nov 2026, owner)
+
+Found by rendering every live insight against its Strapi body (tracker 2.44,
+`docs/page-build/insights-rich-text-report.md`). All three are fixes in the CMS; the site renders what is
+authored and invents nothing.
+
+**1. Alt text on 46 body images.** 46 of the 47 images inside article bodies have no alternative text, so the
+site marks them decorative (`alt=""`) and a screen reader skips them. The content team writes one line per
+image saying what it shows (Strapi media library → the file → Alternative text). By article, with the file
+names as Strapi lists them:
+
+| Article (`/insights/…`) | Missing | Files |
+|---|---|---|
+| `8-proven-strategies-to-boost-saas-user-engagement-and-subscriptions` | 8 of 8 | the Slack screen capture and seven `unnamed (…)` files |
+| `videos/generative-ai-product-patterns-for-saas` | 7 of 7 | `contet-creation-personalization`, `customer-service-automation`, `data-analytics-business-intelligence1`, `ai-design-creative-tools`, `cybersecutiry-fraud-detection`, `ai-project-workflow-management`, `personalized-marketing-sales-engagement` |
+| `building-trust-and-transparency-in-ai-first-user-interfaces` | 7 of 7 | `test-transparency-img-1` to `-7` (one is `123.png`) |
+| `guides/landing-page-design-guide-to-boost-conversions` | 6 of 6 | `5`, `6`, `7`, `8`, `65f4477dae88ff895d9644db_6 (1)`, `10` |
+| `videos/saas-uxx-faq-does-your-saas-app-need-a-mobile-version` | 4 of 4 | `6627abbe…_11`, `6627adac…_120`, `6627aded…_27`, `6627ae0e…_127` |
+| `guides/marketing-automation-software-design-best-practices` | 4 of 4 | `3 (1)`, `4`, `5`, `6` |
+| `guides/inclusive-product-design-for-older-and-disabled-people` | 4 of 4 | `8`, `9`, `10`, `1` |
+| `cognitive-biases-in-ecommerce-and-saas-products` | 3 of 3 | `3`, `7`, `8` |
+| `guides/saas-onboarding-strategies-to-increase-customer-retention` | 2 of 2 | `2`, `3` |
+| `design-thinking-vs-cx-vs-ux-explained` | 1 of 1 | `2` |
+
+**2. Seven in-page links that point at no heading.** Each is a `#…` link whose heading was renamed or never
+existed. The site resolves an anchor to the heading it names when it can, and leaves these as written. Fix each
+link to name a real heading, or remove it:
+- `hiring-a-ui-ux-design-studio-in-india-for-a-saas-product`: `#complex-saas-already-live` (3 links) and
+  `#questions-to-ask` (2; the heading is "Questions to put to every studio on your list").
+- `ai-search-in-saas-should-search-and-the-ai-assistant-be-one-input`: `#one-field-two-modes-our-eden-ai-redesign`.
+- `best-design-system-agencies-and-consultants`: `#grow-the-system-out-of-product-work`.
+- `compare-two-interaction-models-at-equal-depth`: `#running-the-comparison`.
+
+**3. Five bodies open at h3.** The body's first heading is `###` straight after the page's title, so the outline
+skips a level and the contents rail (h2 only) stays empty. The site keeps what is authored. Change the opening
+headings to `##`:
+- `videos/saas-uxx-faq-does-your-saas-app-need-a-mobile-version`
+- `videos/when-a-product-designer-moves-to-bollywood-filmmaking-workshop`
+- `events/design-systems-for-everyone-from-basics-to-advanced`
+- `events/lessons-from-designing-the-ux-for-ai-products`
+- `events/product-design-and-filmmaking`
+
+**Found in.** Tracker 2.44, the live insights rendered from Strapi.
