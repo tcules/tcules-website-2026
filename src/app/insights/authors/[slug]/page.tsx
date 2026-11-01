@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { BrandMark, Button } from '@/components';
 import { getAuthorPage, getInsightsPage, listAuthors, type AuthorPage } from '@/content';
 import { jsonLdMarkup, ORGANIZATION_ID, schemaId } from '@/lib/json-ld';
 import { authorPath, ROUTES, SITE_ORIGIN } from '@/lib/routes';
@@ -12,9 +13,11 @@ import { closingOf, insightCards } from '../../../_insights/hub';
 
 /**
  * One person's author page (owner, 1 Nov 2026; decisions/2026-11-01-author-pages-one-template-from-strapi):
- * the ONE template every person a live byline names is plugged into. Their face, name and role as the
- * CMS sends them, a bio only when the CMS has one, then every live piece that credits them as the
- * hub's own cards, newest first and all visible, then the hub's close.
+ * the ONE template every person a live byline names is plugged into. One composed head (owner, 1 Nov
+ * 2026: "a real profile page"): their face at a confident size beside their name, role, bio, the
+ * topics they write about as labels and their LinkedIn where known. Then every live piece that
+ * credits them as the hub's own cards, newest first and all visible, under a head that counts them,
+ * then the hub's close.
  *
  * It is the `url` Google's author markup asks for (decisions/2026-10-29-author-pages-ship-at-launch),
  * so it emits `ProfilePage` with its `Person`, on the `@id` the CMS's article markup already names.
@@ -23,6 +26,9 @@ import { closingOf, insightCards } from '../../../_insights/hub';
 type AuthorPageProps = { params: Promise<{ slug: string }> };
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
+
+/* A LinkedIn profile opens beside the page. Spread, as Button's anchor props are open (ProfileCard's idiom). */
+const NEW_TAB = { target: '_blank', rel: 'noopener' } as const;
 
 export async function generateStaticParams() {
   const authors = await listAuthors();
@@ -44,6 +50,12 @@ function listed(items: readonly string[]): string {
 /** The pieces' head: how many, by whom. Videos and guides count, because each is a piece. */
 const piecesHeading = (author: AuthorPage) =>
   `${author.pieceCount} ${author.pieceCount === 1 ? 'piece' : 'pieces'} by ${firstName(author.name)}`;
+
+/**
+ * The topic chips under the bio: what they write about, the most frequent few, so the head stays one
+ * composed block. Counted from the live pieces, so no chip claims a subject the cards below lack.
+ */
+const TOPIC_LABELS = 4;
 
 /**
  * The description, from what the CMS holds and nothing else: their role, how many pieces, and the
@@ -131,6 +143,7 @@ function structuredData(author: AuthorPage, crumbs: readonly BreadcrumbItem[]) {
             }
           : {}),
         ...(author.bio ? { description: author.bio } : {}),
+        ...(author.linkedin ? { sameAs: [author.linkedin] } : {}),
         worksFor: { '@id': ORGANIZATION_ID },
       },
       {
@@ -170,13 +183,32 @@ export default async function AuthorProfilePage({ params }: AuthorPageProps) {
         trail={heroTrail(crumbs, author.name, (t) => (
           <Breadcrumbs {...t} />
         ))}
+        arrangement="profile"
         portrait={{ name: author.name, ...(author.image ? { image: author.image } : {}) }}
         title={author.name}
         titleSize="h1"
         body={body.length > 0 ? (body as [string, ...string[]]) : undefined}
+        labels={author.topics.slice(0, TOPIC_LABELS)}
         texture
         surface="paper"
-      />
+      >
+        {/* Their LinkedIn, only where one is known: an outlined control with the mark naming where
+            it goes, opening beside the page. Never the blue solid: that is the page's one main
+            action, and a profile asks nothing of the reader. */}
+        {author.linkedin ? (
+          <Button
+            as="a"
+            href={author.linkedin}
+            {...NEW_TAB}
+            emphasis="outline"
+            tone="primary"
+            iconLeft={<BrandMark name="linkedin" />}
+            aria-label={`${author.name} on LinkedIn (opens in a new tab)`}
+          >
+            LinkedIn
+          </Button>
+        ) : null}
+      </PageHero>
 
       {hub ? (
         <InsightResources heading={piecesHeading(author)} items={insightCards(hub, author.pieces)} />

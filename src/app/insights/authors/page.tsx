@@ -13,8 +13,9 @@ import { closingOf } from '../../_insights/hub';
 /**
  * The authors index (owner, 1 Nov 2026; decisions/2026-11-01-author-pages-one-template-from-strapi):
  * everyone a live byline names, each as a ProfileCard linking to their page, ordered by surname and
- * all visible. A listing in the insights family, so it opens as the hub does (the masthead with its
- * texture) and ends on the hub's close.
+ * all visible. The hero is centred (owner, 1 Nov 2026), the texture behind it, and the people under
+ * it: each card says who the person is in a sentence or two and links to their LinkedIn where one is
+ * known, so the set reads as a team of writers rather than a directory. It ends on the hub's close.
  */
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
@@ -91,7 +92,7 @@ export default async function AuthorsIndexPage() {
         ))}
         title={TITLE}
         body={[LEDE]}
-        arrangement="masthead"
+        arrangement="centred"
         texture
         surface="paper"
       />
@@ -108,6 +109,9 @@ export default async function AuthorsIndexPage() {
               bio={person.bio}
               portrait={person.image}
               link={{ label: `More from ${firstName(person.name)}`, href: authorPath(person.slug) }}
+              {...(person.linkedin
+                ? { linkedin: { label: 'LinkedIn', href: person.linkedin } }
+                : {})}
             />
           ))}
         </Layout>

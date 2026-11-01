@@ -858,6 +858,9 @@ headings to `##`:
   is used for Yash Gidwani, the name Strapi sends.
 - **LinkedIn URLs.** The cards and profiles show a LinkedIn link when there is one. Only Jatin Leuva's and
   Rakesh Chitroda's are known. The content team should supply the rest (Strapi `Profile.linkedInProfile`).
+- **A larger portrait for Rakesh Chitroda.** The profile page sets the face at 240 px; Rakesh's Strapi
+  picture is 146 px square and upscales visibly. Upload one of at least 480 px. Five people have no
+  photo at all (Yash, Chirag, Rishabh, Anshu, Varun) and show initials until one is uploaded.
 - **Remove the body bylines.** Four live guides start their body with an authored "By <name> · Published …"
   line, which repeats the byline the page already shows at the top. Delete that line in Strapi.
 

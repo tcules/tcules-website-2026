@@ -162,6 +162,14 @@
 --hero-portrait-radius:var(--radius-8);
 --hero-portrait-text:var(--text-h2);
 --hero-portrait-tracking:var(--text-h2-tracking);
+/* `arrangement="profile"` (an author page, 1 Nov 2026: "the face at a confident size beside the
+   name"): the same square, a component SIZE stepped by width, 240 from 1024, 192 from 768 and the
+   default 128 below, where it stacks above the name. No ladder holds these, so they are literals,
+   as --lay-track-* are; PageHero.tsx's PROFILE_PORTRAIT_SIZES keeps the <img sizes> in step. The
+   initials take the h1 role so two letters hold a square almost twice the size. */
+--hero-portrait-size-profile:240px;
+--hero-portrait-text-profile:var(--text-h1);
+--hero-portrait-tracking-profile:var(--text-h1-tracking);
 /* The visually hidden key (an article's "Written by"): the one-pixel box screen readers still read.
    A size, not a distance; the ramp's 1 under the same stated exception, as ListCard's hidden size. */
 --hero-hidden-size:var(--space-1);
@@ -257,6 +265,21 @@
      this layer: no primitive holds it. Restated ONCE in TypeScript, as CENTRED_MEDIA in
      src/lib/image-sizes.ts (which builds the `sizes` from it); change both in one edit. */
   --hero-media-size-centred: 860px;
+}
+
+/* The profile portrait's steps (see --hero-portrait-size-profile): 192 from 768 to 1023, and the
+   default portrait's 128 below 768, where it stacks above the name. A component size, not a
+   distance, so it may step by width. */
+@media (max-width: 1023px) {
+  :root {
+    --hero-portrait-size-profile: 192px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --hero-portrait-size-profile: var(--hero-portrait-size);
+  }
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────

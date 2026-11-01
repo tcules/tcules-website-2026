@@ -1103,3 +1103,29 @@ stacked), so a portrait would be blown up past its pixels and read as a hero pho
 
 Specimen: block 23a (a photograph with a bio, then initials on paper, tint and ink).
 
+
+## Amendment · 1 Nov 2026 — `arrangement="profile"`: the face beside the opening
+
+The owner's design pass on the author pages (1 Nov 2026: "a real profile page… the face at a confident
+size beside the name, role, bio and LinkedIn as one composed head"). The 128 portrait above the title read as
+a small face over a name, and the hero as a thumbnail and a heading.
+
+- **`arrangement="profile"`**, with a `portrait`: from 768 a `Layout` of `['auto', 1]`, the portrait in the
+  content-sized track and the whole opening (title, copy, labels, byline, extras, actions, stats, tags) in
+  the other, top-aligned, a `stack` (48) apart. Not a split's 96: a split is two regions of different
+  kind, and the face and the name are one person's head, as ProfileCard's portrait and name are at
+  `block` beside an 80 portrait. Below 768 it is one column, the portrait a `block` above the title.
+- **`--hero-portrait-size-profile`**: 240 from 1024, 192 from 768 to 1023, the default portrait's 128 below.
+  A component size, so it may step by width (the no-responsive-step rule is about distances). Literal
+  pixels, as `--lay-track-*` are, because no ladder holds them. The `<img sizes>` is written once more in
+  `PageHero.tsx` (`PROFILE_PORTRAIT_SIZES`) and the two move together.
+- **Initials** in the profile square take `--hero-portrait-text-profile` (the h1 role), so two letters hold
+  a square nearly twice the size.
+- Without a `portrait` the arrangement renders `stacked`; `media` is not a profile's (a person's page has
+  their face, not a hero image). `data-arrangement="hero-profile"`.
+
+Supply note: a Strapi profile picture as small as 146 px (Rakesh Chitroda's) upscales in the 240 square;
+the content ask is a portrait of at least 480 px.
+
+Specimen: block 23b (a photograph with labels and the LinkedIn control in the extras slot; initials with no
+LinkedIn on paper and ink).

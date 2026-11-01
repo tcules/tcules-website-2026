@@ -1447,8 +1447,10 @@ export type Author = {
   role?: string;
   /** Their photograph. Absent, a page shows their initials. */
   image?: ImageRecord;
-  /** A sentence or two about them. No source sends one yet; the page renders it when one arrives. */
+  /** A sentence or two about them: the CMS's, else the repo's fallback (`teamProfile`). */
   bio?: string;
+  /** Their LinkedIn profile URL, only where one is known. Never guessed. */
+  linkedin?: string;
   /** How many live pieces credit them. */
   pieceCount: number;
 };

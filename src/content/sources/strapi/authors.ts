@@ -5,7 +5,7 @@ import type {
   ImageRecord,
   InsightResource,
 } from '../../types';
-import { personSlug, teamPortrait } from '../people';
+import { personSlug, teamPortrait, teamProfile } from '../people';
 import { mapUploadImage, type StrapiUploadFile } from './image';
 import { insightsSource } from './insights';
 
@@ -52,6 +52,22 @@ const BYLINES_QUERY = /* GraphQL */ `
     }
   }
 `;
+
+const PROFILES_QUERY = /* GraphQL */ `
+  query GetProfiles {
+    profiles(pagination: { limit: 200 }) {
+      name
+      description
+      linkedInProfile
+    }
+  }
+`;
+
+type StrapiProfile = {
+  name?: string | null;
+  description?: unknown;
+  linkedInProfile?: string | null;
+};
 
 type StrapiByline = {
   id?: string | null;
@@ -107,6 +123,42 @@ async function fetchBylines(graphqlUrl: string): Promise<StrapiBylinesResponse> 
   return payload;
 }
 
+/**
+ * Strapi's profiles by name, or an empty map when the collection cannot be read (today: public `find`
+ * is forbidden). Never throws: a missing bio is a fallback, not a failed page.
+ */
+async function fetchProfiles(
+  graphqlUrl: string,
+): Promise<Map<string, { bio?: string; linkedin?: string }>> {
+  const profiles = new Map<string, { bio?: string; linkedin?: string }>();
+  try {
+    const response = await fetch(graphqlUrl, {
+      method: 'POST',
+      headers: { accept: 'application/json', 'content-type': 'application/json' },
+      body: JSON.stringify({ query: PROFILES_QUERY }),
+      cache: 'force-cache',
+      next: { revalidate: AUTHORS_REVALIDATE_SECONDS, tags: ['authors'] },
+    });
+    if (!response.ok) return profiles;
+    const payload = (await response.json()) as {
+      data?: { profiles?: StrapiProfile[] | null } | null;
+    };
+    for (const profile of payload.data?.profiles ?? []) {
+      const name = value(profile.name);
+      if (!name) continue;
+      const bio = typeof profile.description === 'string' ? value(profile.description) : '';
+      const linkedin = value(profile.linkedInProfile);
+      profiles.set(name, {
+        ...(bio ? { bio } : {}),
+        ...(/^https:\/\/([a-z]+\.)?linkedin\.com\//u.test(linkedin) ? { linkedin } : {}),
+      });
+    }
+  } catch {
+    /* Unreadable: the fallback answers. */
+  }
+  return profiles;
+}
+
 function profileImage(
   files: StrapiUploadFile[] | null | undefined,
   name: string,
@@ -144,9 +196,10 @@ type Person = Omit<Author, 'pieceCount'> & { pieces: InsightResource[] };
  */
 async function loadPeople(): Promise<Person[]> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const [payload, hub] = await Promise.all([
+  const [payload, hub, profiles] = await Promise.all([
     fetchBylines(graphqlUrl),
     insightsSource.getInsightsPage(INSIGHTS_SLUG),
+    fetchProfiles(graphqlUrl),
   ]);
   /* The blog collection's pieces only (articles, guides, research, videos): the hub's events,
      podcasts and interviews are other collections, whose slugs could repeat a blog's. */
@@ -181,9 +234,16 @@ async function loadPeople(): Promise<Person[]> {
 
   return [...people.values()].map(({ credited, ...person }) => {
     const image = person.image ?? teamPortrait(person.name);
+    /* Strapi's bio and LinkedIn where its Profile has them, else the repo's fallback, field by field. */
+    const cms = profiles.get(person.name);
+    const fallback = teamProfile(person.name);
+    const bio = cms?.bio ?? fallback?.bio;
+    const linkedin = cms?.linkedin ?? fallback?.linkedin;
     return {
       ...person,
       ...(image ? { image } : {}),
+      ...(bio ? { bio } : {}),
+      ...(linkedin ? { linkedin } : {}),
       /* The hub's order, so the page lists newest first exactly as the hub does. */
       pieces: pool.filter((item) => credited.has(item.slug)),
     };

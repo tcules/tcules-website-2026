@@ -175,6 +175,12 @@
   overflow: hidden;
 }
 
+/* `arrangement="profile"`: the face at a confident size beside the opening, 128 · 192 · 240 by width
+   (the steps live in the token), its initials a role up so they hold the larger square. */
+.portraitProfile {
+  inline-size: var(--hero-portrait-size-profile);
+}
+
 .portraitInitials {
   align-content: center;
   text-align: center;
@@ -183,6 +189,11 @@
   color: var(--hero-avatar-initials-ink);
   font: var(--hero-portrait-text);
   letter-spacing: var(--hero-portrait-tracking);
+}
+
+.portraitInitials.portraitProfile {
+  font: var(--hero-portrait-text-profile);
+  letter-spacing: var(--hero-portrait-tracking-profile);
 }
 
 /* ── The copy · two roles, two measures ───────────────────────────────────

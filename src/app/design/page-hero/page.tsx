@@ -1,4 +1,5 @@
 import {
+  BrandMark,
   Button,
   Cluster,
   Layout,
@@ -1519,6 +1520,66 @@ export default async function PageHeroSpecimenPage() {
           <Note
             title={`23a · portrait · no photograph, initials · ${surface}`}
             note="Without a photograph the initials hold the square on the byline disc's outlined ground, at the h2 role (decisions/2026-11-01-byline-initials-without-a-photo)."
+            surface={surface}
+          />
+        </div>
+      ))}
+
+      {/* ── 23b · arrangement="profile" ────────────────────────────────────────────
+           The author page's composed head (owner, 1 Nov 2026: "a real profile page"): the portrait
+           at 240 beside the whole opening from 1024 (192 from 768, stacked at 128 below), the
+           name, the role and bio, the topics as labels and the LinkedIn control in the extras
+           slot. With a photograph and every slot, then initials with no LinkedIn, on paper and
+           ink. */}
+      <div>
+        <PageHero
+          trail={heroTrail(
+            [
+              { label: 'Home', href: ROUTES.home },
+              { label: 'Insights', href: ROUTES.insights },
+              { label: 'Authors', href: ROUTES.authors },
+              { label: ALICE.name, href: authorPath('alice-chen') },
+            ],
+            ALICE.name,
+            crumbs,
+          )}
+          arrangement="profile"
+          portrait={{ name: ALICE.name, image: ALICE.portrait }}
+          title={ALICE.name}
+          titleSize="h1"
+          body={['Founder and CEO', PARAS[0] ?? '']}
+          labels={['AI Product UX', 'Design Systems', 'B2B SaaS & Workflow Software']}
+          texture
+        >
+          <Button
+            as="a"
+            href="#"
+            emphasis="outline"
+            tone="primary"
+            iconLeft={<BrandMark name="linkedin" />}
+          >
+            LinkedIn
+          </Button>
+        </PageHero>
+        <Note
+          title="23b · arrangement=profile · a photograph · labels · LinkedIn in the extras"
+          note="The face beside the whole opening, a `stack` (48) apart, top-aligned: one composed head. 240 from 1024, 192 from 768, and below 768 the portrait stacks above the name at the default 128. The LinkedIn control is the caller's, passed as children: an outlined Button with the LinkedIn BrandMark leading, never the blue solid."
+        />
+      </div>
+      {(['paper', 'ink'] as const).map((surface) => (
+        <div key={`profile-initials-${surface}`}>
+          <PageHero
+            arrangement="profile"
+            portrait={{ name: 'Yash Gidwani' }}
+            title="Yash Gidwani"
+            titleSize="h1"
+            body={['Product Designer', PARAS[1] ?? '']}
+            labels={['Onboarding & Engagement', 'UX Audits']}
+            surface={surface}
+          />
+          <Note
+            title={`23b · arrangement=profile · initials, no LinkedIn · ${surface}`}
+            note="Without a photograph the initials hold the larger square at the h1 role. Without a LinkedIn URL nothing renders in its place."
             surface={surface}
           />
         </div>

@@ -213,7 +213,10 @@ choice (2.34).
       decisions/2026-11-01-author-pages-one-template-from-strapi, superseding the 30 Oct move to phase 2):
       `/insights/authors` and one `/insights/authors/<person>` template filled from Strapi's bylines (11 people),
       each person's live pieces as the hub's cards, `ProfilePage` + `Person` markup; the bylines and "About the
-      author" link to the page. Built on `feat/insights-rich-text`.
+      author" link to the page. Built on `feat/insights-rich-text`. Design pass (owner, 1 Nov 2026): a bio for
+      everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
+      hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
+      name, role, bio, topic labels and LinkedIn).
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
