@@ -39,6 +39,16 @@
   color: var(--tex-flow-ink);
 }
 
+/* A field that reaches past its box's top and bottom into the neighbouring bands' air (TextureFlow
+   `bleed`): on an open band, so the field spans the whole gap between the bands' content and fades
+   to nothing before reaching either (owner, 31 Oct 2026). */
+.flowBleed {
+  /* A canvas is a replaced element: an auto height takes its intrinsic size instead of the insets, so
+     the height is stated. */
+  inset-block-start: calc(var(--tex-flow-bleed) * -1);
+  block-size: calc(100% + 2 * var(--tex-flow-bleed));
+}
+
 /* A field whose WebGL context was lost steps aside (TextureFlow): the ground stands plain. */
 .flow[data-lost] {
   visibility: hidden;

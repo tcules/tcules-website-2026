@@ -1655,7 +1655,16 @@ export function NoteBand({ band }: { band: CorpusBand }) {
  * Without a link it is a short prose band. The open close is an ink island on CtaSection's own paper
  * band (decisions/2026-10-29-cta-band-is-an-ink-island), so it takes no surface from the plan.
  */
-export function CloseBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+export function CloseBand({
+  page,
+  band,
+  island,
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  /** The close's island, ink unless the page closes on blue (About: owner, 31 Oct 2026). */
+  island?: 'blue' | 'ink';
+}) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => {
     if (block.type === 'links') return block.links;
@@ -1683,6 +1692,7 @@ export function CloseBand({ page, band }: { page: CorpusPage; band: CorpusBand }
         id={band.id}
         data-band="L"
         arrangement="open"
+        {...(island ? { island } : {})}
         heading={band.headingText}
         body={body.length > 0 ? (body.slice(0, 2) as [string] | [string, string]) : undefined}
         actions={

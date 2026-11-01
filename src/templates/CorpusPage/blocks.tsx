@@ -79,7 +79,7 @@ export function head(band: CorpusBand) {
 
 export type CorpusHeroProps = {
   page: CorpusPage;
-  /** `centred` (contact, owner 31 Oct 2026): the head centred on the column, no media, the island under it. */
+  /** `centred`: the head centred on the column, with its media (about) or the island `panel` (contact, owner 31 Oct 2026) under it. */
   arrangement?: 'stacked' | 'beside' | 'centred';
   media?: HeroMedia;
   /** A bare run of facts (home's studio record), one tag each, after the actions. */

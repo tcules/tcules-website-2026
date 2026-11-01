@@ -35,6 +35,12 @@
      island read as one more card; at 24 it floats. Every island takes it, since an island is one
      kind of object. Was 8 (docs/specs/Island.md § 17, Q2). */
   --isl-radius: var(--radius-24);
+  /* `inset="band"` (owner, 31 Oct 2026): a textured paper island on a flush paper band takes the
+     band's own air inside it, so the field runs through what would have been the band's padding.
+     The band's values per width, as the inset was on 13 Oct: 96, and 64 block with the 32 gutter
+     below 768 (the Section exception, CLAUDE.md gap-scale rule 4). */
+  --isl-inset-band-block: var(--gap-section);
+  --isl-inset-band-inline: var(--gap-section);
 }
 
 /* Phone: 48 above and below, as from 768, and the container `gutter` (32) at the sides, because 48
@@ -43,6 +49,8 @@
   :root {
     --isl-inset-block: var(--gap-stack);
     --isl-inset-inline: var(--gap-gutter);
+    --isl-inset-band-block: var(--gap-column);
+    --isl-inset-band-inline: var(--gap-gutter);
   }
 }
 
