@@ -24,12 +24,18 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
 - Media splits' heads take `lg` (the h2 role) everywhere on the composer, so a band with an image beside it no
   longer out-sizes the plain band next to it.
 
+- Round 2 (owner): "How it works" and "Typical starting points" read as blocks, not text; the closing note
+  must not read as part of the last option. EngagementOptions takes `facts` (a mono key over each value, two
+  across under a rule) and a `coda` (statement under the drawings' track, the worked example under the words'
+  track with its key and link action, set apart by a full-width rule). Starting points are split into entries
+  (`listEntries`: commas and the final "or" are the joints; a leading article and the full stop drop).
+
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
 | client-recognition | recognition · LogoGrid (H) | |
-| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | terms row: start wherever + Dealpath |
+| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts per option; coda: start wherever + Dealpath example |
 | your-team | text · B + illustration, image start | |
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |

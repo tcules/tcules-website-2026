@@ -60,3 +60,23 @@
   color: var(--eop-term-ink);
   max-inline-size: var(--eop-body-measure);
 }
+
+/* An option's facts sit under its words behind a rule, the rule the set's own: the description is the
+   option, the facts are its terms (owner, 1 Nov 2026). The padding is the block step inside the box. */
+.facts {
+  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+/* A fact's value and each starting point open as a sentence or an entry does: the first letter is set
+   in CSS, the authored words kept ("an agreed scope…" under its key). */
+.factValue::first-letter,
+.factItems > li::first-letter {
+  text-transform: uppercase;
+}
+
+/* What holds for the whole set closes it under a full-width rule, a stack below it. */
+.coda {
+  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
+  padding-block-start: var(--gap-stack);
+}

@@ -22,6 +22,8 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
+  type EngagementCoda,
+  type EngagementFact,
   type EngagementScope,
   type TraceScene,
   type TraceStage,
@@ -222,17 +224,124 @@ function itemOptions(band: CorpusBand) {
        it is the option's eyebrow, not its first line of body (owner, 1 Nov 2026). */
     const only = paragraphs[0]?.length === 1 ? paragraphs[0][0] : undefined;
     const eyebrowRun = only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
-    const [first, ...more] = eyebrowRun ? paragraphs.slice(1) : paragraphs;
+    const rest = eyebrowRun ? paragraphs.slice(1) : paragraphs;
+    /* A paragraph led by a labelled run ("**How it works:**", "*Typical starting points:*") is one of the
+       option's facts, a block of its own under the words, not more body (owner, 1 Nov 2026). */
+    const facts = rest.flatMap((runs) => {
+      const fact = factOf(runs);
+      return fact ? [fact] : [];
+    });
+    const [first, ...more] = rest.filter((runs) => !factOf(runs));
     return [
       {
         eyebrow: eyebrowRun,
         title: block.headingText,
         body: first ? renderInline(first) : null,
         more: more.map((runs) => renderInline(runs)),
+        facts: facts.length > 0 ? facts : undefined,
         scope: scopeOf(block.headingText) ?? (eyebrowRun ? scopeOf(eyebrowRun) : undefined),
       },
     ];
   });
+}
+
+const firstRun = (runs: readonly InlineRun[]) =>
+  runs.find((run) => !(run.type === 'text' && run.text.trim() === ''));
+
+/**
+ * An option's fact: a paragraph opening with a bold or italic run that ends in a colon. The label loses
+ * its colon (the key's form says it); a list of starting points is split into its entries.
+ */
+function factOf(runs: readonly InlineRun[]): EngagementFact | undefined {
+  const lead = firstRun(runs);
+  if (lead?.type !== 'strong' && lead?.type !== 'em') return undefined;
+  const text = inlineToText(lead.children).trim();
+  if (!text.endsWith(':')) return undefined;
+  const label = text.replace(/:$/, '');
+  const value = trimStart(runs.slice(runs.indexOf(lead) + 1));
+  if (/starting points/i.test(label)) {
+    return { label, items: listEntries(value).map((entry) => renderInline(entry)) };
+  }
+  return { label, body: renderInline(value) };
+}
+
+/**
+ * A sentence-list ("a [UX audit](…), a [review](…), one workflow or a design pilot.") as its entries:
+ * split at the commas and the final "or"/"and", links kept whole, a leading article and the full stop
+ * dropped. The words are the author's; only the joints between them go (content mapping, /how-we-work).
+ */
+function listEntries(runs: readonly InlineRun[]): InlineRun[][] {
+  const entries: InlineRun[][] = [];
+  let current: InlineRun[] = [];
+  entries.push(current);
+  for (const run of runs) {
+    if (run.type !== 'text') {
+      current.push(run);
+      continue;
+    }
+    run.text.split(/(,\s*|\s+or\s+|\s+and\s+)/).forEach((part, index) => {
+      if (index % 2 === 1) {
+        current = [];
+        entries.push(current);
+      } else if (part) current.push({ type: 'text', text: part });
+    });
+  }
+  return entries
+    .map((entry) => {
+      const out = trimStart(entry);
+      if (out[0]?.type === 'text') {
+        out[0] = { type: 'text', text: out[0].text.replace(/^(a|an|the)\s+/i, '') };
+      }
+      const last = out.at(-1);
+      if (last?.type === 'text')
+        out[out.length - 1] = { type: 'text', text: last.text.replace(/\.\s*$/, '') };
+      return out.filter((run) => !(run.type === 'text' && run.text === ''));
+    })
+    .filter((entry) => inlineToText(entry).trim().length > 0);
+}
+
+/**
+ * The set's closing note as a coda: a paragraph led by a bold sentence is the statement (its title and
+ * sentence), a paragraph opening "Example:" is the worked example, its trailing link lifted out as the
+ * action. Anything else stays a plain term.
+ */
+function codaOf(band: CorpusBand): { coda?: EngagementCoda; rest: InlineRun[][] } {
+  const runsList = itemCoda(band);
+  let title: string | undefined;
+  let body: ReactNode = null;
+  let example: EngagementCoda['example'];
+  const rest: InlineRun[][] = [];
+  for (const runs of runsList) {
+    const lead = firstRun(runs);
+    if (!title && lead?.type === 'strong') {
+      title = inlineToText(lead.children).trim().replace(/[.:]$/, '');
+      body = renderInline(trimStart(runs.slice(runs.indexOf(lead) + 1)));
+      continue;
+    }
+    if (!example && lead?.type === 'text' && /^\s*Example:\s*/.test(lead.text)) {
+      const at = runs.indexOf(lead);
+      const stripped = [
+        ...runs.slice(0, at),
+        { type: 'text', text: lead.text.replace(/^\s*Example:\s*/, '') } as InlineRun,
+        ...runs.slice(at + 1),
+      ];
+      const { runs: words, link } = liftTrailingLink(trimStart(stripped));
+      example = {
+        label: 'Example',
+        body: renderInline(words),
+        action: link ? (
+          <LinkActions
+            links={[
+              { href: link.href, label: link.children, labelText: inlineToText(link.children) },
+            ]}
+          />
+        ) : undefined,
+      };
+      continue;
+    }
+    rest.push(runs);
+  }
+  return { coda: title ? { title, body, example } : undefined, rest };
 }
 
 /**
@@ -615,7 +724,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
-      const terms = [...itemCoda(band), ...trailingParagraphs(band)];
+      const closing = codaOf(band);
+      const terms = [...closing.rest, ...trailingParagraphs(band)];
       const links = bandLinks(band);
       const options =
         leads(band).length > 0
@@ -636,9 +746,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         (option) =>
           'eyebrow' in option &&
           Boolean(option.eyebrow) &&
-          'more' in option &&
-          Array.isArray(option.more) &&
-          option.more.length > 0,
+          (('more' in option && Array.isArray(option.more) && option.more.length > 0) ||
+            ('facts' in option && Array.isArray(option.facts) && option.facts.length > 0)),
       );
       return (
         <Fragment>
@@ -649,6 +758,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={options}
             arrangement={rich ? 'rows' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            coda={closing.coda}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
           {links[1] ? (

@@ -34,6 +34,28 @@ export type EngagementTerm = {
   body: ReactNode;
 };
 
+/**
+ * One labelled fact of an option ("How it works", "Typical starting points", "Best when"): a mono key
+ * over its value, so the terms read as blocks of their own under the option's description rather than
+ * as more body. `items` sets the value as a list, one entry a line (the starting points).
+ */
+export type EngagementFact = {
+  label: string;
+  body?: ReactNode;
+  items?: readonly ReactNode[];
+};
+
+/**
+ * What holds for the whole set, set apart from the last option by a rule: a statement (its title and
+ * sentence) under the drawings' track, and a worked example under the words' track, with its own key and
+ * its link as an action (owner, 1 Nov 2026, /how-we-work: the note "doesn't read as a part of it").
+ */
+export type EngagementCoda = {
+  title: string;
+  body: ReactNode;
+  example?: { label: string; body: ReactNode; action?: ReactNode };
+};
+
 export type EngagementOption = {
   /**
    * What kind of engagement the option is ("A focused engagement"), set as the mono eyebrow over its
@@ -51,6 +73,8 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /** The option's terms as labelled blocks under its words, two across from 1024. */
+  facts?: readonly EngagementFact[];
 };
 
 /**
@@ -88,6 +112,8 @@ export type EngagementOptionsProps = {
    * (decisions/2026-10-30-engagement-terms-plain-row).
    */
   terms?: readonly EngagementTerm[];
+  /** What holds for every option, closing the set under a rule. See `EngagementCoda`. */
+  coda?: EngagementCoda;
   /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
@@ -131,6 +157,7 @@ export function EngagementOptions({
   options,
   note,
   terms = [],
+  coda,
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -209,6 +236,9 @@ export function EngagementOptions({
                         option={option}
                         className={cx(styles.body, dense && styles.bodyDense)}
                       />
+                      {option.facts && option.facts.length > 0 ? (
+                        <Facts facts={option.facts} />
+                      ) : null}
                     </Layout>
                   </Layout>
                 );
@@ -236,12 +266,35 @@ export function EngagementOptions({
                         option={option}
                         className={cx(styles.body, styles.bodyRows)}
                       />
+                      {option.facts && option.facts.length > 0 ? (
+                        <Facts facts={option.facts} />
+                      ) : null}
                     </Layout>
                   </Layout>
                 </li>
               ))}
             </Layout>
           )}
+          {coda ? (
+            <Layout
+              columns={{ base: 1, md: [5, 7] }}
+              colGap="column"
+              rowGap="block"
+              className={styles.coda}
+            >
+              <Layout rowGap="text">
+                <h3 className={styles.title}>{coda.title}</h3>
+                <p className={styles.body}>{coda.body}</p>
+              </Layout>
+              {coda.example ? (
+                <Layout rowGap="text">
+                  <p className={styles.eyebrow}>{coda.example.label}</p>
+                  <p className={styles.body}>{coda.example.body}</p>
+                  {coda.example.action}
+                </Layout>
+              ) : null}
+            </Layout>
+          ) : null}
           {terms.length > 0 ? (
             <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
               {terms.map((term, index) => (
@@ -255,6 +308,36 @@ export function EngagementOptions({
         {note}
       </Layout>
     </Section>
+  );
+}
+
+/** The option's facts: a key over each value, two across from 1024, under a rule. */
+function Facts({ facts }: { facts: readonly EngagementFact[] }) {
+  return (
+    <Layout
+      as="dl"
+      columns={{ base: 1, lg: facts.length > 1 ? 2 : 1 }}
+      colGap="gutter"
+      rowGap="block"
+      className={styles.facts}
+    >
+      {facts.map((fact) => (
+        <Layout key={fact.label} rowGap="tight">
+          <dt className={styles.eyebrow}>{fact.label}</dt>
+          <dd className={cx(styles.body, styles.factValue)}>
+            {fact.items ? (
+              <Layout as="ul" rowGap="tight" className={styles.factItems}>
+                {fact.items.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </Layout>
+            ) : (
+              fact.body
+            )}
+          </dd>
+        </Layout>
+      ))}
+    </Layout>
   );
 }
 

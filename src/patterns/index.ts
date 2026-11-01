@@ -304,7 +304,13 @@ export type {
   SiteFooterSocial,
 } from './SiteFooter';
 export { Banner } from './Banner';
-export type { BannerProps, BannerForm, BannerMediaSide, BannerLink, BannerBandHead } from './Banner';
+export type {
+  BannerProps,
+  BannerForm,
+  BannerMediaSide,
+  BannerLink,
+  BannerBandHead,
+} from './Banner';
 export { Statement } from './Statement';
 export type {
   StatementProps,
@@ -371,7 +377,12 @@ export {
 
 /* Gateway — the situation selector: six reader situations, one lit, its answer beside it (home
    "What do you need next?", round 6, 11 Oct 2026). */
-export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';
+export {
+  Gateway,
+  type GatewayArrangement,
+  type GatewayItem,
+  type GatewayProps,
+} from './Gateway';
 /* GatewayPaths — the two-door form: two paths, each its drawing, words and links (home, 29 Oct 2026). */
 export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gateway';
 
@@ -413,6 +424,8 @@ export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpr
 export {
   EngagementOptions,
   type EngagementArrangement,
+  type EngagementCoda,
+  type EngagementFact,
   type EngagementOption,
   type EngagementOptionsProps,
   type EngagementScope,
@@ -420,17 +433,38 @@ export {
 
 /* TracePlates — one screen followed from the approved design to what users see, a drawn plate per
    stage and one trace through them (the design-to-code audit's "What we trace", 11 Oct 2026). */
-export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } from './TracePlates';
+export {
+  TracePlates,
+  type TracePlatesProps,
+  type TraceScene,
+  type TraceStage,
+} from './TracePlates';
 
 /* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
-export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';
+export {
+  ProfileCard,
+  ProfileFollow,
+  type ProfileCardProps,
+  type ProfileFollowProps,
+  type ProfileLink,
+} from './ProfileCard';
 
 /* Contributors — the people behind a piece, after its content (byline board G, 30 Oct 2026). */
-export { Contributors, type Contributor, type ContributorLink, type ContributorsProps } from './Contributors';
+export {
+  Contributors,
+  type Contributor,
+  type ContributorLink,
+  type ContributorsProps,
+} from './Contributors';
 
 /* IndexRail — a curated listing page's rail beside its content: a BY TYPE / BY TOPIC switch that
    changes the whole view (held in the URL), or a picker of sibling pages (insights, 16 Oct 2026). */
-export { IndexRail, type IndexRailItem, type IndexRailMode, type IndexRailProps } from './IndexRail';
+export {
+  IndexRail,
+  type IndexRailItem,
+  type IndexRailMode,
+  type IndexRailProps,
+} from './IndexRail';
 
 /* FilterPanel — a listing's filters in a side panel: groups of chips, Reset and Apply, by GET. */
 export {
@@ -470,9 +504,4 @@ export {
 } from './Bento';
 /* ClaimSet — a page's hard parts: one claim at a time on a stage (tabs), or every claim on the page,
    ruled (owner, 31 Oct 2026; docs/page-build/hard-parts-brief.md). */
-export {
-  ClaimSet,
-  type ClaimSetItem,
-  type ClaimSetProps,
-  type ClaimExample,
-} from './ClaimSet';
+export { ClaimSet, type ClaimSetItem, type ClaimSetProps, type ClaimExample } from './ClaimSet';
