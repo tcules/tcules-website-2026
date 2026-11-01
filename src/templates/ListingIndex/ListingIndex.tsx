@@ -39,6 +39,46 @@ export type ListingHero = {
 };
 
 /**
+ * A listing's close, on its own: the band ListingIndex ends on, for a page in the listing's family
+ * that is not itself a ListingIndex (the author pages, 1 Nov 2026), so the two end the same way.
+ *
+ * The close is an ask, so it renders only WITH its ask: the form beside the copy, else the action
+ * under it, the open close an ink island on paper (decisions/2026-10-29-cta-band-is-an-ink-island).
+ * A conversation glyph is the eye's entry into it, as every corpus close has.
+ */
+export function ListingClose({ closing }: { closing?: ListingClosing }) {
+  if (closing?.form) {
+    return (
+      <CtaSection
+        id={closing.id}
+        island={closing.island?.surface ?? 'blue'}
+        islandArrangement="halves"
+        islandTexture="flow"
+        art={closing.island?.art}
+        eyebrow={closing.eyebrow || undefined}
+        heading={closing.heading}
+        body={closing.body?.trim() ? [closing.body] : undefined}
+        form={closing.form}
+      />
+    );
+  }
+  if (closing?.action) {
+    return (
+      <CtaSection
+        id={closing.id}
+        arrangement="open"
+        eyebrow={closing.eyebrow || undefined}
+        mark={<Icon name="chat-round-dots" size="xl" />}
+        heading={closing.heading}
+        body={closing.body?.trim() ? [closing.body] : undefined}
+        actions={[closing.action]}
+      />
+    );
+  }
+  return null;
+}
+
+/**
  * One section of a view: a jump target in the rail, a one-line head and its pieces. The head is the
  * same grammar in every listing (beauty round 3, 16 Oct 2026; 22 Oct 2026): the name as an h3-scale
  * serif h2 and, on its baseline at the row's end, the way to all of it ("See more →").
@@ -299,32 +339,7 @@ export function ListingIndex({
 
       {bands?.afterListing}
 
-      {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
-          action under it, the open close an ink island on paper (decisions/2026-10-29-cta-band-is-an-ink-island).
-          A conversation glyph is the eye's entry into it, as every corpus close has. */}
-      {closing?.form ? (
-        <CtaSection
-          id={closing.id}
-          island={closing.island?.surface ?? 'blue'}
-          islandArrangement="halves"
-          islandTexture="flow"
-          art={closing.island?.art}
-          eyebrow={closing.eyebrow || undefined}
-          heading={closing.heading}
-          body={closing.body?.trim() ? [closing.body] : undefined}
-          form={closing.form}
-        />
-      ) : closing?.action ? (
-        <CtaSection
-          id={closing.id}
-          arrangement="open"
-          eyebrow={closing.eyebrow || undefined}
-          mark={<Icon name="chat-round-dots" size="xl" />}
-          heading={closing.heading}
-          body={closing.body?.trim() ? [closing.body] : undefined}
-          actions={[closing.action]}
-        />
-      ) : null}
+      <ListingClose closing={closing} />
 
       {bands?.afterClose}
     </>

@@ -209,6 +209,11 @@ choice (2.34).
       (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
       `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
       plates; the three term rows read as one template across pages.
+- [x] **2.49** Author pages, moved back into phase 1 (owner, 1 Nov 2026;
+      decisions/2026-11-01-author-pages-one-template-from-strapi, superseding the 30 Oct move to phase 2):
+      `/insights/authors` and one `/insights/authors/<person>` template filled from Strapi's bylines (11 people),
+      each person's live pieces as the hub's cards, `ProfilePage` + `Person` markup; the bylines and "About the
+      author" link to the page. Built on `feat/insights-rich-text`.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -267,9 +272,6 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 - [ ] `/clients` (owner, 31 Oct 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
-- [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
-      links (owner, 30 Oct; pulled forward only if the weekend leaves time;
-      decisions/2026-10-30-author-pages-move-to-phase-2).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
       with Ask AI).

@@ -11,6 +11,7 @@
  */
 export {
   InsightResources,
+  ListingClose,
   ListingIndex,
   caseFinder,
   caseViews,

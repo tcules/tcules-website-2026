@@ -1,4 +1,20 @@
+import { ROUTES } from '../../../lib/routes.ts';
 import { escapeHtml, safeContentHref } from './rich-text';
+
+/**
+ * An authored link to an author page written as an absolute URL on the live domain
+ * (`https://www.tcules.com/insights/authors/shoghi-bagul`: 8 links on 4 guides, 1 Nov 2026), as the
+ * site's own path, so it opens this site's author page on every host, previews included. Only the
+ * author family is mapped; every other absolute link is left as authored.
+ */
+const AUTHOR_PAGE_URL = new RegExp(
+  `^https?://(?:www\\.)?tcules\\.com(${ROUTES.authors}/[a-z0-9-]+)/?(?=$|[?#])`,
+  'iu',
+);
+function siteHref(href: string): string {
+  const match = href.match(AUTHOR_PAGE_URL);
+  return match?.[1] ? `${match[1].toLowerCase()}${href.slice(match[0].length)}` : href;
+}
 
 function renderMarks(source: string): string {
   const escapedCharacters: string[] = [];
@@ -46,7 +62,8 @@ function renderInline(source: string): string {
   const linkPattern = /(?<!!)(?<!\\)\[([^\]]+)\]\(([^)\s]+)(?:\s+["'][^"']*["'])?\)/gu;
   const links: string[] = [];
   const parked = source.replace(linkPattern, (_, label: string, target: string) => {
-    const href = safeContentHref(target);
+    const safe = safeContentHref(target);
+    const href = safe ? siteHref(safe) : undefined;
     const html = href
       ? `<a href="${escapeHtml(href)}">${renderMarks(label)}</a>`
       : renderMarks(label);

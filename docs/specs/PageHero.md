@@ -109,6 +109,7 @@ The one border-width above zero in section 7 belongs to `media` and to nothing e
 ```ts
 type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer'
 type HeroPerson     = { name: string; href?: string; portrait?: MediaImage }   // 30 Oct 2026, byline board G
+type HeroPortrait   = { name: string; image?: MediaImage }   // 1 Nov 2026, author pages: the face of the page's subject
 type HeroCredit     = { role: HeroCreditRole; people: readonly [HeroPerson, ...HeroPerson[]] }
 type HeroDates      = { published: string; modified?: string }
 type HeroAction     = { label: string; href: string }
@@ -1081,3 +1082,24 @@ Owner: no body text above 16 anywhere; only the hero lead (and a testimonial's q
 `leadSize` and `--hero-lead-text-lg` are removed; `--hero-lead-text` reads `--text-lead-lg`, now
 18 / 1.5 at every width (its 767 step is gone). `--text-lead`, the section lead every other band
 takes, is 16. The amendments above that mention `leadSize="lg"` and a 20px lead are history.
+
+## Amendment · 1 Nov 2026 — a page about a person: `portrait` and `titleSize="h1"`
+
+The author pages (owner, 1 Nov 2026; decisions/2026-11-01-author-pages-one-template-from-strapi) put a
+person's face at the head of the page, and the hero had no slot for one. `media` is the wrong slot: a
+Strapi profile picture is 146 to 984 pixels, and the media slot fills the whole track (572 beside, 1240
+stacked), so a portrait would be blown up past its pixels and read as a hero photograph of a face.
+
+- **`portrait?: HeroPortrait`** (`{ name, image? }`): a fixed square, `--hero-portrait-size` (128, a
+  component size from the space ramp under the same stated exception as `--hero-avatar-size`), at the 8
+  radius as ProfileCard and Contributors crop a portrait, placed first in the opening, a `block` (24)
+  above the eyebrow and title. A photograph renders through Media (`fit="fill"`, `edge="placement"`,
+  `sizes="128px"`, `priority`, the portrait focus); without one the person's initials hold the square at
+  the h2 role on the byline disc's outlined ground (`--hero-avatar-ring`, `-edge`, `-initials-ink`), so a
+  stand-in reads the same at 32 and at 128 (decisions/2026-11-01-byline-initials-without-a-photo). The
+  portrait is decoration (alt=""): the h1 says whose face it is. Absent renders no element and no seam.
+- **`titleSize="h1"`**: a name as the title, at `--text-h1` (54 · 43 · 34) rather than display. A name
+  at display scale shouts over the portrait above it, and the face carries the band.
+
+Specimen: block 23a (a photograph with a bio, then initials on paper, tint and ink).
+

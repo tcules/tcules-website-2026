@@ -54,6 +54,16 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
 export type HeroPerson = { name: string; href?: string; portrait?: MediaImage };
 
 /**
+ * The face of the person a page is ABOUT (an author page, owner 1 Nov 2026;
+ * decisions/2026-11-01-author-pages-one-template-from-strapi): their photograph, cropped square at
+ * the 8 radius at a fixed 128, or their initials holding the square when there is none
+ * (decisions/2026-11-01-byline-initials-without-a-photo). Not `media`: a head-and-shoulders portrait
+ * is a few hundred pixels, and the media slot would blow it up to the full track. `name` is whose
+ * initials to draw; the h1 already says it, so the portrait is decoration (alt="").
+ */
+export type HeroPortrait = { name: string; image?: MediaImage };
+
+/**
  * One credit group — one label, one or more people, one <dd>.
  *
  * `people` is a non-empty tuple, so `{ role: 'guest', people: [] }` does not compile. That
@@ -308,9 +318,11 @@ type PageHeroBaseProps = {
    * The title's scale. `display` (default) is every hero's. `mark` is for a title that is ONE WORD —
    * a format page's "Articles" (beauty round 3, 16 Oct 2026): the word set at twice display's size
    * so it becomes the band's graphic, and the texture drawn in against it rather than in a separate
-   * gutter. Never for a sentence: a mark title is meant to stand on one line.
+   * gutter. Never for a sentence: a mark title is meant to stand on one line. `h1` is a NAME, for a
+   * page about a person (an author page, 1 Nov 2026): a name at display scale shouts, and the
+   * portrait beside the hero's copy is what carries the band.
    */
-  titleSize?: 'display' | 'mark';
+  titleSize?: 'display' | 'mark' | 'h1';
   /**
    * `beside` only: the eyebrow and title read ACROSS the column above the split, at their own
    * measure, and the lead, actions and figures sit in the copy track beside the media. For a title
@@ -362,6 +374,11 @@ type PageHeroBaseProps = {
   eyebrow?: string;
   /** A score in the eyebrow's place. See `HeroRating`. */
   rating?: HeroRating;
+  /**
+   * The face of the person the page is about, above the title, a `block` over it. See
+   * `HeroPortrait`. Absent renders no element and no seam.
+   */
+  portrait?: HeroPortrait;
   /**
    * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
    * above the split.
@@ -688,6 +705,7 @@ export function PageHero({
   body,
   eyebrow,
   rating,
+  portrait,
   trail,
   credits = [],
   dates,
@@ -886,8 +904,38 @@ export function PageHero({
     </Cluster>
   ) : null;
   const titleNode = (
-    <h1 className={cx(styles.title, titleSize === 'mark' && styles.titleMark)}>{title}</h1>
+    <h1
+      className={cx(
+        styles.title,
+        titleSize === 'mark' && styles.titleMark,
+        titleSize === 'h1' && styles.titleH1,
+      )}
+    >
+      {title}
+    </h1>
   );
+  /* The person's face, ahead of the eyebrow and title in the opening (see `HeroPortrait`). A
+     photograph is the LCP element on the page it heads, so it is priority like every hero image. */
+  const portraitNode =
+    portrait === undefined ? null : portrait.image ? (
+      <span className={styles.portrait}>
+        <Media
+          image={{
+            ...portrait.image,
+            alt: '',
+            focus: portrait.image.focus ?? PORTRAIT_FOCUS,
+          }}
+          fit="fill"
+          edge="placement"
+          sizes="128px"
+          priority
+        />
+      </span>
+    ) : (
+      <span className={cx(styles.portrait, styles.portraitInitials)} aria-hidden="true">
+        {initialsOf(portrait.name)}
+      </span>
+    );
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
@@ -1170,6 +1218,7 @@ export function PageHero({
         <>
           {mediaNode}
           <Layout rowGap="block" justifyItems={justify}>
+            {portraitNode}
             {eyebrowNode}
             {titleNode}
             {copyNode}
@@ -1178,6 +1227,7 @@ export function PageHero({
         </>
       ) : (
         <Layout rowGap="block" justifyItems={justify}>
+          {portraitNode}
           {eyebrowNode}
           {titleNode}
           {copyNode}
@@ -1218,6 +1268,7 @@ export function PageHero({
     top = withTrail(
       <Layout columns={{ lg: [2, 1] }} colGap="section" rowGap="block" align="baseline">
         <Layout rowGap="block">
+          {portraitNode}
           {eyebrowNode}
           {titleNode}
         </Layout>
@@ -1245,6 +1296,7 @@ export function PageHero({
       <Layout rowGap="stack">
         <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="baseline">
           <Layout rowGap="block">
+            {portraitNode}
             {eyebrowNode}
             {titleNode}
             {copyNode}
@@ -1330,6 +1382,7 @@ export function PageHero({
     const headed = across ? (
       <Layout rowGap="stack">
         <Layout rowGap="block">
+          {portraitNode}
           {eyebrowNode}
           {titleNode}
         </Layout>

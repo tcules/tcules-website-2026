@@ -15,3 +15,19 @@ export function teamPortrait(name: string): ImageRecord | undefined {
   const portrait = PORTRAITS[name.trim()];
   return portrait ? { ...portrait, alt: name.trim() } : undefined;
 }
+
+/**
+ * A person's slug: their name as authored, lower-cased, accents folded and every run of anything
+ * else made one hyphen ("Yash Gidwani" → "yash-gidwani"). The author page's URL and the `@id` the
+ * CMS's own article markup already points at (`…/insights/authors/yash-gidwani#person`). One
+ * function, so a byline's link and the page it links to can never disagree.
+ */
+export function personSlug(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/gu, '')
+    .replace(/[^a-z0-9]+/gu, '-')
+    .replace(/^-+|-+$/gu, '');
+}

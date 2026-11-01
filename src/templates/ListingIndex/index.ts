@@ -1,4 +1,4 @@
-export { ListingIndex } from './ListingIndex';
+export { ListingClose, ListingIndex } from './ListingIndex';
 export type {
   ListingBands,
   ListingClosing,

@@ -157,6 +157,34 @@
   letter-spacing: var(--hero-title-tracking-mark);
 }
 
+/* A person's name as the title: the h1 role, at the display title's measure. */
+.titleH1 {
+  font: var(--hero-title-text-h1);
+  letter-spacing: var(--hero-title-tracking-h1);
+}
+
+/* ── The portrait · the face of the person the page is about ──────────────────
+   A fixed square, the photograph corner, Media filling it from the face's focus. Without a
+   photograph the initials hold the square on the byline disc's outlined ground (one text run in its
+   own box, centred by the block's own alignment, so nothing is arranged). */
+.portrait {
+  display: block;
+  inline-size: var(--hero-portrait-size);
+  aspect-ratio: var(--ratio-portrait);
+  border-radius: var(--hero-portrait-radius);
+  overflow: hidden;
+}
+
+.portraitInitials {
+  align-content: center;
+  text-align: center;
+  background: var(--hero-avatar-ring);
+  border: var(--hero-byline-rule-width) solid var(--hero-avatar-edge);
+  color: var(--hero-avatar-initials-ink);
+  font: var(--hero-portrait-text);
+  letter-spacing: var(--hero-portrait-tracking);
+}
+
 /* ── The copy · two roles, two measures ───────────────────────────────────
    The lead at 20 and the paragraphs beneath it at 16, which gives the copy an internal hierarchy
    that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs

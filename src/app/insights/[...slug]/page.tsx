@@ -10,7 +10,7 @@ import {
   longformSlugs,
 } from '@/app/_corpus/longform';
 import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/content';
-import { blogPath, ROUTES } from '@/lib/routes';
+import { authorPath, blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
   Breadcrumbs,
@@ -272,6 +272,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const published = blog.publishedContent;
   const authors: HeroPerson[] = blog.authors.map((author) => ({
     name: author.name,
+    ...(author.slug ? { href: authorPath(author.slug) } : {}),
     ...(author.image ? { portrait: author.image } : {}),
   }));
   const credits: HeroCredit[] | undefined = authors[0]
@@ -333,13 +334,21 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 <Fragment key={block.id}>{renderBlogBlock(block, blog.title)}</Fragment>
               ))}
               {/* Who wrote it, after what they wrote (byline board G): the hero carries their faces
-                  and names, this says who each is. No link until author pages have routes. */}
+                  and names, this says who each is and links to the rest of what they wrote. */}
               <Contributors
                 label={blog.authors.length > 1 ? 'About the authors' : 'About the author'}
                 people={blog.authors.map((author) => ({
                   name: author.name,
                   ...(author.designation ? { role: author.designation } : {}),
                   ...(author.image ? { portrait: author.image } : {}),
+                  ...(author.slug
+                    ? {
+                        link: {
+                          label: `More from ${author.name.trim().split(/\s+/)[0]}`,
+                          href: authorPath(author.slug),
+                        },
+                      }
+                    : {}),
                 }))}
               />
             </Layout>

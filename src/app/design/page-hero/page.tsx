@@ -22,7 +22,7 @@ import { getNavigation } from '@/content';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
-import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
+import { ROUTES, authorPath, glossaryPath, servicePath } from '@/lib/routes';
 import { heroTrail, type Trail } from '@/lib/trail';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
@@ -1479,6 +1479,50 @@ export default async function PageHeroSpecimenPage() {
           note="One size since 19 Oct 2026 (owner: no body text above 16, and the hero lead is the one place 18 is allowed). --text-lead-lg, 18, over --text-body paragraphs at 16: the lead is the larger, shorter line, so it reads as the lead without shouting over the title. The 20px opt-in (leadSize) was removed."
         />
       </div>
+
+      {/* ── 23a · A page about a person ───────────────────────────────────────────
+           The author page (owner, 1 Nov 2026): `portrait` above the title, `titleSize="h1"` for
+           a name. With a photograph, then without one (the initials hold the square), then on
+           the tint and ink grounds the initials' outline is drawn for. */}
+      <div>
+        <PageHero
+          trail={heroTrail(
+            [
+              { label: 'Home', href: ROUTES.home },
+              { label: 'Insights', href: ROUTES.insights },
+              { label: 'Authors', href: ROUTES.authors },
+              { label: ALICE.name, href: authorPath('alice-chen') },
+            ],
+            ALICE.name,
+            crumbs,
+          )}
+          portrait={{ name: ALICE.name, image: ALICE.portrait }}
+          title={ALICE.name}
+          titleSize="h1"
+          body={['Founder and CEO', PARAS[0] ?? '']}
+          texture
+        />
+        <Note
+          title="23a · portrait · a photograph · h1 title · role as the lead, a bio under it"
+          note="The face of the person a page is about, a fixed 128 square at the 8 radius, a block above the title. Not `media`: a portrait of a few hundred pixels would be blown up to the full track. The name is set at the h1 role, a step under display. The bio is a body paragraph only when the CMS sends one; without it the hero is the face, the name and the role."
+        />
+      </div>
+      {(['paper', 'tint', 'ink'] as const).map((surface) => (
+        <div key={`portrait-initials-${surface}`}>
+          <PageHero
+            portrait={{ name: 'Yash Gidwani' }}
+            title="Yash Gidwani"
+            titleSize="h1"
+            body={['Product Designer']}
+            surface={surface}
+          />
+          <Note
+            title={`23a · portrait · no photograph, initials · ${surface}`}
+            note="Without a photograph the initials hold the square on the byline disc's outlined ground, at the h2 role (decisions/2026-11-01-byline-initials-without-a-photo)."
+            surface={surface}
+          />
+        </div>
+      ))}
 
       {/* ── 24 · What this page cannot show ─────────────────────────────────────── */}
       <Section>
