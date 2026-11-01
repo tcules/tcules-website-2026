@@ -270,10 +270,19 @@ export function markdownToHtml(
         else if (paragraphs[paragraphs.length - 1]?.length) paragraphs.push([]);
         index += 1;
       }
-      const inner = paragraphs
-        .filter((paragraph) => paragraph.length)
-        .map((paragraph) => `<p>${renderInline(joinLines(paragraph))}</p>`)
-        .join('');
+      const filled = paragraphs.filter((paragraph) => paragraph.length);
+      /* The attribution is the cite (owner, 1 Nov 2026: the name in a smaller, lighter body face,
+         which is how Prose sets `blockquote cite`). It is the last of two or more paragraphs when
+         that paragraph is one short line that does not open on a quotation mark: every one of the
+         22 live multi-paragraph quotes ends that way ("Name, role ([12:17](…))" or a bare timestamp). */
+      const last = filled.length > 1 ? filled[filled.length - 1] : undefined;
+      const attribution =
+        last && last.length === 1 && isAttribution(last[0] ?? '') ? last : undefined;
+      const inner =
+        (attribution ? filled.slice(0, -1) : filled)
+          .map((paragraph) => `<p>${renderInline(joinLines(paragraph))}</p>`)
+          .join('') +
+        (attribution ? `<cite>${renderInline(joinLines(attribution))}</cite>` : '');
       if (inner) blocks.push(`<blockquote>${inner}</blockquote>`);
       continue;
     }
@@ -423,4 +432,10 @@ export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[
       });
     return { ...block, html: rewritten };
   });
+}
+
+/** One short line that names who spoke rather than continuing what they said. */
+function isAttribution(line: string): boolean {
+  const text = line.replace(/\[([^\]]*)\]\([^)]*\)/gu, '$1').trim();
+  return text.length > 0 && !/^[“"‘'«]/u.test(text) && text.split(/\s+/u).length <= 16;
 }
