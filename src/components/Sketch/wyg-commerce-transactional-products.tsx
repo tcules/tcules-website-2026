@@ -136,23 +136,27 @@ function Prototypes() {
       <Hatched x={46} y={84} w={68} h={18} />
       <Rect x={46} y={114} w={40} h={14} rx={7} className={styles.tile} />
       <Cursor x={76} y={112} />
-      <Hop x1={130} x2={170} y={90} />
-      <Rect x={170} y={40} w={120} h={100} rx={8} className={styles.frame} />
-      <Glyph name="user" cx={190} cy={70} size={16} className={styles.glyph} />
-      <Rect x={204} y={63} w={44} h={14} rx={7} className={styles.tile} />
+      <Hop x1={130} x2={162} y={90} />
+      <Rect x={162} y={40} w={128} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={178} cy={70} size={18} className={styles.glyph} />
+      <Rect x={192} y={60} w={58} h={20} rx={10} className={styles.tile} />
       {/* the kit has no search glyph: a small magnifier drawn in the quiet ink */}
-      <circle className={styles.copyQuiet} cx="211" cy="69" r="3" />
-      <path className={styles.copyQuiet} d="M213.2,71.2 L215.5,73.5" />
-      <Copy x={220} y={70} w={20} />
-      <Glyph name="check-circle" cx={270} cy={70} size={14} className={styles.glyphAccent} />
-      <Glyph name="user" cx={190} cy={110} size={16} className={styles.glyph} />
-      <Rect x={204} y={101} w={18} h={18} rx={3} className={styles.tile} />
-      <Rect x={208} y={105} w={10} h={6} rx={1} className={styles.frameQuiet} />
-      <Copy x={208} y={115} w={10} />
-      <path className={styles.line} d="M229,107 L226,110 L229,113 M226,110 L236,110 M233,107 L236,110 L233,113" />
-      <Rect x={240} y={101} w={18} h={18} rx={3} className={styles.tile} />
-      <Rect x={244} y={105} w={10} h={6} rx={1} className={styles.frameQuiet} />
-      <Copy x={244} y={115} w={10} />
+      <circle className={styles.copyQuiet} cx="203" cy="70" r="4" />
+      <path className={styles.copyQuiet} d="M206,73 L209,76" />
+      {/* a typed part number: three short code groups */}
+      <Copy x={213} y={70} w={6} />
+      <Copy x={224} y={70} w={6} />
+      <Copy x={235} y={70} w={6} />
+      <Glyph name="check-circle" cx={270} cy={70} size={14} className={styles.glyph} />
+      <Glyph name="user" cx={178} cy={110} size={18} className={styles.glyph} />
+      <Rect x={192} y={100} w={20} h={20} rx={3} className={styles.tile} />
+      <Rect x={196} y={104} w={12} h={7} rx={1} className={styles.frameQuiet} />
+      <Copy x={196} y={115} w={12} />
+      <path className={styles.line} d="M221,107 L218,110 L221,113 M218,110 L228,110 M225,107 L228,110 L225,113" />
+      <Rect x={232} y={100} w={20} h={20} rx={3} className={styles.tile} />
+      <Rect x={236} y={104} w={12} h={7} rx={1} className={styles.frameQuiet} />
+      <Copy x={236} y={115} w={12} />
+      <Rect x={257} y={97} w={26} h={26} rx={13} className={styles.halo} />
       <Glyph name="check-circle" cx={270} cy={110} size={14} className={styles.glyphAccent} />
     </>
   );

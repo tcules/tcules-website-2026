@@ -159,35 +159,39 @@ function WhatReviewerCanDo() {
 }
 
 /**
- * Routing and the queue: the top item went to the first desk and nobody picked it up there (dashed,
- * its clock run out); the same item goes on from that desk to the person who does.
+ * Routing and the queue: the followed item went to the first desk and nobody picked it up there (dashed,
+ * only its clock, run out); the same item goes on from that desk to the person who does, while the
+ * asker sees its status.
  */
 function RoutingQueue() {
   return (
     <>
-      <Rect x={30} y={70} w={80} h={80} rx={8} className={styles.tile} />
-      {[110, 130].map((y) => (
+      <Rect x={60} y={50} w={80} h={80} rx={8} className={styles.tile} />
+      {[70, 110].map((y) => (
         <g key={y}>
-          <Rect x={42} y={y - 7} w={56} h={14} rx={4} className={styles.frameQuiet} />
-          <Copy x={50} y={y} w={32} quiet />
+          <Rect x={72} y={y - 7} w={56} h={14} rx={4} className={styles.frameQuiet} />
+          <Copy x={80} y={y} w={32} quiet />
         </g>
       ))}
-      {/* The top item, the one being followed. */}
-      <Rect x={42} y={83} w={56} h={14} rx={4} className={styles.frame} />
-      <Copy x={50} y={90} w={36} />
-      {/* The desk nobody answered: up once to it, its clock run out. */}
-      <path className={styles.trail} d="M110,90 L164,90 A6,6 0 0 0 170,84 L170,73" />
-      <circle className={styles.nodeOpen} cx="170" cy="70" r="3" />
-      <Rect x={130} y={30} w={80} h={40} rx={8} className={styles.trailFrame} />
-      <Glyph name="user" cx={154} cy={50} size={16} className={styles.glyphQuiet} />
-      <Glyph name="clock-circle" cx={188} cy={50} size={16} className={styles.glyphQuiet} />
+      {/* The item being followed, in the middle of the queue. */}
+      <Rect x={72} y={83} w={56} h={14} rx={4} className={styles.frame} />
+      <Copy x={80} y={90} w={36} />
+      {/* The desk nobody answered: up once to it, empty but for its clock, run out. */}
+      <path className={styles.trail} d="M140,90 L194,90 A6,6 0 0 0 200,84 L200,73" />
+      <circle className={styles.nodeOpen} cx="200" cy="70" r="3" />
+      <Rect x={160} y={30} w={80} h={40} rx={8} className={styles.trailFrame} />
+      <Glyph name="clock-circle" cx={200} cy={50} size={18} className={styles.glyphQuiet} />
       {/* The same item goes on from the desk, to whoever picks it up. */}
-      <path className={styles.line} d="M210,50 L234,50 A6,6 0 0 1 240,56 L240,105" />
-      <circle className={styles.node} cx="210" cy="50" r="2.5" />
-      <ArrowDown x={240} y={112} />
-      <Focus x={240} y={130} glyph="user" size={13} />
-      <Copy x={176} y={126} w={40} />
-      <Copy x={176} y={136} w={26} quiet />
+      <path className={styles.line} d="M240,50 L254,50 A6,6 0 0 1 260,56 L260,105" />
+      <circle className={styles.node} cx="240" cy="50" r="2.5" />
+      <ArrowDown x={260} y={112} />
+      <Focus x={260} y={130} glyph="user" size={13} />
+      {/* What the asker sees of the waiting item: a quiet branch off its own trail to its status. */}
+      <path className={styles.trail} d="M164,90 L164,116 A6,6 0 0 0 170,122 L176,122" />
+      <circle className={styles.nodeOpen} cx={164} cy={90} r="2.5" />
+      <Rect x={176} y={112} w={50} h={20} rx={10} className={styles.frameQuiet} />
+      <Glyph name="eye" cx={188} cy={122} size={12} className={styles.glyphQuiet} />
+      <Copy x={198} y={122} w={22} quiet />
     </>
   );
 }

@@ -275,14 +275,14 @@ function Stops() {
   return (
     <>
       {/* Ours, lit. */}
-      <Rect x={30} y={44} w={86} h={92} rx={12} className={styles.halo} />
-      <Rect x={36} y={50} w={74} h={80} rx={8} className={styles.frame} />
-      <C cx={56} cy={66} glyph="shield-check" />
+      <Rect x={30} y={44} w={116} h={92} rx={12} className={styles.halo} />
+      <Rect x={36} y={50} w={104} h={80} rx={8} className={styles.frame} />
+      <C cx={56} cy={66} glyph="monitor" />
       {/* The rules, each one checked. */}
       {(
         [
-          [94, 36],
-          [110, 28],
+          [94, 56],
+          [110, 44],
         ] as const
       ).map(([y, w]) => (
         <g key={y}>
@@ -290,7 +290,6 @@ function Stops() {
           <Copy x={60} y={y} w={w} />
         </g>
       ))}
-      <Hop x1={116} x2={162} y={90} />
       {/* Where our part stops. */}
       <path className={styles.trail} d="M170,36 L170,144" />
       <Rect x={200} y={30} w={90} h={120} rx={8} className={styles.tile} />

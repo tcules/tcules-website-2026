@@ -122,12 +122,15 @@ const Choice = ({ cx, glyph }: { cx: number; glyph: IconName }) => (
   </>
 );
 
-/** A short page of what was learned and what is open, ending in one recommendation of three: build, lit. */
+/**
+ * A short page of what was learned and what is open, ending in one recommendation of three (change, build
+ * lit, stop), handed on to someone who missed the session.
+ */
 function ShortWriteup() {
   return (
     <>
-      <Rect x={100} y={30} w={120} h={120} rx={8} className={styles.frame} />
-      <Copy x={116} y={48} w={48} />
+      <Rect x={50} y={30} w={140} h={120} rx={8} className={styles.frame} />
+      <Copy x={66} y={48} w={48} />
       {(
         [
           [70, 'check-circle', styles.glyph],
@@ -135,18 +138,23 @@ function ShortWriteup() {
         ] as const
       ).map(([y, glyph, cls]) => (
         <g key={y}>
-          <Glyph name={glyph} cx={122} cy={y} size={12} className={cls} />
-          <Copy x={136} y={y - 4} w={56} />
-          <Copy x={136} y={y + 4} w={36} quiet />
+          <Glyph name={glyph} cx={72} cy={y} size={12} className={cls} />
+          <Copy x={86} y={y - 4} w={64} />
+          <Copy x={86} y={y + 4} w={40} quiet />
         </g>
       ))}
-      <path className={styles.rule} d="M100,108 L220,108" />
+      <path className={styles.rule} d="M50,104 L190,104" />
       {/* The pick of three: change, build (lit), stop. */}
-      <Choice cx={130} glyph="undo-left" />
-      <circle className={styles.halo} cx={160} cy={128} r={14} />
-      <circle className={styles.solid} cx={160} cy={128} r={9} />
-      <Glyph name="check-circle" cx={160} cy={128} size={11} className={styles.glyphOn} />
-      <Choice cx={190} glyph="close-circle" />
+      <Choice cx={80} glyph="ruler-pen" />
+      <circle className={styles.halo} cx={110} cy={128} r={15} />
+      <circle className={styles.solid} cx={110} cy={128} r={9} />
+      <Glyph name="check-circle" cx={110} cy={128} size={11} className={styles.glyphOn} />
+      <Choice cx={140} glyph="close-circle" />
+      {/* Handed on to the reader who missed the session. */}
+      <Hop x1={190} x2={230} y={90} />
+      <Rect x={230} y={62} w={50} h={56} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={255} cy={80} size={18} className={styles.glyph} />
+      <Copy x={243} y={102} w={24} quiet />
     </>
   );
 }

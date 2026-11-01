@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { Copy, Hop, Rect } from './offer';
+import { ArrowRight, Copy, Hop, Rect } from './offer';
 import { Chip, Focus, Glyph, Hatched } from './scenes';
 import styles from './Sketch.module.css';
 
@@ -174,23 +174,31 @@ function DesignsEachStage() {
 function HelpThroughEachRollout() {
   return (
     <>
-      <Rect x={30} y={48} w={60} h={60} rx={8} className={styles.frameQuiet} />
-      <Copy x={42} y={64} w={28} quiet />
-      <Copy x={42} y={76} w={36} quiet />
-      <Copy x={42} y={88} w={20} quiet />
-      <Rect x={230} y={48} w={60} h={60} rx={8} className={styles.frame} />
-      <Copy x={242} y={64} w={28} quiet />
-      <Copy x={242} y={76} w={36} />
-      <Copy x={242} y={88} w={20} quiet />
-      {/* Staff and customers, on the route across. */}
-      <path className={styles.line} d="M90,78 L140,78" />
-      <circle className={styles.node} cx={90} cy={78} r="2.5" />
-      <Rect x={140} y={68} w={40} h={20} rx={10} className={styles.frame} />
-      <Glyph name="users-group-rounded" cx={160} cy={78} size={16} className={styles.glyph} />
-      <Hop x1={180} x2={230} y={78} />
-      {/* The designer on hand beside them. */}
-      <path className={styles.rule} d="M160,88 L160,106" />
-      <Focus x={160} y={118} glyph="user" size={12} />
+      {/* The old system: quiet, a hatched strip where it has worn. */}
+      <Rect x={30} y={40} w={64} h={84} rx={8} className={styles.frameQuiet} />
+      <Copy x={40} y={56} w={32} quiet />
+      <Copy x={40} y={68} w={40} quiet />
+      <Copy x={40} y={80} w={24} quiet />
+      <Hatched x={40} y={96} w={44} h={16} />
+      {/* The new system. */}
+      <Rect x={226} y={40} w={64} h={84} rx={8} className={styles.frame} />
+      <Copy x={236} y={56} w={32} quiet />
+      <Copy x={236} y={68} w={40} />
+      <Copy x={236} y={80} w={24} quiet />
+      {/* Staff, then customers, crossing on the route at real size. */}
+      <path className={styles.line} d="M94,82 L112,82" />
+      <circle className={styles.node} cx={94} cy={82} r="2.5" />
+      <circle className={styles.frame} cx={124} cy={82} r={12} />
+      <Glyph name="user" cx={124} cy={82} size={16} className={styles.glyph} />
+      <path className={styles.line} d="M136,82 L178,82" />
+      <circle className={styles.frame} cx={190} cy={82} r={12} />
+      <Glyph name="users-group-rounded" cx={190} cy={82} size={16} className={styles.glyph} />
+      <path className={styles.line} d="M202,82 L219,82" />
+      <ArrowRight x={226} y={82} />
+      {/* The designer, lit, on hand between the travellers. */}
+      <circle className={styles.node} cx={157} cy={82} r="2.5" />
+      <path className={styles.line} d="M157,82 L157,100" />
+      <Focus x={157} y={124} glyph="user" size={14} />
     </>
   );
 }

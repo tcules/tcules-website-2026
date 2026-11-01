@@ -151,7 +151,7 @@ function DesignsDevelopersBuildFrom() {
     <>
       {/* The design: the screen's layout, its key tile lit, the design mark in its corner. */}
       <Rect x={30} y={45} w={100} h={90} rx={8} className={styles.frame} />
-      <Glyph name="ruler-pen" cx={116} cy={52} size={10} className={styles.glyphAccent} />
+      <Glyph name="ruler-pen" cx={114} cy={56} size={10} className={styles.glyphAccent} />
       <Copy x={42} y={69} w={48} />
       <Rect x={42} y={85} w={76} h={24} rx={4} className={styles.region} />
       <Copy x={42} y={121} w={60} quiet />
@@ -159,11 +159,11 @@ function DesignsDevelopersBuildFrom() {
       <Hop x1={130} x2={190} y={97} />
       {/* The build: the same layout inside a browser frame, the code mark in its bar. */}
       <Rect x={190} y={45} w={100} h={90} rx={8} className={styles.frame} />
-      <path className={styles.rule} d="M190,59 L290,59" />
+      <path className={styles.rule} d="M190,63 L290,63" />
       {[200, 208, 216].map((cx) => (
-        <circle key={cx} className={styles.quietMark} cx={cx} cy={52} r={1.5} />
+        <circle key={cx} className={styles.quietMark} cx={cx} cy={54} r={1.5} />
       ))}
-      <Glyph name="code" cx={276} cy={52} size={10} className={styles.glyphAccent} />
+      <Glyph name="code" cx={276} cy={54} size={10} className={styles.glyphAccent} />
       <Copy x={202} y={69} w={48} />
       <Rect x={202} y={85} w={76} h={24} rx={4} className={styles.region} />
       <Copy x={202} y={121} w={60} quiet />

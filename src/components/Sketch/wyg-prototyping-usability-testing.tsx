@@ -65,40 +65,42 @@ function PeopleWhoMatchUsers() {
   );
 }
 
-/** A real goal carried into a screen of realistic records (a person leads each row), one record picked. */
+/** A real goal carried into a screen of realistic records (a thumbnail leads each row); the record it needs is picked. */
 function RealisticTasks() {
   const cols = [184, 218, 250] as const;
   return (
     <>
       <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
-      <Glyph name="flag" cx={70} cy={74} size={20} className={styles.glyph} />
+      <Glyph name="flag" cx={70} cy={74} size={20} className={styles.glyphAccent} />
       <Copy x={46} y={100} w={48} />
       <Copy x={46} y={112} w={34} quiet />
       <Hop x1={110} x2={150} y={90} />
       <Rect x={150} y={30} w={140} h={120} rx={8} className={styles.frame} />
-      <Copy x={165} y={48} w={40} quiet />
-      {[66, 84].map((y, i) => (
+      {/* Rows on one 20 pitch, the block centred in the screen. */}
+      <Copy x={165} y={50} w={40} quiet />
+      {[68, 88].map((y, i) => (
         <g key={y}>
-          <Glyph name="user" cx={170} cy={y} size={10} className={styles.glyph} />
+          <Rect x={165} y={y - 5} w={10} h={10} rx={2} className={styles.tile} />
           {cols.map((x, j) => (
             <Copy key={x} x={x} y={y} w={[[26, 20, 22], [20, 24, 16]][i]?.[j] ?? 20} />
           ))}
         </g>
       ))}
-      <Rect x={158} y={93} w={124} h={18} rx={4} className={styles.region} />
-      <Glyph name="user" cx={170} cy={102} size={10} className={styles.glyphAccent} />
+      <Rect x={158} y={96} w={124} h={24} rx={4} className={styles.region} />
+      <Rect x={165} y={103} w={10} h={10} rx={2} className={styles.mark} />
       {cols.map((x, j) => (
         <path
           key={x}
           className={styles.regionCopy}
-          d={`M${x},102 L${x + ([26, 20, 6][j] ?? 20)},102`}
+          d={`M${x},108 L${x + ([26, 20, 6][j] ?? 20)},108`}
         />
       ))}
-      <Glyph name="user" cx={170} cy={130} size={10} className={styles.glyphQuiet} />
+      <Rect x={165} y={123} w={10} h={10} rx={2} className={styles.tile} />
       {cols.map((x, j) => (
-        <Copy key={x} x={x} y={130} w={[22, 26, 12][j] ?? 20} quiet />
+        <Copy key={x} x={x} y={128} w={[22, 26, 12][j] ?? 20} quiet />
       ))}
-      <Cursor x={262} y={98} />
+      {/* The whole pointer, shadow included, inside the lit row. */}
+      <Cursor x={264} y={96} />
     </>
   );
 }

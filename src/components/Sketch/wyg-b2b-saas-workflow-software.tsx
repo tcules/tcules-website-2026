@@ -77,25 +77,34 @@ function WorkflowMap() {
 }
 
 /**
- * Screens for each role: one role's screen (one of several, sheets behind), and the exception it can
- * hit designed as its own screen beside it, the lit point.
+ * Screens for each role: three people's screens fanned in a stack, each headed by its own role (admin,
+ * team, user), and from the front one's port two sibling outcomes: the main path straight on to its done
+ * screen, and the exception designed as its own screen beside it, the lit point.
  */
 function ScreensEachRole() {
   return (
     <>
-      <Rect x={30} y={38} w={112} h={100} rx={8} className={styles.frameQuiet} />
-      <Rect x={34} y={42} w={112} h={100} rx={8} className={styles.frameQuiet} />
-      <Rect x={38} y={46} w={112} h={100} rx={8} className={styles.frame} />
-      <C cx={58} cy={66} glyph="user" />
-      <Copy x={74} y={66} w={40} quiet />
-      <Copy x={54} y={90} w={72} />
-      <Copy x={54} y={102} w={52} quiet />
-      <Rect x={54} y={118} w={40} h={14} rx={7} className={styles.tile} />
-      <Hop x1={150} x2={210} y={90} />
-      <Rect x={210} y={50} w={70} h={80} rx={8} className={styles.frame} />
-      <Focus x={245} y={78} glyph="danger-triangle" size={12} />
-      <Copy x={226} y={104} w={38} />
-      <Rect x={230} y={112} w={30} h={12} rx={6} className={styles.tile} />
+      <Rect x={30} y={30} w={104} h={104} rx={8} className={styles.frameQuiet} />
+      <Glyph name="key" cx={44} cy={40} size={12} className={styles.glyph} />
+      <Copy x={56} y={40} w={32} quiet />
+      <Rect x={38} y={46} w={104} h={96} rx={8} className={styles.frameQuiet} />
+      <Glyph name="users-group-rounded" cx={52} cy={56} size={12} className={styles.glyph} />
+      <Copy x={64} y={56} w={32} quiet />
+      <Rect x={46} y={62} w={104} h={88} rx={8} className={styles.frame} />
+      <C cx={66} cy={82} glyph="user" />
+      <Copy x={82} y={82} w={40} quiet />
+      <Copy x={62} y={104} w={72} />
+      <Copy x={62} y={116} w={52} quiet />
+      <Rect x={62} y={128} w={40} h={12} rx={6} className={styles.tile} />
+      {/* One port, two outcomes: the main path straight on, the exception branching up beside it. */}
+      <Hop x1={150} x2={214} y={110} />
+      <path className={styles.line} d="M170,110 L170,68 A6,6 0 0 1 176,62 L207,62" />
+      <ArrowRight x={214} y={62} />
+      <circle className={styles.node} cx="170" cy="110" r="3.5" />
+      <Rect x={214} y={96} w={76} h={28} rx={8} className={styles.frame} />
+      <Glyph name="check-circle" cx={252} cy={110} size={16} className={styles.glyph} />
+      <Rect x={214} y={40} w={76} h={44} rx={8} className={styles.frame} />
+      <Focus x={252} y={62} glyph="danger-triangle" size={10} />
     </>
   );
 }

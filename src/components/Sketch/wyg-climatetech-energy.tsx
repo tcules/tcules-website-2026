@@ -118,17 +118,26 @@ function DigitalTwinSite() {
     { cx: 90, cy: 56, glyph: 'bolt-circle' },
     { cx: 160, cy: 56, glyph: 'server' },
     { cx: 90, cy: 130, glyph: 'cpu' },
-    { cx: 160, cy: 130, glyph: 'bolt-circle' },
-    { cx: 230, cy: 130, glyph: 'server' },
+    { cx: 160, cy: 130, glyph: 'graph-up' },
+    { cx: 230, cy: 130, glyph: 'database' },
   ];
   return (
     <>
       <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frameQuiet} />
-      <path className={styles.trail} d="M70,90 L250,90" />
       {[90, 160].map((x) => (
-        <path key={`t${x}`} className={styles.trail} d={`M${x},70 L${x},116`} />
+        <g key={`t${x}`}>
+          <path className={styles.trail} d={`M${x},70 L${x},87`} />
+          <path className={styles.trail} d={`M${x},116 L${x},93`} />
+        </g>
       ))}
-      <path className={styles.trail} d="M230,81 L230,116" />
+      <path className={styles.trail} d="M230,116 L230,93" />
+      {/* what matters now: the line from the site's edge to the one lit asset */}
+      <path className={styles.line} d="M53,90 L227,90 M230,87 L230,80" />
+      <circle className={styles.node} cx="50" cy="90" r="3" />
+      {[90, 160].map((x) => (
+        <circle key={`p${x}`} className={styles.tile} cx={x} cy="90" r="3" />
+      ))}
+      <circle className={styles.nodeOpen} cx="230" cy="90" r="3" />
       {assets.map(({ cx, cy, glyph }) => (
         <g key={`${cx}-${cy}`}>
           <Rect x={cx - 14} y={cy - 14} w={28} h={28} rx={6} className={styles.tile} />

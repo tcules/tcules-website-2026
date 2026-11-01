@@ -2,7 +2,7 @@ export const meta = {
   name: 'flat-drawings-pages',
   description: 'Draw every still flat drawing a page is missing, one designer per page, blind-checked per page',
   whenToUse:
-    'Filling empty Sketch plates (placeholders) page by page: a "What you get" band or any band of still drawings. args: {pages:[{page, slug, file?, scenes?:[...]}], maxRounds?: 2} (file defaults to components/Sketch/wyg-<slug>.tsx; scenes default to every key in that file, in order); each item’s title and words are the comment above its scene in the page file. Each page owns one file (components/Sketch/wyg-<page>.tsx) whose scene names are already wired (lib/page-scenes.ts, content/sources/offer-scenes-pages.ts). For moving tile drawings use flat-drawings instead. Needs `npm run dev` running in the checkout.',
+    'Filling empty Sketch plates (placeholders) page by page: a "What you get" band or any band of still drawings. args: {pages:[{page, slug, file?, scenes?:[...], feedback?}], maxRounds?: 2} (feedback: a previous critic’s fixes, to start a fix pass from) (file defaults to components/Sketch/wyg-<slug>.tsx; scenes default to every key in that file, in order); each item’s title and words are the comment above its scene in the page file. Each page owns one file (components/Sketch/wyg-<page>.tsx) whose scene names are already wired (lib/page-scenes.ts, content/sources/offer-scenes-pages.ts). For moving tile drawings use flat-drawings instead. Needs `npm run dev` running in the checkout.',
   phases: [
     { title: 'Draw', detail: 'one designer per page: an idea per item in words, draw the set, capture, self-check' },
     { title: 'Check', detail: 'blind critic per page on its contact sheet, fix loop on the failing items' },
@@ -89,7 +89,7 @@ For each: pass only if a visitor reading that title and line would get its point
 phase('Draw')
 const results = await pipeline(
   args.pages,
-  p => agent(drawPrompt(p, p.scenes ?? ALL), { label: `draw:${p.slug}`, phase: 'Draw', schema: DRAWN }),
+  p => agent(drawPrompt(p, p.scenes ?? ALL, p.feedback), { label: `draw:${p.slug}`, phase: 'Draw', schema: DRAWN }),
   async (drawn, p) => {
     let review = null
     let rounds = 0

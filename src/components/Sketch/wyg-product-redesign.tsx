@@ -172,31 +172,34 @@ function SharedComponents() {
   );
 }
 
-/** The old version kept running while the new one arrives a workflow at a time, the first workflow lit. */
+/** The old version stays live, customers told, while the new one goes in a workflow at a time: first, then next, then next. */
 function RolloutPlan() {
   return (
     <>
-      {/* The old version, still in use. */}
-      <Rect x={40} y={46} w={240} h={24} rx={8} className={styles.frame} />
-      <Glyph name="monitor" cx={56} cy={58} size={12} className={styles.glyphQuiet} />
-      <Copy x={70} y={58} w={36} quiet />
-      <Copy x={180} y={58} w={64} quiet />
-      <circle className={styles.node} cx="70" cy="70" r="2.5" />
-      {/* Its live end: the old version stays on. */}
-      <circle className={styles.node} cx="280" cy="58" r="3.5" />
-      <path className={styles.line} d="M280,58 L290,58" />
-      <TraceIn d="M70,70 L70,104 A6,6 0 0 0 76,110 L97,110" />
-      <ArrowRight x={104} y={110} />
-      {/* The new version, workflow by workflow: the first goes live beside the old. */}
-      <Rect x={104} y={90} w={62} h={40} rx={12} className={styles.halo} />
-      <Rect x={110} y={96} w={50} h={28} rx={8} className={styles.solid} />
-      <Glyph name="flag" cx={135} cy={110} size={14} className={styles.glyphOn} />
-      {[172, 228].map((x) => (
+      {/* The old version, still running, and at its right end the notice customers get, tied by a
+          trail to the queued workflow it announces: they are told before it lands. One solid: the
+          first new workflow. */}
+      <Rect x={40} y={40} w={240} h={28} rx={8} className={styles.frame} />
+      <Glyph name="monitor" cx={56} cy={54} size={12} className={styles.glyphQuiet} />
+      <Copy x={72} y={54} w={60} quiet />
+      <Glyph name="chat-round-dots" cx={236} cy={54} size={12} className={styles.glyph} />
+      <Copy x={248} y={54} w={20} quiet />
+      <path className={styles.trail} d="M236,68 L236,84" />
+      {/* The new version below it, in order: the first workflow live, the next two queued. */}
+      <Rect x={34} y={78} w={68} h={68} rx={12} className={styles.halo} />
+      <Rect x={40} y={84} w={56} h={56} rx={8} className={styles.solid} />
+      <Glyph name="flag" cx={68} cy={112} size={16} className={styles.glyphOn} />
+      {[124, 208].map((x) => (
         <g key={x}>
-          <Rect x={x} y={96} w={46} h={28} rx={8} className={styles.trailFrame} />
-          <Copy x={x + 11} y={110} w={24} quiet />
+          <Rect x={x} y={84} w={56} h={56} rx={8} className={styles.trailFrame} />
+          <Copy x={x + 12} y={112} w={32} quiet />
         </g>
       ))}
+      <path className={styles.line} d="M96,112 L117,112" />
+      <circle className={styles.node} cx="96" cy="112" r="3.5" />
+      <ArrowRight x={124} y={112} />
+      <path className={styles.trail} d="M180,112 L201,112" />
+      <ArrowRight x={208} y={112} />
     </>
   );
 }

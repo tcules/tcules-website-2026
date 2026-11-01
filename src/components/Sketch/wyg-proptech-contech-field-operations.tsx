@@ -39,26 +39,25 @@ function AuditLiveProduct() {
   );
 }
 
-/** One researcher, watching the same work at the desk and on site, where the phone drops out. */
+/** The researcher watches at the desk, but the site is the subject: the phone with its signal down to one bar, a message cutting in. */
 function ResearchDesksSite() {
   return (
     <>
-      {/* The desk. */}
-      <Rect x={30} y={60} w={60} h={60} rx={8} className={styles.frame} />
-      <Glyph name="monitor" cx={60} cy={90} size={24} className={styles.glyph} />
-      {/* The researcher. */}
-      <Rect x={130} y={60} w={60} h={60} rx={8} className={styles.frame} />
-      <Focus x={160} y={90} glyph="eye" size={12} />
-      {/* The site: the phone on the ground, its signal down to one bar. */}
-      <Rect x={230} y={60} w={60} h={60} rx={8} className={styles.frame} />
-      <C cx={242} cy={74} glyph="flag" />
-      <Glyph name="smartphone" cx={260} cy={94} size={28} className={styles.glyph} />
-      <rect x={270} y={76} width={3} height={4} rx={1} className={styles.solid} />
-      <rect x={275} y={73} width={3} height={7} rx={1} className={styles.frameQuiet} />
-      <rect x={280} y={70} width={3} height={10} rx={1} className={styles.frameQuiet} />
-      {/* Routes last, so both ports show on top of the cards. */}
-      <Hop x1={130} x2={90} y={90} />
-      <Hop x1={190} x2={230} y={90} />
+      {/* The desk: a workstation, the easy half. */}
+      <Rect x={26} y={58} w={56} h={64} rx={8} className={styles.frame} />
+      <Glyph name="monitor" cx={54} cy={90} size={24} className={styles.glyph} />
+      {/* The site: the large subject. The phone, and the right column stacked on one axis: a message
+          cutting in above the signal down to one bar (no flag: on this page a flag means trouble). */}
+      <Rect x={156} y={40} w={134} h={100} rx={8} className={styles.frame} />
+      <Glyph name="smartphone" cx={200} cy={90} size={36} className={styles.glyph} />
+      <C cx={248} cy={66} glyph="chat-round-dots" />
+      <rect x={238} y={106} width={5} height={8} rx={1} className={styles.solid} />
+      <rect x={246} y={100} width={5} height={14} rx={1} className={styles.frameQuiet} />
+      <rect x={254} y={94} width={5} height={20} rx={1} className={styles.frameQuiet} />
+      {/* The researcher, on the ground between them, looking both ways; ports 6 clear of the halo. */}
+      <Focus x={118} y={90} glyph="eye" size={12} />
+      <Hop x1={94} x2={82} y={90} />
+      <Hop x1={142} x2={156} y={90} />
     </>
   );
 }

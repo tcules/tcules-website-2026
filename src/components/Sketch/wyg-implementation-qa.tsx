@@ -124,7 +124,7 @@ function Retests() {
       <Glyph name="user" cx={50} cy={90} size={22} className={styles.glyph} />
       {/* The fix, into the build (lit); what still fails, back to its owner (grey), the failure its reason. */}
       <Hop x1={70} x2={130} y={60} />
-      <path className={styles.copyQuiet} d="M130,120 L110,120 M90,120 L77,120" />
+      <path className={styles.copyQuiet} d="M130,120 L112,120 M88,120 L77,120" />
       <QuietArrowLeft x={70} y={120} />
       <Glyph name="danger-triangle" cx={100} cy={120} size={12} className={styles.glyphQuiet} />
       {/* The build. */}

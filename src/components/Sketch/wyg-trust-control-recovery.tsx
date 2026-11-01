@@ -33,25 +33,47 @@ function Chips({ cx, cy, glyphs }: { cx: number; cy: number; glyphs: readonly Ic
  * accepted by a person, correctable, and recoverable (lit), the route from the suggestion landing there.
  */
 function FiveSuggestionStates() {
+  /* Five equal 24-unit chips on y=125, 50 apart; one plain hairline joins each pair, edge to edge. */
+  const middle: [number, IconName][] = [
+    [110, 'document-text'],
+    [160, 'user'],
+    [210, 'ruler-pen'],
+  ];
+  const links: [number, number][] = [
+    [72, 98],
+    [122, 148],
+    [172, 198],
+    [222, 242],
+  ];
   return (
     <>
-      {/* The suggestion itself. */}
-      <Rect x={70} y={30} w={180} h={60} rx={8} className={styles.frame} />
-      <C cx={90} cy={50} glyph="stars" />
-      <Copy x={106} y={50} w={96} />
-      <Copy x={86} y={70} w={120} quiet />
-      {/* Its states. Suggested is still provisional: quiet, in a dashed ring. */}
-      <Rect x={84} y={116} w={28} h={28} rx={8} className={styles.trailFrame} />
-      <rect className={styles.chip} x={90} y={122} width="16" height="16" rx="4" />
-      <Glyph name="stars" cx={98} cy={130} size={10} className={styles.glyphQuiet} />
-      <Chips cx={154} cy={130} glyphs={['document-text', 'user', 'ruler-pen']} />
-      {/* Recoverable: the state that is lit. */}
-      <Rect x={196} y={116} w={28} h={28} rx={8} className={styles.halo} />
-      <rect className={styles.solid} x={202} y={122} width="16" height="16" rx="4" />
-      <Glyph name="undo-left" cx={210} cy={130} size={10} className={styles.glyphOn} />
-      <path className={styles.line} d="M210,90 L210,109" />
-      <path className={styles.solid} d="M210,116 L206,109 L214,109 Z" />
-      <circle className={styles.node} cx="210" cy="90" r="2.5" />
+      {/* The suggestion: its sparkle sits over the first state it drops into. */}
+      <Rect x={40} y={36} w={200} h={50} rx={8} className={styles.frame} />
+      <C cx={60} cy={52} glyph="stars" />
+      <Copy x={76} y={52} w={136} />
+      <Copy x={52} y={72} w={160} quiet />
+      {/* Recoverable, the end state: lit, its halo under the last link. */}
+      <Rect x={242} y={107} w={36} h={36} rx={10} className={styles.halo} />
+      {links.map(([x1, x2]) => (
+        <path key={x1} className={styles.hair} d={`M${x1},125 L${x2},125`} />
+      ))}
+      {/* Suggested, the first state: still provisional, its outline dashed. */}
+      <rect className={styles.chip} x={48} y={113} width="24" height="24" rx="6" />
+      <Rect x={48} y={113} w={24} h={24} rx={6} className={styles.trailFrame} />
+      <Glyph name="stars" cx={60} cy={125} size={14} className={styles.glyphQuiet} />
+      {/* Sourced, accepted by a person, edited. */}
+      {middle.map(([cx, glyph]) => (
+        <g key={cx}>
+          <Rect x={cx - 12} y={113} w={24} h={24} rx={6} className={styles.frame} />
+          <Glyph name={glyph} cx={cx} cy={125} size={14} className={styles.glyphAccent} />
+        </g>
+      ))}
+      <rect className={styles.solid} x={248} y={113} width="24" height="24" rx="6" />
+      <Glyph name="undo-left" cx={260} cy={125} size={14} className={styles.glyphOn} />
+      {/* The suggestion drops into its first state, the arrowhead 2 clear of the dashed outline. */}
+      <path className={styles.line} d="M60,86 L60,104" />
+      <path className={styles.solid} d="M60,111 L56,104 L64,104 Z" />
+      <circle className={styles.node} cx="60" cy="86" r="2.5" />
     </>
   );
 }
