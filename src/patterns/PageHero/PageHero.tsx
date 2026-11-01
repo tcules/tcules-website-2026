@@ -232,12 +232,17 @@ export type { HeroTrail };
  *            inside the first screen. No media and no ask (a listing's ask is its list). Below 1024
  *            it stacks and renders exactly as `stacked`.
  *
+ *   watch    a piece whose media IS the piece, a video (owner, 1 Nov 2026: video insights): the
+ *            trail and title, then the media at the full column, then the lead, labels and byline.
+ *            The player starts inside the first screen at 1440 instead of after the byline. With no
+ *            media it renders exactly as `stacked`.
+ *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
  * the no-visual state, which is the common one, and it is not an error.
  */
 export type HeroArrangement =
-  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead';
+  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead' | 'watch';
 
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
@@ -593,14 +598,21 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
           person.portrait ? (
             <span key={`${person.name}-${index}`} className={styles.avatar}>
               <Media
-                image={{ ...person.portrait, alt: '', focus: person.portrait.focus ?? PORTRAIT_FOCUS }}
+                image={{
+                  ...person.portrait,
+                  alt: '',
+                  focus: person.portrait.focus ?? PORTRAIT_FOCUS,
+                }}
                 fit="fill"
                 edge="placement"
                 sizes="32px"
               />
             </span>
           ) : (
-            <span key={`${person.name}-${index}`} className={cx(styles.avatar, styles.initials)}>
+            <span
+              key={`${person.name}-${index}`}
+              className={cx(styles.avatar, styles.initials)}
+            >
               {initialsOf(person.name)}
             </span>
           ),
@@ -732,7 +744,9 @@ export function PageHero({
 
   /* Any credited portrait sets every value in the strip to the portrait's height (board G), so the
      keys share one top line and the dates sit level with the names beside the faces. */
-  const hasPortraits = credits.some((credit) => credit.people.some((person) => person.portrait));
+  const hasPortraits = credits.some((credit) =>
+    credit.people.some((person) => person.portrait),
+  );
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
@@ -748,6 +762,7 @@ export function PageHero({
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
   const masthead = arrangement === 'masthead';
+  const watch = arrangement === 'watch' && media !== undefined;
   const across = titleAcross && split && !wide;
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
@@ -1142,6 +1157,22 @@ export function PageHero({
             {labelsNode}
           </Layout>
         ) : null
+      ) : watch ? (
+        /* `watch`: the head, the media, then what is said about it. Head to media is the same
+           `stack` as copy to byline: the media is the next block, not part of the head. */
+        <>
+          <Layout rowGap="block" justifyItems={justify}>
+            {eyebrowNode}
+            {titleNode}
+          </Layout>
+          {mediaNode}
+          {copyNode || labelsNode ? (
+            <Layout rowGap="block" justifyItems={justify}>
+              {copyNode}
+              {labelsNode}
+            </Layout>
+          ) : null}
+        </>
       ) : (
         <Layout rowGap="block" justifyItems={justify}>
           {eyebrowNode}
@@ -1260,7 +1291,7 @@ export function PageHero({
     const copyTrack = stack;
 
     const mediaTrack =
-      mediaNode === null ? null : centredHead && isIllustration ? (
+      mediaNode === null || watch ? null : centredHead && isIllustration ? (
         /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
            centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
@@ -1323,15 +1354,17 @@ export function PageHero({
             ? 'hero-display'
             : masthead
               ? 'hero-masthead'
-              : split
-                ? isIllustration
-                  ? 'hero-illustration'
-                  : wide
-                    ? 'hero-wide'
-                    : 'hero-media'
-                : media === undefined
-                  ? 'hero-text'
-                  : 'hero-stacked'
+              : watch
+                ? 'hero-watch'
+                : split
+                  ? isIllustration
+                    ? 'hero-illustration'
+                    : wide
+                      ? 'hero-wide'
+                      : 'hero-media'
+                  : media === undefined
+                    ? 'hero-text'
+                    : 'hero-stacked'
       }
     >
       {faded ? (

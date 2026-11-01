@@ -278,6 +278,7 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         body={[podcast.description || `Listen to ${podcast.title}.`]}
         dates={published ? { published } : undefined}
         media={heroMedia}
+        arrangement={heroMedia ? 'watch' : undefined}
         surface="paper"
 
         labels={labels}

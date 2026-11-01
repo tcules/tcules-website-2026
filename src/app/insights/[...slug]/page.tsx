@@ -307,6 +307,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         readingTime={blog.readingTime}
         dates={published ? { published } : undefined}
         media={heroMedia}
+        arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
         surface="paper"
 
         labels={labels}
