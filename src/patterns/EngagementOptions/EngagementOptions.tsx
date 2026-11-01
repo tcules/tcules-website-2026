@@ -17,6 +17,8 @@ import styles from './EngagementOptions.module.css';
  *   inside     work inside the client's product environment: our workflow inside their window
  *   overlap    across time zones: two working days, the overlap between them marked
  *   commercial the commercial shape follows the work: a fixed piece, a defined project, a monthly run
+ * The working terms (About, "How Tcules works with clients", owner 1 Nov 2026), one each:
+ *   who, communication, response, getting-started, turnaround, hours
  */
 export type EngagementScope =
   | 'feature'
@@ -27,7 +29,13 @@ export type EngagementScope =
   | 'direct'
   | 'inside'
   | 'overlap'
-  | 'commercial';
+  | 'commercial'
+  | 'who'
+  | 'communication'
+  | 'response'
+  | 'getting-started'
+  | 'turnaround'
+  | 'hours';
 
 export type EngagementTerm = {
   /** The term's paragraph, inline content the caller renders. */

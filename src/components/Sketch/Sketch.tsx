@@ -8,6 +8,7 @@ import { L1_BANDS } from './l1-bands';
 import { L1_OUTCOMES } from './l1-outcomes';
 import { L1_SPECIALISTS, L1_SPECIALISTS_DRAWN } from './l1-specialists';
 import { L1_TERMS } from './l1-terms';
+import { TERMS } from './terms';
 import { OFFER, OFFER_DRAWN } from './offer';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
@@ -102,7 +103,8 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
       (name in L1_SPECIALISTS
         ? L1_SPECIALISTS[name as keyof typeof L1_SPECIALISTS]
         : undefined) ??
-      (name in L1_TERMS ? L1_TERMS[name as keyof typeof L1_TERMS] : undefined))
+      (name in L1_TERMS ? L1_TERMS[name as keyof typeof L1_TERMS] : undefined) ??
+      (name in TERMS ? TERMS[name as keyof typeof TERMS] : undefined))
     : undefined;
   const [x, y, w, h] =
     (bare &&

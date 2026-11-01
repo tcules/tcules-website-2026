@@ -185,12 +185,26 @@ export type L1TermScene =
   | 'stops-product-modernisation'
   | 'stops-software-development';
 
+/**
+ * WORKING TERM scenes (owner, 1 Nov 2026): About's six terms of how Tcules works with clients, one
+ * drawn per term from its own sentence. Named `scope-*` because EngagementOptions draws them as it
+ * draws its scopes; never one of How we work together's.
+ */
+export type WorkingTermSceneName =
+  | 'scope-who'
+  | 'scope-communication'
+  | 'scope-response'
+  | 'scope-getting-started'
+  | 'scope-turnaround'
+  | 'scope-hours';
+
 export type L1SceneName = L1BandScene | L1OutcomeScene | L1SpecialistScene | L1TermScene;
 
 export type SketchName =
   | ServiceSceneName
   | ArticleSceneName
   | ScopeSceneName
+  | WorkingTermSceneName
   | TraceSceneName
   | OfferSceneName
   | L1SceneName;
@@ -251,7 +265,9 @@ const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName | L1Specialist
  * the service line's own scene, else the specialist service's. Undefined for a service with no
  * drawing of its own: a set naming one is not drawn, never given another subject's scene.
  */
-export function serviceSceneFor(href: string): ServiceSceneName | OfferSceneName | L1SpecialistScene | undefined {
+export function serviceSceneFor(
+  href: string,
+): ServiceSceneName | OfferSceneName | L1SpecialistScene | undefined {
   const route = href.split('#')[0] ?? href;
   return BY_ROUTE[route] ?? SPECIALIST_BY_ROUTE[route];
 }
