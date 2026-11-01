@@ -33,19 +33,15 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   grouping was wrong. The closing note is the set's `closing`: "Start wherever the work is" as an h3 sub-head
   with its sentence, then its proof as a case teaser under it: a horizontal BlockCard of the Dealpath case
   (its cover, "Example · Dealpath" as eyebrow, the case's own title, the example's words; the whole card the
-  link, title cue). The paper-deep CaseCard stays home's.
-- Round 5 (owner asked; Claude recommended): the claim and its proof take a band of their own on tint, right
-  after the set: tint is the proof ground (testimonials, worked examples), and inside the long set the claim
-  read as the last option's footnote. ContentSection on tint: the claim as the head, its sentence the lead,
-  the case teaser under it (`closingNote`, `CaseTeaser`). Neighbours are paper, so no tints touch.
+  link, title cue). Claim, then proof, inside the band (`closingNote`, `CaseTeaser`). The paper-deep CaseCard
+  stays home's.
 
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
 | client-recognition | recognition · LogoGrid (H) | |
-| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet |
-| (engagement-shapes closing) | ContentSection on tint · case-teaser | "Start wherever the work is" + Dealpath horizontal BlockCard |
+| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet; closing: sub-head + Dealpath case teaser (horizontal BlockCard) |
 | your-team | text · B + illustration, image start | |
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |
