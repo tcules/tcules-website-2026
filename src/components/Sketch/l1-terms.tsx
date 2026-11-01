@@ -144,7 +144,7 @@ function Stops({
  * its right. A core role is solid and routed in; a joiner is dashed and its route ends open.
  */
 type Role = { glyph: IconName; core?: boolean; sheets?: 0 | 1 };
-function Team({ roles }: { roles: readonly Role[] }) {
+export function Team({ roles }: { roles: readonly Role[] }) {
   const ys = roles.length === 1 ? [90] : roles.length === 2 ? [70, 110] : [50, 90, 130];
   return (
     <>
