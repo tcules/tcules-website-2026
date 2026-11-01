@@ -790,24 +790,27 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={options}
             arrangement={rich ? 'rows' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
-            closing={
-              closing.note
-                ? {
-                    heading: closing.note.heading,
-                    lead: closing.note.body[0],
-                    proof: closing.note.example ? (
-                      <CaseTeaser
-                        ctx={ctx}
-                        example={closing.note.example}
-                        words={closing.note.body[1]}
-                      />
-                    ) : undefined,
-                  }
-                : undefined
-            }
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
-          {links[1] ? (
+          {closing.note ? (
+            /* The set's claim and its proof, a band of their own on tint, the proof ground (owner, 1 Nov
+               2026, /how-we-work round 5): the claim as the head, the case teaser under it. */
+            <ContentSection
+              heading={closing.note.heading}
+              headingId={`${band.id}-closing-heading`}
+              lead={closing.note.body[0]}
+              surface="tint"
+              data-band="case-teaser"
+            >
+              {closing.note.example ? (
+                <CaseTeaser
+                  ctx={ctx}
+                  example={closing.note.example}
+                  words={closing.note.body[1]}
+                />
+              ) : null}
+            </ContentSection>
+          ) : links[1] ? (
             <CtaSection
               data-band="L"
               arrangement="open"

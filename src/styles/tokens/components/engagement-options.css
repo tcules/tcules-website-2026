@@ -21,8 +21,6 @@
   --eop-lead-measure: var(--measure-lead);
   --eop-eyebrow-text: var(--text-eyebrow);
   --eop-eyebrow-tracking: var(--text-eyebrow-tracking);
-  --eop-closing-text: var(--text-h3);
-  --eop-closing-tracking: var(--text-h3-tracking);
   --eop-title-text: var(--text-h4);
   --eop-title-tracking: var(--text-h4-tracking);
   --eop-body-text: var(--text-body-sm);

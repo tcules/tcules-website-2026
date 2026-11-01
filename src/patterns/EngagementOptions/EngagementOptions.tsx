@@ -102,12 +102,6 @@ export type EngagementOptionsProps = {
    */
   terms?: readonly EngagementTerm[];
   /**
-   * What holds for the whole set, with its proof (owner, 1 Nov 2026, /how-we-work: "start wherever the
-   * work is" and its example): a sub-head and its sentence, the proof composed by the caller under it (a
-   * case teaser), a `column` under the options. Part of the band, never an ask: an example is evidence.
-   */
-  closing?: { heading: string; lead: ReactNode; proof?: ReactNode };
-  /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
    * decisions/2026-10-29-how-we-work-together-link-in-head): at the inline end of the heading's
@@ -150,7 +144,6 @@ export function EngagementOptions({
   options,
   note,
   terms = [],
-  closing,
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -268,15 +261,6 @@ export function EngagementOptions({
               ))}
             </Layout>
           )}
-          {closing ? (
-            <Layout rowGap="block">
-              <Layout rowGap="text">
-                <h3 className={styles.closingHeading}>{closing.heading}</h3>
-                <p className={styles.lead}>{closing.lead}</p>
-              </Layout>
-              {closing.proof}
-            </Layout>
-          ) : null}
           {terms.length > 0 ? (
             <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
               {terms.map((term, index) => (
