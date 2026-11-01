@@ -1,3 +1,4 @@
+import { ROUTES } from '@/lib/routes';
 import type { CorpusCaseRef, CorpusMediaBinding, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
 import {
@@ -100,4 +101,54 @@ export function caseCover(name: string, caseRef?: CorpusCaseRef): SlotImage {
   if (caseRef?.thumbnail) return caseRef.thumbnail;
   if (caseRef?.cover) return corpusImage(caseRef.cover);
   return placeholderCover(slugOf(name.replace(/['’]s$/, '').replace(/\.$/, '')));
+}
+
+/**
+ * Rule 3: a studio photograph the corpus binds on /about, reused as a hero where the page names no
+ * image of its own. Keyed by route, so the reuse is stated rather than guessed (owner, 1 Nov 2026;
+ * docs/page-build/pages/how-we-work.md).
+ */
+const aboutPhoto = (id: string, assetUri: string, altIntent: string): CorpusMediaBinding => ({
+  id,
+  role: 'atmosphere_and_evidence',
+  supportsSection: 'hero',
+  card: null,
+  assetUri,
+  altIntent,
+  status: 'SATISFIED_BY_EXISTING_ASSET',
+  bound: true,
+  source: '/about',
+  caption: null,
+  attribution: null,
+});
+const CLOUD = 'https://res.cloudinary.com/dbay1gb0s/image/upload';
+const ABOUT_TEAM = aboutPhoto(
+  'about_team',
+  `${CLOUD}/v1788186423/Image_3_ef562c4bc0.webp`,
+  'Tcules team together outside the studio in Ahmedabad.',
+);
+const ABOUT_REVIEW = aboutPhoto(
+  'about_studio_review',
+  `${CLOUD}/v1788186528/Image_2_6b09ca7e30.webp`,
+  'Tcules team in an in-studio presentation and review session.',
+);
+const ABOUT_WALL = aboutPhoto(
+  'about_work_wall',
+  `${CLOUD}/v1788186507/Image_1_c048010957.webp`,
+  'A working wall of discovery, product thinking, UX and visual design material.',
+);
+const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
+  [ROUTES.howWeWork]: ABOUT_TEAM,
+  [ROUTES.howWeWorkAiNative]: ABOUT_WALL,
+  [ROUTES.howWeWorkAiTransparency]: ABOUT_REVIEW,
+};
+
+/** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */
+export function heroImage(page: CorpusPage): SlotImage {
+  const own = page.composition.mediaBindings.find(
+    (binding) => binding.bound && binding.supportsSection === 'hero',
+  );
+  if (own) return corpusImage(own);
+  const reused = STUDIO_HERO[page.route];
+  return reused ? corpusImage(reused) : placeholderImage(page.route, 'hero');
 }

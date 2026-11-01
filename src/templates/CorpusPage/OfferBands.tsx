@@ -45,7 +45,7 @@ import {
   type OfferScenes,
   type SketchName,
 } from '@/lib/sketches';
-import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
 import {
@@ -196,9 +196,14 @@ function listOptions(band: CorpusBand) {
  * engagement it is, then how it works and where it starts), each item's paragraphs in order.
  */
 function itemOptions(band: CorpusBand) {
+  const lastItem = band.blocks.filter((block) => block.type === 'item').at(-1);
   return band.blocks.flatMap((block) => {
     if (block.type !== 'item') return [];
-    const paragraphs = block.blocks.flatMap((inner) =>
+    const own =
+      block === lastItem
+        ? block.blocks.slice(0, block.blocks.length - itemCoda(band).length)
+        : block.blocks;
+    const paragraphs = own.flatMap((inner) =>
       inner.type === 'paragraph'
         ? [inner.runs]
         : inner.type === 'labelled'
@@ -223,6 +228,38 @@ function itemOptions(band: CorpusBand) {
       },
     ];
   });
+}
+
+/**
+ * The band's closing note when Markdown has folded it into the last `###` item. An option ends on its
+ * italic-labelled line ("*Typical starting points:* …", "*Best when:* …"); whatever follows that line in
+ * the LAST item belongs to the whole set (/how-we-work: "Start wherever the work is" and the Dealpath
+ * example rendered inside the third option until 1 Nov 2026). Returned as runs, labels kept strong.
+ */
+function itemCoda(band: CorpusBand): InlineRun[][] {
+  const last = band.blocks.filter((block) => block.type === 'item').at(-1);
+  if (last?.type !== 'item') return [];
+  const closer = lastIndexWhere(last.blocks, (inner) => {
+    if (inner.type !== 'paragraph') return false;
+    const first = inner.runs.find((run) => !(run.type === 'text' && run.text.trim() === ''));
+    return first?.type === 'em' && inlineToText(first.children).trim().endsWith(':');
+  });
+  if (closer < 0) return [];
+  return last.blocks
+    .slice(closer + 1)
+    .flatMap((inner) =>
+      inner.type === 'paragraph'
+        ? [inner.runs]
+        : inner.type === 'labelled'
+          ? [
+              [
+                { type: 'strong', children: inner.label } as InlineRun,
+                { type: 'text', text: ' ' } as InlineRun,
+                ...inner.body,
+              ],
+            ]
+          : [],
+    );
 }
 
 /** The paragraphs that follow the labelled claims or items (a closing note), as runs. */
@@ -568,7 +605,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
-      const terms = trailingParagraphs(band);
+      const terms = [...itemCoda(band), ...trailingParagraphs(band)];
       const links = bandLinks(band);
       return (
         <Fragment>

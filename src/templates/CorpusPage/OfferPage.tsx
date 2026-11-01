@@ -1,6 +1,5 @@
-import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusPage } from '@/lib/corpus-types';
-import { placeholderImage } from '@/lib/placeholders';
+import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { CorpusHero } from './blocks';
@@ -47,9 +46,6 @@ export function OfferPage({
   );
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure, claimFigure };
 
-  const heroBinding = page.composition.mediaBindings.find(
-    (b) => b.bound && b.supportsSection === 'hero',
-  );
   const media = drawing
     ? ({
         type: 'image',
@@ -64,7 +60,7 @@ export function OfferPage({
       } as const)
     : ({
         type: 'image',
-        image: heroBinding ? corpusImage(heroBinding) : placeholderImage(page.route, 'hero'),
+        image: heroImage(page),
       } as const);
 
   return (
