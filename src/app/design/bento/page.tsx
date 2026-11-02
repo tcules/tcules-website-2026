@@ -279,6 +279,25 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="detail"
+        title="2d2 · Split tiles: a detail makes the tile two halves (a router table's third column)"
+        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; an inset panel in the second with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A). Two a row on four tracks; the panel under the named half below 768. Every tile or none."
+      />
+      <Section>
+        <Bento
+          items={single.slice(0, 4).map((item) => ({
+            ...item,
+            detail: {
+              label: 'What you come away with',
+              text: 'Research, workflows, interface design and tested prototypes',
+              action: 'Explore the service',
+            },
+          }))}
+          tracks={4}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."
@@ -558,6 +577,42 @@ export default function BentoSpecimen() {
                   {
                     label: 'Prototype Readiness Review',
                     href: '/audits/prototype-readiness-review',
+                  },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-even"
+        title="2f2 · Two statement cards opening a fresh row share it, 2 + 2"
+        note="Cards that start a row and divide its tracks evenly share it equally (owner, 2 Nov 2026, /services), not 1 + 3. Statement cards: no question, the sentence in the title role, its links as arrows."
+      />
+      <Section>
+        <Bento
+          tracks={4}
+          items={single.slice(0, 4)}
+          cta={{
+            routes: [
+              {
+                answer:
+                  'Product Design can also be hired in parts: user research, workflows and structure, interface design, prototypes and usability tests and data visualisation.',
+                actions: [
+                  { label: 'User research', href: '/services/product-design/ux-research' },
+                  {
+                    label: 'Interface design',
+                    href: '/services/product-design/interaction-ui-design',
+                  },
+                ],
+              },
+              {
+                answer:
+                  'Software Development covers web apps, major features and care of a live product, plus AI Product Engineering and Mobile App Development.',
+                actions: [
+                  {
+                    label: 'AI Product Engineering',
+                    href: '/services/software-development/ai-product-engineering',
                   },
                 ],
               },

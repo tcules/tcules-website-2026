@@ -365,3 +365,41 @@
     transform: none;
   }
 }
+
+/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A) ─────────────────────────────
+   Two tracks wide, two halves. The tile's own inset drops to `tight` so the result panel sits a hair
+   inside the tile's edge; the named half adds `text` back, so its words start where a single tile's
+   would (8 + 16 = the single tile's 24). The panel is a ground inside the tile, its own `block` inset.
+   The drawing at the split scale, at the start of its half. */
+.split .tile {
+  padding: var(--gap-tight);
+}
+
+@media (min-width: 768px) {
+  .split .tile {
+    padding: var(--gap-tight);
+  }
+}
+
+.named {
+  padding: var(--gap-text);
+}
+
+.panel {
+  block-size: 100%;
+  padding: var(--gap-block);
+  border-radius: var(--bnt-panel-radius);
+  background: var(--bnt-panel-ground);
+}
+
+.panelText {
+  max-inline-size: var(--bnt-body-measure);
+  color: var(--bnt-title-ink);
+  font: var(--bnt-body-text);
+}
+
+.split .art {
+  --skt-scale: var(--bnt-art-scale-split);
+
+  justify-self: start;
+}

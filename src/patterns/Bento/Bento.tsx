@@ -18,6 +18,14 @@ export type BentoItem = {
    * none, so the set reads as one.
    */
   body?: string;
+  /**
+   * What the destination gives you, as the tile's second half (owner, 2 Nov 2026, /services, mock A):
+   * a tile with a detail is a SPLIT tile, two tracks wide, its drawing, title and body in the first
+   * half and an inset panel in the second holding the label (a router table's header, as authored;
+   * the mono label voice sets its case), the text, and the tile's action at the panel's foot. A
+   * router table's third column, so a table that becomes tiles drops no column. Every tile or none.
+   */
+  detail?: { label: string; text: string; action?: string };
   /** The whole tile is the link. */
   href: string;
   /** The destination's own Sketch scene, drawn bare on the tile's texture. */
@@ -81,7 +89,7 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
   let row = 0;
   let col = 0;
   return items.map((item) => {
-    const span = TRACKS === 3 ? 1 : (item.span ?? 1);
+    const span = TRACKS === 3 ? 1 : item.detail ? 2 : (item.span ?? 1);
     if (col + span > TRACKS) {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
@@ -153,17 +161,64 @@ function TileLink({
   wide: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
-  const words = (
+  const named = (
     <Layout rowGap="tight">
       <Title className={styles.title}>{item.title}</Title>
       {item.body ? <p className={styles.body}>{item.body}</p> : null}
     </Layout>
   );
+  const words = named;
   const art = (
     <div className={styles.art}>
       <Sketch name={item.scene} frame="bare" story />
     </div>
   );
+  if (item.detail) {
+    /* The split tile: the named half (drawing, then title and body) and the result half, an inset
+       panel whose action sits at its foot. Side by side from 768, the panel under the named half
+       below. */
+    return (
+      <a href={item.href} className={styles.tile}>
+        <Layout
+          className={styles.fill}
+          columns={{ base: 1, md: [1, 1] }}
+          colGap="tight"
+          rowGap="tight"
+        >
+          <div className={styles.named}>
+            <Layout rowGap="block">
+              {art}
+              {named}
+            </Layout>
+          </div>
+          <div className={styles.panel}>
+            <Layout
+              className={styles.fill}
+              rowGap="block"
+              pinLast={Boolean(item.detail.action)}
+            >
+              <Layout rowGap="tight">
+                <p className={styles.eyebrow}>{item.detail.label}</p>
+                <p className={styles.panelText}>{item.detail.text}</p>
+              </Layout>
+              {item.detail.action ? (
+                <Cluster>
+                  <Button
+                    as="span"
+                    emphasis="link"
+                    tone="primary"
+                    icon={<Icon name="arrow-right" />}
+                  >
+                    {item.detail.action}
+                  </Button>
+                </Cluster>
+              ) : null}
+            </Layout>
+          </div>
+        </Layout>
+      </a>
+    );
+  }
   return (
     <a href={item.href} className={styles.tile}>
       {wide ? (
@@ -337,6 +392,12 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
      the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
   const routes = cta?.routes ?? [];
   const ctaAt = used % tracks;
+  /* Cards that open a fresh row and divide it evenly share it (owner, 2 Nov 2026, /services: two
+     cards after eight tiles are 2 + 2, not 1 + 3). */
+  const evenSpan =
+    routes.length > 1 && ctaAt === 0 && tracks % routes.length === 0
+      ? tracks / routes.length
+      : undefined;
   const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
   const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
   const mdSpan = mdCells % 2 === 1 ? 2 : 1;
@@ -353,7 +414,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
       {placed.map(({ item, row, col, span }, index) => (
         <li
           key={item.id}
-          className={cx(styles.cell, span === 2 && styles.wide)}
+          className={cx(styles.cell, span === 2 && styles.wide, item.detail && styles.split)}
           data-row={row % 2 === 0 ? 'a' : 'b'}
           data-col={col}
         >
@@ -367,7 +428,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
             <li
               key={route.question ?? route.answer ?? i}
               className={styles.cta}
-              data-span={isLast ? lgSpan : 1}
+              data-span={evenSpan ?? (isLast ? lgSpan : 1)}
               data-span-md={isLast ? mdSpan : 1}
             >
               <CtaCard route={route} />

@@ -972,7 +972,9 @@ export function PageHero({
      never reordered, and two paragraphs may be identical strings. */
   const copyNode =
     lead === undefined ? null : (
-      <Layout rowGap="text">
+      /* Centred, the paragraphs centre on the axis too: the lead's measure is shorter than the body's,
+         so left at the start of this stack it sat off the axis by the difference (owner, 2 Nov 2026). */
+      <Layout rowGap="text" justifyItems={justify}>
         {lead === undefined ? null : leadAside == null ? (
           <p className={styles.lead}>{lead}</p>
         ) : (

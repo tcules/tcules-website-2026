@@ -183,8 +183,8 @@ pass on another account; a page ships with its placeholders until then.
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
       storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
 - [~] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
-      Design pass 2 Nov (branch design/services-hub, record docs/page-build/pages/services.md): the guide is a drawn
-      chooser (DrawnTableBand `chooser`); centred hero, illustration placeholder until art.
+      Design pass 2 Nov (branch design/services-hub, record docs/page-build/pages/services.md): the guide is split
+      service tiles (mock A); centred hero, illustration placeholder until art.
 - [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
       relief (lowest score on 29 Oct, 4/10).

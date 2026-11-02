@@ -4,28 +4,28 @@ The hub routes into the seven service lines and the audits. Composed from the li
 one new arrangement of DrawnTableBand (`chooser`).
 
 ## Decisions
-- `service-guide` is a chooser, not tiles and not a plain table (owner, 2 Nov 2026). Tried and set aside:
-  the Bento with "What you come away with" as a labelled detail. Each item has three fields (name, who it
-  is for, what you get) and a tile cannot hold them in line: names on two lines pushed every field down,
-  the repeated mono label out-shouted the words, the drawing became filler at the foot. The band's job is
-  choosing BY SITUATION (the FAQ: "you don't need our service names"), so it reads down a column.
-- The chooser: one row per service, a hairline between rows; the service's own drawing at the start
-  (`serviceSceneFor`), then name (h4, the whole row is its link, the arrow on its last word), "Best for"
-  at body size, "What you come away with" a step quieter. The header's words once above the columns from
-  1024; below, each stacked row says its own keys. Every column of the authored table is kept.
-- A closing paragraph that opens with a row's name ("Product Design can also be hired in parts…",
-  "Software Development covers…") sits under that row's name, links kept. The sentence with no row
-  ("A new AI product often brings…") stays under the list.
+- `service-guide` is split service tiles (owner, 2 Nov 2026, mock A in
+  https://claude.ai/artifact/25yNDHrZAHjDK63ySf7Lcu): eight tiles, two a row on four tracks, each two
+  halves. Named half: the service's drawing, then its name and "Best for". Result half: an inset panel
+  with "What you come away with" (the header as authored) over its cell, and "Explore the service" at its
+  foot. The whole tile is the link. Bento `detail` makes the split; every column of the table is kept.
+- Tried and set aside the same day: four-across tiles with the detail stacked in (fields could not stay
+  in line, the label out-shouted the words); a drawn chooser list (the owner disliked the sub-service
+  sentences as footnotes under rows); mock B, the hairline split with the result as a headline.
+- The closing words: each linked sentence is a dotted statement CTA card (Product Design in parts,
+  Software Development's sub-services), the two sharing the row after the tiles 2 + 2; the sentence with
+  no link ("A new AI product often brings…") stays under the set.
 - Hero: centred, the media below (owner, 2 Nov 2026: the long title), `CENTRED_HERO_ROUTES` in
-  src/lib/hero-media.ts. The labelled placeholder until hub art is drawn, registered as an illustration;
-  under a centred head everything but a photograph is capped at 860 (PageHero).
+  src/lib/hero-media.ts. The lede centres on the axis (PageHero's copy stack centres its items under a
+  centred head). The labelled placeholder until hub art is drawn, registered as an illustration; under
+  a centred head everything but a photograph is capped at 860.
 
 ## Band → component
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero centred, placeholder below (860), record figures | illustration to draw (register row) |
 | client-recognition | recognition · LogoGrid | |
-| service-guide | table · DrawnTableBand `chooser` | row notes for PD and SD; one sentence under the list |
+| service-guide | router · Bento split tiles (`detail`), 2 statement CTA cards 2 + 2 | unlinked sentence under the set |
 | selected-work | cases · 3-column card grid | |
 | testimonials | quotes · one-at-a-time slider + Clutch badge | 4 quotes (< 6) |
 | how-we-work-together | options plated + terms row, ink island ask | |
@@ -34,5 +34,5 @@ one new arrangement of DrawnTableBand (`chooser`).
 | enquiry, faq | Island form, FAQ | form before FAQ |
 
 ## Open
-- Owner review of the chooser and the centred hero.
+- Owner review of the split tiles and the centred hero.
 - Hero art; the second Why Tcules illustration; four sector photos; five client marks with no file.

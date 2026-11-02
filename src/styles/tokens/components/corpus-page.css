@@ -20,21 +20,12 @@
    --cpg-panel-height-md  the mount's reserved height, so the page below does not jump when the tool
                        arrives. A component size (a t-shirt name), not a distance.
 
-   --cpg-chooser-rule  the hairline between a chooser's rows (DrawnTableBand `chooser`, /services): the
-                       rows are read down as one list, so one line between each, and under the legend.
-                       Decoration.
-   --cpg-chooser-art-width  a chooser row's drawing below 1024, where it stacks over its words: a
-                       component size, so the drawing keeps a row's scale rather than filling the column.
-
    Every surface restates every token (CLAUDE.md § Tokens rule 2). */
 
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
   --cpg-claim-figure-width: 168px; /* a hard-parts claim's drawing: a component size, one value at every width (hard-parts-claims-lead-proof-footnotes) */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
-  /* A chooser row's keys from 1024, where the legend says them once: visually hidden, one pixel, the standard clip. */
-  --cpg-chooser-hidden-size: 1px;
-  --cpg-chooser-art-width: 224px; /* the drawing's width in a stacked chooser row, about its width in the 1440 track */
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────── */
@@ -45,7 +36,6 @@
   --cpg-mark: var(--color-brandeis-500); /* 6.17:1 */
   --cpg-panel-ground: var(--color-neutral-50);
   --cpg-panel-rule: var(--color-neutral-200);
-  --cpg-chooser-rule: var(--color-neutral-200);
 }
 
 [data-surface='tint'] {
@@ -54,7 +44,6 @@
   --cpg-mark: var(--color-brandeis-500); /* 5.51:1 */
   --cpg-panel-ground: var(--color-paper);
   --cpg-panel-rule: var(--color-neutral-300);
-  --cpg-chooser-rule: var(--color-neutral-300);
 }
 
 [data-surface='ink'] {
@@ -63,7 +52,6 @@
   --cpg-mark: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --cpg-panel-ground: var(--color-neutral-900);
   --cpg-panel-rule: var(--color-neutral-700);
-  --cpg-chooser-rule: var(--color-neutral-700);
 }
 
 [data-surface='blue'] {
@@ -72,5 +60,4 @@
   --cpg-mark: var(--color-white); /* 6.23:1 */
   --cpg-panel-ground: var(--color-brandeis-600);
   --cpg-panel-rule: var(--color-brandeis-400);
-  --cpg-chooser-rule: var(--color-brandeis-400);
 }
