@@ -18,7 +18,8 @@ import { CURSOR, Chip, Focus, Glide, GrowIn, Glyph, Hatched, TraceIn } from './s
  *   symptom-*     "Where we start": each complaint drawn as the problem turning into its fix
  *   specialist-*  the specialist services, drawn bare on the bento's tiles
  *   case-*        a worked example's problem and what we did, drawn on the same screen so the change
- *                 is the only difference (Dealpath's listing card and pipeline)
+ *                 is the only difference (Dealpath's listing card and pipeline); ConnectX's thinking
+ *                 and craft, before the coded workspace (/why-tcules)
  *
  * Assigned item by item at the content seam (src/content/sources/offer-scenes.ts), never by keyword.
  */
@@ -756,6 +757,88 @@ function OfferRoute() {
   );
 }
 
+/** A floor of the 2.5D twin: one flat plate seen from above, centred on (cx, y). */
+function Floor({
+  cx,
+  y,
+  w,
+  h,
+  className,
+}: {
+  cx: number;
+  y: number;
+  w: number;
+  h: number;
+  className: string | undefined;
+}) {
+  return (
+    <path
+      className={className}
+      d={`M${cx - w},${y} L${cx},${y - h} L${cx + w},${y} L${cx},${y + h} Z`}
+    />
+  );
+}
+
+/** The one arrowhead pointing down, tip at (x, y). */
+function ArrowDown({ x, y }: { x: number; y: number }) {
+  return <path className={styles.solid} d={`M${x},${y} L${x - 4},${y - 7} L${x + 4},${y - 7} Z`} />;
+}
+
+/**
+ * ConnectX, the thinking: the two directions combined in one workspace. The ask sits in the workspace
+ * rather than beside it, and its answer is the screen: the route runs from the ask to the twin it
+ * brought into view, with the data beside it and room left for ordinary work.
+ */
+function CaseConnectxThinking() {
+  return (
+    <>
+      <Rect x={30} y={22} w={260} h={136} rx={8} className={styles.frame} />
+      <Copy x={44} y={38} w={36} quiet />
+      <Rect x={44} y={50} w={156} h={22} rx={11} className={styles.tile} />
+      <Glyph name="chat-round-dots" cx={58} cy={61} size={11} className={styles.glyph} />
+      <Copy x={70} y={61} w={84} />
+      <path className={styles.line} d="M200,61 L230,61 Q236,61 236,67 L236,81" />
+      <circle className={styles.node} cx="200" cy="61" r="2.5" />
+      <ArrowDown x={236} y={88} />
+      <Rect x={44} y={92} w={66} h={24} className={styles.tile} />
+      <Copy x={52} y={104} w={36} />
+      <Rect x={118} y={92} w={66} h={24} className={styles.tile} />
+      <Copy x={126} y={104} w={28} />
+      <Rect x={44} y={124} w={140} h={22} className={styles.frameQuiet} />
+      <Copy x={52} y={135} w={72} quiet />
+      <Rect x={196} y={92} w={80} h={54} rx={6} className={styles.halo} />
+      <Floor cx={236} y={132} w={24} h={6} className={styles.tile} />
+      <Floor cx={236} y={119} w={24} h={6} className={styles.region} />
+      <Floor cx={236} y={106} w={24} h={6} className={styles.tile} />
+    </>
+  );
+}
+
+/**
+ * ConnectX, the craft: the detailed 3D building set aside (hatched, never built) for a simpler 2.5D
+ * twin whose job is to explain: one floor brought into focus, the rest dimmed, the asset it holds
+ * named beside it.
+ */
+function CaseConnectxCraft() {
+  return (
+    <>
+      <Hatched x={30} y={40} w={76} h={100} />
+      <Glyph name="layers" cx={68} cy={90} size={20} className={styles.glyphQuiet} />
+      <Hop x1={106} x2={142} y={90} />
+      <Floor cx={192} y={142} w={44} h={10} className={styles.tile} />
+      <Floor cx={192} y={116} w={44} h={10} className={styles.tile} />
+      <Floor cx={192} y={90} w={44} h={10} className={styles.region} />
+      <Floor cx={192} y={64} w={44} h={10} className={styles.tile} />
+      <path className={styles.line} d="M236,90 L250,90" />
+      <circle className={styles.node} cx="236" cy="90" r="2.5" />
+      <Rect x={250} y={74} w={48} h={32} rx={6} className={styles.frame} />
+      <Glyph name="bolt-circle" cx={262} cy={90} size={11} className={styles.glyph} />
+      <Copy x={272} y={86} w={18} />
+      <Copy x={272} y={96} w={14} quiet />
+    </>
+  );
+}
+
 export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-explain': OutcomeExplain,
   'outcome-rules': OutcomeRules,
@@ -778,6 +861,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'offer-route': OfferRoute,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
+  'case-connectx-thinking': CaseConnectxThinking,
+  'case-connectx-craft': CaseConnectxCraft,
 };
 
 /** Each specialist scene's drawn edge in the 320 × 180 drawing, for the bento's bare frame. */

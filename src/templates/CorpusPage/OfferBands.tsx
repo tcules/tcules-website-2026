@@ -159,6 +159,21 @@ function sceneFor(ctx: OfferContext, band: CorpusBand, key: string): SketchName 
 type Lead = { title: string; body: readonly InlineRun[] };
 
 /** Every labelled claim of a band as a title and the runs after it, in order. */
+/**
+ * A result whose last words are a link to a case study: the link (as the band's action reads it) and the
+ * sentence without it. Null when the runs end in anything else.
+ */
+function trailingCaseLink(
+  runs: readonly InlineRun[],
+): { link: { labelText: string; href: string }; rest: InlineRun[] } | null {
+  const last = runs[runs.length - 1];
+  if (last?.type !== 'link' || !last.href.startsWith('/case-studies/')) return null;
+  const rest = runs.slice(0, -1);
+  const prev = rest[rest.length - 1];
+  if (prev?.type === 'text') rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
+  return { link: { labelText: plain(last.children), href: last.href }, rest };
+}
+
 function leads(band: CorpusBand): Lead[] {
   return band.blocks.flatMap((block) => {
     const lead = leadOf(block);
@@ -659,7 +674,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const claimAt = at >= 0 ? at : rows.length - 1;
       const claim = rows[claimAt];
       if (!claim) return null;
-      const [link] = bandLinks(band);
+      /* The case link closes the story as the band's action. Authored either as its own line, or as the
+         last words of the result ("…live since late 2025. Read the ConnectX case", /why-tcules): then it
+         moves to the action and leaves the sentence it ended, so the strip reads as a case snippet with
+         its way into the case at the head, as Dealpath's (owner, 2 Nov 2026). Words unchanged. */
+      const tail = trailingCaseLink(claim.body);
+      const [link] = bandLinks(band).length > 0 ? bandLinks(band) : tail ? [tail.link] : [];
+      const claimBody = tail ? tail.rest : claim.body;
       /* "Example: Dealpath": the kind of band as the eyebrow, the case as the heading (owner, 26 Oct
          2026). Typesetting the authored heading, never rewording it. */
       const named = /^(example):\s*(.+)$/i.exec(band.headingText);
@@ -670,7 +691,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...(named ? { eyebrow: named[1], heading: named[2] } : {})}
           {...(story ? { scenes: story } : {})}
           surface={unit.surface}
-          claim={{ title: claim.title, body: renderInline(claim.body) }}
+          claim={{ title: claim.title, body: renderInline(claimBody) }}
           action={
             link ? (
               <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />

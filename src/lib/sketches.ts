@@ -78,7 +78,9 @@ export type OfferSceneName =
   | 'specialist-readiness'
   | 'offer-route'
   | 'case-dealpath-problem'
-  | 'case-dealpath-did';
+  | 'case-dealpath-did'
+  | 'case-connectx-thinking'
+  | 'case-connectx-craft';
 
 /**
  * L1 scenes (owner, 30 Oct 2026, round 5): the six service lines' own pages, drawn item by item the
