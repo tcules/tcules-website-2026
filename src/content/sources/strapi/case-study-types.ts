@@ -60,6 +60,8 @@ export type StrapiCaseStudy = {
   shortDescription?: string | null;
   publishedAt?: string | null;
   updatedAt?: string | null;
+  /** Validated projection of the CMS's native story components. */
+  storyView?: unknown;
   heroImage?: StrapiCaseStudyFile | null;
   thumbnail?: StrapiCaseStudyFile | null;
   profile?: Array<{

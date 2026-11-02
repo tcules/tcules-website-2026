@@ -1174,6 +1174,8 @@ export type CaseStudyPage = {
   blocks: CaseStudyBlock[];
   /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
   outline: PageOutlineEntry[];
+  /** Published CMS chapters, when the case has a designed story. */
+  story?: CaseStory;
   cta?: {
     heading: string;
     body: readonly [string];

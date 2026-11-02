@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 import type {
   CaseStudyAction,
   CaseStudyBlock,
@@ -23,8 +25,11 @@ import type {
 } from './case-study-types';
 import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
+import { mapCaseStory } from './case-story';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
+const DEFAULT_CASE_STUDY_GRAPHQL_URL =
+  'https://tcules-cms-2026-production.up.railway.app/graphql';
 const CASE_STUDIES_SLUG = 'case-studies';
 const CASE_STUDY_REVALIDATE_SECONDS = 300;
 
@@ -46,6 +51,11 @@ function normaliseSlug(candidate: string | null | undefined): string {
 
 function getStrapiGraphqlUrl(): string {
   return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
+}
+
+/** Detail pages migrate independently of the other CMS page families. */
+function getCaseStudyGraphqlUrl(): string {
+  return value(process.env.STRAPI_CASE_STUDY_GRAPHQL_URL) || DEFAULT_CASE_STUDY_GRAPHQL_URL;
 }
 
 function absoluteUrl(url: string | null | undefined, baseUrl: string): string | undefined {
@@ -442,7 +452,7 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
     }),
   );
 
-  return {
+  const page: CaseStudyPage = {
     documentId: value(raw.documentId) || slug,
     slug,
     title,
@@ -478,6 +488,8 @@ function mapCaseStudy(raw: StrapiCaseStudy, graphqlUrl: string): CaseStudyPage |
     ...(cta ? { cta } : {}),
     ...(seo ? { seo } : {}),
   };
+  const story = mapCaseStory(raw.storyView, page, graphqlUrl);
+  return story ? { ...page, story } : page;
 }
 
 function nonNegativeInteger(candidate: number | null | undefined): number {
@@ -541,18 +553,21 @@ function mapCaseStudyListing(
 }
 
 async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | null> {
-  const graphqlUrl = getStrapiGraphqlUrl();
+  const graphqlUrl = getCaseStudyGraphqlUrl();
+  const token = value(process.env.STRAPI_CASE_STUDY_API_TOKEN);
   const response = await fetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({
       query: CASE_STUDY_BY_SLUG_QUERY,
       variables: { slug, status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
+    signal: AbortSignal.timeout(10_000),
     next: {
       revalidate: CASE_STUDY_REVALIDATE_SECONDS,
       tags: ['case-studies', `case-study:${slug.slice(0, 235)}`],
@@ -569,7 +584,15 @@ async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | nul
     throw new Error(`Strapi case-study query failed: ${errors.join('; ')}`);
   }
 
-  return payload.data?.currentCaseStudy?.[0] ?? null;
+  const cases = payload.data?.currentCaseStudy;
+  if (!Array.isArray(cases)) {
+    throw new Error('Strapi case-study query returned no collection.');
+  }
+  const record = cases[0] ?? null;
+  if (record && (record.slug !== slug || !record.publishedAt)) {
+    throw new Error('Strapi case-study query returned an unexpected or unpublished record.');
+  }
+  return record;
 }
 
 async function fetchCaseStudyListing(): Promise<{
@@ -621,12 +644,14 @@ export const caseStudySource: CaseStudyContentSource = {
     return mapCaseStudyListing(payload, requestedSlug, graphqlUrl);
   },
 
-  async getCaseStudyPage(slug) {
+  getCaseStudyPage: cache(async (slug: string) => {
     const requestedSlug = value(slug);
-    if (!requestedSlug) return null;
+    if (requestedSlug.length > 200 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(requestedSlug)) {
+      return null;
+    }
 
-    const graphqlUrl = getStrapiGraphqlUrl();
+    const graphqlUrl = getCaseStudyGraphqlUrl();
     const caseStudy = await fetchCaseStudyBySlug(requestedSlug);
     return caseStudy ? mapCaseStudy(caseStudy, graphqlUrl) : null;
-  },
+  }),
 };

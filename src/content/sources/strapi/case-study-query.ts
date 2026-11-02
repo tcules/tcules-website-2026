@@ -11,6 +11,7 @@ export const CASE_STUDY_BY_SLUG_QUERY = /* GraphQL */ `
       shortDescription: description
       publishedAt
       updatedAt
+      storyView
 
       heroImage {
         ...FileFields

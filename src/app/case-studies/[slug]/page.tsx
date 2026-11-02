@@ -3,12 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
-import {
-  getCaseStory,
-  getCaseStudyPage,
-  type CaseStudyBlock,
-  type CaseStudyImage,
-} from '@/content';
+import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -207,30 +202,37 @@ export async function generateMetadata({
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
 
-  /* A case with an ideal local copy renders as a designed story (fixtures/ideal/case-studies); every
-     other case renders the CMS body as it stands. */
-  const story = await getCaseStory(slug);
-  if (story) {
-    return (
-      <CaseStory
-        story={story}
-        trail={heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: 'Case studies', href: ROUTES.caseStudies },
-            { label: story.title, href: caseStudyPath(story.slug) },
-          ],
-          story.title,
-          (t) => (
-            <Breadcrumbs {...t} />
-          ),
-        )}
-      />
-    );
-  }
-
   const caseStudy = await getCaseStudyPage(slug);
   if (!caseStudy) notFound();
+
+  /* The published CMS record chooses the story or block renderer, including its metadata. */
+  const story = caseStudy.story;
+  if (story) {
+    return (
+      <>
+        {caseStudy.seo?.structuredData ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: jsonLdMarkup(caseStudy.seo.structuredData) }}
+          />
+        ) : null}
+        <CaseStory
+          story={story}
+          trail={heroTrail(
+            [
+              { label: 'Home', href: ROUTES.home },
+              { label: 'Case studies', href: ROUTES.caseStudies },
+              { label: story.title, href: caseStudyPath(story.slug) },
+            ],
+            story.title,
+            (t) => (
+              <Breadcrumbs {...t} />
+            ),
+          )}
+        />
+      </>
+    );
+  }
 
   /* The outline the seam derived from this body's level-2 headings, mapped to what the component
      takes. A case study is a long-form document, which is what earns it a rail —
