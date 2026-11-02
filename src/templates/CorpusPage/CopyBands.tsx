@@ -982,19 +982,44 @@ export function MethodBand({
   const listAt = rest.findIndex((block) => block.type === 'list');
   const claimAt = rest.findIndex((block) => leadOf(block) !== null && !isBareLabel(block));
   let steps: Step[] = [];
+  const trailingNotes: Step[] = [];
   let from = 0;
   let to = 0;
   if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
     from = claimAt;
     to = claimAt;
-    while (
-      rest[to] &&
-      leadOf(rest[to] as CorpusBlock) &&
-      !isBareLabel(rest[to] as CorpusBlock)
-    ) {
+    /* A step authored as a bold-led paragraph keeps the plain paragraphs that follow it as more of
+       its body (owner, 2 Nov 2026, /audits/prototype-readiness-review: two paragraphs between steps
+       broke the run, so two steps were numbered and the rest fell into a text grid). A paragraph
+       with a link is not a step's continuation: it is the band's closing line. */
+    const isStep = (block: CorpusBlock | undefined) =>
+      block !== undefined && leadOf(block) !== null && !isBareLabel(block);
+    const continues = (block: CorpusBlock | undefined) =>
+      block?.type === 'paragraph' && !leadOf(block) && !hasLink(block.runs);
+    while (isStep(rest[to])) {
       const lead = leadOf(rest[to] as CorpusBlock)!;
-      steps.push({ title: stepTitle(lead.label), ...rowBody(trimStart(lead.body)) });
+      const paras: InlineRun[][] = [trimStart(lead.body)];
       to += 1;
+      while (continues(rest[to])) {
+        const block = rest[to] as Extract<CorpusBlock, { type: 'paragraph' }>;
+        paras.push([...block.runs]);
+        to += 1;
+      }
+      steps.push(
+        paras.length === 1
+          ? { title: stepTitle(lead.label), ...rowBody(paras[0] ?? []) }
+          : { title: stepTitle(lead.label), bodyHtml: paras.map((runs) => inlineToHtml(runs)) },
+      );
+    }
+    /* Steps named in sequence ("Before we start", "First, …", "Then, …") end where a lead stops
+       naming a moment: "A wider review" is a variant of the work, not its next step, so it stands
+       after the steps as a note on them rather than as a numbered step. */
+    const ORDINAL = /^(before|first|second|third|then|next|after|finally|last)\b/i;
+    if (steps.filter((step) => ORDINAL.test(step.title)).length >= 2) {
+      while (steps.length > 0 && !ORDINAL.test(steps[steps.length - 1]!.title)) {
+        const extra = steps.pop()!;
+        trailingNotes.unshift(extra);
+      }
     }
   } else if (listAt >= 0) {
     const list = rest[listAt] as Extract<CorpusBlock, { type: 'list' }>;
@@ -1040,7 +1065,13 @@ export function MethodBand({
         )}
       </Layout>
     ) : (
-      <Steps steps={steps} />
+      /* The approved method is steps beside ONE flat graphic (owner, 30 Oct 2026); until the page's
+         drawing exists its labelled plate stands beside them, never the steps alone in half the band
+         (owner, 2 Nov 2026). */
+      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <Steps steps={steps} />
+        <Sketch />
+      </Layout>
     );
   return (
     <ContentSection {...head(band)} data-band="F" lead={leadText}>
@@ -1049,6 +1080,13 @@ export function MethodBand({
           <BandBody blocks={before} labelledBy={head(band).headingId} />
         ) : null}
         {stepsNode}
+        {trailingNotes.map((note) => (
+          <Callout
+            key={note.title}
+            label={note.title.replace(/[.:]\s*$/, '')}
+            html={note.bodyHtml ? note.bodyHtml.join(' ') : (note.body ?? '')}
+          />
+        ))}
         {after.length > 0 ? (
           noteIcon ? (
             <Layout rowGap="block">
