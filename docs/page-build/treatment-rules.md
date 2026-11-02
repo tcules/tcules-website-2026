@@ -164,3 +164,10 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   with no link stays below the set. Cards that open a fresh row and divide it evenly share it equally.
 - **A hero title too long for the beside split's half column** takes the centred hero with the media below
   (route list `CENTRED_HERO_ROUTES`); a drawing or its placeholder is capped at 860, a photograph is not.
+
+## Added 2 Nov 2026 (/expertise)
+
+- **Groups of borderless cards inside one band sit a `section` (96) apart**, each head a `block` from its own
+  cards. The set's own rows are a `column` (64) apart, so at `stack` (48) the next group's head read as one more
+  row of the set before it. The distance between groups is always larger than the distance inside one.
+- **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).

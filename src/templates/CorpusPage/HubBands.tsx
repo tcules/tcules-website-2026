@@ -71,7 +71,11 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
 
   return (
     <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
-      <Layout rowGap="stack">
+      {/* The groups sit a `section` (96) apart: each group's cards are a borderless set whose rows are
+          a `column` (64) apart, so at `stack` (48) the second group's head read as one more row of the
+          first set (owner, 2 Nov 2026, /expertise). Two groups are two regions; their head stays a
+          `block` from its own cards. */}
+      <Layout rowGap="section">
         {opening.length > 0 ? <BandBody blocks={opening} /> : null}
         {groups.map((group) => {
           const table = group.blocks.find(
