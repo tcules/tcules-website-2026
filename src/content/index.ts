@@ -27,6 +27,8 @@ export {
   createClientContact,
   getEventPage,
   getExpertisePage,
+  getExpertiseOfferPage,
+  listPublishedExpertises,
   getFutureInterfacesLabJoinPage,
   getFutureInterfacesLabPage,
   getGlossaryPage,

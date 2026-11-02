@@ -19,9 +19,9 @@ import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
 
 /**
- * The offer routes share one renderer. Live services supply a published CMS page; audits,
- * expertise and the design specimens still read the local corpus. The list below tracks the pages
- * designed for this template; service publication and route discovery come from the CMS.
+ * The offer routes share one renderer. Live services and expertise supply a published CMS page;
+ * audits and the design specimens still read the local corpus. The list below tracks the pages
+ * designed for this template; service and expertise publication and route discovery come from the CMS.
  *
  * Each of those routes serves a whole family, and only the pages whose band shapes the page-mapping
  * has verified switch to the corpus; the rest keep their current source until their own batch maps
