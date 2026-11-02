@@ -585,42 +585,6 @@ export default function BentoSpecimen() {
         />
       </Section>
       <Variation
-        id="cta-even"
-        title="2f2 · Two statement cards opening a fresh row share it, 2 + 2"
-        note="Cards that start a row and divide its tracks evenly share it equally (owner, 2 Nov 2026, /services), not 1 + 3. Statement cards: no question, the sentence in the title role, its links as arrows."
-      />
-      <Section>
-        <Bento
-          tracks={4}
-          items={single.slice(0, 4)}
-          cta={{
-            routes: [
-              {
-                answer:
-                  'Product Design can also be hired in parts: user research, workflows and structure, interface design, prototypes and usability tests and data visualisation.',
-                actions: [
-                  { label: 'User research', href: '/services/product-design/ux-research' },
-                  {
-                    label: 'Interface design',
-                    href: '/services/product-design/interaction-ui-design',
-                  },
-                ],
-              },
-              {
-                answer:
-                  'Software Development covers web apps, major features and care of a live product, plus AI Product Engineering and Mobile App Development.',
-                actions: [
-                  {
-                    label: 'AI Product Engineering',
-                    href: '/services/software-development/ai-product-engineering',
-                  },
-                ],
-              },
-            ],
-          }}
-        />
-      </Section>
-      <Variation
         id="cta-row"
         title="2g · Three and two cards on three tracks, the last card spanning two"
         note="Five cells fill neither; three tracks leave the fuller last row (3 + 2), so the second card takes the last two cells."

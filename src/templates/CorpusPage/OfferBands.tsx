@@ -1330,7 +1330,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      path drops the table's third column. */
   const runOn = (row: (typeof rows)[number]) =>
     row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
-  const routerLead = leadText(band);
+  const mixedClosing =
+    closing.some(hasLink) && !closing.every(hasLink) && routesOf(closing) === undefined;
+  const lead = leadText(band);
+  const routerLead = lead;
   const closingFooter =
     closing.length > 0 ? (
       <ContentSectionText>
@@ -1367,23 +1370,21 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
               ),
             },
           ]
-        : undefined) ??
-      /* Mixed closing words (owner, 2 Nov 2026, /services): each linked paragraph is a statement card
-         of its own, and the paragraphs with no link stay below the set. */
-      (closing.some(hasLink)
-        ? closing
-            .filter(hasLink)
-            .map((runs): { question?: string; answer: InlineRun[] } => ({ answer: runs }))
         : undefined);
-    const unlinked = closing.filter((runs) => !hasLink(runs));
-    const restFooter =
-      routes && unlinked.length > 0 ? (
+    /* Mixed closing words (owner, 2 Nov 2026, /services): notes on single destinations and a sentence
+       about the set, in their authored order, run on as ONE paragraph at the body measure, links
+       inline. Never a card per note (it repeated the names as links and outshouted the set), never
+       three loose lines (the last read as stray). */
+    const coda =
+      !routes && mixedClosing ? (
         <ContentSectionText>
-          <Layout rowGap="text">
-            {unlinked.map((runs, index) => (
-              <p key={index}>{renderInline(runs)}</p>
-            ))}
-          </Layout>
+          <p>
+            {renderInline(
+              closing.flatMap((runs, index) =>
+                index > 0 ? [{ type: 'text', text: ' ' } as InlineRun, ...runs] : runs,
+              ),
+            )}
+          </p>
         </ContentSectionText>
       ) : undefined;
     const n = rows.length;
@@ -1424,7 +1425,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? restFooter : closingFooter,
+      routes ? undefined : (coda ?? closingFooter),
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));
