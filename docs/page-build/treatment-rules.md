@@ -171,3 +171,5 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   cards. The set's own rows are a `column` (64) apart, so at `stack` (48) the next group's head read as one more
   row of the set before it. The distance between groups is always larger than the distance inside one.
 - **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).
+- **A group head told as "Label: statement"** ("By product type: what your product does") sets the label as the
+  group's eyebrow and the statement as its h3, first letter raised. A head with no colon stays one h3.

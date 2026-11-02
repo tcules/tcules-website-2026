@@ -36,6 +36,15 @@
   color: var(--cpg-mark);
 }
 
+/* A destination group's label, split from its head at the colon (HubBands `groupHead`): the eyebrow
+   voice over the group's h3, as a band's eyebrow sits over its h2. */
+.groupEyebrow {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cpg-ink-label);
+}
+
 /* An item's own heading inside a band's copy (a reason, a case in a slide, a case story): an h3
    element at the h4 role. The band's h2 is the scale's first step, and a heading inside its body that
    set at the h3 role read as a second band title beside it. A set's heading always outranks its
