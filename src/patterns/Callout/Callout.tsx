@@ -35,6 +35,10 @@ export type CalloutProps = {
    *            footnote — body-sm in the secondary ink under a grey glyph — the band's one statement
    *            read as disabled text. It takes the body role in the surface's full ink, and its
    *            glyph the accent.
+   *   summary  an article's TL;DR, read before the article (owner, 2 Nov 2026, direction D on the
+   *            Insight summary canvas). A bounded panel: the deep ground with the accent across its
+   *            top edge, the key as the mono label, the paragraph set large in the surface's full
+   *            ink (--text-summary). The panel takes the width of its text, up to the lead measure.
    */
   tone?: CalloutTone;
   /**
@@ -46,7 +50,7 @@ export type CalloutProps = {
   icon?: ReactNode;
 };
 
-export type CalloutTone = 'note' | 'example' | 'band';
+export type CalloutTone = 'note' | 'example' | 'band' | 'summary';
 
 /**
  * Callout — a quiet boundary on the claim immediately before it.
@@ -74,6 +78,7 @@ export function Callout({ html, label, tone = 'note', icon }: CalloutProps) {
     styles.root,
     tone === 'example' && styles.example,
     tone === 'band' && styles.band,
+    tone === 'summary' && styles.summary,
   );
 
   const glyph = icon ? (
@@ -100,8 +105,9 @@ export function Callout({ html, label, tone = 'note', icon }: CalloutProps) {
   /* The key sits ABOVE the sentence, never beside it (owner, 30 Sep 2026): two lines of text set
      left and right read as two columns of one thing. The 8 seam is the key's bind to what it keys;
      a glyph heads both, a `block` above them. */
+  /* The summary's paragraph is set large, so its key sits a text step (16) above it, not 8. */
   const keyed = (
-    <Layout rowGap="tight">
+    <Layout rowGap={tone === 'summary' ? 'text' : 'tight'}>
       <span className={styles.label}>{keyText}</span>
       <Prose html={html} className={styles.content} />
     </Layout>

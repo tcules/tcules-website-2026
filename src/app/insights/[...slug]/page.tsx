@@ -67,6 +67,9 @@ function renderBlogBlock(block: BlogBlock, blogTitle: string) {
     case 'callout':
       return <Callout html={block.html} />;
 
+    case 'summary':
+      return <Callout tone="summary" label={block.heading} html={block.html} />;
+
     case 'figures':
       return (
         <Layout

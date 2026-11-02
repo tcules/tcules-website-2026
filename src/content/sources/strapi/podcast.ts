@@ -210,8 +210,11 @@ function mapBlock(
     }
 
     case 'ComponentBlogAndCasestudiesTldrSection': {
-      const html = calloutHtml(block.heading, block.tdlrDescription, `${id} summary`);
-      return html ? { id, type: 'callout', html } : undefined;
+      /* The article's summary: its heading ("Insights") becomes the panel's key, never a bold line
+         inside the paragraph, so the page can set the two apart (Callout tone="summary"). */
+      const html = calloutHtml(undefined, block.tdlrDescription, `${id} summary`);
+      const heading = value(block.heading);
+      return html ? { id, type: 'summary', html, ...(heading ? { heading } : {}) } : undefined;
     }
 
     case 'ComponentBlogAndCasestudiesSepration': {

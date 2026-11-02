@@ -161,6 +161,9 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
     case 'callout':
       return <Callout html={block.html} />;
 
+    case 'summary':
+      return <Callout tone="summary" label={block.heading} html={block.html} />;
+
     case 'separator':
       return <Prose html={block.html} />;
   }
