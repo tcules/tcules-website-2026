@@ -75,6 +75,9 @@
   /* The width of each scroll fade — about a third of a column's text floor, so the fade softens the
      clipped edge without hiding a whole word under it. A component size, not a layout distance. */
   --dtab-fade-size: var(--space-48);
+  /* The picked row's start bar: one step heavier than the hairline so it reads as a mark, not as
+     one more rule of the box. */
+  --dtab-pick-bar-width: var(--border-width-3);
 }
 
 /* Paper: the body lifts to white inside the frame and the head fill is the lightest neutral —
@@ -93,6 +96,10 @@
   --dtab-rule-ink: var(--color-neutral-200); /* decoration; 1.35:1 on the body */
   --dtab-empty-ink: var(--color-neutral-500); /* 3.19:1 — a mark for "nothing here", non-text */
   --dtab-ring-ink: var(--color-brandeis-500); /* 6.17:1 on paper */
+  /* The picked row: brandeis-50 under the cells, the key in brandeis-600 (6.5:1 on it). */
+  --dtab-pick-ground: var(--color-brandeis-50);
+  --dtab-pick-key-ink: var(--color-brandeis-600);
+  --dtab-pick-bar-ink: var(--color-brandeis-500);
   /* Prose on the white body: ink 14.75, muted 4.97, link 6.23. */
 }
 
@@ -107,6 +114,9 @@
   --dtab-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 on the body */
   --dtab-empty-ink: var(--color-neutral-500); /* 3.16:1 on the body, non-text */
   --dtab-ring-ink: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
+  --dtab-pick-ground: var(--color-brandeis-50);
+  --dtab-pick-key-ink: var(--color-brandeis-600);
+  --dtab-pick-bar-ink: var(--color-brandeis-500);
   /* Prose on the paper body: ink 14.62, muted 8.14, link 6.17. */
 }
 
@@ -122,6 +132,10 @@
   --dtab-rule-ink: var(--color-neutral-700); /* decoration; 1.80:1 on the body */
   --dtab-empty-ink: var(--color-neutral-500); /* 4.62:1 on the body */
   --dtab-ring-ink: var(--color-brandeis-300); /* 7.32:1 on neutral-950 */
+  /* Picked row on ink: the deepest blue under the cells, the key and bar lifted to 200 / 300. */
+  --dtab-pick-ground: var(--color-brandeis-950);
+  --dtab-pick-key-ink: var(--color-brandeis-200);
+  --dtab-pick-bar-ink: var(--color-brandeis-300);
   /* Prose on the neutral-900 body: ink 12.37, muted 6.88, link 6.26. */
 }
 
@@ -137,5 +151,9 @@
   --dtab-rule-ink: var(--color-brandeis-400); /* decoration; 2.64:1 on the body */
   --dtab-empty-ink: var(--color-brandeis-300); /* 4.31:1 on the body */
   --dtab-ring-ink: var(--color-white); /* 6.23:1 on brandeis-500 */
+  /* Picked row on blue: one rung deeper than the body, the key and bar white. */
+  --dtab-pick-ground: var(--color-brandeis-800);
+  --dtab-pick-key-ink: var(--color-white);
+  --dtab-pick-bar-ink: var(--color-white);
   /* Prose on the brandeis-700 body: ink and link 10.16, muted 8.01. */
 }

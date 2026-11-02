@@ -153,3 +153,14 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
 - **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
   photo bands that all sit image-left is a planner bug, not a design.
+
+## Added 2 Nov 2026 (/why-tcules)
+
+- **A claim's example is one pattern everywhere** (2026-11-02-examples-are-one-pattern): an "Example:" paragraph
+  is the ClaimProof panel under its claim's words, in hard parts, Reasons and prose bands alike.
+- **A case snippet on a non-case page** (the copy tells one product's story in titled steps, then links the case)
+  is the CaseSpread strip, as Dealpath's: each step a picture over its words, the earlier steps drawn, the last the
+  case's real capture, the case link the band's action at the heading's end.
+- **Every quote carries its person's one rating** (2026-11-02-one-person-one-rating).
+- **A comparison of options keeps its table, and the row naming Tcules is picked** (DataTable `pick`: blue ground,
+  blue key, start bar), so the table reads as advice with our suggestion in it (owner, 2 Nov 2026).
