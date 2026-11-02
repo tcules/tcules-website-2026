@@ -29,6 +29,7 @@ export {
   createClientContact,
   getEventPage,
   getExpertisePage,
+  getExpertiseListingPage,
   getExpertiseOfferPage,
   listPublishedExpertises,
   getFutureInterfacesLabJoinPage,

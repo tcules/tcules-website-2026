@@ -1,5 +1,6 @@
 import {
   getNavigation,
+  getExpertiseListingPage,
   listAuthors,
   listCorpusPages,
   listSitePages,
@@ -89,6 +90,7 @@ const FIXED_PAGES: readonly { route: RouteKey; title: string; group: SitemapGrou
   },
   { route: 'matterDesignSystem', title: 'Matter Design System', group: 'company' },
   { route: 'services', title: 'Services', group: 'services' },
+  { route: 'expertise', title: 'Expertise', group: 'expertise' },
   { route: 'caseStudies', title: 'Case studies', group: 'caseStudies' },
   { route: 'insights', title: 'Insights', group: 'insights' },
   { route: 'authors', title: 'Authors', group: 'insights' },
@@ -180,11 +182,15 @@ async function cmsPages(): Promise<SitePage[]> {
 }
 
 export async function listSitemapGroups(): Promise<SitemapGroup[]> {
-  const [cms, corpus, navigation, authors] = await Promise.all([
+  const [cms, corpus, navigation, authors, expertiseListing] = await Promise.all([
     cmsPages(),
     listCorpusPages(),
     getNavigation(),
     authorPages(),
+    getExpertiseListingPage().catch((error) => {
+      console.error('sitemap: expertise listing unavailable', error);
+      return null;
+    }),
   ]);
   const corpusNames = new Map(corpus.map((page) => [page.route, page.name]));
   const labels = navLabels(navigation);
@@ -197,8 +203,16 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
     byGroup.get(group)?.push(entry);
   };
 
-  for (const page of FIXED_PAGES)
-    add(page.group, { path: ROUTES[page.route], title: page.title });
+  for (const page of FIXED_PAGES) {
+    if (page.route === 'expertise' && !expertiseListing) continue;
+    add(page.group, {
+      path: ROUTES[page.route],
+      title: page.title,
+      ...(page.route === 'expertise' && expertiseListing?.updatedAt
+        ? { lastModified: expertiseListing.updatedAt }
+        : {}),
+    });
+  }
   for (const page of cms) {
     const family = FAMILIES[page.family];
     const path = family.path(page.slug);

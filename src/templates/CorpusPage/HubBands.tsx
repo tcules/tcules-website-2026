@@ -4,6 +4,7 @@ import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
+import { corpusImage } from '@/lib/corpus-images';
 
 import { head } from './blocks';
 import { BandBody } from './CopyBands';
@@ -65,6 +66,11 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
   const rest = blocks.slice(firstGroup).filter((block) => !isGroup(block));
 
   const image = (href: string, title: string) => {
+    const bound = page.composition.mediaBindings.find(
+      (binding) =>
+        binding.bound && binding.supportsSection === band.id && binding.card === href,
+    );
+    if (bound) return corpusImage(bound);
     const photo = HOME_SECTOR_PHOTOS[href];
     return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
   };
@@ -96,8 +102,10 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
             ];
           });
           return (
-            <Layout key={group.headingText} rowGap="block">
-              <h3 id={group.id ?? undefined}>{group.headingText}</h3>
+            <Layout key={group.id ?? group.headingText} rowGap="block">
+              {group.headingText ? (
+                <h3 id={group.id ?? undefined}>{group.headingText}</h3>
+              ) : null}
               {others.length > 0 ? <BandBody blocks={others} /> : null}
               <BlockCardSet items={cards} lead="none" across={3} cue="title" scroll="never" />
             </Layout>

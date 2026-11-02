@@ -27,7 +27,7 @@ const record = (value: unknown): Record<string, unknown> =>
 export function mapOfferDocument(
   document: OfferDocument,
   route: string,
-  pageType: 'service' | 'expertise' | 'audit',
+  pageType: 'service' | 'expertise' | 'audit' | 'expertise_hub',
 ): CmsOffer {
   if (
     document.route !== route ||

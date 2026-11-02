@@ -13,6 +13,8 @@ import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { OfferPage } from '@/templates';
+import type { CorpusPage } from '@/lib/corpus-types';
+import type { OfferScenes } from '@/lib/sketches';
 
 import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
@@ -55,16 +57,32 @@ export async function composedMetadata(route: string): Promise<Metadata | null> 
   return page ? corpusMetadata(page) : null;
 }
 
-export async function ComposedRoute({ route }: { route: string }) {
+export async function ComposedRoute({
+  route,
+  page: suppliedPage,
+  scenes: suppliedScenes,
+  heroIllustration,
+}: {
+  route: string;
+  page?: CorpusPage;
+  scenes?: OfferScenes;
+  heroIllustration?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    kind: 'illustration';
+  };
+}) {
   if (!isComposedRoute(route)) notFound();
-  const page = await getCorpusPage(route);
+  const page = suppliedPage ?? (await getCorpusPage(route));
   if (!page) notFound();
   const [caseRefs, shared, ratings, avatars, scenes] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getCorpusBindings(SHARED_BINDINGS),
     getTestimonialRatings(page.composition.testimonialIds),
     getTestimonialAvatars(page.composition.testimonialIds),
-    getOfferScenes(route),
+    suppliedScenes ?? getOfferScenes(route),
   ]);
   return (
     <OfferPage
@@ -74,6 +92,7 @@ export async function ComposedRoute({ route }: { route: string }) {
       ratings={ratings}
       avatars={avatars}
       scenes={scenes}
+      heroIllustration={heroIllustration}
       reasonFigure={landedReasonFigure}
       claimFigure={landedClaimFigure}
     />

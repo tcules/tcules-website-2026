@@ -1,16 +1,25 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { getExpertiseListingPage } from '@/content';
+import { ComposedRoute } from '@/app/_corpus/composed';
+import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 
-/**
- * `/expertise` — the hub, read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+export const revalidate = 300;
+
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.expertise)) ?? { title: 'Tcules' };
+  const listing = await getExpertiseListingPage();
+  return listing
+    ? corpusMetadata(listing.page)
+    : {
+        title: 'Expertise not found | Tcules',
+        robots: { index: false, follow: false },
+      };
 }
 
-export default function ExpertiseHub() {
-  return <ComposedRoute route={ROUTES.expertise} />;
+export default async function ExpertiseHub() {
+  const listing = await getExpertiseListingPage();
+  if (!listing) notFound();
+  return <ComposedRoute route={ROUTES.expertise} {...listing} />;
 }

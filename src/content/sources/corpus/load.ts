@@ -194,7 +194,7 @@ function liveHref(href: string): string {
   const live = match ? CASE_SLUG_REDIRECTS[match[1] ?? ''] : undefined;
   return live ? `/case-studies/${live}${match?.[2] ?? ''}` : href;
 }
-function liveCaseLinks<T>(node: T): T {
+export function liveCaseLinks<T>(node: T): T {
   if (Array.isArray(node)) return node.map(liveCaseLinks) as T;
   if (node && typeof node === 'object') {
     const out: Record<string, unknown> = {};

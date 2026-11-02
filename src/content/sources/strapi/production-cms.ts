@@ -1,6 +1,6 @@
 const DEFAULT_GRAPHQL_URL = 'https://tcules-cms-2026-production.up.railway.app/graphql';
 
-/** Shared by case studies, resources, services, expertise, glossary and audits in preview. Server-only settings. */
+/** Shared by the migrated CMS details and expertise listing in preview. Server-only settings. */
 export function productionCmsUrl(): string {
   return process.env.STRAPI_CASE_STUDY_GRAPHQL_URL?.trim() || DEFAULT_GRAPHQL_URL;
 }
