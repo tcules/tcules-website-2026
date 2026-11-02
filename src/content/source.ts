@@ -15,6 +15,7 @@ import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
+import { authorsSource } from './sources/strapi/authors';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
 import { caseStudySource } from './sources/strapi/case-study';
@@ -40,6 +41,7 @@ import type {
   AboutContentSource,
   CorpusContentSource,
   AuditContentSource,
+  AuthorsContentSource,
   BlogContentSource,
   CareerContentSource,
   CaseStudyContentSource,
@@ -82,6 +84,8 @@ import type {
 const source: ContentSource = fixtureSource;
 const aboutPagesSource: AboutContentSource = aboutSource;
 const auditSource: AuditContentSource = strapiSource;
+/* Derived from the bylines until the CMS carries an author collection; that swap is this line. */
+const authorPagesSource: AuthorsContentSource = authorsSource;
 const blogsSource: BlogContentSource = blogSource;
 const careersPagesSource: CareerContentSource = careersSource;
 const caseStudiesSource: CaseStudyContentSource = caseStudySource;
@@ -110,6 +114,8 @@ export const listPages = source.listPages.bind(source);
 export const getNavigation = source.getNavigation.bind(source);
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
+export const listAuthors = authorPagesSource.listAuthors.bind(authorPagesSource);
+export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSource);
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
 export const getCaseStudyListingPage =

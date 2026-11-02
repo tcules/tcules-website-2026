@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Layout, Prose, Section } from '@/components';
+import { Layout, Media, Prose, Section } from '@/components';
 import {
   LongformRoute,
   isCorpusLongform,
@@ -10,7 +10,7 @@ import {
   longformSlugs,
 } from '@/app/_corpus/longform';
 import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/content';
-import { blogPath, ROUTES } from '@/lib/routes';
+import { authorPath, blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
   Breadcrumbs,
@@ -37,6 +37,10 @@ function requestedSlug(slug: readonly string[]): string {
     .filter(Boolean)
     .join('/');
 }
+
+/* Figure's own `sizes` (Figure.tsx): the full content column, which over-fetches in the narrower
+   article track rather than ever under-fetching. */
+const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
 function figureImage(image: BlogImage) {
   return {
@@ -70,13 +74,23 @@ function renderBlogBlock(block: BlogBlock, blogTitle: string) {
           colGap={block.figures.length > 1 ? 'gutter' : undefined}
           rowGap="gutter"
         >
-          {block.figures.map((figure, index) => (
-            <Figure
-              key={`${block.id}-${figure.image.src}-${index}`}
-              image={figureImage(figure.image)}
-              caption={figure.caption}
-            />
-          ))}
+          {block.figures.map((figure, index) =>
+            /* A body image with no authored caption renders bare, through Figure's own Media:
+               a Figure's caption is required, and the words under an image are never invented. */
+            figure.caption ? (
+              <Figure
+                key={`${block.id}-${figure.image.src}-${index}`}
+                image={figureImage(figure.image)}
+                caption={figure.caption}
+              />
+            ) : (
+              <Media
+                key={`${block.id}-${figure.image.src}-${index}`}
+                image={figureImage(figure.image)}
+                sizes={BODY_IMAGE_SIZES}
+              />
+            ),
+          )}
         </Layout>
       );
 
@@ -258,6 +272,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const published = blog.publishedContent;
   const authors: HeroPerson[] = blog.authors.map((author) => ({
     name: author.name,
+    ...(author.slug ? { href: authorPath(author.slug) } : {}),
     ...(author.image ? { portrait: author.image } : {}),
   }));
   const credits: HeroCredit[] | undefined = authors[0]
@@ -293,11 +308,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
         readingTime={blog.readingTime}
         dates={published ? { published } : undefined}
         media={heroMedia}
+        arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
         surface="paper"
-      
+
         labels={labels}
       />
-
 
       {blog.blocks.length > 0 ? (
         <Section as="div" surface="paper">
@@ -319,13 +334,21 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 <Fragment key={block.id}>{renderBlogBlock(block, blog.title)}</Fragment>
               ))}
               {/* Who wrote it, after what they wrote (byline board G): the hero carries their faces
-                  and names, this says who each is. No link until author pages have routes. */}
+                  and names, this says who each is and links to the rest of what they wrote. */}
               <Contributors
                 label={blog.authors.length > 1 ? 'About the authors' : 'About the author'}
                 people={blog.authors.map((author) => ({
                   name: author.name,
                   ...(author.designation ? { role: author.designation } : {}),
                   ...(author.image ? { portrait: author.image } : {}),
+                  ...(author.slug
+                    ? {
+                        link: {
+                          label: `More from ${author.name.trim().split(/\s+/)[0]}`,
+                          href: authorPath(author.slug),
+                        },
+                      }
+                    : {}),
                 }))}
               />
             </Layout>
@@ -335,7 +358,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
           (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
-      <InsightResources heading="Explore other resources" items={resourceItems(blog.resources)} />
+      <InsightResources
+        heading="Explore other resources"
+        items={resourceItems(blog.resources)}
+      />
 
       {blog.cta ? (
         <CtaSection

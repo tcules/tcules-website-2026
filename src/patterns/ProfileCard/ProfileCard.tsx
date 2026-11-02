@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { BrandMark, Button, Cluster, Layout, Media, type MediaImage } from '@/components';
+import { BrandMark, Button, Cluster, Icon, Layout, Media, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './ProfileCard.module.css';
@@ -18,15 +18,21 @@ export type ProfileCardProps = {
   /** What they lead and care about: plain text, or inline content the caller renders. */
   bio?: ReactNode;
   /**
-   * Their portrait, cropped square from the centre. Absent, their initials hold the square on a plain
+   * Their portrait, cropped square from the centre. Absent, their initials hold the square on the frame's tint
    * ground, so a set keeps one head height and nothing reads as a broken image. Never pass a labelled
    * placeholder panel here: at 80px its label cannot be read (review 29 Oct).
    */
   portrait?: MediaImage;
   /** `square` (default): the 8 radius, the house photograph corner. `circle`: as a testimonial's avatar. */
   portraitShape?: 'square' | 'circle';
-  /** Their LinkedIn profile: the card's one action, on the ruled foot. */
+  /** Their LinkedIn profile: an action on the ruled foot, opening beside the page. */
   linkedin?: ProfileLink;
+  /**
+   * Their page on this site (an author page: "More from Chirag", owner 1 Nov 2026): an action on the
+   * ruled foot, the trailing arrow because it navigates, as Contributors' link to the same page. With
+   * `linkedin` too, the two share the foot, this one first.
+   */
+  link?: ProfileLink;
   /** Heading semantics. Default h3, under the band's h2. */
   nameAs?: 'h3' | 'h4';
   /** The list item's tag when the card is a member of a set. Default `li`. */
@@ -58,13 +64,16 @@ export function ProfileCard({
   portrait,
   portraitShape = 'square',
   linkedin,
+  link,
   nameAs: Name = 'h3',
   as: Root = 'li',
 }: ProfileCardProps) {
   return (
     <Root className={styles.item}>
-      <Layout rowGap="block" pinLast={Boolean(linkedin)} className={styles.card}>
-        <Cluster nowrap colGap="block" align="center">
+      <Layout rowGap="block" pinLast={Boolean(linkedin || link)} className={styles.card}>
+        {/* Top-aligned: the name starts on the portrait's top edge, so a two-line role never
+            pushes one card's name out of line with its row's (1 Nov 2026). */}
+        <Cluster nowrap colGap="block" align="start">
           {portrait ? (
             <span className={cx(styles.portrait, portraitShape === 'circle' && styles.circle)}>
               <Media
@@ -92,18 +101,31 @@ export function ProfileCard({
           </Layout>
         </Cluster>
         {bio ? <p className={styles.bio}>{bio}</p> : <span />}
-        {linkedin ? (
-          <Cluster nowrap colGap="tight" align="center" className={styles.foot}>
-            <Button
-              as="a"
-              href={linkedin.href}
-              {...NEW_TAB}
-              emphasis="link"
-              tone="primary"
-              icon={<BrandMark name="linkedin" />}
-            >
-              {linkedin.label}
-            </Button>
+        {linkedin || link ? (
+          <Cluster colGap="block" rowGap="tight" align="center" className={styles.foot}>
+            {link ? (
+              <Button
+                as="a"
+                href={link.href}
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                {link.label}
+              </Button>
+            ) : null}
+            {linkedin ? (
+              <Button
+                as="a"
+                href={linkedin.href}
+                {...NEW_TAB}
+                emphasis="link"
+                tone="primary"
+                iconLeft={<BrandMark name="linkedin" />}
+              >
+                {linkedin.label}
+              </Button>
+            ) : null}
           </Cluster>
         ) : null}
       </Layout>
@@ -145,7 +167,7 @@ export function ProfileFollow({ body, link, image }: ProfileFollowProps) {
             {...NEW_TAB}
             emphasis="link"
             tone="primary"
-            icon={<BrandMark name="linkedin" />}
+            iconLeft={<BrandMark name="linkedin" />}
           >
             {link.label}
           </Button>

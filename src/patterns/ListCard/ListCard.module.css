@@ -289,6 +289,13 @@
   transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
 }
 
+/* A bodiless row's title is the item's whole sentence, so it takes the sentence measure rather than
+   the 32ch a name is: two balanced lines at full width (owner, 1 Nov 2026). Rows only. */
+.title.titleSentence,
+.titleSentence .title {
+  max-inline-size: var(--lcrd-sentence-measure);
+}
+
 /* The kind-and-date label above the title (`eyebrow`, 13 Oct 2026): BlockCard's eyebrow voice, read
    through this component's own tokens (a component never reads another's). Ink, never blue. */
 .eyebrow {

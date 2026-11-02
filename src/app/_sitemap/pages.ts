@@ -1,5 +1,6 @@
 import {
   getNavigation,
+  listAuthors,
   listCorpusPages,
   listSitePages,
   type SitePage,
@@ -7,6 +8,7 @@ import {
 } from '@/content';
 import {
   auditPath,
+  authorPath,
   blogPath,
   CASE_SLUG_REDIRECTS,
   caseStudyPath,
@@ -33,7 +35,8 @@ import { PASS_1_TOOL_ROUTES } from '../_corpus/tool';
  *   1. the fixed pages — the routes with a `page.tsx` of their own and no slug. Named here because a
  *      route in ROUTES may have no page yet (the nav names a route before it exists); a new fixed
  *      page joins this list in the same edit that creates it.
- *   2. every entry Strapi publishes in a routed collection (`listSitePages`).
+ *   2. every entry Strapi publishes in a routed collection (`listSitePages`), and every author page
+ *      (`listAuthors`).
  *   3. the corpus pages that have switched over (`_corpus/*` PASS_1 lists), less any that redirect.
  *
  * Strapi before corpus, so a page both sources name keeps Strapi's last-modified date.
@@ -88,6 +91,7 @@ const FIXED_PAGES: readonly { route: RouteKey; title: string; group: SitemapGrou
   { route: 'services', title: 'Services', group: 'services' },
   { route: 'caseStudies', title: 'Case studies', group: 'caseStudies' },
   { route: 'insights', title: 'Insights', group: 'insights' },
+  { route: 'authors', title: 'Authors', group: 'insights' },
   { route: 'privacy', title: 'Privacy policy', group: 'legal' },
   { route: 'terms', title: 'Terms of use', group: 'legal' },
   { route: 'sitemap', title: 'Sitemap', group: 'legal' },
@@ -144,6 +148,19 @@ function navLabels(node: unknown, labels = new Map<string, string>()): Map<strin
   return labels;
 }
 
+/** Everyone with an author page. An outage lists none, as `cmsPages` does. */
+async function authorPages(): Promise<SitemapEntry[]> {
+  try {
+    return (await listAuthors()).map((author) => ({
+      path: authorPath(author.slug),
+      title: author.name,
+    }));
+  } catch (error) {
+    console.error('sitemap: authors unavailable', error);
+    return [];
+  }
+}
+
 async function cmsPages(): Promise<SitePage[]> {
   try {
     return await listSitePages();
@@ -156,10 +173,11 @@ async function cmsPages(): Promise<SitePage[]> {
 }
 
 export async function listSitemapGroups(): Promise<SitemapGroup[]> {
-  const [cms, corpus, navigation] = await Promise.all([
+  const [cms, corpus, navigation, authors] = await Promise.all([
     cmsPages(),
     listCorpusPages(),
     getNavigation(),
+    authorPages(),
   ]);
   const corpusNames = new Map(corpus.map((page) => [page.route, page.name]));
   const labels = navLabels(navigation);
@@ -183,6 +201,7 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
       ...(page.updatedAt ? { lastModified: page.updatedAt } : {}),
     });
   }
+  for (const author of authors) add('insights', author);
   for (const path of CORPUS_ROUTES) {
     const group = CORPUS_GROUPS[`/${path.split('/')[1]}`];
     if (group) add(group, { path, title: labels.get(path) ?? corpusNames.get(path) ?? path });

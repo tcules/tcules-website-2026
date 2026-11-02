@@ -477,12 +477,15 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
  * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
  */
-export const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
+const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
   'your-team',
   'working-loop',
   'design-to-release',
   'product-knowledge',
 ]);
+
+/** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
+export const isIllustratedProse = (bandId: string): boolean => ILLUSTRATED_PROSE.has(bandId);
 
 /**
  * The register a band is drawn in, from its kind, whether the page draws it (`drawn`, the scenes it was

@@ -25,17 +25,21 @@
   aspect-ratio: var(--ratio-portrait);
   border-radius: var(--pfc-portrait-radius);
   overflow: hidden;
+  background: var(--pfc-portrait-ground);
 }
 
-/* No portrait: the initials centred in the square on a plain ground (one text run in its own box,
-   centred by the block's own alignment, so nothing is arranged). */
+/* No portrait: the initials centred in the square on the frame's tint, in the name's full ink (one
+   text run in its own box, centred by the block's own alignment, so nothing is arranged). */
 .initials {
   align-content: center;
   text-align: center;
   font: var(--pfc-initials-text);
   letter-spacing: var(--pfc-initials-tracking);
   color: var(--pfc-initials-ink);
-  background: var(--pfc-initials-ground);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--pfc-initials-tracking);
 }
 
 .circle {

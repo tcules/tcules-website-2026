@@ -145,6 +145,18 @@ function toItem(resource: InsightResource, subjects?: Map<string, string>): Insi
   };
 }
 
+/**
+ * Pieces from the hub's pool as the hub's own cards: the same mapping, so a piece is one card
+ * wherever it is listed (an author's pieces, 1 Nov 2026).
+ */
+export function insightCards(
+  page: InsightsPage,
+  resources: readonly InsightResource[],
+): InsightItem[] {
+  const subjects = subjectsOf(page);
+  return resources.map((resource) => toItem(resource, subjects));
+}
+
 const formatTitle = (page: InsightsPage, kind: InsightResourceKind) =>
   page.formatCards.find((card) => card.kind === kind)?.title?.trim() || FORMAT_NAME[kind];
 
@@ -181,8 +193,11 @@ const CLOSE_STAND_IN = {
   action: { label: 'Tell us about it', href: ROUTES.contact },
 };
 
-/** The close: the authored ask (or its stand-in) with the enquiry form, sent from `origin`. */
-function closingOf(page: InsightsPage, origin: string, placement: string): ListingClosing {
+/**
+ * The close: the authored ask (or its stand-in) with the enquiry form, sent from `origin`. The hub's,
+ * and every page in its family that ends the way the hub does (the author pages, 1 Nov 2026).
+ */
+export function closingOf(page: InsightsPage, origin: string, placement: string): ListingClosing {
   const copy = page.closing?.action
     ? {
         heading: page.closing.heading,

@@ -24,7 +24,7 @@ more of them. It closes an article; it is not a card set and not an advert for t
 - `label` — an `<h2>` in the mono micro voice ("About the authors").
 - `list` — a `Cluster` `<ul>`: `colGap="stack"`, `rowGap="block"`, wrapping one person per line on a
   phone.
-- `person` — portrait (64 square, 8 radius, `Media` filling it) or initials in an outlined square;
+- `person` — portrait (64 square, 8 radius, `Media` filling it) or initials (the h4 role, optically centred: trimmed to the capitals, tracking balanced) in full ink on the portrait's tint ground (1 Nov 2026); name and role 4 apart, the link 16 below them, the text top-aligned to the portrait;
   beside it at `--gap-text`, the name (`<h3>` at `--text-h5`), the role (`--text-body-sm`) and the
   link, `inline` apart.
 - `link` — `Button` `emphasis="link"`, `size="sm"`, trailing arrow: "More from Shoghi".
