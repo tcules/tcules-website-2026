@@ -311,7 +311,10 @@ const EMPTY_CELLS: DataTableProps = {
 const SURFACE_TABLE: DataTableProps = {
   ...ROUTE_TABLE,
   rows: [
-    ...ROUTE_TABLE.rows,
+    ROUTE_TABLE.rows[0]!,
+    /* The picked row on every surface (pick, owner 2 Nov 2026). */
+    { ...ROUTE_TABLE.rows[1]!, pick: true },
+    ...ROUTE_TABLE.rows.slice(2),
     {
       header: 'Full rebuild',
       cellsHtml: [
@@ -485,6 +488,15 @@ export default function DataTableSpecimenPage() {
             note="Six columns in 1176 is about 196 a column. Heads that wrap sit on the rule with their one-line neighbours."
           >
             <DataTable {...FIVE_COLUMNS} />
+          </Specimen>
+          <Specimen
+            title="The picked row · pick"
+            note="The option the table recommends: a blue ground across the row, the key in blue, a bar down its start edge. /why-tcules' alternatives pick the Tcules row (the composer picks any comparison row naming Tcules). Never reorders the rows; at most one per table. Every surface below shows it on its second row."
+          >
+            <DataTable
+              {...ROUTE_TABLE}
+              rows={ROUTE_TABLE.rows.map((row, i) => (i === 1 ? { ...row, pick: true } : row))}
+            />
           </Specimen>
           <Specimen
             title="Named by the heading above it · labelledBy"

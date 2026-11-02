@@ -403,3 +403,12 @@
 
   justify-self: start;
 }
+
+/* The split tile carries no texture (owner, 2 Nov 2026): its result panel is already the card's
+   second surface, and a drawing with its own hatching (New Product Design's set-aside parts) shimmered
+   against the pixel grid. Its drawing sits on the tile's plain ground; hover keeps the lift, the
+   hairline and the title's accent. */
+.split .tile::before,
+.split .tile::after {
+  content: none;
+}

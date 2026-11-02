@@ -18,7 +18,8 @@ import { CURSOR, Chip, Focus, Glide, GrowIn, Glyph, Hatched, TraceIn } from './s
  *   symptom-*     "Where we start": each complaint drawn as the problem turning into its fix
  *   specialist-*  the specialist services, drawn bare on the bento's tiles
  *   case-*        a worked example's problem and what we did, drawn on the same screen so the change
- *                 is the only difference (Dealpath's listing card and pipeline)
+ *                 is the only difference (Dealpath's listing card and pipeline); ConnectX's thinking
+ *                 and craft, before the coded workspace (/why-tcules)
  *
  * Assigned item by item at the content seam (src/content/sources/offer-scenes.ts), never by keyword.
  */
@@ -756,6 +757,78 @@ function OfferRoute() {
   );
 }
 
+/** A floor of the 2.5D twin: one flat plate seen from above, centred on (cx, y). */
+function Floor({
+  cx,
+  y,
+  w,
+  h,
+  className,
+}: {
+  cx: number;
+  y: number;
+  w: number;
+  h: number;
+  className: string | undefined;
+}) {
+  return (
+    <path
+      className={className}
+      d={`M${cx - w},${y} L${cx},${y - h} L${cx + w},${y} L${cx},${y + h} Z`}
+    />
+  );
+}
+
+/**
+ * ConnectX, the thinking: the question, asked in the product, lands on a screen assembled around it.
+ * The ask (a pill with its chat mark) routes into the workspace, where the modules it called sit in
+ * place, one lit as the answer. The twin's floors are the craft's picture, so this one draws none.
+ */
+function CaseConnectxThinking() {
+  return (
+    <>
+      <Rect x={30} y={80} w={100} h={20} rx={10} className={styles.tile} />
+      <Glyph name="chat-round-dots" cx={44} cy={90} size={10} className={styles.glyph} />
+      <Copy x={56} y={90} w={60} />
+      <Hop x1={130} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={184} y={46} w={32} quiet />
+      <Rect x={184} y={60} w={92} h={36} className={styles.region} />
+      <Glyph name="widget" cx={200} cy={78} size={12} className={styles.glyphAccent} />
+      <Copy x={214} y={78} w={44} />
+      <Rect x={184} y={104} w={42} h={32} className={styles.tile} />
+      <Copy x={192} y={120} w={24} quiet />
+      <Rect x={234} y={104} w={42} h={32} className={styles.tile} />
+      <Copy x={242} y={120} w={24} quiet />
+    </>
+  );
+}
+
+/**
+ * ConnectX, the craft: the detailed building set aside (hatched, never built) for a simple stack of
+ * floors, one lit and the rest dimmed, its asset named beside it, because the twin's job is to explain.
+ */
+function CaseConnectxCraft() {
+  return (
+    <>
+      <Hatched x={30} y={50} w={80} h={80} />
+      <Glyph name="layers" cx={70} cy={90} size={20} className={styles.glyphQuiet} />
+      <Hop x1={110} x2={150} y={90} />
+      <Floor cx={190} y={130} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={110} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={90} w={40} h={8} className={styles.region} />
+      <Floor cx={190} y={70} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={50} w={40} h={8} className={styles.tile} />
+      <path className={styles.line} d="M230,90 L250,90" />
+      <circle className={styles.node} cx="230" cy="90" r="2.5" />
+      <Rect x={250} y={74} w={40} h={32} rx={6} className={styles.frame} />
+      <Glyph name="bolt-circle" cx={262} cy={90} size={10} className={styles.glyph} />
+      <Copy x={272} y={86} w={10} />
+      <Copy x={272} y={95} w={8} quiet />
+    </>
+  );
+}
+
 export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-explain': OutcomeExplain,
   'outcome-rules': OutcomeRules,
@@ -778,6 +851,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'offer-route': OfferRoute,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
+  'case-connectx-thinking': CaseConnectxThinking,
+  'case-connectx-craft': CaseConnectxCraft,
 };
 
 /** Each specialist scene's drawn edge in the 320 × 180 drawing, for the bento's bare frame. */

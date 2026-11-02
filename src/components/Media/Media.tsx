@@ -437,6 +437,10 @@ export function Media({
               ? styles.crop
               : styles.intrinsic,
         ...(cropRatio ? ratioClasses(cropRatio) : []),
+        /* A placement that rules its own crop box rounds and clips it; the image draws no corner of
+           its own, or its 8 sits inside the box's (8 less the hairline) and shows ground at each
+           corner (owner, 2 Nov 2026). */
+        edge === 'placement' && styles.placed,
         edge === 'kind' && kind === 'capture' && styles.capture,
         edge === 'kind' && isPhotograph && styles.photograph,
         /* The tone layer (review 7 Oct 2026): every photograph, whatever its edge, so one grade

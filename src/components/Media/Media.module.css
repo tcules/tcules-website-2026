@@ -37,6 +37,15 @@
   border-radius: var(--media-radius);
 }
 
+/* edge="placement": the crop box around the image draws its edge (radius, hairline, clip), so the
+   image has square corners inside it. Since --media-radius became 8 (2026-11-01-every-image-rounded)
+   a placed image rounded itself inside a box already rounded and clipped, and the two curves, one a
+   hairline smaller than the other, left a sliver of ground at every corner. A later rule than .image,
+   at equal specificity. */
+.placed {
+  border-radius: 0;
+}
+
 /* `art`: the <picture> that holds the <source>s. It renders no box of its own — block so the img
    inside has no inline line box around it, and, under fill or contain, the parent's full height so
    the img's 100% still resolves against the parent's box. */

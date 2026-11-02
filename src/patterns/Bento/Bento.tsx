@@ -179,11 +179,14 @@ function TileLink({
        below. */
     return (
       <a href={item.href} className={styles.tile}>
+        {/* equalRows: the halves' row takes the tile's whole height, so every panel in a row of
+            tiles ends on the same line however long its neighbour's words run. */}
         <Layout
           className={styles.fill}
           columns={{ base: 1, md: [1, 1] }}
           colGap="tight"
           rowGap="tight"
+          equalRows
         >
           <div className={styles.named}>
             <Layout rowGap="block">
@@ -392,12 +395,6 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
      the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
   const routes = cta?.routes ?? [];
   const ctaAt = used % tracks;
-  /* Cards that open a fresh row and divide it evenly share it (owner, 2 Nov 2026, /services: two
-     cards after eight tiles are 2 + 2, not 1 + 3). */
-  const evenSpan =
-    routes.length > 1 && ctaAt === 0 && tracks % routes.length === 0
-      ? tracks / routes.length
-      : undefined;
   const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
   const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
   const mdSpan = mdCells % 2 === 1 ? 2 : 1;
@@ -428,7 +425,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
             <li
               key={route.question ?? route.answer ?? i}
               className={styles.cta}
-              data-span={evenSpan ?? (isLast ? lgSpan : 1)}
+              data-span={isLast ? lgSpan : 1}
               data-span-md={isLast ? mdSpan : 1}
             >
               <CtaCard route={route} />

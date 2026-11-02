@@ -23,9 +23,11 @@ const PLACEHOLDER = true;
 
 /** The lowest placeholder score that may be shown (owner, 19 Oct 2026). */
 const PLACEHOLDER_FLOOR = 4.5;
+/** The only scores a placeholder may take (owner, 2 Nov 2026: "either 4.5 or 5, never less"). */
+const PLACEHOLDER_SCORES: readonly number[] = [4.5, 5];
 
 const rating = (value: number): TestimonialRating => {
-  if (PLACEHOLDER && value < PLACEHOLDER_FLOOR) {
+  if (PLACEHOLDER && (value < PLACEHOLDER_FLOOR || !PLACEHOLDER_SCORES.includes(value))) {
     throw new Error(
       `testimonial-ratings: placeholder ${value} is below the ${PLACEHOLDER_FLOOR} floor.`,
     );
@@ -67,4 +69,33 @@ export const TESTIMONIAL_RATINGS: Readonly<Record<string, TestimonialRating>> = 
   'DRAFT-NOVUS-RESEARCHER': rating(4.5),
   'CL-KNOVOS-CANDOUR': rating(5),
   'UW-RAZEO-METHOD': rating(4.5),
+};
+
+/**
+ * ONE RATING PER PERSON (owner, 2 Nov 2026; decisions/2026-11-02-one-person-one-rating): "testimonials
+ * should always appear with star ratings, one named person gives one rating across the website despite
+ * different quotes." Keyed by the speaker's name as the copy attributes it (the text before the first
+ * comma of the bold sign-off). The corpus loader sets every quote's rating from this table and throws
+ * on a quoted person missing from it, so no quote renders without stars and no person carries two
+ * scores. Still PLACEHOLDERS (P36): each is replaced by the person's own published review.
+ */
+export const RATINGS_BY_PERSON: Readonly<Record<string, TestimonialRating>> = {
+  'Akshay Vyas': rating(5),
+  'Aldrin Gomes': rating(4.5),
+  'Amin Nordin': rating(5),
+  'Ashok Mohanty': rating(5),
+  'Clément Contamine': rating(5),
+  'David Aghaei': rating(4.5),
+  'Dhanur Aashray Majety': rating(5),
+  'Eagles Security Aruba & Hotel California Aruba': rating(4.5),
+  "Jody O'Neill": rating(5),
+  'Kalpesh Gohill': rating(4.5),
+  'Pranjal Dev Goswami': rating(5),
+  'Pratik Ghoshal': rating(5),
+  'Roland Sailer': rating(5),
+  'Russell Miler': rating(4.5),
+  'Samy Melaine': rating(5),
+  'Stephanie Leue': rating(5),
+  'Trishanya Raju': rating(5),
+  'Tushar G': rating(4.5),
 };
