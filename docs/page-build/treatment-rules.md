@@ -160,9 +160,7 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   are split service tiles: two a row, the named half (drawing, name, line) and an inset result panel
   (label, text, the tile's action at its foot). Never four-across tiles with the field stacked in: three
   fields cannot stay in line across a tile, and a label repeated per tile out-shouts the words.
-- **Mixed closing words under a tile set** (notes on single destinations, not a question and its way
-  onward): the authored sentences once, links inline, at body size, two in the set's two columns. A
-  closing sentence with no link that speaks of the whole set joins the band's lead. Never a CTA card per note: it repeats the sentence's names as links and an aside
-  outshouts the set.
+- **Mixed closing words under a tile set**: each linked sentence is its own statement CTA card; a sentence
+  with no link stays below the set. Cards that open a fresh row and divide it evenly share it equally.
 - **A hero title too long for the beside split's half column** takes the centred hero with the media below
   (route list `CENTRED_HERO_ROUTES`); a drawing or its placeholder is capped at 860, a photograph is not.

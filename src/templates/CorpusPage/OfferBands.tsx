@@ -1330,17 +1330,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      path drops the table's third column. */
   const runOn = (row: (typeof rows)[number]) =>
     row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
-  /* Mixed closing words (owner, 2 Nov 2026, /services): a sentence with no link is about the set as a
-     whole ("A new AI product often brings…" beside "most projects draw on two or three"), so it joins
-     the lead it continues; the linked ones are notes on single destinations and stay under the set. */
-  const mixedClosing =
-    closing.some(hasLink) && !closing.every(hasLink) && routesOf(closing) === undefined;
-  const lead = leadText(band);
-  const setNotes = closing
-    .filter((runs) => !hasLink(runs))
-    .map((runs) => plain(runs).trim())
-    .join(' ');
-  const routerLead = mixedClosing && lead && setNotes ? `${lead} ${setNotes}` : lead;
+  const routerLead = leadText(band);
   const closingFooter =
     closing.length > 0 ? (
       <ContentSectionText>
@@ -1377,23 +1367,24 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
               ),
             },
           ]
+        : undefined) ??
+      /* Mixed closing words (owner, 2 Nov 2026, /services): each linked paragraph is a statement card
+         of its own, and the paragraphs with no link stay below the set. */
+      (closing.some(hasLink)
+        ? closing
+            .filter(hasLink)
+            .map((runs): { question?: string; answer: InlineRun[] } => ({ answer: runs }))
         : undefined);
-    /* The linked closing sentences are notes on single destinations: the authored sentences, said
-       once, links inline, at body size, two in the set's two columns under the tiles they qualify.
-       Never a card per sentence: the card repeated the sentence's names as links and set an aside
-       louder than the set. */
-    const linked = closing.filter(hasLink);
-    const coda =
-      !routes && mixedClosing && routerLead !== lead ? (
-        <Layout
-          columns={{ base: 1, md: linked.length === 2 ? [1, 1] : 1 }}
-          colGap="gutter"
-          rowGap="text"
-        >
-          {linked.map((runs, index) => (
-            <p key={index}>{renderInline(runs)}</p>
-          ))}
-        </Layout>
+    const unlinked = closing.filter((runs) => !hasLink(runs));
+    const restFooter =
+      routes && unlinked.length > 0 ? (
+        <ContentSectionText>
+          <Layout rowGap="text">
+            {unlinked.map((runs, index) => (
+              <p key={index}>{renderInline(runs)}</p>
+            ))}
+          </Layout>
+        </ContentSectionText>
       ) : undefined;
     const n = rows.length;
     const cta: BentoCta | undefined = routes
@@ -1433,7 +1424,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? undefined : (coda ?? closingFooter),
+      routes ? restFooter : closingFooter,
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));

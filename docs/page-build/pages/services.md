@@ -15,11 +15,9 @@ one new arrangement of DrawnTableBand (`chooser`).
 - Tried and set aside the same day: four-across tiles with the detail stacked in (fields could not stay
   in line, the label out-shouted the words); a drawn chooser list (the owner disliked the sub-service
   sentences as footnotes under rows); mock B, the hairline split with the result as a headline.
-- The closing words stay the authored sentences, said once, links inline, at body size, with no card:
-  the two linked ones (Product Design in parts, Software Development's sub-services) in the set's two
-  columns. "A new AI product often brings…" is about the set as a whole, so it joins the lead it continues
-  ("Most projects draw on two or three of them."); under the set it read as a third, stray line (owner). Dotted statement cards were tried and read as
-  clutter: each repeated its sentence's names as a stack of mono links, an aside louder than the set.
+- The closing words: each linked sentence is a dotted statement CTA card (Product Design in parts,
+  Software Development's sub-services), the two sharing the row after the tiles 2 + 2; the sentence with
+  no link ("A new AI product often brings…") stays under the set.
 - Hero: centred, the media below (owner, 2 Nov 2026: the long title), `CENTRED_HERO_ROUTES` in
   src/lib/hero-media.ts. The lede centres on the axis (PageHero's copy stack centres its items under a
   centred head). The labelled placeholder until hub art is drawn, registered as an illustration; under
@@ -30,16 +28,13 @@ one new arrangement of DrawnTableBand (`chooser`).
 |---|---|---|
 | hero | CorpusHero centred, placeholder below (860), record figures | illustration to draw (register row) |
 | client-recognition | recognition · LogoGrid | |
-| service-guide | router · Bento split tiles (`detail`) | closing sentences as a two-column coda, links inline |
+| service-guide | router · Bento split tiles (`detail`), 2 statement CTA cards 2 + 2 | unlinked sentence under the set |
 | selected-work | cases · 3-column card grid | |
 | testimonials | quotes · one-at-a-time slider + Clutch badge | 4 quotes (< 6) |
 | how-we-work-together | options plated + terms row, ink island ask | |
 | why-tcules | reasons · isometric illustrations | The Wandering Raven's still to draw |
 | industries | 3-column sector photo cards | 4 photos owed |
 | enquiry, faq | Island form, FAQ | form before FAQ |
-
-## Content mapping
-- `service-guide`: the closing sentence with no link moves up into the lead (same words).
 
 ## Open
 - Owner review of the split tiles and the centred hero.
