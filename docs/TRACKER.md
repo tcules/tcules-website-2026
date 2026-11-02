@@ -170,22 +170,23 @@ a template before the single pages it serves, since one pass there fixes every p
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
-- [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+- [~] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
       from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
-      carry sector photos. Polished tier.
+      carry sector photos. Polished tier. Started 2 Nov in another session.
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-- [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+- [~] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
-      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
-- [~] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
-      Design pass 2 Nov (branch design/services-hub, record docs/page-build/pages/services.md): the guide is split
+      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
+- [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+      Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
       service tiles (mock A); centred hero, illustration placeholder until art.
-- [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
+- [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
+      services hub (#194).
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
       relief (lowest score on 29 Oct, 4/10).
 
@@ -198,9 +199,9 @@ needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:c
 problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
 `/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
 choice (2.34).
-- [~] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [x] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
       First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
-      the four middle illustrations and the subpages' prose runs are open.
+      the four middle illustrations and the subpages' prose runs are open. Done for now (owner, 2 Nov 2026).
 - [x] **2.41** `/why-tcules`: every service page links to it. First pass done 2 Nov (owner: "decent for now"):
       work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
       case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.

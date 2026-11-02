@@ -1,0 +1,124 @@
+/* Arena — the home hero's animated drawing. Every value comes from --arena-*, declared in
+   tokens/components/arena.css; the durations and curves are the artifact's own timing.
+
+   The BOX is the drawing's track at 1024/720 (square below 640, the artifact's phone cut, where
+   the camera holds on the studio floor). It holds that ratio before the SVG lands, so nothing
+   shifts. The STAGE is not held to the box: as in the artifact, the field of apps runs past it
+   and fades to the page by a soft mask, so the drawing reads as unbounded ground rather than a
+   picture in a column (owner, 2 Nov 2026). It bleeds 9% above and below, 7% into the gap
+   before the copy (inside the 96 split gap; under 32 on a phone), and up to the page gutter at the end — never further, because Section does
+   not clip and a bleed past the gutter would scroll the page sideways.
+
+   No tone, fog or drift layers: the artifact's stylesheet declares them but its markup never
+   renders them (owner, 2 Nov 2026: "what's that gray halo").
+
+   The drawing's own classes (.alid, the field, the hero card) are reached with :global, scoped
+   under the stage, because the SVG is markup this module did not write.                       */
+
+.arena {
+  position: relative;
+  aspect-ratio: 1024 / 720;
+}
+
+@media (max-width: 639px) {
+  .arena {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.stage {
+  position: absolute;
+  inset-block: -9%;
+  inset-inline-start: -7%;
+  inset-inline-end: calc(-1 * var(--gap-gutter));
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, var(--arena-mask-solid) 78%, transparent 100%);
+  mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, var(--arena-mask-solid) 78%, transparent 100%);
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+}
+
+.art :global(svg) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* The field of apps, and each app's idle salute while the field is held. */
+.stage :global(#arena-field) {
+  transition: opacity 1.2s ease;
+}
+
+.stage :global(.alid) {
+  animation: salute 2.2s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+@keyframes salute {
+  0%,
+  8% {
+    transform: translateY(0);
+  }
+  20%,
+  52% {
+    transform: translateY(calc(-1 * var(--arena-lid-lift)));
+  }
+  64%,
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.stage :global(#arena-heroc) {
+  transition: filter 0.9s;
+}
+
+.stage[data-phase='grey'] :global(#arena-heroc) {
+  filter: drop-shadow(0 0 var(--arena-glow-blur) var(--arena-glow-color));
+}
+
+/* Risen: the field recedes and stops saluting. */
+.stage[data-phase='far'] :global(#arena-field) {
+  opacity: 0.2;
+}
+
+.stage[data-phase='far'] :global(.alid) {
+  animation: none;
+}
+
+.stage[data-paused='true'] :global(.alid) {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage :global(.alid) {
+    animation: none;
+  }
+}
+
+/* The control: placed in the drawing's end corner, inside its own box (not an arrangement). */
+.control {
+  position: absolute;
+  inset-block-end: var(--arena-control-inset);
+  inset-inline-end: var(--arena-control-inset);
+  inline-size: var(--arena-control-size);
+  block-size: var(--arena-control-size);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--arena-control-fg);
+  background: var(--arena-control-bg);
+  border: var(--arena-control-rule-width) solid var(--arena-control-rule);
+  border-radius: var(--arena-control-radius);
+  cursor: pointer;
+}
+
+.control:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--arena-ring-offset) var(--arena-ring-gap-color),
+    0 0 0 calc(var(--arena-ring-offset) + var(--arena-ring-width)) var(--arena-ring-color);
+}
