@@ -45,7 +45,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
 import { caseCover, slotImage, slugOf, type SlotImage } from './images';
-import { isIllustratedProse, signature } from './plan';
+import { isIllustratedProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -409,7 +409,14 @@ function sheetItem(
     if (opts?.wholeSentence && !link && !labelText.endsWith('.')) {
       return {
         title: labelText.replace(/,$/, '').trim(),
-        ...bodyFields([...lead.label, { type: 'text', text: ' ' }, ...trimStart(lead.body)]),
+        /* No space before the authored punctuation: "**A walkthrough with your team**, so …". */
+        ...bodyFields([
+          ...lead.label,
+          ...(/^\s*[,;:.]/.test(plain(lead.body))
+            ? []
+            : [{ type: 'text' as const, text: ' ' }]),
+          ...trimStart(lead.body),
+        ]),
       };
     }
     const body = trimStart(lead.body);
@@ -467,7 +474,7 @@ export function sheetParts(band: CorpusBand): SheetParts {
   const at = blocks[start];
   if (at?.type === 'list') {
     const opts = {
-      wholeSentence: band.id === 'what-you-get',
+      wholeSentence: isWhatYouGet(band),
       runOn: band.id === 'what-we-design',
     };
     items = at.items.map((runs) => sheetItem(runs, opts));
@@ -631,10 +638,22 @@ export function WhatYouGetBand({
 }) {
   const parts = sheetParts(band);
   const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
+  /* What the copy sets before the first term (an audit's worked example, the table a deliverable
+     points to) stays under the deliverables; what follows the terms closes the band. */
+  const firstTerm = parts.after.findIndex((block) => !noteBlocks.includes(block));
+  const exampleBlocks = noteBlocks.filter(
+    (block) =>
+      firstTerm >= 0 &&
+      parts.after.indexOf(block) >= 0 &&
+      parts.after.indexOf(block) < firstTerm,
+  );
+  const closingBlocks = noteBlocks.filter((block) => !exampleBlocks.includes(block));
+  const story = scenarioParts(exampleBlocks);
   const deliverables = parts.items.map((item) => {
     /* Every deliverable is authored with a title (content-changes, 30 Oct 2026). One that is not
        prints its sentence once, as the title, and development says so. */
-    const title = item.title ?? item.body ?? item.id ?? '';
+    /* A title is a label, so its authored full stop goes, as the terms' does below. */
+    const title = item.title?.replace(/\.\s*$/, '') ?? item.body ?? item.id ?? '';
     if (!item.title && process.env.NODE_ENV !== 'production') {
       console.warn(`WhatYouGetBand "${band.id}": "${title}" has no title of its own.`);
     }
@@ -657,9 +676,25 @@ export function WhatYouGetBand({
       deliverablesTitle={parts.listLabel ?? ''}
       deliverables={deliverables}
       parts={peers}
+      example={
+        exampleBlocks.length === 0 ? undefined : story.label ? (
+          <Layout rowGap="stack">
+            {story.before.length > 0 ? (
+              <BandBody blocks={story.before} labelledBy={head(band).headingId} />
+            ) : null}
+            <ScenarioSplit
+              label={story.label}
+              blocks={story.scenario}
+              scene={scenes('scenario')}
+            />
+          </Layout>
+        ) : (
+          <BandBody blocks={exampleBlocks} labelledBy={head(band).headingId} />
+        )
+      }
       note={
-        noteBlocks.length > 0 ? (
-          <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
+        closingBlocks.length > 0 ? (
+          <BandBody blocks={closingBlocks} labelledBy={head(band).headingId} />
         ) : undefined
       }
     />
@@ -834,7 +869,9 @@ export function ClaimRows({
  * gives a claim its example, the example is set apart as the ClaimProof panel, never run on in the
  * argument's words (owner, 2 Nov 2026; decisions/2026-11-02-examples-are-one-pattern).
  */
-export function isExampleParagraph(block: CorpusBlock): block is Extract<CorpusBlock, { type: 'paragraph' }> {
+export function isExampleParagraph(
+  block: CorpusBlock,
+): block is Extract<CorpusBlock, { type: 'paragraph' }> {
   if (block.type !== 'paragraph') return false;
   const first = block.runs[0];
   return first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text);

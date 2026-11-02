@@ -96,7 +96,7 @@ import {
   sheetParts,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
-import { kindOf, type OfferUnit } from './plan';
+import { isWhatYouGet, kindOf, type OfferUnit } from './plan';
 import {
   bandLinks,
   blocksOf,
@@ -571,7 +571,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'set':
     case 'catalog': {
       const scenes = (title: string) => sceneFor(ctx, band, title);
-      if (band.id === 'what-you-get') {
+      if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
       return <SheetBand band={band} scenes={scenes} />;

@@ -198,11 +198,12 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   method: 'method',
   scope: (_band, sig) =>
     /U/.test(sig) && /L/.test(sig) ? 'outcomes' : /T/.test(sig) ? 'table' : 'text',
-  deliverables: 'deliverables',
+  /* An audit's What you get (owner, 2 Nov 2026: "typical what you get section like the services page"). */
+  deliverables: 'outcomes',
   'services-on-their-own': 'router',
   /* ── G11 · option and record tables ── */
   'company-record': 'table',
-  'gap-map': 'table',
+  'gap-map': 'outcomes',
   'client-list': 'table',
   'design-run': 'table',
   autonomy: 'table',
@@ -407,8 +408,16 @@ export function kindOf(band: CorpusBand): OfferKind {
   const kind = kindById(band) ?? kindByShape(band, sig);
   /* "What you get" is one band, four parts (OfferParts); any other labelled set the copy calls by
      another name is a set of items (31 Oct 2026, kinds:check on the composed pages). */
-  return kind === 'outcomes' && band.id !== 'what-you-get' ? 'set' : kind;
+  return kind === 'outcomes' && !isWhatYouGet(band) ? 'set' : kind;
 }
+
+/**
+ * The bands that are "What you get": the service and expertise pages' `what-you-get`, and an audit's
+ * `deliverables` (or `gap-map`, the readiness review's), which render the same four parts (owner,
+ * 2 Nov 2026). One answer, read by the planner, the sheet parser and the renderer.
+ */
+const WHAT_YOU_GET_IDS: ReadonlySet<string> = new Set(['what-you-get', 'deliverables', 'gap-map']);
+export const isWhatYouGet = (band: CorpusBand): boolean => WHAT_YOU_GET_IDS.has(band.id);
 
 /** The shape fallback: the rules OfferPage applied before the id table, still right for an unnamed band. */
 export function kindByShape(band: CorpusBand, sig: string = signature(band)): OfferKind {
