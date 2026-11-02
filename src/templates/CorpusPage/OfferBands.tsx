@@ -6,6 +6,7 @@ import {
   BlockCardSet,
   Bento,
   CaseSpread,
+  ClaimProof,
   ContentSection,
   ContentSectionText,
   CtaRow,
@@ -76,7 +77,9 @@ import {
   BandBody,
   ChallengesBand,
   ClaimRows,
+  claimExample,
   claimsOf,
+  isExampleParagraph,
   CloseBand,
   DestinationsBand,
   DirectoryBand,
@@ -159,6 +162,21 @@ function sceneFor(ctx: OfferContext, band: CorpusBand, key: string): SketchName 
 type Lead = { title: string; body: readonly InlineRun[] };
 
 /** Every labelled claim of a band as a title and the runs after it, in order. */
+/**
+ * A result whose last words are a link to a case study: the link (as the band's action reads it) and the
+ * sentence without it. Null when the runs end in anything else.
+ */
+function trailingCaseLink(
+  runs: readonly InlineRun[],
+): { link: { labelText: string; href: string }; rest: InlineRun[] } | null {
+  const last = runs[runs.length - 1];
+  if (last?.type !== 'link' || !last.href.startsWith('/case-studies/')) return null;
+  const rest = runs.slice(0, -1);
+  const prev = rest[rest.length - 1];
+  if (prev?.type === 'text') rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
+  return { link: { labelText: plain(last.children), href: last.href }, rest };
+}
+
 function leads(band: CorpusBand): Lead[] {
   return band.blocks.flatMap((block) => {
     const lead = leadOf(block);
@@ -660,7 +678,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const claimAt = at >= 0 ? at : rows.length - 1;
       const claim = rows[claimAt];
       if (!claim) return null;
-      const [link] = bandLinks(band);
+      /* The case link closes the story as the band's action. Authored either as its own line, or as the
+         last words of the result ("…live since late 2025. Read the ConnectX case", /why-tcules): then it
+         moves to the action and leaves the sentence it ended, so the strip reads as a case snippet with
+         its way into the case at the head, as Dealpath's (owner, 2 Nov 2026). Words unchanged. */
+      const tail = trailingCaseLink(claim.body);
+      const [link] = bandLinks(band).length > 0 ? bandLinks(band) : tail ? [tail.link] : [];
+      const claimBody = tail ? tail.rest : claim.body;
       /* "Example: Dealpath": the kind of band as the eyebrow, the case as the heading (owner, 26 Oct
          2026). Typesetting the authored heading, never rewording it. */
       const named = /^(example):\s*(.+)$/i.exec(band.headingText);
@@ -671,7 +695,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...(named ? { eyebrow: named[1], heading: named[2] } : {})}
           {...(story ? { scenes: story } : {})}
           surface={unit.surface}
-          claim={{ title: claim.title, body: renderInline(claim.body) }}
+          claim={{ title: claim.title, body: renderInline(claimBody) }}
           action={
             link ? (
               <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
@@ -920,6 +944,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const titled = parts.items.filter((item) => item.title);
+        /* A `###` reason's "Example:" paragraph is its example, set apart in the ClaimProof panel the
+           hard parts use, its words out of the argument's body (owner, 2 Nov 2026: claims and examples
+           are one pattern; decisions/2026-11-02-examples-are-one-pattern). */
+        const authored = new Map(
+          band.blocks.flatMap((block) =>
+            block.type === 'item' ? [[block.headingText, block.blocks] as const] : [],
+          ),
+        );
+        const split = (title: string) => {
+          const blocks = authored.get(title);
+          const example = blocks?.find(isExampleParagraph);
+          if (!blocks || !example) return null;
+          const bodyHtml = blocks
+            .filter((block) => block.type === 'paragraph' && block !== example)
+            .map((block) => (block.type === 'paragraph' ? inlineToHtml(block.runs) : ''))
+            .join(' ');
+          return { bodyHtml, example: claimExample(example.runs) };
+        };
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
@@ -930,13 +972,16 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               action={action}
               items={titled.map((item) => {
                 const drawn = ctx.reasonFigure?.(item.title!, ground);
+                const parted = split(item.title!);
+                const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
                   title: item.title!,
-                  body: item.bodyHtml ? (
-                    <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                  body: bodyHtml ? (
+                    <span dangerouslySetInnerHTML={{ __html: bodyHtml }} />
                   ) : (
                     (item.body ?? '')
                   ),
+                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
                   figure: drawn
                     ? { ...drawn, alt: '', kind: 'illustration' as const }
                     : { ...placeholderIllustration(item.title!), alt: '' },
@@ -1234,10 +1279,22 @@ function routerBody(
   table: Extract<CorpusBlock, { type: 'table' }>,
   row: InlineRun[][],
 ): string {
-  const second = plain(row[1] ?? []).replace(/\.$/, '');
-  return table.header.length >= 3
-    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
-    : second;
+  return plain(row[1] ?? []).replace(/\.$/, '');
+}
+
+/**
+ * A three-column router table's third column, kept as the tile's labelled detail under its header
+ * (owner, 2 Nov 2026, /services): a table that becomes tiles drops no column, and the column's own
+ * name labels it rather than being run on into the body sentence.
+ */
+function routerDetail(
+  table: Extract<CorpusBlock, { type: 'table' }>,
+  row: InlineRun[][],
+): { label: string; text: string } | undefined {
+  const text = plain(row[2] ?? []).trim();
+  return table.header.length >= 3 && text
+    ? { label: plain(table.header[2] ?? []).trim(), text }
+    : undefined;
 }
 
 /**
@@ -1257,7 +1314,12 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
-  const rows = table
+  const rows: {
+    href: string;
+    title: string;
+    body: string;
+    detail?: { label: string; text: string };
+  }[] = table
     ? table.rows.flatMap((row) => {
         const link =
           row[0]?.find((run) => run.type === 'link') ??
@@ -1265,7 +1327,14 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
+          ? [
+              {
+                href: link.href,
+                title: plain(link.children),
+                body: routerBody(table, row),
+                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
+              },
+            ]
           : [];
       })
     : band.blocks.flatMap((block) => {
@@ -1302,13 +1371,22 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []))
       : [];
   const sentence = (body: string) => body.charAt(0).toUpperCase() + body.slice(1);
-  const routerLead = leadText(band);
+  /* Where a set has no tile to carry the detail as its own field, it runs on into the body, so no
+     path drops the table's third column. */
+  const runOn = (row: (typeof rows)[number]) =>
+    row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
+  const mixedClosing =
+    closing.some(hasLink) && !closing.every(hasLink) && routesOf(closing) === undefined;
+  const lead = leadText(band);
+  const routerLead = lead;
   const closingFooter =
     closing.length > 0 ? (
       <ContentSectionText>
-        {closing.map((runs, index) => (
-          <p key={index}>{renderInline(runs)}</p>
-        ))}
+        <Layout rowGap="text">
+          {closing.map((runs, index) => (
+            <p key={index}>{renderInline(runs)}</p>
+          ))}
+        </Layout>
       </ContentSectionText>
     ) : undefined;
   const wrap = (set: ReactNode, footer?: ReactNode) => (
@@ -1338,6 +1416,22 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             },
           ]
         : undefined);
+    /* Mixed closing words (owner, 2 Nov 2026, /services): notes on single destinations and a sentence
+       about the set, in their authored order, run on as ONE paragraph at the body measure, links
+       inline. Never a card per note (it repeated the names as links and outshouted the set), never
+       three loose lines (the last read as stray). */
+    const coda =
+      !routes && mixedClosing ? (
+        <ContentSectionText>
+          <p>
+            {renderInline(
+              closing.flatMap((runs, index) =>
+                index > 0 ? [{ type: 'text', text: ' ' } as InlineRun, ...runs] : runs,
+              ),
+            )}
+          </p>
+        </ContentSectionText>
+      ) : undefined;
     const n = rows.length;
     const cta: BentoCta | undefined = routes
       ? {
@@ -1354,31 +1448,36 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
     return wrap(
       <Bento
         tracks={
-          cta
-            ? /* A lone card is two cells wide (decisions/2026-10-30-set-ends-in-a-cta-card): counted
+          /* Split tiles (a detail each) take two tracks, so four tracks set them two a row. */
+          rows.some((row) => row.detail)
+            ? 4
+            : cta
+              ? /* A lone card is two cells wide (decisions/2026-10-30-set-ends-in-a-cta-card): counted
                  as one, seven tiles chose four tracks and squeezed it into the eighth cell. */
-              ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
-            : n === 7 || n === 8 || n === 4
-              ? 4
-              : 3
+                ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
+              : n === 7 || n === 8 || n === 4
+                ? 4
+                : 3
         }
         cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
+          /* The split tile's action: the service tile's one wording (ServiceTile `action`). */
+          ...(row.detail ? { detail: { ...row.detail, action: 'Explore the service' } } : {}),
           href: row.href,
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? undefined : closingFooter,
+      routes ? undefined : (coda ?? closingFooter),
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));
   const items: BlockCardSetItem[] = rows.map((row, index) => ({
     id: row.href,
     title: row.title,
-    ...(row.body ? { body: sentence(row.body) } : {}),
+    ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
     href: row.href,
     icon: glyphs.every(Boolean) ? glyphs[index] : undefined,
   }));
@@ -1402,7 +1501,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           key={row.href}
           titleAs="h3"
           title={row.title}
-          body={row.body}
+          body={runOn(row)}
           href={row.href}
         />
       ))}
@@ -1560,7 +1659,7 @@ function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
   const block = quoteOf(unit.band);
   if (!block) return null;
   const id = block.testimonialId;
-  const rating = id ? ctx.ratings?.[id]?.value : undefined;
+  const rating = block.rating?.value ?? (id ? ctx.ratings?.[id]?.value : undefined);
   const avatar = id ? ctx.avatars?.[id] : undefined;
   const quote = {
     ...proofQuote(block),

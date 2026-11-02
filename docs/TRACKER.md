@@ -182,7 +182,9 @@ pass on another account; a page ships with its placeholders until then.
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
       storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
-- [ ] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+- [~] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+      Design pass 2 Nov (branch design/services-hub, record docs/page-build/pages/services.md): the guide is split
+      service tiles (mock A); centred hero, illustration placeholder until art.
 - [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
       relief (lowest score on 29 Oct, 4/10).
@@ -199,7 +201,10 @@ choice (2.34).
 - [~] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
       First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
       the four middle illustrations and the subpages' prose runs are open.
-- [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
+- [x] **2.41** `/why-tcules`: every service page links to it. First pass done 2 Nov (owner: "decent for now"):
+      work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
+      case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
+      Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
 - [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to

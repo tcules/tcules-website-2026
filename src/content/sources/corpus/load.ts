@@ -14,6 +14,8 @@ import type {
 } from '../../corpus-types.ts';
 import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS } from '../../../lib/routes.ts';
 import { parseBody } from './parse-body.ts';
+import { RATINGS_BY_PERSON } from '../fixtures/testimonial-ratings.ts';
+import { inlineToText } from '../../../lib/inline.ts';
 
 /** The corpus directory: `_pages/` at the repo root, one markdown file per page. */
 export const CORPUS_DIR = join(process.cwd(), '_pages');
@@ -156,6 +158,30 @@ function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string
   });
 }
 
+/**
+ * Give each quote its speaker's rating: one person, one rating, on every quote of theirs (owner, 2 Nov
+ * 2026; decisions/2026-11-02-one-person-one-rating). The speaker is the name the sign-off starts with
+ * ("Ashok Mohanty, Founder, Auxentios"; "Samy Melaine" then the role on its own line). A quoted person with no rating fails the load, so a quote can
+ * never render without stars.
+ */
+function rateQuotes(bands: readonly CorpusBand[], route: string) {
+  for (const quote of quotesIn(bands.flatMap((band) => band.blocks))) {
+    if (quote.type !== 'quote' || !quote.attribution) continue;
+    const signOff = inlineToText(quote.attribution).trim();
+    /* The sign-off starts with the name, then the role after a comma or on its own line. */
+    const person = Object.keys(RATINGS_BY_PERSON).find((name) => signOff.startsWith(name));
+    const speaker = person ?? signOff.split(',')[0]!.trim();
+    const rating = person ? RATINGS_BY_PERSON[person] : undefined;
+    if (!rating) {
+      throw new Error(
+        `${route}: "${speaker}" is quoted but has no rating. Add them to RATINGS_BY_PERSON ` +
+          '(content/sources/fixtures/testimonial-ratings.ts): 4.5 or 5.',
+      );
+    }
+    quote.rating = rating;
+  }
+}
+
 /** Parse one corpus file's text into a page. Throws with the file name on a malformed file. */
 /**
  * Every link to a case study points at its LIVE slug (component-map C3, 29 Oct 2026), and every link
@@ -203,6 +229,7 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const { hero, bands } = liveCaseLinks(parseBody(body));
     const comp = composition(data.page_composition);
     assignTestimonialIds(bands, comp.testimonialIds);
+    rateQuotes(bands, route);
     return {
       route,
       slug: str(data.slug) ?? route.split('/').filter(Boolean).pop() ?? 'home',

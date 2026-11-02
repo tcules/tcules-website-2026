@@ -36,6 +36,10 @@
   --bnt-art-scale: 0.7;
   --bnt-art-scale-wide: 1.3;
   --bnt-art-scale-m: 0.75;
+  /* The split tile's drawing (`detail`): half a wide tile, so between the single and the wide scale. */
+  --bnt-art-scale-split: 1;
+  /* The split tile's result panel: the card crop box's radius, one step inside the tile's 16. */
+  --bnt-panel-radius: var(--radius-8);
   --bnt-tex-strength: 0.8;
   /* An optical lift, not a distance between two things: the ramp's 2, so the tile rises off the
      band by a hair rather than travelling. */
@@ -63,6 +67,7 @@
   --bnt-tex-ink: var(--color-neutral-500); /* decoration */
   --bnt-tex-ink-hover: var(--color-brandeis-400); /* decoration */
   --bnt-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  --bnt-panel-ground: var(--color-paper-deep); /* the result panel: one step off the band's ground */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -77,6 +82,7 @@
   --bnt-tex-ink: var(--color-neutral-600);
   --bnt-tex-ink-hover: var(--color-brandeis-400);
   --bnt-ring-color: var(--color-brandeis-500);
+  --bnt-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -91,6 +97,7 @@
   --bnt-tex-ink: var(--color-neutral-600);
   --bnt-tex-ink-hover: var(--color-brandeis-300);
   --bnt-ring-color: var(--color-brandeis-300);
+  --bnt-panel-ground: var(--color-neutral-800);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
@@ -105,4 +112,5 @@
   --bnt-tex-ink: var(--color-brandeis-300);
   --bnt-tex-ink-hover: var(--color-white);
   --bnt-ring-color: var(--color-white);
+  --bnt-panel-ground: var(--color-brandeis-600);
 }

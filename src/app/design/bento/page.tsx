@@ -279,6 +279,25 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="detail"
+        title="2d2 · Split tiles: a detail makes the tile two halves (a router table's third column)"
+        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; an inset panel in the second with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A). Two a row on four tracks; the panel under the named half below 768. Every tile or none."
+      />
+      <Section>
+        <Bento
+          items={single.slice(0, 4).map((item) => ({
+            ...item,
+            detail: {
+              label: 'What you come away with',
+              text: 'Research, workflows, interface design and tested prototypes',
+              action: 'Explore the service',
+            },
+          }))}
+          tracks={4}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

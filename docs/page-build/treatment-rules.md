@@ -153,3 +153,36 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
 - **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
   photo bands that all sit image-left is a planner bug, not a design.
+
+## Added 2 Nov 2026 (/why-tcules)
+
+- **A claim's example is one pattern everywhere** (2026-11-02-examples-are-one-pattern): an "Example:" paragraph
+  is the ClaimProof panel under its claim's words, in hard parts, Reasons and prose bands alike.
+- **A case snippet on a non-case page** (the copy tells one product's story in titled steps, then links the case)
+  is the CaseSpread strip, as Dealpath's: each step a picture over its words, the earlier steps drawn, the last the
+  case's real capture, the case link the band's action at the heading's end.
+- **Every quote carries its person's one rating** (2026-11-02-one-person-one-rating).
+- **A comparison of options keeps its table, and the row naming Tcules is picked** (DataTable `pick`: blue ground,
+  blue key, start bar), so the table reads as advice with our suggestion in it (owner, 2 Nov 2026).
+
+## Added 2 Nov 2026 (/services)
+
+- **Named services that each carry a second field** (a router table: service · best for · what you get)
+  are split service tiles: two a row, the named half (drawing, name, line) and an inset result panel
+  (label, text, the tile's action at its foot). Never four-across tiles with the field stacked in: three
+  fields cannot stay in line across a tile, and a label repeated per tile out-shouts the words.
+- **Mixed closing words under a tile set** (notes on single destinations, not a question and its way
+  onward): the authored sentences in their order, run on as one paragraph at the body measure, links
+  inline. Never a CTA card per note (it repeats the names as links and outshouts the set), never loose
+  lines, and never moved out of their place: the copy's order is fixed.
+- **A hero title too long for the beside split's half column** takes the centred hero with the media below
+  (route list `CENTRED_HERO_ROUTES`); a drawing or its placeholder is capped at 860, a photograph is not.
+
+## Added 2 Nov 2026 (/expertise)
+
+- **Groups of borderless cards inside one band sit a `section` (96) apart**, each head a `block` from its own
+  cards. The set's own rows are a `column` (64) apart, so at `stack` (48) the next group's head read as one more
+  row of the set before it. The distance between groups is always larger than the distance inside one.
+- **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).
+- **A group head told as "Label: statement"** ("By product type: what your product does") sets the label as the
+  group's eyebrow and the statement as its h3, first letter raised. A head with no colon stays one h3.

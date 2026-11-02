@@ -972,7 +972,9 @@ export function PageHero({
      never reordered, and two paragraphs may be identical strings. */
   const copyNode =
     lead === undefined ? null : (
-      <Layout rowGap="text">
+      /* Centred, the paragraphs centre on the axis too: the lead's measure is shorter than the body's,
+         so left at the start of this stack it sat off the axis by the difference (owner, 2 Nov 2026). */
+      <Layout rowGap="text" justifyItems={justify}>
         {lead === undefined ? null : leadAside == null ? (
           <p className={styles.lead}>{lead}</p>
         ) : (
@@ -1398,8 +1400,9 @@ export function PageHero({
     const mediaTrack =
       panel != null ? (
         <div className={styles.panel}>{panel}</div>
-      ) : mediaNode === null || watch ? null : centredHead && isIllustration ? (
-        /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
+      ) : mediaNode === null || watch ? null : centredHead && !isPhotograph ? (
+        /* The cap is a drawing's (its labels outgrew the lead at full width), and a capture's or a
+           placeholder's standing in for one (owner, 2 Nov 2026, /services); only a photograph under a
            centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
       ) : split && !isIllustration ? (

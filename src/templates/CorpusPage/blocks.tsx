@@ -259,7 +259,10 @@ export function testimonialItem(
   avatars?: AvatarsById,
 ): TestimonialItem {
   const quote = proofQuote(block);
-  const rating = block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined;
+  /* The speaker's one rating, set at the content seam (one person, one rating); the id table is the
+     fallback for a quote the loader did not rate. */
+  const rating =
+    block.rating?.value ?? (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
   /* The speaker's portrait, when the route passed one for this id (PLACEHOLDER stock portraits
      today, home round 3); without one the card shows no avatar at all. */
   const portrait = block.testimonialId ? avatars?.[block.testimonialId] : undefined;
@@ -394,7 +397,8 @@ function QuoteSlider({
   );
   const withPortraits = portraits.every(Boolean);
   const slides: ProofQuote[] = quotes.map((block, index) => {
-    const stars = block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined;
+    const stars =
+      block.rating?.value ?? (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
     const portrait = withPortraits ? portraits[index] : undefined;
     return {
       ...proofQuote(block),
