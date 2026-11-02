@@ -779,62 +779,52 @@ function Floor({
   );
 }
 
-/** The one arrowhead pointing down, tip at (x, y). */
-function ArrowDown({ x, y }: { x: number; y: number }) {
-  return <path className={styles.solid} d={`M${x},${y} L${x - 4},${y - 7} L${x + 4},${y - 7} Z`} />;
-}
-
 /**
- * ConnectX, the thinking: the two directions combined in one workspace. The ask sits in the workspace
- * rather than beside it, and its answer is the screen: the route runs from the ask to the twin it
- * brought into view, with the data beside it and room left for ordinary work.
+ * ConnectX, the thinking: the question, asked in the product, lands on a screen assembled around it.
+ * The ask (a pill with its chat mark) routes into the workspace, where the modules it called sit in
+ * place, one lit as the answer. The twin's floors are the craft's picture, so this one draws none.
  */
 function CaseConnectxThinking() {
   return (
     <>
-      <Rect x={30} y={22} w={260} h={136} rx={8} className={styles.frame} />
-      <Copy x={44} y={38} w={36} quiet />
-      <Rect x={44} y={50} w={156} h={22} rx={11} className={styles.tile} />
-      <Glyph name="chat-round-dots" cx={58} cy={61} size={11} className={styles.glyph} />
-      <Copy x={70} y={61} w={84} />
-      <path className={styles.line} d="M200,61 L230,61 Q236,61 236,67 L236,81" />
-      <circle className={styles.node} cx="200" cy="61" r="2.5" />
-      <ArrowDown x={236} y={88} />
-      <Rect x={44} y={92} w={66} h={24} className={styles.tile} />
-      <Copy x={52} y={104} w={36} />
-      <Rect x={118} y={92} w={66} h={24} className={styles.tile} />
-      <Copy x={126} y={104} w={28} />
-      <Rect x={44} y={124} w={140} h={22} className={styles.frameQuiet} />
-      <Copy x={52} y={135} w={72} quiet />
-      <Rect x={196} y={92} w={80} h={54} rx={6} className={styles.halo} />
-      <Floor cx={236} y={132} w={24} h={6} className={styles.tile} />
-      <Floor cx={236} y={119} w={24} h={6} className={styles.region} />
-      <Floor cx={236} y={106} w={24} h={6} className={styles.tile} />
+      <Rect x={30} y={80} w={100} h={20} rx={10} className={styles.tile} />
+      <Glyph name="chat-round-dots" cx={44} cy={90} size={10} className={styles.glyph} />
+      <Copy x={56} y={90} w={60} />
+      <Hop x1={130} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={184} y={46} w={32} quiet />
+      <Rect x={184} y={60} w={92} h={36} className={styles.region} />
+      <Glyph name="widget" cx={200} cy={78} size={12} className={styles.glyphAccent} />
+      <Copy x={214} y={78} w={44} />
+      <Rect x={184} y={104} w={42} h={32} className={styles.tile} />
+      <Copy x={192} y={120} w={24} quiet />
+      <Rect x={234} y={104} w={42} h={32} className={styles.tile} />
+      <Copy x={242} y={120} w={24} quiet />
     </>
   );
 }
 
 /**
- * ConnectX, the craft: the detailed 3D building set aside (hatched, never built) for a simpler 2.5D
- * twin whose job is to explain: one floor brought into focus, the rest dimmed, the asset it holds
- * named beside it.
+ * ConnectX, the craft: the detailed building set aside (hatched, never built) for a simple stack of
+ * floors, one lit and the rest dimmed, its asset named beside it, because the twin's job is to explain.
  */
 function CaseConnectxCraft() {
   return (
     <>
-      <Hatched x={30} y={40} w={76} h={100} />
-      <Glyph name="layers" cx={68} cy={90} size={20} className={styles.glyphQuiet} />
-      <Hop x1={106} x2={142} y={90} />
-      <Floor cx={192} y={142} w={44} h={10} className={styles.tile} />
-      <Floor cx={192} y={116} w={44} h={10} className={styles.tile} />
-      <Floor cx={192} y={90} w={44} h={10} className={styles.region} />
-      <Floor cx={192} y={64} w={44} h={10} className={styles.tile} />
-      <path className={styles.line} d="M236,90 L250,90" />
-      <circle className={styles.node} cx="236" cy="90" r="2.5" />
-      <Rect x={250} y={74} w={48} h={32} rx={6} className={styles.frame} />
-      <Glyph name="bolt-circle" cx={262} cy={90} size={11} className={styles.glyph} />
-      <Copy x={272} y={86} w={18} />
-      <Copy x={272} y={96} w={14} quiet />
+      <Hatched x={30} y={50} w={80} h={80} />
+      <Glyph name="layers" cx={70} cy={90} size={20} className={styles.glyphQuiet} />
+      <Hop x1={110} x2={150} y={90} />
+      <Floor cx={190} y={130} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={110} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={90} w={40} h={8} className={styles.region} />
+      <Floor cx={190} y={70} w={40} h={8} className={styles.tile} />
+      <Floor cx={190} y={50} w={40} h={8} className={styles.tile} />
+      <path className={styles.line} d="M230,90 L250,90" />
+      <circle className={styles.node} cx="230" cy="90" r="2.5" />
+      <Rect x={250} y={74} w={40} h={32} rx={6} className={styles.frame} />
+      <Glyph name="bolt-circle" cx={262} cy={90} size={10} className={styles.glyph} />
+      <Copy x={272} y={86} w={10} />
+      <Copy x={272} y={95} w={8} quiet />
     </>
   );
 }
