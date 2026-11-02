@@ -568,9 +568,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        round 7; decisions/2026-10-30-what-you-get-label-rows): the deliverables, then who does the
        work, what we need and where our part stops, each part's title in a label column, the last
        three each led by its drawing. The sheet stands wherever a drawing is missing. */
+    case 'catalog':
+      return <CatalogBand band={band} ctx={ctx} />;
     case 'outcomes':
-    case 'set':
-    case 'catalog': {
+    case 'set': {
       const scenes = (title: string) => sceneFor(ctx, band, title);
       if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
@@ -1310,6 +1311,46 @@ function ctaTracks(cells: number): 3 | 4 {
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
+/**
+ * An expertise page's "What we design" (owner, 2 Nov 2026: drawn tiles, as the services hub): each kind
+ * of product a Bento tile — its drawing (the labelled plate until it is drawn), the kind as authored,
+ * and what follows the ` · ` (the client, or the promise) as the body. Where the copy links the client
+ * to a case study, the whole tile is that link; a kind with no case is a still tile. Words unchanged.
+ */
+function CatalogBand({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
+  const parts = sheetParts(band);
+  const list = blocksOf(band, 'list')[0];
+  const items = parts.items.map((item, index) => {
+    const runs = list?.items[index] ?? [];
+    const link = linksIn(runs)[0];
+    const title = item.title ?? item.body ?? item.id ?? '';
+    const note = plain(runs).split(' · ').slice(1).join(' · ').trim();
+    const scene = sceneFor(ctx, band, title);
+    return {
+      id: title,
+      title,
+      ...(note ? { body: note.charAt(0).toUpperCase() + note.slice(1) } : {}),
+      ...(link ? { href: link.href } : {}),
+      ...(scene ? { scene } : {}),
+    };
+  });
+  const rest = [...parts.intro, ...parts.after];
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="catalog-tiles"
+      lead={parts.lead}
+      footer={
+        rest.length > 0 ? (
+          <BandBody blocks={rest} labelledBy={head(band).headingId} />
+        ) : undefined
+      }
+    >
+      <Bento tracks={items.length === 4 || items.length >= 7 ? 4 : 3} items={items} />
+    </ContentSection>
+  );
+}
+
 /** A split tile's action, named for what its link opens: a tool, an audit or a service. */
 function tileAction(href: string | undefined): string {
   if (href?.startsWith('/tools/')) return 'Try the tool';
@@ -1427,7 +1468,9 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
       ? (sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href))
       : (sceneFor(ctx, band, row.title) ??
         /* the page's own option takes the page's own drawing */
-        (ctx.page.name.toLowerCase() === row.title.toLowerCase() ? serviceSceneFor(ctx.page.route) : undefined)),
+        (ctx.page.name.toLowerCase() === row.title.toLowerCase()
+          ? serviceSceneFor(ctx.page.route)
+          : undefined)),
   );
   /* An option table always takes the tiles: a missing drawing is the labelled empty plate. */
   if (rows.length >= 3 && (optionTable || scenes.every(Boolean))) {
