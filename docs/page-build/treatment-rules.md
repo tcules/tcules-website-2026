@@ -156,10 +156,10 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 
 ## Added 2 Nov 2026 (/services)
 
-- **A router table of named services becomes service tiles and keeps every column**: the second column is
-  the tile's body, the third a labelled detail (Bento `detail`, the header as its mono label). Never run the
-  third column into the body sentence where a tile can carry it.
-- **Mixed closing words under a tile set**: each linked sentence is its own statement CTA card; a sentence
-  with no link stays below the set. Cards that open a fresh row and divide it evenly share it equally.
+- **A choice the reader makes by situation** (a router table: service · best for · what you get) is a
+  chooser: one drawn row per destination, the situation column read down, the header's words once.
+  Never tiles when each item carries more than a name and one line: a tile cannot hold three fields in
+  line, and a repeated label per tile out-shouts the words. A closing sentence that opens with a row's
+  name is that row's note.
 - **A hero title too long for the beside split's half column** takes the centred hero with the media below
   (route list `CENTRED_HERO_ROUTES`); a drawing or its placeholder is capped at 860, a photograph is not.

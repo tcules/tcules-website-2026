@@ -1120,7 +1120,7 @@ export function DrawnTableBand({
 }: {
   page: CorpusPage;
   band: CorpusBand;
-  sceneOf: (key: string) => SketchName | undefined;
+  sceneOf: (key: string, href?: string) => SketchName | undefined;
   scenario?: SketchName;
   /**
    * `grid`: the items as drawn tiles side by side. `ledger`: one row per item, its drawing at the
@@ -1128,7 +1128,14 @@ export function DrawnTableBand({
    * compares across columns (a choice, a chain of checks), where a tile grid would repeat the shape
    * of the band before it (round 5 critic, 30 Oct 2026).
    */
-  arrangement?: 'grid' | 'ledger';
+  /*
+   * `chooser`: a choice between destinations read by situation (owner, 2 Nov 2026, /services): one
+   * row per item, the drawing at the start, then the name, the second column and the third, each in
+   * its own aligned track, the header's words said once above them from 1024. The whole row is the
+   * link. A closing paragraph that opens with an item's name belongs to that item and sits under its
+   * row; the rest stay below the set.
+   */
+  arrangement?: 'grid' | 'ledger' | 'chooser';
 }) {
   const blocks = content(band);
   const tableAt = blocks.findIndex((block) => block.type === 'table');
@@ -1141,7 +1148,7 @@ export function DrawnTableBand({
     return {
       title,
       href: link?.href,
-      scene: sceneOf(title),
+      scene: sceneOf(title, link?.href),
       body: inlineToHtml(row[1] ?? []),
       meta:
         table.header.length >= 3
@@ -1195,8 +1202,87 @@ export function DrawnTableBand({
       ))}
     </Layout>
   );
+  /* The chooser: a paragraph after the table that opens with an item's name is that item's note. */
+  const noteOf = (title: string) =>
+    after.find(
+      (block) =>
+        block.type === 'paragraph' &&
+        hasLink(block.runs) &&
+        plain(block.runs).startsWith(`${title} `),
+    );
+  const notes = new Set(
+    arrangement === 'chooser' ? items.map((item) => noteOf(item.title)).filter(Boolean) : [],
+  );
+  const CHOOSER_TRACKS: { base: number; lg: number[] } = { base: 1, lg: [2, 3, 4, 4] };
+  const chooser = (
+    <Layout rowGap="block">
+      <div className={styles.chooserHead} aria-hidden="true">
+        <Layout columns={CHOOSER_TRACKS} colGap="gutter" rowGap="none">
+          <span />
+          <p className={styles.legend}>{heading}</p>
+          <p className={styles.legend}>{plain(table.header[1] ?? [])}</p>
+          <p className={styles.legend}>{plain(table.header[2] ?? [])}</p>
+        </Layout>
+      </div>
+      <Layout as="ul" rowGap="none">
+        {items.map((item) => {
+          const note = noteOf(item.title);
+          return (
+            <li key={item.title} className={styles.chooserRow}>
+              <Layout columns={CHOOSER_TRACKS} colGap="gutter" rowGap="block" align="start">
+                <div className={styles.chooserArt}>
+                  <Sketch name={item.scene!} />
+                </div>
+                <Layout rowGap="text">
+                  <h3 className={styles.chooserTitle}>
+                    {item.href ? (
+                      <a href={item.href} className={styles.ledgerLink}>
+                        {/* The arrow travels with the name's last word, so a name on two lines
+                            keeps it beside its end rather than at the track's far edge. */}
+                        {item.title.split(' ').slice(0, -1).join(' ')}{' '}
+                        <span className={styles.chooserEnd}>
+                          {item.title.split(' ').at(-1)}
+                          <Icon name="arrow-right" size="md" />
+                        </span>
+                      </a>
+                    ) : (
+                      item.title
+                    )}
+                  </h3>
+                  {note && note.type === 'paragraph' ? (
+                    <p
+                      className={styles.chooserNote}
+                      dangerouslySetInnerHTML={{ __html: inlineToHtml(note.runs) }}
+                    />
+                  ) : null}
+                </Layout>
+                <Layout rowGap="inline">
+                  <p className={styles.chooserKey}>{plain(table.header[1] ?? [])}</p>
+                  <p
+                    className={styles.chooserFit}
+                    dangerouslySetInnerHTML={{ __html: item.body }}
+                  />
+                </Layout>
+                {item.meta ? (
+                  <Layout rowGap="inline">
+                    <p className={styles.chooserKey}>{item.meta.label}</p>
+                    <p
+                      className={styles.chooserGet}
+                      dangerouslySetInnerHTML={{ __html: item.meta.html }}
+                    />
+                  </Layout>
+                ) : null}
+              </Layout>
+            </li>
+          );
+        })}
+      </Layout>
+    </Layout>
+  );
   const set =
-    arrangement === 'ledger' ? (
+    arrangement === 'chooser' ? (
+      chooser
+    ) : arrangement === 'ledger' ? (
       ledger
     ) : (
       <Layout rowGap="block">
@@ -1231,6 +1317,7 @@ export function DrawnTableBand({
         </Layout>
       </Layout>
     );
+  const rest = after.filter((block) => !notes.has(block));
   const bound = page.composition.mediaBindings.some(
     (b) => b.bound && b.supportsSection === band.id,
   );
@@ -1241,7 +1328,7 @@ export function DrawnTableBand({
           <BandBody blocks={leading} labelledBy={head(band).headingId} />
         ) : null}
         {set}
-        {after.length > 0 ? (
+        {rest.length > 0 ? (
           bound ? (
             <Layout
               columns={{ base: 1, lg: [1, 1] }}
@@ -1249,11 +1336,11 @@ export function DrawnTableBand({
               rowGap="stack"
               align="center"
             >
-              <BandBody blocks={after} />
+              <BandBody blocks={rest} />
               <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
             </Layout>
           ) : (
-            <BandBody blocks={after} />
+            <BandBody blocks={rest} />
           )
         ) : null}
       </Layout>

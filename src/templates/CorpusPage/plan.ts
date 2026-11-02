@@ -236,9 +236,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   alternatives: 'table',
   /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
   choose: 'table',
-  /* /services' chooser: eight named services, so the service tiles, each its own drawing, the table's
-     third column kept as a labelled detail (owner, 2 Nov 2026; named-services-are-service-tiles). */
-  'service-guide': 'router',
+  /* /services' chooser: eight named services, a choice read by situation, so DrawnTableBand
+     `chooser` with each service's own drawing (owner, 2 Nov 2026). */
+  'service-guide': 'table',
   services: (_band, sig) => (/^[KU]$/.test(sig) ? 'router' : 'text'),
   /* ── G13 · labelled claim sets ── */
   /* About's working terms, bold-led bullets: a drawn set of how the work runs (owner, 31 Oct 2026). */

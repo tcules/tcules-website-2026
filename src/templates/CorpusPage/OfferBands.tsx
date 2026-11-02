@@ -503,6 +503,13 @@ function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
  */
 const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 'compare']);
 
+/**
+ * A choice between destinations the reader makes by situation (owner, 2 Nov 2026, /services
+ * `service-guide`): rows read down, each service drawn by its own scene, the header's words once
+ * (DrawnTableBand `chooser`). Not the Bento: three fields a tile cannot hold in line.
+ */
+const CHOOSER_BANDS: ReadonlySet<string> = new Set(['service-guide']);
+
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
 
@@ -848,15 +855,23 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M15 — a comparison: a key column against rows, boxed. */
     case 'table':
-      return ctx.scenes?.items[band.id] &&
+      return (ctx.scenes?.items[band.id] || CHOOSER_BANDS.has(band.id)) &&
         !sceneFor(ctx, band, 'agree') &&
         blocksOf(band, 'table').length > 0 ? (
         <DrawnTableBand
           page={page}
           band={band}
-          sceneOf={(key) => sceneFor(ctx, band, key)}
+          sceneOf={(key, href) =>
+            sceneFor(ctx, band, key) ?? (href ? serviceSceneFor(href) : undefined)
+          }
           scenario={sceneFor(ctx, band, 'scenario')}
-          arrangement={LEDGER_BANDS.has(band.id) ? 'ledger' : 'grid'}
+          arrangement={
+            CHOOSER_BANDS.has(band.id)
+              ? 'chooser'
+              : LEDGER_BANDS.has(band.id)
+                ? 'ledger'
+                : 'grid'
+          }
         />
       ) : (
         <TableBand
@@ -1234,22 +1249,10 @@ function routerBody(
   table: Extract<CorpusBlock, { type: 'table' }>,
   row: InlineRun[][],
 ): string {
-  return plain(row[1] ?? []).replace(/\.$/, '');
-}
-
-/**
- * A three-column router table's third column, kept as the tile's labelled detail under its header
- * (owner, 2 Nov 2026, /services): a table that becomes tiles drops no column, and the column's own
- * name labels it rather than being run on into the body sentence.
- */
-function routerDetail(
-  table: Extract<CorpusBlock, { type: 'table' }>,
-  row: InlineRun[][],
-): { label: string; text: string } | undefined {
-  const text = plain(row[2] ?? []).trim();
-  return table.header.length >= 3 && text
-    ? { label: plain(table.header[2] ?? []).trim(), text }
-    : undefined;
+  const second = plain(row[1] ?? []).replace(/\.$/, '');
+  return table.header.length >= 3
+    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
+    : second;
 }
 
 /**
@@ -1269,12 +1272,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
-  const rows: {
-    href: string;
-    title: string;
-    body: string;
-    detail?: { label: string; text: string };
-  }[] = table
+  const rows = table
     ? table.rows.flatMap((row) => {
         const link =
           row[0]?.find((run) => run.type === 'link') ??
@@ -1282,14 +1280,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [
-              {
-                href: link.href,
-                title: plain(link.children),
-                body: routerBody(table, row),
-                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
-              },
-            ]
+          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
           : [];
       })
     : band.blocks.flatMap((block) => {
@@ -1326,10 +1317,6 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []))
       : [];
   const sentence = (body: string) => body.charAt(0).toUpperCase() + body.slice(1);
-  /* Where a set has no tile to carry the detail as its own field, it runs on into the body, so no
-     path drops the table's third column. */
-  const runOn = (row: (typeof rows)[number]) =>
-    row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
   const routerLead = leadText(band);
   const closingFooter =
     closing.length > 0 ? (
@@ -1367,25 +1354,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
               ),
             },
           ]
-        : undefined) ??
-      /* Mixed closing words (owner, 2 Nov 2026, /services): each linked paragraph is a statement card
-         of its own, and the paragraphs with no link stay below the set. */
-      (closing.some(hasLink)
-        ? closing
-            .filter(hasLink)
-            .map((runs): { question?: string; answer: InlineRun[] } => ({ answer: runs }))
         : undefined);
-    const unlinked = closing.filter((runs) => !hasLink(runs));
-    const restFooter =
-      routes && unlinked.length > 0 ? (
-        <ContentSectionText>
-          <Layout rowGap="text">
-            {unlinked.map((runs, index) => (
-              <p key={index}>{renderInline(runs)}</p>
-            ))}
-          </Layout>
-        </ContentSectionText>
-      ) : undefined;
     const n = rows.length;
     const cta: BentoCta | undefined = routes
       ? {
@@ -1415,19 +1384,18 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           id: row.href,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
-          ...(row.detail ? { detail: row.detail } : {}),
           href: row.href,
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? restFooter : closingFooter,
+      routes ? undefined : closingFooter,
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));
   const items: BlockCardSetItem[] = rows.map((row, index) => ({
     id: row.href,
     title: row.title,
-    ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
+    ...(row.body ? { body: sentence(row.body) } : {}),
     href: row.href,
     icon: glyphs.every(Boolean) ? glyphs[index] : undefined,
   }));
@@ -1451,7 +1419,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           key={row.href}
           titleAs="h3"
           title={row.title}
-          body={runOn(row)}
+          body={row.body}
           href={row.href}
         />
       ))}
