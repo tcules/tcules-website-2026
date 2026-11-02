@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, Sketch, type SectionSurface } from '@/components';
+import { Cluster, Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
@@ -17,6 +17,7 @@ import styles from './EngagementOptions.module.css';
  *   inside     work inside the client's product environment: our workflow inside their window
  *   overlap    across time zones: two working days, the overlap between them marked
  *   commercial the commercial shape follows the work: a fixed piece, a defined project, a monthly run
+ *   own        who decides and who owns the work: our options meet at you, the result handed to you
  * The working terms (About, "How Tcules works with clients", owner 1 Nov 2026), one each:
  *   who, communication, response, getting-started, turnaround, hours
  */
@@ -30,6 +31,7 @@ export type EngagementScope =
   | 'inside'
   | 'overlap'
   | 'commercial'
+  | 'own'
   | 'who'
   | 'communication'
   | 'response'
@@ -42,7 +44,23 @@ export type EngagementTerm = {
   body: ReactNode;
 };
 
+/**
+ * One labelled fact of an option ("How it works", "Typical starting points", "Best when"): a mono key
+ * over its value, so the terms read as blocks of their own under the option's description rather than
+ * as more body. `items` sets the value as a list, one entry a line (the starting points).
+ */
+export type EngagementFact = {
+  label: string;
+  body?: ReactNode;
+  items?: readonly ReactNode[];
+};
+
 export type EngagementOption = {
+  /**
+   * What kind of engagement the option is ("A focused engagement"), set as the mono eyebrow over its
+   * name. Authored case is kept; the transform is CSS (owner, 1 Nov 2026, /how-we-work).
+   */
+  eyebrow?: string;
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
   title: string;
   /** What it is: plain text, or inline content the caller renders (a link to the team that builds). */
@@ -54,17 +72,21 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /** The option's terms as labelled blocks under its words, two across from 1024. */
+  facts?: readonly EngagementFact[];
 };
 
 /**
  * How the options are set (owner, 11 Oct 2026).
  *   grid  image cards two by two (one column below 768): the scope drawing on its plate at 16:9 as
  *         each card's image, then the name and what it is. THE BAND (product design).
+ *   compare  the options three across, then each fact as one ruled row, its values aligned under
+ *         their option (owner, 1 Nov 2026, /how-we-work). Below 1024, `rows`.
  *   rows  one alternating row per option, the drawing in 5 of [5, 7] beside its words, sides
  *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
  *         1440).
  */
-export type EngagementArrangement = 'grid' | 'rows';
+export type EngagementArrangement = 'grid' | 'rows' | 'compare';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -91,6 +113,12 @@ export type EngagementOptionsProps = {
    * (decisions/2026-10-30-engagement-terms-plain-row).
    */
   terms?: readonly EngagementTerm[];
+  /**
+   * What holds for the whole set, with its proof (owner, 1 Nov 2026, /how-we-work: "start wherever the
+   * work is" and its example): a sub-head and its sentence, the proof composed by the caller under it (a
+   * case teaser), a `column` under the options. Part of the band, never an ask: an example is evidence.
+   */
+  closing?: { heading: string; lead: ReactNode; proof?: ReactNode };
   /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
@@ -134,6 +162,7 @@ export function EngagementOptions({
   options,
   note,
   terms = [],
+  closing,
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -204,46 +233,48 @@ export function EngagementOptions({
                       <Sketch />
                     ) : null}
                     <Layout rowGap="text">
-                      <h3 className={cx(styles.title, dense && styles.titleDense)}>
-                        {option.title}
-                      </h3>
+                      <OptionHead
+                        option={option}
+                        className={cx(styles.title, dense && styles.titleDense)}
+                      />
                       <OptionBody
                         option={option}
                         className={cx(styles.body, dense && styles.bodyDense)}
                       />
+                      {option.facts && option.facts.length > 0 ? (
+                        <Facts facts={option.facts} />
+                      ) : null}
                     </Layout>
                   </Layout>
                 );
                 return <li key={option.title}>{card}</li>;
               })}
             </Layout>
+          ) : arrangement === 'compare' ? (
+            <>
+              {/* From 1024: the options head the set three across, then each fact runs as one ruled
+                  row, its key over the three values aligned under their option, so a read across a
+                  row compares the deals (owner, 1 Nov 2026, /how-we-work). Below 1024 there is no
+                  across to read: the rows arrangement, one option a section. */}
+              <div className={styles.compareWide}>
+                <Compare shown={shown} />
+              </div>
+              <div className={styles.compareNarrow}>
+                <Rows shown={shown} />
+              </div>
+            </>
           ) : (
-            <Layout as="ul" rowGap="column">
-              {shown.map((option, index) => (
-                <li key={option.title}>
-                  {/* One row per option, the drawing and the words side by side, swapping sides row
-                      by row from 768. Below 768 the drawing heads its words, full width at 2:1:
-                      beside them, the column gap left both too narrow. */}
-                  <Layout
-                    columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-                    reverse={{ md: index % 2 === 1 }}
-                    colGap="column"
-                    rowGap="block"
-                    align="center"
-                  >
-                    {option.scope ? <Drawing scope={option.scope} /> : null}
-                    <Layout rowGap="block">
-                      <h3 className={styles.title}>{option.title}</h3>
-                      <OptionBody
-                        option={option}
-                        className={cx(styles.body, styles.bodyRows)}
-                      />
-                    </Layout>
-                  </Layout>
-                </li>
-              ))}
-            </Layout>
+            <Rows shown={shown} />
           )}
+          {closing ? (
+            <Layout rowGap="block">
+              <Layout rowGap="text">
+                <h3 className={styles.closingHeading}>{closing.heading}</h3>
+                <p className={styles.lead}>{closing.lead}</p>
+              </Layout>
+              {closing.proof}
+            </Layout>
+          ) : null}
           {terms.length > 0 ? (
             <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
               {terms.map((term, index) => (
@@ -257,6 +288,134 @@ export function EngagementOptions({
         {note}
       </Layout>
     </Section>
+  );
+}
+
+/**
+ * The option's facts as a spec sheet: one row a fact, the mono key in a narrow track and its value
+ * beside it, every row on the same two tracks so the keys align down the option (owner, 1 Nov 2026,
+ * round 3: two narrow columns of small text "don't look very good"). A list value runs as one wrapping
+ * line, its entries parted by a middle dot. Under one rule, the facts are the option's terms.
+ */
+function Facts({ facts }: { facts: readonly EngagementFact[] }) {
+  return (
+    <Layout as="dl" rowGap="text" className={styles.facts}>
+      {facts.map((fact) => (
+        <Layout
+          key={fact.label}
+          columns={{ base: 1, md: [1, 2] }}
+          colGap="gutter"
+          rowGap="tight"
+        >
+          <dt className={styles.factKey}>{fact.label}</dt>
+          <dd className={cx(styles.body, styles.factValue)}>
+            {fact.items ? (
+              <Cluster as="ul" colGap="tight" rowGap="inline" className={styles.factItems}>
+                {fact.items.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </Cluster>
+            ) : (
+              fact.body
+            )}
+          </dd>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
+/** One row per option, the drawing beside its words, sides swapping row by row. */
+function Rows({ shown }: { shown: readonly EngagementOption[] }) {
+  return (
+    <Layout as="ul" rowGap="column">
+      {shown.map((option, index) => (
+        <li key={option.title}>
+          {/* One row per option, the drawing and the words side by side, swapping sides row
+              by row from 768. Below 768 the drawing heads its words, full width at 2:1:
+              beside them, the column gap left both too narrow. */}
+          <Layout
+            columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+            reverse={{ md: index % 2 === 1 }}
+            colGap="column"
+            rowGap="block"
+            align="center"
+          >
+            {option.scope ? <Drawing scope={option.scope} /> : null}
+            <Layout rowGap="block">
+              <OptionHead option={option} className={styles.title} />
+              <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
+              {option.facts && option.facts.length > 0 ? <Facts facts={option.facts} /> : null}
+            </Layout>
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  );
+}
+
+/** The labels a fact row carries: each option's label at that row, distinct, in option order. */
+function rowLabel(shown: readonly EngagementOption[], index: number): string {
+  return [
+    ...new Set(shown.flatMap((o) => (o.facts?.[index] ? [o.facts[index].label] : []))),
+  ].join(' / ');
+}
+
+/** The comparison: the heads three across, then one ruled row a fact. */
+function Compare({ shown }: { shown: readonly EngagementOption[] }) {
+  const rows = Math.max(0, ...shown.map((o) => o.facts?.length ?? 0));
+  const tracks = { base: 1, lg: shown.length as 2 | 3 | 4 } as const;
+  return (
+    <Layout rowGap="stack">
+      <Layout as="ul" columns={tracks} colGap="gutter" rowGap="column">
+        {shown.map((option) => (
+          <li key={option.title}>
+            <Layout rowGap="block">
+              {option.scope ? <Drawing scope={option.scope} /> : <Sketch />}
+              <Layout rowGap="text">
+                <OptionHead option={option} className={styles.title} />
+                <OptionBody option={option} className={styles.body} />
+              </Layout>
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+      {Array.from({ length: rows }, (_, index) => (
+        <Layout key={index} rowGap="block" className={styles.compareRow}>
+          <p className={styles.factKey}>{rowLabel(shown, index)}</p>
+          <Layout columns={tracks} colGap="gutter" rowGap="block">
+            {shown.map((option) => {
+              const fact = option.facts?.[index];
+              return (
+                <div key={option.title} className={cx(styles.body, styles.factValue)}>
+                  {fact?.items ? (
+                    <Layout as="ul" rowGap="tight">
+                      {fact.items.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </Layout>
+                  ) : (
+                    fact?.body
+                  )}
+                </div>
+              );
+            })}
+          </Layout>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
+/** The option's name, with its eyebrow over it a `tight` step when it has one. */
+function OptionHead({ option, className }: { option: EngagementOption; className?: string }) {
+  const title = <h3 className={className}>{option.title}</h3>;
+  if (!option.eyebrow) return title;
+  return (
+    <Layout rowGap="tight">
+      <p className={styles.eyebrow}>{option.eyebrow}</p>
+      {title}
+    </Layout>
   );
 }
 

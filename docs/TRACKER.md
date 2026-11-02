@@ -196,7 +196,9 @@ needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:c
 problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
 `/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
 choice (2.34).
-- [ ] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [~] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+      First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
+      the four middle illustrations and the subpages' prose runs are open.
 - [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.

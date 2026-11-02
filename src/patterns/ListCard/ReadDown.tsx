@@ -1,4 +1,11 @@
-import { Layout, Media, Texture, TextureShape, type IconName, type MediaImage } from '@/components';
+import {
+  Layout,
+  Media,
+  Texture,
+  TextureShape,
+  type IconName,
+  type MediaImage,
+} from '@/components';
 import { cx } from '@/lib/cx';
 import { READ_DOWN_PHOTO } from '@/lib/image-sizes';
 

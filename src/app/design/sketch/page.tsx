@@ -72,6 +72,7 @@ const KIT: readonly SketchName[] = [
   'scope-inside',
   'scope-overlap',
   'scope-commercial',
+  'scope-own',
   'trace-design',
   'trace-handoff',
   'trace-code',

@@ -160,9 +160,7 @@ type ShapeRule = (band: CorpusBand, sig: string) => OfferKind;
 /** A band whose list items each open on a bold label ("**Who you work with.** One senior…"). */
 const boldLedList = (band: CorpusBand): boolean =>
   band.blocks.some(
-    (block) =>
-      block.type === 'list' &&
-      block.items.every((runs) => boldLead(runs) !== null),
+    (block) => block.type === 'list' && block.items.every((runs) => boldLead(runs) !== null),
   );
 
 const personaOrChallenges: ShapeRule = (band) =>
@@ -267,7 +265,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'who-we-are-looking-for': 'outcomes',
   'what-youll-gain': 'outcomes',
   'what-youll-do': 'outcomes',
-  essentials: 'outcomes',
+  /* /how-we-work's practical details: drawn cards, as About's working terms (owner, 1 Nov 2026). */
+  essentials: 'tiles',
   'engagement-shapes': 'tiles',
   /* Why Tcules' principles are reasons to choose us, so they take Reasons (treatment rules § 6). */
   principles: (_band, sig) => (/I/.test(sig) ? 'reasons' : 'text'),
@@ -358,7 +357,13 @@ export const TEMPLATE_BANDS = {
     'expertise',
     'insights',
   ],
-  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record', 'work-with-tcules'],
+  '/about': [
+    'what-we-do',
+    'who-uses-tcules',
+    'leadership',
+    'company-record',
+    'work-with-tcules',
+  ],
   /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
   '/contact': ['brief', 'next-steps', 'confidentiality'],
   /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,
@@ -467,6 +472,22 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
 ]);
 
 /**
+ * Prose bands that carry an isometric illustration of their own claim beside them, in place of any
+ * photograph the copy binds. /how-we-work's four "what working with us is like" bands unpack the
+ * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
+ * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
+ */
+const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
+  'your-team',
+  'working-loop',
+  'design-to-release',
+  'product-knowledge',
+]);
+
+/** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
+export const isIllustratedProse = (bandId: string): boolean => ILLUSTRATED_PROSE.has(bandId);
+
+/**
  * The register a band is drawn in, from its kind, whether the page draws it (`drawn`, the scenes it was
  * given) and whether a photograph is bound to it. Claims and reasons take isometric illustrations,
  * items take flat drawings, proof is cases and records (decisions/2026-10-30-claim-visual-depicts-the-claim).
@@ -506,6 +527,7 @@ export function registerOf(
     case 'table':
     case 'method':
     case 'text':
+      if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
       return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
     default:
       return 'none';
@@ -544,6 +566,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             band.blocks.some(
               (block) =>
@@ -640,8 +663,11 @@ export function planOffer(
       continue;
     }
 
+    /* Prose with a photograph of its own is a media split (B) too: without this every one of them
+       took the start side, and /how-we-work's three ran image-left down the page (1 Nov 2026). */
     const carriesMedia =
-      MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b');
+      (MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b')) ||
+      (draft.kind === 'text' && (draft.register === 'photo' || draft.register === 'isometric'));
     /* Two media splits already in a row: a third would be a third B. A read-down with the
        photograph beside its head says the same thing in a different shape (page-mapping M11). */
     const variant: OfferUnit['variant'] =

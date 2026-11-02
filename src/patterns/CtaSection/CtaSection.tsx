@@ -1007,15 +1007,15 @@ export function CtaSection(props: CtaSectionProps) {
      form is usually the taller, and the group never spreads to fill it (owner: "too much space
      between the illustration and the copy"). Below 1024 it stacks: the group, then the form. */
   const requested: CtaFormIsland = props.island ?? FORM_ISLAND;
-    const band: SectionSurface = props.surface ?? ISLAND_BAND[requested];
-    const islandSurface = closeIslandOn(band, requested);
-    const panel = (
-      <div className={styles.islandPanel} data-surface="paper">
-        {props.form}
-      </div>
-    );
+  const band: SectionSurface = props.surface ?? ISLAND_BAND[requested];
+  const islandSurface = closeIslandOn(band, requested);
+  const panel = (
+    <div className={styles.islandPanel} data-surface="paper">
+      {props.form}
+    </div>
+  );
 
-    /* ── Above (19 Oct 2026): the head row, then the panel across the island ──────────────────
+  /* ── Above (19 Oct 2026): the head row, then the panel across the island ──────────────────
        The head row is the drawing BESIDE the heading and lede from 768 (`['auto', 1]`: the
        drawing at its own small width, the words taking the rest), centred on each other; the
        drawing over the words below. The drawing is the head's own mark, not a region of the band,
@@ -1023,82 +1023,14 @@ export function CtaSection(props: CtaSectionProps) {
        The panel follows a `stack` under the head row: block to block inside the band. Points and
        a contact strip, when a caller passes them, follow the lede in the words' column as they do
        beside; the close is built for a heading and a lede, and each of them costs the fit. */
-    /* ── Halves (23 Oct 2026): 1:1, the words at the foot of the start half ──────────────────
+  /* ── Halves (23 Oct 2026): 1:1, the words at the foot of the start half ──────────────────
        Two regions of different kind side by side, so the split's `section`. The start half pins
        one group to its foot (`pinLast`): the drawing, then a `stack` under it the words (owner,
        25 Oct 2026: "right above the title with a 48px gap"). The words are the field's still water
        (`data-texture-calm`). The panel centres on the row rather than stretching to it, so it
        never grows empty paper under the form. */
-    if (props.islandArrangement === 'halves') {
-      const art = present(props.art);
-      return (
-        <IslandBand
-          inBand={props.inBand}
-          surface={band}
-          id={props.id}
-          data-band={props['data-band']}
-          aria-labelledby={headingId}
-        >
-          <Island surface={islandSurface}>
-            {props.islandTexture === 'flow' ? <TextureFlow fade={art ? 'start' : undefined} /> : null}
-            {props.islandTexture === 'frame' ? <TextureFrame /> : null}
-            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-              <Layout pinLast>
-                <Layout rowGap="stack">
-                  {art ? <div className={styles.artLarge}>{props.art}</div> : null}
-                  <div data-texture-calm>
-                    <Layout rowGap="block">
-                      {lede({ scale: 'halves' })}
-                      <CtaPoints shape="stack" markers={markers} points={points} />
-                      {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-                      {ratingRow}
-                    </Layout>
-                  </div>
-                </Layout>
-              </Layout>
-              <div className={cx(styles.islandPanel, styles.islandPanelHalves)} data-surface="paper">
-                {props.form}
-              </div>
-            </Layout>
-          </Island>
-        </IslandBand>
-      );
-    }
-
-    if (props.islandArrangement === 'above') {
-      return (
-        <IslandBand
-          inBand={props.inBand}
-          surface={band}
-          id={props.id}
-          data-band={props['data-band']}
-          aria-labelledby={headingId}
-        >
-          <Island surface={islandSurface}>
-            {props.islandTexture === 'frame' ? <TextureFrame panel="foot" /> : null}
-            {props.islandTexture === 'flow' ? <TextureFlow /> : null}
-            <Layout rowGap="stack">
-              <Layout
-                columns={present(props.art) ? { md: ['auto', 1] } : undefined}
-                colGap={present(props.art) ? 'block' : undefined}
-                rowGap={present(props.art) ? 'block' : undefined}
-                align="center"
-              >
-                {present(props.art) ? <div className={styles.artSmall}>{props.art}</div> : null}
-                <Layout rowGap="block">
-                  {lede({ scale: 'offer' })}
-                  <CtaPoints shape="stack" markers={markers} points={points} />
-                  {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
-                  {ratingRow}
-                </Layout>
-              </Layout>
-              {panel}
-            </Layout>
-          </Island>
-        </IslandBand>
-      );
-    }
-
+  if (props.islandArrangement === 'halves') {
+    const art = present(props.art);
     return (
       <IslandBand
         inBand={props.inBand}
@@ -1108,21 +1040,101 @@ export function CtaSection(props: CtaSectionProps) {
         aria-labelledby={headingId}
       >
         <Island surface={islandSurface}>
+          {props.islandTexture === 'flow' ? (
+            <TextureFlow fade={art ? 'start' : undefined} />
+          ) : null}
           {props.islandTexture === 'frame' ? <TextureFrame /> : null}
-          {props.islandTexture === 'flow' ? <TextureFlow fade={present(props.art) ? 'start' : undefined} /> : null}
-          <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
-            <Layout rowGap="block">
-              {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
-              {lede({ scale: 'offer' })}
-              <CtaPoints shape="stack" markers={markers} points={points} />
-              {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-              {ratingRow}
+          <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
+            <Layout pinLast>
+              <Layout rowGap="stack">
+                {art ? <div className={styles.artLarge}>{props.art}</div> : null}
+                <div data-texture-calm>
+                  <Layout rowGap="block">
+                    {lede({ scale: 'halves' })}
+                    <CtaPoints shape="stack" markers={markers} points={points} />
+                    {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                    {ratingRow}
+                  </Layout>
+                </div>
+              </Layout>
+            </Layout>
+            <div
+              className={cx(styles.islandPanel, styles.islandPanelHalves)}
+              data-surface="paper"
+            >
+              {props.form}
+            </div>
+          </Layout>
+        </Island>
+      </IslandBand>
+    );
+  }
+
+  if (props.islandArrangement === 'above') {
+    return (
+      <IslandBand
+        inBand={props.inBand}
+        surface={band}
+        id={props.id}
+        data-band={props['data-band']}
+        aria-labelledby={headingId}
+      >
+        <Island surface={islandSurface}>
+          {props.islandTexture === 'frame' ? <TextureFrame panel="foot" /> : null}
+          {props.islandTexture === 'flow' ? <TextureFlow /> : null}
+          <Layout rowGap="stack">
+            <Layout
+              columns={present(props.art) ? { md: ['auto', 1] } : undefined}
+              colGap={present(props.art) ? 'block' : undefined}
+              rowGap={present(props.art) ? 'block' : undefined}
+              align="center"
+            >
+              {present(props.art) ? <div className={styles.artSmall}>{props.art}</div> : null}
+              <Layout rowGap="block">
+                {lede({ scale: 'offer' })}
+                <CtaPoints shape="stack" markers={markers} points={points} />
+                {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
+                {ratingRow}
+              </Layout>
             </Layout>
             {panel}
           </Layout>
         </Island>
       </IslandBand>
     );
+  }
+
+  return (
+    <IslandBand
+      inBand={props.inBand}
+      surface={band}
+      id={props.id}
+      data-band={props['data-band']}
+      aria-labelledby={headingId}
+    >
+      <Island surface={islandSurface}>
+        {props.islandTexture === 'frame' ? <TextureFrame /> : null}
+        {props.islandTexture === 'flow' ? (
+          <TextureFlow fade={present(props.art) ? 'start' : undefined} />
+        ) : null}
+        <Layout
+          columns={{ base: 1, lg: [5, 7] }}
+          colGap="section"
+          rowGap="stack"
+          align="center"
+        >
+          <Layout rowGap="block">
+            {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
+            {lede({ scale: 'offer' })}
+            <CtaPoints shape="stack" markers={markers} points={points} />
+            {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+            {ratingRow}
+          </Layout>
+          {panel}
+        </Layout>
+      </Island>
+    </IslandBand>
+  );
 }
 
 /**

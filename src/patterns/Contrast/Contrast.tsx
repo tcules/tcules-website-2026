@@ -138,7 +138,12 @@ export function Contrast({ yes, no, headingAs = 'h3', emphasis = 'peer' }: Contr
       rowGap="stack"
       align="start"
     >
-      <List list={yes} polarity="yes" Heading={headingAs} weight={weighted ? 'primary' : 'peer'} />
+      <List
+        list={yes}
+        polarity="yes"
+        Heading={headingAs}
+        weight={weighted ? 'primary' : 'peer'}
+      />
       <List list={no} polarity="no" Heading={headingAs} weight={weighted ? 'quiet' : 'peer'} />
     </Layout>
   );

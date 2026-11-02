@@ -79,14 +79,22 @@ export const KIND_COMPONENTS: Readonly<
     status: 'to-design',
     note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D).',
   },
-  record: { component: ['case-spread'], status: 'approved', note: 'One worked case (CaseSpread).' },
+  record: {
+    component: ['case-spread'],
+    status: 'approved',
+    note: 'One worked case (CaseSpread).',
+  },
   recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
   destinations: {
     component: ['C-image', 'C-icon'],
     status: 'to-design',
     note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
   },
-  related: { component: ['K'], status: 'to-design', note: 'Ruled link rows (open roles, glossary groups).' },
+  related: {
+    component: ['K'],
+    status: 'to-design',
+    note: 'Ruled link rows (open roles, glossary groups).',
+  },
   directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
   note: { component: ['C-note'], status: 'to-design' },
   close: {

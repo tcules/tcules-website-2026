@@ -18,6 +18,13 @@
   max-inline-size: var(--eop-lead-measure);
 }
 
+.eyebrow {
+  font: var(--eop-eyebrow-text);
+  letter-spacing: var(--eop-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eop-eyebrow-ink);
+}
+
 .title {
   font: var(--eop-title-text);
   letter-spacing: var(--eop-title-tracking);
@@ -52,4 +59,65 @@
   text-wrap: var(--text-running-wrap);
   color: var(--eop-term-ink);
   max-inline-size: var(--eop-body-measure);
+}
+
+/* An option's facts sit under its words behind a rule, the rule the set's own: the description is the
+   option, the facts are its terms (owner, 1 Nov 2026). The padding is the block step inside the box. */
+.facts {
+  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+/* A fact's key: the eyebrow's mono voice, set on the value's first line. */
+.factKey {
+  font: var(--eop-eyebrow-text);
+  letter-spacing: var(--eop-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eop-eyebrow-ink);
+  padding-block-start: var(--eop-key-optical-offset);
+}
+
+/* A fact's value opens as a sentence does: the first letter is set in CSS, the authored words kept
+   ("an agreed scope…" under its key). */
+.factValue::first-letter,
+.factValue li::first-letter {
+  text-transform: uppercase;
+}
+
+/* A list value runs as one wrapping line: each entry but the last carries its middle dot at its own
+   end, inside its own box (the Cluster owns the distance between entries), so a wrapped line never
+   opens on a dot. */
+.factItems > li:not(:last-child)::after {
+  content: '·';
+  padding-inline-start: var(--gap-tight);
+  color: var(--eop-eyebrow-ink);
+}
+
+/* The set's closing statement: the h3 role, a step under the band's h2 and over each option's name. */
+.closingHeading {
+  font: var(--eop-closing-text);
+  letter-spacing: var(--eop-closing-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eop-heading-ink);
+}
+
+/* `compare`: a fact row is ruled above, the block step inside its own box. */
+.compareRow {
+  border-block-start: var(--eop-rule-width) solid var(--eop-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+/* `compare` reads across from 1024; below it the rows arrangement stands in. One of the two renders. */
+.compareWide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .compareWide {
+    display: block;
+  }
+
+  .compareNarrow {
+    display: none;
+  }
 }

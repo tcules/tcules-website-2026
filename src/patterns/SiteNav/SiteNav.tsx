@@ -3,13 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type {
-  CSSProperties,
-  FocusEvent,
-  KeyboardEvent,
-  MouseEvent,
-  PointerEvent,
-} from 'react';
+import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
 
 import { Button, Cluster, Icon, Layout, Logo, Section } from '@/components';
 import { isActivePath } from '@/lib/activePath';
@@ -315,7 +309,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       const block =
         parts.reduce((total, part) => total + (part?.offsetHeight ?? 0), 0) + body.offsetHeight;
       if (block <= 0) return;
-      setSectionBlocks((current) => (current[key] === block ? current : { ...current, [key]: block }));
+      setSectionBlocks((current) =>
+        current[key] === block ? current : { ...current, [key]: block },
+      );
     };
 
     measure();
@@ -528,7 +524,8 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       /* Out the far side. The plate closes and focus continues from the trigger's own place in the
          bar, which is where a reader who has finished with the panel expects to be — not at the
          top of the document, and not back at the start of the bar. */
-      const controls = headerRef.current?.querySelectorAll<HTMLElement>('[data-nav-control]') ?? [];
+      const controls =
+        headerRef.current?.querySelectorAll<HTMLElement>('[data-nav-control]') ?? [];
       const trigger = document.getElementById(triggerId(key));
       const index = [...controls].indexOf(trigger as HTMLElement);
       const next = index === -1 ? undefined : controls[index + 1];
@@ -782,7 +779,10 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
             </div>
           </div>
 
-          <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
+          <div
+            className={cx(styles.sheetPane, styles.sheetPaneSection)}
+            inert={section === null}
+          >
             <div ref={headRef} className={styles.sheetHead}>
               {/* A Button, not a bespoke <button>. It was hand-rolled and set a MONO role in
                   sentence case — "Menu" in Geist Mono with the tracking opened, which §8 names as

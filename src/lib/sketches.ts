@@ -44,7 +44,8 @@ export type ScopeSceneName =
   | 'scope-direct'
   | 'scope-inside'
   | 'scope-overlap'
-  | 'scope-commercial';
+  | 'scope-commercial'
+  | 'scope-own';
 export type TraceSceneName =
   'trace-design' | 'trace-handoff' | 'trace-code' | 'trace-product' | 'trace-signoff';
 

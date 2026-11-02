@@ -121,7 +121,9 @@ const SIZES: Record<VideoTestimonialVariant, string> = {
 
 /** "4:52" → "4 minutes 52 seconds", so the control's name is not read as a clock time. */
 function spokenDuration(duration: string): string {
-  const [m = Number.NaN, s = Number.NaN] = duration.split(':').map((n) => Number.parseInt(n, 10));
+  const [m = Number.NaN, s = Number.NaN] = duration
+    .split(':')
+    .map((n) => Number.parseInt(n, 10));
   if (!Number.isFinite(m) || !Number.isFinite(s)) return duration;
   const parts: string[] = [];
   if (m > 0) parts.push(`${m} minute${m === 1 ? '' : 's'}`);
@@ -279,7 +281,11 @@ export function VideoTestimonial({
       colGap="section"
       rowGap={variant === 'wide' ? 'block' : 'stack'}
       align={variant === 'wide' ? undefined : 'center'}
-      className={cx(styles.root, variant === 'wide' && styles.wide, portrait && styles.portrait)}
+      className={cx(
+        styles.root,
+        variant === 'wide' && styles.wide,
+        portrait && styles.portrait,
+      )}
     >
       {screen}
       {caption}

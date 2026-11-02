@@ -372,6 +372,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "Vovisto's healthcare event and travel platform: a travel coordinator's view of one congress trip (budget, approval, flights, hotel). The case study is coming soon; the index lists it unlinked.",
   },
+  'illustration:from-design-files-into-working-software': {
+    src: '/placeholders/illustration--from-design-files-into-working-software.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'A design that is tried in code while it is still open: the drawn screen and its coded version side by side, real data and states running through the coded one.',
+  },
   'illustration:keeping-teams-on-the-system-after-launch': {
     src: '/placeholders/illustration--keeping-teams-on-the-system-after-launch.svg',
     width: 1600,
@@ -404,6 +412,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'One rule named by its meaning, read the same way by a designer in Figma and by an AI coding tool writing the code.',
+  },
+  'illustration:the-understanding-grows-with-the-relationship': {
+    src: '/placeholders/illustration--the-understanding-grows-with-the-relationship.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'Product knowledge accumulating across an engagement: each new piece of work starting from what the last one taught, the reasons behind the product kept where the team can see them.',
   },
   'illustration:we-design-ai-that-people-can-check-and-correct': {
     src: '/placeholders/illustration--we-design-ai-that-people-can-check-and-correct.svg',
@@ -452,5 +468,21 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'A detail entered once in the redesigned record appears wherever it is needed next, in place of the retyping and spreadsheets that carried it outside the product.',
+  },
+  'illustration:you-see-the-thinking-as-well-as-the-design': {
+    src: '/placeholders/illustration--you-see-the-thinking-as-well-as-the-design.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The work kept in view between kickoff and the final presentation: early questions, alternative directions and prototypes laid out where the client can still change them, one discovery bending the plan.',
+  },
+  'illustration:your-outsourced-product-design-team-working-alongside-yours': {
+    src: '/placeholders/illustration--your-outsourced-product-design-team-working-alongside-yours.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "Our designers and engineers inside the client's own tools and reviews, beside their product managers and engineers: one team at one table, the client's people bringing context.",
   },
 };

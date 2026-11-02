@@ -22,6 +22,7 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
+  type EngagementFact,
   type EngagementScope,
   type TraceScene,
   type TraceStage,
@@ -45,7 +46,7 @@ import {
   type OfferScenes,
   type SketchName,
 } from '@/lib/sketches';
-import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
 import {
@@ -196,9 +197,14 @@ function listOptions(band: CorpusBand) {
  * engagement it is, then how it works and where it starts), each item's paragraphs in order.
  */
 function itemOptions(band: CorpusBand) {
+  const lastItem = band.blocks.filter((block) => block.type === 'item').at(-1);
   return band.blocks.flatMap((block) => {
     if (block.type !== 'item') return [];
-    const paragraphs = block.blocks.flatMap((inner) =>
+    const own =
+      block === lastItem
+        ? block.blocks.slice(0, block.blocks.length - itemCoda(band).length)
+        : block.blocks;
+    const paragraphs = own.flatMap((inner) =>
       inner.type === 'paragraph'
         ? [inner.runs]
         : inner.type === 'labelled'
@@ -213,16 +219,156 @@ function itemOptions(band: CorpusBand) {
             ? inner.items
             : [],
     );
-    const [first, ...more] = paragraphs;
+    /* A first paragraph that is wholly italic ("*A focused engagement*") names the kind of option:
+       it is the option's eyebrow, not its first line of body (owner, 1 Nov 2026). */
+    const only = paragraphs[0]?.length === 1 ? paragraphs[0][0] : undefined;
+    const eyebrowRun = only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
+    const rest = eyebrowRun ? paragraphs.slice(1) : paragraphs;
+    /* A paragraph led by a labelled run ("**How it works:**", "*Typical starting points:*") is one of the
+       option's facts, a block of its own under the words, not more body (owner, 1 Nov 2026). */
+    const facts = rest.flatMap((runs) => {
+      const fact = factOf(runs);
+      return fact ? [fact] : [];
+    });
+    const [first, ...more] = rest.filter((runs) => !factOf(runs));
     return [
       {
+        eyebrow: eyebrowRun,
         title: block.headingText,
         body: first ? renderInline(first) : null,
         more: more.map((runs) => renderInline(runs)),
-        scope: scopeOf(block.headingText),
+        facts: facts.length > 0 ? facts : undefined,
+        scope: scopeOf(block.headingText) ?? (eyebrowRun ? scopeOf(eyebrowRun) : undefined),
       },
     ];
   });
+}
+
+const firstRun = (runs: readonly InlineRun[]) =>
+  runs.find((run) => !(run.type === 'text' && run.text.trim() === ''));
+
+/**
+ * An option's fact: a paragraph opening with a bold or italic run that ends in a colon. The label loses
+ * its colon (the key's form says it). The value stays the authored sentence: splitting a list of
+ * starting points dropped the copy's own joints (kinds:check, 2 Nov 2026).
+ */
+function factOf(runs: readonly InlineRun[]): EngagementFact | undefined {
+  const lead = firstRun(runs);
+  if (lead?.type !== 'strong' && lead?.type !== 'em') return undefined;
+  const text = inlineToText(lead.children).trim();
+  if (!text.endsWith(':')) return undefined;
+  const label = text.replace(/:$/, '');
+  const value = trimStart(runs.slice(runs.indexOf(lead) + 1));
+  return { label, body: renderInline(value) };
+}
+
+/**
+ * One case as the proof under a claim: a horizontal BlockCard, the case's cover beside its client, its own
+ * title and the example's words, the whole card the link (the paper-deep CaseCard is home's alone, owner
+ * 29 Oct 2026). The words are the example's as authored, its "Example:" and client name lifted into the
+ * eyebrow.
+ */
+function CaseTeaser({
+  ctx,
+  example,
+  words,
+}: {
+  ctx: OfferContext;
+  example: { href: string; label: string; client?: string };
+  words?: string;
+}) {
+  const ref = ctx.caseRefs[example.href];
+  const client = example.client ?? '';
+  return (
+    /* A BlockCard is a list item: a set of one. */
+    <Layout as="ul" rowGap="block">
+      <BlockCard
+        orientation="horizontal"
+        eyebrow={client ? `Example · ${client}` : 'Example'}
+        title={ref?.title ?? example.label}
+        body={words}
+        href={example.href}
+        ctaLabel={example.label}
+        media={{ type: 'image', image: caseCover(client || example.label, ref) }}
+      />
+    </Layout>
+  );
+}
+
+/**
+ * The set’s closing note (owner, 1 Nov 2026, /how-we-work rounds 3–4: the note "feels like floating
+ * text"; an example is evidence, not an ask): a paragraph led by a bold sentence is the closing's heading and
+ * lead, a paragraph opening "Example:" the case teaser's words and its link. Anything else stays
+ * a plain term under the set.
+ */
+function closingNote(band: CorpusBand): {
+  note?: { heading: string; body: string[]; example?: { href: string; label: string } };
+  rest: InlineRun[][];
+} {
+  let heading: string | undefined;
+  const body: string[] = [];
+  let example: { href: string; label: string; client?: string } | undefined;
+  const rest: InlineRun[][] = [];
+  for (const runs of itemCoda(band)) {
+    const lead = firstRun(runs);
+    if (!heading && lead?.type === 'strong') {
+      heading = inlineToText(lead.children).trim().replace(/[.:]$/, '');
+      body.unshift(inlineToText(runs.slice(runs.indexOf(lead) + 1)).trim());
+      continue;
+    }
+    if (!example && lead?.type === 'text' && /^\s*Example:/.test(lead.text)) {
+      const { runs: words, link } = liftTrailingLink(runs);
+      /* "Example: **Dealpath.** A focused audit…": the bold name is the client, the rest the words. */
+      const named = words.find((run) => run.type === 'strong');
+      const client =
+        named?.type === 'strong'
+          ? inlineToText(named.children).trim().replace(/[.:]$/, '')
+          : undefined;
+      const after = named ? words.slice(words.indexOf(named) + 1) : words;
+      body.push(
+        inlineToText(after)
+          .replace(/^\s*Example:\s*/, '')
+          .trim(),
+      );
+      if (link)
+        example = { href: link.href, label: inlineToText(link.children).trim(), client };
+      continue;
+    }
+    rest.push(runs);
+  }
+  return { note: heading ? { heading, body, example } : undefined, rest };
+}
+
+/**
+ * The band's closing note when Markdown has folded it into the last `###` item. An option ends on its
+ * italic-labelled line ("*Typical starting points:* …", "*Best when:* …"); whatever follows that line in
+ * the LAST item belongs to the whole set (/how-we-work: "Start wherever the work is" and the Dealpath
+ * example rendered inside the third option until 1 Nov 2026). Returned as runs, labels kept strong.
+ */
+function itemCoda(band: CorpusBand): InlineRun[][] {
+  const last = band.blocks.filter((block) => block.type === 'item').at(-1);
+  if (last?.type !== 'item') return [];
+  const closer = lastIndexWhere(last.blocks, (inner) => {
+    if (inner.type !== 'paragraph') return false;
+    const first = inner.runs.find((run) => !(run.type === 'text' && run.text.trim() === ''));
+    return first?.type === 'em' && inlineToText(first.children).trim().endsWith(':');
+  });
+  if (closer < 0) return [];
+  return last.blocks
+    .slice(closer + 1)
+    .flatMap((inner) =>
+      inner.type === 'paragraph'
+        ? [inner.runs]
+        : inner.type === 'labelled'
+          ? [
+              [
+                { type: 'strong', children: inner.label } as InlineRun,
+                { type: 'text', text: ' ' } as InlineRun,
+                ...inner.body,
+              ],
+            ]
+          : [],
+    );
 }
 
 /** The paragraphs that follow the labelled claims or items (a closing note), as runs. */
@@ -291,6 +437,11 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'getting started': 'getting-started',
   turnaround: 'turnaround',
   'working hours': 'hours',
+  /* /how-we-work's practical details (owner, 1–2 Nov 2026): getting started is About's own term and
+     drawing; time zones, fees and notice and ownership take the scenes drawn for those claims. */
+  'working across time zones': 'overlap',
+  'fees and notice': 'commercial',
+  'who decides, and who owns the work': 'own',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -570,26 +721,57 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
-      const terms = trailingParagraphs(band);
+      const closing = closingNote(band);
+      const terms = [...closing.rest, ...trailingParagraphs(band)];
       const links = bandLinks(band);
+      const options =
+        leads(band).length > 0
+          ? leads(band).map((row) => ({
+              title: row.title,
+              body: renderInline(row.body),
+              scope: scopeOf(row.title),
+            }))
+          : listOptions(band).length > 0
+            ? listOptions(band)
+            : itemOptions(band);
+      /* Options told in several paragraphs each (how it works, where it starts) are sections, not
+         cards: one row per option (owner, 1 Nov 2026, /how-we-work: "3 sections and not 1 with 3
+         columns"). */
+      /* Sections, not cards: options that name their kind in an eyebrow and are each told in
+         several paragraphs. One long card in a set of short ones stays a card. */
+      const rich = options.every(
+        (option) =>
+          'eyebrow' in option &&
+          Boolean(option.eyebrow) &&
+          (('more' in option && Array.isArray(option.more) && option.more.length > 0) ||
+            ('facts' in option && Array.isArray(option.facts) && option.facts.length > 0)),
+      );
       return (
         <Fragment>
+          {/* A rich set compares (owner, 1 Nov 2026, /how-we-work: picked over the rows, which stand in
+              below 1024). */}
           <EngagementOptions
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={
-              leads(band).length > 0
-                ? leads(band).map((row) => ({
-                    title: row.title,
-                    body: renderInline(row.body),
-                    scope: scopeOf(row.title),
-                  }))
-                : listOptions(band).length > 0
-                  ? listOptions(band)
-                  : itemOptions(band)
-            }
+            options={options}
+            arrangement={rich ? 'compare' : 'grid'}
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            closing={
+              closing.note
+                ? {
+                    heading: closing.note.heading,
+                    lead: closing.note.body[0],
+                    proof: closing.note.example ? (
+                      <CaseTeaser
+                        ctx={ctx}
+                        example={closing.note.example}
+                        words={closing.note.body[1]}
+                      />
+                    ) : undefined,
+                  }
+                : undefined
+            }
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
           {links[1] ? (

@@ -19,6 +19,10 @@
   --eop-heading-measure: var(--measure-title);
   --eop-lead-text: var(--text-lead);
   --eop-lead-measure: var(--measure-lead);
+  --eop-eyebrow-text: var(--text-eyebrow);
+  --eop-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --eop-closing-text: var(--text-h3);
+  --eop-closing-tracking: var(--text-h3-tracking);
   --eop-title-text: var(--text-h4);
   --eop-title-tracking: var(--text-h4-tracking);
   --eop-body-text: var(--text-body-sm);
@@ -31,11 +35,17 @@
   --eop-body-measure: var(--measure-lead);
   /* A shared term reads at body size (16), one plain row under the set (30 Oct 2026, engagement-terms-plain-row). */
   --eop-term-text: var(--text-body);
+  /* The rule over an option's facts. */
+  --eop-rule-width: var(--border-width-hairline);
+  /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
+  --eop-key-optical-offset: var(--space-2);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --eop-rule-ink: var(--color-neutral-300); /* decoration */
+  --eop-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   --eop-heading-ink: var(--color-neutral-900); /* 14.62:1 */
   --eop-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --eop-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -45,6 +55,8 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --eop-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on tint */
+  --eop-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
   --eop-heading-ink: var(--color-neutral-900); /* 13.05:1 */
   --eop-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --eop-title-ink: var(--color-neutral-900); /* 13.05:1 */
@@ -54,6 +66,8 @@
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
 [data-surface='ink'] {
+  --eop-rule-ink: var(--color-neutral-700); /* decoration */
+  --eop-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --eop-heading-ink: var(--color-white); /* 17.26:1 */
   --eop-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --eop-title-ink: var(--color-white); /* 17.26:1 */
@@ -63,6 +77,8 @@
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
+  --eop-rule-ink: var(--color-brandeis-300); /* decoration */
+  --eop-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --eop-heading-ink: var(--color-white); /* 6.23:1 */
   --eop-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --eop-title-ink: var(--color-white); /* 6.23:1 */

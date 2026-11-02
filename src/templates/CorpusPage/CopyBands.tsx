@@ -44,7 +44,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
 import { caseCover, slotImage, slugOf, type SlotImage } from './images';
-import { signature } from './plan';
+import { isIllustratedProse, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -1619,13 +1619,33 @@ export function TextBand({
     <BandBody blocks={body} />
   );
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
+  /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
+     plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
+  if (isIllustratedProse(band.id)) {
+    return (
+      <ContentSection
+        {...head(band)}
+        data-band="B"
+        arrangement="media"
+        media={{
+          image: placeholderIllustration(band.headingText),
+          side,
+          weight: 'photo',
+          head: 'lg',
+        }}
+        actions={actions}
+      >
+        {text}
+      </ContentSection>
+    );
+  }
   if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
     return (
       <ContentSection
         {...head(band)}
         data-band="B"
         arrangement="media"
-        media={{ image: slotImage(page, band.id), side, weight: 'photo' }}
+        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg' }}
         actions={actions}
       >
         {text}

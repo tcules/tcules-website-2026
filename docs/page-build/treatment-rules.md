@@ -131,3 +131,25 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **Heroes:** the seven L1 service pages, /expertise and /audits carry the owner-approved isometric heroes from the illustration canvas (public/illustrations/heroes/, text flattened to paths, viewBox trimmed to the drawing).
 - **Standing lesson:** render the copy as authored with existing components; change the arrangement before adding parts; use the full width.
 
+
+## Added 1 Nov 2026 (/how-we-work)
+
+- **A page with no hero art of its own** reuses a studio photograph bound on /about, named per route in
+  `images.ts` `STUDIO_HERO`, never guessed. Use the photo whose subject matches the page's claim (team, review,
+  work wall).
+- **Options with an eyebrow and several paragraphs each are sections**: EngagementOptions `rows`, not a
+  three-column card set. An italic first line naming the option's kind is its eyebrow, never body.
+- **An option's labelled lines are facts**: "**How it works:**", "*Typical starting points:*", "*Best when:*" are
+  a spec sheet under the option's description (mono key in a narrow track, value beside it), never more
+  body; a sentence-list of starting points stays the authored sentence (its joints are copy). A set's closing
+  claim with its worked example is claim-then-proof inside the band: the claim as a sub-head, the example as
+  a case teaser (horizontal BlockCard of the case) under it. Never an ask: an example is evidence, and an
+  island that carries one mixes the two jobs. Never a band of its own when its words point back at the set
+  ("any of the three"): a conclusion stays in the band it concludes.
+- **Practical terms (getting started, time zones, fees, ownership) are drawn cards**, as About's working terms;
+  never an OfferSheet. A term with no scene takes the empty plate.
+- **Bands that unpack one promise share one register**: on /how-we-work the four "what working with us is
+  like" bands each take an isometric illustration of their claim, alternating sides.
+- **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
+- **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
+  photo bands that all sit image-left is a planner bug, not a design.

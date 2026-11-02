@@ -15,7 +15,9 @@ import type { ScopeSceneName, TraceSceneName } from '@/lib/sketches';
 
 /** The one arrowhead pointing right, tip at (x, y): filled, 7 long, 8 wide. */
 function ArrowRight({ x, y }: { x: number; y: number }) {
-  return <path className={styles.solid} d={`M${x},${y} L${x - 7},${y - 4} L${x - 7},${y + 4} Z`} />;
+  return (
+    <path className={styles.solid} d={`M${x},${y} L${x - 7},${y - 4} L${x - 7},${y + 4} Z`} />
+  );
 }
 
 /** A route from a port at x1 to the arrowhead's tip at x2, on y. */
@@ -235,6 +237,39 @@ function ScopeCommercial() {
   );
 }
 
+/**
+ * Who decides, and who owns the work: our options (the recommendation marked) meet at you, the one lit
+ * point where the choice is made, and the result is handed over to you, designs and code
+ * (/how-we-work's practical details, owner 2 Nov 2026). Routes on the axes, turning at corners.
+ */
+function ScopeOwn() {
+  return (
+    <>
+      {[36, 116].map((y) => (
+        <g key={y}>
+          <rect className={styles.frameQuiet} x="30" y={y} width="64" height="28" rx="8" />
+          <path className={styles.copyQuiet} d={`M42,${y + 14} L74,${y + 14}`} />
+        </g>
+      ))}
+      <rect className={styles.frame} x="30" y="76" width="64" height="28" rx="8" />
+      <Chip x={38} y={82} glyph="star" />
+      <path className={styles.copy} d="M60,90 L84,90" />
+
+      <path className={styles.line} d="M94,50 L124,50 A6,6 0 0 1 130,56 L130,90" />
+      <path className={styles.line} d="M94,130 L124,130 A6,6 0 0 0 130,124 L130,90" />
+      <path className={styles.line} d="M94,90 L152,90" />
+      <circle className={styles.node} cx="130" cy="90" r="3.5" />
+      <Focus x={170} y={90} glyph="user" size={12} />
+
+      <Hop x1={190} x2={230} y={90} />
+      <rect className={styles.frame} x="230" y="60" width="60" height="60" rx="8" />
+      <Chip x={242} y={72} glyph="layers" />
+      <Chip x={264} y={72} glyph="code" />
+      <path className={styles.copy} d="M242,104 L278,104" />
+    </>
+  );
+}
+
 /* ── Trace stages: one screen at every hand-over ─────────────────────────────────
    The screen is 220 × 120 from (50, 30); its action is 80 × 20 from (70, 100), centred on (110, 110),
    where TracePlates' trace crosses every plate (tokens/components/trace-plates.css holds the shares). */
@@ -262,7 +297,16 @@ function Screen({ chrome = false }: { chrome?: boolean }) {
 }
 
 function Action({ className }: { className: string | undefined }) {
-  return <rect className={className} x={ACTION.x} y={ACTION.y} width={ACTION.w} height={ACTION.h} rx="4" />;
+  return (
+    <rect
+      className={className}
+      x={ACTION.x}
+      y={ACTION.y}
+      width={ACTION.w}
+      height={ACTION.h}
+      rx="4"
+    />
+  );
 }
 
 /** The approved design: the clean screen, its action filled. */
@@ -351,6 +395,7 @@ export const KIT: Record<ScopeSceneName | TraceSceneName, () => ReactNode> = {
   'scope-inside': ScopeInside,
   'scope-overlap': ScopeOverlap,
   'scope-commercial': ScopeCommercial,
+  'scope-own': ScopeOwn,
   'trace-design': TraceDesign,
   'trace-handoff': TraceHandoff,
   'trace-code': TraceCode,

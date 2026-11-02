@@ -42,7 +42,13 @@ function Scene({ scene }: { scene: TraceScene }) {
 /** The trace's end node on the first and last plates: open where it starts, filled where it lands. */
 function End({ index, last }: { index: number; last: number }) {
   if (index !== 0 && index !== last) return null;
-  return <span className={styles.node} data-end={index === 0 ? 'first' : 'last'} aria-hidden="true" />;
+  return (
+    <span
+      className={styles.node}
+      data-end={index === 0 ? 'first' : 'last'}
+      aria-hidden="true"
+    />
+  );
 }
 
 /**
@@ -70,7 +76,12 @@ export function TracePlates({ stages, orientation = 'across' }: TracePlatesProps
       <Layout as="ol" rowGap="block" className={styles.down}>
         {shown.map((stage, index) => (
           <li key={stage.title} className={styles.stage}>
-            <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="block" align="center">
+            <Layout
+              columns={{ base: 1, md: [1, 3] }}
+              colGap="gutter"
+              rowGap="block"
+              align="center"
+            >
               <div className={styles.plate}>
                 <Scene scene={stage.scene} />
                 <End index={index} last={shown.length - 1} />
