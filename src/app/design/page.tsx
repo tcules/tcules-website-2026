@@ -108,6 +108,11 @@ const SPECIMENS = [
         note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',
       },
       {
+        href: '/design/arena',
+        name: 'Arena',
+        note: 'the home hero drawing — the field of apps, one rising onto the studio floor, looping; fetched after paint, paused out of view, still under reduced motion; 1024/720 and the square phone cut',
+      },
+      {
         href: '/design/texture',
         name: 'Texture',
         note: 'the pixel grid through placed, blurred shapes — 4 anchors, 4 surfaces, dark-ground candidates',
