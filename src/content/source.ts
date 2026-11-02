@@ -23,6 +23,10 @@ import { expertiseSource } from './sources/strapi/expertise';
 import { futureInterfacesLabJoinSource } from './sources/strapi/future-interfaces-lab-join';
 import { futureInterfacesLabSource } from './sources/strapi/future-interfaces-lab';
 import { glossarySource } from './sources/strapi/glossary';
+export {
+  getGlossaryDocument,
+  listPublishedGlossaries,
+} from './sources/strapi/glossary-documents';
 import { matterDesignSystemSource } from './sources/strapi/matter-design-system';
 import {
   resourceBlogSource as blogSource,

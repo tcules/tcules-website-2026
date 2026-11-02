@@ -208,14 +208,15 @@ function CloseBand({ band }: { band: CorpusBand }) {
   const paragraphs = band.blocks.flatMap((block) =>
     block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
   );
-  if (!paragraphs.some(hasLink)) {
+  if (!paragraphs.some(hasLink) && paragraphs.length <= 2) {
+    const [first, second] = paragraphs.map(plain);
     return (
       <CtaSection
         id={band.id}
         data-band="L"
         arrangement="open"
         heading={band.headingText}
-        body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
+        body={first ? (second ? [first, second] : [first]) : undefined}
         actions={[{ label: link.labelText, href: link.href }]}
       />
     );

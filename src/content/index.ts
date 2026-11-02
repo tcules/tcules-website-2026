@@ -32,6 +32,8 @@ export {
   getFutureInterfacesLabJoinPage,
   getFutureInterfacesLabPage,
   getGlossaryPage,
+  getGlossaryDocument,
+  listPublishedGlossaries,
   getHowWeWorkPage,
   getInsightsPage,
   getInsightsFixturePage,

@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Layout, Media, Prose, Section } from '@/components';
-import { Accordion, DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
+import { Accordion, CtaRow, DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
@@ -211,6 +211,17 @@ export function ArticleSection({
           flow += `<h${item.level}>${inlineToHtml(item.heading)}</h${item.level}>${blocksHtml(item.blocks)}`;
         break;
       case 'links':
+        flush();
+        for (const link of item.links) {
+          out.push(
+            <CtaRow
+              key={`links-${out.length}`}
+              rule={false}
+              actions={[{ label: link.labelText, href: link.href }]}
+            />,
+          );
+        }
+        break;
       case 'form':
         break;
     }

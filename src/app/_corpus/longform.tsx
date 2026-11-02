@@ -5,9 +5,11 @@ import { getCaseRefs, getCorpusPage } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { LongformPage, type LongformFamily } from '@/templates';
+import type { CorpusPage } from '@/lib/corpus-types';
 
 /**
- * The corpus-backed article (`/insights/*`) and glossary (`/glossary/*`) routes. Only the pages whose
+ * The shared article and glossary renderer. Live glossary routes supply a published CMS document;
+ * the local allowlist remains available to design specimens and other corpus routes. Only pages whose
  * band shapes the page-mapping has verified switch to the corpus; the rest keep their current source
  * until their own batch maps them (page-mapping § 1.2). Adding a page to the list is the whole act of
  * switching it, and its image slots must have register rows first (src/lib/placeholders.ts).
@@ -62,8 +64,14 @@ export async function longformMetadata(route: string): Promise<Metadata | null> 
   return page ? corpusMetadata(page) : null;
 }
 
-export async function LongformRoute({ route }: { route: string }) {
-  const page = await getCorpusPage(route);
+export async function LongformRoute({
+  route,
+  page: suppliedPage,
+}: {
+  route: string;
+  page?: CorpusPage;
+}) {
+  const page = suppliedPage ?? (await getCorpusPage(route));
   const family = FAMILIES[`/${route.split('/')[1]}`];
   if (!page || !family) notFound();
   const caseRefs = await getCaseRefs(caseRoutesIn(page));
