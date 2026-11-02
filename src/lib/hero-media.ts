@@ -27,3 +27,18 @@ export const HERO_MEDIA_ROUTES: ReadonlySet<string> = new Set([
 
 /** Whether a route's hero must carry an illustration or an image. */
 export const heroNeedsMedia = (route: string): boolean => HERO_MEDIA_ROUTES.has(route);
+
+/**
+ * Heroes set centred, the media below the words (PageHero `centred`), where a long title would stack
+ * seven lines in the beside split's half column (owner, 2 Nov 2026, /services: "because the hero
+ * title is so long, the center aligned version with the illustration below"). A route's choice, in
+ * code, as every arrangement is (ruling H1); the title still never runs across media
+ * (hero-title-stays-in-its-column), because here nothing sits beside it.
+ */
+export const CENTRED_HERO_ROUTES: ReadonlySet<string> = new Set([
+  ROUTES.services,
+  ROUTES.expertise,
+]);
+
+/** Whether a route's hero is the centred stack with its media below. */
+export const heroIsCentred = (route: string): boolean => CENTRED_HERO_ROUTES.has(route);

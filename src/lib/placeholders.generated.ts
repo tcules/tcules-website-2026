@@ -260,6 +260,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "One product built from launch day to the tenth release: frontend, backend, integrations, AI features and the mobile app as one system, built from the studio's own design and readable by the engineers who extend it. High-traffic page, hero image always (owner, 29 Oct 2026).",
   },
+  '/services#hero': {
+    src: '/placeholders/services--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "One product with the right mix of services around it: Product Design leading, two or three of the studio's services joining it for what this product needs, from a founder's first idea to a product customers have used for years. Set centred, under the long title (owner, 2 Nov 2026).",
+  },
   '/tools/design-system-drift-checker#how-to-use-it': {
     src: '/placeholders/tools-design-system-drift-checker--how-to-use-it.svg',
     width: 1600,

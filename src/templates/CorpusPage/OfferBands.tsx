@@ -1279,10 +1279,22 @@ function routerBody(
   table: Extract<CorpusBlock, { type: 'table' }>,
   row: InlineRun[][],
 ): string {
-  const second = plain(row[1] ?? []).replace(/\.$/, '');
-  return table.header.length >= 3
-    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
-    : second;
+  return plain(row[1] ?? []).replace(/\.$/, '');
+}
+
+/**
+ * A three-column router table's third column, kept as the tile's labelled detail under its header
+ * (owner, 2 Nov 2026, /services): a table that becomes tiles drops no column, and the column's own
+ * name labels it rather than being run on into the body sentence.
+ */
+function routerDetail(
+  table: Extract<CorpusBlock, { type: 'table' }>,
+  row: InlineRun[][],
+): { label: string; text: string } | undefined {
+  const text = plain(row[2] ?? []).trim();
+  return table.header.length >= 3 && text
+    ? { label: plain(table.header[2] ?? []).trim(), text }
+    : undefined;
 }
 
 /**
@@ -1302,7 +1314,12 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
-  const rows = table
+  const rows: {
+    href: string;
+    title: string;
+    body: string;
+    detail?: { label: string; text: string };
+  }[] = table
     ? table.rows.flatMap((row) => {
         const link =
           row[0]?.find((run) => run.type === 'link') ??
@@ -1310,7 +1327,14 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
+          ? [
+              {
+                href: link.href,
+                title: plain(link.children),
+                body: routerBody(table, row),
+                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
+              },
+            ]
           : [];
       })
     : band.blocks.flatMap((block) => {
@@ -1347,13 +1371,22 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []))
       : [];
   const sentence = (body: string) => body.charAt(0).toUpperCase() + body.slice(1);
-  const routerLead = leadText(band);
+  /* Where a set has no tile to carry the detail as its own field, it runs on into the body, so no
+     path drops the table's third column. */
+  const runOn = (row: (typeof rows)[number]) =>
+    row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
+  const mixedClosing =
+    closing.some(hasLink) && !closing.every(hasLink) && routesOf(closing) === undefined;
+  const lead = leadText(band);
+  const routerLead = lead;
   const closingFooter =
     closing.length > 0 ? (
       <ContentSectionText>
-        {closing.map((runs, index) => (
-          <p key={index}>{renderInline(runs)}</p>
-        ))}
+        <Layout rowGap="text">
+          {closing.map((runs, index) => (
+            <p key={index}>{renderInline(runs)}</p>
+          ))}
+        </Layout>
       </ContentSectionText>
     ) : undefined;
   const wrap = (set: ReactNode, footer?: ReactNode) => (
@@ -1383,6 +1416,22 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             },
           ]
         : undefined);
+    /* Mixed closing words (owner, 2 Nov 2026, /services): notes on single destinations and a sentence
+       about the set, in their authored order, run on as ONE paragraph at the body measure, links
+       inline. Never a card per note (it repeated the names as links and outshouted the set), never
+       three loose lines (the last read as stray). */
+    const coda =
+      !routes && mixedClosing ? (
+        <ContentSectionText>
+          <p>
+            {renderInline(
+              closing.flatMap((runs, index) =>
+                index > 0 ? [{ type: 'text', text: ' ' } as InlineRun, ...runs] : runs,
+              ),
+            )}
+          </p>
+        </ContentSectionText>
+      ) : undefined;
     const n = rows.length;
     const cta: BentoCta | undefined = routes
       ? {
@@ -1399,31 +1448,36 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
     return wrap(
       <Bento
         tracks={
-          cta
-            ? /* A lone card is two cells wide (decisions/2026-10-30-set-ends-in-a-cta-card): counted
+          /* Split tiles (a detail each) take two tracks, so four tracks set them two a row. */
+          rows.some((row) => row.detail)
+            ? 4
+            : cta
+              ? /* A lone card is two cells wide (decisions/2026-10-30-set-ends-in-a-cta-card): counted
                  as one, seven tiles chose four tracks and squeezed it into the eighth cell. */
-              ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
-            : n === 7 || n === 8 || n === 4
-              ? 4
-              : 3
+                ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
+              : n === 7 || n === 8 || n === 4
+                ? 4
+                : 3
         }
         cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
+          /* The split tile's action: the service tile's one wording (ServiceTile `action`). */
+          ...(row.detail ? { detail: { ...row.detail, action: 'Explore the service' } } : {}),
           href: row.href,
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? undefined : closingFooter,
+      routes ? undefined : (coda ?? closingFooter),
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));
   const items: BlockCardSetItem[] = rows.map((row, index) => ({
     id: row.href,
     title: row.title,
-    ...(row.body ? { body: sentence(row.body) } : {}),
+    ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
     href: row.href,
     icon: glyphs.every(Boolean) ? glyphs[index] : undefined,
   }));
@@ -1447,7 +1501,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           key={row.href}
           titleAs="h3"
           title={row.title}
-          body={row.body}
+          body={runOn(row)}
           href={row.href}
         />
       ))}

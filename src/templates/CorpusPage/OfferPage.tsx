@@ -1,4 +1,5 @@
 import type { CorpusPage } from '@/lib/corpus-types';
+import { heroIsCentred } from '@/lib/hero-media';
 import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
@@ -80,7 +81,7 @@ export function OfferPage({
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
       <CorpusHero
         page={page}
-        arrangement="beside"
+        arrangement={heroIsCentred(page.route) ? 'centred' : 'beside'}
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />

@@ -437,8 +437,13 @@ export function BlockCardSet({
      body the 1fr rows took the tallest card's height, so a row of three-line bodies left 80 above
      the next icon and a row of two-line ones 53 — two beats in one grid. Cards in a row still share
      its height (stretch); the seam down the grid is exactly `stack`. Icon cards carry no pinned
-     cta, which is the only thing equal rows were for. */
-  const equalRows = !iconSet;
+     cta, which is the only thing equal rows were for.
+     A borderless set is sized per row too (owner, 2 Nov 2026, /expertise: "could the height be per
+     row and not for the entire grid?"): with no box, a short row's slack under 1fr rows only
+     widened the seam below it past `column`. Cards in one row still share its height (Layout's
+     default stretch), so a pinned cta stays level along the row. Only a boxed set, whose boxes are
+     seen, keeps every row the tallest one's height. */
+  const equalRows = frame === 'box' && !iconSet;
   const staggered = stagger && !featured && peers.length <= widest;
   const tabStop = scrolls && !linked;
   if (tabStop && !label) warnUnnamed();
