@@ -44,7 +44,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
 import { caseCover, slotImage, slugOf, type SlotImage } from './images';
-import { ILLUSTRATED_PROSE, signature } from './plan';
+import { isIllustratedProse, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -1621,7 +1621,7 @@ export function TextBand({
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
      plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
-  if (ILLUSTRATED_PROSE.has(band.id)) {
+  if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
         {...head(band)}
