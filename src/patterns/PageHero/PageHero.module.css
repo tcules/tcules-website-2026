@@ -397,11 +397,11 @@ a.name:hover {
    the capture's edge cue. The values stay --hero-* rather than reading --media-*, because a
    component never reads another component's tokens (token rule 6). */
 /* The clip takes the same media edge as the YouTube frame; its ratio is the Clip's own (16/9,
-   4/5 below 640), so none is set here. */
+   4/5 below 640), so none is set here. Its corner is the photograph's (--hero-clip-radius). */
 .clip {
   overflow: hidden;
   border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
-  border-radius: var(--hero-media-radius);
+  border-radius: var(--hero-clip-radius);
 }
 
 .video {
