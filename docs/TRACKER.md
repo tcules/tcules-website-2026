@@ -235,6 +235,45 @@ choice (2.34).
       hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
       name, role, bio, topic labels and LinkedIn).
 
+**Review with Jatin, 2 Nov 2026.** Jatin's order: home, the CTAs and the enquiry modal, the reused bands
+(engagement, trust markers, FAQ), then the commercial banners. His note on the whole site: the problem is now
+more content than design, and the owner keeps visual consistency, pushing back on content that can't be
+designed well. Everything here is designed before the lock on Wed 4 Nov. Not ours: Yash sends Jatin the
+page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
+the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
+checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
+- [ ] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+      plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
+      one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+- [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
+      pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
+      real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
+      engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
+- [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
+      on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
+      success and failure copy, and CTA-source analytics come after launch.
+- [ ] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+      apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
+      adjacent, never beside the close.
+- [ ] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+      (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
+- [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
+      Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
+      links to `/expertise`.
+- [ ] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+      "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
+      social media, the other ways to reach us, and the studio address.
+- [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
+      the article page, and bring the comparison to the owner.
+- [ ] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+      decisions and records them in `docs/page-build/pages/clients.md`.
+- [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
+      illustrations instead.
+
+Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
+screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
+and CTA-source analytics · a pricing section · taxonomy collection pages.
+
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
 Jatin's explicit sign-off on the reduced type size.
@@ -290,7 +329,7 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 ## Phase 2 — after the 6 Nov launch
 
-- [ ] `/clients` (owner, 31 Oct 2026).
+- [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs

@@ -886,3 +886,16 @@ into these strips is on us.
 unfinished beside the nine that have one.
 
 **Found in.** `kinds:check`, 1 Nov 2026 (tracker 2.32–2.43 note).
+
+## Remove "Start wherever the work is" (2 Nov 2026)
+
+**Page / section.** `/how-we-work`, the engagement-models band: the closing line "**Start wherever the work
+is.** Begin with any of the three, and move between them when the work gives us a reason to."
+
+**What's needed.** Delete the line from the copy (`_pages/how-we-work.md`) and from Strapi. The Dealpath
+example after it stays. `OfferBands.tsx` treats the band's last item as belonging to the whole set, so check
+that the Dealpath example still renders where it should once the line is gone.
+
+**Why.** Jatin's review, 2 Nov: the engagement band gets one clear CTA instead (tracker 2.51).
+
+**Found in.** Review with Jatin, 2 Nov 2026.
