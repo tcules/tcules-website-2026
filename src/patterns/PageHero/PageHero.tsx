@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import {
+  Arena,
   BrandMark,
   Button,
   Cluster,
@@ -191,7 +192,24 @@ export type HeroVideo = {
  * at the CALL SITE, on 129 routes, in a tier whose whole job is composition. The two renderings
  * are a closed set and the component owns them.
  */
-export type HeroMedia = HeroImage | HeroVideo;
+export type HeroMedia = HeroImage | HeroVideo | HeroScene;
+
+/**
+ * An animated drawing from the site's own files (owner, 2 Nov 2026, the home hero): the Arena,
+ * an SVG fetched after paint and run on its own loop, with a pause / play control. A closed set of
+ * one — `scene` names which drawing, so a caller cannot pass a URL or markup into the opening
+ * block. It sits as an illustration does: no box, centred on the copy. `title` is its accessible
+ * name: what the drawing shows.
+ */
+export type HeroScene = {
+  type: 'scene';
+  scene: 'arena';
+  title: string;
+};
+
+const HERO_SCENES: Record<HeroScene['scene'], string> = {
+  arena: '/illustrations/home/arena.svg',
+};
 
 /**
  * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026):
@@ -817,7 +835,8 @@ export function PageHero({
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
      photograph, a capture or a video has an edge, so the h1 and that top edge share a line. */
-  const isIllustration = media?.type === 'image' && media.image.kind === 'illustration';
+  const isIllustration =
+    (media?.type === 'image' && media.image.kind === 'illustration') || media?.type === 'scene';
   const isPhotograph = media?.type === 'image' && media.image.kind === 'photograph';
   const centred = split && isIllustration;
 
@@ -1185,7 +1204,13 @@ export function PageHero({
       />
     ) : null;
   const mediaNode =
-    media === undefined ? null : media.type === 'image' ? (
+    media === undefined ? null : media.type === 'scene' ? (
+      <Arena
+        src={HERO_SCENES[media.scene]}
+        label={media.title}
+        glyphs={{ play: <Icon name="chrome-play" />, pause: <Icon name="chrome-pause" /> }}
+      />
+    ) : media.type === 'image' ? (
       legend ? (
         <Layout rowGap="block">
           {image}
@@ -1381,6 +1406,9 @@ export function PageHero({
                    drawing     [2, 1] from 1024 and [1, 1] from 1440. The 67px title needs 576 at
                                1024 ("unresolved product." is one line there); the drawing takes
                                the third and its numbered cut, so its labels stay readable.
+                   scene       the animated drawing takes wide's tracks: [1, 1] from 1024 and
+                               2 : 3 from 1440 — a scene has a camera and needs the room a
+                               still drawing's third cannot give it (home hero, 2 Nov 2026).
         wide     the photograph LEADS: [1, 1] from 1024 and copy 2 : media 3 from 1440, a 3:2
                  photograph at 686 × 457 beside a 458 copy column. The family's second photograph
                  idea, so the home and studio heroes are not one rectangle at a squint (fix round 2).
@@ -1389,7 +1417,7 @@ export function PageHero({
        anything else is top-aligned in its own box. */
     const columns = !split
       ? undefined
-      : wide
+      : wide || media?.type === 'scene'
         ? { lg: [1, 1], xl: [2, 3] }
         : isIllustration
           ? { lg: [2, 1], xl: [1, 1] }
