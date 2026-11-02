@@ -1,16 +1,12 @@
 /**
  * Every routed collection's slugs in one request, for the sitemap. Each collection is read at the
- * publication status its own page reads — the offer, glossary and tool routes render the latest
- * draft, the insight, podcast, event and case-study routes render published entries only — so the
- * list names exactly the pages the site answers. `limit: -1` lifts Strapi's default page of 10.
+ * publication status its own page reads — the audit, expertise, glossary and tool routes render the latest
+ * draft, while case-study routes render published entries only — so the
+ * list names exactly the pages the site answers. Resources and services are appended from the new
+ * CMS by their own published readers. `limit: -1` lifts Strapi's default page of 10.
  */
 export const SITE_PAGES_QUERY = /* GraphQL */ `
   query SitePages {
-    services(status: DRAFT, pagination: { limit: -1 }) {
-      slug
-      title
-      updatedAt
-    }
     audits(status: DRAFT, pagination: { limit: -1 }) {
       slug
       title

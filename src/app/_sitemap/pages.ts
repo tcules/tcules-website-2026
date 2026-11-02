@@ -132,7 +132,7 @@ const CORPUS_ROUTES: readonly string[] = [
   ...PASS_1_LONGFORM_ROUTES,
   ...PASS_1_TOOL_ROUTES,
   ...PASS_1_CASE_ROUTES,
-].filter((path) => !REDIRECTED.has(path));
+].filter((path) => !REDIRECTED.has(path) && !path.startsWith(`${ROUTES.services}/`));
 
 /** Every `{ label, href }` anywhere in the header and footer IA, first label per path. */
 function navLabels(node: unknown, labels = new Map<string, string>()): Map<string, string> {

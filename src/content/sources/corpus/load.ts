@@ -58,6 +58,25 @@ function mediaBinding(raw: unknown): CorpusMediaBinding {
     source: str(b.source),
     caption: str(b.caption),
     attribution: str(b.attribution),
+    ...(typeof b.width === 'number' &&
+    b.width > 0 &&
+    typeof b.height === 'number' &&
+    b.height > 0
+      ? { width: b.width, height: b.height }
+      : {}),
+    ...(Array.isArray(b.sources)
+      ? {
+          sources: b.sources.flatMap((source) => {
+            const variant = dict(source);
+            return typeof variant.src === 'string' &&
+              /^https?:\/\//u.test(variant.src) &&
+              typeof variant.width === 'number' &&
+              variant.width > 0
+              ? [{ src: variant.src, width: variant.width }]
+              : [];
+          }),
+        }
+      : {}),
   };
 }
 
@@ -189,8 +208,13 @@ function liveCaseLinks<T>(node: T): T {
 }
 
 export function parseCorpusFile(file: string, text: string): CorpusPage {
+  const { data, body } = splitFrontmatter(text);
+  return parseCorpusDocument(file, data, body);
+}
+
+/** Parse the same authored page model from disk or the CMS's published document projection. */
+export function parseCorpusDocument(file: string, data: Dict, body: string): CorpusPage {
   try {
-    const { data, body } = splitFrontmatter(text);
     const route = str(data.route);
     if (!route) throw new Error('frontmatter has no route');
     const seo = dict(data.seo);
@@ -244,7 +268,7 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
       hero,
       bands,
       frontmatter: data,
-      file: `_pages/${file}`,
+      file: file.startsWith('cms:') ? file : `_pages/${file}`,
     };
   } catch (e) {
     throw new Error(`${file}: ${e instanceof Error ? e.message : String(e)}`);

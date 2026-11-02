@@ -8,6 +8,13 @@ import { planOffer } from './plan';
 
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
+  heroIllustration?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    kind: 'illustration';
+  };
 };
 
 /**
@@ -37,8 +44,12 @@ export function OfferPage({
   scenes,
   reasonFigure,
   claimFigure,
+  heroIllustration,
 }: OfferPageProps) {
-  const drawing = serviceIllustration(page.route);
+  const localDrawing = serviceIllustration(page.route);
+  const drawing = heroIllustration
+    ? { ...heroIllustration, cut: localDrawing?.cut }
+    : localDrawing;
   const units = planOffer(
     page,
     new Set(Object.keys(scenes?.items ?? {})),

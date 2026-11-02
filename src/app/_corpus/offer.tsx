@@ -12,12 +12,16 @@ import {
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { OfferPage } from '@/templates';
+import type { CorpusPage } from '@/lib/corpus-types';
+import type { OfferScenes } from '@/lib/sketches';
 
 import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
 
 /**
- * The corpus-backed offer routes (`/services/*`, `/audits/*`, `/expertise/*`) share one reader.
+ * The offer routes share one renderer. Live services supply a published CMS page; audits,
+ * expertise and the design specimens still read the local corpus. The list below tracks the pages
+ * designed for this template; service publication and route discovery come from the CMS.
  *
  * Each of those routes serves a whole family, and only the pages whose band shapes the page-mapping
  * has verified switch to the corpus; the rest keep their current source until their own batch maps
@@ -99,15 +103,31 @@ export async function offerMetadata(route: string): Promise<Metadata | null> {
   return page ? corpusMetadata(page) : null;
 }
 
-export async function OfferRoute({ route }: { route: string }) {
-  const page = await getCorpusPage(route);
+export async function OfferRoute({
+  route,
+  page: suppliedPage,
+  scenes: suppliedScenes,
+  heroIllustration,
+}: {
+  route: string;
+  page?: CorpusPage;
+  scenes?: OfferScenes;
+  heroIllustration?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    kind: 'illustration';
+  };
+}) {
+  const page = suppliedPage ?? (await getCorpusPage(route));
   if (!page) notFound();
   const [caseRefs, shared, ratings, avatars, scenes] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getCorpusBindings(SHARED_BINDINGS),
     getTestimonialRatings(page.composition.testimonialIds),
     getTestimonialAvatars(page.composition.testimonialIds),
-    getOfferScenes(route),
+    suppliedScenes ?? getOfferScenes(route),
   ]);
   return (
     <OfferPage
@@ -117,6 +137,7 @@ export async function OfferRoute({ route }: { route: string }) {
       ratings={ratings}
       avatars={avatars}
       scenes={scenes}
+      heroIllustration={heroIllustration}
       reasonFigure={landedReasonFigure}
       claimFigure={landedClaimFigure}
     />

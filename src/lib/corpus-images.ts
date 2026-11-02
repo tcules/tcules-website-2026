@@ -35,7 +35,10 @@ const CLOUDINARY = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.+
 export function corpusImage(binding: CorpusMediaBinding): CorpusImage {
   const url = binding.assetUri;
   if (!url) throw new Error(`Binding "${binding.id}" has no asset_uri; use a placeholder.`);
-  const size = CORPUS_ASSET_SIZES[url];
+  const size =
+    binding.width && binding.height
+      ? { width: binding.width, height: binding.height }
+      : CORPUS_ASSET_SIZES[url];
   if (!size) {
     throw new Error(
       `Bound asset for "${binding.id}" is not measured (${url}). Run \`npm run corpus:assets\`.`,
@@ -43,8 +46,9 @@ export function corpusImage(binding: CorpusMediaBinding): CorpusImage {
   }
   const match = CLOUDINARY.exec(url);
   const animated = /\.gif($|\?)/i.test(url);
-  const sources =
-    match && !animated
+  const sources = binding.sources?.length
+    ? binding.sources
+    : match && !animated
       ? RUNGS.filter((w) => w < size.width).map((w) => ({
           src: `${match[1]}w_${w},c_limit,q_auto/${match[2]}`,
           width: w,

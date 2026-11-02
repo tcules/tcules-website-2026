@@ -37,6 +37,8 @@ export {
   getPodcastPage,
   getPrivacyPolicyPage,
   getServicePage,
+  getServiceOfferPage,
+  listPublishedServices,
   getServicesMasterPage,
   getTermsOfUsePage,
   getToolPage,

@@ -775,6 +775,7 @@ export function corpusEnquiryForm(
       variant="enquiry"
       urlLabel="Product or company URL"
       action={ENDPOINTS.enquiry}
+      submitLabel={conversion?.submitLabel}
       /* The form is the band's primary object (home round 3): lg fields, the submit across the
          panel, so the one solid on the band is the widest thing in it. */
       dress={treatment.dress}

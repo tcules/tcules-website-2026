@@ -67,6 +67,10 @@ export type CorpusMediaBinding = {
   source: string | null;
   caption: string | null;
   attribution: string | null;
+  /** Published CMS media supplies measurements and responsive variants directly. */
+  width?: number;
+  height?: number;
+  sources?: readonly { src: string; width: number }[];
 };
 
 /** `page_composition.client_recognition`: the logo strip a page declares. */

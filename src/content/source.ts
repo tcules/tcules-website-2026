@@ -32,6 +32,7 @@ import {
 } from './sources/strapi/resources';
 import { privacyPolicySource } from './sources/strapi/privacy-policy';
 import { serviceSource } from './sources/strapi/service';
+export { getServiceOfferPage, listPublishedServices } from './sources/strapi/service-offers';
 import { servicesMasterSource } from './sources/strapi/services-master';
 import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';

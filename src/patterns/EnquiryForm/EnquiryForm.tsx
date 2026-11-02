@@ -26,6 +26,8 @@ export type EnquiryContextBase = {
 
 type SharedProps = {
   action: string;
+  /** The page's authored action label, when supplied by the CMS. */
+  submitLabel?: string;
   onSubmitted?: () => void;
   /**
    * How wide the form sets (cmp-form fix round, 6 Oct 2026). ONE policy for every variant: the form
@@ -949,11 +951,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
           : '';
 
   const submitLabel =
-    variant === 'audit'
+    props.submitLabel?.trim() ||
+    (variant === 'audit'
       ? 'Request free audit'
       : variant === 'contact'
         ? 'Send message'
-        : 'Send enquiry';
+        : 'Send enquiry');
 
   /* The submit is the converting action, so it carries NO arrow on any variant (owner, 7 Oct 2026:
      a solid primary never takes one — the label carries the ask). Its partner, "See available
