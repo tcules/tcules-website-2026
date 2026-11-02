@@ -1,7 +1,7 @@
 ---
 title: "On an insight page the ask comes before the further reading, which closes on tint"
 date: 2026-11-02
-status: proposed
+status: active
 area: [layout]
 source: "Owner, 2 Nov 2026, reviewing /insights/ux-audit-vs-heuristic-evaluation on feat/insights-summary-panel (\"the CTA block can be above the explore other resources block\", confirmed with Yash; \"the explore other resources card could be tint bg\")"
 supersedes: []

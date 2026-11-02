@@ -1,12 +1,12 @@
 ---
 title: "An insight's summary is a panel with a blue top, its paragraph set large"
 date: 2026-11-02
-status: proposed
+status: active
 area: [components, type]
 source: "Owner, 2 Nov 2026, picking direction D on the Insight summary canvas (https://claude.ai/artifact/WyE7jPCfHurxZoCwNcLRcb): \"i like a's hierarchy, but B's box design with the blue highlight\", then \"cool build D\""
 supersedes: []
-dbf: []
-dbf_status: none
+dbf: ["ch03 §2"]
+dbf_status: pending
 enforced_by: "review"
 ---
 
@@ -25,5 +25,4 @@ points ("the content is already there and it needs to remain the same shape").
 
 **How to apply.** `TldrSection` maps to a `summary` block with `heading` and `html` in `blog.ts`, `podcast.ts` and
 `event.ts`. `--text-summary` is the only paragraph role above 18. It is an exception to
-decisions/2026-10-19-body-type-ceiling, and when this ruling is promoted that entry is amended to name it. Stays
-proposed until the owner has seen it on the built routes.
+decisions/2026-10-19-body-type-ceiling, which names it. Seen and approved by the owner on the built article route, 2 Nov 2026.
