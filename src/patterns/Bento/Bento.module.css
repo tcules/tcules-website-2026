@@ -333,21 +333,22 @@
 
 /* ── States ─────────────────────────────────────────────────────────────────
    Hover and keyboard focus, one curve both ways: the tile lifts, its hairline and texture turn blue,
-   its title takes the accent. Keyboard gets the ring as well. */
-.tile:is(:hover, :focus-visible) {
+   its title takes the accent. Keyboard gets the ring as well. Only a LINKED tile moves: a tile with no
+   destination (the page itself in a comparison, an option outside the studio) is a still card. */
+a.tile:is(:hover, :focus-visible) {
   transform: translateY(calc(-1 * var(--bnt-lift)));
   border-color: var(--bnt-rule-ink-hover);
 }
 
-.tile:is(:hover, :focus-visible)::before {
+a.tile:is(:hover, :focus-visible)::before {
   opacity: 0;
 }
 
-.tile:is(:hover, :focus-visible)::after {
+a.tile:is(:hover, :focus-visible)::after {
   opacity: var(--bnt-tex-strength);
 }
 
-.tile:is(:hover, :focus-visible) .title {
+a.tile:is(:hover, :focus-visible) .title {
   color: var(--bnt-title-ink-hover);
 }
 
@@ -361,7 +362,7 @@
     transition: border-color var(--bnt-duration) var(--bnt-easing);
   }
 
-  .tile:is(:hover, :focus-visible) {
+  a.tile:is(:hover, :focus-visible) {
     transform: none;
   }
 }

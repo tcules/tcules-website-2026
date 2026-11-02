@@ -173,7 +173,8 @@ function trailingCaseLink(
   if (last?.type !== 'link' || !last.href.startsWith('/case-studies/')) return null;
   const rest = runs.slice(0, -1);
   const prev = rest[rest.length - 1];
-  if (prev?.type === 'text') rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
+  if (prev?.type === 'text')
+    rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
   return { link: { labelText: plain(last.children), href: last.href }, rest };
 }
 
@@ -1309,13 +1310,25 @@ function ctaTracks(cells: number): 3 | 4 {
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
+/** A split tile's action, named for what its link opens: a tool, an audit or a service. */
+function tileAction(href: string | undefined): string {
+  if (href?.startsWith('/tools/')) return 'Try the tool';
+  if (href?.startsWith('/audits/')) return 'See the audit';
+  return 'Explore the service';
+}
+
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
+  /* A table of options to choose between (an audit's "Option | What it gives | Best for", owner,
+     2 Nov 2026: "the new pattern we made for services hub"): every row is a tile, the ones with no
+     link too — the page's own option and those outside the studio are still tiles, never dropped. */
+  const optionTable =
+    table !== undefined && /^(option|options)$/i.test(plain(table.header[0] ?? []).trim());
   const rows: {
-    href: string;
+    href?: string;
     title: string;
     body: string;
     detail?: { label: string; text: string };
@@ -1326,13 +1339,23 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           row[0]?.flatMap((run) =>
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
-        return link && link.type === 'link'
+        const detail = routerDetail(table, row);
+        if (link && link.type === 'link') {
+          return [
+            {
+              href: link.href,
+              title: plain(link.children),
+              body: routerBody(table, row),
+              ...(detail ? { detail } : {}),
+            },
+          ];
+        }
+        return optionTable
           ? [
               {
-                href: link.href,
-                title: plain(link.children),
+                title: plain(row[0] ?? []).trim(),
                 body: routerBody(table, row),
-                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
+                ...(detail ? { detail } : {}),
               },
             ]
           : [];
@@ -1399,8 +1422,15 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. Services
      named as a set are always the service tile, each with its own scene, wherever they are named
      (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
-  const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
-  if (rows.length >= 3 && scenes.every(Boolean)) {
+  const scenes = rows.map((row) =>
+    row.href
+      ? (sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href))
+      : (sceneFor(ctx, band, row.title) ??
+        /* the page's own option takes the page's own drawing */
+        (ctx.page.name.toLowerCase() === row.title.toLowerCase() ? serviceSceneFor(ctx.page.route) : undefined)),
+  );
+  /* An option table always takes the tiles: a missing drawing is the labelled empty plate. */
+  if (rows.length >= 3 && (optionTable || scenes.every(Boolean))) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
@@ -1461,20 +1491,24 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
         }
         cta={cta}
         items={rows.map((row, index) => ({
-          id: row.href,
+          id: row.href ?? row.title,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
-          /* The split tile's action: the service tile's one wording (ServiceTile `action`). */
-          ...(row.detail ? { detail: { ...row.detail, action: 'Explore the service' } } : {}),
-          href: row.href,
-          scene: scenes[index] as SketchName,
+          /* The split tile's action: the service tile's one wording (ServiceTile `action`), named
+             for what the link opens. */
+          ...(row.detail ? { detail: { ...row.detail, action: tileAction(row.href) } } : {}),
+          ...(row.href ? { href: row.href } : {}),
+          ...(scenes[index] ? { scene: scenes[index] as SketchName } : {}),
         }))}
       />,
       routes ? undefined : (coda ?? closingFooter),
     );
   }
-  const glyphs = rows.map((row) => glyphForRoute(row.href));
-  const items: BlockCardSetItem[] = rows.map((row, index) => ({
+  const linked = rows.filter((row): row is (typeof rows)[number] & { href: string } =>
+    Boolean(row.href),
+  );
+  const glyphs = linked.map((row) => glyphForRoute(row.href));
+  const items: BlockCardSetItem[] = linked.map((row, index) => ({
     id: row.href,
     title: row.title,
     ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
@@ -1487,7 +1521,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
       <BlockCardSet
         items={items}
         lead="none"
-        across={rows.length % 4 === 0 ? 4 : 3}
+        across={linked.length % 4 === 0 ? 4 : 3}
         cue="title"
         scroll="never"
       />,
@@ -1496,7 +1530,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   }
   return wrap(
     <Layout as="ul" rowGap="none">
-      {rows.map((row) => (
+      {linked.map((row) => (
         <ListCard
           key={row.href}
           titleAs="h3"
