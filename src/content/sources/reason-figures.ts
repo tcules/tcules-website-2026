@@ -46,6 +46,25 @@ const OFFER: Record<string, Omit<ReasonFigureRef, 'set'>> = {
   },
 };
 
+/**
+ * /why-tcules' principles, where a reason argues what an offer reason's drawing already says (a drawing
+ * is reused only for an item arguing the same thing; treatment rules § 2). Same set, so the band keeps
+ * one scale. "We design software people enjoy using" has no drawing yet and takes the labelled slot
+ * (docs/image-register.md).
+ */
+const WHY: Record<string, Omit<ReasonFigureRef, 'set'>> = {
+  'We see the product behind the brief': {
+    name: 'known-before-drawn',
+    message:
+      'What the product has to know is worked out and solid first; the screen above it is still a dashed outline.',
+  },
+  'We make ideas real in working software': {
+    name: 'proved-in-code',
+    message:
+      'In a board whose design is still open, the one hard interaction, dragging a card to another column, already works in code.',
+  },
+};
+
 const HOME: Record<string, Omit<ReasonFigureRef, 'set'>> = {
   'Products customers rely on': {
     name: 'relied-on',
@@ -66,5 +85,6 @@ const keyed = (set: 'offer' | 'home', rows: Record<string, Omit<ReasonFigureRef,
 
 export const REASON_FIGURES: Readonly<Record<string, ReasonFigureRef>> = Object.fromEntries([
   ...keyed('offer', OFFER),
+  ...keyed('offer', WHY),
   ...keyed('home', HOME),
 ]);
