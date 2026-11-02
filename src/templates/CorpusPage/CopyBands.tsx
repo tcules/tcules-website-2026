@@ -169,6 +169,8 @@ export function CorpusTable({ table, labelledBy }: { table: TableBlock; labelled
           header: plain(keyCell),
           ...(hasLink(keyCell) ? { headerHtml: inlineToHtml(keyCell) } : {}),
           cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
+          /* In a comparison, the row naming Tcules is the one we suggest (owner, 2 Nov 2026). */
+          ...(/^tcules\b/i.test(plain(keyCell).trim()) ? { pick: true } : {}),
         };
       })}
     />

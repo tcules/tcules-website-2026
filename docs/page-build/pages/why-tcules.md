@@ -21,10 +21,9 @@ Composed from the library: OfferPage's plan. No new components; two new flat dra
 | principles | reasons · Reasons + ClaimProof examples | |
 | signature-work | record · CaseSpread strip | on tint |
 | studio | text · B + team photo, ClaimProof example | |
-| alternatives | table · DataTable | open: drawn rows? |
+| alternatives | table · DataTable, Tcules row `pick` | owner, 2 Nov: stays a table; the Tcules row reads as the suggestion |
 | testimonials | quotes · slider, stars on every quote | |
 | enquiry, faq | L, D-faq | |
 
 ## Open
 - The craft reason's illustration (register row). Client marks for Dealpath, Benchmark Gensuite, ConnectX, JoVE, Ringier.
-- Alternatives: a table read across rows (kept), or six drawn rows (treatment rules § 2)? Owner's call.
