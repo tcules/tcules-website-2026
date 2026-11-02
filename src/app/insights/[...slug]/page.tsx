@@ -2,22 +2,14 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Layout, Media, Prose, Section } from '@/components';
-import {
-  LongformRoute,
-  isCorpusLongform,
-  longformMetadata,
-  longformSlugs,
-} from '@/app/_corpus/longform';
-import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/content';
+import { Layout, Section } from '@/components';
+import { getBlogPage, type BlogPage } from '@/content';
 import { authorPath, blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
   Breadcrumbs,
-  Callout,
   Contributors,
   CtaSection,
-  Figure,
   PageHero,
   TableOfContents,
   type HeroCredit,
@@ -28,6 +20,7 @@ import type { BreadcrumbItem } from '@/patterns';
 import { InsightResources } from '@/templates';
 
 import { resourceItems } from '../../_insights/resources';
+import { renderResourceBlock } from '../../_insights/body';
 
 type BlogPageProps = { params: Promise<{ slug: string[] }> };
 
@@ -36,130 +29,6 @@ function requestedSlug(slug: readonly string[]): string {
     .map((segment) => segment.trim())
     .filter(Boolean)
     .join('/');
-}
-
-/* Figure's own `sizes` (Figure.tsx): the full content column, which over-fetches in the narrower
-   article track rather than ever under-fetching. */
-const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
-
-function figureImage(image: BlogImage) {
-  return {
-    src: image.src,
-    alt: image.alt,
-    width: image.width,
-    height: image.height,
-    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
-       a srcset and draw the edge by kind; `mime` is the one field left behind. */
-    sources: image.sources,
-    kind: image.kind,
-    panel: image.panel,
-    shadow: image.shadow,
-  };
-}
-
-function renderBlogBlock(block: BlogBlock, blogTitle: string) {
-  switch (block.type) {
-    case 'prose':
-    case 'code':
-    case 'separator':
-      return <Prose html={block.html} />;
-
-    case 'callout':
-      return <Callout html={block.html} />;
-
-    case 'figures':
-      return (
-        <Layout
-          columns={block.figures.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
-          colGap={block.figures.length > 1 ? 'gutter' : undefined}
-          rowGap="gutter"
-        >
-          {block.figures.map((figure, index) =>
-            /* A body image with no authored caption renders bare, through Figure's own Media:
-               a Figure's caption is required, and the words under an image are never invented. */
-            figure.caption ? (
-              <Figure
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                caption={figure.caption}
-              />
-            ) : (
-              <Media
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                sizes={BODY_IMAGE_SIZES}
-              />
-            ),
-          )}
-        </Layout>
-      );
-
-    case 'video':
-      return (
-        <Layout rowGap="block">
-          {block.title || block.description ? (
-            <Layout rowGap="tight">
-              {block.title ? <h2>{block.title}</h2> : null}
-              {block.description ? <p>{block.description}</p> : null}
-            </Layout>
-          ) : null}
-          {block.youtubeId ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${block.youtubeId}`}
-              title={block.title || `${blogTitle} video`}
-              width="100%"
-              height="698"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              loading="lazy"
-              allowFullScreen
-            />
-          ) : block.video ? (
-            <video
-              controls
-              autoPlay={block.video.autoplay}
-              muted={block.video.autoplay}
-              loop={block.video.loop}
-              playsInline
-              poster={block.video.poster}
-              width={block.video.width}
-              height={block.video.height}
-              preload="metadata"
-            >
-              <source src={block.video.src} type={block.video.mime} />
-            </video>
-          ) : block.thumbnail ? (
-            <Figure
-              image={figureImage(block.thumbnail)}
-              caption={block.title || block.description || `${blogTitle} video`}
-            />
-          ) : null}
-        </Layout>
-      );
-
-    case 'embed':
-      return (
-        <Layout rowGap="block">
-          <Layout rowGap="tight">
-            <h2>{block.title}</h2>
-            {block.description ? <p>{block.description}</p> : null}
-          </Layout>
-          {block.url ? (
-            <iframe
-              src={block.url}
-              title={block.title}
-              width={block.width ?? '100%'}
-              height={block.height ?? 720}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
-          ) : block.thumbnail ? (
-            <Figure image={figureImage(block.thumbnail)} caption={block.title} />
-          ) : null}
-        </Layout>
-      );
-  }
 }
 
 function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
@@ -171,6 +40,9 @@ const FORMAT_CRUMB: Record<BlogPage['kind'], BreadcrumbItem> = {
   article: { label: 'Articles', href: ROUTES.articles },
   guide: { label: 'Guides', href: ROUTES.guides },
   research: { label: 'Research', href: ROUTES.research },
+  event: { label: 'Events', href: ROUTES.events },
+  podcast: { label: 'Podcasts', href: ROUTES.podcasts },
+  interview: { label: 'Interviews', href: ROUTES.interviews },
   video: { label: 'Videos', href: ROUTES.videos },
 };
 
@@ -187,14 +59,8 @@ function uniqueLabels(labels: readonly string[]): string[] {
   return [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
 }
 
-export function generateStaticParams() {
-  return longformSlugs('/insights').map((slug) => ({ slug: slug.split('/') }));
-}
-
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const corpus = await longformMetadata(`/insights/${requestedSlug(slug)}`);
-  if (corpus) return corpus;
   const blog = await getBlogPage(requestedSlug(slug));
 
   if (!blog) {
@@ -220,6 +86,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
       ...(blog.publishedContent ? { publishedTime: blog.publishedContent } : {}),
+      ...(blog.updatedAt ? { modifiedTime: blog.updatedAt } : {}),
       ...(blog.authors.length > 0
         ? { authors: blog.authors.map((author) => author.name) }
         : {}),
@@ -245,8 +112,6 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
 export default async function BlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
-  if (isCorpusLongform(`/insights/${requestedSlug(slug)}`))
-    return <LongformRoute route={`/insights/${requestedSlug(slug)}`} />;
   const blog = await getBlogPage(requestedSlug(slug));
 
   if (!blog) notFound();
@@ -266,9 +131,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
      grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
   const hasOutline = outline.length >= 2;
 
-  /* The authored date only. Strapi's publishedAt and updatedAt are the CMS's last publish and save
-     (every live article re-published 28–30 Oct 2026), so neither is shown as the piece's date, and
-     there is no "Updated" until the CMS carries an authored one. */
+  /* The native CMS has separate authored publication and last-updated dates. */
   const published = blog.publishedContent;
   const authors: HeroPerson[] = blog.authors.map((author) => ({
     name: author.name,
@@ -306,7 +169,11 @@ export default async function BlogPage({ params }: BlogPageProps) {
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}
         readingTime={blog.readingTime}
-        dates={published ? { published } : undefined}
+        dates={
+          published
+            ? { published, ...(blog.updatedAt ? { modified: blog.updatedAt } : {}) }
+            : undefined
+        }
         media={heroMedia}
         arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
         surface="paper"
@@ -331,7 +198,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
             {hasOutline ? <TableOfContents items={outline} /> : null}
             <Layout as="article" rowGap="stack">
               {blog.blocks.map((block) => (
-                <Fragment key={block.id}>{renderBlogBlock(block, blog.title)}</Fragment>
+                <Fragment key={block.id}>{renderResourceBlock(block, blog.title)}</Fragment>
               ))}
               {/* Who wrote it, after what they wrote (byline board G): the hero carries their faces
                   and names, this says who each is and links to the rest of what they wrote. */}
@@ -359,7 +226,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
           (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
       <InsightResources
-        heading="Explore other resources"
+        heading={blog.resourcesHeading || 'Explore other resources'}
         items={resourceItems(blog.resources)}
       />
 

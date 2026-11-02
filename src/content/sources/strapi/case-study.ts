@@ -26,10 +26,9 @@ import type {
 import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 import { mapCaseStory } from './case-story';
+import { productionCmsUrl, productionCmsHeaders } from './production-cms';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const DEFAULT_CASE_STUDY_GRAPHQL_URL =
-  'https://tcules-cms-2026-production.up.railway.app/graphql';
 const CASE_STUDIES_SLUG = 'case-studies';
 const CASE_STUDY_REVALIDATE_SECONDS = 300;
 
@@ -54,9 +53,7 @@ function getStrapiGraphqlUrl(): string {
 }
 
 /** Detail pages migrate independently of the other CMS page families. */
-function getCaseStudyGraphqlUrl(): string {
-  return value(process.env.STRAPI_CASE_STUDY_GRAPHQL_URL) || DEFAULT_CASE_STUDY_GRAPHQL_URL;
-}
+const getCaseStudyGraphqlUrl = productionCmsUrl;
 
 function absoluteUrl(url: string | null | undefined, baseUrl: string): string | undefined {
   const candidate = value(url);
@@ -554,14 +551,9 @@ function mapCaseStudyListing(
 
 async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | null> {
   const graphqlUrl = getCaseStudyGraphqlUrl();
-  const token = value(process.env.STRAPI_CASE_STUDY_API_TOKEN);
   const response = await fetch(graphqlUrl, {
     method: 'POST',
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-      ...(token ? { authorization: `Bearer ${token}` } : {}),
-    },
+    headers: productionCmsHeaders(),
     body: JSON.stringify({
       query: CASE_STUDY_BY_SLUG_QUERY,
       variables: { slug, status: 'PUBLISHED' },

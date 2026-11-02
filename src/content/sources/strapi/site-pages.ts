@@ -1,5 +1,6 @@
 import type { SitePage, SitePageFamily, SitePagesContentSource } from '../../types';
 import { SITE_PAGES_QUERY } from './site-pages-query';
+import { resourceSitePages } from './resources';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const SITE_PAGES_REVALIDATE_SECONDS = 300;
@@ -22,9 +23,6 @@ const FAMILIES = {
   expertises: 'expertise',
   glossaries: 'glossary',
   tools: 'tool',
-  blogs: 'insight',
-  podcasts: 'podcast',
-  events: 'event',
   caseStudies: 'caseStudy',
 } as const satisfies Record<string, SitePageFamily>;
 
@@ -93,7 +91,7 @@ async function fetchSitePages(): Promise<StrapiSitePagesResponse['data']> {
 /** Every page Strapi publishes, as route family + route slug + title, deduplicated. */
 export const sitePageSource: SitePagesContentSource = {
   async listSitePages() {
-    const data = await fetchSitePages();
+    const [data, resources] = await Promise.all([fetchSitePages(), resourceSitePages()]);
     const pages = new Map<string, SitePage>();
 
     for (const [collection, family] of Object.entries(FAMILIES) as [
@@ -113,6 +111,6 @@ export const sitePageSource: SitePagesContentSource = {
       }
     }
 
-    return [...pages.values()];
+    return [...pages.values(), ...resources];
   },
 };

@@ -31,21 +31,6 @@ export const SITE_PAGES_QUERY = /* GraphQL */ `
       title
       updatedAt
     }
-    blogs(status: PUBLISHED, pagination: { limit: -1 }) {
-      slug
-      title
-      updatedAt
-    }
-    podcasts(status: PUBLISHED, pagination: { limit: -1 }) {
-      slug
-      title
-      updatedAt
-    }
-    events(status: PUBLISHED, pagination: { limit: -1 }) {
-      slug
-      title
-      updatedAt
-    }
     caseStudies(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title

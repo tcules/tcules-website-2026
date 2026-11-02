@@ -15,19 +15,21 @@ import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
-import { authorsSource } from './sources/strapi/authors';
-import { blogSource } from './sources/strapi/blog';
+import { resourceAuthorsSource as authorsSource } from './sources/strapi/resource-authors';
 import { careersSource } from './sources/strapi/careers';
 import { caseStudySource } from './sources/strapi/case-study';
 import { contactSource } from './sources/strapi/contact';
-import { eventSource } from './sources/strapi/event';
 import { expertiseSource } from './sources/strapi/expertise';
 import { futureInterfacesLabJoinSource } from './sources/strapi/future-interfaces-lab-join';
 import { futureInterfacesLabSource } from './sources/strapi/future-interfaces-lab';
 import { glossarySource } from './sources/strapi/glossary';
-import { insightsSource } from './sources/strapi/insights';
 import { matterDesignSystemSource } from './sources/strapi/matter-design-system';
-import { podcastSource } from './sources/strapi/podcast';
+import {
+  resourceBlogSource as blogSource,
+  resourceEventSource as eventSource,
+  resourceInsightsSource as insightsSource,
+  resourcePodcastSource as podcastSource,
+} from './sources/strapi/resources';
 import { privacyPolicySource } from './sources/strapi/privacy-policy';
 import { serviceSource } from './sources/strapi/service';
 import { servicesMasterSource } from './sources/strapi/services-master';
@@ -84,7 +86,7 @@ import type {
 const source: ContentSource = fixtureSource;
 const aboutPagesSource: AboutContentSource = aboutSource;
 const auditSource: AuditContentSource = strapiSource;
-/* Derived from the bylines until the CMS carries an author collection; that swap is this line. */
+/* Native employee profiles and credits from the complete published resource collection. */
 const authorPagesSource: AuthorsContentSource = authorsSource;
 const blogsSource: BlogContentSource = blogSource;
 const careersPagesSource: CareerContentSource = careersSource;
@@ -231,7 +233,10 @@ export function getReasonFigure(
 ): { src: string; width: number; height: number } | undefined {
   const ref = REASON_FIGURES[offerSceneKey(title)];
   if (!ref) return undefined;
-  return { src: `/illustrations/reasons/${ref.name}.${ground}.svg`, ...REASON_FIGURE_SIZE[ref.set] };
+  return {
+    src: `/illustrations/reasons/${ref.name}.${ground}.svg`,
+    ...REASON_FIGURE_SIZE[ref.set],
+  };
 }
 
 /**

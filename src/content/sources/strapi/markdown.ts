@@ -399,6 +399,14 @@ const ANCHOR_HREF = /href="#([^"]+)"/gu;
  * Blocks without `html`, and entries with no in-page link, come back unchanged.
  */
 export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[] {
+  const nativeHeadingOf = (block: B): { slug: string; id: string } | undefined => {
+    const candidate = block as { type?: unknown; heading?: unknown; anchorId?: unknown };
+    return candidate.type === 'heading' &&
+      typeof candidate.heading === 'string' &&
+      typeof candidate.anchorId === 'string'
+      ? { slug: anchorSlug(candidate.heading), id: candidate.anchorId }
+      : undefined;
+  };
   const htmlOf = (block: B): string | undefined => {
     const html = (block as { html?: unknown }).html;
     return typeof html === 'string' ? html : undefined;
@@ -407,6 +415,8 @@ export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[
 
   const headings: { slug: string; id?: string }[] = [];
   for (const block of blocks) {
+    const native = nativeHeadingOf(block);
+    if (native) headings.push(native);
     for (const match of (htmlOf(block) ?? '').matchAll(HEADING_TAG)) {
       const id = match[2]?.match(/id="([^"]*)"/u)?.[1];
       headings.push({ slug: anchorSlug(headingLabel(match[3] ?? '')), ...(id ? { id } : {}) });
@@ -415,6 +425,7 @@ export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[
   const slugs = headings.map((heading) => heading.slug);
 
   const targets = new Map<string, string>();
+  const usedIds = new Set(headings.flatMap((heading) => (heading.id ? [heading.id] : [])));
   let added = 0;
   for (const block of blocks) {
     for (const match of (htmlOf(block) ?? '').matchAll(ANCHOR_HREF)) {
@@ -423,8 +434,11 @@ export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[
       const heading = headings[anchorTarget(anchor, slugs) ?? -1];
       if (!heading) continue;
       if (!heading.id) {
-        added += 1;
+        do {
+          added += 1;
+        } while (usedIds.has(`heading-${added}`));
         heading.id = `heading-${added}`;
+        usedIds.add(heading.id);
       }
       targets.set(anchor, heading.id);
     }
@@ -433,6 +447,11 @@ export function resolveInPageAnchors<B extends object>(blocks: readonly B[]): B[
 
   let headingIndex = 0;
   return blocks.map((block) => {
+    // Native headings already render their authored ID in React, outside the HTML string.
+    if (nativeHeadingOf(block)) {
+      headingIndex += 1;
+      return block;
+    }
     const html = htmlOf(block);
     if (html === undefined) return block;
     const rewritten = html

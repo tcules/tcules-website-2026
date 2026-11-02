@@ -1525,28 +1525,7 @@ export type PodcastAction = CaseStudyAction;
 export type PodcastImage = CaseStudyImage;
 
 export type PodcastBlock =
-  | { id: string; type: 'prose'; html: string }
-  | {
-      id: string;
-      type: 'figures';
-      figures: Array<{ image: PodcastImage; caption?: string }>;
-    }
-  | {
-      id: string;
-      type: 'video';
-      title?: string;
-      description?: string;
-      video?: {
-        src: string;
-        mime: string;
-        poster?: string;
-        width?: number;
-        height?: number;
-        autoplay: boolean;
-        loop: boolean;
-      };
-      thumbnail?: PodcastImage;
-    }
+  | BlogBlock
   | {
       id: string;
       type: 'shadow-card';
@@ -1556,9 +1535,7 @@ export type PodcastBlock =
       mediaUrl?: string;
       action?: PodcastAction;
       emphasized: boolean;
-    }
-  | { id: string; type: 'callout'; html: string }
-  | { id: string; type: 'separator'; html: string };
+    };
 
 export type PodcastResource = {
   documentId: string;
@@ -1582,6 +1559,8 @@ export type PodcastPage = {
   description: string;
   createdAt?: string;
   publishedAt?: string;
+  publishedContent?: string;
+  updatedAt?: string;
   heroVideo?: { id: string; title: string };
   socialImage?: PodcastImage;
   tags: string[];
@@ -1590,6 +1569,7 @@ export type PodcastPage = {
   /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
   outline: PageOutlineEntry[];
   resources: PodcastResource[];
+  resourcesHeading?: string;
   seo?: ContentSeo;
 };
 
@@ -1618,6 +1598,8 @@ export type EventPage = {
   description: string;
   createdAt?: string;
   publishedAt?: string;
+  publishedContent?: string;
+  updatedAt?: string;
   featureImage?: EventImage;
   socialImage?: EventImage;
   details: EventDetail[];
@@ -1627,6 +1609,7 @@ export type EventPage = {
   /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
   outline: PageOutlineEntry[];
   resources: EventResource[];
+  resourcesHeading?: string;
   seo?: ContentSeo;
 };
 
@@ -1660,6 +1643,8 @@ export type BlogAuthor = {
 };
 
 export type BlogBlock =
+  | { id: string; type: 'heading'; anchorId: string; heading: string; eyebrow?: string }
+  | { id: string; type: 'table'; table: ContentTable }
   | { id: string; type: 'prose'; html: string }
   | { id: string; type: 'callout'; html: string }
   | { id: string; type: 'separator'; html: string }
@@ -1668,6 +1653,7 @@ export type BlogBlock =
       id: string;
       type: 'figures';
       figures: Array<{ image: BlogImage; caption?: string }>;
+      columns?: 1 | 2 | 3;
     }
   | {
       id: string;
@@ -1695,6 +1681,8 @@ export type BlogBlock =
       width?: number;
       height?: number;
       thumbnail?: BlogImage;
+      /** A static SVG diagram authored in a native CMS embed block. */
+      diagram?: BlogImage;
     };
 
 export type BlogResource = {
@@ -1718,7 +1706,7 @@ export type BlogPage = {
   documentId: string;
   slug: string;
   /** Which format the entry is: the blog collection carries guides, research and videos too. */
-  kind: Extract<InsightResourceKind, 'article' | 'guide' | 'research' | 'video'>;
+  kind: InsightResourceKind;
   title: string;
   description: string;
   createdAt?: string;
@@ -1738,6 +1726,7 @@ export type BlogPage = {
   /** The level-2 outline of `blocks`, in reading order. Empty when the body has none. */
   outline: PageOutlineEntry[];
   resources: BlogResource[];
+  resourcesHeading?: string;
   cta?: {
     heading: string;
     body: readonly [string];

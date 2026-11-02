@@ -2,169 +2,17 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Media, Prose, Section, Tag } from '@/components';
-import { getEventPage, type EventBlock, type EventImage } from '@/content';
+import { Cluster, Layout, Section, Tag } from '@/components';
+import { getEventPage } from '@/content';
 import { eventPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
-import {
-  Breadcrumbs,
-  Callout,
-  Figure,
-  PageHero,
-  TableOfContents,
-  type TocItem,
-} from '@/patterns';
+import { Breadcrumbs, PageHero, TableOfContents, type TocItem } from '@/patterns';
 import { InsightResources } from '@/templates';
 
 import { resourceItems } from '../../../_insights/resources';
+import { renderResourceBlock } from '../../../_insights/body';
 
 type EventPageProps = { params: Promise<{ slug: string }> };
-
-/* Figure's own `sizes` (Figure.tsx): the full content column, which over-fetches in the narrower
-   article track rather than ever under-fetching. */
-const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
-
-function figureImage(image: EventImage) {
-  return {
-    src: image.src,
-    alt: image.alt,
-    width: image.width,
-    height: image.height,
-    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
-       a srcset and draw the edge by kind; `mime` is the one field left behind. */
-    sources: image.sources,
-    kind: image.kind,
-    panel: image.panel,
-    shadow: image.shadow,
-  };
-}
-
-function renderEventBlock(block: EventBlock, eventTitle: string) {
-  switch (block.type) {
-    case 'prose':
-      return <Prose html={block.html} />;
-
-    case 'figures':
-      return (
-        <Layout
-          columns={block.figures.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
-          colGap={block.figures.length > 1 ? 'gutter' : undefined}
-          rowGap="gutter"
-        >
-          {block.figures.map((figure, index) =>
-            /* A body image with no authored caption renders bare, through Figure's own Media:
-               a Figure's caption is required, and the words under an image are never invented. */
-            figure.caption ? (
-              <Figure
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                caption={figure.caption}
-              />
-            ) : (
-              <Media
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                sizes={BODY_IMAGE_SIZES}
-              />
-            ),
-          )}
-        </Layout>
-      );
-
-    case 'video':
-      return (
-        <Layout rowGap="block">
-          {block.title || block.description ? (
-            <Layout rowGap="tight">
-              {block.title ? <h2>{block.title}</h2> : null}
-              {block.description ? <p>{block.description}</p> : null}
-            </Layout>
-          ) : null}
-          {block.video ? (
-            <video
-              controls
-              autoPlay={block.video.autoplay}
-              muted={block.video.autoplay}
-              loop={block.video.loop}
-              playsInline
-              poster={block.video.poster}
-              width={block.video.width}
-              height={block.video.height}
-              preload="metadata"
-            >
-              <source src={block.video.src} type={block.video.mime} />
-            </video>
-          ) : block.thumbnail ? (
-            <Figure
-              image={figureImage(block.thumbnail)}
-              caption={block.title || block.description || `${eventTitle} video`}
-            />
-          ) : null}
-        </Layout>
-      );
-
-    case 'shadow-card':
-      return (
-        <Layout rowGap="block">
-          {block.heading ? <h2>{block.heading}</h2> : null}
-          {block.youtubeId ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${block.youtubeId}`}
-              title={`${eventTitle} video`}
-              width="100%"
-              height="698"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              loading="lazy"
-              allowFullScreen
-            />
-          ) : block.mediaUrl ? (
-            <Cluster>
-              <Button
-                as="a"
-                href={block.mediaUrl}
-                emphasis="link"
-                tone="primary"
-                size="md"
-                extendHitArea
-                icon={<Icon name="arrow-right" />}
-              >
-                View event media
-              </Button>
-            </Cluster>
-          ) : null}
-          {block.descriptionHtml ? (
-            block.emphasized ? (
-              <Callout html={block.descriptionHtml} />
-            ) : (
-              <Prose html={block.descriptionHtml} />
-            )
-          ) : null}
-          {block.action ? (
-            <Cluster>
-              <Button
-                as="a"
-                href={block.action.href}
-                emphasis="link"
-                tone="primary"
-                size="md"
-                extendHitArea
-                icon={<Icon name="arrow-right" />}
-              >
-                {block.action.label}
-              </Button>
-            </Cluster>
-          ) : null}
-        </Layout>
-      );
-
-    case 'callout':
-      return <Callout html={block.html} />;
-
-    case 'separator':
-      return <Prose html={block.html} />;
-  }
-}
 
 function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
@@ -204,7 +52,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
       description,
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
-      ...(event.publishedAt ? { publishedTime: event.publishedAt } : {}),
+      ...(event.publishedContent ? { publishedTime: event.publishedContent } : {}),
       images: image
         ? [
             {
@@ -246,7 +94,7 @@ export default async function EventPage({ params }: EventPageProps) {
      grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
   const hasOutline = outline.length >= 2;
 
-  const published = dateOnly(event.publishedAt);
+  const published = dateOnly(event.publishedContent);
   const labels = uniqueLabels([...event.categories, ...event.tags]);
   const hasHeroDetails = event.details.length > 0 || labels.length > 0;
   const heroMedia = event.featureImage
@@ -277,7 +125,11 @@ export default async function EventPage({ params }: EventPageProps) {
         )}
         title={event.title}
         body={[event.description || `Explore ${event.title}.`]}
-        dates={published ? { published } : undefined}
+        dates={
+          published
+            ? { published, ...(event.updatedAt ? { modified: event.updatedAt } : {}) }
+            : undefined
+        }
         media={heroMedia}
         surface="paper"
       >
@@ -342,7 +194,7 @@ export default async function EventPage({ params }: EventPageProps) {
             {hasOutline ? <TableOfContents items={outline} /> : null}
             <Layout as="article" rowGap="stack">
               {event.blocks.map((block) => (
-                <Fragment key={block.id}>{renderEventBlock(block, event.title)}</Fragment>
+                <Fragment key={block.id}>{renderResourceBlock(block, event.title)}</Fragment>
               ))}
             </Layout>
           </Layout>
@@ -352,7 +204,7 @@ export default async function EventPage({ params }: EventPageProps) {
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
           (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
       <InsightResources
-        heading="Explore other resources"
+        heading={event.resourcesHeading || 'Explore other resources'}
         items={resourceItems(event.resources)}
       />
     </>
