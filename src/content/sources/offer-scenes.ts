@@ -194,4 +194,13 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
     },
     stories: {},
   },
+
+  /* The ConnectX snippet, as the Dealpath strip: the thinking and the craft drawn, the code the real
+     capture (owner, 2 Nov 2026: "a snippet of the case study, presented like that"). */
+  '/why-tcules': {
+    items: {},
+    stories: {
+      'signature-work': ['case-connectx-thinking', 'case-connectx-craft'],
+    },
+  },
 };

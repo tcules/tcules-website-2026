@@ -363,3 +363,22 @@
     content: none;
   }
 }
+
+/* ── The picked row ────────────────────────────────────────────────────────────────────────────
+   The option the table recommends (`pick`; owner, 2 Nov 2026). Three marks, all the row's own: a
+   blue ground across every cell, the key in blue, and a bar down the key cell's start edge drawn
+   as an inset so it sits inside the frame's border rather than on it. Not a hover or a selection:
+   the table is still not interactive. */
+.pick > .key,
+.pick > .cell {
+  background: var(--dtab-pick-ground);
+}
+
+.pick > .key {
+  box-shadow: inset var(--dtab-pick-bar-width) 0 0 var(--dtab-pick-bar-ink);
+}
+
+.pick .keyText,
+.pick .key .keyRich {
+  color: var(--dtab-pick-key-ink);
+}

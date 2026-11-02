@@ -141,6 +141,10 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
   [ROUTES.howWeWork]: ABOUT_TEAM,
   [ROUTES.howWeWorkAiNative]: ABOUT_WALL,
   [ROUTES.howWeWorkAiTransparency]: ABOUT_REVIEW,
+  /* "Designers who see what your product could become": the working wall, the page's own
+     `why_work_wall` binding, which its Reasons band no longer carries (reasons take drawings). The team
+     photograph stays the studio band's. */
+  [ROUTES.whyTcules]: ABOUT_WALL,
 };
 
 /** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */

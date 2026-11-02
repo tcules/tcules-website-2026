@@ -61,6 +61,13 @@ export type DataTableRow = {
    * composed mark (see DataTableNodeCell).
    */
   cellsHtml: readonly (string | DataTableNodeCell)[];
+  /**
+   * The row the table recommends: in a comparison of options, the one we suggest (the "Tcules" row
+   * of /why-tcules' alternatives; owner, 2 Nov 2026). Set apart by a blue ground, a blue key and a
+   * bar down its start edge, so it reads as the answer without a word being added. At most one per
+   * table; it never reorders the rows. Default false.
+   */
+  pick?: boolean;
 };
 
 export type DataTableProps = {
@@ -305,7 +312,7 @@ export function DataTable({
               }
 
               return (
-                <tr key={rowIndex} className={styles.row}>
+                <tr key={rowIndex} className={cx(styles.row, row.pick && styles.pick)}>
                   <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
                     {row.headerHtml ? (
                       <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
