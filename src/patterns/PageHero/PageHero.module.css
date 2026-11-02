@@ -396,6 +396,14 @@ a.name:hover {
    rectangle of somebody else's pixels, the same kind of object as a flat screenshot, so it takes
    the capture's edge cue. The values stay --hero-* rather than reading --media-*, because a
    component never reads another component's tokens (token rule 6). */
+/* The clip takes the same media edge as the YouTube frame; its ratio is the Clip's own (16/9,
+   4/5 below 640), so none is set here. */
+.clip {
+  overflow: hidden;
+  border: var(--hero-media-rule-width) solid var(--hero-media-rule-ink);
+  border-radius: var(--hero-media-radius);
+}
+
 .video {
   display: block;
   inline-size: 100%;

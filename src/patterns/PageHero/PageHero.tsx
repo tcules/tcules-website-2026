@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import {
   BrandMark,
   Button,
+  Clip,
   Cluster,
   Icon,
   Layout,
@@ -15,6 +16,7 @@ import {
   TextureShape,
   type MediaImage,
   type BrandMarkName,
+  type ClipRendition,
   type MediaRatioSpec,
   type SectionSurface,
 } from '@/components';
@@ -191,7 +193,22 @@ export type HeroVideo = {
  * at the CALL SITE, on 129 routes, in a tier whose whole job is composition. The two renderings
  * are a closed set and the component owns them.
  */
-export type HeroMedia = HeroImage | HeroVideo;
+export type HeroMedia = HeroImage | HeroVideo | HeroClip;
+
+/**
+ * A silent film from the site's own files (2 Nov 2026, the Prototype Readiness Review): it plays
+ * once when it comes into view and holds on its end card, with a pause / play-again control. The
+ * wide rendition is 16/9 and the optional tall one, 4/5, replaces it below 640. `title` is its
+ * accessible name; `description` is what the film says, as text, for a screen reader. Rendered by
+ * the Clip primitive; the hero adds only its media edge.
+ */
+export type HeroClip = {
+  type: 'clip';
+  wide: ClipRendition;
+  tall?: ClipRendition;
+  title: string;
+  description?: string;
+};
 
 /**
  * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026):
@@ -1210,6 +1227,19 @@ export function PageHero({
       ) : (
         image
       )
+    ) : media.type === 'clip' ? (
+      <Clip
+        className={styles.clip}
+        wide={media.wide}
+        tall={media.tall}
+        label={media.title}
+        description={media.description}
+        glyphs={{
+          play: <Icon name="chrome-play" />,
+          pause: <Icon name="chrome-pause" />,
+          replay: <Icon name="refresh" />,
+        }}
+      />
     ) : (
       /* youtube-nocookie.com: it withholds the tracking cookies until a visitor presses play. The
          whole URL is built here rather than taken from the caller, so every route embeds the same
