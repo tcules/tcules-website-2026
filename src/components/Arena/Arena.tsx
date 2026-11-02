@@ -96,10 +96,7 @@ export function Arena({ src, label, glyphs, className }: ArenaProps) {
   return (
     <div className={cx(styles.arena, className)}>
       <div ref={stageRef} className={styles.stage} role="img" aria-label={label}>
-        <div className={styles.tone} aria-hidden="true" />
         <div ref={artRef} className={styles.art} />
-        <div className={styles.fog} aria-hidden="true" />
-        <div className={styles.drift} aria-hidden="true" />
       </div>
       {ready ? (
         <button

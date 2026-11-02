@@ -3,31 +3,19 @@
    artifact): a field of grey apps, one rising and opening onto the studio floor.
 
    Naming: --arena-{part}-{role}
-     parts  tone | fog | drift | glow | lid | control | ring
-     roles  core · mid · edge · light · blur · lift · size · bg · fg · rule · width · offset · inset
+     parts  glow | lid | mask | control | ring
+     roles  color · blur · lift · solid · size · bg · fg · rule · width · offset · inset
 
    ── No surface blocks, and that is the assertion ─────────────────────────────────
-   The drawing paints its own field — the haze it rises out of is part of the picture, and it
-   fades to paper at its edges by a mask — so nothing here moves with `data-surface`. It is
+   The drawing paints its own field and fades to the page at its edges by a mask, so nothing here moves with `data-surface`. It is
    placed on paper only (the home hero). The control sits on the drawing, as Clip's sits on its
    film, and takes Clip's values for the same reason: paper with an ink glyph and a hairline.
-
-   The haze colours are the drawing's own (the artifact's values), not the site's neutrals: they
-   are lit greys around the grey apps, and moving them to a ramp step would repaint the scene.
 
    --arena-lid-lift is in the SVG's user units (an SVG element's px is a user unit): how far an
    app's lid rises in the field's idle salute.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --arena-tone-core: rgb(223 227 233);
-  --arena-tone-mid: rgb(226 229 234 / 0.9);
-  --arena-tone-edge: rgb(255 254 250 / 0);
-  --arena-fog-clear: rgb(227 230 235 / 0);
-  --arena-fog-mid: rgb(227 230 235 / 0.5);
-  --arena-fog-edge: rgb(218 222 228 / 0.94);
-  --arena-drift-light: rgb(255 255 255 / 0.55);
-  --arena-drift-soft: rgb(255 255 255 / 0.45);
   --arena-glow-color: rgb(0 72 255 / 0.5);
   --arena-glow-blur: 26px;
   --arena-lid-lift: 208.3px;

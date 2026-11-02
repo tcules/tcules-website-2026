@@ -8,7 +8,7 @@
  * document, so the drawing cannot reach anything else on the page.
  *
  * Phases are written to the stage as `data-phase` ('grey' while the field is held, 'far' once the
- * app has risen); the stylesheet does the rest (the field's fade, the fog lifting, the glow).
+ * app has risen); the stylesheet does the rest (the field receding, the glow).
  */
 
 type XY = [number, number];
