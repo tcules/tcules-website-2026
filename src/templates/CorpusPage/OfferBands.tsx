@@ -477,6 +477,7 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'getting started': 'start',
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
+  'who decides, and who owns the work': 'own',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {

@@ -49,11 +49,11 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |
 | product-knowledge | text · B + illustration, image end | |
-| essentials | tiles · EngagementOptions grid, 4 across | empty plate on "who decides" |
+| essentials | tiles · EngagementOptions grid, 4 across | who decides → `scope-own` (drawn 2 Nov: options meet at you, then handed over, designs and code) |
 | testimonials | quotes · G | |
 | enquiry, faq | L, D-faq | |
 
 ## Open
-- Four illustrations to draw (register rows), and a flat scene for "who decides, who owns the work".
+- Four illustrations to draw (register rows).
 - ai-native and ai-transparency still run three to four prose bands in a row.
 - Missing client marks (content-changes, "Client marks with no file").
