@@ -20,6 +20,7 @@ import {
   CtaSection,
   DataTable,
   ListCard,
+  ClaimProof,
   ClaimSet,
   OfferParts,
   OfferSheet,
@@ -826,6 +827,17 @@ export function ClaimRows({
   );
 }
 
+/**
+ * A paragraph authored as an example ("Example: …", "Example, from related work: …"). Wherever the copy
+ * gives a claim its example, the example is set apart as the ClaimProof panel, never run on in the
+ * argument's words (owner, 2 Nov 2026; decisions/2026-11-02-examples-are-one-pattern).
+ */
+export function isExampleParagraph(block: CorpusBlock): block is Extract<CorpusBlock, { type: 'paragraph' }> {
+  if (block.type !== 'paragraph') return false;
+  const first = block.runs[0];
+  return first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text);
+}
+
 /** One hard part: its title, its words in order (a table included), and its example if it has one. */
 export type Claim = {
   title: string;
@@ -839,7 +851,7 @@ export type Claim = {
  * it), the closing "Read the … case" link lifted out as the panel's case link, every other word as
  * authored and in order.
  */
-function claimExample(runs: readonly InlineRun[]): ClaimExample {
+export function claimExample(runs: readonly InlineRun[]): ClaimExample {
   const rest = [...runs];
   const first = rest[0];
   let label: string | undefined;
@@ -1608,12 +1620,21 @@ export function TextBand({
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
-  const body = blocks.filter((block) => block.type !== 'links');
+  const examples = blocks.filter(isExampleParagraph);
+  const body = blocks.filter((block) => block.type !== 'links' && !isExampleParagraph(block));
   const parts = scenarioParts(body);
+  const examplePanels = examples.map((block) => (
+    <ClaimProof key={inlineToText(block.runs)} example={claimExample(block.runs)} />
+  ));
   const text = parts.label ? (
     <Layout rowGap="stack">
       <BandBody blocks={parts.before} />
       <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : examplePanels.length > 0 ? (
+    <Layout rowGap="block">
+      <BandBody blocks={body} />
+      {examplePanels}
     </Layout>
   ) : (
     <BandBody blocks={body} />

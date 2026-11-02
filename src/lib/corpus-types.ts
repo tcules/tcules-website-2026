@@ -154,6 +154,11 @@ export type CorpusBlock =
       attribution: InlineRun[] | null;
       pendingSignoff: boolean;
       testimonialId: string | null;
+      /**
+       * The speaker's star rating, set by the loader from the speaker's name: one person, one rating,
+       * on every quote of theirs site-wide (owner, 2 Nov 2026). Null only before the loader runs.
+       */
+      rating: TestimonialRating | null;
     }
   | {
       type: 'item';

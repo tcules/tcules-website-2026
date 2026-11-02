@@ -68,6 +68,11 @@ export type ReasonsItem = {
    * level. It restates the sentence below it, so it is hidden from assistive technology.
    */
   proof?: ReasonsProof;
+  /**
+   * The reason's example, set apart from the argument under its words (owner, 2 Nov 2026: a claim and
+   * its example are one pattern site-wide). A slot: in practice the ClaimProof panel the hard parts use.
+   */
+  example?: ReactNode;
 };
 
 /**
@@ -360,9 +365,12 @@ export function Reasons({
             <Layout as="ul" rowGap="stack">
               {shown.map((item, index) => (
                 <li key={`${index}-${item.title}`} className={styles.item}>
-                  <Layout rowGap="tight">
-                    <h3 className={cx(styles.title, styles.titleBeside)}>{item.title}</h3>
-                    <p className={styles.body}>{item.body}</p>
+                  <Layout rowGap="block">
+                    <Layout rowGap="tight">
+                      <h3 className={cx(styles.title, styles.titleBeside)}>{item.title}</h3>
+                      <p className={styles.body}>{item.body}</p>
+                    </Layout>
+                    {item.example}
                   </Layout>
                 </li>
               ))}
@@ -402,6 +410,7 @@ export function Reasons({
           <h3 className={styles.title}>{item.title}</h3>
           <p className={styles.body}>{item.body}</p>
         </Layout>
+        {item.example}
       </Layout>
     </li>
   );

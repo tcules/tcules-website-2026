@@ -503,4 +503,10 @@ export {
 } from './Bento';
 /* ClaimSet — a page's hard parts: one claim at a time on a stage (tabs), or every claim on the page,
    ruled (owner, 31 Oct 2026; docs/page-build/hard-parts-brief.md). */
-export { ClaimSet, type ClaimSetItem, type ClaimSetProps, type ClaimExample } from './ClaimSet';
+export {
+  ClaimProof,
+  ClaimSet,
+  type ClaimSetItem,
+  type ClaimSetProps,
+  type ClaimExample,
+} from './ClaimSet';

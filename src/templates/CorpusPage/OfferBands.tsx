@@ -6,6 +6,7 @@ import {
   BlockCardSet,
   Bento,
   CaseSpread,
+  ClaimProof,
   ContentSection,
   ContentSectionText,
   CtaRow,
@@ -76,7 +77,9 @@ import {
   BandBody,
   ChallengesBand,
   ClaimRows,
+  claimExample,
   claimsOf,
+  isExampleParagraph,
   CloseBand,
   DestinationsBand,
   DirectoryBand,
@@ -940,6 +943,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const titled = parts.items.filter((item) => item.title);
+        /* A `###` reason's "Example:" paragraph is its example, set apart in the ClaimProof panel the
+           hard parts use, its words out of the argument's body (owner, 2 Nov 2026: claims and examples
+           are one pattern; decisions/2026-11-02-examples-are-one-pattern). */
+        const authored = new Map(
+          band.blocks.flatMap((block) =>
+            block.type === 'item' ? [[block.headingText, block.blocks] as const] : [],
+          ),
+        );
+        const split = (title: string) => {
+          const blocks = authored.get(title);
+          const example = blocks?.find(isExampleParagraph);
+          if (!blocks || !example) return null;
+          const bodyHtml = blocks
+            .filter((block) => block.type === 'paragraph' && block !== example)
+            .map((block) => (block.type === 'paragraph' ? inlineToHtml(block.runs) : ''))
+            .join(' ');
+          return { bodyHtml, example: claimExample(example.runs) };
+        };
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
@@ -950,13 +971,16 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               action={action}
               items={titled.map((item) => {
                 const drawn = ctx.reasonFigure?.(item.title!, ground);
+                const parted = split(item.title!);
+                const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
                   title: item.title!,
-                  body: item.bodyHtml ? (
-                    <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                  body: bodyHtml ? (
+                    <span dangerouslySetInnerHTML={{ __html: bodyHtml }} />
                   ) : (
                     (item.body ?? '')
                   ),
+                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
                   figure: drawn
                     ? { ...drawn, alt: '', kind: 'illustration' as const }
                     : { ...placeholderIllustration(item.title!), alt: '' },
@@ -1580,7 +1604,7 @@ function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
   const block = quoteOf(unit.band);
   if (!block) return null;
   const id = block.testimonialId;
-  const rating = id ? ctx.ratings?.[id]?.value : undefined;
+  const rating = block.rating?.value ?? (id ? ctx.ratings?.[id]?.value : undefined);
   const avatar = id ? ctx.avatars?.[id] : undefined;
   const quote = {
     ...proofQuote(block),
