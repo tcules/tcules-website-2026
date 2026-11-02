@@ -27,7 +27,7 @@ const record = (value: unknown): Record<string, unknown> =>
 export function mapOfferDocument(
   document: OfferDocument,
   route: string,
-  pageType: 'service' | 'expertise',
+  pageType: 'service' | 'expertise' | 'audit',
 ): CmsOffer {
   if (
     document.route !== route ||
@@ -37,7 +37,9 @@ export function mapOfferDocument(
     throw new Error(`Production CMS returned an invalid ${pageType} document for ${route}.`);
   }
   const page = parseCorpusDocument(`cms:${route}`, document.frontmatter, document.body);
-  if (!page.hero.titleText || page.pageType !== pageType) {
+  const matchesType =
+    page.pageType === pageType || (pageType === 'audit' && page.pageType === 'assessment');
+  if (!page.hero.titleText || !matchesType) {
     throw new Error(`Production CMS ${pageType} ${route} has no ${pageType} page content.`);
   }
   const template = record(document.frontmatter.frontendTemplate);

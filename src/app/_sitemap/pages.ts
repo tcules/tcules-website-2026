@@ -137,7 +137,8 @@ const CORPUS_ROUTES: readonly string[] = [
     !REDIRECTED.has(path) &&
     !path.startsWith(`${ROUTES.services}/`) &&
     !path.startsWith(`${ROUTES.expertise}/`) &&
-    !path.startsWith(`${ROUTES.glossary}/`),
+    !path.startsWith(`${ROUTES.glossary}/`) &&
+    !path.startsWith(`${ROUTES.audits}/`),
 );
 
 /** Every `{ label, href }` anywhere in the header and footer IA, first label per path. */

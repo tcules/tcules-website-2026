@@ -37,6 +37,7 @@ import {
 import { privacyPolicySource } from './sources/strapi/privacy-policy';
 import { serviceSource } from './sources/strapi/service';
 export { getServiceOfferPage, listPublishedServices } from './sources/strapi/service-offers';
+export { getAuditOfferPage, listPublishedAudits } from './sources/strapi/audit-offers';
 export {
   getExpertiseOfferPage,
   listPublishedExpertises,

@@ -13,6 +13,8 @@ export {
   getNavigation,
   getAboutPage,
   getAuditPage,
+  getAuditOfferPage,
+  listPublishedAudits,
   listAuthors,
   getAuthorPage,
   getBlogPage,
