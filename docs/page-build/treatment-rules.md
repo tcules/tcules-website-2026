@@ -153,3 +153,9 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
 - **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
   photo bands that all sit image-left is a planner bug, not a design.
+
+## Added 2 Nov 2026 (/services)
+
+- **A router table of named services becomes service tiles and keeps every column**: the second column is
+  the tile's body, the third a labelled detail (Bento `detail`, the header as its mono label). Never run the
+  third column into the body sentence where a tile can carry it.

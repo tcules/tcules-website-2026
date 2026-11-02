@@ -279,6 +279,24 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="detail"
+        title="2d2 · A labelled detail under the body (a router table's third column)"
+        note="`detail` keeps a three-column router table's third column as its own field: the header as a mono label over its cell, one paragraph step under the name and body (owner, 2 Nov 2026, /services). Every tile or none."
+      />
+      <Section>
+        <Bento
+          items={single.slice(0, 4).map((item) => ({
+            ...item,
+            detail: {
+              label: 'What you come away with',
+              text: 'Research, workflows, interface design and tested prototypes',
+            },
+          }))}
+          tracks={4}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

@@ -18,6 +18,13 @@ export type BentoItem = {
    * none, so the set reads as one.
    */
   body?: string;
+  /**
+   * A second, labelled line under the body: a router table's third column kept as its own field
+   * ("What you come away with" over "Research, workflows…") rather than run on into the body, so a
+   * table that becomes tiles drops no column (owner, 2 Nov 2026, /services). The label is the
+   * table's header as authored; the mono label voice sets its case. Give every tile one or none.
+   */
+  detail?: { label: string; text: string };
   /** The whole tile is the link. */
   href: string;
   /** The destination's own Sketch scene, drawn bare on the tile's texture. */
@@ -153,11 +160,24 @@ function TileLink({
   wide: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
-  const words = (
+  const named = (
     <Layout rowGap="tight">
       <Title className={styles.title}>{item.title}</Title>
       {item.body ? <p className={styles.body}>{item.body}</p> : null}
     </Layout>
+  );
+  /* A detail is a key and its value, set one paragraph step under the named pair, so the two read as
+     two fields rather than one run of text. */
+  const words = item.detail ? (
+    <Layout rowGap="text">
+      {named}
+      <Layout rowGap="inline">
+        <p className={styles.eyebrow}>{item.detail.label}</p>
+        <p className={styles.body}>{item.detail.text}</p>
+      </Layout>
+    </Layout>
+  ) : (
+    named
   );
   const art = (
     <div className={styles.art}>

@@ -1234,10 +1234,22 @@ function routerBody(
   table: Extract<CorpusBlock, { type: 'table' }>,
   row: InlineRun[][],
 ): string {
-  const second = plain(row[1] ?? []).replace(/\.$/, '');
-  return table.header.length >= 3
-    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
-    : second;
+  return plain(row[1] ?? []).replace(/\.$/, '');
+}
+
+/**
+ * A three-column router table's third column, kept as the tile's labelled detail under its header
+ * (owner, 2 Nov 2026, /services): a table that becomes tiles drops no column, and the column's own
+ * name labels it rather than being run on into the body sentence.
+ */
+function routerDetail(
+  table: Extract<CorpusBlock, { type: 'table' }>,
+  row: InlineRun[][],
+): { label: string; text: string } | undefined {
+  const text = plain(row[2] ?? []).trim();
+  return table.header.length >= 3 && text
+    ? { label: plain(table.header[2] ?? []).trim(), text }
+    : undefined;
 }
 
 /**
@@ -1257,7 +1269,12 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
-  const rows = table
+  const rows: {
+    href: string;
+    title: string;
+    body: string;
+    detail?: { label: string; text: string };
+  }[] = table
     ? table.rows.flatMap((row) => {
         const link =
           row[0]?.find((run) => run.type === 'link') ??
@@ -1265,7 +1282,14 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
+          ? [
+              {
+                href: link.href,
+                title: plain(link.children),
+                body: routerBody(table, row),
+                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
+              },
+            ]
           : [];
       })
     : band.blocks.flatMap((block) => {
@@ -1302,13 +1326,19 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []))
       : [];
   const sentence = (body: string) => body.charAt(0).toUpperCase() + body.slice(1);
+  /* Where a set has no tile to carry the detail as its own field, it runs on into the body, so no
+     path drops the table's third column. */
+  const runOn = (row: (typeof rows)[number]) =>
+    row.detail ? `${row.body}. ${row.detail.label}: ${row.detail.text}` : row.body;
   const routerLead = leadText(band);
   const closingFooter =
     closing.length > 0 ? (
       <ContentSectionText>
-        {closing.map((runs, index) => (
-          <p key={index}>{renderInline(runs)}</p>
-        ))}
+        <Layout rowGap="text">
+          {closing.map((runs, index) => (
+            <p key={index}>{renderInline(runs)}</p>
+          ))}
+        </Layout>
       </ContentSectionText>
     ) : undefined;
   const wrap = (set: ReactNode, footer?: ReactNode) => (
@@ -1367,6 +1397,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           id: row.href,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
+          ...(row.detail ? { detail: row.detail } : {}),
           href: row.href,
           scene: scenes[index] as SketchName,
         }))}
@@ -1378,7 +1409,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   const items: BlockCardSetItem[] = rows.map((row, index) => ({
     id: row.href,
     title: row.title,
-    ...(row.body ? { body: sentence(row.body) } : {}),
+    ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
     href: row.href,
     icon: glyphs.every(Boolean) ? glyphs[index] : undefined,
   }));
@@ -1402,7 +1433,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           key={row.href}
           titleAs="h3"
           title={row.title}
-          body={row.body}
+          body={runOn(row)}
           href={row.href}
         />
       ))}
