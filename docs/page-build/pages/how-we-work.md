@@ -1,4 +1,6 @@
-# /how-we-work, with /ai-native-product-design and /ai-transparency: round 2, 1 Nov 2026 (draft PR #190)
+# /how-we-work, with /ai-native-product-design and /ai-transparency: shipped for now, 2 Nov 2026 (PR #190)
+
+The owner: "the page needs improvement but PR for now". Next pass starts from the Open list below.
 
 Composed from the library: OfferPage's plan, no new components.
 
@@ -27,9 +29,8 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
 - Round 2–3 (owner): "How it works" / "Typical starting points" must read as blocks, and beautifully; the
   closing note "feels like floating text". EngagementOptions takes `facts`, set as a spec sheet: under one rule,
   a row a fact, the mono key in the 1 of [1, 2] tracks and the value beside it, keys aligned down the option.
-  Starting points run as one wrapping line, entries parted by a middle dot at each entry's end (a wrap never
-  opens on a dot); split by `listEntries` (commas and the final "or" are the joints; a leading article and the
-  full stop drop). - Round 4 (owner): the island was wrong: "there's an example in" and an example is evidence, not an ask; the
+  Starting points stay the authored sentence, links kept: splitting them into entries dropped the copy's own
+  words ("a", "or"), which kinds:check rightly fails. - Round 4 (owner): the island was wrong: "there's an example in" and an example is evidence, not an ask; the
   grouping was wrong. The closing note is the set's `closing`: "Start wherever the work is" as an h3 sub-head
   with its sentence, then its proof as a case teaser under it: a horizontal BlockCard of the Dealpath case
   (its cover, "Example · Dealpath" as eyebrow, the case's own title, the example's words; the whole card the
@@ -39,12 +40,16 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   ("Begin with any of the three…") refers to the options above; a separate band cuts the sentence off from what
   it points at. The claim is the set's conclusion, so it stays inside the set's band.
 
+- Round 6 (owner picked, 1–2 Nov): the job is choosing, so the set compares: `compare` sets the options three
+  across, then each fact as one ruled row, its key over the three values aligned under their option. Rows was
+  shown beside it and set aside; rows stand in below 1024.
+
 ## Band → component (/how-we-work)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
 | client-recognition | recognition · LogoGrid (H) | |
-| engagement-shapes | tiles · EngagementOptions rows, eyebrows, scenes | facts as a spec sheet; closing: sub-head + Dealpath case teaser (horizontal BlockCard) |
+| engagement-shapes | tiles · EngagementOptions `compare` (rows below 1024), eyebrows, scenes | facts as a spec sheet; closing: sub-head + Dealpath case teaser (horizontal BlockCard) |
 | your-team | text · B + illustration, image start | |
 | working-loop | text · B + illustration, image end | |
 | design-to-release | text · B + illustration, image start | |
@@ -54,6 +59,7 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
 | enquiry, faq | L, D-faq | |
 
 ## Open
+- The owner: the page still needs improvement (not itemised yet).
 - Four illustrations to draw (register rows).
 - ai-native and ai-transparency still run three to four prose bands in a row.
 - Missing client marks (content-changes, "Client marks with no file").

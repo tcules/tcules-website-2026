@@ -249,7 +249,8 @@ const firstRun = (runs: readonly InlineRun[]) =>
 
 /**
  * An option's fact: a paragraph opening with a bold or italic run that ends in a colon. The label loses
- * its colon (the key's form says it); a list of starting points is split into its entries.
+ * its colon (the key's form says it). The value stays the authored sentence: splitting a list of
+ * starting points dropped the copy's own joints (kinds:check, 2 Nov 2026).
  */
 function factOf(runs: readonly InlineRun[]): EngagementFact | undefined {
   const lead = firstRun(runs);
@@ -258,45 +259,7 @@ function factOf(runs: readonly InlineRun[]): EngagementFact | undefined {
   if (!text.endsWith(':')) return undefined;
   const label = text.replace(/:$/, '');
   const value = trimStart(runs.slice(runs.indexOf(lead) + 1));
-  if (/starting points/i.test(label)) {
-    return { label, items: listEntries(value).map((entry) => renderInline(entry)) };
-  }
   return { label, body: renderInline(value) };
-}
-
-/**
- * A sentence-list ("a [UX audit](…), a [review](…), one workflow or a design pilot.") as its entries:
- * split at the commas and the final "or"/"and", links kept whole, a leading article and the full stop
- * dropped. The words are the author's; only the joints between them go (content mapping, /how-we-work).
- */
-function listEntries(runs: readonly InlineRun[]): InlineRun[][] {
-  const entries: InlineRun[][] = [];
-  let current: InlineRun[] = [];
-  entries.push(current);
-  for (const run of runs) {
-    if (run.type !== 'text') {
-      current.push(run);
-      continue;
-    }
-    run.text.split(/(,\s*|\s+or\s+|\s+and\s+)/).forEach((part, index) => {
-      if (index % 2 === 1) {
-        current = [];
-        entries.push(current);
-      } else if (part) current.push({ type: 'text', text: part });
-    });
-  }
-  return entries
-    .map((entry) => {
-      const out = trimStart(entry);
-      if (out[0]?.type === 'text') {
-        out[0] = { type: 'text', text: out[0].text.replace(/^(a|an|the)\s+/i, '') };
-      }
-      const last = out.at(-1);
-      if (last?.type === 'text')
-        out[out.length - 1] = { type: 'text', text: last.text.replace(/\.\s*$/, '') };
-      return out.filter((run) => !(run.type === 'text' && run.text === ''));
-    })
-    .filter((entry) => inlineToText(entry).trim().length > 0);
 }
 
 /**
@@ -784,37 +747,32 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
       return (
         <Fragment>
-          {(rich ? (['rows', 'compare'] as const) : (['grid'] as const)).map((arrangement) => (
-            /* REVIEW ONLY (owner, 1 Nov 2026): a rich set renders twice, the rows and then the
-               comparison, so both can be judged on the route. One is removed when the owner picks. */
-            <EngagementOptions
-              key={arrangement}
-              {...(arrangement === 'compare'
-                ? { heading: band.headingText, headingId: `${head(band).headingId}-compare` }
-                : head(band))}
-              surface={unit.surface}
-              lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-              options={options}
-              arrangement={arrangement}
-              terms={terms.map((runs) => ({ body: renderInline(runs) }))}
-              closing={
-                closing.note
-                  ? {
-                      heading: closing.note.heading,
-                      lead: closing.note.body[0],
-                      proof: closing.note.example ? (
-                        <CaseTeaser
-                          ctx={ctx}
-                          example={closing.note.example}
-                          words={closing.note.body[1]}
-                        />
-                      ) : undefined,
-                    }
-                  : undefined
-              }
-              action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
-            />
-          ))}
+          {/* A rich set compares (owner, 1 Nov 2026, /how-we-work: picked over the rows, which stand in
+              below 1024). */}
+          <EngagementOptions
+            {...head(band)}
+            surface={unit.surface}
+            lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
+            options={options}
+            arrangement={rich ? 'compare' : 'grid'}
+            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            closing={
+              closing.note
+                ? {
+                    heading: closing.note.heading,
+                    lead: closing.note.body[0],
+                    proof: closing.note.example ? (
+                      <CaseTeaser
+                        ctx={ctx}
+                        example={closing.note.example}
+                        words={closing.note.body[1]}
+                      />
+                    ) : undefined,
+                  }
+                : undefined
+            }
+            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+          />
           {links[1] ? (
             <CtaSection
               data-band="L"

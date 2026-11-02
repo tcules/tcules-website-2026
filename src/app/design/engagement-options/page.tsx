@@ -29,6 +29,52 @@ const TOGETHER: EngagementOption[] = [
   },
 ];
 
+/* Three options with an eyebrow and keyed facts (/how-we-work, 1 Nov 2026). Sample words. */
+const FACTS: EngagementOption[] = [
+  {
+    eyebrow: 'A focused engagement',
+    title: 'Start with one meaningful challenge',
+    body: 'One workflow, one interface or one prototype, investigated, redesigned or tested.',
+    scope: 'feature',
+    facts: [
+      { label: 'How it works', body: 'An agreed scope, deliverable and fixed price.' },
+      {
+        label: 'Typical starting points',
+        items: [
+          <a key="a" href="#facts">
+            UX or product audit
+          </a>,
+          'one workflow',
+          'design pilot',
+        ],
+      },
+    ],
+  },
+  {
+    eyebrow: 'A defined project',
+    title: 'Take a product initiative forward',
+    body: 'A first release, a redesign or a design system, with the scope agreed first.',
+    scope: 'area',
+    facts: [
+      {
+        label: 'How it works',
+        body: 'Scope, roles, milestones and fees agreed before work starts.',
+      },
+      { label: 'Typical starting points', items: ['MVP', 'major workflow redesign'] },
+    ],
+  },
+  {
+    eyebrow: 'An ongoing partnership',
+    title: 'Keep design close as your product grows',
+    body: 'A senior designer in your team, specialists as the roadmap calls for them.',
+    scope: 'embedded',
+    facts: [
+      { label: 'How it works', body: 'A fixed monthly fee for an agreed team.' },
+      { label: 'Best when', body: 'Design is a continuing responsibility.' },
+    ],
+  },
+];
+
 const FOUR: EngagementOption[] = [
   {
     title: 'One workflow or feature.',
@@ -143,8 +189,12 @@ export default function EngagementOptionsSpecimen() {
         options={FOUR}
         note={NOTE}
         terms={[
-          { body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you.' },
-          { body: 'Our studio is in Ahmedabad, India. We agree the hours we share before each project starts.' },
+          {
+            body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you.',
+          },
+          {
+            body: 'Our studio is in Ahmedabad, India. We agree the hours we share before each project starts.',
+          },
         ]}
       />
 
@@ -158,6 +208,30 @@ export default function EngagementOptionsSpecimen() {
         headingId="eop-rows"
         options={FOUR}
         note={NOTE}
+        arrangement="rows"
+      />
+
+      <Variation
+        id="compare"
+        title="1c · Compare, with eyebrows and facts"
+        note="The options three across from 1024, then each fact as one ruled row: its key over the three values aligned under their option, a list value one entry a line. Mixed keys on a row join with a slash. Below 1024 it is the rows arrangement (1d). /how-we-work's three ways."
+      />
+      <EngagementOptions
+        heading="Three ways to work together"
+        headingId="eop-compare"
+        options={FACTS}
+        arrangement="compare"
+      />
+
+      <Variation
+        id="facts"
+        title="1d · Rows with eyebrows and facts"
+        note="Each option's facts as a spec sheet under one rule: the mono key in 1 of [1, 2], the value beside it, keys aligned down the option; a list value runs as one line parted by middle dots."
+      />
+      <EngagementOptions
+        heading="Three ways to work together"
+        headingId="eop-facts"
+        options={FACTS}
         arrangement="rows"
       />
 
