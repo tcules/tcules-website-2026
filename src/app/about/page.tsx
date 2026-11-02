@@ -1,28 +1,35 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseRefs, getCorpusPage, getTestimonialRatings } from '@/content';
+import { getCaseRefs, getAboutDocument } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
-import { ROUTES } from '@/lib/routes';
 import { AboutPage } from '@/templates';
 
-/**
- * `/about` — read from the `_pages/` corpus and composed by the About template. Composition only: the
- * route reads the page and the cases it cites and passes them down; every arrangement decision is the
- * template's.
- */
+export const revalidate = 300;
+
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getCorpusPage(ROUTES.about);
-  return page ? corpusMetadata(page) : { title: 'About Tcules' };
+  const document = await getAboutDocument();
+  return document
+    ? corpusMetadata(document.page)
+    : { title: 'About page not found | Tcules', robots: { index: false, follow: false } };
 }
 
 export default async function About() {
-  const page = await getCorpusPage(ROUTES.about);
-  if (!page) notFound();
-  const [caseRefs, ratings] = await Promise.all([
-    getCaseRefs(caseRoutesIn(page)),
-    getTestimonialRatings(page.composition.testimonialIds),
-  ]);
-  return <AboutPage page={page} caseRefs={caseRefs} ratings={ratings} />;
+  const document = await getAboutDocument();
+  if (!document) notFound();
+  const caseRefs = await getCaseRefs(caseRoutesIn(document.page));
+  return (
+    <>
+      <AboutPage page={document.page} caseRefs={caseRefs} avatars={document.avatars} />
+      {document.structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(document.structuredData).replace(/</gu, '\\u003c'),
+          }}
+        />
+      ) : null}
+    </>
+  );
 }

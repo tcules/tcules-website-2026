@@ -151,7 +151,13 @@ export type CorpusBlock =
   | { type: 'paragraph'; runs: InlineRun[] }
   | { type: 'labelled'; label: InlineRun[]; body: InlineRun[] }
   | { type: 'list'; ordered: boolean; items: InlineRun[][] }
-  | { type: 'table'; header: InlineRun[][]; rows: InlineRun[][][] }
+  | {
+      type: 'table';
+      header: InlineRun[][];
+      rows: InlineRun[][][];
+      caption?: string;
+      summary?: string;
+    }
   | {
       type: 'quote';
       paragraphs: InlineRun[][];

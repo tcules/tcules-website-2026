@@ -31,6 +31,7 @@ export {
   getExpertisePage,
   getExpertiseListingPage,
   getLegalDocument,
+  getAboutDocument,
   getExpertiseOfferPage,
   listPublishedExpertises,
   getFutureInterfacesLabJoinPage,

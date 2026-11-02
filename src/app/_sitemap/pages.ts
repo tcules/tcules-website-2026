@@ -2,6 +2,7 @@ import {
   getNavigation,
   getExpertiseListingPage,
   getLegalDocument,
+  getAboutDocument,
   listAuthors,
   listCorpusPages,
   listSitePages,
@@ -183,7 +184,7 @@ async function cmsPages(): Promise<SitePage[]> {
 }
 
 export async function listSitemapGroups(): Promise<SitemapGroup[]> {
-  const [cms, corpus, navigation, authors, expertiseListing, legalDocuments] =
+  const [cms, corpus, navigation, authors, expertiseListing, legalDocuments, aboutDocument] =
     await Promise.all([
       cmsPages(),
       listCorpusPages(),
@@ -203,6 +204,10 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
           }
         }),
       ),
+      getAboutDocument().catch((error) => {
+        console.error('sitemap: About page unavailable', error);
+        return null;
+      }),
     ]);
   const legalPages = new Map(
     legalDocuments.flatMap((document) =>
@@ -222,6 +227,7 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
 
   for (const page of FIXED_PAGES) {
     if (page.route === 'expertise' && !expertiseListing) continue;
+    if (page.route === 'about' && !aboutDocument) continue;
     const legalPage = legalPages.get(ROUTES[page.route]);
     if ((page.route === 'terms' || page.route === 'privacy') && !legalPage) continue;
     add(page.group, {
@@ -231,6 +237,9 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
         ? { lastModified: expertiseListing.updatedAt }
         : {}),
       ...(legalPage ? { lastModified: legalPage.updatedAt } : {}),
+      ...(page.route === 'about' && aboutDocument?.updatedAt
+        ? { lastModified: aboutDocument.updatedAt }
+        : {}),
     });
   }
   for (const page of cms) {

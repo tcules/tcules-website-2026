@@ -32,7 +32,13 @@ import {
   type EngagementScope,
   type HeroStat,
 } from '@/patterns';
-import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
+import type {
+  CorpusBand,
+  CorpusBlock,
+  CorpusCaseRef,
+  CorpusPage,
+  TestimonialAvatarRecord,
+} from '@/lib/corpus-types';
 import type { IconName } from '@/components';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
@@ -64,6 +70,7 @@ export type AboutPageProps = {
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
   /** Star ratings for the page's testimonials, by id (PLACEHOLDERS today; see the content seam). */
   ratings?: RatingsById;
+  avatars?: Readonly<Record<string, TestimonialAvatarRecord>>;
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
@@ -136,9 +143,12 @@ const ABOUT_HERO_PHOTO = {
 };
 
 /** The 26 Oct copy's About: the hero with the record as figures, then every band in order. */
-function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
+function AboutCopy({ page, caseRefs, ratings, avatars }: AboutPageProps) {
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs: caseRefs ?? {}, shared: {}, ratings };
+  const ctx: OfferContext = { page, caseRefs: caseRefs ?? {}, shared: {}, ratings, avatars };
+  const heroImage = page.composition.mediaBindings.find(
+    (binding) => binding.bound && binding.supportsSection === 'hero',
+  );
   return (
     <>
       <CorpusHero
@@ -148,7 +158,11 @@ function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
         stats={homeRecordStats(page)}
         /* The studio, wide, under the words, the head centred (owner, 31 Oct 2026). */
         arrangement="centred"
-        media={{ type: 'image', image: ABOUT_HERO_PHOTO, ratio: { base: '3/2', lg: '2/1' } }}
+        media={{
+          type: 'image',
+          image: heroImage ? corpusImage(heroImage) : ABOUT_HERO_PHOTO,
+          ratio: { base: '3/2', lg: '2/1' },
+        }}
       />
       {units.map((unit) => {
         const Band =
@@ -186,7 +200,7 @@ function WhatWeDoBento({ band: b }: AboutBandProps) {
   const tiles: BentoItem[] = items(b).flatMap((item) => {
     const link = item.blocks.flatMap((block) => (block.type === 'links' ? block.links : []))[0];
     const scene = link ? sceneForService(link.href) : undefined;
-    if (!link || !scene) return [];
+    if (!link) return [];
     return [
       {
         id: link.href,
@@ -249,12 +263,21 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
   });
   const cards: BlockCardSetItem[] = cases.map(({ link, body }) => {
     const name = plain(link.children);
+    const nativeCover = page.composition.mediaBindings.find(
+      (binding) =>
+        binding.bound && binding.supportsSection === b.id && binding.card === link.href,
+    );
     return {
       id: link.href,
       title: name,
       /* "Doodle shows research…": the name is the card's title, so its sentence opens the body. */
       body: sentenceCase(plain(body)),
-      media: { type: 'image', image: coverFor(page, name, caseRefs[link.href], b.id) },
+      media: {
+        type: 'image',
+        image: nativeCover
+          ? corpusImage(nativeCover)
+          : coverFor(page, name, caseRefs[link.href], b.id),
+      },
       href: link.href,
     };
   });
@@ -382,11 +405,13 @@ const STUDIO_PHOTOS: readonly ((page: CorpusPage) => MediaImage)[] = [
 function LeadershipBand({ page, band: b }: AboutBandProps) {
   const blocks = b.blocks.filter((block) => block.type !== 'comment');
   const lead = blocks[0]?.type === 'paragraph' ? plain(blocks[0].runs) : undefined;
-  const people = items(b).filter((item) =>
-    item.blocks.some(
-      (block) =>
-        block.type === 'links' && block.links.some((l) => /linkedin\.com\/in\//.test(l.href)),
-    ),
+  const people = items(b).filter(
+    (item) =>
+      item.id?.startsWith('about-person-') ||
+      item.blocks.some(
+        (block) =>
+          block.type === 'links' && block.links.some((l) => /linkedin\.com\/in\//.test(l.href)),
+      ),
   );
   const studio = items(b).filter((item) => !people.includes(item));
   const studioLinks = studio.flatMap((item) =>
@@ -419,6 +444,9 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           studio's other places, so they leave the story for a block of their own. */}
       {studio.map((item, index) => {
         const photo = STUDIO_PHOTOS[index];
+        const nativePhoto = page.composition.mediaBindings.find(
+          (binding) => binding.bound && binding.supportsSection === item.id,
+        );
         return (
           <ContentSection
             key={item.headingText}
@@ -428,7 +456,11 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
             headingId={`${b.id}-${index + 2}-heading`}
             arrangement="media"
             media={{
-              image: photo ? photo(page) : slotImage(page, b.id),
+              image: nativePhoto
+                ? corpusImage(nativePhoto)
+                : photo
+                  ? photo(page)
+                  : slotImage(page, b.id),
               side: index % 2 === 0 ? 'start' : 'end',
               weight: 'photo',
             }}
@@ -523,11 +555,11 @@ function Text({
  * careers banner. The hero holds the title and its first paragraph; the rest of the opening splits into
  * `studio`, so the first viewport is not a wall of text.
  */
-export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
+export function AboutPage({ page, caseRefs = {}, ratings, avatars }: AboutPageProps) {
   /* The 26 Oct 2026 copy reshaped About's bands: it composes from the plan (AboutCopy). The earlier
      composition below stays for a page that still carries the earlier bands. */
   if (!aboutPageFits(page))
-    return <AboutCopy page={page} caseRefs={caseRefs} ratings={ratings} />;
+    return <AboutCopy page={page} caseRefs={caseRefs} ratings={ratings} avatars={avatars} />;
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>
@@ -918,6 +950,8 @@ function CompanyRecord({ page }: { page: CorpusPage }) {
     <ContentSection {...head(b)} data-band="E">
       <DataTable
         split
+        caption={table.caption}
+        summary={table.summary}
         labelledBy={headingIdOf(b)}
         keyColumn={{ heading: plain(key) }}
         columns={columns.map((cell) => ({ heading: plain(cell) }))}

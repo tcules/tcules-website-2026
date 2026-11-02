@@ -22,6 +22,7 @@ import { contactSource } from './sources/strapi/contact';
 import { expertiseSource } from './sources/strapi/expertise';
 export { getExpertiseListingPage } from './sources/strapi/expertise-listing';
 export { getLegalDocument } from './sources/strapi/legal-documents';
+export { getAboutDocument } from './sources/strapi/about-document';
 import { futureInterfacesLabJoinSource } from './sources/strapi/future-interfaces-lab-join';
 import { futureInterfacesLabSource } from './sources/strapi/future-interfaces-lab';
 import { glossarySource } from './sources/strapi/glossary';
