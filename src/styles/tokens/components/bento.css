@@ -38,11 +38,6 @@
   --bnt-art-scale-m: 0.75;
   /* The split tile's drawing (`detail`): half a wide tile, so between the single and the wide scale. */
   --bnt-art-scale-split: 1;
-  /* The split tile's texture window (a mask, not a colour): an oval over the drawing at the named
-     half's head, gone before the title, so the words sit on clean ground. Widths are of the tile. */
-  --bnt-wave-split: radial-gradient(ellipse 34% 52% at 24% 26%, black 30%, transparent 100%);
-  /* Below 768 the halves stack: the drawing spans the tile's width at its head. */
-  --bnt-wave-split-m: radial-gradient(ellipse 60% 22% at 50% 15%, black 30%, transparent 100%);
   /* The split tile's result panel: the card crop box's radius, one step inside the tile's 16. */
   --bnt-panel-radius: var(--radius-8);
   --bnt-tex-strength: 0.8;

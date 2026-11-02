@@ -10,8 +10,8 @@ one new arrangement of DrawnTableBand (`chooser`).
   with "What you come away with" (the header as authored) over its cell, and "Explore the service" at its
   foot. The whole tile is the link. Bento `detail` makes the split; every column of the table is kept.
   Round 2 (owner): the panels fill the tile's height, so a row's panels end on one line (`equalRows`);
-  the texture sits behind the drawing only and fades before the words (`--bnt-wave-split`), since the
-  row wave under the title and line muddied the card.
+  the split tile carries no texture: the panel is already the card's second surface, and New Product
+  Design's hatched drawing shimmered against the pixel grid (a halo behind the drawing was tried first).
 - Tried and set aside the same day: four-across tiles with the detail stacked in (fields could not stay
   in line, the label out-shouted the words); a drawn chooser list (the owner disliked the sub-service
   sentences as footnotes under rows); mock B, the hairline split with the result as a headline.
