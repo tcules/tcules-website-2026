@@ -40,6 +40,12 @@ export type OfferPartsProps = {
   deliverables: readonly OfferPartsDeliverable[];
   /** Zero to three; built for three. */
   parts: readonly OfferPart[];
+  /**
+   * What the copy sets between the deliverables and the terms — a worked example, the table a
+   * deliverable refers to ("one of the five statuses below") — under the deliverables and before
+   * the parts, so it stays beside what it illustrates (owner, 2 Nov 2026: audits). A slot.
+   */
+  example?: ReactNode;
   /** Whatever else the band carries, under the parts. A slot. */
   note?: ReactNode;
   /** Default `paper`. */
@@ -96,6 +102,7 @@ export function OfferParts({
   deliverablesTitle,
   deliverables,
   parts,
+  example,
   note,
   surface = 'paper',
 }: OfferPartsProps) {
@@ -156,6 +163,7 @@ export function OfferParts({
               ))}
             </Layout>
           </Row>
+          {example}
           {parts.length > 0 ? (
             <Layout rowGap="stack">
               {parts.map((part) => (

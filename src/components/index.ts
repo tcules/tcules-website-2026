@@ -105,6 +105,7 @@ export {
   type MediaSource,
   type MediaTone,
 } from './Media';
+export { Clip, type ClipProps, type ClipRendition, type ClipSource } from './Clip';
 export { Tag, type TagProps, type TagVariant } from './Tag';
 export { Sketch, type SketchName, type SketchProps } from './Sketch';
 export {

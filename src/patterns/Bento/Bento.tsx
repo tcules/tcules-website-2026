@@ -26,10 +26,14 @@ export type BentoItem = {
    * router table's third column, so a table that becomes tiles drops no column. Every tile or none.
    */
   detail?: { label: string; text: string; action?: string };
-  /** The whole tile is the link. */
-  href: string;
-  /** The destination's own Sketch scene, drawn bare on the tile's texture. */
-  scene: SketchName;
+  /**
+   * The whole tile is the link. Absent, the tile is a still card (owner, 2 Nov 2026, the audits'
+   * comparisons): the option the page itself is, or one outside the studio ("your own engineers"),
+   * set among the others so no row of the table is dropped. It does not move and carries no action.
+   */
+  href?: string;
+  /** The destination's own Sketch scene, drawn bare on the tile's texture. Absent, the empty plate. */
+  scene?: SketchName;
   /**
    * Tracks the tile takes from 1024: 1 (default) or 2. A wide tile puts its drawing beside its words
    * and takes a size up for both. Each row of four tracks must fill exactly: 2 + 1 + 1, 1 + 1 + 2,
@@ -151,6 +155,17 @@ function CtaCard({ route }: { route: BentoCtaRoute }) {
   );
 }
 
+/** A tile's box: the link, or a still card when the tile has no destination. */
+function TileBox({ href, children }: { href?: string; children: ReactNode }) {
+  return href ? (
+    <a href={href} className={styles.tile}>
+      {children}
+    </a>
+  ) : (
+    <div className={styles.tile}>{children}</div>
+  );
+}
+
 /** One tile's link: its words and its drawing, stacked, or side by side when it is wide. */
 function TileLink({
   item,
@@ -170,7 +185,12 @@ function TileLink({
   const words = named;
   const art = (
     <div className={styles.art}>
-      <Sketch name={item.scene} frame="bare" story />
+      {/* No drawing yet: the labelled empty plate, since a bare frame draws nothing. */}
+      <Sketch
+        name={item.scene}
+        frame={item.scene ? 'bare' : 'plate'}
+        story={Boolean(item.href)}
+      />
     </div>
   );
   if (item.detail) {
@@ -178,7 +198,7 @@ function TileLink({
        panel whose action sits at its foot. Side by side from 768, the panel under the named half
        below. */
     return (
-      <a href={item.href} className={styles.tile}>
+      <TileBox href={item.href}>
         {/* equalRows: the halves' row takes the tile's whole height, so every panel in a row of
             tiles ends on the same line however long its neighbour's words run. */}
         <Layout
@@ -198,13 +218,13 @@ function TileLink({
             <Layout
               className={styles.fill}
               rowGap="block"
-              pinLast={Boolean(item.detail.action)}
+              pinLast={Boolean(item.detail.action && item.href)}
             >
               <Layout rowGap="tight">
                 <p className={styles.eyebrow}>{item.detail.label}</p>
                 <p className={styles.panelText}>{item.detail.text}</p>
               </Layout>
-              {item.detail.action ? (
+              {item.detail.action && item.href ? (
                 <Cluster>
                   <Button
                     as="span"
@@ -219,11 +239,11 @@ function TileLink({
             </Layout>
           </div>
         </Layout>
-      </a>
+      </TileBox>
     );
   }
   return (
-    <a href={item.href} className={styles.tile}>
+    <TileBox href={item.href}>
       {wide ? (
         <Layout
           className={styles.fill}
@@ -240,7 +260,7 @@ function TileLink({
           {art}
         </Layout>
       )}
-    </a>
+    </TileBox>
   );
 }
 

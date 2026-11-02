@@ -36,9 +36,9 @@ export const KIND_COMPONENTS: Readonly<
   },
   personas: { component: ['voice-ledger'], status: 'approved' },
   catalog: {
-    component: ['offer-sheet', 'D'],
+    component: ['catalog-tiles'],
     status: 'to-design',
-    note: 'What we design. The ruled blue-marker cell is for figures only (owner, 30 Oct 2026); flat drawing per product kind. Past six items the two-column read-down (D).',
+    note: 'What we design: drawn Bento tiles, as the services hub (owner, 2 Nov 2026); a tile links its case where the copy does. Plates until each kind is drawn. Owner to judge on the expertise pages.',
   },
   cases: { component: ['M'], status: 'approved' },
   quotes: { component: ['G'], status: 'approved' },

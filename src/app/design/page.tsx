@@ -58,6 +58,11 @@ const SPECIMENS = [
         note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, photograph ratio · focus · radius, stress shapes',
       },
       {
+        href: '/design/clip',
+        name: 'Clip',
+        note: 'the silent film — wide and tall renditions, wide only, a narrow column; plays once in view, pause / play again, no autoplay under reduced motion',
+      },
+      {
         href: '/design/chip',
         name: 'Chip',
         note: 'one choice in a set — a real checkbox or radio drawn as a pill; edge at rest, blue fill and tick when checked, a lift on hover; rest · checked · disabled on 4 surfaces, long labels wrapping; and look=index, the rail entry (no pill, the blue start-edge bar when checked) the insights finder’s filters are, on 4 surfaces',

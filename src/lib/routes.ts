@@ -41,7 +41,7 @@ export const ROUTES = {
   designToCodeAudit: '/audits/design-to-code-audit',
   productModernisationAssessment: '/audits/product-modernisation-assessment',
   aiProductUxReadiness: '/audits/ai-product-ux-readiness',
-  prototypeHardeningReview: '/audits/prototype-hardening-review',
+  prototypeReadinessReview: '/audits/prototype-readiness-review',
 
   /* Work. `/case-studies` is the canonical family and `/work` is not a route — the previous
      codebase carried that question unresolved across five files, which is why it is settled
@@ -304,6 +304,14 @@ export const INSIGHT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
  * `/expertise/fintech-insurtech` became `/expertise/fintech`. Every expertise page renders from the
  * corpus now, so next.config.ts sends the old path to the new one and old links keep landing.
  */
+/**
+ * An audit path the copy renamed → its new path (the copy's `redirect_from`): the Prototype Hardening
+ * Review became the Prototype Readiness Review (2 Nov 2026), so old links keep landing.
+ */
+export const AUDIT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
+  '/audits/prototype-hardening-review': '/audits/prototype-readiness-review',
+};
+
 export const EXPERTISE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
   'fintech-insurtech': 'fintech',
 };

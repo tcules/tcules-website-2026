@@ -58,10 +58,31 @@ arrangement holds it → what it must never do.**
 - **Three kinds, three components** (owner, 30 Oct 2026): *hard parts* are claims (a problem and how we design for it); *how we do it* is a method (numbered Steps beside one flat graphic of the process: the `method` band, approved as is); a *worked example* is a story (above). A peer set where each item pairs what it is with what goes wrong without it is the drawn ledger (`status-example`, approved as is). Decide the kind from what the content does, then use that kind's one component.
 - **The ruled cell with the blue marker is for figures, not content** (owner, 30 Oct 2026): a stat and its label. Product kinds, deliverables and claims never sit in it.
 - **A table of peer items** (levels, places, options) renders as drawn items, one drawing per row; a table read across rows stays a table. Router tables never drop a column.
+- **One method, one numbered run** (owner, 2 Nov 2026, prototype readiness review): a step authored as a
+  bold-led paragraph keeps the plain paragraphs after it as its body, so a step is never split into a
+  numbered half and a loose text grid. Steps named in sequence ("Before we start", "First", "Then") end
+  where a lead stops naming a moment: a variant of the work ("A wider review") is a labelled note under
+  the steps, never a numbered step and never a peer tile. Until the band's drawing exists its labelled
+  plate stands beside the steps.
+- **A worked example in What you get is one panel** (owner, 2 Nov 2026, the audits): the sentences that
+  introduce it sit above, and everything the example is (its "Illustration, not client work" label, the
+  scenario, its table, the reading of it) sits inside one tint panel. A key table the example's table
+  refers to (the readiness review's five statuses, the design-to-code audit's five types of gap) is
+  the panel's legend, not a table of its own; a status with a conventional glyph carries it in both
+  places. Below 768 the example's table reads down, row by row, inside the panel.
 - **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
 - **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
 - **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
+- **A card takes its title from its own words** (owner, 2 Nov 2026; first done 30 Oct on four service
+  pages, `6f1f1057`). Before a list renders as titled cards (What you get deliverables, any drawn tile or
+  card set), check every item has a short bold lead. Where one doesn't, write it into `_pages/` from the
+  item's opening words, verbatim, and keep the rest as the body: "a gap map, marking every…" →
+  "**A gap map:** marking every…". Capitalise the title's first letter; the parser capitalises the body.
+  Never invent a title, never paraphrase, never leave lower-case sentences set as card titles. Sweep
+  every page using the same band when you change a band's renderer, not only the page under review:
+  `awk` the band's list items for lines that don't start `- **`. A run-on lead ("**A fix plan,** …")
+  is already titled and needs no edit.
 
 ## 3 · How to use it on a section nobody has designed
 
