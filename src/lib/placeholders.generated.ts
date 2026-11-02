@@ -429,6 +429,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'An AI answer stopping at a person to be checked and corrected before it counts.',
   },
+  'illustration:we-design-software-people-enjoy-using': {
+    src: '/placeholders/illustration--we-design-software-people-enjoy-using.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "Several directions explored side by side, one carried to finish: a screen that reads at a glance, responds, and shows a considered empty and error state. /why-tcules principles; the band's other two reuse the offer set's known-before-drawn and proved-in-code, so this is drawn in that set's world box.",
+  },
   'illustration:we-know-what-to-leave-alone-in-a-product-people-rely-on': {
     src: '/placeholders/illustration--we-know-what-to-leave-alone-in-a-product-people-rely-on.svg',
     width: 1600,
