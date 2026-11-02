@@ -5,6 +5,7 @@ import {
   Cluster,
   Icon,
   type IconName,
+  Island,
   Layout,
   Media,
   Prose,
@@ -622,6 +623,197 @@ export function SheetBand({
   );
 }
 
+/** A status's mark: one conventional glyph per state of a gap map, read beside its word. */
+const STATUS_GLYPH: Readonly<Record<string, IconName>> = {
+  proven: 'check-circle',
+  assumed: 'question-circle',
+  missing: 'close-circle',
+  parked: 'clock-circle',
+  'for a specialist': 'user',
+};
+
+/**
+ * A worked example that is a page of a report (owner 2 Nov 2026; the copy's visual_plan:
+ * "ending in a sample report page"): a KEY table (its first column the statuses, its second what each
+ * means) and a later table with a column of those same statuses. The key becomes a legend of marks;
+ * the later table is the report page, on its own ground, each status in it carrying the key's mark.
+ */
+function statusReport(
+  blocks: readonly CorpusBlock[],
+): { key: TableBlock; sheet: TableBlock; column: number } | undefined {
+  const norm = (runs: readonly InlineRun[]) => plain(runs).trim().toLowerCase();
+  const tables = blocks.filter((block): block is TableBlock => block.type === 'table');
+  for (const key of tables) {
+    if (key.header.length < 2) continue;
+    const names = new Set(key.rows.map((row) => norm(row[0] ?? [])));
+    for (const sheet of tables) {
+      if (sheet === key || blocks.indexOf(sheet) < blocks.indexOf(key)) continue;
+      /* the later table's column named as the key's first column, every value one of the key's */
+      const column = sheet.header.findIndex((cell) => norm(cell) === norm(key.header[0] ?? []));
+      if (column > 0 && sheet.rows.every((row) => names.has(norm(row[column] ?? [])))) {
+        return { key, sheet, column };
+      }
+    }
+  }
+  return undefined;
+}
+
+function StatusMark({ name }: { name: string }) {
+  const glyph = STATUS_GLYPH[name.trim().toLowerCase()];
+  return (
+    <Cluster colGap="tight" align="center" nowrap>
+      {glyph ? (
+        <span className={styles.statusGlyph}>
+          <Icon name={glyph} />
+        </span>
+      ) : null}
+      <span className={styles.statusName}>{name}</span>
+    </Cluster>
+  );
+}
+
+/**
+ * A worked example as ONE unit (owner, 2 Nov 2026: "this whole thing is for the illustration but reads
+ * disconnected"; "can all of these be put inside the panels?"): the sentence that introduces it sits
+ * above, and everything the example is — its label, scenario, table and the reading of it — sits inside
+ * one tint panel, the example's own ground.
+ */
+function ExamplePanel({
+  intro,
+  labelledBy,
+  children,
+}: {
+  intro: readonly CorpusBlock[];
+  labelledBy: string;
+  children: ReactNode;
+}) {
+  return (
+    <Layout rowGap="block">
+      {intro.length > 0 ? <BandBody blocks={intro} labelledBy={labelledBy} /> : null}
+      <Island surface="tint">{children}</Island>
+    </Layout>
+  );
+}
+
+function StatusReport({
+  blocks,
+  report,
+  label,
+  labelledBy,
+}: {
+  blocks: readonly CorpusBlock[];
+  report: { key: TableBlock; sheet: TableBlock; column: number };
+  label?: string;
+  labelledBy: string;
+}) {
+  const { key, sheet, column } = report;
+  const keyAt = blocks.indexOf(key);
+  const sheetAt = blocks.indexOf(sheet);
+  const between = blocks
+    .slice(keyAt + 1, sheetAt)
+    .filter(
+      (block) => !(block.type === 'paragraph' && label && plain(block.runs).trim() === label),
+    );
+  /* the scenario: the paragraphs after the label; the intro: those before it */
+  const labelAt = blocks.findIndex(
+    (block) =>
+      block.type === 'paragraph' && label !== undefined && plain(block.runs).trim() === label,
+  );
+  /* everything before the key (the sentence that introduces it) and before the label: the intro */
+  const intro = [
+    ...blocks.slice(0, keyAt),
+    ...between.filter((block) => blocks.indexOf(block) < labelAt),
+  ];
+  const scenario = between.filter((block) => blocks.indexOf(block) > labelAt);
+  const after = blocks.slice(sheetAt + 1);
+  const [keyHead = [], ...rest] = sheet.header;
+  /* ONE unit (owner, 2 Nov 2026: "this whole thing is for the illustration but reads disconnected"):
+     the sentence that introduces it, then the report page holding everything the example is — its
+     label and scenario, the status key as the page's own legend, the page's rows, and the reading of
+     them that closes it. */
+  const legend = (
+    <Layout
+      as="ul"
+      columns={{ base: 1, md: 3, lg: 5 }}
+      colGap="gutter"
+      rowGap="block"
+      aria-label={plain(key.header[0] ?? [])}
+    >
+      {key.rows.map((row) => (
+        <Layout as="li" key={plain(row[0] ?? [])} rowGap="tight">
+          <StatusMark name={plain(row[0] ?? [])} />
+          <p className={styles.statusMeaning}>{plain(row[1] ?? [])}</p>
+          {/* a key with more columns ("Where the fix belongs") keeps each, under its own name */}
+          {key.header.slice(2).map((cell, index) => (
+            <Layout key={plain(cell)} rowGap="inline">
+              <p className={styles.legend}>{plain(cell)}</p>
+              <p className={styles.statusMeaning}>{plain(row[index + 2] ?? [])}</p>
+            </Layout>
+          ))}
+        </Layout>
+      ))}
+    </Layout>
+  );
+  return (
+    <Layout rowGap="block">
+      {intro.length > 0 ? <BandBody blocks={intro} labelledBy={labelledBy} /> : null}
+      <Island surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            {label ? <p className={styles.legend}>{label}</p> : null}
+            {scenario.length > 0 ? (
+              <BandBody blocks={scenario} labelledBy={labelledBy} />
+            ) : null}
+          </Layout>
+          {legend}
+          {/* Below 768 the page reads down: each area with its mark, then its columns under their
+              names. From 768 the table. One shows at a time (display none leaves the other out of
+              the accessibility tree too). */}
+          <Layout as="ul" rowGap="stack" className={styles.sheetList}>
+            {sheet.rows.map((row) => (
+              <Layout as="li" key={plain(row[0] ?? [])} rowGap="text">
+                <Layout rowGap="tight">
+                  <p className={styles.statusName}>{plain(row[0] ?? [])}</p>
+                  <StatusMark name={plain(row[column] ?? [])} />
+                </Layout>
+                {rest.map((cell, index) =>
+                  index + 1 === column ? null : (
+                    <Layout key={plain(cell)} rowGap="inline">
+                      <p className={styles.legend}>{plain(cell)}</p>
+                      <p>{plain(row[index + 1] ?? [])}</p>
+                    </Layout>
+                  ),
+                )}
+              </Layout>
+            ))}
+          </Layout>
+          <div className={styles.sheetTable}>
+            <DataTable
+              labelledBy={labelledBy}
+              keyColumn={{ heading: plain(keyHead) }}
+              columns={rest.map((cell, index) => ({
+                heading: plain(cell),
+                ...(index + 1 === column ? { behaviour: 'nowrap' as const } : {}),
+              }))}
+              rows={sheet.rows.map((row) => ({
+                header: plain(row[0] ?? []),
+                cellsHtml: row
+                  .slice(1)
+                  .map((cell, index) =>
+                    index + 1 === column
+                      ? { node: <StatusMark name={plain(cell)} /> }
+                      : inlineToHtml(cell),
+                  ),
+              }))}
+            />
+          </div>
+          {after.length > 0 ? <BandBody blocks={after} labelledBy={labelledBy} /> : null}
+        </Layout>
+      </Island>
+    </Layout>
+  );
+}
+
 /**
  * "What you get" in four parts (owner, 30 Oct 2026, round 7;
  * decisions/2026-10-30-what-you-get-label-rows): the drawn deliverables, then the band's three terms
@@ -649,6 +841,7 @@ export function WhatYouGetBand({
   );
   const closingBlocks = noteBlocks.filter((block) => !exampleBlocks.includes(block));
   const story = scenarioParts(exampleBlocks);
+  const report = statusReport(exampleBlocks);
   const deliverables = parts.items.map((item) => {
     /* Every deliverable is authored with a title (content-changes, 30 Oct 2026). One that is not
        prints its sentence once, as the title, and development says so. */
@@ -677,19 +870,36 @@ export function WhatYouGetBand({
       deliverables={deliverables}
       parts={peers}
       example={
-        exampleBlocks.length === 0 ? undefined : story.label ? (
-          <Layout rowGap="stack">
-            {story.before.length > 0 ? (
-              <BandBody blocks={story.before} labelledBy={head(band).headingId} />
-            ) : null}
+        exampleBlocks.length === 0 ? undefined : report ? (
+          <StatusReport
+            blocks={exampleBlocks}
+            report={report}
+            label={story.label}
+            labelledBy={head(band).headingId}
+          />
+        ) : story.label ? (
+          <ExamplePanel intro={story.before} labelledBy={head(band).headingId}>
             <ScenarioSplit
               label={story.label}
               blocks={story.scenario}
               scene={scenes('scenario')}
             />
-          </Layout>
+          </ExamplePanel>
         ) : (
-          <BandBody blocks={exampleBlocks} labelledBy={head(band).headingId} />
+          (() => {
+            /* An unlabelled example (the UX audit's real Dealpath finding): the paragraphs before its
+               first table introduce it; the table and what reads it are the example. */
+            const firstTable = exampleBlocks.findIndex((block) => block.type !== 'paragraph');
+            const cut = firstTable < 0 ? 0 : firstTable;
+            return (
+              <ExamplePanel
+                intro={exampleBlocks.slice(0, cut)}
+                labelledBy={head(band).headingId}
+              >
+                <BandBody blocks={exampleBlocks.slice(cut)} labelledBy={head(band).headingId} />
+              </ExamplePanel>
+            );
+          })()
         )
       }
       note={

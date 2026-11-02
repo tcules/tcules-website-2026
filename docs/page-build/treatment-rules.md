@@ -64,6 +64,12 @@ arrangement holds it → what it must never do.**
   where a lead stops naming a moment: a variant of the work ("A wider review") is a labelled note under
   the steps, never a numbered step and never a peer tile. Until the band's drawing exists its labelled
   plate stands beside the steps.
+- **A worked example in What you get is one panel** (owner, 2 Nov 2026, the audits): the sentences that
+  introduce it sit above, and everything the example is (its "Illustration, not client work" label, the
+  scenario, its table, the reading of it) sits inside one tint panel. A key table the example's table
+  refers to (the readiness review's five statuses, the design-to-code audit's five types of gap) is
+  the panel's legend, not a table of its own; a status with a conventional glyph carries it in both
+  places. Below 768 the example's table reads down, row by row, inside the panel.
 - **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
 - **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
 - **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
