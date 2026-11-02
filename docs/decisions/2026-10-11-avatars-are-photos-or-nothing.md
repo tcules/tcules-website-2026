@@ -1,7 +1,7 @@
 ---
 title: "Avatars are circular photos or nothing"
 date: 2026-10-11
-status: active
+status: superseded
 area: [proof]
 source: "Owner review, 11 Oct 2026"
 supersedes: []

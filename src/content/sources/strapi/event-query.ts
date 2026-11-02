@@ -154,6 +154,7 @@ export const EVENT_BY_SLUG_QUERY = /* GraphQL */ `
     documentId
     url
     alternativeText
+    caption
     width
     height
     formats

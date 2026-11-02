@@ -157,6 +157,51 @@
   letter-spacing: var(--hero-title-tracking-mark);
 }
 
+/* A person's name as the title: the h1 role, at the display title's measure. */
+.titleH1 {
+  font: var(--hero-title-text-h1);
+  letter-spacing: var(--hero-title-tracking-h1);
+}
+
+/* ── The portrait · the face of the person the page is about ──────────────────
+   A fixed square, the photograph corner, Media filling it from the face's focus. Without a
+   photograph the initials hold the square on the same filled tint, in the title's full ink (one
+   text run in its own box, centred by the block's own alignment, so nothing is arranged). The tint
+   is the frame's ground under a photograph too, so a source cut to a circle on transparency still
+   reads as the rounded square (1 Nov 2026). ProfileCard's portrait is drawn the same way. */
+.portrait {
+  display: block;
+  inline-size: var(--hero-portrait-size);
+  aspect-ratio: var(--ratio-portrait);
+  border-radius: var(--hero-portrait-radius);
+  overflow: hidden;
+  background: var(--hero-portrait-ground);
+}
+
+/* `arrangement="profile"`: the face at a confident size beside the opening, 128 · 192 · 240 by width
+   (the steps live in the token), its initials a role up so they hold the larger square. */
+.portraitProfile {
+  inline-size: var(--hero-portrait-size-profile);
+}
+
+.portraitInitials {
+  align-content: center;
+  text-align: center;
+  color: var(--hero-portrait-initials-ink);
+  font: var(--hero-portrait-text);
+  letter-spacing: var(--hero-portrait-tracking);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--hero-portrait-tracking);
+}
+
+.portraitInitials.portraitProfile {
+  font: var(--hero-portrait-text-profile);
+  letter-spacing: var(--hero-portrait-tracking-profile);
+  text-indent: var(--hero-portrait-tracking-profile);
+}
+
 /* ── The copy · two roles, two measures ───────────────────────────────────
    The lead at 20 and the paragraphs beneath it at 16, which gives the copy an internal hierarchy
    that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs
@@ -303,8 +348,8 @@ a.name:hover {
   margin-inline-start: calc(-1 * var(--hero-avatar-overlap));
 }
 
-/* A person with no portrait in a group that has them: initials in an outlined disc on the ground,
-   so it reads as a stand-in by design rather than a missing photograph. */
+/* A person with no portrait: initials in an outlined disc on the ground, so it reads as a stand-in
+   by design rather than a missing photograph (owner, 1 Nov 2026). */
 .initials {
   display: flex;
   align-items: center;
@@ -314,6 +359,10 @@ a.name:hover {
   color: var(--hero-avatar-initials-ink);
   font: var(--hero-avatar-text);
   letter-spacing: var(--hero-avatar-tracking);
+  /* Optically centred: the line box is trimmed to the capitals (the initials are caps only), and an
+     indent of the tracking balances the space tracking leaves after the last letter. */
+  text-box: trim-both cap alphabetic;
+  text-indent: var(--hero-avatar-tracking);
   text-transform: var(--text-mono-case);
 }
 

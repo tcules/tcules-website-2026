@@ -124,12 +124,12 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 **Review with Jatin, 22 Oct.** Triaged with the owner's answers in the review checklist
 (https://claude.ai/artifact/HLnxA2opHsfw47YkfSXcnf). Batch 1 lands and is reviewed before batch 2 starts (owner, 22 Oct).
 
-*Batch 1: small items, one PR each.*
-- [~] **2.19** FAQ question at 20px, as a standard step in the type ladder.
-- [~] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
-- [~] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
-- [~] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
-- [~] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
+*Batch 1: small items, one PR each.* Closed 1 Nov 2026 (owner): each item was approved or has changed since.
+- [x] **2.19** FAQ question at 20px, as a standard step in the type ladder.
+- [x] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
+- [x] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
+- [x] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
+- [x] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
 
 *Batch 2: exploratory, after batch 1 is reviewed.*
 - [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
@@ -163,12 +163,19 @@ design pass (#174, #175). Everything below still renders the 26 Oct copy through
 and each can take many design changes. Work in the order listed: polished-tier pages first (launch roadmap), and
 a template before the single pages it serves, since one pass there fixes every page on it. Starting notes are the
 29 Oct critic's (`docs/page-build/review-29-oct.md`), not a brief.
+
+**Design order (owner, 1 Nov 2026):** 2.40 `/how-we-work` → 2.41 `/why-tcules` → 2.37 `/services` hub → 2.38
+`/expertise` hub → 2.32 the 12 expertise pages → 2.36 audit pages → 2.39 glossary → 2.42 `/careers` → 2.35 Future Interfaces Lab →
+2.43 `/matter-design-system`. 2.46 level-2 sub-services are low priority, after these. One PR per large page or per template group (how-we-work and its two subpages; the two hubs; the 12 expertise pages). Every page designed gets its record in `docs/page-build/pages/<page>.md` (decisions
+and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
+the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
+pass on another account; a page ships with its placeholders until then.
 - [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
       from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
       carry sector photos. Polished tier.
-- [ ] **2.33** `/about`: two OfferSheets read the same; the leadership band has no portraits yet; the difference
+- [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
-- [ ] **2.34** `/contact`: the hero's right half is empty, and the page ends in text bands. Polished tier.
+- [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
 - [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
@@ -193,9 +200,11 @@ choice (2.34).
 - [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
-- [~] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+- [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
-      Needs no design pass, only full coverage. Coverage run started 1 Nov on `feat/insights-rich-text`.
+      Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
+      match their Strapi bodies; `docs/page-build/insights-rich-text-report.md`. The copy's articles and glossary
+      terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
 - [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
@@ -209,6 +218,14 @@ choice (2.34).
       (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
       `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
       plates; the three term rows read as one template across pages.
+- [x] **2.49** Author pages, moved back into phase 1 (owner, 1 Nov 2026;
+      decisions/2026-11-01-author-pages-one-template-from-strapi, superseding the 30 Oct move to phase 2):
+      `/insights/authors` and one `/insights/authors/<person>` template filled from Strapi's bylines (11 people),
+      each person's live pieces as the hub's cards, `ProfilePage` + `Person` markup; the bylines and "About the
+      author" link to the page. Built on `feat/insights-rich-text`. Design pass (owner, 1 Nov 2026): a bio for
+      everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
+      hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
+      name, role, bio, topic labels and LinkedIn).
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -267,9 +284,6 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 - [ ] `/clients` (owner, 31 Oct 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
-- [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
-      links (owner, 30 Oct; pulled forward only if the weekend leaves time;
-      decisions/2026-10-30-author-pages-move-to-phase-2).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
       with Ask AI).

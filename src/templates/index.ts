@@ -10,7 +10,9 @@
  * page reads content and passes it in.
  */
 export {
+  AuthorPieces,
   InsightResources,
+  ListingClose,
   ListingIndex,
   caseFinder,
   caseViews,

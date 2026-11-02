@@ -225,6 +225,13 @@ type ContentSectionBaseProps = {
    */
   density?: SectionDensity;
   /**
+   * The `beside` tracks from 1024. `head` (default) is the narrow head track, 5 : 7 then 1 : 2 from
+   * 1440 (O2). `halves` is 1 : 1 at every split width, for a body that is a short list and would
+   * otherwise leave its long track half empty (owner, 1 Nov 2026, About's audiences). Read only
+   * under `beside`.
+   */
+  split?: 'head' | 'halves';
+  /**
    * The band's foot: in practice one `CtaRow` (a hairline, then a row of actions — § 3.1). It is the
    * body's last row, a `stack` (48) under the blocks (§ 1.2: body → CtaRow), in every arrangement:
    * under the blocks in `stacked`, in the body track under `beside`, and pinned to
@@ -475,6 +482,7 @@ export function ContentSectionText({ children, align = 'start' }: ContentSection
  * The arrangement changes at a breakpoint; no distance does.
  */
 const HEAD_TRACKS = { lg: [5, 7], xl: [1, 2] };
+const HALF_TRACKS = { lg: 2 };
 
 /** A development-only warning, prefixed with the component's name. */
 const warn = (message: string) => {
@@ -519,8 +527,18 @@ const present = (node: ReactNode) => Children.toArray(node).length > 0;
  * Route-blind and data-blind like every pattern — it never learns that Strapi exists.
  */
 export function ContentSection(props: ContentSectionProps) {
-  const { heading, headingId, headingSize, eyebrow, lead, surface, density, footer, children } =
-    props;
+  const {
+    heading,
+    headingId,
+    headingSize,
+    eyebrow,
+    lead,
+    surface,
+    density,
+    split,
+    footer,
+    children,
+  } = props;
   const arrangement: ContentSectionArrangement = props.arrangement ?? 'stacked';
   /* `center` centres at every width; `center-lg` from 1024 only (ContentSectionAlign). The alignment
      is stated per width below — Layout's justifyItems for `center`, a class with its own breakpoint
@@ -730,7 +748,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout
         rowGap="stack"
         colGap={besideSplit ? 'section' : undefined}
-        columns={besideSplit ? HEAD_TRACKS : undefined}
+        columns={besideSplit ? (split === 'halves' ? HALF_TRACKS : HEAD_TRACKS) : undefined}
         align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
         reverse={headAtEnd ? { lg: true } : undefined}
       >

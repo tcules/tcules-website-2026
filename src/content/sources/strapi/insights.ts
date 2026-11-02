@@ -42,7 +42,9 @@ function labLink(action: InsightAction | undefined): InsightAction | undefined {
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const INSIGHTS_SLUG = 'insights';
 const INSIGHTS_REVALIDATE_SECONDS = 300;
-const RESOURCE_LIMIT = 100;
+/* Well above every live count (102 blogs on 1 Nov 2026; Strapi honours a limit over 100). At 100 the hub
+   silently dropped the 2 oldest articles. */
+const RESOURCE_LIMIT = 500;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';

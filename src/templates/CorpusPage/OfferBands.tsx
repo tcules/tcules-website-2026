@@ -427,17 +427,18 @@ function liftTrailingLink(runs: readonly InlineRun[]) {
  * draws only what the name says). A name none of these fit shows no drawing rather than a wrong one.
  */
 /**
- * About's working terms, by their authored titles, each to the scene drawn for the same claim in the
- * 11 Oct "How Tcules works" band (owner, 31 Oct 2026). Who you work with, response time and getting
- * started argue something no scene draws yet: they take the empty plate until drawn.
+ * About's working terms, by their authored titles, each to its own scene, drawn for it as one set
+ * (owner, 1 Nov 2026; Sketch/terms.tsx). None borrows How we work together's scopes.
  */
 const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
-  communication: 'inside',
-  turnaround: 'commercial',
-  'working hours': 'overlap',
-  /* /how-we-work's practical details (owner, 1 Nov 2026): the same scenes for the same claims. Who
-     decides and who owns the work draws something no scene does yet: the empty plate. */
-  'getting started': 'start',
+  'who you work with': 'who',
+  communication: 'communication',
+  'response time': 'response',
+  'getting started': 'getting-started',
+  turnaround: 'turnaround',
+  'working hours': 'hours',
+  /* /how-we-work's practical details (owner, 1–2 Nov 2026): getting started is About's own term and
+     drawing; time zones, fees and notice and ownership take the scenes drawn for those claims. */
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
   'who decides, and who owns the work': 'own',

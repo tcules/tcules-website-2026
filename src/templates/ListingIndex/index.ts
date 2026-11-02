@@ -1,4 +1,4 @@
-export { ListingIndex } from './ListingIndex';
+export { ListingClose, ListingIndex } from './ListingIndex';
 export type {
   ListingBands,
   ListingClosing,
@@ -16,4 +16,5 @@ export type { FinderArgs, FinderGroup, FinderOption, FinderPick } from './listin
 export type { InsightItem, InsightKind } from './compositions';
 export { caseFinder, caseViews } from './cases';
 export { InsightResources } from './resources';
+export { AuthorPieces } from './authors';
 export type { CaseGroup, CaseItem, CaseView } from './cases';
