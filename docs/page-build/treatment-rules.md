@@ -62,6 +62,15 @@ arrangement holds it → what it must never do.**
 - **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
 - **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
+- **A card takes its title from its own words** (owner, 2 Nov 2026; first done 30 Oct on four service
+  pages, `6f1f1057`). Before a list renders as titled cards (What you get deliverables, any drawn tile or
+  card set), check every item has a short bold lead. Where one doesn't, write it into `_pages/` from the
+  item's opening words, verbatim, and keep the rest as the body: "a gap map, marking every…" →
+  "**A gap map:** marking every…". Capitalise the title's first letter; the parser capitalises the body.
+  Never invent a title, never paraphrase, never leave lower-case sentences set as card titles. Sweep
+  every page using the same band when you change a band's renderer, not only the page under review:
+  `awk` the band's list items for lines that don't start `- **`. A run-on lead ("**A fix plan,** …")
+  is already titled and needs no edit.
 
 ## 3 · How to use it on a section nobody has designed
 
