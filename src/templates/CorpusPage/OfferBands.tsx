@@ -1367,7 +1367,25 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
               ),
             },
           ]
+        : undefined) ??
+      /* Mixed closing words (owner, 2 Nov 2026, /services): each linked paragraph is a statement card
+         of its own, and the paragraphs with no link stay below the set. */
+      (closing.some(hasLink)
+        ? closing
+            .filter(hasLink)
+            .map((runs): { question?: string; answer: InlineRun[] } => ({ answer: runs }))
         : undefined);
+    const unlinked = closing.filter((runs) => !hasLink(runs));
+    const restFooter =
+      routes && unlinked.length > 0 ? (
+        <ContentSectionText>
+          <Layout rowGap="text">
+            {unlinked.map((runs, index) => (
+              <p key={index}>{renderInline(runs)}</p>
+            ))}
+          </Layout>
+        </ContentSectionText>
+      ) : undefined;
     const n = rows.length;
     const cta: BentoCta | undefined = routes
       ? {
@@ -1402,7 +1420,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           scene: scenes[index] as SketchName,
         }))}
       />,
-      routes ? undefined : closingFooter,
+      routes ? restFooter : closingFooter,
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));

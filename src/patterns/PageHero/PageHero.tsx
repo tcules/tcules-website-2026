@@ -1398,8 +1398,9 @@ export function PageHero({
     const mediaTrack =
       panel != null ? (
         <div className={styles.panel}>{panel}</div>
-      ) : mediaNode === null || watch ? null : centredHead && isIllustration ? (
-        /* The cap is a drawing's (its labels outgrew the lead at full width); a photograph under a
+      ) : mediaNode === null || watch ? null : centredHead && !isPhotograph ? (
+        /* The cap is a drawing's (its labels outgrew the lead at full width), and a capture's or a
+           placeholder's standing in for one (owner, 2 Nov 2026, /services); only a photograph under a
            centred head takes the whole column (owner, 31 Oct 2026, About). */
         <div className={styles.centredMedia}>{mediaNode}</div>
       ) : split && !isIllustration ? (
