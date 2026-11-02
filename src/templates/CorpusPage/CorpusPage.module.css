@@ -45,6 +45,13 @@
   color: var(--cpg-ink-label);
 }
 
+/* A destination group's eyebrow and h3, centred from 1024 to sit under the band's `center-lg` head. */
+@media (min-width: 1024px) {
+  .groupHead {
+    text-align: center;
+  }
+}
+
 /* An item's own heading inside a band's copy (a reason, a case in a slide, a case story): an h3
    element at the h4 role. The band's h2 is the scale's first step, and a heading inside its body that
    set at the h3 role read as a second band title beside it. A set's heading always outranks its

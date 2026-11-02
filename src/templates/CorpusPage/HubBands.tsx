@@ -83,7 +83,7 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
   };
 
   return (
-    <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
+    <ContentSection {...head(band)} data-band="C-image" lead={leadText} align="center-lg">
       {/* The groups sit a `section` (96) apart: each group's cards are a borderless set whose rows are
           a `column` (64) apart, so at `stack` (48) the second group's head read as one more row of the
           first set (owner, 2 Nov 2026, /expertise). Two groups are two regions; their head stays a
@@ -115,8 +115,12 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
           const { eyebrow, title } = groupHead(group.headingText);
           return (
             <Layout key={group.headingText} rowGap="block">
-              {eyebrow ? <p className={styles.groupEyebrow}>{eyebrow}</p> : null}
-              <h3 id={group.id ?? undefined}>{title}</h3>
+              {/* Centred from 1024 under the band's centred head; on a phone the cards stack on the start
+                  edge, so the head starts there too (ContentSection `center-lg`). */}
+              <Layout rowGap="block" className={styles.groupHead}>
+                {eyebrow ? <p className={styles.groupEyebrow}>{eyebrow}</p> : null}
+                <h3 id={group.id ?? undefined}>{title}</h3>
+              </Layout>
               {others.length > 0 ? <BandBody blocks={others} /> : null}
               <BlockCardSet items={cards} lead="none" across={3} cue="title" scroll="never" />
             </Layout>
