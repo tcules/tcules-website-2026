@@ -403,3 +403,29 @@
 
   justify-self: start;
 }
+
+/* The split tile's texture sits behind its drawing only, fading out before the words, so the
+   title and line read on the clean ground (owner, 2 Nov 2026: the row wave "muddying the card").
+   The tile's own window, not the row's wave: the panel covers its other half anyway. Placed after
+   the row wave's rules, at their specificity. */
+.cell.split {
+  --bnt-wave: var(--bnt-wave-split-m);
+  --bnt-wave-size: 100% 100%;
+  --bnt-wave-x: 0%;
+}
+
+@media (min-width: 768px) {
+  .cell.split {
+    --bnt-wave: var(--bnt-wave-split);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cell.split,
+  .cell.split[data-row='a'],
+  .cell.split[data-row='b'] {
+    --bnt-wave: var(--bnt-wave-split);
+    --bnt-wave-size: 100% 100%;
+    --bnt-wave-x: 0%;
+  }
+}

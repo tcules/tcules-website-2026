@@ -179,11 +179,14 @@ function TileLink({
        below. */
     return (
       <a href={item.href} className={styles.tile}>
+        {/* equalRows: the halves' row takes the tile's whole height, so every panel in a row of
+            tiles ends on the same line however long its neighbour's words run. */}
         <Layout
           className={styles.fill}
           columns={{ base: 1, md: [1, 1] }}
           colGap="tight"
           rowGap="tight"
+          equalRows
         >
           <div className={styles.named}>
             <Layout rowGap="block">
