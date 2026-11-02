@@ -10,6 +10,7 @@ import { head } from './blocks';
 import { BandBody } from './CopyBands';
 import { slugOf } from './images';
 import { hasLink, plain } from './text';
+import styles from './CorpusPage.module.css';
 
 /**
  * The hubs' own band (component-map § E Hubs, G16; 29 Oct 2026). Kept out of CopyBands so the five
@@ -27,6 +28,18 @@ const isGroup = (block: CorpusBlock): block is ItemBlock =>
 /** True for a destinations band told as `###` groups, each a table whose key column links a page. */
 export function hasDestinationGroups(band: CorpusBand): boolean {
   return content(band).some(isGroup);
+}
+
+/**
+ * A group head told as "By product type: what your product does" is a label and a statement: the
+ * label before the first colon becomes the group's eyebrow, the rest its h3, its first letter raised
+ * as a heading's is (owner, 2 Nov 2026, /expertise). A head with no colon stays one h3.
+ */
+function groupHead(text: string): { eyebrow?: string; title: string } {
+  const at = text.indexOf(': ');
+  if (at <= 0) return { title: text };
+  const rest = text.slice(at + 2);
+  return { eyebrow: text.slice(0, at), title: rest.charAt(0).toUpperCase() + rest.slice(1) };
 }
 
 /** A linked card's body is plain text: the whole card is the link, and a link may not hold another. */
@@ -76,8 +89,12 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
   };
 
   return (
-    <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
-      <Layout rowGap="stack">
+    <ContentSection {...head(band)} data-band="C-image" lead={leadText} align="center-lg">
+      {/* The groups sit a `section` (96) apart: each group's cards are a borderless set whose rows are
+          a `column` (64) apart, so at `stack` (48) the second group's head read as one more row of the
+          first set (owner, 2 Nov 2026, /expertise). Two groups are two regions; their head stays a
+          `block` from its own cards. */}
+      <Layout rowGap="section">
         {opening.length > 0 ? <BandBody blocks={opening} /> : null}
         {groups.map((group) => {
           const table = group.blocks.find(
@@ -101,10 +118,14 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
               },
             ];
           });
+          const { eyebrow, title } = groupHead(group.headingText);
           return (
             <Layout key={group.id ?? group.headingText} rowGap="block">
               {group.headingText ? (
-                <h3 id={group.id ?? undefined}>{group.headingText}</h3>
+                <Layout rowGap="block" className={styles.groupHead}>
+                  {eyebrow ? <p className={styles.groupEyebrow}>{eyebrow}</p> : null}
+                  <h3 id={group.id ?? undefined}>{title}</h3>
+                </Layout>
               ) : null}
               {others.length > 0 ? <BandBody blocks={others} /> : null}
               <BlockCardSet items={cards} lead="none" across={3} cue="title" scroll="never" />

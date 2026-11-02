@@ -169,15 +169,15 @@ The review ends in one report, your MVP readiness plan, written so your engineer
 
 **What you receive**
 
-- a gap map, marking every important area of the prototype with one of the five statuses below
+- **A gap map:** marking every important area of the prototype with one of the five statuses below
 
-- experience fixes: where customers get stuck, and what to change
+- **Experience fixes:** where customers get stuck, and what to change
 
-- what to keep, specify, redesign or replace, part by part, and which code is safe to build on if you share it
+- **What to keep, specify, redesign or replace:** part by part, and which code is safe to build on if you share it
 
-- an ordered plan for the work before launch
+- **An ordered plan:** for the work before launch
 
-- questions for specialists, each with a named owner
+- **Questions for specialists:** each with a named owner
 
 | Status | What it means |
 |---|---|

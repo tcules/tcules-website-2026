@@ -1,4 +1,6 @@
 import type { CorpusPage } from '@/lib/corpus-types';
+import { heroIsCentred } from '@/lib/hero-media';
+import { heroClip } from '@/lib/hero-clips';
 import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
@@ -66,22 +68,25 @@ export function OfferPage({
     claimFigure,
   };
 
-  const media = drawing
-    ? ({
-        type: 'image',
-        image: {
-          src: drawing.src,
-          width: drawing.width,
-          height: drawing.height,
-          alt: drawing.alt,
-          kind: drawing.kind,
-        },
-        cut: drawing.cut,
-      } as const)
-    : ({
-        type: 'image',
-        image: heroImage(page),
-      } as const);
+  const clip = heroClip(page.route);
+  const media = clip
+    ? ({ type: 'clip', ...clip } as const)
+    : drawing
+      ? ({
+          type: 'image',
+          image: {
+            src: drawing.src,
+            width: drawing.width,
+            height: drawing.height,
+            alt: drawing.alt,
+            kind: drawing.kind,
+          },
+          cut: drawing.cut,
+        } as const)
+      : ({
+          type: 'image',
+          image: heroImage(page),
+        } as const);
 
   return (
     <>
@@ -91,7 +96,7 @@ export function OfferPage({
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
       <CorpusHero
         page={page}
-        arrangement="beside"
+        arrangement={clip ? 'stacked' : heroIsCentred(page.route) ? 'centred' : 'beside'}
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />

@@ -97,8 +97,8 @@ const SERVICES: SiteNavItem = {
         },
         { label: 'AI Product UX Readiness', href: ROUTES.aiProductUxReadiness, status: 'live' },
         {
-          label: 'Prototype Hardening Review',
-          href: ROUTES.prototypeHardeningReview,
+          label: 'Prototype Readiness Review',
+          href: ROUTES.prototypeReadinessReview,
           status: 'live',
         },
       ],

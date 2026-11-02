@@ -198,6 +198,7 @@ function quoteBlock(lines: string[], pendingSignoff: boolean): CorpusBlock {
     attribution,
     pendingSignoff,
     testimonialId: null,
+    rating: null,
   };
 }
 

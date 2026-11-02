@@ -105,6 +105,7 @@ export {
   type MediaSource,
   type MediaTone,
 } from './Media';
+export { Clip, type ClipProps, type ClipRendition, type ClipSource } from './Clip';
 export { Tag, type TagProps, type TagVariant } from './Tag';
 export { Sketch, type SketchName, type SketchProps } from './Sketch';
 export {
@@ -136,6 +137,11 @@ export { ClientMark, type ClientMarkProps } from './ClientMark';
 /* BrandMark is a THIRD-PARTY mark (LinkedIn, YouTube, Clutch) at its owner's proportions, monochrome
    on currentColor — moved up from SiteFooter on 1 Oct 2026 when a second consumer needed it.
    RatingBadge is a score and its source as one outline pill; it takes the mark as a node. */
+/* Arena is the home hero's animated drawing (owner, 2 Nov 2026): one SVG fetched after paint and
+   run on its own timeline, paused out of view and under reduced motion. Its control glyphs are
+   passed in. */
+export { Arena, type ArenaProps } from './Arena';
+
 export { BrandMark, type BrandMarkName } from './BrandMark';
 export { RatingBadge, type RatingBadgeProps } from './RatingBadge';
 

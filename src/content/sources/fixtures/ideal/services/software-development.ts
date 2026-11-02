@@ -54,7 +54,7 @@ export const softwareDevelopment: ServiceStory = {
     lead: 'Tcules designs and builds running software in one accountable path, so roles, rules and edge states reach the code decided, not guessed.',
     actions: [
       { label: 'Start a project', href: ENQUIRY },
-      { label: 'Prototype Hardening Review', href: ROUTES.prototypeHardeningReview },
+      { label: 'Prototype Readiness Review', href: ROUTES.prototypeReadinessReview },
     ],
     illustration: {
       src: '/illustrations/services/software-development.paper.svg',

@@ -170,20 +170,23 @@ a template before the single pages it serves, since one pass there fixes every p
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
-- [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+- [~] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
       from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
-      carry sector photos. Polished tier.
+      carry sector photos. Polished tier. Started 2 Nov in another session.
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-- [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+- [~] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
-      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
-- [ ] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
-- [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
+      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
+- [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+      Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
+      service tiles (mock A); centred hero, illustration placeholder until art.
+- [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
+      services hub (#194).
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
       relief (lowest score on 29 Oct, 4/10).
 
@@ -196,10 +199,13 @@ needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:c
 problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
 `/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
 choice (2.34).
-- [~] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [x] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
       First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
-      the four middle illustrations and the subpages' prose runs are open.
-- [ ] **2.41** `/why-tcules`: every service page links to it. It renders through the composer since #181. Crucial.
+      the four middle illustrations and the subpages' prose runs are open. Done for now (owner, 2 Nov 2026).
+- [x] **2.41** `/why-tcules`: every service page links to it. First pass done 2 Nov (owner: "decent for now"):
+      work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
+      case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
+      Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
 - [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
 - [ ] **2.43** `/matter-design-system`: crucial.
 - [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
@@ -228,6 +234,45 @@ choice (2.34).
       everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
       hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
       name, role, bio, topic labels and LinkedIn).
+
+**Review with Jatin, 2 Nov 2026.** Jatin's order: home, the CTAs and the enquiry modal, the reused bands
+(engagement, trust markers, FAQ), then the commercial banners. His note on the whole site: the problem is now
+more content than design, and the owner keeps visual consistency, pushing back on content that can't be
+designed well. Everything here is designed before the lock on Wed 4 Nov. Not ours: Yash sends Jatin the
+page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
+the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
+checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
+- [ ] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+      plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
+      one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+- [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
+      pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
+      real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
+      engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
+- [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
+      on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
+      success and failure copy, and CTA-source analytics come after launch.
+- [ ] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+      apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
+      adjacent, never beside the close.
+- [ ] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+      (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
+- [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
+      Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
+      links to `/expertise`.
+- [ ] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+      "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
+      social media, the other ways to reach us, and the studio address.
+- [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
+      the article page, and bring the comparison to the owner.
+- [ ] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+      decisions and records them in `docs/page-build/pages/clients.md`.
+- [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
+      illustrations instead.
+
+Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
+screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
+and CTA-source analytics · a pricing section · taxonomy collection pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -284,7 +329,7 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 ## Phase 2 — after the 6 Nov launch
 
-- [ ] `/clients` (owner, 31 Oct 2026).
+- [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs

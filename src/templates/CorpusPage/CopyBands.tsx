@@ -5,6 +5,7 @@ import {
   Cluster,
   Icon,
   type IconName,
+  Island,
   Layout,
   Media,
   Prose,
@@ -20,6 +21,7 @@ import {
   CtaSection,
   DataTable,
   ListCard,
+  ClaimProof,
   ClaimSet,
   OfferParts,
   OfferSheet,
@@ -44,7 +46,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
 import { caseCover, slotImage, slugOf, type SlotImage } from './images';
-import { isIllustratedProse, signature } from './plan';
+import { isIllustratedProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -168,6 +170,8 @@ export function CorpusTable({ table, labelledBy }: { table: TableBlock; labelled
           header: plain(keyCell),
           ...(hasLink(keyCell) ? { headerHtml: inlineToHtml(keyCell) } : {}),
           cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
+          /* In a comparison, the row naming Tcules is the one we suggest (owner, 2 Nov 2026). */
+          ...(/^tcules\b/i.test(plain(keyCell).trim()) ? { pick: true } : {}),
         };
       })}
     />
@@ -406,7 +410,14 @@ function sheetItem(
     if (opts?.wholeSentence && !link && !labelText.endsWith('.')) {
       return {
         title: labelText.replace(/,$/, '').trim(),
-        ...bodyFields([...lead.label, { type: 'text', text: ' ' }, ...trimStart(lead.body)]),
+        /* No space before the authored punctuation: "**A walkthrough with your team**, so …". */
+        ...bodyFields([
+          ...lead.label,
+          ...(/^\s*[,;:.]/.test(plain(lead.body))
+            ? []
+            : [{ type: 'text' as const, text: ' ' }]),
+          ...trimStart(lead.body),
+        ]),
       };
     }
     const body = trimStart(lead.body);
@@ -464,7 +475,7 @@ export function sheetParts(band: CorpusBand): SheetParts {
   const at = blocks[start];
   if (at?.type === 'list') {
     const opts = {
-      wholeSentence: band.id === 'what-you-get',
+      wholeSentence: isWhatYouGet(band),
       runOn: band.id === 'what-we-design',
     };
     items = at.items.map((runs) => sheetItem(runs, opts));
@@ -612,6 +623,197 @@ export function SheetBand({
   );
 }
 
+/** A status's mark: one conventional glyph per state of a gap map, read beside its word. */
+const STATUS_GLYPH: Readonly<Record<string, IconName>> = {
+  proven: 'check-circle',
+  assumed: 'question-circle',
+  missing: 'close-circle',
+  parked: 'clock-circle',
+  'for a specialist': 'user',
+};
+
+/**
+ * A worked example that is a page of a report (owner 2 Nov 2026; the copy's visual_plan:
+ * "ending in a sample report page"): a KEY table (its first column the statuses, its second what each
+ * means) and a later table with a column of those same statuses. The key becomes a legend of marks;
+ * the later table is the report page, on its own ground, each status in it carrying the key's mark.
+ */
+function statusReport(
+  blocks: readonly CorpusBlock[],
+): { key: TableBlock; sheet: TableBlock; column: number } | undefined {
+  const norm = (runs: readonly InlineRun[]) => plain(runs).trim().toLowerCase();
+  const tables = blocks.filter((block): block is TableBlock => block.type === 'table');
+  for (const key of tables) {
+    if (key.header.length < 2) continue;
+    const names = new Set(key.rows.map((row) => norm(row[0] ?? [])));
+    for (const sheet of tables) {
+      if (sheet === key || blocks.indexOf(sheet) < blocks.indexOf(key)) continue;
+      /* the later table's column named as the key's first column, every value one of the key's */
+      const column = sheet.header.findIndex((cell) => norm(cell) === norm(key.header[0] ?? []));
+      if (column > 0 && sheet.rows.every((row) => names.has(norm(row[column] ?? [])))) {
+        return { key, sheet, column };
+      }
+    }
+  }
+  return undefined;
+}
+
+function StatusMark({ name }: { name: string }) {
+  const glyph = STATUS_GLYPH[name.trim().toLowerCase()];
+  return (
+    <Cluster colGap="tight" align="center" nowrap>
+      {glyph ? (
+        <span className={styles.statusGlyph}>
+          <Icon name={glyph} />
+        </span>
+      ) : null}
+      <span className={styles.statusName}>{name}</span>
+    </Cluster>
+  );
+}
+
+/**
+ * A worked example as ONE unit (owner, 2 Nov 2026: "this whole thing is for the illustration but reads
+ * disconnected"; "can all of these be put inside the panels?"): the sentence that introduces it sits
+ * above, and everything the example is — its label, scenario, table and the reading of it — sits inside
+ * one tint panel, the example's own ground.
+ */
+function ExamplePanel({
+  intro,
+  labelledBy,
+  children,
+}: {
+  intro: readonly CorpusBlock[];
+  labelledBy: string;
+  children: ReactNode;
+}) {
+  return (
+    <Layout rowGap="block">
+      {intro.length > 0 ? <BandBody blocks={intro} labelledBy={labelledBy} /> : null}
+      <Island surface="tint">{children}</Island>
+    </Layout>
+  );
+}
+
+function StatusReport({
+  blocks,
+  report,
+  label,
+  labelledBy,
+}: {
+  blocks: readonly CorpusBlock[];
+  report: { key: TableBlock; sheet: TableBlock; column: number };
+  label?: string;
+  labelledBy: string;
+}) {
+  const { key, sheet, column } = report;
+  const keyAt = blocks.indexOf(key);
+  const sheetAt = blocks.indexOf(sheet);
+  const between = blocks
+    .slice(keyAt + 1, sheetAt)
+    .filter(
+      (block) => !(block.type === 'paragraph' && label && plain(block.runs).trim() === label),
+    );
+  /* the scenario: the paragraphs after the label; the intro: those before it */
+  const labelAt = blocks.findIndex(
+    (block) =>
+      block.type === 'paragraph' && label !== undefined && plain(block.runs).trim() === label,
+  );
+  /* everything before the key (the sentence that introduces it) and before the label: the intro */
+  const intro = [
+    ...blocks.slice(0, keyAt),
+    ...between.filter((block) => blocks.indexOf(block) < labelAt),
+  ];
+  const scenario = between.filter((block) => blocks.indexOf(block) > labelAt);
+  const after = blocks.slice(sheetAt + 1);
+  const [keyHead = [], ...rest] = sheet.header;
+  /* ONE unit (owner, 2 Nov 2026: "this whole thing is for the illustration but reads disconnected"):
+     the sentence that introduces it, then the report page holding everything the example is — its
+     label and scenario, the status key as the page's own legend, the page's rows, and the reading of
+     them that closes it. */
+  const legend = (
+    <Layout
+      as="ul"
+      columns={{ base: 1, md: 3, lg: 5 }}
+      colGap="gutter"
+      rowGap="block"
+      aria-label={plain(key.header[0] ?? [])}
+    >
+      {key.rows.map((row) => (
+        <Layout as="li" key={plain(row[0] ?? [])} rowGap="tight">
+          <StatusMark name={plain(row[0] ?? [])} />
+          <p className={styles.statusMeaning}>{plain(row[1] ?? [])}</p>
+          {/* a key with more columns ("Where the fix belongs") keeps each, under its own name */}
+          {key.header.slice(2).map((cell, index) => (
+            <Layout key={plain(cell)} rowGap="inline">
+              <p className={styles.legend}>{plain(cell)}</p>
+              <p className={styles.statusMeaning}>{plain(row[index + 2] ?? [])}</p>
+            </Layout>
+          ))}
+        </Layout>
+      ))}
+    </Layout>
+  );
+  return (
+    <Layout rowGap="block">
+      {intro.length > 0 ? <BandBody blocks={intro} labelledBy={labelledBy} /> : null}
+      <Island surface="tint">
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            {label ? <p className={styles.legend}>{label}</p> : null}
+            {scenario.length > 0 ? (
+              <BandBody blocks={scenario} labelledBy={labelledBy} />
+            ) : null}
+          </Layout>
+          {legend}
+          {/* Below 768 the page reads down: each area with its mark, then its columns under their
+              names. From 768 the table. One shows at a time (display none leaves the other out of
+              the accessibility tree too). */}
+          <Layout as="ul" rowGap="stack" className={styles.sheetList}>
+            {sheet.rows.map((row) => (
+              <Layout as="li" key={plain(row[0] ?? [])} rowGap="text">
+                <Layout rowGap="tight">
+                  <p className={styles.statusName}>{plain(row[0] ?? [])}</p>
+                  <StatusMark name={plain(row[column] ?? [])} />
+                </Layout>
+                {rest.map((cell, index) =>
+                  index + 1 === column ? null : (
+                    <Layout key={plain(cell)} rowGap="inline">
+                      <p className={styles.legend}>{plain(cell)}</p>
+                      <p>{plain(row[index + 1] ?? [])}</p>
+                    </Layout>
+                  ),
+                )}
+              </Layout>
+            ))}
+          </Layout>
+          <div className={styles.sheetTable}>
+            <DataTable
+              labelledBy={labelledBy}
+              keyColumn={{ heading: plain(keyHead) }}
+              columns={rest.map((cell, index) => ({
+                heading: plain(cell),
+                ...(index + 1 === column ? { behaviour: 'nowrap' as const } : {}),
+              }))}
+              rows={sheet.rows.map((row) => ({
+                header: plain(row[0] ?? []),
+                cellsHtml: row
+                  .slice(1)
+                  .map((cell, index) =>
+                    index + 1 === column
+                      ? { node: <StatusMark name={plain(cell)} /> }
+                      : inlineToHtml(cell),
+                  ),
+              }))}
+            />
+          </div>
+          {after.length > 0 ? <BandBody blocks={after} labelledBy={labelledBy} /> : null}
+        </Layout>
+      </Island>
+    </Layout>
+  );
+}
+
 /**
  * "What you get" in four parts (owner, 30 Oct 2026, round 7;
  * decisions/2026-10-30-what-you-get-label-rows): the drawn deliverables, then the band's three terms
@@ -628,10 +830,23 @@ export function WhatYouGetBand({
 }) {
   const parts = sheetParts(band);
   const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
+  /* What the copy sets before the first term (an audit's worked example, the table a deliverable
+     points to) stays under the deliverables; what follows the terms closes the band. */
+  const firstTerm = parts.after.findIndex((block) => !noteBlocks.includes(block));
+  const exampleBlocks = noteBlocks.filter(
+    (block) =>
+      firstTerm >= 0 &&
+      parts.after.indexOf(block) >= 0 &&
+      parts.after.indexOf(block) < firstTerm,
+  );
+  const closingBlocks = noteBlocks.filter((block) => !exampleBlocks.includes(block));
+  const story = scenarioParts(exampleBlocks);
+  const report = statusReport(exampleBlocks);
   const deliverables = parts.items.map((item) => {
     /* Every deliverable is authored with a title (content-changes, 30 Oct 2026). One that is not
        prints its sentence once, as the title, and development says so. */
-    const title = item.title ?? item.body ?? item.id ?? '';
+    /* A title is a label, so its authored full stop goes, as the terms' does below. */
+    const title = item.title?.replace(/\.\s*$/, '') ?? item.body ?? item.id ?? '';
     if (!item.title && process.env.NODE_ENV !== 'production') {
       console.warn(`WhatYouGetBand "${band.id}": "${title}" has no title of its own.`);
     }
@@ -654,9 +869,42 @@ export function WhatYouGetBand({
       deliverablesTitle={parts.listLabel ?? ''}
       deliverables={deliverables}
       parts={peers}
+      example={
+        exampleBlocks.length === 0 ? undefined : report ? (
+          <StatusReport
+            blocks={exampleBlocks}
+            report={report}
+            label={story.label}
+            labelledBy={head(band).headingId}
+          />
+        ) : story.label ? (
+          <ExamplePanel intro={story.before} labelledBy={head(band).headingId}>
+            <ScenarioSplit
+              label={story.label}
+              blocks={story.scenario}
+              scene={scenes('scenario')}
+            />
+          </ExamplePanel>
+        ) : (
+          (() => {
+            /* An unlabelled example (the UX audit's real Dealpath finding): the paragraphs before its
+               first table introduce it; the table and what reads it are the example. */
+            const firstTable = exampleBlocks.findIndex((block) => block.type !== 'paragraph');
+            const cut = firstTable < 0 ? 0 : firstTable;
+            return (
+              <ExamplePanel
+                intro={exampleBlocks.slice(0, cut)}
+                labelledBy={head(band).headingId}
+              >
+                <BandBody blocks={exampleBlocks.slice(cut)} labelledBy={head(band).headingId} />
+              </ExamplePanel>
+            );
+          })()
+        )
+      }
       note={
-        noteBlocks.length > 0 ? (
-          <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
+        closingBlocks.length > 0 ? (
+          <BandBody blocks={closingBlocks} labelledBy={head(band).headingId} />
         ) : undefined
       }
     />
@@ -826,6 +1074,19 @@ export function ClaimRows({
   );
 }
 
+/**
+ * A paragraph authored as an example ("Example: …", "Example, from related work: …"). Wherever the copy
+ * gives a claim its example, the example is set apart as the ClaimProof panel, never run on in the
+ * argument's words (owner, 2 Nov 2026; decisions/2026-11-02-examples-are-one-pattern).
+ */
+export function isExampleParagraph(
+  block: CorpusBlock,
+): block is Extract<CorpusBlock, { type: 'paragraph' }> {
+  if (block.type !== 'paragraph') return false;
+  const first = block.runs[0];
+  return first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text);
+}
+
 /** One hard part: its title, its words in order (a table included), and its example if it has one. */
 export type Claim = {
   title: string;
@@ -839,7 +1100,7 @@ export type Claim = {
  * it), the closing "Read the … case" link lifted out as the panel's case link, every other word as
  * authored and in order.
  */
-function claimExample(runs: readonly InlineRun[]): ClaimExample {
+export function claimExample(runs: readonly InlineRun[]): ClaimExample {
   const rest = [...runs];
   const first = rest[0];
   let label: string | undefined;
@@ -931,19 +1192,44 @@ export function MethodBand({
   const listAt = rest.findIndex((block) => block.type === 'list');
   const claimAt = rest.findIndex((block) => leadOf(block) !== null && !isBareLabel(block));
   let steps: Step[] = [];
+  const trailingNotes: Step[] = [];
   let from = 0;
   let to = 0;
   if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
     from = claimAt;
     to = claimAt;
-    while (
-      rest[to] &&
-      leadOf(rest[to] as CorpusBlock) &&
-      !isBareLabel(rest[to] as CorpusBlock)
-    ) {
+    /* A step authored as a bold-led paragraph keeps the plain paragraphs that follow it as more of
+       its body (owner, 2 Nov 2026, /audits/prototype-readiness-review: two paragraphs between steps
+       broke the run, so two steps were numbered and the rest fell into a text grid). A paragraph
+       with a link is not a step's continuation: it is the band's closing line. */
+    const isStep = (block: CorpusBlock | undefined) =>
+      block !== undefined && leadOf(block) !== null && !isBareLabel(block);
+    const continues = (block: CorpusBlock | undefined) =>
+      block?.type === 'paragraph' && !leadOf(block) && !hasLink(block.runs);
+    while (isStep(rest[to])) {
       const lead = leadOf(rest[to] as CorpusBlock)!;
-      steps.push({ title: stepTitle(lead.label), ...rowBody(trimStart(lead.body)) });
+      const paras: InlineRun[][] = [trimStart(lead.body)];
       to += 1;
+      while (continues(rest[to])) {
+        const block = rest[to] as Extract<CorpusBlock, { type: 'paragraph' }>;
+        paras.push([...block.runs]);
+        to += 1;
+      }
+      steps.push(
+        paras.length === 1
+          ? { title: stepTitle(lead.label), ...rowBody(paras[0] ?? []) }
+          : { title: stepTitle(lead.label), bodyHtml: paras.map((runs) => inlineToHtml(runs)) },
+      );
+    }
+    /* Steps named in sequence ("Before we start", "First, …", "Then, …") end where a lead stops
+       naming a moment: "A wider review" is a variant of the work, not its next step, so it stands
+       after the steps as a note on them rather than as a numbered step. */
+    const ORDINAL = /^(before|first|second|third|then|next|after|finally|last)\b/i;
+    if (steps.filter((step) => ORDINAL.test(step.title)).length >= 2) {
+      while (steps.length > 0 && !ORDINAL.test(steps[steps.length - 1]!.title)) {
+        const extra = steps.pop()!;
+        trailingNotes.unshift(extra);
+      }
     }
   } else if (listAt >= 0) {
     const list = rest[listAt] as Extract<CorpusBlock, { type: 'list' }>;
@@ -989,7 +1275,13 @@ export function MethodBand({
         )}
       </Layout>
     ) : (
-      <Steps steps={steps} />
+      /* The approved method is steps beside ONE flat graphic (owner, 30 Oct 2026); until the page's
+         drawing exists its labelled plate stands beside them, never the steps alone in half the band
+         (owner, 2 Nov 2026). */
+      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <Steps steps={steps} />
+        <Sketch />
+      </Layout>
     );
   return (
     <ContentSection {...head(band)} data-band="F" lead={leadText}>
@@ -998,6 +1290,13 @@ export function MethodBand({
           <BandBody blocks={before} labelledBy={head(band).headingId} />
         ) : null}
         {stepsNode}
+        {trailingNotes.map((note) => (
+          <Callout
+            key={note.title}
+            label={note.title.replace(/[.:]\s*$/, '')}
+            html={note.bodyHtml ? note.bodyHtml.join(' ') : (note.body ?? '')}
+          />
+        ))}
         {after.length > 0 ? (
           noteIcon ? (
             <Layout rowGap="block">
@@ -1608,12 +1907,21 @@ export function TextBand({
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
-  const body = blocks.filter((block) => block.type !== 'links');
+  const examples = blocks.filter(isExampleParagraph);
+  const body = blocks.filter((block) => block.type !== 'links' && !isExampleParagraph(block));
   const parts = scenarioParts(body);
+  const examplePanels = examples.map((block) => (
+    <ClaimProof key={inlineToText(block.runs)} example={claimExample(block.runs)} />
+  ));
   const text = parts.label ? (
     <Layout rowGap="stack">
       <BandBody blocks={parts.before} />
       <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : examplePanels.length > 0 ? (
+    <Layout rowGap="block">
+      <BandBody blocks={body} />
+      {examplePanels}
     </Layout>
   ) : (
     <BandBody blocks={body} />

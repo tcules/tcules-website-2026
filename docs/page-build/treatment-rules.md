@@ -58,10 +58,31 @@ arrangement holds it → what it must never do.**
 - **Three kinds, three components** (owner, 30 Oct 2026): *hard parts* are claims (a problem and how we design for it); *how we do it* is a method (numbered Steps beside one flat graphic of the process: the `method` band, approved as is); a *worked example* is a story (above). A peer set where each item pairs what it is with what goes wrong without it is the drawn ledger (`status-example`, approved as is). Decide the kind from what the content does, then use that kind's one component.
 - **The ruled cell with the blue marker is for figures, not content** (owner, 30 Oct 2026): a stat and its label. Product kinds, deliverables and claims never sit in it.
 - **A table of peer items** (levels, places, options) renders as drawn items, one drawing per row; a table read across rows stays a table. Router tables never drop a column.
+- **One method, one numbered run** (owner, 2 Nov 2026, prototype readiness review): a step authored as a
+  bold-led paragraph keeps the plain paragraphs after it as its body, so a step is never split into a
+  numbered half and a loose text grid. Steps named in sequence ("Before we start", "First", "Then") end
+  where a lead stops naming a moment: a variant of the work ("A wider review") is a labelled note under
+  the steps, never a numbered step and never a peer tile. Until the band's drawing exists its labelled
+  plate stands beside the steps.
+- **A worked example in What you get is one panel** (owner, 2 Nov 2026, the audits): the sentences that
+  introduce it sit above, and everything the example is (its "Illustration, not client work" label, the
+  scenario, its table, the reading of it) sits inside one tint panel. A key table the example's table
+  refers to (the readiness review's five statuses, the design-to-code audit's five types of gap) is
+  the panel's legend, not a table of its own; a status with a conventional glyph carries it in both
+  places. Below 768 the example's table reads down, row by row, inside the panel.
 - **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
 - **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
 - **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
+- **A card takes its title from its own words** (owner, 2 Nov 2026; first done 30 Oct on four service
+  pages, `6f1f1057`). Before a list renders as titled cards (What you get deliverables, any drawn tile or
+  card set), check every item has a short bold lead. Where one doesn't, write it into `_pages/` from the
+  item's opening words, verbatim, and keep the rest as the body: "a gap map, marking every…" →
+  "**A gap map:** marking every…". Capitalise the title's first letter; the parser capitalises the body.
+  Never invent a title, never paraphrase, never leave lower-case sentences set as card titles. Sweep
+  every page using the same band when you change a band's renderer, not only the page under review:
+  `awk` the band's list items for lines that don't start `- **`. A run-on lead ("**A fix plan,** …")
+  is already titled and needs no edit.
 
 ## 3 · How to use it on a section nobody has designed
 
@@ -153,3 +174,36 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **One heading size per page**: a media split's head is `lg`, the same as a plain band's.
 - **Prose with its own photograph is a media split**: it alternates sides with every other media band. A run of
   photo bands that all sit image-left is a planner bug, not a design.
+
+## Added 2 Nov 2026 (/why-tcules)
+
+- **A claim's example is one pattern everywhere** (2026-11-02-examples-are-one-pattern): an "Example:" paragraph
+  is the ClaimProof panel under its claim's words, in hard parts, Reasons and prose bands alike.
+- **A case snippet on a non-case page** (the copy tells one product's story in titled steps, then links the case)
+  is the CaseSpread strip, as Dealpath's: each step a picture over its words, the earlier steps drawn, the last the
+  case's real capture, the case link the band's action at the heading's end.
+- **Every quote carries its person's one rating** (2026-11-02-one-person-one-rating).
+- **A comparison of options keeps its table, and the row naming Tcules is picked** (DataTable `pick`: blue ground,
+  blue key, start bar), so the table reads as advice with our suggestion in it (owner, 2 Nov 2026).
+
+## Added 2 Nov 2026 (/services)
+
+- **Named services that each carry a second field** (a router table: service · best for · what you get)
+  are split service tiles: two a row, the named half (drawing, name, line) and an inset result panel
+  (label, text, the tile's action at its foot). Never four-across tiles with the field stacked in: three
+  fields cannot stay in line across a tile, and a label repeated per tile out-shouts the words.
+- **Mixed closing words under a tile set** (notes on single destinations, not a question and its way
+  onward): the authored sentences in their order, run on as one paragraph at the body measure, links
+  inline. Never a CTA card per note (it repeats the names as links and outshouts the set), never loose
+  lines, and never moved out of their place: the copy's order is fixed.
+- **A hero title too long for the beside split's half column** takes the centred hero with the media below
+  (route list `CENTRED_HERO_ROUTES`); a drawing or its placeholder is capped at 860, a photograph is not.
+
+## Added 2 Nov 2026 (/expertise)
+
+- **Groups of borderless cards inside one band sit a `section` (96) apart**, each head a `block` from its own
+  cards. The set's own rows are a `column` (64) apart, so at `stack` (48) the next group's head read as one more
+  row of the set before it. The distance between groups is always larger than the distance inside one.
+- **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).
+- **A group head told as "Label: statement"** ("By product type: what your product does") sets the label as the
+  group's eyebrow and the statement as its h3, first letter raised. A head with no colon stays one h3.

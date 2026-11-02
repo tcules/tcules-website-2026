@@ -260,6 +260,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "One product built from launch day to the tenth release: frontend, backend, integrations, AI features and the mobile app as one system, built from the studio's own design and readable by the engineers who extend it. High-traffic page, hero image always (owner, 29 Oct 2026).",
   },
+  '/services#hero': {
+    src: '/placeholders/services--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "One product with the right mix of services around it: Product Design leading, two or three of the studio's services joining it for what this product needs, from a founder's first idea to a product customers have used for years. Set centred, under the long title (owner, 2 Nov 2026).",
+  },
   '/tools/design-system-drift-checker#how-to-use-it': {
     src: '/placeholders/tools-design-system-drift-checker--how-to-use-it.svg',
     width: 1600,
@@ -428,6 +436,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'An AI answer stopping at a person to be checked and corrected before it counts.',
+  },
+  'illustration:we-design-software-people-enjoy-using': {
+    src: '/placeholders/illustration--we-design-software-people-enjoy-using.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "Several directions explored side by side, one carried to finish: a screen that reads at a glance, responds, and shows a considered empty and error state. /why-tcules principles; the band's other two reuse the offer set's known-before-drawn and proved-in-code, so this is drawn in that set's world box.",
   },
   'illustration:we-know-what-to-leave-alone-in-a-product-people-rely-on': {
     src: '/placeholders/illustration--we-know-what-to-leave-alone-in-a-product-people-rely-on.svg',

@@ -191,18 +191,26 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'related-terms': 'related',
   'hard-parts': personaOrChallenges,
   'what-we-design': 'catalog',
-  compare: 'table',
+  /* A comparison of options to choose between ("Option | …") is the services hub's split tiles
+     (owner, 2 Nov 2026, audits); any other comparison stays a table. */
+  compare: (band) => {
+    const table = band.blocks.find((block) => block.type === 'table');
+    return table?.type === 'table' && /^options?$/i.test(plain(table.header[0] ?? []).trim())
+      ? 'router'
+      : 'table';
+  },
   routes: 'table',
   articles: 'related',
   'client-recognition': 'recognition',
   method: 'method',
   scope: (_band, sig) =>
     /U/.test(sig) && /L/.test(sig) ? 'outcomes' : /T/.test(sig) ? 'table' : 'text',
-  deliverables: 'deliverables',
+  /* An audit's What you get (owner, 2 Nov 2026: "typical what you get section like the services page"). */
+  deliverables: 'outcomes',
   'services-on-their-own': 'router',
   /* ── G11 · option and record tables ── */
   'company-record': 'table',
-  'gap-map': 'table',
+  'gap-map': 'outcomes',
   'client-list': 'table',
   'design-run': 'table',
   autonomy: 'table',
@@ -236,7 +244,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   alternatives: 'table',
   /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
   choose: 'table',
-  'service-guide': 'table',
+  /* /services' chooser: eight named services, so the service tiles, each its own drawing, the table's
+     third column kept as a labelled detail (owner, 2 Nov 2026; named-services-are-service-tiles). */
+  'service-guide': 'router',
   services: (_band, sig) => (/^[KU]$/.test(sig) ? 'router' : 'text'),
   /* ── G13 · labelled claim sets ── */
   /* About's working terms, bold-led bullets: a drawn set of how the work runs (owner, 31 Oct 2026). */
@@ -405,8 +415,16 @@ export function kindOf(band: CorpusBand): OfferKind {
   const kind = kindById(band) ?? kindByShape(band, sig);
   /* "What you get" is one band, four parts (OfferParts); any other labelled set the copy calls by
      another name is a set of items (31 Oct 2026, kinds:check on the composed pages). */
-  return kind === 'outcomes' && band.id !== 'what-you-get' ? 'set' : kind;
+  return kind === 'outcomes' && !isWhatYouGet(band) ? 'set' : kind;
 }
+
+/**
+ * The bands that are "What you get": the service and expertise pages' `what-you-get`, and an audit's
+ * `deliverables` (or `gap-map`, the readiness review's), which render the same four parts (owner,
+ * 2 Nov 2026). One answer, read by the planner, the sheet parser and the renderer.
+ */
+const WHAT_YOU_GET_IDS: ReadonlySet<string> = new Set(['what-you-get', 'deliverables', 'gap-map']);
+export const isWhatYouGet = (band: CorpusBand): boolean => WHAT_YOU_GET_IDS.has(band.id);
 
 /** The shape fallback: the rules OfferPage applied before the id table, still right for an unnamed band. */
 export function kindByShape(band: CorpusBand, sig: string = signature(band)): OfferKind {
