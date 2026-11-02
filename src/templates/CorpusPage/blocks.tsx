@@ -569,7 +569,7 @@ export function bodyOf(runs: readonly InlineRun[]): { body: string } | { bodyHtm
     : { body: plain(runs) };
 }
 
-/** The HTML of a block list as one run of paragraphs and lists, for an accordion answer. */
+/** The HTML of a block list, including nested article subsections and accordion answers. */
 export function blocksHtml(blocks: readonly CorpusBlock[]): string {
   return blocks
     .map((block) => {
@@ -591,6 +591,12 @@ export function blocksHtml(blocks: readonly CorpusBlock[]): string {
                 `<p>${inlineToHtml([{ type: 'link', href: link.href, children: link.label }])}</p>`,
             )
             .join('');
+        case 'item':
+          return `<h${block.level}>${inlineToHtml(block.heading)}</h${block.level}>${blocksHtml(block.blocks)}`;
+        case 'quote':
+          return `<blockquote>${block.paragraphs.map(html).join('')}${block.attribution ? `<cite>${inlineToHtml(block.attribution)}</cite>` : ''}</blockquote>`;
+        case 'table':
+          return `<table><thead><tr>${block.header.map((cell) => `<th scope="col">${inlineToHtml(cell)}</th>`).join('')}</tr></thead><tbody>${block.rows.map((row) => `<tr>${row.map((cell, index) => (index === 0 ? `<th scope="row">${inlineToHtml(cell)}</th>` : `<td>${inlineToHtml(cell)}</td>`)).join('')}</tr>`).join('')}</tbody></table>`;
         default:
           return '';
       }

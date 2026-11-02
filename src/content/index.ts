@@ -30,6 +30,7 @@ export {
   getEventPage,
   getExpertisePage,
   getExpertiseListingPage,
+  getLegalDocument,
   getExpertiseOfferPage,
   listPublishedExpertises,
   getFutureInterfacesLabJoinPage,

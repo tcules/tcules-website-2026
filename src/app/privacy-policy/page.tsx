@@ -1,16 +1,34 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { LongformRoute, longformMetadata } from '@/app/_corpus/longform';
+import { LongformRoute } from '@/app/_corpus/longform';
+import { getLegalDocument } from '@/content';
+import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 
-/**
- * `/privacy-policy` — read from the `_pages/` copy as one document in the article shell (legal pages need no
- * design: owner, 31 Oct 2026). Composition only.
- */
+export const revalidate = 300;
+
 export async function generateMetadata(): Promise<Metadata> {
-  return (await longformMetadata(ROUTES.privacy)) ?? { title: 'Tcules' };
+  const document = await getLegalDocument(ROUTES.privacy);
+  return document
+    ? corpusMetadata(document.page)
+    : { title: 'Page not found | Tcules', robots: { index: false, follow: false } };
 }
 
-export default function PrivacyPolicyPage() {
-  return <LongformRoute route={ROUTES.privacy} />;
+export default async function PrivacyPolicyPage() {
+  const document = await getLegalDocument(ROUTES.privacy);
+  if (!document) notFound();
+  return (
+    <>
+      <LongformRoute route={ROUTES.privacy} page={document.page} />
+      {document.structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(document.structuredData).replace(/</gu, '\\u003c'),
+          }}
+        />
+      ) : null}
+    </>
+  );
 }

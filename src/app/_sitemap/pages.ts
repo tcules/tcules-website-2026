@@ -1,6 +1,7 @@
 import {
   getNavigation,
   getExpertiseListingPage,
+  getLegalDocument,
   listAuthors,
   listCorpusPages,
   listSitePages,
@@ -182,16 +183,32 @@ async function cmsPages(): Promise<SitePage[]> {
 }
 
 export async function listSitemapGroups(): Promise<SitemapGroup[]> {
-  const [cms, corpus, navigation, authors, expertiseListing] = await Promise.all([
-    cmsPages(),
-    listCorpusPages(),
-    getNavigation(),
-    authorPages(),
-    getExpertiseListingPage().catch((error) => {
-      console.error('sitemap: expertise listing unavailable', error);
-      return null;
-    }),
-  ]);
+  const [cms, corpus, navigation, authors, expertiseListing, legalDocuments] =
+    await Promise.all([
+      cmsPages(),
+      listCorpusPages(),
+      getNavigation(),
+      authorPages(),
+      getExpertiseListingPage().catch((error) => {
+        console.error('sitemap: expertise listing unavailable', error);
+        return null;
+      }),
+      Promise.all(
+        [ROUTES.terms, ROUTES.privacy].map(async (route) => {
+          try {
+            return await getLegalDocument(route);
+          } catch (error) {
+            console.error(`sitemap: legal page ${route} unavailable`, error);
+            return null;
+          }
+        }),
+      ),
+    ]);
+  const legalPages = new Map(
+    legalDocuments.flatMap((document) =>
+      document ? [[document.page.route, document] as const] : [],
+    ),
+  );
   const corpusNames = new Map(corpus.map((page) => [page.route, page.name]));
   const labels = navLabels(navigation);
 
@@ -205,12 +222,15 @@ export async function listSitemapGroups(): Promise<SitemapGroup[]> {
 
   for (const page of FIXED_PAGES) {
     if (page.route === 'expertise' && !expertiseListing) continue;
+    const legalPage = legalPages.get(ROUTES[page.route]);
+    if ((page.route === 'terms' || page.route === 'privacy') && !legalPage) continue;
     add(page.group, {
       path: ROUTES[page.route],
       title: page.title,
       ...(page.route === 'expertise' && expertiseListing?.updatedAt
         ? { lastModified: expertiseListing.updatedAt }
         : {}),
+      ...(legalPage ? { lastModified: legalPage.updatedAt } : {}),
     });
   }
   for (const page of cms) {

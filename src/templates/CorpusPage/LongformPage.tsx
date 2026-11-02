@@ -126,7 +126,11 @@ function CasePage({
  * ContentSection with the ask as a link button (M3, the form with inline links), never a CtaSection.
  */
 function ArticlePage({ page }: { page: CorpusPage }) {
-  const { shell, close } = splitClose(formBeforeFaq(page.bands));
+  // Legal sections stay in authored order, including a final contact link inside the document.
+  const { shell, close } =
+    page.pageType === 'legal'
+      ? { shell: page.bands, close: undefined }
+      : splitClose(formBeforeFaq(page.bands));
   return (
     <>
       <CorpusHero page={page} texture />
