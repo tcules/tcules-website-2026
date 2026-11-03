@@ -6,7 +6,7 @@ import { Variation } from '../_specimen/Variation';
 
 /**
  * /design/collage — a band's words in one corner and six studio photographs round them in an L
- * (owner, 3 Nov 2026, Direction A as revised). 1 is /about's "The Ahmedabad studio" with the owner's
+ * (owner, 3 Nov 2026, Direction A as revised). 1 is home's "The people behind Tcules" with the owner's
  * picks, crops and zoom; 2 is the same photographs with one paragraph, where the lead keeps its 3:2
  * floor; 3 is the stress case, four paragraphs, where the lead grows with the copy instead of leaving
  * a hole under the words; 4 is the set on tint, to show the tiles carry no ground of their own.
@@ -37,11 +37,11 @@ const PICKS: CollagePhotos = {
 };
 
 const P1 =
-  'For generations, Ahmedabad has turned ideas into things people live with. Making, design and enterprise have long sat unusually close together here. NID and CEPT helped establish modern design education in India, and today they are part of a much broader design ecosystem across the city.';
+  'Tcules is a studio of product designers, design engineers and developers working side by side in Ahmedabad, a city with a long tradition of design. Since 2022 the whole team has worked from one studio. Work goes up on the wall, gets questioned in reviews and gets better because a designer and an engineer looked at it together.';
 const P2 =
-  "Opening the studio in 2022 was about more than having an office. Working in the same place makes it easier for designers and engineers to share what they know, inspect the same product, challenge one another's thinking and take responsibility for the quality of the whole.";
+  'The same people explore new ideas in our Future Interfaces Lab, from AI-assisted design reviews to workflows that run across several AI models.';
 const P3 =
-  'It also made another ambition more tangible: a place where talented people can build a career in Ahmedabad while doing product work that reaches far beyond it. Ahmedabad is where the practice took shape. The world is where the work goes.';
+  'A third paragraph, to show the corner with more words than the home copy has: the frame beside it keeps its shape until the copy runs taller than it.';
 const P4 =
   'A fourth paragraph, to stress the corner: when the words run longer than the frame beside them, the frame grows to meet them and the lower row moves down with it, so there is never a hole under the copy or a gap above the lower row.';
 
@@ -51,13 +51,13 @@ export default function CollageSpecimen() {
   return (
     <>
       <Variation
-        id="about"
-        title="1 · The Ahmedabad studio (/about)"
-        note="Three paragraphs as authored. The lead is 3:2 at least and here grows with the copy; the lower row is three equal thirds, the middle a 3:2 frame over two 3:4 ones, the ends taking its height. Photos 16 apart. Below 1024 the copy sits over the lead; below 768 the lower row stacks."
+        id="home"
+        title="1 · The people behind Tcules (home)"
+        note="Two paragraphs as authored. The lead is 3:2 at least and here grows with the copy; the lower row is three equal thirds, the middle a 3:2 frame over two 3:4 ones, the ends taking its height. Photos 16 apart. Below 1024 the copy sits over the lead; below 768 the lower row stacks."
       />
-      <Section aria-label="Collage: the Ahmedabad studio">
-        <Collage heading="The Ahmedabad studio" photos={PICKS}>
-          {para(P1, P2, P3)}
+      <Section aria-label="Collage: the people behind Tcules">
+        <Collage heading="The people behind Tcules" photos={PICKS}>
+          {para(P1, P2)}
         </Collage>
       </Section>
 
@@ -67,7 +67,7 @@ export default function CollageSpecimen() {
         note="The lead keeps its 3:2 floor and the copy sits at the top of its track."
       />
       <Section aria-label="Collage: one paragraph">
-        <Collage heading="The Ahmedabad studio" photos={PICKS}>
+        <Collage heading="The people behind Tcules" photos={PICKS}>
           {para(P1)}
         </Collage>
       </Section>
@@ -78,7 +78,7 @@ export default function CollageSpecimen() {
         note="The lead stretches to the copy's height; the lower row follows it down."
       />
       <Section aria-label="Collage: four paragraphs">
-        <Collage heading="The Ahmedabad studio" photos={PICKS}>
+        <Collage heading="The people behind Tcules" photos={PICKS}>
           {para(P1, P2, P3, P4)}
         </Collage>
       </Section>
@@ -89,7 +89,7 @@ export default function CollageSpecimen() {
         note="The tiles paint no ground: the photographs sit straight on the band's surface."
       />
       <Section surface="tint" aria-label="Collage on tint">
-        <Collage heading="The Ahmedabad studio" photos={PICKS}>
+        <Collage heading="The people behind Tcules" photos={PICKS}>
           {para(P1, P2)}
         </Collage>
       </Section>

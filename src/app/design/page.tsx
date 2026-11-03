@@ -275,7 +275,7 @@ const SPECIMENS = [
       {
         href: '/design/collage',
         name: 'Collage',
-        note: "a band's words in one corner and six studio photographs round them in an L — /about's Ahmedabad studio with the owner's crops, one paragraph, four paragraphs (stress), tint",
+        note: "a band's words in one corner and six studio photographs round them in an L — home's people behind Tcules with the owner's crops, one paragraph, four paragraphs (stress), tint",
       },
       {
         href: '/design/bento',

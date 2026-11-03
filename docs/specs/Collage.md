@@ -8,8 +8,8 @@
 | **Status** | implemented |
 | **Token prefix** | none (no component layer: every value is a gap step or the `--radius-8` primitive) |
 | **Designer / date** | Owner (Devagya), 3 Nov 2026: mock "Studio collage" Direction A, revised by the owner; photos, crops and zoom picked in the collage picker |
-| **Implements** | The ask of 3 Nov 2026: "a collage for the people behind tcules … like a bento with varying sizes … L shape so the section title and body sit in one corner and images surround it" |
-| **Implemented at** | `src/patterns/Collage/`, `Media`'s `zoom`, `src/templates/CorpusPage/AboutPage.tsx` (`STUDIO_COLLAGE`), `/design/collage` |
+| **Implements** | The ask of 3 Nov 2026, for home's "The people behind Tcules" band: "a collage for the people behind tcules … like a bento with varying sizes … L shape so the section title and body sit in one corner and images surround it" |
+| **Implemented at** | `src/patterns/Collage/`, `Media`'s `zoom`, `src/templates/CorpusPage/HomePage.tsx` (`PEOPLE_COLLAGE`), `/design/collage` |
 
 ## 1 · Identity
 
@@ -26,7 +26,7 @@ Heading (h2 by default) and the caller's body, then `lead`, `start`, `middle`, `
 
 ## 3 · Props / API
 
-`heading`, `headingId?`, `headingAs?: 'h2' | 'h3'`, `children` (the body), and `photos: { lead, start, middle, middleStart, middleEnd, end }`. Each photo is `{ image: MediaImage; focus?: MediaFocus; zoom?: number }`. All six are required.
+`heading`, `headingId?`, `headingAs?: 'h2' | 'h3'`, `children` (the body), `actions?` (the band's links, under the words), and `photos: { lead, start, middle, middleStart, middleEnd, end }`. Each photo is `{ image: MediaImage; focus?: MediaFocus; zoom?: number }`. All six are required.
 
 `focus` and `zoom` describe how this placement crops the photo, not the photo itself, so they never go on the catalogue record. `zoom` is a new `Media` prop: it scales a cropped photograph, under `fill` or `ratio` inside a box that clips it, by 1 to 2 around the focal point. The srcset `sizes` grow by the same factor.
 
@@ -71,7 +71,7 @@ The heading is a bare h2/h3 on the global composite. The body is the caller's (P
 
 ## 10 · Composition
 
-The template places it in a `Section` labelled by `headingId`. Today that is /about's "The Ahmedabad studio" (`data-band="B-collage"`).
+The template places it in a `Section` labelled by `headingId`. Today that is home's "The people behind Tcules" (`data-band="B-collage"`), its "See the studio" link in the `actions` slot.
 
 ## 11 · Accessibility
 
@@ -94,7 +94,7 @@ Do pick each tile's photo and crop by eye. Don't put type on a photograph, and d
 ## 15 · Specimen plan
 
 `/design/collage`:
-1. /about's copy with the owner's picks.
+1. Home's copy with the owner's picks.
 2. One paragraph.
 3. Four paragraphs (stress).
 4. On tint.

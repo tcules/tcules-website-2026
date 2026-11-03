@@ -48,6 +48,8 @@ export type CollageProps = {
   headingAs?: 'h2' | 'h3';
   /** The words under the heading — paragraphs, as the caller renders them (Prose, plain <p>). */
   children: ReactNode;
+  /** The band's way on, under the words (home: "See the studio"). The caller renders the links. */
+  actions?: ReactNode;
   photos: CollagePhotos;
 };
 
@@ -98,7 +100,14 @@ function Tile({
  *
  * It owns no band: the template places it in a Section and labels the Section by `headingId`.
  */
-export function Collage({ heading, headingId, headingAs = 'h2', children, photos }: CollageProps) {
+export function Collage({
+  heading,
+  headingId,
+  headingAs = 'h2',
+  children,
+  actions,
+  photos,
+}: CollageProps) {
   const Heading = headingAs;
   return (
     <Layout rowGap="text">
@@ -106,6 +115,7 @@ export function Collage({ heading, headingId, headingAs = 'h2', children, photos
         <Layout rowGap="block">
           <Heading id={headingId}>{heading}</Heading>
           {children}
+          {actions}
         </Layout>
         <Tile photo={photos.lead} shape="lead" sizes={SIZES.lead} />
       </Layout>

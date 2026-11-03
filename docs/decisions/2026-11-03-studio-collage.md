@@ -10,7 +10,7 @@ dbf_status: none
 enforced_by: "structure (the Collage pattern: six named tiles, nested Layouts, photo seams at `text`)"
 ---
 
-Where a band shows the studio itself, its heading and words sit in the top-left corner with six real
+Home's "The people behind Tcules", and any band that shows the studio itself, sets its heading and words in the top-left corner with six real
 studio photographs round them in an L. One large frame sits beside the copy, at least 3:2 and growing with
 the copy. Under both runs a row of three equal thirds: tall frames at the two ends, and in the middle a 3:2
 frame over two 3:4 ones. The photographs sit `--gap-text` (16) apart on both axes. The copy and the large
