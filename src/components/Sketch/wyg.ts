@@ -36,6 +36,12 @@ import { SCENES as P_AI_PRODUCT_ENGINEERING } from './wyg-ai-product-engineering
 import { SCENES as P_BACKEND_API_DEVELOPMENT } from './wyg-backend-api-development';
 import { SCENES as P_GLOSSARY } from './wyg-glossary';
 import { SCENES as P_GLOSSARY_DESTINATIONS } from './wyg-glossary-destinations';
+import { SCENES as P_AUDIT_PROTOTYPE_READINESS_REVIEW } from './wyg-prototype-readiness-review';
+import { SCENES as P_AUDIT_UX_PRODUCT_AUDIT } from './wyg-ux-product-audit';
+import { SCENES as P_AUDIT_AI_PRODUCT_UX_READINESS } from './wyg-ai-product-ux-readiness';
+import { SCENES as P_AUDIT_DESIGN_SYSTEM_AUDIT } from './wyg-design-system-audit';
+import { SCENES as P_AUDIT_DESIGN_TO_CODE_AUDIT } from './wyg-design-to-code-audit';
+import { SCENES as P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT } from './wyg-product-modernisation-assessment';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
@@ -74,4 +80,10 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_BACKEND_API_DEVELOPMENT,
   ...P_GLOSSARY,
   ...P_GLOSSARY_DESTINATIONS,
+  ...P_AUDIT_PROTOTYPE_READINESS_REVIEW,
+  ...P_AUDIT_UX_PRODUCT_AUDIT,
+  ...P_AUDIT_AI_PRODUCT_UX_READINESS,
+  ...P_AUDIT_DESIGN_SYSTEM_AUDIT,
+  ...P_AUDIT_DESIGN_TO_CODE_AUDIT,
+  ...P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT,
 };

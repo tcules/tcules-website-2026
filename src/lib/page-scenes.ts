@@ -379,6 +379,74 @@ export const PAGE_SCENE_NAMES = [
   'specialist-design-to-code-audit',
   'specialist-drift-checker',
   'specialist-prototype-readiness-checklist',
+  /* /audits/prototype-readiness-review (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-prototype-readiness-review-whats-proven-what-isnt',
+  'wyg-prototype-readiness-review-fixes-customers-will-notice',
+  'wyg-prototype-readiness-review-code-worth-keeping',
+  'wyg-prototype-readiness-review-work-before-launch',
+  'team-prototype-readiness-review',
+  'stops-prototype-readiness-review',
+  'method-prototype-readiness-review',
+  /* /audits/ux-product-audit (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-ux-product-audit-findings-ranked-by-harm',
+  'wyg-ux-product-audit-next-step-each',
+  'wyg-ux-product-audit-what-each-fix-takes',
+  'wyg-ux-product-audit-walkthrough-with-team',
+  'team-ux-product-audit',
+  'stops-ux-product-audit',
+  'method-ux-product-audit',
+  /* /audits/ai-product-ux-readiness (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-ai-product-ux-readiness-ranked-fix-list',
+  'wyg-ai-product-ux-readiness-fixes-users-would-notice',
+  'wyg-ai-product-ux-readiness-questions-for-specialists',
+  'wyg-ai-product-ux-readiness-walkthrough-with-team',
+  'team-ai-product-ux-readiness',
+  'stops-ai-product-ux-readiness',
+  'method-ai-product-ux-readiness',
+  /* /audits/design-system-audit (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-design-system-audit-what-to-keep',
+  'wyg-design-system-audit-what-to-repair-first',
+  'wyg-design-system-audit-where-requests-stall',
+  'wyg-design-system-audit-early-warnings',
+  'wyg-design-system-audit-how-widely-used',
+  'team-design-system-audit',
+  'stops-design-system-audit',
+  'method-design-system-audit',
+  /* /audits/design-to-code-audit (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-design-to-code-audit-every-gap-side-by-side',
+  'wyg-design-to-code-audit-fix-plan',
+  'wyg-design-to-code-audit-stop-gaps-coming-back',
+  'wyg-design-to-code-audit-developer-changes-worth-keeping',
+  'team-design-to-code-audit',
+  'stops-design-to-code-audit',
+  'method-design-to-code-audit',
+  /* /audits/product-modernisation-assessment (the audits' 3 Nov 2026 outline: What you get and the method's figure) */
+  'wyg-product-modernisation-assessment-area-by-area-answers',
+  'wyg-product-modernisation-assessment-what-must-survive',
+  'wyg-product-modernisation-assessment-order-of-work',
+  'wyg-product-modernisation-assessment-questions-to-answer-first',
+  'wyg-product-modernisation-assessment-ready-for-ai-features',
+  'team-product-modernisation-assessment',
+  'stops-product-modernisation-assessment',
+  'method-product-modernisation-assessment',
+  /* /tools: the four tools that had no drawing of their own, each that tool's OWN scene, drawn from
+     its own page's argument (components/Sketch/wyg-tools.tsx); the drift checker's and the prototype
+     checklist's are above. Shown wherever the tool is named as a tile (`serviceSceneFor`). */
+  'specialist-ai-readiness-check',
+  'specialist-ai-trust-canvas',
+  'specialist-fidelity-checklist',
+  'specialist-rebuild-worksheet',
+  /* /tools/<slug>: each tool page's worked-example story and its diagram, drawn from that page's own
+     words (components/Sketch/wyg-tool-<slug>.tsx; which band takes which: LongformPage TOOL_SCENES). */
+  'tool-ai-product-ux-readiness-check-example',
+  'tool-ai-product-ux-readiness-check-marking',
+  'tool-ai-trust-control-canvas-example',
+  'tool-audit-redesign-modernise-rebuild-example',
+  'tool-audit-redesign-modernise-rebuild-reading',
+  'tool-design-system-drift-checker-example',
+  'tool-figma-storybook-fidelity-checklist-example',
+  'tool-figma-storybook-fidelity-checklist-corrections',
+  'tool-prototype-readiness-checklist-example',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];
