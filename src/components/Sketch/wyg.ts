@@ -34,6 +34,8 @@ import { SCENES as P_PRODUCT_REDESIGN } from './wyg-product-redesign';
 import { SCENES as P_REPLATFORMING_PRODUCT_DESIGN } from './wyg-replatforming-product-design';
 import { SCENES as P_AI_PRODUCT_ENGINEERING } from './wyg-ai-product-engineering';
 import { SCENES as P_BACKEND_API_DEVELOPMENT } from './wyg-backend-api-development';
+import { SCENES as P_GLOSSARY } from './wyg-glossary';
+import { SCENES as P_GLOSSARY_DESTINATIONS } from './wyg-glossary-destinations';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
@@ -70,4 +72,6 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_REPLATFORMING_PRODUCT_DESIGN,
   ...P_AI_PRODUCT_ENGINEERING,
   ...P_BACKEND_API_DEVELOPMENT,
+  ...P_GLOSSARY,
+  ...P_GLOSSARY_DESTINATIONS,
 };

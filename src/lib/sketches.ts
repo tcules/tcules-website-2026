@@ -1,4 +1,4 @@
-import type { PageSceneName } from './page-scenes';
+import { PAGE_SCENE_NAMES, type PageSceneName } from './page-scenes';
 
 /**
  * The Sketch scenes (components/Sketch) and which one a service page takes. Named here, once, so the
@@ -29,6 +29,30 @@ export type ServiceSceneName =
  *                            questions into a stored, running system
  */
 export type ArticleSceneName = 'code-review' | 'security-checklist' | 'prototype-to-production';
+
+/**
+ * GLOSSARY scenes (4 Nov 2026): one drawing per defined term, drawn from that term's own definition
+ * (components/Sketch/wyg-glossary.tsx). A term's drawing is its picture wherever the term is shown:
+ * its hub card, its own page's statement and every related-term card naming it. Like an article
+ * scene it is drawn for one item, so it may be a card's cover; a service scene still never is.
+ */
+export type GlossarySceneName = Extract<PageSceneName, `glossary-${string}`>;
+
+/** A destination's own scene, drawn where it had none (the glossary closes' services, audit and tools). */
+export type DestinationSceneName = Extract<
+  PageSceneName,
+  `specialist-${string}`
+>;
+
+/** The drawing for a glossary term's route (`/glossary/design-system`), or undefined for any other. */
+export function glossarySceneFor(href: string): GlossarySceneName | undefined {
+  const match = /^\/glossary\/([a-z0-9-]+)\/?$/.exec(href.split('#')[0] ?? href);
+  if (!match) return undefined;
+  const name = `glossary-${match[1]}`;
+  return (PAGE_SCENE_NAMES as readonly string[]).includes(name)
+    ? (name as GlossarySceneName)
+    : undefined;
+}
 
 /**
  * KIT scenes (owner, 26 Oct 2026, S2): the drawings EngagementOptions and TracePlates show, drawn in the
@@ -236,7 +260,9 @@ export function sketchForRoute(href: string): ServiceSceneName | undefined {
  * 26 Oct 2026; the UX & Product Audit's on 29 Oct). A service page's specialist band assigns the same
  * drawings at the content seam; this is the same drawing for the same service wherever it is named.
  */
-const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName | L1SpecialistScene>> = {
+const SPECIALIST_BY_ROUTE: Readonly<
+  Record<string, OfferSceneName | L1SpecialistScene | DestinationSceneName>
+> = {
   '/services/product-design/ux-research': 'specialist-research',
   '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
   '/services/product-design/interaction-ui-design': 'specialist-ui',
@@ -264,6 +290,14 @@ const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName | L1Specialist
   '/services/software-development/product-maintenance': 'specialist-maintenance',
   '/services/software-development/mobile-app-development': 'specialist-mobile',
   '/audits/prototype-readiness-review': 'specialist-prototype-review',
+  /* The destinations the glossary's term pages close on (4 Nov 2026; components/Sketch/
+     wyg-glossary-destinations.tsx): each drawn from its own page's argument. */
+  '/services/design-engineering/implementation-qa': 'specialist-implementation-qa',
+  '/services/design-engineering/coded-prototyping': 'specialist-coded-prototyping',
+  '/services/design-engineering/design-to-code': 'specialist-design-to-code',
+  '/audits/design-to-code-audit': 'specialist-design-to-code-audit',
+  '/tools/design-system-drift-checker': 'specialist-drift-checker',
+  '/tools/prototype-readiness-checklist': 'specialist-prototype-readiness-checklist',
 };
 
 /**
@@ -273,7 +307,7 @@ const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName | L1Specialist
  */
 export function serviceSceneFor(
   href: string,
-): ServiceSceneName | OfferSceneName | L1SpecialistScene | undefined {
+): ServiceSceneName | OfferSceneName | L1SpecialistScene | DestinationSceneName | undefined {
   const route = href.split('#')[0] ?? href;
   return BY_ROUTE[route] ?? SPECIALIST_BY_ROUTE[route];
 }

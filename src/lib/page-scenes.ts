@@ -348,6 +348,37 @@ export const PAGE_SCENE_NAMES = [
   'team-backend-api-development',
   'needs-backend-api-development',
   'stops-backend-api-development',
+  /* /glossary: one drawing per TERM (components/Sketch/wyg-glossary.tsx), drawn from the term's own
+     definition. The same drawing for the same term wherever it is shown: its hub card, its own page's
+     statement and every related-term card that names it (`glossarySceneFor`, @/lib/sketches). */
+  'glossary-ai-product-ux',
+  'glossary-agentic-ux',
+  'glossary-human-in-the-loop',
+  'glossary-ai-native-product-design',
+  'glossary-ai-assisted-product-development',
+  'glossary-coded-prototype',
+  'glossary-design-engineering',
+  'glossary-design-intent',
+  'glossary-design-to-code',
+  'glossary-prototype-hardening',
+  'glossary-design-system',
+  'glossary-design-system-adoption',
+  'glossary-design-system-drift',
+  'glossary-design-system-governance',
+  'glossary-information-architecture',
+  'glossary-product-modernisation',
+  'glossary-user-journey-mapping',
+  'glossary-ux-debt',
+  'glossary-workflow-design',
+  /* The destinations a glossary page closes on that had no drawing of their own
+     (components/Sketch/wyg-glossary-destinations.tsx): each that service, audit or tool's own scene,
+     wherever it is named as a ServiceTile (`serviceSceneFor`, @/lib/sketches). */
+  'specialist-implementation-qa',
+  'specialist-coded-prototyping',
+  'specialist-design-to-code',
+  'specialist-design-to-code-audit',
+  'specialist-drift-checker',
+  'specialist-prototype-readiness-checklist',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];
