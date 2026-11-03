@@ -263,3 +263,17 @@ export function onwardLine(band: CorpusBand): OnwardLine | null {
 export function withoutBlock(band: CorpusBand, index: number): CorpusBand {
   return { ...band, blocks: band.blocks.filter((_, at) => at !== index) };
 }
+
+/**
+ * A link's words for a control that draws its own arrow (4 Nov 2026): the copy's trailing "→" goes,
+ * or the button reads "SEE DESIGN SYSTEMS → →". Every link set with an arrow icon takes its label
+ * through this; the words before the arrow are unchanged.
+ */
+export function labelWithoutArrow(label: string): string {
+  return label.replace(/\s*(?:→|->)\s*$/, '').trim();
+}
+
+/** A "See …" / "Use the …" link's destination name, as a tile's title ("See Design Systems →" → "Design Systems"). */
+export function destinationName(label: string): string {
+  return labelWithoutArrow(label).replace(/^(?:see|use|explore|try)\s+(?:the\s+)?/i, '');
+}

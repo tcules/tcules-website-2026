@@ -1,4 +1,4 @@
-import { Layout } from '@/components';
+import { Layout, Sketch } from '@/components';
 import {
   BlockCardSet,
   CtaRow,
@@ -6,18 +6,20 @@ import {
   ContentSection,
   ContentSectionText,
   DataTable,
+  ServiceTile,
   Statement,
   type BlockCardSetItem,
 } from '@/patterns';
 import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
+import { glossarySceneFor, serviceSceneFor } from '@/lib/sketches';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
 import { ArticleShell } from './LongformShell';
 import { coverFor } from './images';
 import { formBeforeFaq } from './order';
-import { blocksOf, hasLink, loneLink, plain } from './text';
+import { blocksOf, destinationName, hasLink, labelWithoutArrow, loneLink, plain } from './text';
 
 export type LongformFamily = 'case' | 'article' | 'term';
 
@@ -147,6 +149,7 @@ function TermPage({ page }: { page: CorpusPage }) {
   const { hero } = page;
   const [definition, sharpest, ...rest] = hero.lede;
   const { shell, close } = splitClose(formBeforeFaq(page.bands));
+  const scene = glossarySceneFor(page.route);
   const continued: CorpusBand | undefined =
     rest.length > 0
       ? {
@@ -161,12 +164,19 @@ function TermPage({ page }: { page: CorpusPage }) {
     <>
       <CorpusHero page={page} ledes={definition ? [definition] : []} texture />
       {sharpest ? (
-        <Statement as="p" align="start" id="definition">
+        <Statement
+          as="p"
+          align="start"
+          id="definition"
+          /* The term's own drawing beside its sharpest sentence (4 Nov 2026): the same picture as its
+             hub card and every related-term card, so a reader who clicked one lands on it. */
+          {...(scene ? { figure: <Sketch name={scene} /> } : {})}
+        >
           {plain(sharpest)}
         </Statement>
       ) : null}
       <ArticleShell page={page} sections={continued ? [continued, ...shell] : shell} />
-      {close ? <CloseBand band={close} /> : null}
+      {close ? <TermClose band={close} /> : null}
     </>
   );
 }
@@ -216,7 +226,7 @@ function CloseBand({ band }: { band: CorpusBand }) {
         arrangement="open"
         heading={band.headingText}
         body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
-        actions={[{ label: link.labelText, href: link.href }]}
+        actions={[{ label: labelWithoutArrow(link.labelText), href: link.href }]}
       />
     );
   }
@@ -229,7 +239,52 @@ function CloseBand({ band }: { band: CorpusBand }) {
           ))}
         </Layout>
       </ContentSectionText>
-      <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+      <CtaRow
+        rule={false}
+        actions={[{ label: labelWithoutArrow(link.labelText), href: link.href }]}
+      />
+    </ContentSection>
+  );
+}
+
+/**
+ * A term's close (4 Nov 2026): where Tcules does this work. Its sentences keep their inline links
+ * (the related services and terms, named in passing); the link it ends on is ONE destination, so it
+ * is that destination's service tile, wide, its own drawing beside its name
+ * (decisions/2026-10-29-named-services-are-service-tiles, -related-destination-is-a-card). Paper: it
+ * is a route to a page, not the form's ask, and a tint band here was a plain band at the foot.
+ */
+function TermClose({ band }: { band: CorpusBand }) {
+  const link = closingLink(band);
+  if (!link) return null;
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
+  );
+  const scene = serviceSceneFor(link.href);
+  return (
+    <ContentSection {...head(band)} data-band="L">
+      <Layout rowGap="stack">
+        {paragraphs.length > 0 ? (
+          <ContentSectionText>
+            <Layout rowGap="text">
+              {paragraphs.map((runs, index) => (
+                <p key={index}>{renderInline(runs)}</p>
+              ))}
+            </Layout>
+          </ContentSectionText>
+        ) : null}
+        <Layout as="ul" rowGap="none">
+          <li data-media-row="">
+            <ServiceTile
+              title={destinationName(link.labelText)}
+              href={link.href}
+              action={labelWithoutArrow(link.labelText)}
+              {...(scene ? { scene } : {})}
+              wide
+            />
+          </li>
+        </Layout>
+      </Layout>
     </ContentSection>
   );
 }

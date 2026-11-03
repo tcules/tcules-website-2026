@@ -1,18 +1,28 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Layout, Media, Prose, Section } from '@/components';
-import { Accordion, DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
+import {
+  Accordion,
+  BlockCardSet,
+  CtaRow,
+  DataTable,
+  Steps,
+  TableOfContents,
+  type BlockCardSetItem,
+  type TocItem,
+} from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
 import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
+import { glossarySceneFor } from '@/lib/sketches';
 
 import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
 import { isFaqBand } from './order';
 import styles from './CorpusPage.module.css';
-import { html, plain, trimStart } from './text';
+import { html, labelWithoutArrow, linkLead, plain, trimStart } from './text';
 
 /**
  * The long-form argument: a run of sections in ONE shell, a table-of-contents rail beside a reading
@@ -156,6 +166,23 @@ export function ArticleSection({
     }
   }
 
+  const terms = relatedTerms(band);
+  if (terms) {
+    return (
+      <Layout as="section" id={band.id} aria-labelledby={headingIdOf(band)} rowGap="block">
+        <h2 id={headingIdOf(band)}>{band.headingText}</h2>
+        <BlockCardSet
+          items={terms}
+          across={3}
+          lead="none"
+          frame="none"
+          cue="title"
+          scroll="never"
+        />
+      </Layout>
+    );
+  }
+
   const out: ReactNode[] = [];
   let flow = '';
   const flush = () => {
@@ -193,6 +220,7 @@ export function ArticleSection({
             key={`table-${out.length}`}
             table={item}
             labelledBy={headingIdOf(band)}
+            term={page.pageType === 'defined_term' ? page.name : undefined}
           />,
         );
         break;
@@ -210,7 +238,30 @@ export function ArticleSection({
         if (!isFaq)
           flow += `<h${item.level}>${inlineToHtml(item.heading)}</h${item.level}>${blocksHtml(item.blocks)}`;
         break;
-      case 'links':
+      /* A lone link line where the author set it, as the link button with its arrow (4 Nov 2026:
+         "See how we use AI →" was dropped here, so the shortest glossary page lost its one way
+         onward). The copy's own arrow goes; the button draws one. */
+      case 'links': {
+        const [first, second, ...more] = item.links.map((link) => ({
+          label: labelWithoutArrow(link.labelText),
+          href: link.href,
+        }));
+        if (!first) break;
+        if (more.length > 0) {
+          /* A row of three or more links stays words in the flow: a button row holds two. */
+          flow += `<p>${item.links.map((link) => inlineToHtml([{ type: 'link', href: link.href, children: link.label }])).join(' · ')}</p>`;
+          break;
+        }
+        flush();
+        out.push(
+          <CtaRow
+            key={`links-${out.length}`}
+            rule={false}
+            actions={second ? [first, second] : [first]}
+          />,
+        );
+        break;
+      }
       case 'form':
         break;
     }
@@ -250,7 +301,51 @@ export function ArticleSection({
   );
 }
 
-export function CorpusTable({ table, labelledBy }: { table: TableBlock; labelledBy: string }) {
+/**
+ * The column of a comparison whose head names the page's own term ("Governance" on the governance
+ * page), or -1. Only a table whose first head cell names something can be one: a blank corner is a
+ * keyed table's.
+ */
+function termColumn(table: TableBlock, term: string | undefined): number {
+  if (!term || !plain(table.header[0] ?? []).trim()) return -1;
+  const name = term.toLowerCase();
+  return table.header.findIndex((cell) => {
+    const head = plain(cell).trim().toLowerCase();
+    return head.length > 0 && (head === name || name.endsWith(` ${head}`));
+  });
+}
+
+/**
+ * A corpus table. Read across rows, its first column is the row key (DataTable's key column). A
+ * COMPARISON of the page's term with its neighbours (4 Nov 2026, the glossary: "Style guide ·
+ * Component library · Design system") has no key: its head row is the things compared and its rows
+ * are sentences across them, so every column is a peer and the column naming the page's term is
+ * picked. Keying it set every cell of the first neighbour bold, as if it were the others' headings.
+ */
+export function CorpusTable({
+  table,
+  labelledBy,
+  term,
+}: {
+  table: TableBlock;
+  labelledBy: string;
+  /** The page's defined term, on a glossary page: a table comparing it with its peers is keyless. */
+  term?: string;
+}) {
+  const pick = termColumn(table, term);
+  if (pick >= 0) {
+    return (
+      <DataTable
+        labelledBy={labelledBy}
+        columns={table.header.map((cell) => ({ heading: plain(cell) }))}
+        pickColumn={pick}
+        rows={table.rows.map((row) => ({
+          header: plain(row[0] ?? []),
+          cellsHtml: table.header.map((_, index) => inlineToHtml(row[index] ?? [])),
+        }))}
+      />
+    );
+  }
   const [key = [], ...columns] = table.header;
   return (
     <DataTable
@@ -303,4 +398,30 @@ export function ArticleShell({
       </Section>
     </div>
   );
+}
+
+/**
+ * A section that is only `[Term](/glossary/…): definition` lines (a term page's "Terms related to
+ * …"): the same drawn term card as the hub, each related term's own scene on its plate, titled by
+ * its link and told by this section's own words for it (4 Nov 2026). They are destinations, so they
+ * are cards under the section's head, not run-on body text. Null for any other section.
+ */
+function relatedTerms(band: CorpusBand): BlockCardSetItem[] | null {
+  const live = band.blocks.filter((block) => block.type !== 'comment');
+  if (live.length < 2) return null;
+  const items: BlockCardSetItem[] = [];
+  for (const block of live) {
+    const lead = linkLead(block);
+    if (!lead || !lead.link.href.startsWith('/glossary/')) return null;
+    const body = plain(lead.body).trim();
+    const scene = glossarySceneFor(lead.link.href);
+    items.push({
+      id: lead.link.href,
+      title: plain(lead.link.children),
+      body: body.charAt(0).toUpperCase() + body.slice(1),
+      href: lead.link.href,
+      ...(scene ? { media: { type: 'sketch' as const, name: scene } } : {}),
+    });
+  }
+  return items;
 }
