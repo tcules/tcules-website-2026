@@ -129,14 +129,17 @@ function AiNativeProductDesign() {
       <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
       {/* The routine tasks, handed to an agent and to automation. */}
       <Rect x={146} y={42} w={128} h={28} className={styles.tile} />
-      <Glyph name="cpu" cx={160} cy={56} size={14} className={styles.glyphQuiet} />
+      <Chip x={150} y={48} glyph="cpu" />
       <Copy x={176} y={56} w={64} quiet />
+      <Glyph name="check-circle" cx={262} cy={56} size={12} className={styles.glyphQuiet} />
       <Rect x={146} y={110} w={128} h={28} className={styles.tile} />
-      <Glyph name="refresh-square" cx={160} cy={124} size={14} className={styles.glyphQuiet} />
+      <Chip x={150} y={116} glyph="refresh-square" />
       <Copy x={176} y={124} w={52} quiet />
-      {/* The decision, kept in hand. */}
+      <Glyph name="check-circle" cx={262} cy={124} size={12} className={styles.glyphQuiet} />
+      {/* The decision, kept in hand: the one row still open. */}
       <Rect x={146} y={76} w={128} h={28} className={styles.region} />
-      <path className={styles.regionCopy} d="M158,90 L236,90" />
+      <path className={styles.regionCopy} d="M158,90 L230,90" />
+      <Glyph name="question-circle" cx={262} cy={90} size={14} className={styles.glyphAccent} />
     </>
   );
 }
@@ -162,23 +165,30 @@ function AiAssistedProductDevelopment() {
 
 /** Coded prototype: a working screen full of real rows, one reached from the keyboard. */
 function CodedPrototype() {
-  const rows = [58, 70, 110, 122, 134];
+  const rows = [54, 64, 74, 106, 116, 126, 136];
+  const left = [56, 44, 60, 40, 52, 48, 36];
+  const right = [32, 40, 24, 36, 28, 40, 24];
   return (
     <>
       <Rect x={50} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      <Copy x={66} y={44} w={40} />
+      <Copy x={66} y={42} w={40} />
       {rows.map((y, i) => (
         <g key={y}>
-          <Copy x={66} y={y} w={[56, 44, 60, 40, 52][i] ?? 48} quiet />
-          <Copy x={146} y={y} w={[32, 40, 24, 36, 28][i] ?? 32} quiet />
+          <Copy x={66} y={y} w={left[i] ?? 48} quiet />
+          <Copy x={146} y={y} w={right[i] ?? 32} quiet />
         </g>
       ))}
+      {/* The row reached from the keyboard: a focus ring, not a selection. */}
+      <Rect x={56} y={78} w={148} h={24} rx={4} className={styles.line} />
       <Rect x={58} y={80} w={144} h={20} className={styles.region} />
       <path className={styles.regionCopy} d="M66,90 L114,90 M146,90 L178,90" />
       <Hop x1={250} x2={210} y={90} />
-      {/* The key, a cap that floats on its flat offset. */}
-      <Rect x={252} y={72} w={40} h={40} rx={8} className={styles.liftUnder} />
-      <Rect x={250} y={70} w={40} h={40} rx={8} className={styles.lift} />
+      {/* The arrow keys, two caps that float on their flat offsets. */}
+      <Rect x={252} y={36} w={40} h={32} rx={6} className={styles.liftUnder} />
+      <Rect x={250} y={34} w={40} h={32} rx={6} className={styles.lift} />
+      <Glyph name="alt-arrow-up" cx={270} cy={50} size={18} className={styles.glyph} />
+      <Rect x={252} y={76} w={40} h={32} rx={6} className={styles.liftUnder} />
+      <Rect x={250} y={74} w={40} h={32} rx={6} className={styles.lift} />
       <Glyph name="alt-arrow-down" cx={270} cy={90} size={18} className={styles.glyph} />
     </>
   );
@@ -307,20 +317,22 @@ function DesignSystem() {
 function DesignSystemAdoption() {
   return (
     <>
-      <Rect x={30} y={30} w={80} h={120} rx={8} className={styles.frame} />
-      <Rect x={50} y={42} w={40} h={16} rx={8} className={styles.tile} />
-      <Rect x={50} y={82} w={40} h={16} rx={8} className={styles.tile} />
-      <Rect x={50} y={122} w={40} h={16} rx={8} className={styles.region} />
-      <Rect x={210} y={30} w={80} h={120} rx={8} className={styles.frame} />
+      {/* The system: its own mark, and its parts. */}
+      <Rect x={30} y={30} w={80} h={134} rx={8} className={styles.frame} />
+      <Chip x={38} y={38} glyph="layers" />
+      <Rect x={50} y={62} w={40} h={16} rx={8} className={styles.tile} />
+      <Rect x={50} y={102} w={40} h={16} rx={8} className={styles.tile} />
+      <Rect x={50} y={142} w={40} h={16} rx={8} className={styles.region} />
+      <Rect x={210} y={30} w={80} h={134} rx={8} className={styles.frame} />
       {/* Reused: the route carries it across. */}
-      <Hop x1={110} x2={210} y={50} />
-      <Rect x={230} y={42} w={40} h={16} rx={8} className={styles.tile} />
-      {/* Overridden: the trail breaks, the copy goes its own way. */}
-      <path className={styles.trail} d="M110,90 L210,90" />
-      <Rect x={226} y={80} w={48} h={20} rx={2} className={styles.trailFrame} />
+      <Hop x1={110} x2={210} y={70} />
+      <Rect x={230} y={62} w={40} h={16} rx={8} className={styles.tile} />
+      {/* Overridden: the trail breaks, and the part arrives changed, square where the system is round. */}
+      <path className={styles.trail} d="M110,110 L210,110" />
+      <Rect x={226} y={100} w={48} h={20} rx={2} className={styles.tile} />
       {/* Contributed back: the product's new part returns to the system. */}
-      <Hop x1={210} x2={110} y={130} />
-      <Rect x={230} y={122} w={40} h={16} rx={8} className={styles.tile} />
+      <Hop x1={210} x2={110} y={150} />
+      <Rect x={230} y={142} w={40} h={16} rx={8} className={styles.tile} />
     </>
   );
 }
