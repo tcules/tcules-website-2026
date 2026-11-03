@@ -47,6 +47,15 @@
   --foot-watermark-size: var(--space-160);
   --foot-watermark-opacity: var(--opacity-faint);
 
+  /* The moving field under the watermark (owner, 4 Nov 2026). Its box is the lower part of the
+     band as a share of the band, so it reaches the same way past the studio block at every width;
+     the mask fades it from full at the foot to nothing at the box's top. The layer puts it under
+     the content inside the Section, which isolates itself so -1 resolves there. The mask's solid
+     stop is any opaque colour — a mask reads alpha only — and black is the canonical one. */
+  --foot-field-block-size: 45%;
+  --foot-field-layer: -1;
+  --foot-field-mask-solid: var(--color-black);
+
   /* Type. Composites only — the footer restates no family, size or ratio. The tagline runs at
  --text-lead because the brand block is the largest thing in the band; everything below it is
  body-sm and micro, which is what keeps a directory of forty links from competing with it. */

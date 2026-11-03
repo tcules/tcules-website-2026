@@ -10,8 +10,7 @@ import {
   Logo,
   RatingBadge,
   Section,
-  Texture,
-  TextureShape,
+  TextureFlow,
 } from '@/components';
 
 import styles from './SiteFooter.module.css';
@@ -70,14 +69,14 @@ export function SiteFooter({
 }: SiteFooterProps) {
   return (
     <Section as="footer" surface={surface}>
-      {/* The field (owner, 4 Nov 2026: "a faded shape from the bottom"). One wide ellipse sunk
-          below the band's foot and blurred, so the pixel grid rises from the bottom edge behind the
-          watermark and fades out long before the legal line. Shapes, blur, texture — the Figma
-          workflow Texture is built for. It fills the Section edge to edge, gutter included, so the
-          fade has no side edges either. */}
-      <Texture>
-        <TextureShape kind="ellipse" bottom={-240} width="120%" height={520} blur={240} />
-      </Texture>
+      {/* The field (owner, 4 Nov 2026: movement, under a gradient mask from the bottom). The
+          site's moving texture, TextureFlow, run turbulent across the band's lower part edge to
+          edge, and masked by a gradient that is full at the foot and gone well before the legal
+          line, so the grid churns under the watermark and dissolves upward. One field, no shape and
+          no frame. Reduced motion draws it once and holds. */}
+      <div className={styles.field} aria-hidden="true">
+        <TextureFlow flow="turbulent" />
+      </div>
       <Layout rowGap="stack">
         {/* ── 1 · Brand ───────────────────────────────────────────────────────────────
             No hairline and no inset: it is the first band, and a rule above the mark would be a

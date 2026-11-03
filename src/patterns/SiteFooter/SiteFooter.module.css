@@ -295,6 +295,22 @@
   color: var(--foot-link-ink-hover);
 }
 
+/* ── The field ─────────────────────────────────────────────────────────────────
+   The moving grid's box: the band's lower part, edge to edge (the Section's padding box, gutter
+   included), under the content. The mask is the fade — opaque at the foot, transparent at the top
+   — so the field has no edge anywhere but the band's own bottom. Below the content on the
+   footer's own layer: the mask makes the box a stacking context, and without the negative layer it
+   would paint over the text. */
+.field {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--foot-field-layer);
+  block-size: var(--foot-field-block-size);
+  pointer-events: none;
+  mask-image: linear-gradient(to top, var(--foot-field-mask-solid), transparent);
+}
+
 /* ── Watermark ─────────────────────────────────────────────────────────────────
    The mark as ground. At --opacity-faint it is a texture in the surface — a shape when looked
    for, gone when read past — which is the only way an oversized logo sits under live text without
