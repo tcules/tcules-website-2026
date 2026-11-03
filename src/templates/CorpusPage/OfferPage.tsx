@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 import type { CorpusPage } from '@/lib/corpus-types';
 import { heroIsCentred } from '@/lib/hero-media';
 import { heroClip } from '@/lib/hero-clips';
@@ -5,8 +7,10 @@ import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { CorpusHero } from './blocks';
+import { OnwardIsland } from './CopyBands';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer } from './plan';
+import { withoutBlock } from './text';
 
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
@@ -89,9 +93,20 @@ export function OfferPage({
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />
-      {units.map((unit) => (
-        <UnitView key={unit.id} unit={unit} ctx={ctx} />
-      ))}
+      {/* A band's onward line is said once, on its island after the band (tracker 2.53). */}
+      {units.map((unit) =>
+        unit.onward ? (
+          <Fragment key={unit.id}>
+            <UnitView
+              unit={{ ...unit, band: withoutBlock(unit.band, unit.onward.index) }}
+              ctx={ctx}
+            />
+            <OnwardIsland bandId={unit.band.id} line={unit.onward} />
+          </Fragment>
+        ) : (
+          <UnitView key={unit.id} unit={unit} ctx={ctx} />
+        ),
+      )}
     </>
   );
 }

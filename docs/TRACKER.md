@@ -252,7 +252,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
       success and failure copy, and CTA-source analytics come after launch.
-- [~] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
 - [~] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more

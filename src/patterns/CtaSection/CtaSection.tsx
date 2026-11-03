@@ -207,6 +207,7 @@ type CtaSplitProps = {
    */
   form: ReactElement;
   actions?: readonly [];
+  intent?: never;
   /**
    * Refused since cmp-cta fix round 1. A close with the FULL form and a proof row ran 880–1104 at
    * 1470 with standard copy — past the 830 fold at every proof kind — so the evidence for the ask is
@@ -290,6 +291,13 @@ type CtaOpenProps = {
    * makes its one main action (r7-buttons, 8 Oct 2026), so this is a solid by position.
    */
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
+  /**
+   * What the actions do (tracker 2.53, 3 Nov 2026). `ask` (default): the page's ask, the blue solid
+   * then its ghost. `onward`: the island points to a piece of reading mid-page (a band's onward line,
+   * set as its own island), so its action is the blue LINK with its arrow, never a solid: the page's
+   * one main action belongs to the hero and the close (r7-buttons, 8 Oct 2026).
+   */
+  intent?: 'ask' | 'onward';
   proof?: ReactNode;
   media?: never;
   contact?: never;
@@ -317,6 +325,7 @@ type CtaOfferWithActionsProps = {
    * CtaRow rule); a second destination is a second band's.
    */
   actions: readonly [CtaAction];
+  intent?: never;
   proof?: never;
   /**
    * The K offer's photograph. With it, the band is [7, 5] — copy in 7 (667 at 1470), the 4:5 photo
@@ -813,6 +822,7 @@ export function CtaSection(props: CtaSectionProps) {
       </Island>
     );
     const arrangement = 'open-island';
+    const actionKind = props.intent === 'onward' ? 'link' : 'ask';
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in
@@ -838,7 +848,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <div data-texture-calm>{lede({ scale: 'close' })}</div>
                 </Layout>
                 <CtaPoints shape="row" markers={markers} points={points} />
-                <CtaActions actions={props.actions} kind="ask" />
+                <CtaActions actions={props.actions} kind={actionKind} />
               </Layout>
               <div>{props.proof}</div>
             </Layout>,
@@ -878,7 +888,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <CtaPoints shape="centred" markers={markers} points={points} />
                 </Layout>
               ) : null}
-              <CtaActions actions={props.actions} kind="ask" justify="center" />
+              <CtaActions actions={props.actions} kind={actionKind} justify="center" />
             </Layout>
           </div>,
         )}
