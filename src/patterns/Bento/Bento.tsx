@@ -32,7 +32,7 @@ export type BentoItem = {
    * set among the others so no row of the table is dropped. It does not move and carries no action.
    */
   href?: string;
-  /** The destination's own Sketch scene, drawn bare on the tile's texture. Absent, the empty plate. */
+  /** The destination's own Sketch scene, on its plate inside the tile. Absent, the empty plate. */
   scene?: SketchName;
   /**
    * Tracks the tile takes from 1024: 1 (default) or 2. A wide tile puts its drawing beside its words
@@ -185,12 +185,9 @@ function TileLink({
   const words = named;
   const art = (
     <div className={styles.art}>
-      {/* No drawing yet: the labelled empty plate, since a bare frame draws nothing. */}
-      <Sketch
-        name={item.scene}
-        frame={item.scene ? 'bare' : 'plate'}
-        story={Boolean(item.href)}
-      />
+      {/* The drawing on its plate, the one frame every flat drawing sits in (owner, 3 Nov 2026,
+          decisions/2026-11-03-flat-graphics-on-one-plate). No drawing yet: the empty plate. */}
+      <Sketch name={item.scene} story={Boolean(item.href)} />
     </div>
   );
   if (item.detail) {
@@ -275,7 +272,7 @@ export type ServiceTileProps = {
    * sets the case.
    */
   eyebrow?: string;
-  /** The service's own flat Sketch scene, drawn bare on the tile's texture. */
+  /** The service's own flat Sketch scene, on its plate inside the tile. */
   scene?: SketchName;
   /**
    * A picture in the drawing's place, composed by the caller (an expertise's sector photograph, or
@@ -303,8 +300,7 @@ export type ServiceTileProps = {
  * ServiceTile — ONE bento tile on its own, for a named destination that sits as a card in another
  * set (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
  * related service or related expertise beside its pieces. The same tile as the bento's (its hairline,
- * texture and hover), with the texture's wave fitted to the tile itself, since it shares no row with
- * other tiles. As a card it reads top to bottom (owner, 29 Oct 2026;
+ * its drawing on the plate, its hover). As a card it reads top to bottom (owner, 29 Oct 2026;
  * decisions/2026-10-29-related-destination-is-a-card): the eyebrow, the title, the visual in the
  * middle of the spare height, the action at the foot. `wide`, the words and action beside the visual.
  * It renders a `div`; the caller's set supplies the `li`. A set of services is a `Bento`, never a row
@@ -329,8 +325,8 @@ export function ServiceTile({
   const visual = picture ? (
     <div className={styles.picture}>{picture}</div>
   ) : scene ? (
-    <div className={cx(styles.art, styles.artCentred)}>
-      <Sketch name={scene} frame="bare" story />
+    <div className={styles.art}>
+      <Sketch name={scene} story />
     </div>
   ) : null;
   const button = action?.trim() ? (
@@ -381,12 +377,10 @@ export function ServiceTile({
  * no tile hides behind a scroll or a tab.
  *
  * Every tile shows its hairline edge at rest, so its inset is honest (no ground exists only on
- * hover). Behind the drawings runs one continuous texture per row: the site's pixel grid seen
- * through a feathered wave drawn across the whole row (public/textures/bento-wave-*.svg) and
- * clipped by each tile, so the field reads as one while every seam stays a clean tile edge. Each
- * tile's window onto its row is set from its track (`data-col`), so the grid's cells line up from
- * tile to tile. Neutral at rest; on hover the tile's own texture turns blue, its hairline turns
- * light blue, it lifts and its title takes the accent.
+ * hover). Its drawing sits on the Sketch plate, the dotted frame every flat drawing on the site takes;
+ * the tile carries no texture of its own (owner, 3 Nov 2026,
+ * decisions/2026-11-03-flat-graphics-on-one-plate). On hover the tile lifts, its hairline turns light
+ * blue and its title takes the accent.
  *
  * Every tile's drawing moves on hover or focus: a story scene tells its story, any other makes its one
  * `Move`/`GrowIn` move on the tile's own curve (decisions/2026-10-30-service-tile-drawing-moves-on-hover).
@@ -422,18 +416,14 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   return (
     <Layout
       as="ul"
-      className={styles.set}
-      data-tracks={tracks}
       columns={{ base: 1, md: 2, lg: tracks }}
       colGap="gutter"
       rowGap="gutter"
     >
-      {placed.map(({ item, row, col, span }, index) => (
+      {placed.map(({ item, span }) => (
         <li
           key={item.id}
           className={cx(styles.cell, span === 2 && styles.wide, item.detail && styles.split)}
-          data-row={row % 2 === 0 ? 'a' : 'b'}
-          data-col={col}
         >
           <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
