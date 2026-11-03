@@ -1,6 +1,7 @@
 /* ClaimSet — a page's hard parts. Values are the --clm-* layer (tokens/components/claim-set.css),
-   the gap scale and the text roles; arrangement is Layout's. Two media queries: the tabs layout
-   is a stage from 1024 and a stack below it, and the drawing's size steps down on a phone. */
+   the gap scale and the text roles; arrangement is Layout's. The media queries: the tabs layout
+   is a stage from 1024 and a stack below it; a hovered tab's lift is for a mouse only; reduced motion
+   stills every transition. */
 
 /* ── Shared parts ──────────────────────────────────────────────────────────── */
 
@@ -194,8 +195,42 @@
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
 
-  .tab[aria-selected='false']:hover .tabTitle {
-    transform: translateY(var(--clm-tab-lift));
+  /* The entry (ClaimTabs arms it only while the stage is off screen): the tabs after the chosen one
+     wait off to the side, then slide home in turn, one curve each. The row is clipped while it runs. */
+  .stage[data-entry] .tablist {
+    overflow: clip;
+  }
+
+  .stage[data-entry='armed'] .tab[aria-selected='false'] {
+    transform: translateX(var(--clm-entry-travel));
+  }
+
+  .stage[data-entry='play'] .tab {
+    transition: transform var(--clm-entry-duration) var(--clm-slide-easing);
+  }
+
+  .stage[data-entry='play'] .tab:nth-child(3) {
+    transition-delay: var(--clm-entry-stagger);
+  }
+
+  .stage[data-entry='play'] .tab:nth-child(4) {
+    transition-delay: calc(var(--clm-entry-stagger) * 2);
+  }
+
+  .stage[data-entry='play'] .tab:nth-child(5) {
+    transition-delay: calc(var(--clm-entry-stagger) * 3);
+  }
+
+  .stage[data-entry='play'] .tab:nth-child(6) {
+    transition-delay: calc(var(--clm-entry-stagger) * 4);
+  }
+
+  /* With a mouse, resting on a tab chooses it (ClaimTabs): the title lifts as the pointer arrives and
+     settles as it leaves, one move there and back, chosen or not. Never on touch, where :hover sticks. */
+  @media (hover: hover) and (pointer: fine) {
+    .tab:hover .tabTitle {
+      transform: translateY(var(--clm-tab-lift));
+    }
   }
 
   /* The panel: paper, its height following the slide; the slide moves inside it and is clipped by it. */
@@ -239,6 +274,7 @@
   .piece,
   .arrow,
   .tabTitle,
+  .stage[data-entry='play'] .tab,
   .panel[data-moving],
   .panel[data-moving] .slide {
     transition: none;

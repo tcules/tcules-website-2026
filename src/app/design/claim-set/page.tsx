@@ -100,7 +100,12 @@ export default function ClaimSetSpecimen() {
             A page&rsquo;s hard parts. Tabs: one claim at a time on a paper-deep stage, the
             claims along its top, the chosen claim&rsquo;s slide on paper below in two parts
             (its title and words; the example), with no drawing. The slide moves as one piece
-            toward the chosen claim, and the panel&rsquo;s height follows it. Autoplay has no
+            toward the chosen claim, and the panel&rsquo;s height follows it. With a mouse,
+            resting on a tab for a moment chooses it (a quick sweep across the row changes
+            nothing); click, tap and the arrow keys, Home and End work as before. Once, as a stage
+            scrolls into view, the tabs after the first slide in from the side one after another,
+            so the row reads as more than one claim; a stage already on screen at load is left
+            still, and reduced motion stills both. Autoplay has no
             control: it runs only where there is a mouse, the pointer or focus holds it, any
             deliberate act stops it, and it plays once. Below 1024 every claim is on the page.
             Page: every claim on the page, ruled, in three columns.
@@ -111,7 +116,7 @@ export default function ClaimSetSpecimen() {
       <Variation
         id="tabs-five"
         title="1 · Tabs — five claims, each with an example"
-        note="From 1024 the stage; below it, every claim stacked."
+        note="From 1024 the stage; below it, every claim stacked. Hover a tab to choose it."
       />
       <Section>
         <Layout rowGap="stack">
@@ -123,7 +128,7 @@ export default function ClaimSetSpecimen() {
       <Variation
         id="tabs-plain"
         title="2 · Tabs — four of five without an example"
-        note="A claim with no example fills the slide, its words in two columns from 1024."
+        note="A claim with no example fills the slide, its words in two columns from 1024. Scroll down to it to see the entry: the four later tabs slide in, one after another."
       />
       <Section>
         <Layout rowGap="stack">

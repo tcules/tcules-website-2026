@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type PointerEvent,
 } from 'react';
 
 import { Layout } from '@/components';
@@ -20,6 +21,13 @@ import styles from './ClaimSet.module.css';
 const DWELL_MS = 15000;
 /** Where autoplay may run at all: a mouse, and the stage's own width (below it every claim is stacked). */
 const AUTOPLAY_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
+/** Where resting the pointer on a tab chooses it: a mouse or trackpad, never touch or a stylus. */
+const HOVER_QUERY = '(hover: hover) and (pointer: fine)';
+/**
+ * How long the pointer rests on a tab before it is chosen: long enough that sweeping across the row
+ * to reach another tab, or out of the stage, changes nothing; short enough to read as immediate.
+ */
+const HOVER_INTENT_MS = 140;
 
 /**
  * The tabs layout: the claims as tabs along the top of a paper-deep stage, the chosen claim's slide
@@ -31,6 +39,14 @@ const AUTOPLAY_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fin
  * inside it holds the timer; any deliberate act (a tab, an arrow key, selected text, a link) stops it
  * for good; it plays through once, returns to the first claim and rests. Reduced motion never starts
  * it. The rule after each tab's number is its timer.
+ *
+ * Where there is a mouse, resting the pointer on a tab chooses it after a short intent delay, so a
+ * sweep across the row does not flicker; it is a deliberate act and stops autoplay. It never moves
+ * focus: click, tap and the keyboard (arrows, Home, End) work exactly as before. Once, when the stage
+ * scrolls into view, the claims after the first slide in from the side one after another, so the
+ * row reads as more than its chosen tab. It is armed only while the stage is still off screen (a
+ * stage already in view at load is left alone rather than snapped away and back), and never under
+ * reduced motion or below 1024, where there are no tabs.
  */
 export function ClaimTabs({
   id,
@@ -50,6 +66,7 @@ export function ClaimTabs({
   const fills = useRef<(HTMLSpanElement | null)[]>([]);
   const shown = useRef(0);
   const finish = useRef<(() => void) | null>(null);
+  const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clock = useRef({
     elapsed: 0,
     hold: false,
@@ -125,6 +142,48 @@ export function ClaimTabs({
     return () => resize.disconnect();
   }, [placePiece]);
 
+  /* The entry: armed (the later tabs held off to the side) only while the stage is below or above
+     the fold, released once when it scrolls in, then cleared so nothing of it lingers. */
+  useLayoutEffect(() => {
+    const box = stage.current;
+    if (!box) return;
+    if (
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !matchMedia('(min-width: 1024px)').matches
+    )
+      return;
+    const rect = box.getBoundingClientRect();
+    if (rect.top < innerHeight && rect.bottom > 0) return;
+    box.dataset.entry = 'armed';
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const seen = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        seen.disconnect();
+        box.dataset.entry = 'play';
+        const style = getComputedStyle(box);
+        const total =
+          (parseFloat(style.getPropertyValue('--clm-entry-duration')) || 600) +
+          (parseFloat(style.getPropertyValue('--clm-entry-stagger')) || 80) * items.length;
+        timer = setTimeout(() => delete box.dataset.entry, total + 40);
+      },
+      { threshold: 0.35 },
+    );
+    seen.observe(box);
+    return () => {
+      seen.disconnect();
+      clearTimeout(timer);
+      delete box.dataset.entry;
+    };
+  }, [items.length]);
+
+  useEffect(
+    () => () => {
+      if (intent.current) clearTimeout(intent.current);
+    },
+    [],
+  );
+
   /* The clock: a frame loop that only counts while every condition to run holds. */
   useEffect(() => {
     const c = clock.current;
@@ -180,6 +239,21 @@ export function ClaimTabs({
     if (focus) tabs.current[i]?.focus();
   };
 
+  /* Hover: choose the tab the pointer rests on, after the intent delay. Mouse only. */
+  const cancelIntent = () => {
+    if (intent.current) clearTimeout(intent.current);
+    intent.current = null;
+  };
+  const onHover = (event: PointerEvent<HTMLButtonElement>, i: number) => {
+    cancelIntent();
+    if (event.pointerType !== 'mouse' || !matchMedia(HOVER_QUERY).matches) return;
+    if (i === shown.current) return;
+    intent.current = setTimeout(() => {
+      intent.current = null;
+      choose(i);
+    }, HOVER_INTENT_MS);
+  };
+
   const onKey = (event: KeyboardEvent, i: number) => {
     const n = items.length;
     const to =
@@ -225,7 +299,12 @@ export function ClaimTabs({
               aria-selected={i === active}
               tabIndex={i === active ? 0 : -1}
               className={styles.tab}
-              onClick={() => choose(i)}
+              onClick={() => {
+                cancelIntent();
+                choose(i);
+              }}
+              onPointerEnter={(event) => onHover(event, i)}
+              onPointerLeave={cancelIntent}
               onKeyDown={(event) => onKey(event, i)}
             >
               <span className={styles.index} aria-hidden="true">
