@@ -142,7 +142,10 @@ export function OfferParts({
         <Layout
           as="li"
           key={item.title}
-          columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
+          /* Below 768 the drawing heads its words at the column's full width, as the method figure
+             and the case cards do: beside them it shrank to a ~100 thumbnail and "Code worth
+             keeping" could not be read (critic, audits run, 4 Nov 2026). */
+          columns={{ base: 1, md: [1, 3], lg: 1 }}
           colGap="gutter"
           rowGap="block"
           align="start"
@@ -179,7 +182,12 @@ export function OfferParts({
             <Layout rowGap="stack">
               {parts.map((part) => (
                 <Row key={part.title} title={part.title}>
-                  <Layout columns={{ base: [2, 3], md: [1, 3] }} colGap="gutter" align="start">
+                  <Layout
+                    columns={{ base: 1, md: [1, 3] }}
+                    colGap="gutter"
+                    rowGap="block"
+                    align="start"
+                  >
                     <Sketch name={part.scene} />
                     {words(part)}
                   </Layout>

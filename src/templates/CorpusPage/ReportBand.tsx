@@ -8,8 +8,9 @@ import { renderInline } from '@/lib/inline-render';
 
 import { head } from './blocks';
 import styles from './CorpusPage.module.css';
-import { BandBody, STATUS_GLYPH, StatusMark } from './CopyBands';
-import { leadOf, plain, trimEnd } from './text';
+import { BandBody } from './CopyBands';
+import { isStatus, StatusMark } from './StatusMark';
+import { leadOf, plain, trimEnd, trimStart } from './text';
 
 /**
  * "What the report looks like" (the audits' 3 Nov 2026 outline): a sample page of the deliverable,
@@ -68,13 +69,7 @@ function trailingCaseLink(
 export const hasReportSheet = (band: CorpusBand): boolean =>
   band.blocks.some((block) => block.type === 'table');
 
-export function ReportBand({
-  band,
-  surface,
-}: {
-  band: CorpusBand;
-  surface: 'paper' | 'tint';
-}) {
+export function ReportBand({ band, surface }: { band: CorpusBand; surface: 'paper' | 'tint' }) {
   const eyebrow = band.blocks
     .flatMap((block) => (block.type === 'comment' ? [EYEBROW_NOTE.exec(block.text)?.[1]] : []))
     .find(Boolean)
@@ -92,7 +87,7 @@ export function ReportBand({
   const [keyHead = [], ...columns] = sheet.header;
   /* A column of statuses: every value one of the gap map's states, each carrying its mark. */
   const statusAt = columns.findIndex((_, index) =>
-    sheet.rows.every((row) => STATUS_GLYPH[norm(row[index + 1] ?? [])] !== undefined),
+    sheet.rows.every((row) => isStatus(norm(row[index + 1] ?? []))),
   );
   /* The key after the sheet: bold-led paragraphs whose labels are the values of one column. */
   const keyRows = after.flatMap((block) => {
@@ -121,6 +116,16 @@ export function ReportBand({
       : block,
   );
 
+  /* A record: a key and ONE value read down the rows ("Field · The finding"), no status and no answer
+     column. It is a spec sheet, not a grid (DataTable `appearance="sheet"`): the keys are labels, so a
+     50/50 box with a head row read as a database table (critic, audits run, 4 Nov 2026). */
+  const record = columns.length === 1 && statusAt < 0 && answerAt < 0;
+  /* The row the reading turns on: a cell that opens on a bold run ("**Breaks here first.** Date
+     only …") marks its row as the finding, and the row takes DataTable's pick (the /why-tcules
+     treatment) so the trace's one point is not buried mid-table. The bold stays. */
+  const pickRow = (row: readonly (readonly InlineRun[])[]) =>
+    row.slice(1).some((runs) => trimStart(runs)[0]?.type === 'strong');
+
   const cell = (runs: readonly InlineRun[], index: number): string | { node: ReactNode } =>
     index === statusAt
       ? { node: <StatusMark name={plain(runs)} /> }
@@ -131,7 +136,10 @@ export function ReportBand({
   const headProps = head(band);
   const page = (
     <Island surface={surface === 'tint' ? 'paper' : 'tint'}>
-      <Layout rowGap="stack">
+      {/* One page: its label and scenario head the sheet, and the reading closes it, so the seams
+          are the block step (head to body inside a block), not the stack between two blocks. At
+          stack the report pages ran 950 to 1140 at 1440, past the fold (critic, 4 Nov 2026). */}
+      <Layout rowGap="block">
         {label || scenario.length > 0 ? (
           <Layout rowGap="block">
             {label ? <p className={styles.legend}>{label}</p> : null}
@@ -147,27 +155,37 @@ export function ReportBand({
             768 the table. One shows at a time (display none leaves the other out of the
             accessibility tree too). */}
         <Layout as="ul" rowGap="stack" className={styles.sheetList}>
-          {sheet.rows.map((row) => (
-            <Layout as="li" key={plain(row[0] ?? [])} rowGap="text">
-              <p className={styles.statusName}>{plain(row[0] ?? [])}</p>
-              {columns.map((heading, index) => (
-                <Layout key={plain(heading)} rowGap="inline">
-                  <p className={styles.legend}>{plain(heading)}</p>
-                  {index === statusAt ? (
-                    <StatusMark name={plain(row[index + 1] ?? [])} />
-                  ) : index === answerAt ? (
-                    <p className={styles.statusName}>{plain(row[index + 1] ?? [])}</p>
-                  ) : (
-                    <p>{renderInline(row[index + 1] ?? [])}</p>
-                  )}
-                </Layout>
-              ))}
-            </Layout>
-          ))}
+          {sheet.rows.map((row) =>
+            record ? (
+              /* A record's row on a phone: its key as the label over its value, as the sheet sets it;
+                 the value column's own name over every row would only repeat. */
+              <Layout as="li" key={plain(row[0] ?? [])} rowGap="inline">
+                <p className={styles.legend}>{plain(row[0] ?? [])}</p>
+                <p>{renderInline(row[1] ?? [])}</p>
+              </Layout>
+            ) : (
+              <Layout as="li" key={plain(row[0] ?? [])} rowGap="text">
+                <p className={styles.statusName}>{plain(row[0] ?? [])}</p>
+                {columns.map((heading, index) => (
+                  <Layout key={plain(heading)} rowGap="inline">
+                    <p className={styles.legend}>{plain(heading)}</p>
+                    {index === statusAt ? (
+                      <StatusMark name={plain(row[index + 1] ?? [])} />
+                    ) : index === answerAt ? (
+                      <p className={styles.statusName}>{plain(row[index + 1] ?? [])}</p>
+                    ) : (
+                      <p>{renderInline(row[index + 1] ?? [])}</p>
+                    )}
+                  </Layout>
+                ))}
+              </Layout>
+            ),
+          )}
         </Layout>
         <div className={styles.sheetTable}>
           <DataTable
             labelledBy={headProps.headingId}
+            {...(record ? { appearance: 'sheet' as const } : {})}
             keyColumn={{ heading: plain(keyHead) }}
             columns={columns.map((heading, index) => ({
               heading: plain(heading),
@@ -178,6 +196,7 @@ export function ReportBand({
             rows={sheet.rows.map((row) => ({
               header: plain(row[0] ?? []),
               cellsHtml: row.slice(1).map((runs, index) => cell(runs, index)),
+              ...(pickRow(row) ? { pick: true } : {}),
             }))}
           />
         </div>

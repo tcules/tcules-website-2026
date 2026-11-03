@@ -795,28 +795,42 @@ function Mobile() {
 }
 
 /**
- * Prototype review: the core workflow is taken off its happy path, down to the step nobody tried, which
- * lights. Motion: the route draws off the happy row (1) and lands on the highlighted step (3).
+ * Prototype review: the core flow ticked step by step to its finish, the way a demo runs it, and under
+ * it the step a demo skips (a failed card, a double tap) drawn at rest with its warning lit: the
+ * problem is there before any motion (critic, audits run, 4 Nov 2026: at rest the old scene was three
+ * ticks, a loose empty box and a hanging dot). Motion: the route draws off the second step down to the
+ * skipped one (1), and its highlight grows (3). Drawn to fill the plate, x 30–290, y 30–150.
  */
 function PrototypeReview() {
   return (
     <>
       {/* The happy path: three steps that pass, to the finish flag. */}
-      {[30, 110, 190].map((x, i) => (
+      {[30, 104, 178].map((x, i) => (
         <g key={x}>
-          <Rect x={x} y={30} w={40} h={40} className={styles.tile} />
-          <Glyph name="check-circle" cx={x + 20} cy={50} size={14} className={styles.glyphQuiet} />
-          <path className={styles.rule} d={`M${x + 40},50 L${i < 2 ? x + 80 : 258},50`} />
+          <Rect x={x} y={30} w={48} h={48} rx={8} className={styles.frame} />
+          <Glyph name="check-circle" cx={x + 24} cy={54} size={16} className={styles.glyphQuiet} />
+          <path className={styles.rule} d={`M${x + 48},54 L${i < 2 ? x + 74 : 256},54`} />
         </g>
       ))}
-      <Glyph name="flag" cx={270} cy={50} size={16} className={styles.glyphQuiet} />
-      {/* Past it: the route leaves the second step for the case off the path, which lights. */}
-      <circle className={styles.node} cx="130" cy="70" r="2.5" />
-      <TraceIn d="M130,70 L130,104 A6,6 0 0 0 136,110 L210,110" />
+      <Glyph name="flag" cx={272} cy={54} size={18} className={styles.glyphQuiet} />
+      {/* The step the demo skips, under the path: its warning lit at rest. */}
       <GrowIn>
-        <Rect x={204} y={84} w={72} h={52} rx={10} className={styles.halo} />
+        <Rect x={172} y={94} w={118} h={56} rx={12} className={styles.halo} />
       </GrowIn>
-      <Rect x={210} y={90} w={60} h={40} className={styles.press} />
+      <Rect x={178} y={100} w={106} h={44} rx={8} className={styles.frame} />
+      <Glyph name="danger-triangle" cx={198} cy={122} size={16} className={styles.glyphAccent} />
+      <Copy x={214} y={116} w={52} quiet />
+      <Copy x={214} y={128} w={36} />
+      {/* The branch nobody tried, dashed at rest; the review takes the flow down it, from the second
+          step to the skipped one, and the route draws over the dashes. */}
+      <path className={styles.trailFrame} d="M128,78 L128,116 A6,6 0 0 0 134,122 L178,122" />
+      <GrowIn>
+        <circle className={styles.node} cx="128" cy="78" r="2.5" />
+      </GrowIn>
+      <TraceIn d="M128,78 L128,116 A6,6 0 0 0 134,122 L171,122" />
+      <GrowIn>
+        <ArrowRight x={178} y={122} />
+      </GrowIn>
     </>
   );
 }
@@ -855,7 +869,6 @@ export const L1_SPECIALISTS_DRAWN: Record<
   ) as Record<L1SpecialistScene, readonly [number, number, number, number]>),
   'specialist-ai-hitl': [46, 26, 248, 128],
   'specialist-ds-strategy': [26, 26, 248, 128],
-  'specialist-prototype-review': [26, 26, 256, 114],
   'specialist-mobile': [46, 26, 228, 128],
   'specialist-frontend': [26, 26, 268, 128],
   'specialist-maintenance': [26, 26, 248, 128],};

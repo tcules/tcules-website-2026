@@ -596,6 +596,51 @@ export default function DataTableSpecimenPage() {
               />
             </Layout>
           </Specimen>
+          <Specimen
+            title="A record as a spec sheet · appearance=&quot;sheet&quot;"
+            note="A key and one value read down the rows, drawn as the spec sheet EngagementOptions sets for an option's facts: the key in the mono label voice in a narrow share, the value beside it, one rule above the set, no frame, no fill and no grid. The head row is out of sight, its words still read by a screen reader. The audits' 'What the report looks like' (4 Nov 2026, proposed)."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-sheet">One finding</h3>
+              <DataTable
+                appearance="sheet"
+                labelledBy="dt-sheet"
+                keyColumn={{ heading: 'Field' }}
+                columns={[{ heading: 'The finding' }]}
+                rows={[
+                  { header: 'What happens', cellsHtml: ['A sample button always opens a new record'] },
+                  { header: 'Who it affects', cellsHtml: ['The teams who file the records'] },
+                  { header: 'Why it matters', cellsHtml: ['One item can become two records'] },
+                  { header: 'How sure we are', cellsHtml: ['Confirmed: the button offers no other route'] },
+                  { header: 'What to do next', cellsHtml: ['Find the existing record first'] },
+                ]}
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="A sheet with the row the reading turns on picked · appearance=&quot;sheet&quot; + pick"
+            note="The trace's one point: the row whose value opens on a bold run takes the pick (blue ground, start bar), as /why-tcules marks its row. The pick gains an inset of its own so the ground does not butt the words."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-sheet-pick">One component, traced</h3>
+              <DataTable
+                appearance="sheet"
+                labelledBy="dt-sheet-pick"
+                keyColumn={{ heading: 'Where we looked' }}
+                columns={[{ heading: 'What we found' }]}
+                rows={[
+                  { header: 'The product need', cellsHtml: ['A date, a time window, sometimes repeats'] },
+                  {
+                    header: 'Figma',
+                    cellsHtml: ['<p><strong>Breaks here first.</strong> Date only</p>'],
+                    pick: true,
+                  },
+                  { header: 'Code', cellsHtml: ['Matches Figma; two local copies'] },
+                  { header: 'The live product', cellsHtml: ['Three versions'] },
+                ]}
+              />
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 

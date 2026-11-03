@@ -134,6 +134,16 @@ export type DataTableProps = {
    * One view shows at a time, and `display: none` keeps the other out of the accessibility tree.
    */
   narrow?: 'scroll' | 'read-down';
+  /**
+   * How the table is drawn. `boxed`, the default, is the frame, the head fill and a hairline between
+   * every row and column. `sheet` (4 Nov 2026, status proposed; the audits' "What the report looks
+   * like") is for a RECORD, a key and one value read down the rows: the spec sheet EngagementOptions
+   * already draws for an option's facts, as a table. The key in the mono label voice in a narrow track,
+   * its value beside it in body, a rule above the set and none between rows or columns; no frame, no
+   * fill, and the head row set out of sight (its words stay in the accessibility tree). A table with
+   * more than one value column is compared across its rows and stays `boxed`.
+   */
+  appearance?: 'boxed' | 'sheet';
 };
 
 /*
@@ -242,6 +252,7 @@ export function DataTable({
   split = false,
   pickColumn,
   narrow = 'scroll',
+  appearance = 'boxed',
 }: DataTableProps) {
   const captionId = useId();
 
@@ -278,6 +289,11 @@ export function DataTable({
     warn('a head-less record takes at most one value column; the others read without a head.');
   }
 
+  if (appearance === 'sheet' && (columns.length > 1 || !keyColumn)) {
+    warn('`sheet` is for a record (a key column and one value column); drawn boxed.');
+  }
+  const sheet = appearance === 'sheet' && columns.length === 1 && keyColumn !== undefined;
+
   const keyBehaviour = keyColumn?.behaviour ?? 'hold';
   const picked = (index: number) => index === pickColumn;
   const breakAt = split ? splitAt(rows) : rows.length;
@@ -286,7 +302,14 @@ export function DataTable({
      second. The shell holds the frame and draws the scroll fades over its clipped edges. It does
      not scroll itself, which is what keeps the fades pinned while the table moves beneath them. */
   const renderFrame = (part: readonly DataTableRow[], joins: boolean, inSplit: boolean) => (
-    <div className={cx(styles.shell, inSplit && styles.split, joins && styles.joins)}>
+    <div
+      className={cx(
+        styles.shell,
+        inSplit && styles.split,
+        joins && styles.joins,
+        sheet && styles.sheet,
+      )}
+    >
       <div
         className={styles.frame}
         role="region"

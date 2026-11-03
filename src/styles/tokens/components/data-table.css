@@ -67,6 +67,10 @@
      (a cell's min-content beats its width). A share rather than a size, so it holds at every
      table width with no breakpoint. */
   --dtab-record-key-share: 38%;
+  /* The sheet's key (`appearance="sheet"`, 4 Nov 2026): a mono label in a narrow share, the value
+     taking the rest. 28% of the 1048 report page is about 293, room for "How sure we are" on one line
+     at the mono label size; a longer key wraps by word. A share, so it holds at every width. */
+  --dtab-sheet-key-share: 28%;
   /* A split record's key floor where its halves join (below 1024): both halves' key columns take at
      least this, so the rule between key and value runs straight through the join. 152 holds a key
      word of ~104 ("Headquarters", "Collaboration" at the h6 role) plus the cell's two `block` insets,

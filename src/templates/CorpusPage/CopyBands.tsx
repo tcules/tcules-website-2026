@@ -48,6 +48,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head, headingIdOf } from './blocks';
 import styles from './CorpusPage.module.css';
+import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
 import { isIllustratedProse, isWhatYouGet, signature } from './plan';
 import {
@@ -698,15 +699,6 @@ export function SheetBand({
   );
 }
 
-/** A status's mark: one conventional glyph per state of a gap map, read beside its word. */
-export const STATUS_GLYPH: Readonly<Record<string, IconName>> = {
-  proven: 'check-circle',
-  assumed: 'question-circle',
-  missing: 'close-circle',
-  parked: 'clock-circle',
-  'for a specialist': 'user',
-};
-
 /**
  * A worked example that is a page of a report (owner 2 Nov 2026; the copy's visual_plan:
  * "ending in a sample report page"): a KEY table (its first column the statuses, its second what each
@@ -731,20 +723,6 @@ function statusReport(
     }
   }
   return undefined;
-}
-
-export function StatusMark({ name }: { name: string }) {
-  const glyph = STATUS_GLYPH[name.trim().toLowerCase()];
-  return (
-    <Cluster colGap="tight" align="center" nowrap>
-      {glyph ? (
-        <span className={styles.statusGlyph}>
-          <Icon name={glyph} />
-        </span>
-      ) : null}
-      <span className={styles.statusName}>{name}</span>
-    </Cluster>
-  );
 }
 
 /**

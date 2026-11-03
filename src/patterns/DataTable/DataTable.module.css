@@ -376,6 +376,70 @@
   }
 }
 
+/* ── The sheet (`appearance="sheet"`, 4 Nov 2026, status proposed) ──────────────────────────────
+   A record drawn as a spec sheet rather than a box: no frame, no fill, no column rule and no row
+   hairline, one rule above the set. The key takes the head row's mono label voice in a narrow share;
+   the value is body beside it, a gutter apart. The head row is collapsed out of sight as a joined
+   split's is, so its words stay in the accessibility tree. Before the pick, so a picked row keeps its
+   ground and bar. */
+.sheet .frame {
+  border: 0;
+  border-block-start: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: none;
+}
+
+.sheet .colHead {
+  block-size: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+}
+
+.sheet .key,
+.sheet .cell {
+  padding-block: var(--gap-tight);
+  border: 0;
+}
+
+.sheet .row:first-child > .key,
+.sheet .row:first-child > .cell {
+  padding-block-start: var(--gap-block);
+}
+
+/* The head row sizes the columns, so its key cell carries the share too (it beats `.record`'s
+   share by order). */
+.sheet .colHead:first-child,
+.sheet .key {
+  inline-size: var(--dtab-sheet-key-share);
+}
+
+.sheet .key {
+  padding-inline: 0 var(--gap-gutter);
+}
+
+.sheet .cell {
+  padding-inline: 0;
+}
+
+.sheet .keyText,
+.sheet .key .keyRich {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--dtab-head-ink);
+}
+
+/* A picked row on a sheet: its ground needs an inset of its own, or the blue would butt the words. */
+.sheet .pick > .key {
+  padding-inline-start: var(--gap-block);
+}
+
+.sheet .pick > .cell {
+  padding-inline-end: var(--gap-block);
+}
+
 /* ── The picked row ────────────────────────────────────────────────────────────────────────────
    The option the table recommends (`pick`; owner, 2 Nov 2026). Three marks, all the row's own: a
    blue ground across every cell, the key in blue, and a bar down the key cell's start edge drawn
