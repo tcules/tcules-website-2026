@@ -1,7 +1,7 @@
 ---
 title: "Home What we do is a bento of boxed tiles in two sizes"
 date: 2026-10-19
-status: active
+status: superseded
 area: [cards, layout]
 source: "Owner, 19 Oct 2026 (What we do references and mocks S1/C1/S3)"
 supersedes: []

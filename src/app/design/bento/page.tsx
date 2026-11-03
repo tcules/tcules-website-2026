@@ -8,7 +8,7 @@ import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
 
 /**
- * /design/bento — linked tiles of two sizes on four tracks over one continuous texture per row
+ * /design/bento — linked tiles of two sizes on four tracks, each its drawing on the plate with its name under it
  * (home "What we do", owner 19 Oct 2026, mocks S3). The six-tile diagonal home ships, the even
  * four-up row, a two-wide row, the tint, ink and blue grounds, and one tile on its own as a card in
  * another set (ServiceTile, 29 Oct 2026): a related service, a related expertise with its photo, and
@@ -205,7 +205,7 @@ export default function BentoSpecimen() {
       <Variation
         id="seven-note"
         title="2c · Seven peers on four tracks, the closing words in the eighth cell"
-        note="`tracks={4}` with seven tiles is 4 + 3; `note` puts the band's closing paragraph in the cell the last row leaves, unframed and untextured, so it reads as the row's last word, never an eighth destination (owner, 29 Oct 2026, Q7, /services/product-design). Below 1024 the note takes a row of its own."
+        note="`tracks={4}` with seven tiles is 4 + 3; `note` puts the band's closing paragraph in the cell the last row leaves, without a plate, so it reads as the row's last word, never an eighth destination (owner, 29 Oct 2026, Q7, /services/product-design). Below 1024 the note takes a row of its own."
       />
       <Section>
         <Bento
@@ -336,7 +336,7 @@ export default function BentoSpecimen() {
       <Variation
         id="service-tile"
         title="7 · ServiceTile — a related service as a card in another set"
-        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, texture and hover, its wave fitted to itself. As a card (owner, 29 Oct 2026): the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, the flat drawing centred in the spare height, &ldquo;Explore the service&rdquo; at the foot."
+        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same plate, words and hover (owner, 3 Nov 2026: one plate for every flat drawing). As a card: the drawing on its plate, the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, &ldquo;Explore the service&rdquo; at the foot."
       />
       <Section>
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">

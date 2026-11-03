@@ -1,5 +1,10 @@
 # Bento
 
+> **3 Nov 2026: the frame changed.** Every tile is now its drawing on the Sketch plate with its name
+> and arrow under it: no hairline, no texture, no lift (decisions/2026-11-03-flat-graphics-on-one-plate).
+> The texture (§ 4), the drawing scales and the hover below are superseded; the tracks, spans, split
+> tile, note cell and CTA cards stand.
+
 ## 0 · Front matter
 
 | | |
@@ -9,7 +14,7 @@
 | **Token prefix** | `--bnt-*` |
 | **Designer / date** | Claude, owner decisions 19 Oct 2026 (What we do mocks, references round, S1–S3 v1–v13) |
 | **Implements** | Home queue item "What we do: hover tile grid; indent optically off; title and description steal weight" (review 15 Oct 2026), and the plan in `decisions/2026-10-19-no-hover-only-grounds` |
-| **Implemented at** | `src/patterns/Bento/`, `src/styles/tokens/components/bento.css`, `public/textures/bento-wave-*.svg` (`scripts/bento-waves.mjs`), `/design/bento` |
+| **Implemented at** | `src/patterns/Bento/`, `src/styles/tokens/components/bento.css`, `/design/bento` |
 | **Mocks** | references https://claude.ai/artifact/UddfwEVAWfhuWe6g8iCsXp · directions https://claude.ai/artifact/SkS1Zngh96SnziuKxZnUFj (S3 is the build) |
 
 ## 1 · Identity

@@ -242,9 +242,11 @@ designed well. Everything here is designed before the lock on Wed 4 Nov. Not our
 page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
 the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
 checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
-- [~] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
       plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
+      the one dotted plate, words under it; the textured tile is retired (decisions/2026-11-03-flat-graphics-on-one-plate).
 - [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
