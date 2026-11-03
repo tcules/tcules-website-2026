@@ -75,8 +75,12 @@ export type SiteFooterNewsletter = {
  */
 export type SiteFooterStudio = {
   statement: string;
-  /** The registered address, as one line. */
-  address: string;
+  /**
+   * The registered address, one entry per printed line. Lines rather than one string because the
+   * address is set as a short stacked block, and where it breaks is an authoring decision — a
+   * pattern splitting on commas would break "614, Silver Radiance 2" in the middle.
+   */
+  address: readonly string[];
   /** Rendered as a mailto link. The address alone, not a URL. */
   email: string;
   social: SiteFooterLink[];

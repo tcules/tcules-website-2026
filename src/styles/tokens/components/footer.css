@@ -65,6 +65,9 @@
   --foot-social-text: var(--text-ui-sm);
   --foot-social-tracking: var(--text-ui-sm-tracking);
   --foot-statement-text: var(--text-body);
+  /* The statement holds its half of the studio split at the lead measure, so a 16px sentence breaks
+     into three or four lines rather than running the whole half. */
+  --foot-statement-measure: var(--measure-lead);
   --foot-legal-text: var(--text-caption);
 }
 

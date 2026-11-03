@@ -376,7 +376,11 @@ const FOOTER: SiteFooterProps = {
   studio: {
     statement:
       'Tcules is a digital product design studio creating ambitious new software products and making established ones better.',
-    address: '614, Silver Radiance 2, Science City Road, Sola, Ahmedabad 380060, Gujarat, India',
+    address: [
+      '614, Silver Radiance 2',
+      'Science City Road, Sola',
+      'Ahmedabad 380060, Gujarat, India',
+    ],
     email: 'hello@tcules.com',
     social: [
       { label: 'LinkedIn', href: EXTERNAL.linkedin },

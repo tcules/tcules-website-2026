@@ -10,6 +10,7 @@ import {
   Logo,
   RatingBadge,
   Section,
+  TextureFlow,
 } from '@/components';
 
 import styles from './SiteFooter.module.css';
@@ -112,7 +113,11 @@ export function SiteFooter({
         {/* ── 2 · Directory ───────────────────────────────────────────────────────────
             Three tracks at lg, accordions below it. The link rest state is ink rather than blue:
             forty blue links is not forty signals, it is a blue block. */}
-        <div className={styles.band}>
+        {/* No hairline above it at lg (owner, 4 Nov 2026): the directory follows the brand band as its
+            continuation, so the rule that separates every later band would cut the footer's head
+            off from its own index. Below lg the rule stays — it is the top edge of the accordion
+            list, which reads as a ruled list closed at both ends. */}
+        <div className={styles.directoryBand}>
           {/* Desktop. Three tracks, two rows: Services and the two expertise groups, then Work,
               Studio and Resources. The breakpoint toggle lives on this wrapper rather than on the
               Layout, because both would be single-class selectors and which one won `display`
@@ -162,7 +167,7 @@ export function SiteFooter({
         </div>
 
         {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
-        <Layout className={styles.band} columns={[1, 1]} colGap="section" rowGap="stack">
+        <Layout className={styles.newsletterBand} columns={[1, 1]} colGap="section" rowGap="stack">
           <Layout rowGap="block">
             {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
                 block makes them read as three unrelated lines rather than an eyebrow on a title
@@ -207,46 +212,58 @@ export function SiteFooter({
         </Layout>
 
         {/* ── 4 · Studio ──────────────────────────────────────────────────────────────
-            The statement, then where the studio is and how to write to it, then where else it is.
-            Nested by what belongs together: the statement and its address read as one paragraph
-            of fact at text, and the profiles sit a block below as a row of their own. */}
-        <Layout className={styles.band} rowGap="block">
-          <Layout rowGap="tight">
-            <p className={styles.statement}>{studio.statement}</p>
-            <p className={styles.address}>
-              {studio.address}
-              {' · '}
-              <a className={styles.smallLink} href={`mailto:${studio.email}`}>
-                {studio.email}
-              </a>
-            </p>
-          </Layout>
-          {/* Two by two on a phone, one row from md. A wrapping Cluster left "X" alone on a second
-              line at 390 — the shortest name, orphaned, read as an afterthought. Content-sized
-              tracks from md, so the row packs left at its own width rather than spreading. */}
-          <Layout
-            as="ul"
-            columns={{ base: 2, md: ['auto', 'auto', 'auto', 'auto'] }}
-            justify="start"
-            rowGap="text"
-            colGap="block"
-          >
-            {studio.social.map((social) => (
-              <li key={social.label}>
-                {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and
-                    neither means anything for another origin. `noreferrer` implies `noopener`, and
-                    both are stated because the pair is what reviews look for. */}
-                <a
-                  className={styles.socialLink}
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  {social.label}
-                  <Icon name="arrow-right-up" size="sm" />
+            A split: the studio describing itself on one side, the facts on the other (owner,
+            4 Nov 2026: "something better" than one run-on paragraph over a line of small print).
+            The statement and the facts are different kinds of thing, so they take a section's
+            distance. The facts are two peers — where the studio is and how to write to it, and where
+            else it is — each a labelled stack, so the address reads as an address (three short
+            lines) rather than as a sentence. */}
+        <Layout
+          className={styles.band}
+          columns={{ base: 1, lg: [1, 1] }}
+          colGap="section"
+          rowGap="stack"
+        >
+          <p className={styles.statement}>{studio.statement}</p>
+
+          <Layout columns={[1, 1]} colGap="gutter" rowGap="stack">
+            <Layout rowGap="text">
+              <p className={styles.label}>Studio</p>
+              <Layout rowGap="tight">
+                <address className={styles.address}>
+                  {studio.address.map((line) => (
+                    <span key={line} className={styles.addressLine}>
+                      {line}
+                    </span>
+                  ))}
+                </address>
+                <a className={styles.email} href={`mailto:${studio.email}`}>
+                  {studio.email}
                 </a>
-              </li>
-            ))}
+              </Layout>
+            </Layout>
+
+            <Layout rowGap="text">
+              <p className={styles.label}>Elsewhere</p>
+              {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and
+                  neither means anything for another origin. `noreferrer` implies `noopener`, and
+                  both are stated because the pair is what reviews look for. */}
+              <Layout as="ul" rowGap="tight">
+                {studio.social.map((social) => (
+                  <li key={social.label}>
+                    <a
+                      className={styles.socialLink}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {social.label}
+                      <Icon name="arrow-right-up" size="sm" />
+                    </a>
+                  </li>
+                ))}
+              </Layout>
+            </Layout>
           </Layout>
         </Layout>
 
@@ -277,6 +294,11 @@ export function SiteFooter({
           mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
           already announced once at the top of the band, and twice is noise. */}
       <div className={styles.watermark} aria-hidden="true">
+        {/* The field (owner, 4 Nov 2026: "texture play at the bottom"). The site's one moving
+            texture, TextureFlow, run turbulent and feathered across the watermark's box only — so
+            the grid churns slowly under the mark at the foot of the page and fades out before it
+            reaches the legal line. One field, no frame and no second effect. */}
+        <TextureFlow flow="turbulent" />
         <Logo size="lg" variant="mono" title="" />
       </div>
     </Section>

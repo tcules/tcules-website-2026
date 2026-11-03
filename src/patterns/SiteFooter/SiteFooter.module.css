@@ -27,6 +27,31 @@
   padding-block-start: var(--foot-band-inset);
 }
 
+/* The directory and the newsletter change places with the rule across the breakpoint (owner,
+   4 Nov 2026).
+
+   Below lg the directory is a ruled list: a hairline on top, one under every group, the last one
+   included, so the list is closed at both ends with each row's own padding as its only air. The
+   newsletter then follows a stack below that last rule and carries none of its own — a second rule
+   48 under the list's closing one read as an empty band.
+
+   At lg the directory has no rule at all: it continues the brand band rather than starting a new
+   one. The newsletter takes the ordinary band rule there, closing the directory. */
+.directoryBand {
+  border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+}
+
+@media (min-width: 1024px) {
+  .directoryBand {
+    border-block-start: 0;
+  }
+
+  .newsletterBand {
+    border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+    padding-block-start: var(--foot-band-inset);
+  }
+}
+
 /* ── 1 · Brand ─────────────────────────────────────────────────────────────────
    Two groups opposed across the band, as grid tracks rather than flex children. That is
    deliberate: a flex BASIS is a width in a row and a HEIGHT the moment the row wraps to a column,
@@ -106,12 +131,6 @@
    than six boxes. */
 .accordion {
   border-block-end: var(--foot-rule-width) solid var(--foot-rule);
-}
-
-/* The last one carries no rule: the newsletter band's own hairline sits a stack below it, and two
-   rules 48 apart read as an empty band. */
-.accordion:last-child {
-  border-block-end: 0;
 }
 
 /* `list-style: none` plus the WebKit pseudo-element: the two engines hide the disclosure triangle
@@ -222,15 +241,36 @@
    as the studio describing itself rather than as one more link. The address under it is small
    print. */
 .statement {
-  max-inline-size: var(--foot-body-measure);
+  max-inline-size: var(--foot-statement-measure);
   color: var(--foot-statement-ink);
   font: var(--foot-statement-text);
   text-wrap: var(--text-running-wrap);
 }
 
+/* The address in the body ink, a line per authored line. `font-style: normal` because <address>
+   is italic by default, and the address is a fact here rather than a voice. */
 .address {
-  color: var(--foot-legal-ink);
-  font: var(--foot-legal-text);
+  color: var(--foot-body-ink);
+  font: var(--foot-body-text);
+  font-style: normal;
+}
+
+.addressLine {
+  display: block;
+}
+
+/* The email reads as a link — it is the one way to write to the studio — so it takes the
+   directory's link treatment rather than the legal line's. */
+.email {
+  color: var(--foot-link-ink);
+  font: var(--foot-link-text);
+  text-decoration: none;
+  transition: color var(--foot-transition-duration) var(--foot-transition-easing);
+}
+
+.email:hover,
+.email:focus-visible {
+  color: var(--foot-link-ink-hover);
 }
 
 /* ── 5 · Legal ─────────────────────────────────────────────────────────────────
@@ -275,10 +315,11 @@
    cannot drift; a footer given `density="tight"` would need this to follow, and nothing renders
    one. */
 .watermark {
+  position: relative;
+  isolation: isolate;
   margin-block-start: var(--gap-stack);
   margin-block-end: calc(-1 * var(--sec-padding-y));
   overflow: hidden;
-  opacity: var(--foot-watermark-opacity);
 }
 
 /* The mark is sized by whichever axis runs out first, and the box always fits the artwork.
@@ -294,6 +335,9 @@
    enough, and the height cap binds instead and the width follows from it. Neither axis is ever
    told a value the other has to fake. */
 .watermark svg {
+  /* The faint opacity sits on the mark, not on the box: on the box it would fade the field under
+     the mark along with it. */
+  opacity: var(--foot-watermark-opacity);
   inline-size: fit-content;
   max-inline-size: 100%;
   block-size: auto;
@@ -305,6 +349,7 @@
    ring reads against the ground it is drawn on. Both halves are surface tokens, which is why the
    ink footer and a blue one need no rule of their own here. */
 .link:focus,
+.email:focus,
 .socialLink:focus,
 .smallLink:focus,
 .accordionSummary:focus {
@@ -312,6 +357,7 @@
 }
 
 .link:focus-visible,
+.email:focus-visible,
 .socialLink:focus-visible,
 .smallLink:focus-visible,
 .accordionSummary:focus-visible {
@@ -323,6 +369,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .link,
+  .email,
   .socialLink,
   .smallLink,
   .accordionChevron {
