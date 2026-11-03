@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import styles from './Sketch.module.css';
-import { ArrowRight, Copy, Hop, Rect } from './offer';
+import { ArrowRight, Copy, Rect } from './offer';
 import { Focus, Glyph } from './scenes';
 
 /* /tools/prototype-readiness-checklist: the page's still plate (LongformPage family "tool", 4 Nov
@@ -36,9 +36,10 @@ function InvitationExample() {
       <Copy x={50} y={114} w={40} />
       <Copy x={56} y={126} w={28} quiet />
       {/* The real path: delivery, the letter that has to go out. */}
-      <Hop x1={110} x2={139} y={90} />
+      <circle className={styles.node} cx={110} cy={90} r="2.5" />
+      <path className={styles.line} d="M110,90 L132,90" />
       <Focus x={150} y={90} glyph="letter" size={12} />
-      <path className={styles.line} d="M161,90 L183,90" />
+      <path className={styles.line} d="M168,90 L183,90" />
       <ArrowRight x={190} y={90} />
       {/* What the build must add around it. */}
       <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frameQuiet} />
