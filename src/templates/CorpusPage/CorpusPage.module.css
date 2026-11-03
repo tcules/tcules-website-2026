@@ -17,6 +17,13 @@
   max-inline-size: var(--measure-body);
 }
 
+/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026): held to the
+   lead measure so a 16:9 plate reads with the words it follows and never fills the column with
+   dotted ground. */
+.diagram {
+  max-inline-size: var(--measure-lead);
+}
+
 .proofLine {
   font: var(--text-body-sm);
   color: var(--cpg-ink-muted);

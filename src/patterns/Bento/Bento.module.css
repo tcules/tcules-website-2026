@@ -202,6 +202,17 @@
     align-self: start;
   }
 
+  /* \`visual="start"\`: the visual leads, the words and action beside it on the end side, so two
+     whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools). */
+  .visualStart .wideVisual {
+    grid-column: 1;
+  }
+
+  .visualStart .wideWords,
+  .visualStart .wideAction {
+    grid-column: 2;
+  }
+
   .tileWide .title {
     font: var(--bnt-title-text-wide);
     letter-spacing: var(--bnt-title-tracking-wide);

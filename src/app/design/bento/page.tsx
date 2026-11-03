@@ -599,6 +599,36 @@ export default function BentoSpecimen() {
         </Layout>
       </Section>
       <Variation
+        id="tile-visual-start"
+        title="9c · ServiceTile wide, visual on the start side — whole-row tiles alternate"
+        note="`visual=&quot;start&quot;`: from 768 the visual leads and the words and action sit on the end side, so two whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start). Below 768 the order is the card's: words, visual, action. Shortest and longest real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Redesign or rebuild worksheet: compare every route before you commit"
+              body="The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. It ends in the case for and against each route, and the next test before you commit."
+              href={ROUTES.tools}
+              scene="specialist-rebuild-worksheet"
+              action="Try the tool"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype readiness checklist: show developers what is real and what is simulated"
+              body="The Prototype Readiness Checklist walks through one workflow of any prototype, AI-built ones included. It sorts what really works from what is simulated or still unknown, and leaves you with the questions and checks a development brief needs."
+              href={ROUTES.tools}
+              scene="specialist-prototype-readiness-checklist"
+              action="Try the tool"
+              wide
+              visual="start"
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
         id="cta"
         title="2c · Seven peers and two cards on three tracks (9 cells)"
         note="`cta`: one dotted card per question, each a normal cell: its question, its sentence, then its destinations as arrow links pinned to the foot; no fill, no drawing, no outline button. Tracks are chosen so tiles plus cards fill whole rows; where 3 and 4 both leave a hole, the last card takes what its row leaves. Seven tiles and two cards are nine cells: three full rows."

@@ -1949,7 +1949,7 @@ type ToolEntry = { title: string; href?: string; body?: string };
  * The words after the set (a "start with" line, the closing route to /audits and /contact) follow it
  * at the body measure with their links inline. A tool with no drawing yet shows the empty plate.
  */
-export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand }) {
+export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
   const tools: ToolEntry[] = [];
   const rest: CorpusBlock[] = [];
@@ -1991,6 +1991,11 @@ export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand })
   let set: ReactNode;
   const [only] = tools;
   if (tools.length === 1 && only?.href) {
+    /* Whole-row tiles in consecutive groups alternate their visual's side, the first on the end. */
+    const lone = (page?.bands ?? []).filter(
+      (other) => content(other).filter((block) => leadOf(block) !== null).length === 1,
+    );
+    const visual = lone.indexOf(band) % 2 === 1 ? 'start' : 'end';
     set = (
       <Layout as="ul" rowGap="none">
         <li data-media-row="">
@@ -2001,6 +2006,7 @@ export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand })
             scene={scene(only.href)}
             action={tileActionFor(only.href)}
             wide
+            visual={visual}
           />
         </li>
       </Layout>

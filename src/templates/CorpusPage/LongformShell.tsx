@@ -343,12 +343,12 @@ export function ArticleSection({
         />,
       );
     }
-    /* A tool's diagram: the flat drawing on its plate at the reading measure, so it reads with the
+    /* A tool's diagram: the flat drawing on its plate at the lead measure, so it reads with the
        words it follows and never fills the column with dotted ground. */
     if (toolDiagram && index === toolDiagramAt) {
       flush();
       out.push(
-        <div key={`plate-${out.length}`} className={styles.reading}>
+        <div key={`plate-${out.length}`} className={styles.diagram}>
           <Sketch name={toolDiagram.scene} />
         </div>,
       );

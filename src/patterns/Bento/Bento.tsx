@@ -324,6 +324,12 @@ export type ServiceTileProps = {
    * (decisions/2026-10-29-media-rows-take-a-whole-row). The caller's `li` declares `data-media-row`.
    */
   wide?: boolean;
+  /**
+   * With \`wide\`, the side the visual takes from 768: \`end\` (default) or \`start\`. Two whole-row tiles
+   * in consecutive bands alternate, so the page does not repeat one shape down its length (4 Nov
+   * 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start).
+   */
+  visual?: 'start' | 'end';
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
   /**
@@ -352,6 +358,7 @@ export function ServiceTile({
   picture,
   action,
   wide = false,
+  visual: side = 'end',
   titleAs: Title = 'h3',
   body,
 }: ServiceTileProps) {
@@ -378,7 +385,15 @@ export function ServiceTile({
   ) : null;
   return (
     <div className={cx(styles.cell, styles.solo)}>
-      <a href={href} className={cx(styles.tile, wide && styles.tileWide)} data-btn-link-group>
+      <a
+        href={href}
+        className={cx(
+          styles.tile,
+          wide && styles.tileWide,
+          wide && side === 'start' && styles.visualStart,
+        )}
+        data-btn-link-group
+      >
         {wide ? (
           /* Words, visual, action in reading order, so a phone stacks them as the card does; from
              768 the visual takes the second track across both rows, the words over the action
