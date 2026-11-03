@@ -11,7 +11,9 @@ enforced_by: "review"
 ---
 
 On `ClaimSet`'s tabs, with a mouse (`(hover: hover) and (pointer: fine)`), resting the pointer on a tab for
-140ms chooses it; a quicker sweep across the row changes nothing, and hovering never moves focus. Click, tap
+140ms chooses it; a quicker sweep across the row changes nothing, and hovering never moves focus. Only the
+hand moving the pointer counts: a tab the page scrolls under a still pointer, or one sliding under it during
+the entry, is never chosen, because only a deliberate act may stop autoplay (2026-10-31-hard-parts-tabs-on-a-stage). Click, tap
 and the keyboard (arrows, Home, End) work as before. Once, when a stage scrolls into view, the tabs after the
 chosen one slide in from the side, one after another (64px, the slide's 360ms ease, 80ms apart), so the row
 reads as more than one claim. A stage already on screen at load is left still; reduced motion and widths
@@ -20,7 +22,9 @@ below 1024 get neither.
 **Why.** The tracker item asks that the tabs change on hover and that an entry shows there is more. The intent
 delay is what keeps hover switching from flickering as the pointer crosses the row on its way somewhere else.
 
-**The mistake it prevents.** A hover switch with no delay that flashes every slide a sweep passes over; an entry
+**The mistake it prevents.** A wheel scroll that parks a tab under a resting mouse choosing it and stopping
+autoplay for good (pointerenter fires on scroll; the intent starts from a pointermove whose screen point
+moved). A hover switch with no delay that flashes every slide a sweep passes over; an entry
 that snaps the tabs away and back on a stage the reader is already looking at; an entry built from fades or
 keyframes (2026-10-19-hover-is-a-move).
 

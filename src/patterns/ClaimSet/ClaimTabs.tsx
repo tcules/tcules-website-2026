@@ -40,8 +40,10 @@ const HOVER_INTENT_MS = 140;
  * for good; it plays through once, returns to the first claim and rests. Reduced motion never starts
  * it. The rule after each tab's number is its timer.
  *
- * Where there is a mouse, resting the pointer on a tab chooses it after a short intent delay, so a
- * sweep across the row does not flicker; it is a deliberate act and stops autoplay. It never moves
+ * Where there is a mouse, moving the pointer onto a tab chooses it after a short intent delay, so a
+ * sweep across the row does not flicker; it is a deliberate act and stops autoplay. Only the hand
+ * moving the pointer counts: a tab scrolled under a still pointer, or sliding under it during the
+ * entry, is never chosen. It never moves
  * focus: click, tap and the keyboard (arrows, Home, End) work exactly as before. Once, when the stage
  * scrolls into view, the claims after the first slide in from the side one after another, so the
  * row reads as more than its chosen tab. It is armed only while the stage is still off screen (a
@@ -67,6 +69,9 @@ export function ClaimTabs({
   const shown = useRef(0);
   const finish = useRef<(() => void) | null>(null);
   const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intentFor = useRef<number | null>(null);
+  /* Whether the latest pointermove was the hand moving the mouse, not the page scrolling under it. */
+  const handMoved = useRef(false);
   const clock = useRef({
     elapsed: 0,
     hold: false,
@@ -177,12 +182,23 @@ export function ClaimTabs({
     };
   }, [items.length]);
 
-  useEffect(
-    () => () => {
+  /* A pointermove counts as the hand's only if the pointer moved on the screen. Scrolling fires
+     pointerenter and a synthetic pointermove with the pointer still: same screen point, no movement.
+     Read on window in the capture phase, so it is settled before the tab's own handler runs. */
+  useEffect(() => {
+    let at: { x: number; y: number } | null = null;
+    const record = (event: globalThis.PointerEvent) => {
+      handMoved.current = at
+        ? event.screenX !== at.x || event.screenY !== at.y
+        : event.movementX !== 0 || event.movementY !== 0;
+      at = { x: event.screenX, y: event.screenY };
+    };
+    addEventListener('pointermove', record, { capture: true, passive: true });
+    return () => {
+      removeEventListener('pointermove', record, { capture: true });
       if (intent.current) clearTimeout(intent.current);
-    },
-    [],
-  );
+    };
+  }, []);
 
   /* The clock: a frame loop that only counts while every condition to run holds. */
   useEffect(() => {
@@ -239,17 +255,24 @@ export function ClaimTabs({
     if (focus) tabs.current[i]?.focus();
   };
 
-  /* Hover: choose the tab the pointer rests on, after the intent delay. Mouse only. */
+  /* Hover: choose the tab the pointer rests on, after the intent delay. Mouse only, and only from the
+     hand moving the pointer over the tab: a tab scrolled under a still pointer, or sliding under it
+     during the entry, is not chosen, since that is not a deliberate act and would stop autoplay. */
   const cancelIntent = () => {
     if (intent.current) clearTimeout(intent.current);
     intent.current = null;
+    intentFor.current = null;
   };
   const onHover = (event: PointerEvent<HTMLButtonElement>, i: number) => {
-    cancelIntent();
     if (event.pointerType !== 'mouse' || !matchMedia(HOVER_QUERY).matches) return;
-    if (i === shown.current) return;
+    if (!handMoved.current || stage.current?.dataset.entry) return;
+    if (i === shown.current) return cancelIntent();
+    if (intentFor.current === i) return;
+    cancelIntent();
+    intentFor.current = i;
     intent.current = setTimeout(() => {
       intent.current = null;
+      intentFor.current = null;
       choose(i);
     }, HOVER_INTENT_MS);
   };
@@ -303,7 +326,7 @@ export function ClaimTabs({
                 cancelIntent();
                 choose(i);
               }}
-              onPointerEnter={(event) => onHover(event, i)}
+              onPointerMove={(event) => onHover(event, i)}
               onPointerLeave={cancelIntent}
               onKeyDown={(event) => onKey(event, i)}
             >
