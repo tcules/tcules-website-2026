@@ -189,3 +189,67 @@ export function isExample(runs: readonly InlineRun[]): boolean {
      "Example of how each view is set:", "Example, from related work:". */
   return /^example\b[^:.]{0,40}:/i.test(plain(runs).trimStart());
 }
+
+/**
+ * A band's onward line (tracker 2.53, 3 Nov 2026): the band's LAST block is a paragraph of its own,
+ * at most two sentences, whose one link sends the reader to a piece of reading (`/insights/…`):
+ * "[Is your vibe-coded app ready for production?](/insights/…) covers where AI-built apps break
+ * first." Such a line is lifted out of its band and set as an ink island after it (`OnwardIsland`,
+ * CopyBands.tsx), where the plan allows one (plan.ts `placeOnward`).
+ *
+ * Its words are split, never rewritten: the sentence before the one holding the link (the setup) is
+ * the island's heading; the sentence holding the link is its lead, or the heading when there is no
+ * setup; a link that closes the line on its own is the button alone. The link's own words are the
+ * one button, to its href, without the authored arrow (the control draws one).
+ *
+ * Not an onward line: a link to a case (the case-mention rule links it in place), a service or the
+ * form (an ask), a paragraph that argues and then points (three sentences or more), an "Example:".
+ */
+export type OnwardLine = {
+  /** The block's index in `band.blocks`. */
+  index: number;
+  heading: string;
+  lead?: string;
+  link: { label: string; href: string };
+};
+
+const SENTENCE_END = /[.?!…](?=\s|$)/g;
+
+export function onwardLine(band: CorpusBand): OnwardLine | null {
+  const index = lastIndexWhere(band.blocks, (block) => block.type !== 'comment');
+  const block = band.blocks[index];
+  if (block?.type !== 'paragraph' || isExample(block.runs)) return null;
+  const links = block.runs.filter((run) => run.type === 'link');
+  const link = links[0];
+  if (links.length !== 1 || link?.type !== 'link' || !link.href.startsWith('/insights/'))
+    return null;
+  const at = block.runs.indexOf(link);
+  const before = plain(block.runs.slice(0, at));
+  const after = plain(block.runs.slice(at + 1));
+  const label = plain(link.children).trim();
+  const sentences =
+    (before.match(SENTENCE_END)?.length ?? 0) + (after.match(SENTENCE_END)?.length ?? 0);
+  if (sentences > 2 || !label) return null;
+
+  /* The setup: everything up to the last sentence end before the link. */
+  let cut = -1;
+  for (const match of before.matchAll(SENTENCE_END)) cut = (match.index ?? 0) + 1;
+  const setup = cut > 0 ? before.slice(0, cut).trim() : '';
+  const prefix = cut > 0 ? before.slice(cut) : before;
+  const tail = /^\s*[.]?\s*$/.test(after);
+  const pointer = `${prefix}${label}${after}`.trim();
+  const button = { label: label.replace(/\s*[→➝➔⟶]\s*$/u, ''), href: link.href };
+
+  if (tail && !prefix.trim()) {
+    /* "Added a confidence score and usage stayed flat? [Read why … →](…)": the link is the button. */
+    return setup ? { index, heading: setup, link: button } : null;
+  }
+  return setup
+    ? { index, heading: setup, lead: pointer, link: button }
+    : { index, heading: pointer, link: button };
+}
+
+/** The band without its onward line, so the line is said once, on the island. */
+export function withoutBlock(band: CorpusBand, index: number): CorpusBand {
+  return { ...band, blocks: band.blocks.filter((_, at) => at !== index) };
+}
