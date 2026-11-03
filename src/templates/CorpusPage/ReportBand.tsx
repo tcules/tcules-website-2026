@@ -154,7 +154,7 @@ export function ReportBand({ band, surface }: { band: CorpusBand; surface: 'pape
             names. From
             768 the table. One shows at a time (display none leaves the other out of the
             accessibility tree too). */}
-        <Layout as="ul" rowGap="stack" className={styles.sheetList}>
+        <Layout as="ul" rowGap={record ? 'block' : 'stack'} className={styles.sheetList}>
           {sheet.rows.map((row) =>
             record ? (
               /* A record's row on a phone: its key as the label over its value, as the sheet sets it;
