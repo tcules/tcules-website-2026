@@ -145,7 +145,30 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
      `why_work_wall` binding, which its Reasons band no longer carries (reasons take drawings). The team
      photograph stays the studio band's. */
   [ROUTES.whyTcules]: ABOUT_WALL,
+  /* "Free product design checklists that end in a brief": a team reviewing work together, the brief
+     being acted on (4 Nov 2026, the tools hub; until now the unregistered "studio photo" slot). */
+  [ROUTES.tools]: ABOUT_REVIEW,
 };
+
+/**
+ * A band that reuses a studio photograph, by band id and the routes it applies on (page-mapping § 0
+ * rule 5, step 3: a studio photograph the corpus binds elsewhere, where the page's plan names the
+ * reuse). An audit's "After the audit" says who carries the report on, "your team … or our people":
+ * the people take the review session (proposed, 4 Nov 2026, the audits' 3 Nov outline). One use a
+ * page; the photograph grade is the shared tone layer.
+ */
+const STUDIO_BAND: readonly { band: string; routes: (route: string) => boolean; photo: CorpusMediaBinding }[] = [
+  {
+    band: 'after-the-audit',
+    routes: (route) => route.startsWith(`${ROUTES.audits}/`),
+    photo: ABOUT_REVIEW,
+  },
+];
+
+/** The studio photograph a band reuses on this route, if its plan names one (`STUDIO_BAND`). */
+export function studioBandPhoto(route: string, bandId: string): CorpusMediaBinding | undefined {
+  return STUDIO_BAND.find((entry) => entry.band === bandId && entry.routes(route))?.photo;
+}
 
 /** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */
 export function heroImage(page: CorpusPage): SlotImage {

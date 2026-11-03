@@ -34,8 +34,10 @@ import {
   type OfferSheetItem,
   type ReadDownRow,
   type Step,
+  ServiceTile,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
+import { corpusImage } from '@/lib/corpus-images';
 import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
@@ -46,7 +48,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
-import { caseCover, slotImage, slugOf, type SlotImage } from './images';
+import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
 import { isIllustratedProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
@@ -56,6 +58,8 @@ import {
   leadOf,
   linkLead,
   plain,
+  tileActionFor,
+  trimEnd,
   trimStart,
   type OnwardLine,
 } from './text';
@@ -677,7 +681,7 @@ export function SheetBand({
 }
 
 /** A status's mark: one conventional glyph per state of a gap map, read beside its word. */
-const STATUS_GLYPH: Readonly<Record<string, IconName>> = {
+export const STATUS_GLYPH: Readonly<Record<string, IconName>> = {
   proven: 'check-circle',
   assumed: 'question-circle',
   missing: 'close-circle',
@@ -711,7 +715,7 @@ function statusReport(
   return undefined;
 }
 
-function StatusMark({ name }: { name: string }) {
+export function StatusMark({ name }: { name: string }) {
   const glyph = STATUS_GLYPH[name.trim().toLowerCase()];
   return (
     <Cluster colGap="tight" align="center" nowrap>
@@ -1711,6 +1715,30 @@ export function RelatedBand({ band }: { band: CorpusBand }) {
      entries, so the groups share one grid down the page instead of switching between one column
      and two by their counts (29 Oct 2026). Other lists keep one column under four. */
   const termIndex = entries.length >= 2 && /^A+P?$/.test(signature(band));
+  /* One named offer on its own (/audits `prototype`: the sixth audit, kept apart from the chooser) is
+     that offer's service tile, a whole row under the band's heading (named-services-are-service-tiles;
+     media-rows-take-a-whole-row): its name, the sentence the copy sets beside it, its own drawing and
+     the action for what it opens. Words unchanged. 4 Nov 2026. */
+  const [only] = entries;
+  const onlyScene = entries.length === 1 && only?.href ? serviceSceneFor(only.href) : undefined;
+  if (only?.href && onlyScene && !only.bodyHtml) {
+    return (
+      <ContentSection {...head(band)} data-band="service-tile" lead={leadText} footer={footer}>
+        <Layout as="ul" rowGap="none">
+          <li data-media-row="">
+            <ServiceTile
+              title={only.title}
+              {...(only.body ? { body: only.body } : {})}
+              href={only.href}
+              scene={onlyScene}
+              action={tileActionFor(only.href)}
+              wide
+            />
+          </li>
+        </Layout>
+      </ContentSection>
+    );
+  }
   return (
     /* One entry under a full-width head was a stub: ~500px of band for one row (/audits `prototype`,
        review 29 Oct). A single entry reads beside its head instead, the band a head's height. */
@@ -1903,34 +1931,41 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
 
 /* ── Tool groups (G23) ───────────────────────────────────────────────────────── */
 
+type ToolEntry = { title: string; href?: string; body?: string };
+
 /**
- * A tool hub group: each tool's bold linked name and the paragraph after it as one card, under the
- * head; a table or a closing paragraph follows the cards.
+ * A tool hub group (/tools, 4 Nov 2026; tracker 2.57: the glyph cards did not read as clickable). Each
+ * tool is its bold linked name and the ONE paragraph after it, and it is a destination, so it is the
+ * kit's clickable tile: hairline at rest, lift, blue hairline, accent title, its own drawing moving on
+ * hover, the whole tile the link (the /services service-guide answer).
  *
- * Every tool is a worksheet with no cover yet, so each card is led by its tool's glyph (the icon
- * set), until the tools are drawn in the kit's Sketch style. Two across in every group.
+ *   router   a group whose table names each tool in its key column ("Tool | Best for | You leave
+ *            with"): split tiles, the table's value columns in each tile's result panel under their
+ *            authored headers, so every column is kept and the tools are not shown twice.
+ *   pair     two tools, no table: two wide tiles, drawing beside words, one row.
+ *   one      a single tool: its service tile across the whole row (named-services-are-service-tiles;
+ *            media-rows-take-a-whole-row), never a lone half-width card beside a hole.
+ *
+ * The words after the set (a "start with" line, the closing route to /audits and /contact) follow it
+ * at the body measure with their links inline. A tool with no drawing yet shows the empty plate.
  */
 export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
-  const cards: BlockCardSetItem[] = [];
+  const tools: ToolEntry[] = [];
   const rest: CorpusBlock[] = [];
-  /* Each tool is its bold linked name and the ONE paragraph after it; a linked card's body is
-     plain text, since the whole card is the link and a link may not hold another. */
-  let open: BlockCardSetItem | undefined;
+  /* A linked tile's body is plain text: the whole tile is the link, and a link may not hold another. */
+  let open: ToolEntry | undefined;
   for (const block of blocks) {
     const lead = leadOf(block);
     if (lead) {
       const link = linkIn(lead.label);
       const body = trimStart(lead.body);
-      const icon = link ? glyphForRoute(link.href) : undefined;
       open = {
-        id: link?.href ?? labelTitle(lead.label),
         title: labelTitle(lead.label),
         ...(link ? { href: link.href } : {}),
-        ...(icon ? { icon } : {}),
         ...(body.length > 0 ? { body: plain(body) } : {}),
       };
-      cards.push(open);
+      tools.push(open);
     } else if (block.type === 'paragraph' && open && !open.body) {
       open.body = plain(block.runs);
     } else {
@@ -1938,17 +1973,77 @@ export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand })
       rest.push(block);
     }
   }
-  /* The tools as the borderless icon set (glyph, then title, then body), as /expertise `services`:
-     a texture stand-in cover read as unfinished art (review 29 Oct), and a group of one took a
-     horizontal box-beside-words shape its siblings did not. Every group is two across, so a single
-     tool is the same card at the same track width as its neighbours. */
-  const set = <BlockCardSet items={cards} lead="none" across={2} cue="title" scroll="never" />;
+
+  /* The router table: one row per tool, matched by the tool's name in the row's key cell (the tile's
+     body opens with that name), so the key column is carried by the tile itself. */
+  const table = rest.find(
+    (block): block is TableBlock =>
+      block.type === 'table' &&
+      block.rows.length === tools.length &&
+      block.header.length >= 2 &&
+      block.rows.every((row) =>
+        tools.some((tool) => tool.body?.includes(plain(row[0] ?? []).trim())),
+      ),
+  );
+  const after = rest.filter((block) => block !== table);
+  const scene = (href?: string) => (href ? serviceSceneFor(href) : undefined);
+
+  let set: ReactNode;
+  const [only] = tools;
+  if (tools.length === 1 && only?.href) {
+    set = (
+      <Layout as="ul" rowGap="none">
+        <li data-media-row="">
+          <ServiceTile
+            title={only.title}
+            {...(only.body ? { body: only.body } : {})}
+            href={only.href}
+            scene={scene(only.href)}
+            action={tileActionFor(only.href)}
+            wide
+          />
+        </li>
+      </Layout>
+    );
+  } else {
+    const items: BentoItem[] = tools.map((tool) => {
+      const row = table?.rows.find((cells) =>
+        tool.body?.includes(plain(cells[0] ?? []).trim()),
+      );
+      const fields = row
+        ? (table?.header ?? []).slice(1).map((cell, index) => ({
+            label: plain(cell),
+            text: plain(row[index + 1] ?? []),
+          }))
+        : [];
+      const [first, ...more] = fields;
+      return {
+        id: tool.href ?? tool.title,
+        title: tool.title,
+        ...(tool.body ? { body: tool.body } : {}),
+        ...(tool.href ? { href: tool.href } : {}),
+        ...(scene(tool.href) ? { scene: scene(tool.href) } : {}),
+        ...(first
+          ? {
+              detail: {
+                ...first,
+                ...(more.length > 0 ? { fields: more } : {}),
+                action: tileActionFor(tool.href),
+              },
+            }
+          : tools.length === 2
+            ? { span: 2 as const }
+            : {}),
+      };
+    });
+    set = <Bento items={items} tracks={4} />;
+  }
   return (
-    <ContentSection {...head(band)} data-band="C-cards">
-      {rest.length > 0 ? (
+    <ContentSection {...head(band)} data-band="tool-tiles">
+      {after.length > 0 ? (
         <Layout rowGap="stack">
           {set}
-          <BandBody blocks={rest} labelledBy={head(band).headingId} />
+          <BandBody blocks={after} labelledBy={head(band).headingId} />
         </Layout>
       ) : (
         set
@@ -2026,6 +2121,46 @@ export function TextBand({
         actions={actions}
       >
         {text}
+      </ContentSection>
+    );
+  }
+  /* A studio photograph the page's plan reuses for this band (images.ts `studioBandPhoto`: an audit's
+     "After the audit", the people who carry the report on). The paragraph's closing "→" link is the
+     band's action, a link row under the words it closes; the sentence and its inline links stay as
+     authored. 4 Nov 2026. */
+  const studio = studioBandPhoto(page.route, band.id);
+  if (studio) {
+    const prose: readonly CorpusBlock[] = body;
+    const last = prose.at(-1);
+    const tail = last?.type === 'paragraph' ? trimEnd(last.runs) : [];
+    const arrow = tail.at(-1);
+    const lifted =
+      arrow?.type === 'link' && /[→➝➔⟶]\s*$/u.test(plain(arrow.children)) ? arrow : undefined;
+    const words =
+      lifted && last?.type === 'paragraph'
+        ? prose.map((block) =>
+            block === last ? { ...last, runs: trimEnd(tail.slice(0, -1)) } : block,
+          )
+        : prose;
+    const liftedLinks = lifted
+      ? [{ href: lifted.href, label: lifted.children, labelText: plain(lifted.children) }]
+      : [];
+    const all = [...liftedLinks, ...links];
+    return (
+      <ContentSection
+        {...head(band)}
+        data-band="B"
+        arrangement="media"
+        media={{ image: corpusImage(studio), side, weight: 'photo', head: 'lg' }}
+      >
+        {all.length > 0 ? (
+          <Layout rowGap="block">
+            <BandBody blocks={words} />
+            <LinkActions links={all} />
+          </Layout>
+        ) : (
+          <BandBody blocks={words} />
+        )}
       </ContentSection>
     );
   }

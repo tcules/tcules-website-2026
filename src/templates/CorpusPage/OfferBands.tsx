@@ -97,6 +97,7 @@ import {
   isAskLink,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
+import { ReportBand } from './ReportBand';
 import { isWhatYouGet, kindOf, type OfferUnit } from './plan';
 import {
   bandLinks,
@@ -108,6 +109,7 @@ import {
   linksIn,
   linkLead,
   plain,
+  tileActionFor,
   trimEnd,
   trimStart,
 } from './text';
@@ -622,6 +624,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
     case 'related':
       return <RelatedBand band={band} />;
+    case 'example':
+      return <ReportBand band={band} surface={unit.surface} />;
     case 'recognition':
       return <RecognitionBand band={band} />;
     case 'destinations':
@@ -1348,12 +1352,7 @@ function CatalogBand({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   );
 }
 
-/** A split tile's action, named for what its link opens: a tool, an audit or a service. */
-function tileAction(href: string | undefined): string {
-  if (href?.startsWith('/tools/')) return 'Try the tool';
-  if (href?.startsWith('/audits/')) return 'See the audit';
-  return 'Explore the service';
-}
+const tileAction = tileActionFor;
 
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
@@ -1469,8 +1468,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           ? serviceSceneFor(ctx.page.route)
           : undefined)),
   );
-  /* An option table always takes the tiles: a missing drawing is the labelled empty plate. */
-  if (rows.length >= 3 && (optionTable || scenes.every(Boolean))) {
+  /* An option table always takes the tiles, from two rows (one full row of two split tiles; owner,
+     2 Nov 2026: "the new pattern we made for services hub", on every audit page, 4 Nov 2026): a
+     missing drawing is the labelled empty plate. */
+  if ((rows.length >= 3 || (optionTable && rows.length >= 2)) && (optionTable || scenes.every(Boolean))) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and

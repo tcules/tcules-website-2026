@@ -88,6 +88,11 @@ export const KIND_COMPONENTS: Readonly<
     status: 'approved',
     note: 'One worked case (CaseSpread).',
   },
+  example: {
+    component: ['report'],
+    status: 'to-design',
+    note: "What the report looks like (the audits' 3 Nov outline): one paper report page on the tint band, the label, scenario, sheet and reading inside it (ReportBand; the 2 Nov one-panel answer). Owner to judge on the six audit pages.",
+  },
   recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
   destinations: {
     component: ['C-image', 'C-icon'],
@@ -95,11 +100,15 @@ export const KIND_COMPONENTS: Readonly<
     note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
   },
   related: {
-    component: ['K'],
+    component: ['K', 'service-tile'],
     status: 'to-design',
-    note: 'Ruled link rows (open roles, glossary groups).',
+    note: 'Ruled link rows (open roles, glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles).',
   },
-  directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  directory: {
+    component: ['tool-tiles'],
+    status: 'to-design',
+    note: "The /tools groups as clickable tool tiles (tracker 2.57, 4 Nov 2026): split tiles when the group's table names each tool (its columns in the result panel), two wide tiles for a pair, one service tile across the row for a single tool. Owner to judge on /tools.",
+  },
   index: {
     component: ['listing-lead', 'listing-section'],
     status: 'to-design',

@@ -265,6 +265,18 @@ export function withoutBlock(band: CorpusBand, index: number): CorpusBand {
 }
 
 /**
+ * A service tile's action, named for what its link opens: a tool, an audit, the audits hub or a
+ * service (ServiceTile `action`, Bento's split tile `detail.action`). One wording per kind of tile.
+ */
+export function tileActionFor(href: string | undefined): string {
+  const route = href?.split('#')[0];
+  if (route?.startsWith('/tools/')) return 'Try the tool';
+  if (route === '/audits') return 'See the audits';
+  if (route?.startsWith('/audits/')) return 'See the audit';
+  return 'Explore the service';
+}
+
+/**
  * A link's words for a control that draws its own arrow (4 Nov 2026): the copy's trailing "→" goes,
  * or the button reads "SEE DESIGN SYSTEMS → →". Every link set with an arrow icon takes its label
  * through this; the words before the arrow are unchanged.

@@ -1,5 +1,6 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
+import { studioBandPhoto } from './images';
 import { formBeforeFaq } from './order';
 import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
@@ -59,6 +60,11 @@ export type OfferKind =
   | 'text'
   /** A labelled set of items that is not What you get (31 Oct 2026): the sheet, to design. */
   | 'set'
+  /**
+   * A worked example that carries a table (the audits' 3 Nov 2026 "What the report looks like"): a
+   * sample page of the report (ReportBand). A worked example told as bold-led story rows is `record`.
+   */
+  | 'example'
   | 'note'
   | 'close'
   /** A listing's term index (4 Nov 2026, /glossary): its lead and its groups, set by ListingIndex. */
@@ -284,8 +290,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   states: 'table',
   platforms: 'table',
   alternatives: 'table',
-  /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
-  choose: 'table',
+  /* ── G12 · hub routers ── */
+  /* /audits' chooser: five named audits, each with who it is for and what you come away with. The
+     /services hub solved the same table on 2 Nov (owner; named-services-are-service-tiles): split
+     tiles, each its own drawing, the third column the tile's labelled panel (4 Nov 2026). */
+  choose: 'router',
   /* /services' chooser: eight named services, so the service tiles, each its own drawing, the table's
      third column kept as a labelled detail (owner, 2 Nov 2026; named-services-are-service-tiles). */
   'service-guide': 'router',
@@ -382,7 +391,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'signature-work': 'record',
   'complex-products': 'cases',
   proof: 'cases',
-  'worked-example': 'record',
+  /* A worked example that carries a table is a page of the report (the audits, 3 Nov 2026 copy); one
+     told as bold-led story rows stays the case spread. */
+  'worked-example': (band) => (band.blocks.some((b) => b.type === 'table') ? 'example' : 'record'),
   engagement: 'tiles',
   approach: 'principles',
   /* ── G24 · home's own bands (HomePage composes them; this is the shared fallback) ── */
@@ -516,6 +527,7 @@ const MEDIA_KINDS: ReadonlySet<OfferKind> = new Set([
 const VISUAL: ReadonlySet<OfferKind> = new Set([
   'symptoms',
   'record',
+  'example',
   'cases',
   'tiles',
   'router',
@@ -589,7 +601,11 @@ export function registerOf(
     case 'method':
     case 'text':
       if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
-      return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
+      return drawn.has(band.id)
+        ? 'flat'
+        : bound || studioBandPhoto(page.route, band.id)
+          ? 'photo'
+          : 'none';
     default:
       return 'none';
   }
@@ -627,6 +643,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            studioBandPhoto(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             band.blocks.some(
@@ -748,7 +765,7 @@ export function planOffer(
   /* A worked example is a story on its own ground: tint, unless a neighbour is already tint (two tints
      never touch). */
   planned.forEach((unit, index) => {
-    if (unit.kind !== 'record' && unit.kind !== 'close') return;
+    if (unit.kind !== 'record' && unit.kind !== 'example' && unit.kind !== 'close') return;
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
