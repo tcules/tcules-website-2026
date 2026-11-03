@@ -324,3 +324,10 @@
   inline-size: var(--cta-art-inline-size-sm);
   max-inline-size: 100%;
 }
+
+/* The island's footnote (`footnote`): one plain line under the island on the band's ground, in the
+   band's own ink, at the body's measure. */
+.footnote {
+  max-inline-size: var(--cta-body-measure);
+  font: var(--text-body-sm);
+}

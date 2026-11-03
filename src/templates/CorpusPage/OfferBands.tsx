@@ -10,7 +10,6 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
-  CtaSection,
   EngagementOptions,
   ListCard,
   OfferSheet,
@@ -40,7 +39,6 @@ import type {
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { placeholderIllustration } from '@/lib/placeholders';
-import { ROUTES } from '@/lib/routes';
 import {
   offerSceneKey,
   serviceSceneFor,
@@ -94,6 +92,9 @@ import {
   TextBand,
   WhatYouGetBand,
   sheetParts,
+  AskIsland,
+  askLinkIn,
+  isAskLink,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { isWhatYouGet, kindOf, type OfferUnit } from './plan';
@@ -749,7 +750,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const opening = leadingParagraphs(band);
       const closing = closingNote(band);
       const terms = [...closing.rest, ...trailingParagraphs(band)];
-      const links = bandLinks(band);
+      /* Links by role, never by position (owner, 3 Nov 2026): the page link ("See how we work") is
+         the head's action, the ask ("Book a call", to the form) its own island after the band. */
+      const ask = askLinkIn(band);
+      const links = bandLinks(band).filter((link) => !isAskLink(link));
       const options =
         leads(band).length > 0
           ? leads(band).map((row) => ({
@@ -800,14 +804,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             }
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
-          {links[1] ? (
-            <CtaSection
-              data-band="L"
-              arrangement="open"
-              heading={links[1].labelText}
-              actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-            />
-          ) : null}
+          {ask ? <AskIsland link={ask} /> : null}
         </Fragment>
       );
     }

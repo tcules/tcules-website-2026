@@ -275,6 +275,11 @@ type CtaSplitProps = {
    * the column, the ground and the air. Island only.
    */
   inBand?: boolean;
+  /**
+   * One plain line under the island, on the band's own ground (owner, 3 Nov 2026: contact's "Need an
+   * NDA first?" sits outside the island so the island stays the ask and the form). Island only.
+   */
+  footnote?: string;
 };
 
 type CtaOpenProps = {
@@ -1034,6 +1039,7 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <IslandBand
         inBand={props.inBand}
+        footnote={props.footnote}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1074,6 +1080,7 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <IslandBand
         inBand={props.inBand}
+        footnote={props.footnote}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1107,6 +1114,7 @@ export function CtaSection(props: CtaSectionProps) {
   return (
     <IslandBand
       inBand={props.inBand}
+      footnote={props.footnote}
       surface={band}
       id={props.id}
       data-band={props['data-band']}
@@ -1143,6 +1151,7 @@ export function CtaSection(props: CtaSectionProps) {
  */
 function IslandBand({
   inBand,
+  footnote,
   surface,
   id,
   'data-band': dataBand,
@@ -1150,15 +1159,25 @@ function IslandBand({
   children,
 }: {
   inBand?: boolean;
+  footnote?: string;
   surface: SectionSurface;
   id?: string;
   'data-band'?: string;
   'aria-labelledby'?: string;
   children: ReactNode;
 }) {
+  /* The footnote is the band's, not the island's: a `block` under it, on the ground. */
+  const body = footnote ? (
+    <Layout rowGap="block">
+      {children}
+      <p className={styles.footnote}>{footnote}</p>
+    </Layout>
+  ) : (
+    children
+  );
   return inBand ? (
     <section id={id} data-band={dataBand} aria-labelledby={labelledBy}>
-      {children}
+      {body}
     </section>
   ) : (
     <Section
@@ -1168,7 +1187,7 @@ function IslandBand({
       aria-labelledby={labelledBy}
       data-arrangement="split"
     >
-      {children}
+      {body}
     </Section>
   );
 }

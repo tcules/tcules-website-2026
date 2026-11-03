@@ -51,6 +51,11 @@ type SharedProps = {
    */
   submit?: 'inline' | 'full';
   /**
+   * The submit's words as the page's copy authors them ("Request a call", 3 Nov 2026). Absent, the
+   * variant's own label. The caller's copy wins: the form never rewrites an authored ask.
+   */
+  submitLabel?: string;
+  /**
    * What happens after a send, shown in the success view as numbered steps. The CALLER's copy,
    * never the pattern's: on a close it is the same list the band's points promise (pass
    * CtaSection's `points` straight through), so the success view keeps the band's promise and
@@ -949,11 +954,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
           : '';
 
   const submitLabel =
-    variant === 'audit'
+    props.submitLabel?.trim() ||
+    (variant === 'audit'
       ? 'Request free audit'
       : variant === 'contact'
         ? 'Send message'
-        : 'Send enquiry';
+        : 'Send enquiry');
 
   /* The submit is the converting action, so it carries NO arrow on any variant (owner, 7 Oct 2026:
      a solid primary never takes one — the label carries the ask). Its partner, "See available
