@@ -262,7 +262,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
       Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
       links to `/expertise`.
-- [~] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+- [x] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
       "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
       social media, the other ways to reach us, and the studio address.
 - [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
