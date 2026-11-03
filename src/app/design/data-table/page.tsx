@@ -444,6 +444,42 @@ const NODE_TABLE: DataTableProps = {
   ],
 };
 
+/* The longest peer comparison the glossary authors (/glossary/design-system), verbatim. */
+const PEERS: DataTableProps = {
+  caption: 'Design system vs component library and style guide',
+  columns: [
+    { heading: 'Style guide' },
+    { heading: 'Component library' },
+    { heading: 'Design system' },
+  ],
+  rows: [
+    {
+      header: 'What it holds',
+      cellsHtml: [
+        'Visual rules such as colour, type, logo use and tone of voice',
+        'Reusable interface components',
+        'Foundations, components, patterns, design files, code, guidance and rules for change',
+      ],
+    },
+    {
+      header: 'What it answers',
+      cellsHtml: [
+        'Answers how the product should look and sound',
+        'Answers how a shared element looks and works',
+        'Also answers what belongs in the shared layer, how it changes and how products adopt it',
+      ],
+    },
+    {
+      header: 'What it needs',
+      cellsHtml: [
+        'Often a document or a page of examples',
+        'Can exist without a way to contribute or migrate',
+        'Needs ownership and a route from change to the products that use it',
+      ],
+    },
+  ],
+};
+
 export default function DataTableSpecimenPage() {
   return (
     <>
@@ -497,6 +533,18 @@ export default function DataTableSpecimenPage() {
               {...ROUTE_TABLE}
               rows={ROUTE_TABLE.rows.map((row, i) => (i === 1 ? { ...row, pick: true } : row))}
             />
+          </Specimen>
+          <Specimen
+            title="Keyless peers · no keyColumn"
+            note="A comparison whose head row IS the things compared and whose rows are sentences across them (the glossary, 4 Nov 2026): no column is a row label, so every cell is set alike under its own head."
+          >
+            <DataTable {...PEERS} />
+          </Specimen>
+          <Specimen
+            title="Keyless peers, the page's own column picked · pickColumn"
+            note="The row pick turned a quarter: the column naming the page's own term takes the blue ground, its head in blue with a bar across its top. Never reorders the columns."
+          >
+            <DataTable {...PEERS} pickColumn={2} />
           </Specimen>
           <Specimen
             title="Named by the heading above it · labelledBy"

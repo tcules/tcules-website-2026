@@ -53,3 +53,9 @@
     display: block;
   }
 }
+
+/* `figure`: the drawing beside the sentence. It fills its track; the plate (the Sketch's own) sets
+   its ratio and ground. */
+.figure {
+  min-inline-size: 0;
+}

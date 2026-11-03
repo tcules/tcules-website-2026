@@ -382,3 +382,16 @@
 .pick .key .keyRich {
   color: var(--dtab-pick-key-ink);
 }
+
+/* ── The picked column (`pickColumn`, 4 Nov 2026) ──────────────────────────────────────────────
+   The row pick turned a quarter: the blue ground down the column's cells and its head, the head in
+   blue, and the bar across the head's top edge, inset so it sits inside the frame's border. */
+.pickHead,
+.pickCell {
+  background: var(--dtab-pick-ground);
+}
+
+.pickHead {
+  color: var(--dtab-pick-key-ink);
+  box-shadow: inset 0 var(--dtab-pick-bar-width) 0 var(--dtab-pick-bar-ink);
+}

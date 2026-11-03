@@ -90,9 +90,23 @@ export type DataTableProps = {
   caption?: string;
   /** A plain-text lead-in, rendered as a paragraph immediately before the table. */
   summary?: string;
-  keyColumn: DataTableKeyColumn;
+  /**
+   * The first column, whose cells name each row (`<th scope="row">`). Absent (4 Nov 2026, the
+   * glossary's comparisons): a KEYLESS table, every column a peer under its own head, for a table
+   * whose head row IS the things compared ("Style guide · Component library · Design system") and
+   * whose rows are sentences across them. Then `cellsHtml` holds every column's cell and a row's
+   * `header` is only its plain name for the warnings; no cell is set as a row label.
+   */
+  keyColumn?: DataTableKeyColumn;
   /** The data columns. One to five is the designed range; the count is data, never a variant. */
   columns: readonly DataTableColumn[];
+  /**
+   * The column the table recommends or is about, by its index in `columns` (4 Nov 2026): a keyless
+   * comparison's column naming the page's own term. The row pick's treatment turned a quarter turn —
+   * the blue ground down every cell, the head in blue, a bar across the head's top edge. At most
+   * one; it never reorders the columns.
+   */
+  pickColumn?: number;
   /** Three to twelve is the designed range (eight until 1 Oct 2026). Never sorted, filtered or paginated. */
   rows: readonly DataTableRow[];
   /**
@@ -215,8 +229,13 @@ export function DataTable({
   columns,
   rows,
   split = false,
+  pickColumn,
 }: DataTableProps) {
   const captionId = useId();
+
+  if (pickColumn !== undefined && !columns[pickColumn]) {
+    warn(`pickColumn ${pickColumn} names no column; nothing is picked.`);
+  }
 
   if (rows.length === 0) {
     warn('received no rows; rendering nothing.');
@@ -247,7 +266,8 @@ export function DataTable({
     warn('a head-less record takes at most one value column; the others read without a head.');
   }
 
-  const keyBehaviour = keyColumn.behaviour ?? 'hold';
+  const keyBehaviour = keyColumn?.behaviour ?? 'hold';
+  const picked = (index: number) => index === pickColumn;
   const breakAt = split ? splitAt(rows) : rows.length;
 
   /* One boxed frame over `part` of the rows; `inSplit` marks both halves of a split and `joins` the
@@ -265,7 +285,7 @@ export function DataTable({
           ? { 'aria-labelledby': captionId }
           : labelledBy
             ? { 'aria-labelledby': labelledBy }
-            : { 'aria-label': `${keyColumn.heading} table` })}
+            : { 'aria-label': `${keyColumn?.heading ?? columns[0]?.heading ?? ''} table` })}
       >
         <table
           /* A record is read down its rows, a key and ONE value: head-less, or with a head row
@@ -283,14 +303,20 @@ export function DataTable({
           {head ? (
             <thead className={joins ? styles.joinHead : undefined}>
               <tr>
-                <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
-                  {keyColumn.heading}
-                </th>
+                {keyColumn ? (
+                  <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
+                    {keyColumn.heading}
+                  </th>
+                ) : null}
                 {columns.map((column, index) => (
                   <th
                     key={index}
                     scope="col"
-                    className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
+                    className={cx(
+                      styles.colHead,
+                      BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                      picked(index) && styles.pickHead,
+                    )}
                   >
                     {column.heading}
                   </th>
@@ -313,13 +339,15 @@ export function DataTable({
 
               return (
                 <tr key={rowIndex} className={cx(styles.row, row.pick && styles.pick)}>
-                  <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
-                    {row.headerHtml ? (
-                      <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
-                    ) : (
-                      <span className={styles.keyText}>{row.header}</span>
-                    )}
-                  </th>
+                  {keyColumn ? (
+                    <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
+                      {row.headerHtml ? (
+                        <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
+                      ) : (
+                        <span className={styles.keyText}>{row.header}</span>
+                      )}
+                    </th>
+                  ) : null}
                   {columns.map((column, index) => {
                     const cell = row.cellsHtml[index] ?? '';
                     const html = typeof cell === 'string' ? cell : '';
@@ -330,6 +358,7 @@ export function DataTable({
                           styles.cell,
                           typeof cell !== 'string' && styles.nodeCell,
                           BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                          picked(index) && styles.pickCell,
                         )}
                       >
                         {typeof cell !== 'string' ? (
