@@ -21,6 +21,7 @@ export const ROUTES = {
   /* Services — the six offers, plus the two ways an engagement starts. */
   services: '/services',
   productDesign: '/services/product-design',
+  mvpDevelopment: '/services/mvp-development',
   productModernisation: '/services/product-modernisation',
   designSystems: '/services/design-systems',
   aiProductUx: '/services/ai-product-ux',
@@ -416,6 +417,10 @@ export const EXTERNAL = {
   clutch: 'https://clutch.co/profile/tcules-ux-design-studio',
   linkedin: 'https://in.linkedin.com/company/tcules',
   youtube: 'https://www.youtube.com/@tcules',
+  /* UNVERIFIED (3 Nov 2026): the handle form was assumed, not given. Confirm both against the
+     studio's own profiles before launch. */
+  instagram: 'https://www.instagram.com/tcules',
+  x: 'https://x.com/tcules',
 } as const;
 
 /**

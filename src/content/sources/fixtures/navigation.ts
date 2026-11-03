@@ -284,97 +284,83 @@ const NAV: SiteNavProps = {
 };
 
 /* ── Footer ───────────────────────────────────────────────────────────────────────
-   The directory is broader than the nav on purpose. A header panel is a route in — it has to
-   choose. A footer is the index, so it can afford to name every service, every industry and every
-   format, and being the one place that lists all of them is most of its value. */
+   Content, order and labels from the owner's header-and-footer copy of 3 Nov 2026, verbatim — '&'
+   in labels, not 'and'. The directory names each page once; Articles, Podcasts and Events are
+   reached through Insights, which is why they are not listed beside it. */
 const FOOTER: SiteFooterProps = {
   brand: {
-    tagline: 'Product intent, kept visible from the first decision to what ships.',
-    /* Two, not three: Clutch left this list for the rating badge below. A profile that carries a
-       score is a claim with a source, and a row of three names cannot say 4.8. */
-    social: [
-      { label: 'LinkedIn', href: EXTERNAL.linkedin, mark: 'linkedin' },
-      { label: 'YouTube', href: EXTERNAL.youtube, mark: 'youtube' },
-    ],
-    /* One source for the score, shared with the service pages' testimonial band: see ratings.ts. */
+    tagline: "Code got easy. Good products didn't.",
+    /* One source for the score, shared with the service pages' testimonial band: see ratings.ts.
+       The badge links the Clutch profile, so Clutch is not repeated among the socials. */
     rating: CLUTCH_RATING,
   },
+  cta: { label: 'Start a project', href: ROUTES.contact },
   groups: [
     {
       title: 'Services',
       links: [
         { label: 'Product Design', href: ROUTES.productDesign },
+        { label: 'Design-led MVP development', href: ROUTES.mvpDevelopment },
         { label: 'Product Modernisation', href: ROUTES.productModernisation },
         { label: 'Design Systems', href: ROUTES.designSystems },
         { label: 'AI Product UX', href: ROUTES.aiProductUx },
         { label: 'Design Engineering', href: ROUTES.designEngineering },
         { label: 'Software Development', href: ROUTES.softwareDevelopment },
-        { label: 'Audits', href: ROUTES.audits },
-        { label: 'How We Work', href: ROUTES.howWeWork },
+        { label: 'Audits & Assessments', href: ROUTES.audits },
       ],
     },
     {
-      title: 'Expertise',
+      title: 'Software Product Expertise',
       links: [
-        { label: 'B2B SaaS and Workflow Software', href: ROUTES.b2bSaasWorkflow },
-        { label: 'AI Products and Developer Tools', href: ROUTES.aiDeveloperTools },
-        { label: 'Data and Decision Products', href: ROUTES.dataDecisionProducts },
-        { label: 'Marketplaces', href: ROUTES.marketplaces },
-        { label: 'Content and Knowledge Platforms', href: ROUTES.contentDiscovery },
+        { label: 'B2B SaaS & Workflow Software', href: ROUTES.b2bSaasWorkflow },
+        { label: 'Developer Tools & AI Platforms', href: ROUTES.aiDeveloperTools },
+        { label: 'Data, Analytics & Decision Products', href: ROUTES.dataDecisionProducts },
+        { label: 'Marketplaces & Multi-Sided Platforms', href: ROUTES.marketplaces },
+        { label: 'Content, Knowledge & Discovery Platforms', href: ROUTES.contentDiscovery },
+        { label: 'Commerce & Transactional Products', href: ROUTES.commerce },
+      ],
+    },
+    {
+      title: 'Industries',
+      links: [
         { label: 'FinTech', href: ROUTES.fintech },
         { label: 'HealthTech', href: ROUTES.healthtech },
-        { label: 'EdTech', href: ROUTES.edtech },
-        { label: 'All Expertise', href: ROUTES.expertise },
+        { label: 'ClimateTech & Energy', href: ROUTES.climatetech },
+        { label: 'PropTech, ConTech & Field Operations', href: ROUTES.proptech },
+        { label: 'EdTech & Learning', href: ROUTES.edtech },
+        { label: 'MarTech & SalesTech', href: ROUTES.martech },
       ],
     },
     {
       title: 'Work',
       links: [
-        { label: 'Case Studies', href: ROUTES.caseStudies },
+        { label: 'Case studies', href: ROUTES.caseStudies },
         { label: 'Clients', href: ROUTES.clients },
-        /* Product Stages and Engagement Models are CLASSIFICATIONS of a case study rather than
-           routes of their own, so they point at the pages that carry them. Named here anyway
-           because they are how people ask for the work. */
-        { label: 'Product Stages', href: ROUTES.caseStudies },
-        { label: 'Engagement Models', href: ROUTES.howWeWork },
+        { label: 'All expertise', href: ROUTES.expertise },
+        { label: 'How we work', href: ROUTES.howWeWork },
       ],
     },
     {
-      title: 'Insights',
+      title: 'Studio',
       links: [
-        { label: 'Articles', href: ROUTES.articles },
-        { label: 'Guides', href: ROUTES.guides },
-        { label: 'Podcasts', href: ROUTES.podcasts },
-        { label: 'Videos', href: ROUTES.videos },
-        { label: 'Events', href: ROUTES.events },
-        { label: 'Research', href: ROUTES.research },
-        { label: 'Tools and Resources', href: ROUTES.tools },
-        { label: 'Glossary', href: ROUTES.glossary },
-      ],
-    },
-    /* Lab is two links and stays its own column rather than folding into Company. It is the one
-       group whose contents are products rather than pages about the studio, and burying the design
-       system under "Company" is how nobody finds it. Marketing's IA folds them together — that
-       note is the one still open. */
-    {
-      title: 'Lab',
-      links: [
-        { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
-        { label: 'Matter Design System', href: ROUTES.matterDesignSystem },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About', href: ROUTES.about },
-        { label: 'Team', href: ROUTES.team },
+        { label: 'About Tcules', href: ROUTES.about },
+        { label: 'Why Tcules', href: ROUTES.whyTcules },
+        { label: 'How we design with AI', href: ROUTES.howWeWorkAiNative },
         { label: 'Careers', href: ROUTES.careers },
-        { label: 'Security and Confidentiality', href: ROUTES.security },
         { label: 'Contact', href: ROUTES.contact },
       ],
     },
+    {
+      title: 'Resources',
+      links: [
+        { label: 'Insights', href: ROUTES.insights },
+        { label: 'Guides', href: ROUTES.guides },
+        { label: 'Checklists and worksheets', href: ROUTES.tools },
+        { label: 'Glossary', href: ROUTES.glossary },
+        { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
+      ],
+    },
   ],
-  cta: { label: 'Start a project', href: ROUTES.contact },
   newsletter: {
     title: 'Beyond Interfaces',
     description:
@@ -387,24 +373,31 @@ const FOOTER: SiteFooterProps = {
     fieldLabel: 'Email address',
     placeholder: 'you@company.com',
   },
-  meta: [
-    { key: 'Enquiries', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
-    { key: 'Studio', value: 'Ahmedabad, India' },
-    { key: 'Across time zones', value: 'India · United States · Europe' },
-    { key: 'Response', value: 'Within 2 business days' },
-  ],
-  address: '614, Silver Radiance 2, Science City Road, Sola, Ahmedabad 380060, India',
-  utility: [
-    { label: 'Privacy', href: ROUTES.privacy },
-    { label: 'Terms', href: ROUTES.terms },
-    { label: 'Accessibility', href: ROUTES.accessibility },
-    { label: 'Sitemap', href: ROUTES.sitemap },
-  ],
-  /* The Solar credit rides the legal notice, the footer's existing small-print slot, rather than a
-     new link or band: Solar Icons are CC BY 4.0 (DBF ch04), and attribution is owed once the first
-     Solar glyph is route-visible — ListCard's external cue (`arrow-right-up` since 2.17). Title, author
-     and licence, which is what CC BY asks for; the footer's layout is unchanged. */
-  legal: '© 2026 Tcules. All rights reserved. Icons: Solar Icons by 480 Design, CC BY 4.0.',
+  studio: {
+    statement:
+      'Tcules is a digital product design studio creating ambitious new software products and making established ones better.',
+    address: '614, Silver Radiance 2, Science City Road, Sola, Ahmedabad 380060, Gujarat, India',
+    email: 'hello@tcules.com',
+    social: [
+      { label: 'LinkedIn', href: EXTERNAL.linkedin },
+      { label: 'YouTube', href: EXTERNAL.youtube },
+      { label: 'Instagram', href: EXTERNAL.instagram },
+      { label: 'X', href: EXTERNAL.x },
+    ],
+  },
+  legal: {
+    notice: '© 2017–2026 Tcules UX Private Limited',
+    links: [
+      { label: 'Privacy Policy', href: ROUTES.privacy },
+      { label: 'Cookie Policy', href: ROUTES.cookiePolicy },
+      { label: 'Terms of Use', href: ROUTES.terms },
+      { label: 'AI Transparency', href: ROUTES.howWeWorkAiTransparency },
+      { label: 'Sitemap', href: ROUTES.sitemap },
+    ],
+    /* Solar Icons are CC BY 4.0 (DBF ch04): title, author and licence, kept in the footer's small
+       print (owner, 3 Nov 2026). */
+    credit: 'Icons: Solar Icons by 480 Design, CC BY 4.0.',
+  },
 };
 
 export const NAVIGATION: Navigation = { nav: NAV, footer: FOOTER };

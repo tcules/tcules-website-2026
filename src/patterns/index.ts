@@ -300,9 +300,10 @@ export type {
   SiteFooterBrand,
   SiteFooterGroup,
   SiteFooterLink,
-  SiteFooterMetaItem,
+  SiteFooterLegal,
   SiteFooterNewsletter,
-  SiteFooterSocial,
+  SiteFooterRating,
+  SiteFooterStudio,
 } from './SiteFooter';
 export { Banner } from './Banner';
 export type {
