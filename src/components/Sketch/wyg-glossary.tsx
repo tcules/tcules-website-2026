@@ -420,24 +420,32 @@ function InformationArchitecture() {
   );
 }
 
-/** Product modernisation: the old workflow rebuilt, the same data carried under both. */
+/** Product modernisation: the new product built in front of the old one, both standing on the same
+ *  data. The old screen, dense and quiet, shows behind; the new one overlaps it; one database feeds
+ *  both, its route to the old screen a trail and to the new one the line. */
 function ProductModernisation() {
   return (
     <>
-      <Rect x={30} y={30} w={80} h={80} rx={8} className={styles.frameQuiet} />
-      {[44, 54, 64, 74, 84, 94].map((y, i) => (
-        <Copy key={y} x={40} y={y} w={[52, 36, 60, 44, 56, 30][i] ?? 40} quiet />
+      {/* The established product: a dense grid of rows, quiet, behind. */}
+      <Rect x={40} y={30} w={120} h={90} rx={8} className={styles.frameQuiet} />
+      {[46, 58, 70, 82, 94].map((y, i) => (
+        <g key={y}>
+          <Copy x={50} y={y} w={[20, 24, 16, 22, 18][i] ?? 20} quiet />
+          <Copy x={78} y={y} w={[28, 18, 26, 14, 24][i] ?? 20} quiet />
+        </g>
       ))}
-      <Hop x1={110} x2={210} y={70} />
-      <Rect x={210} y={30} w={80} h={80} rx={8} className={styles.frame} />
-      <Copy x={222} y={46} w={32} quiet />
-      <Rect x={222} y={58} w={56} h={20} className={styles.tile} />
-      <Rect x={222} y={88} w={32} h={12} rx={6} className={styles.solid} />
-      <Tile cx={160} cy={130} glyph="database" />
-      <path className={styles.trail} d="M140,130 L76,130 Q70,130 70,124 L70,110" />
-      <path className={styles.line} d="M180,130 L244,130 Q250,130 250,124 L250,117" />
-      <ArrowUp x={250} y={110} />
-      <Port x={180} y={130} />
+      {/* The modernised product, in front: one clear record and its action. */}
+      <Rect x={110} y={60} w={130} h={90} rx={8} className={styles.frame} />
+      <Copy x={124} y={76} w={40} quiet />
+      <Rect x={124} y={88} w={102} h={24} rx={4} className={styles.region} />
+      <path className={styles.regionCopy} d="M134,100 L190,100" />
+      <Rect x={124} y={124} w={36} h={12} rx={6} className={styles.solid} />
+      {/* The same data under both: the trail to the old screen, the line to the new one. */}
+      <Tile cx={280} cy={100} glyph="database" />
+      <path className={styles.trail} d="M280,80 L280,46 Q280,40 274,40 L160,40" />
+      <path className={styles.line} d="M240,100 L260,100" />
+      <Port x={240} y={100} />
+      <Port x={260} y={100} />
     </>
   );
 }
@@ -465,7 +473,8 @@ function UserJourneyMapping() {
   );
 }
 
-/** UX debt: every change costs a little more than the last, and the workarounds pile into the manual. */
+/** UX debt: every change costs a little more than the last (the bars grow, the latest lit), and the
+ *  workarounds pile into the manual. */
 function UxDebt() {
   const bars: [number, number][] = [
     [60, 40],
@@ -486,12 +495,30 @@ function UxDebt() {
         />
       ))}
       <Glyph name="notebook" cx={62} cy={96} size={20} className={styles.glyph} />
-      {bars.map(([y, w]) => (
-        <Rect key={y} x={130} y={y - 8} w={w} h={16} rx={8} className={styles.tile} />
-      ))}
-      <path className={styles.line} d="M234,120 L251,120" />
-      <Port x={234} y={120} />
-      <Focus x={270} y={120} glyph="clock-circle" size={12} />
+      {/* Each change takes longer than the last: the bars grow, and the latest is the one lit. No
+          badge at the end: the growth itself is the cost. */}
+      {bars.map(([y, w], i) => {
+        const last = i === bars.length - 1;
+        return (
+          <g key={y}>
+            <Rect
+              x={130}
+              y={y - 8}
+              w={w}
+              h={16}
+              rx={8}
+              className={last ? styles.region : styles.tile}
+            />
+            <Glyph
+              name="clock-circle"
+              cx={142}
+              cy={y}
+              size={10}
+              className={last ? styles.glyphAccent : styles.glyphQuiet}
+            />
+          </g>
+        );
+      })}
     </>
   );
 }
