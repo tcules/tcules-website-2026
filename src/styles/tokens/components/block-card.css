@@ -14,11 +14,12 @@
 
    Colour tokens, declared on every surface (12): title-ink, title-ink-hover, title-ink-pressed,
    mark-ink, body-ink, eyebrow-ink, media-rule-ink, text-rule-ink, box-ground-hover,
-   box-ground-pressed, ring-color and ring-gap-color. The /design/block-card specimen lists them per
+   box-ground-pressed, tile-ground, ring-color and ring-gap-color. The /design/block-card specimen lists them per
    surface from one constant. --bcrd-cue-ink was deleted with the arrow (7 Oct 2026).
 
-   No ground AT REST: BlockCard never paints a fill at rest and keeps the nearest Section visible
-   behind it. A boxed linked card paints one under the pointer only. Every surface block redeclares
+   No ground AT REST, with one exception: the tile (`frame="tile"`, owner 3 Nov 2026) paints
+   --bcrd-tile-ground at rest, because its ground IS the card. Every other frame keeps the nearest
+   Section visible behind it, and a boxed linked card paints one under the pointer only. Every surface block redeclares
    every colour token so a nested surface cannot inherit an outer card palette.
 
    ── What is absent, and why ────────────────────────────────────────────────────
