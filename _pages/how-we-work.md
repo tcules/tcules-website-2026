@@ -181,7 +181,7 @@ You have an outcome in mind: a first release, a product redesign, a design syste
 
 **How it works:** scope, roles, milestones and fees agreed before work starts. We deliver designs for your engineers, or carry agreed parts through development.
 
-*Typical starting points:* an [MVP](/services/new-product-design-first-release), a major workflow redesign, a [design system](/services/design-systems) or a new product module.
+*Typical starting points:* an [MVP](/services/mvp-development), a major workflow redesign, a [design system](/services/design-systems) or a new product module.
 
 ### Keep design close as your product grows {#ongoing}
 

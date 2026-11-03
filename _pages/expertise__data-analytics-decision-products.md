@@ -60,11 +60,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -180,13 +180,15 @@ content_governance:
 
 # Data product design for analytics that shows users what to do next
 
-A customer opens your analytics on Monday to see what changed. By Thursday two of their teams are quoting its figures in one meeting, and your support team hears when those figures disagree. Tcules provides data product design for analytics, embedded reports and scores in SaaS products and data platforms.
+Built around the decisions your customers make, our data product design shows what changed and why, in figures every team reads alike.
 
-[Tell us what your users ask the data](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in data and analytics products {#what-we-design}
+
+For SaaS teams whose customers act on their reports, and for the data platforms behind them.
 
 - **Customer-facing reports and dashboards** inside a SaaS product · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
@@ -200,19 +202,19 @@ A customer opens your analytics on Monday to see what changed. By Thursday two o
 
 ## Selected data product design work {#selected-work}
 
-### Benchmark Gensuite: a scope selector in three views
+### Benchmark Gensuite: three quick ways to set where you work
 
 Every application in Benchmark Gensuite's suite depends on the selector that sets which part of the organisation people work in. We redesigned it as three views, Browse, Recents and Favourites, and Nearby, each with a stated search boundary. Benchmark's engineers reviewed it as a coded prototype before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Doodle: one interview found the missing variable
+### Doodle: suggested times scored by how much the meeting matters
 
 Doodle was exploring enterprise scheduling across companies, and the brief looked like automation. One interview showed that whether someone is free depends on how much the meeting matters. Priority joined the product's model, beside meeting type and tentative weekly schedules. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-### Ryzeo: reports customers can tailor on shared rules
+### Ryzeo: reports customers shape around their own questions
 
 Ryzeo's ecommerce customers wanted more useful insights from their reports. We researched how they used reporting, reorganised how reports are structured and designed how customers tailor a view, backed by documented rules for filters, states and how data is shown. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
-## Where analytics products get hard: the four questions behind every screen {#hard-parts}
+## Four questions every analytics screen must answer {#hard-parts}
 
 | What the user asks | What the product has to show |
 |---|---|
@@ -253,8 +255,6 @@ Example: we framed Ryzeo's reporting redesign around four questions a good repor
 
 We design analytics around the questions people bring, on definitions your data team agrees.
 
-**What you receive**
-
 - **A definition for each figure:** a plain definition, scope and freshness rule for each figure that matters, agreed before any chart is drawn
 
 - **Views at different depths:** views for analysts, managers and customers at different depths, on the same definitions
@@ -288,41 +288,41 @@ One dashboard or chart set people misread may need only [dashboard design](/serv
 > “Tcules designed the UX and UI for the SaaS dashboard in our tyre shop software. They were easy to work with and communicate with throughout.”  
 > **Kalpesh Gohill, Founder & CEO, TreadCommand**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For an analytics product, a good first piece of work is the report customers open once a month and then forget, redesigned around the questions they bring to it.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** Before redesigning four of Scissors' staffing workflows, we modelled how its clients, candidates, jobs and talent pools connect. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** Our designers have worked on all of Primelis' products for the past three years, as an ongoing partnership.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** We took ConnectX's coded demo through to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about data product design {#faq}
 
@@ -356,6 +356,6 @@ Add who it is for and the question it should answer.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

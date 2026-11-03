@@ -212,7 +212,7 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/ai-copilots-agents': {
     items: {
       'what-you-get': by({
-        'A level for each step.': 'wyg-ai-copilots-agents-level-each-step',
+        'How far the AI goes at each step.': 'wyg-ai-copilots-agents-level-each-step',
         'Screens for the start and the middle of a job.': 'wyg-ai-copilots-agents-screens-start-middle-job',
         'Screens for the pause and the finish.': 'wyg-ai-copilots-agents-screens-pause-finish',
         'Agent approval flows.': 'wyg-ai-copilots-agents-agent-approval-flows',
@@ -229,11 +229,11 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/ai-search-recommendation': {
     items: {
       'what-you-get': by({
-        'Search entry.': 'wyg-ai-search-recommendation-search-entry',
+        'The search box.': 'wyg-ai-search-recommendation-search-entry',
         'Results that show their source.': 'wyg-ai-search-recommendation-results-show-their-source',
         'AI answers with sources.': 'wyg-ai-search-recommendation-ai-answers-sources',
         'Recommendations that explain themselves.': 'wyg-ai-search-recommendation-recommendations-explain-themselves',
-        'Corrections.': 'wyg-ai-search-recommendation-corrections',
+        'Ways to fix a bad answer.': 'wyg-ai-search-recommendation-corrections',
         'The next step.': 'wyg-ai-search-recommendation-next-step',
         'A test on your own content.': 'wyg-ai-search-recommendation-test-own-content',
         'Who does the work': 'team-ai-search-recommendation',
@@ -246,13 +246,13 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/human-in-the-loop-workflows': {
     items: {
       'what-you-get': by({
-        'Review triggers.': 'wyg-human-in-the-loop-workflows-review-triggers',
-        'The review card.': 'wyg-human-in-the-loop-workflows-review-card',
+        'What sends work to a person.': 'wyg-human-in-the-loop-workflows-review-triggers',
+        'What the reviewer sees.': 'wyg-human-in-the-loop-workflows-review-card',
         'What the reviewer can do.': 'wyg-human-in-the-loop-workflows-what-reviewer-can-do',
-        'Routing and the queue.': 'wyg-human-in-the-loop-workflows-routing-queue',
-        'The record.': 'wyg-human-in-the-loop-workflows-record',
+        'Who picks up each item, and when.': 'wyg-human-in-the-loop-workflows-routing-queue',
+        'A record of every decision.': 'wyg-human-in-the-loop-workflows-record',
         'A day\'s workload.': 'wyg-human-in-the-loop-workflows-days-workload',
-        'A path to spot checks.': 'wyg-human-in-the-loop-workflows-path-spot-checks',
+        'When to move to spot checks.': 'wyg-human-in-the-loop-workflows-path-spot-checks',
         'A test on past cases.': 'wyg-human-in-the-loop-workflows-test-past-cases',
         'Who does the work': 'team-human-in-the-loop-workflows',
         'What we need from you': 'needs-human-in-the-loop-workflows',
@@ -264,8 +264,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/trust-control-recovery': {
     items: {
       'what-you-get': by({
-        'Five suggestion states.': 'wyg-trust-control-recovery-five-suggestion-states',
-        'One labelling rule.': 'wyg-trust-control-recovery-one-labelling-rule',
+        'What a suggestion shows at each stage.': 'wyg-trust-control-recovery-five-suggestion-states',
+        'One mark for AI, everywhere.': 'wyg-trust-control-recovery-one-labelling-rule',
         'Buttons for common fixes.': 'wyg-trust-control-recovery-buttons-common-fixes',
         'Overrides that keep a record.': 'wyg-trust-control-recovery-overrides-keep-record',
         'Recovery messages.': 'wyg-trust-control-recovery-recovery-messages',
@@ -281,7 +281,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'The question, agreed first.': 'wyg-coded-prototyping-question-agreed-first',
-        'The hard cases before the happy path.': 'wyg-coded-prototyping-hard-cases-before-happy',
+        'Awkward cases built first.': 'wyg-coded-prototyping-hard-cases-before-happy',
         'Real or representative data.': 'wyg-coded-prototyping-real-or-representative-data',
         'A working session.': 'wyg-coded-prototyping-working-session',
         'A short write-up.': 'wyg-coded-prototyping-short-writeup',
@@ -313,7 +313,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'The component, rebuilt in code.': 'wyg-frontend-design-systems-component-rebuilt-code',
-        'Its contract.': 'wyg-frontend-design-systems-its-contract',
+        'The component\'s rules, written down.': 'wyg-frontend-design-systems-its-contract',
         'Every state on show.': 'wyg-frontend-design-systems-every-state-show',
         'Automatic checks.': 'wyg-frontend-design-systems-automatic-checks',
         'Notes to extend it.': 'wyg-frontend-design-systems-notes-extend-it',
@@ -342,8 +342,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/design-system-implementation': {
     items: {
       'what-you-get': by({
-        'Design tokens named by meaning.': 'wyg-design-system-implementation-design-tokens-named-meaning',
-        'Components in both places.': 'wyg-design-system-implementation-components-both-places',
+        'Design tokens named by what they do.': 'wyg-design-system-implementation-design-tokens-named-meaning',
+        'Components in Figma and in code.': 'wyg-design-system-implementation-components-both-places',
         'Documentation.': 'wyg-design-system-implementation-documentation',
         'Versioning and releases.': 'wyg-design-system-implementation-versioning-releases',
         'The system on a real area of your product.': 'wyg-design-system-implementation-system-real-area-product',
@@ -357,8 +357,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/design-system-strategy': {
     items: {
       'what-you-get': by({
-        'An inventory.': 'wyg-design-system-strategy-inventory',
-        'A scope map.': 'wyg-design-system-strategy-scope-map',
+        'What you already have, listed.': 'wyg-design-system-strategy-inventory',
+        'What the system covers.': 'wyg-design-system-strategy-scope-map',
         'A structure for the system.': 'wyg-design-system-strategy-structure-system',
         'Owners and contribution rules.': 'wyg-design-system-strategy-owners-contribution-rules',
         'A design system roadmap.': 'wyg-design-system-strategy-design-system-roadmap',
@@ -374,7 +374,7 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/figma-storybook-alignment': {
     items: {
       'what-you-get': by({
-        'A correspondence map for each component family.': 'wyg-figma-storybook-alignment-correspondence-map-each-component',
+        'A side-by-side map of Figma and code.': 'wyg-figma-storybook-alignment-correspondence-map-each-component',
         'The gaps that matter, fixed.': 'wyg-figma-storybook-alignment-gaps-matter-fixed',
         'A Storybook entry for each case.': 'wyg-figma-storybook-alignment-storybook-entry-each-case',
         'Behaviour written where designers can see it.': 'wyg-figma-storybook-alignment-behaviour-written-where-designers',
@@ -391,7 +391,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'A map of where teams leave the system.': 'wyg-governance-adoption-map-where-teams-leave',
-        'Gaps told apart.': 'wyg-governance-adoption-gaps-told-apart',
+        'Each workaround\'s cause, named.': 'wyg-governance-adoption-gaps-told-apart',
         'Named owners.': 'wyg-governance-adoption-named-owners',
         'A path for every change.': 'wyg-governance-adoption-path-every-change',
         'A governance model.': 'wyg-governance-adoption-governance-model',
@@ -462,7 +462,7 @@ export const PAGE_OFFER_SCENES = {
         'A plan that starts from what you hold.': 'wyg-ux-research-plan-starts-from-what',
         'Interviews and observation.': 'wyg-ux-research-interviews-observation',
         'Every source checked against the others.': 'wyg-ux-research-every-source-checked-against',
-        'A readout you can act on.': 'wyg-ux-research-readout-you-can-act',
+        'Findings you can act on.': 'wyg-ux-research-readout-you-can-act',
         'Who does the work': 'team-ux-research',
         'What we need from you': 'needs-ux-research',
         'Where our part stops': 'stops-ux-research',
@@ -474,7 +474,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'A map of what the system really does.': 'wyg-legacy-software-modernisation-map-what-system-really',
-        'A keep-or-change call on each rule.': 'wyg-legacy-software-modernisation-keeporchange-call-each-rule',
+        'A keep-or-change decision on each rule.': 'wyg-legacy-software-modernisation-keeporchange-call-each-rule',
         'A staged plan.': 'wyg-legacy-software-modernisation-staged-plan',
         'Designs for each stage.': 'wyg-legacy-software-modernisation-designs-each-stage',
         'Help through each rollout.': 'wyg-legacy-software-modernisation-help-through-each-rollout',
@@ -506,7 +506,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'Each feature\'s fate.': 'wyg-replatforming-product-design-each-features-fate',
-        'The months in between, designed.': 'wyg-replatforming-product-design-months-between-designed',
+        'The changeover months, designed.': 'wyg-replatforming-product-design-months-between-designed',
         'A plan for saved work.': 'wyg-replatforming-product-design-plan-saved-work',
         'Names that still make sense.': 'wyg-replatforming-product-design-names-still-make-sense',
         'Risky interactions tried in code': 'wyg-replatforming-product-design-risky-interactions-tried-code',
@@ -526,7 +526,7 @@ export const PAGE_OFFER_SCENES = {
         'Tests you can rerun.': 'wyg-ai-product-engineering-tests-you-can-rerun',
         'A model chosen for each task.': 'wyg-ai-product-engineering-model-chosen-each-task',
         'Corrections that become tests.': 'wyg-ai-product-engineering-corrections-become-tests',
-        'A view after release.': 'wyg-ai-product-engineering-view-after-release',
+        'Usage, cost and failures after release.': 'wyg-ai-product-engineering-view-after-release',
         'Documented code in your codebase': 'wyg-ai-product-engineering-documented-code-codebase',
         'Who does the work': 'team-ai-product-engineering',
         'What we need from you': 'needs-ai-product-engineering',

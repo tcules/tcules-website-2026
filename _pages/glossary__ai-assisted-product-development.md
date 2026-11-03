@@ -118,7 +118,7 @@ AI might draft test cases from a list of the screens and conditions the product 
 
 ## Where AI helps most in product development work {#practice}
 
-A designer may explore how a screen behaves in code. An engineer may use an assistant to draft tests. A product team may use a model to organise interview notes. In each case a person remains responsible for the call and for what is released.
+A designer may explore how a screen behaves in code. An engineer may use an assistant to draft tests. A product team may use a model to organise interview notes. In each case a person remains responsible for the decision and for what is released.
 
 AI helps most where the goal is clear and the result can be checked. First drafts of tests, sorted research notes, variations of a screen and routine code all fit. Work that turns on judgement about users, trade-offs or the business stays with people.
 
@@ -172,4 +172,4 @@ A person reviews what the AI generated and decides whether it is fit to release.
 
 AI tools can now draft much of the work, from test cases to running code. A named person who checks the output against the design, and answers for what ships, is what lets a team use more of it with confidence.
 
-[See Implementation QA](/services/design-engineering/implementation-qa)
+[See Implementation QA →](/services/design-engineering/implementation-qa)

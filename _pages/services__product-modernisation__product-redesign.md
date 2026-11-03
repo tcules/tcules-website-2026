@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -161,19 +161,17 @@ content_governance:
 
 # SaaS product redesign that keeps what long-time users rely on
 
-A SaaS product redesign is for two audiences at once: the prospect judging the product in a demo, and the long-time customer who built a working day around it. Tcules provides SaaS product redesign for established B2B software, starting with what long-time users rely on and changing the rest a workflow at a time.
+Our SaaS product redesign gives established software clearer screens and workflows, changed in stages, so it impresses prospects and keeps loyal customers.
 
 *Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)*
 
-[Show us the part customers complain about](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from our product redesign services {#what-you-get}
 
 Every change comes with a reason, and with a plan for how existing customers will meet it. Redesign is one part of our [Product Modernisation](/services/product-modernisation) work.
-
-**What you receive**
 
 - **A record of what customers rely on.** Every habit we find, sorted into the four groups below, each with a reason.
 
@@ -193,7 +191,7 @@ Every change comes with a reason, and with a plan for how existing customers wil
 
 **What we need from you.** Access to the live product, the analytics and support history you have, and time with new and long-time customers to watch and test with.
 
-**Where our part stops.** The product calls stay with you, including what ships and when. Our part ends at specifications your engineers build from, unless we build it too.
+**Where our part stops.** The product decisions stay with you, including what ships and when. Our part ends at specifications your engineers build from, unless we build it too.
 
 ## Selected SaaS product redesign work {#selected-work}
 
@@ -224,7 +222,7 @@ Every established product holds habits worth keeping. Before redesigning, we lis
 
 If a screen already works, we say so, and the budget goes where customers will feel it. One workflow is redesigned first, the one causing most friction, so the new patterns are proved before they spread.
 
-We test each change with people who already know the product. New users show whether it is clear. Long-time users show what it would cost them, including [the small regressions that cost confidence even when every task completes](/insights/articles/silent-ui-regression-debt).
+We test each change with people who already know the product. New users show whether it is clear. Long-time users show what it would cost them, including [the small regressions that cost confidence even when every task completes](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows).
 
 Then old and new versions run side by side while customers move across, with a note on what changed.
 
@@ -252,41 +250,41 @@ Then old and new versions run side by side while customers move across, with a n
 > “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a redesign, a good first piece of work is the workflow causing most friction, redesigned and tested with people who already know the product.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We know what to leave alone in a product people rely on.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), we treated long-time customers' habits as a limit on change and checked the redesigned scope selector against them in coded prototypes.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we tried the AI workspace as a coded demo on sample data while its direction could still change, then took it to a production-ready module.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and we design each of its products and keep improving them like part of its product team.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## SaaS product redesign FAQs {#faq}
 
@@ -320,6 +318,6 @@ Share a link, the customers who feel it most and the tasks they used to find eas
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

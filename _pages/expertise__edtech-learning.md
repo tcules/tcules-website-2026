@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -170,13 +170,15 @@ content_governance:
 
 # EdTech product design for learning platforms, courses and teacher tools
 
-Learners meet your platform on a phone between lessons, teachers when they check who is stuck, and your team every time a course changes in the LMS. Tcules' EdTech product design covers learning platforms, courses and teacher tools, carried into Moodle or your chosen LMS.
+In our EdTech product design, learners get a clear next step, even on a phone, and teachers see at a glance who is stuck.
 
-[Tell us about your learners](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in EdTech and learning {#what-we-design}
+
+For learning platforms, training providers and course teams. We carry the design into Moodle or the LMS you already use.
 
 - **LMS and Moodle course experiences**, with custom themes and plugins · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience)
 
@@ -190,9 +192,7 @@ Learners meet your platform on a phone between lessons, teachers when they check
 
 - **Teacher dashboards and educator views** · Who is stuck, seen early enough to help
 
-## Selected EdTech product design work {#selected-work}
-
-Work closest to EdTech: our learning-platform work for The Wandering Raven, and two products where an expert reviews what the software produced, as a teacher or an assessor does.
+## EdTech and related product design work {#selected-work}
 
 ### The Wandering Raven: we built the Moodle theme ourselves
 
@@ -200,7 +200,7 @@ The Wandering Raven runs creative-writing courses for eight- to eighteen-year-ol
 
 ### BuildTwin: a sign-off with the source in view
 
-At BuildTwin, a quality engineer signs off each AI check on a structural drawing and has to defend the call. Our review feed keeps every observation beside its source, and a correction needs a reason, which is the shape an assessor's sign-off takes too. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+At BuildTwin, a quality engineer signs off each AI check on a structural drawing and has to defend the decision. Our review feed keeps every observation beside its source, and a correction needs a reason, which is the shape an assessor's sign-off takes too. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
 ### Novus Insights: the AI drafts the questions, a person decides
 
@@ -250,8 +250,6 @@ We would spend longest on the mentor's step, because we would expect apprentices
 
 We design the learning experience and carry it into your platform, as a project or with a senior designer inside your product team.
 
-**What you receive**
-
 - **Research with learners and educators:** research with learners and educators, on the devices they really use
 
 - **An audit with a plain verdict:** an audit of content structure, mobile use, consistency and community features, each with a plain verdict
@@ -268,15 +266,13 @@ We design the learning experience and carry it into your platform, as a project 
 
 **Who does the work.** One senior product designer leads and does the design, and an account lead runs the project day to day. Our developers configure the platform. We can also work inside your product team, as we did beside JoVE's product managers and designers for six months.
 
-**What we need from you.** Time with learners and educators, and access to your LMS with its plugins, themes and settings. The course content, your instructional designers and subject experts, and a person who can make the product calls for you.
+**What we need from you.** Time with learners and educators, and access to your LMS with its plugins, themes and settings. The course content, your instructional designers and subject experts, and a person who can make the product decisions for you.
 
 **Where our part stops.** Course content, assessment standards and accreditation stay with your instructional designers and subject experts. Privacy requirements for younger learners stay with your legal team.
 
-A learning app that exists only as an idea or a prototype can start with [New Product Design & First Release](/services/new-product-design-first-release). If engagement is dropping and nobody can say why, start with a [UX & Product Audit](/audits/ux-product-audit).
+A learning app that exists only as an idea or a prototype can start with [Design-led MVP Development](/services/mvp-development). If engagement is dropping and nobody can say why, start with a [UX & Product Audit](/audits/ux-product-audit).
 
 ## What clients say {#testimonials}
-
-Two voices from learning platforms, and one from a client outside education.
 
 > “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
 > **Trishanya Raju, Founder, The Wandering Raven**
@@ -287,41 +283,41 @@ Two voices from learning platforms, and one from a client outside education.
 > “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
 > **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a learning product, a good first piece of work is one course, or a learner's first week, redesigned inside the LMS you already run.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** At Gold Image Printing, we watched staff handle orders in the existing system before redesigning the screens they rely on. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has stayed with us for three years, and we have designed each of its products in that time.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** We designed GT Tools' Shopify store and then developed it, including the custom work the platform needed. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about EdTech product design {#faq}
 
@@ -351,6 +347,6 @@ Share who they are, the platform you run on and the activity where they drift.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

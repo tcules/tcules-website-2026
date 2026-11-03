@@ -158,4 +158,4 @@ Shared components and a style guide often become the foundation for that change,
 
 Tcules runs the full job through Product Modernisation. [Product Redesign](/services/product-modernisation/product-redesign) and [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation) cover narrower jobs.
 
-[See Product Modernisation](/services/product-modernisation)
+[See Product Modernisation →](/services/product-modernisation)

@@ -50,7 +50,7 @@ const HERO_ILLUSTRATIONS: Readonly<
     width: 820,
     height: 693,
   },
-  [servicePath('new-product-design-first-release')]: {
+  [servicePath('mvp-development')]: {
     src: '/illustrations/heroes/services-new-product-design-first-release.svg',
     width: 820,
     height: 519,
@@ -82,7 +82,7 @@ export function serviceIllustration(routeOrSlug: string): ServiceIllustration | 
  * round 1, 10 Oct 2026: the six situations of "What do you need next?" each lead with their
  * service's drawing). Decorative in a card: the card's title names the service, so `alt` is empty.
  *
- * `/services/new-product-design-first-release` has no drawing of its own yet. Until it does it takes
+ * `/services/mvp-development` has no drawing of its own yet. Until it does it takes
  * Software Development's — the end-to-end build from system to release, the first release's own
  * promise ("design a first release … and build it too") — and docs/page-mapping.md (Home round 1)
  * lists the interim for the owner.
@@ -96,7 +96,7 @@ const SERVICE_DRAWINGS: Readonly<
   '/services/design-systems': { file: 'design-systems', width: 681, height: 569 },
   '/services/design-engineering': { file: 'design-engineering', width: 737, height: 560 },
   '/services/software-development': { file: 'software-development', width: 714, height: 610 },
-  '/services/new-product-design-first-release': {
+  '/services/mvp-development': {
     file: 'software-development',
     width: 714,
     height: 610,

@@ -107,13 +107,13 @@ As you grow, the questions get bigger. You move from designing a screen well to 
 
 ## How AI fits into the job {#ai-fluency}
 
-AI is part of how the studio works, which changes what a strong practitioner needs to know. You will learn when a task can go to a tool or an agent and what it needs, how to check what comes back, and when to do the work yourself.
+You'll work with AI tools and agents, learning what to hand them, how to check their work and when to do it yourself.
 
 That leaves your attention for the parts of a product that need judgement. Taste, writing, interaction design and visual craft still decide whether the work is good.
 
 We think software is heading towards products that act on people's behalf and interfaces that are generated as well as drawn. The designers who shape it will direct AI through the repetitive work, explore ideas in code and still be the ones who decide what is good. That is the practitioner this studio is growing.
 
-[Read how AI-native Product Design works at Tcules](/how-we-work/ai-native-product-design)
+[See how we use AI →](/how-we-work/ai-native-product-design)
 
 ## What we look for when Tcules is hiring {#what-we-look-for}
 
@@ -144,7 +144,7 @@ Engineering · Full-time · In-office, Ahmedabad
 
 Marketing and visual communication · Full-time · In-office, Ahmedabad
 
-## Tcules internships, residencies and the Lab {#lab}
+## Tcules internships, residencies and Future Interfaces Lab places {#lab}
 
 The [Future Interfaces Lab](/future-interfaces-lab) is where we run experiments outside client work. Each internship, residency or Lab place is published with its terms and a way to apply when it opens. The [Lab application page](/future-interfaces-lab/join) shows what is open now.
 

@@ -58,11 +58,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -176,11 +176,11 @@ content_governance:
 
 # Human-in-the-loop design for AI review steps experts actually use
 
-The review step is where your AI meets the people who answer for its work. The expert signs off each item, a manager watches the queue and a customer waits on the result. Tcules provides human-in-the-loop design for AI products, setting what reaches a person, what they see and what the record keeps.
+Human-in-the-loop design gives your reviewers the sources and context to decide on AI work quickly, and keeps a record of every correction.
 
 *Selected work: [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)*
 
-[Show us your review step](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -188,21 +188,19 @@ The review step is where your AI meets the people who answer for its work. The e
 
 The review step designed as part of the product, from what sends an item to a person to what happens after they decide.
 
-**What you receive**
+- **What sends work to a person.** Each reason work reaches a person, tied to what a mistake would cost: a costly action, a policy rule, missing information or an unusual result.
 
-- **Review triggers.** Each reason work reaches a person, tied to what a mistake would cost: a costly action, a policy rule, missing information or an unusual result.
-
-- **The review card.** The AI's proposal, what it was based on, what is missing and what approval will change, in the reviewer's reading path.
+- **What the reviewer sees.** The AI's proposal, what it was based on, what is missing and what approval will change, in the reviewer's reading path.
 
 - **What the reviewer can do.** Approve, edit, reject, ask for more, overrule with a reason or pass it to someone senior.
 
-- **Routing and the queue.** Who picks an item up, what happens if nobody does, and what the person who asked can see while they wait.
+- **Who picks up each item, and when.** Who picks an item up, what happens if nobody does, and what the person who asked can see while they wait.
 
-- **The record.** The original AI result, the reviewer's choice, the reason and the action that followed.
+- **A record of every decision.** The original AI result, the reviewer's choice, the reason and the action that followed.
 
-- **A day's workload.** How much a person can judge properly in a day, riskiest items first and routine ones cleared in groups.
+- **How much one reviewer can handle.** How much a person can judge properly in a day, riskiest items first and routine ones cleared in groups.
 
-- **A path to spot checks.** The rules for moving a type of work from full review to sampling, and back again.
+- **When to move to spot checks.** The rules for moving a type of work from full review to sampling, and back again.
 
 - **A test on past cases.** A coded version loaded with a sample of past items, so your reviewers try it before the build.
 
@@ -230,7 +228,7 @@ In ConnectX's peak-price scenario, an operator sees the suggested battery action
 
 ## Human review of AI output that experts keep using {#review-options}
 
-A review step fails quietly. Reviewers are asked to approve output with no sources behind it, and queues grow while the person who asked cannot see where their work is. A correction overwrites the AI's result, so nobody learns from the disagreement. When the only button says "Approve", the product is collecting signatures.
+Reviewers are asked to approve output with no sources behind it, and queues grow while the person who asked cannot see where their work is. A correction overwrites the AI's result, so nobody learns from the disagreement. When the only button says "Approve", the product is collecting signatures.
 
 So we start by choosing the right set-up for each kind of work.
 
@@ -258,41 +256,41 @@ We keep every override with its reason, so the record shows where the AI and you
 > “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
 > **Clément Contamine, CPO, Primelis**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For human-in-the-loop design, a good first piece of work is one review step, from what sends an item to a person to what the record keeps after they decide.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We design AI that people can check and correct.** In the [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) redesign, nothing the AI wrote reached a listing until a person chose it.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We work out what the product has to know before we draw it.** For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we modelled how clients, candidates, jobs and talent pools connect before redesigning four workflows around that model.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **We prove the hard parts in code while they can still change.** While reviewing our coded prototypes for [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer asked about drag and drop in Bootstrap 5 while the choice was still open.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about human-in-the-loop design {#faq}
 
@@ -326,6 +324,6 @@ Share the AI output, who reviews it and what happens when they disagree.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

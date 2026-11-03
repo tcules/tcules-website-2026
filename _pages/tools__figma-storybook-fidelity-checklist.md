@@ -149,7 +149,7 @@ The free Figma to Storybook Fidelity Checklist tests one component past its look
 
 Compare what the component should do with what it does, note what you saw, and leave with corrections someone else can check.
 
-[Start a component check](#workspace)
+[Use the checklist](#workspace)
 
 ## How to run a Storybook component review with this checklist {#how-to-use-it}
 

@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -150,13 +150,11 @@ content_governance:
 
 # SaaS development services from the studio that designs the product
 
-Software development is for launch day, the first large customer's rollout and the tenth release, and for the engineers who will read and extend the code after us.
-
-Tcules provides SaaS development services from a first release to the ongoing build of an established product: frontend, backend, integrations, AI features and mobile apps.
+Our SaaS development services take your product from first release through each one after, as software customers rely on and engineers can extend.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)*
 
-[Start a development enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -178,13 +176,11 @@ GT Tools sells specialist automotive-glass equipment on Shopify. We designed the
 
 The Wandering Raven teaches creative writing to learners aged eight to eighteen, partly on Moodle. After the research and design, we installed and configured the Moodle plugins and made a custom theme. Design and platform stayed with one team, and the client could concentrate on its courses.
 
-[Read the Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
 
 ## What you get from our SaaS development services {#what-you-get}
 
-In B2B SaaS development and beyond, we build a first release, a large new feature or the next stage of a live product, with designers in the build team.
-
-**What you receive**
+We build a first release, a large new feature or the next stage of a live product, with designers in the build team.
 
 - **Working software:** screens, the systems behind them and integrations, built in small releases.
 
@@ -211,7 +207,7 @@ In B2B SaaS development and beyond, we build a first release, a large new featur
 | **When it's ready** | The testing and checks it must pass before release |
 | **Who owns what** | Code, reviews, security, support and agreed hosting, each with a named owner |
 
-Our engineers use AI coding tools for well-defined work, so more of the time goes on what customers notice, from the first-run screen to the error message on a bad day. People review every change and make the calls on architecture, data and security.
+Our engineers use AI coding tools for well-defined work, so more of the time goes on what customers notice, from the first-run screen to the error message on a bad day. People review every change and make the decisions on architecture, data and security.
 
 *Illustration, not client work*
 
@@ -225,7 +221,7 @@ It ships behind a switch to a few customers first, and the code, tests and run n
 
 | Service | Best for |
 |---|---|
-| **[New Product Design & First Release](/services/new-product-design-first-release)** | Founders taking an idea, research or an AI-built prototype to a first release |
+| **[Design-led MVP Development](/services/mvp-development)** | Founders taking an idea, research or an AI-built prototype to a first release |
 | **[SaaS & Web Application Development](/services/software-development/saas-web-app-development)** | New workflows, integrations or AI features in a live product |
 | **[Frontend Development](/services/software-development/frontend-development)** | Screens that look and behave as designed on every device and with the keyboard |
 | **[Backend & API Development](/services/software-development/backend-api-development)** | Data, sign-in, business rules and third-party platforms |
@@ -249,47 +245,47 @@ Have engineers ready to build? [Product Design](/services/product-design) gives 
 > “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
 > **Trishanya Raju, Founder, The Wandering Raven**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For software development, a good first piece of work is one feature built as a pilot, or a [Prototype Readiness Review](/audits/prototype-readiness-review) if you already hold an early build.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we began with a UX audit, designed the store mobile first and then built it on Magento, keeping Magento's own purchase workflow intact.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We prove the hard parts in code while they can still change.** [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers reviewed our coded prototypes while the build approach was still open, and one asked how drag and drop would work in Bootstrap 5.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has stayed with us for three years as an ongoing partnership, and each of its products in that time is our design.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about our SaaS development services {#faq}
 
 ### Can you build our whole first release?
 
-Yes. We take a complete first release from design to launch, covering the frontend, backend, integrations and testing. That work runs through [New Product Design & First Release](/services/new-product-design-first-release), where the release is scoped around what early customers need first.
+Yes. We take a complete first release from design to launch, covering the frontend, backend, integrations and testing. That work runs through [Design-led MVP Development](/services/mvp-development), where the release is scoped around what early customers need first.
 
 ### Can you work in our existing codebase?
 
@@ -313,7 +309,7 @@ Tcules is a product design studio that also builds software, so ours is design-l
 
 ### Is Tcules a SaaS development company in India?
 
-Our studio is in Ahmedabad, India, and we have worked with clients in 19 countries since 2017. [How We Work](/how-we-work#time-zones) explains how we agree shared hours and run the collaboration day to day.
+Our studio is in Ahmedabad, India, and we have worked with clients in 19 countries since 2017. [How We Work](/how-we-work#time-zones) explains our working hours and how we run the collaboration day to day.
 
 ## Tell us what your SaaS product needs built {#enquiry}
 
@@ -325,6 +321,6 @@ A first release, a big new feature or a live product that needs looking after. S
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

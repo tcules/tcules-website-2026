@@ -70,10 +70,10 @@ search_context:
 conversion:
   form: project_enquiry
   anchor: enquiry
-  submit_label: Send enquiry
+  submit_label: Request a call
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
 page_composition:

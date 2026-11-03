@@ -142,6 +142,7 @@ release:
 migration:
   redirects_from:
   - /insights/podcasts/mastering-design-decisions-insights-for-founders-pms-and-designers
+  - /insights/videos/mastering-design-decisions-insights-for-founders-pms-and-designers
 content_governance:
   master_contract: Tcules Website V11, Editorial Embodiment & Visual Proof Pass
   v10_role: media_preserve_and_refine
@@ -184,7 +185,7 @@ page_composition:
 
 By [Jatin Leuva](/insights/authors/jatin-leuva) · Published 16 July 2026 · Updated 26 October 2026 · 7 min read
 
-Product calls rarely come with one complete source of truth. Customer feedback is often partial, and analytics can show what people did without saying why. Engineers know what is feasible and what it will cost to run. Business leaders carry commitments the company has already made. Designers have to keep the user, and the product the team is heading towards, in view among all of that.
+Product decisions rarely come with one complete source of truth. Customer feedback is often partial, and analytics can show what people did without saying why. Engineers know what is feasible and what it will cost to run. Business leaders carry commitments the company has already made. Designers have to keep the user, and the product the team is heading towards, in view among all of that.
 
 Jatin Leuva, Founder and CEO of Tcules, hosts three guests: Parasharan Chari, Founder of Medkart; Dhimant Trivedi, Head of Engineering at Contrado; and Akshay Vyas, Creative Head at Knovos. This page summarises the conversation in writing; the recording is linked below.
 
@@ -192,10 +193,10 @@ Jatin Leuva, Founder and CEO of Tcules, hosts three guests: Parasharan Chari, Fo
 
 **Key takeaways**
 
-- Jatin Leuva hosts leaders from Medkart, Contrado and Knovos on how product calls get made together.
+- Jatin Leuva hosts leaders from Medkart, Contrado and Knovos on how product decisions get made together.
 - Each feedback route tells a different story, so keep track of where each piece came from.
 - Data can strengthen or weaken an explanation. People still have to find out what caused an event.
-- Roadmap calls are negotiations, and a responsible partial release records the compromise and the trigger for the next stage.
+- Roadmap decisions are negotiations, and a responsible partial release records the compromise and the trigger for the next stage.
 - AI makes options cheaper to generate, and people still own the judgement and its effect on customers.
 
 ## Product research and constraints: start with how you listen {#the-first-decision-is-how-to-listen}
@@ -250,7 +251,7 @@ A better presentation helps. A shared decision record helps more:
 | Business consequence | What is the effect on revenue, cost, risk, service or strategy? |
 | Technical constraint | What is impossible, expensive or unsafe today? |
 | Options | Which paths are still open? |
-| Accountable owner | Who makes the call and carries the consequence? |
+| Accountable owner | Who makes the decision and carries the consequence? |
 | How we will check | What will we observe after committing? |
 | What we are putting off | What must not be lost from the future product? |
 
@@ -272,9 +273,9 @@ Generating options has become cheaper. The team still has to understand the requ
 
 Tcules works to the same rule: people own the work, including work done with AI tools. See [How We Work](/how-we-work) and [Product Design](/services/product-design).
 
-## Accountable product calls: what to record when disciplines disagree {#what-should-the-team-record-when-disciplines-dis}
+## Accountable product decisions: what to record when disciplines disagree {#what-should-the-team-record-when-disciplines-dis}
 
-When disciplines disagree, write down the call to be made and what each side's reading rests on. Add the constraints that cannot move, the options turned down and the owner accountable for the next step. The negotiation still happens. The record lets anyone review it later, so a roadmap choice is remembered as a choice the team made.
+When disciplines disagree, write down the decision to be made and what each side's reading rests on. Add the constraints that cannot move, the options turned down and the owner accountable for the next step. The negotiation still happens. The record lets anyone review it later, so a roadmap choice is remembered as a choice the team made.
 
 AI can produce more options and summaries quickly. Responsibility stays with the people who understand the consequence and can question how the problem was framed. Keep the original material within reach, mark what was generated and record who accepted the resulting choice.
 
@@ -301,4 +302,4 @@ This Tcules episode, published on 16 July 2026, brings together Parasharan Chari
 ## More on product decisions across design and code {#related-reading}
 
 - [Samy Melaine Eden AI podcast: how should AI products start from the user's work?](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo)
-- [Product Design](/services/product-design): carrying an agreed product call into the interaction design and the build.
+- [Product Design](/services/product-design): carrying an agreed product decision into the interaction design and the build.

@@ -268,7 +268,7 @@ Five drivers set the price, and all of them are predictable. Two concern what is
 
 A diagnosis of one component family is a much smaller commitment than a multi-platform build, and it can tell you whether the larger one is needed. Whoever you hire, ask for the work to be priced up front once the scope is agreed, so each driver is visible before you commit.
 
-## Two design system calls from our own work {#from-our-own-design-system-work}
+## Two design system decisions from our own work {#from-our-own-design-system-work}
 
 Both cases are ours. Each shows a choice a good consultant should help you make before anything gets built.
 
@@ -314,13 +314,13 @@ Ask what they will look at first, what they might advise you to leave unbuilt an
 
 ### Do AI coding tools change when you need design system help?
 
-They make written rules more valuable, because agents apply what they can read. Choosing what belongs in the shared system, and who approves an exception, remains a call for people. If agents already produce interface faster than anyone reviews it, write the rules down before you hire for anything else.
+They make written rules more valuable, because agents apply what they can read. Choosing what belongs in the shared system, and who approves an exception, remains a decision for people. If agents already produce interface faster than anyone reviews it, write the rules down before you hire for anything else.
 
 ## More on hiring design system help {#related-reading}
 
-- [How to build a SaaS design system product teams keep using](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency): contribution, adoption and what to measure.
+- [How to build a SaaS design system product teams keep using](/insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency): contribution, adoption and what to measure.
 - [Design System Drift Checker](/tools/design-system-drift-checker): trace one component family through design, code and real use.
 - [What is design system adoption?](/glossary/design-system-adoption) The term, and how teams measure it.
 - [Design Systems](/services/design-systems): strategy, implementation, Figma and Storybook alignment, and governance.
 
-[Talk to Tcules about design system consulting](/contact).
+[Book a call](/contact) about design system consulting.

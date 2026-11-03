@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -99,7 +99,7 @@ structured_data:
 
 *How we work · AI-native Product Design*
 
-# AI in product design, with people making every call
+# AI in product design, with people making every decision
 
 Our designers now hand the legwork of a product review to AI. It walks through your live product, sorts what it finds and drafts corrections, and a designer judges each result before the next step starts.
 
@@ -107,7 +107,7 @@ A small team sees more of your product before anyone changes it, so you choose b
 
 We call this AI-native Product Design. The [glossary defines the term](/glossary/ai-native-product-design).
 
-[Start a conversation](#enquiry)
+[Book a call](#enquiry)
 
 ## A typical AI-assisted design run, step by step {#design-run}
 
@@ -134,7 +134,7 @@ Code handed over for release still goes through the reviews and tests your proje
 
 The mix changes with the project and with your rules.
 
-## Which design calls stay with people, and how AI work is checked {#people-decide}
+## Which design decisions stay with people, and how AI work is checked {#people-decide}
 
 **What stays with a person.** Designers frame the problem, choose the direction and decide what goes into the design. Taste, domain knowledge, disagreements in your team and anything with real consequences for your users stay with a person.
 
@@ -142,7 +142,7 @@ The mix changes with the project and with your rules.
 
 **How results are checked.** We check results in the way their task needs. Some checks run against your design system, accessibility standards or business rules. A designer reviews wherever no automatic check can answer.
 
-**When a result counts.** A generated screen is accepted when it passes those checks. A comparison becomes a finding when a designer understands it. Code handed over for release goes through the reviews and tests the project has agreed.
+**When we accept a result.** A generated screen is accepted when it passes those checks. A comparison becomes a finding when a designer understands it. Code handed over for release goes through the reviews and tests the project has agreed.
 
 ## Senior designers with AI tools: who leads and when you review {#what-stays}
 
@@ -170,9 +170,9 @@ For data handling and procurement questions, see [what happens to your material 
 
 Our designers use AI to walk through live products, compare screens with the design system and draft coded corrections. They also use it to sort research and build small prototypes. A person checks each result, and people decide what the results mean.
 
-### Does using AI make design work faster or cheaper?
+### Does using AI make design work faster?
 
-It changes how much ground a small team covers: more of your live product reviewed, more research sorted and more options to click through before you commit. People still make the calls. Each engagement is priced on its agreed scope before work starts.
+Yes, for the routine work. AI does it faster, so we either deliver more in the same time or put the time saved into more ambitious work: more of your live product reviewed, more options explored and harder ideas tested before you commit. People still make every decision. Each engagement is priced on its agreed scope before work starts.
 
 ### Will AI replace product designers?
 
@@ -192,6 +192,6 @@ Tell us what you are designing, fixing or rebuilding. If your company has rules 
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

@@ -53,11 +53,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -139,35 +139,29 @@ content_governance:
 
 # Software product audits for teams that disagree about the cause
 
-An audit is for the steering meeting where product, design and engineering each have a theory, and for a redesign budget meant for what customers will notice.
-
-A Tcules software product audit finds the cause behind what your team sees and ranks what to fix first. It suits live software, with a particular focus on SaaS, and prototypes heading for customers.
-
-Know what to fix, and what the product could become, before you fund the redesign. Your team can run with the plan, or our designers and engineers can carry it into the product.
+Each audit starts with about two days on one workflow, feature or set of components, at a fixed price, and ends with what to fix first.
 
 *Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-[Not sure which audit fits? Describe the symptom](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Which audit do you need? Match it to what you are seeing {#choose}
+## Which audit do you need? {#choose}
 
-Each of these five audits starts with about two days on one focused piece: a single workflow, one family of components or one AI feature. The price is fixed and agreed before work begins, and you can widen the scope later.
+Pick the row that matches what you're seeing.
 
-| Audit | Best for | You get |
+| Audit | Best for | What you get |
 |---|---|---|
-| [UX & Product Audit](/audits/ux-product-audit) | Established SaaS where people stall in a workflow or drop out of onboarding, and every team has a theory | The causes of the friction, ranked by harm |
-| [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) | Copilots, AI search and agents about to reach more users | The feature tested on real tasks, and where people struggle to see, check or undo what the AI did |
-| [Design System Audit](/audits/design-system-audit) | A shared library that teams keep working around | Your most-used patterns checked in Figma, in code and on live screens, then a repair list and the habits behind the drift |
-| [Design-to-Code Audit](/audits/design-to-code-audit) | Screens that pass design review, then ship looking or behaving differently | Every gap sorted by cause, so each fix lands in the design, the code or the review step |
-| [Product Modernisation Assessment](/audits/product-modernisation-assessment) | Established software that needs real change, with the team split between redesign, a new platform and a rebuild | A recommended route for each area, what must stay and the order of work |
+| [UX & Product Audit](/audits/ux-product-audit) | People stall in a workflow, and teams disagree why | The causes of the friction, ranked by harm |
+| [AI UX Audit](/audits/ai-product-ux-readiness) | An AI feature about to reach more users | Where people can't check or undo what the AI did |
+| [Design System Audit](/audits/design-system-audit) | A shared library teams keep working around | A repair list, and why teams bypass it |
+| [Design-to-Code Audit](/audits/design-to-code-audit) | Screens that ship unlike the approved design | Every gap sorted by cause, with a fix plan |
+| [Product Modernisation Assessment](/audits/product-modernisation-assessment) | A team split between redesign, new platform and rebuild | An answer and an order of work for each area |
 
 ## Auditing a prototype before it meets real customers {#prototype}
 
-The sixth audit starts from a working prototype, and also takes about two days on one core workflow.
-
-[Prototype Readiness Review](/audits/prototype-readiness-review). For working prototypes, including AI-built ones, that customers or investors now want to use for real. We map what the prototype proved, what it left out and how to close the gaps.
+[Prototype Readiness Review](/audits/prototype-readiness-review). A senior designer and an engineer put one key flow through real use and show you what breaks before launch.
 
 ## Selected work that started with the cause {#selected-work}
 
@@ -181,7 +175,7 @@ Our audit found the fault in one assumption: in Dealpath's listing workspace, ad
 
 ### Omny AI: the cause sat in one default
 
-Users held Omny accountable for AI suggestions they had not properly reviewed, which filled the listing before anyone chose them. The redesign starts the content area empty, and each suggestion takes a deliberate click. Afterwards, Omny reported that users relied on the AI more knowingly, and forgave it more readily when a suggestion was wrong.
+Users held Omny accountable for AI suggestions they had not properly reviewed, which filled the listing before anyone chose them. The redesign starts the content area empty, and each suggestion takes a deliberate click. Afterwards, Omny reported that users became more aware of how they used the AI, and more forgiving when a suggestion was wrong.
 
 [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
@@ -205,41 +199,41 @@ We built the suite's new shared patterns and a three-view scope selector as code
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-After an audit, your team can work from the report alone, or our designers and engineers can carry the findings into a redesign or a build.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We tell you what is really wrong.** For [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), an expert usability review, stakeholder conversations, user interviews and product analytics, read together, put reporting first.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We work out what the product has to know before we draw it.** For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we modelled how clients, candidates and jobs connect before redesigning four staffing workflows: onboarding, shortlisting, talent pools and job creation.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, so the answers specialist buyers need before they pay sit beside the price in the store they use.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about choosing a software product audit {#faq}
 
@@ -281,6 +275,6 @@ Not sure which audit fits? Describe the symptom, who it affects and what you've 
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

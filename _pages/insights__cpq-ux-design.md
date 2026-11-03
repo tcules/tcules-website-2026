@@ -328,4 +328,4 @@ It is the design of configure-price-quote software around the people who build, 
 - [How to use a UX audit, from first question to ranked plan](/insights/guides/how-to-use-a-ux-product-audit)
 - [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design): the service that models roles and records before screens.
 
-[Tell us where quotes slow down or need rework](/contact).
+[Book a call](/contact)

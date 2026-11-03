@@ -216,7 +216,7 @@ export type SketchName =
   | L1SceneName;
 
 const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
-  '/services/new-product-design-first-release': 'new-product',
+  '/services/mvp-development': 'new-product',
   '/services/product-design': 'product-design',
   '/services/product-modernisation': 'product-modernisation',
   '/services/design-systems': 'design-systems',

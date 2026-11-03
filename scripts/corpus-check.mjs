@@ -15,8 +15,9 @@
  *   - the hero has a title; nothing is left in `hero.extra`
  *   - every media binding that claims to be bound has a URL
  *   - no run list contains a raw markdown delimiter that the parser should have consumed
- *   - the pass covers 125 files: 99 first- and second-level (the 26 Oct 2026 copy: 96, less
- *     insights/videos, plus the three legal pages and the authors index) and the 26 level-2 services
+ *   - the pass covers 126 files: 100 first- and second-level (the 26 Oct 2026 copy: 96, less
+ *     insights/videos, plus the three legal pages, the authors index and, from 3 Nov 2026, the Ringier
+ *     case) and the 26 level-2 services
  *     (31 Oct 2026)
  *   - a page that authors no `render.band_order` keeps document order (legal, authors index)
  */
@@ -161,9 +162,9 @@ const files = readdirSync('_pages').filter((f) => {
     f.endsWith('.md') && (parts.length <= 2 || (parts.length === 3 && parts[0] === 'services'))
   );
 });
-if (files.length !== 125)
+if (files.length !== 126)
   problems.push(
-    `expected 125 corpus files (99 first/second-level, 26 level-2 services), found ${files.length}`,
+    `expected 126 corpus files (100 first/second-level, 26 level-2 services), found ${files.length}`,
   );
 if (pages.length !== files.length)
   problems.push(`parsed ${pages.length} of ${files.length} files`);

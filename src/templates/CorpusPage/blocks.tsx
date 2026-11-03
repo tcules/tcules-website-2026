@@ -695,7 +695,24 @@ export function EnquiryBand({
   island?: EnquiryIsland;
 }) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
-  const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
+  /* A plain line after the lead ("Need an NDA first? Say so…", contact, 3 Nov 2026 copy) is part of
+     the copy half's body: it has no link to become a contact entry and no score to become the badge,
+     and dropping it lost words. */
+  const notes = band.blocks.flatMap((block) =>
+    block !== lead &&
+    block.type === 'paragraph' &&
+    !ratingOf(block) &&
+    !block.runs.some((run) => run.type === 'link')
+      ? [plain(block.runs)]
+      : [],
+  );
+  /* The close's body holds two paragraphs at most (CtaSection): the lead and its one note. */
+  const body =
+    lead && lead.type === 'paragraph'
+      ? notes[0]
+        ? ([plain(lead.runs), notes[0]] as const)
+        : ([plain(lead.runs)] as const)
+      : undefined;
   /* The band's other lines, kept in the copy half: the independent score ("**4.8 on Clutch** from 13
      reviews. [Read the reviews]") as the RatingBadge alone (owner, 29 Oct 2026: a rating is always
      the badge, never a key and a link), and the other ways in ("Or email [hello@tcules.com]") as the

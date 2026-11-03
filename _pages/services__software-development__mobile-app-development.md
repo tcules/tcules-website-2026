@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -174,19 +174,17 @@ content_governance:
 
 # Mobile app development for SaaS work done away from a desk
 
-A SaaS mobile app is for the carer between visits, the engineer on site with patchy signal, and the customer who taps a notification and expects the right screen. Tcules provides mobile app development for SaaS: iOS and Android apps designed and built together, sharing records and rules with your web product.
+We take your SaaS mobile app from design to store release, sharing records with your web product and planning what people can do without signal.
 
 *Selected work: [OctiFi](/case-studies/octifi-mobile-lending-product-design) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-[Tell us where your users need the app](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from mobile app development {#scope}
 
-B2B mobile app development for the few tasks that belong on a phone: an iOS and Android app built to work where your users actually are.
-
-**What you receive**
+An iOS and Android app for the few tasks that belong on a phone, built to work where your users actually are.
 
 - **The mobile tasks chosen.** We list the jobs people do away from a desk and pick the few that belong on a phone, instead of every web screen shrunk down.
 
@@ -202,7 +200,7 @@ B2B mobile app development for the few tasks that belong on a phone: an iOS and 
 
 - **Store release.** Listings, submissions, crash reports and updates that keep older versions working.
 
-- **One set of rules.** The app shares records, rules and words with your web product, usually through the same backend and API, so customers recognise it between phone and desk.
+- **The same records and rules as your web app.** The app shares records, rules and words with your web product, usually through the same backend and API, so customers recognise it between phone and desk.
 
 **Who does the work.** Designers and developers work it out together, because a syncing rule or a notification changes the screens and the code at once. An account lead keeps it running.
 
@@ -226,7 +224,7 @@ Mobile shoppers were a growing share of the market, so we designed The Chain Hut
 
 In Benchmark Gensuite's safety and sustainability suite, people choose which part of the organisation they are working in. For the field case we designed a Nearby view, because location finds the right site better than a hierarchy does. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-## When a mobile companion app earns its place {#format}
+## When a mobile companion app is worth building {#format}
 
 An app is worth building when the task needs a phone. One of these is usually true:
 
@@ -264,41 +262,41 @@ We talk the trade-off through with you before anything is built.
 > “Tcules began with a UX audit, designed our store mobile first and then built it on Magento. They kept Magento's purchase workflow intact and simplified everything around it, from finding the right chain to a checkout without distractions.”  
 > **Tushar G, Owner, The Chain Hut**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a mobile app, a good first piece of work is choosing the few tasks that belong on a phone and trying them as a prototype on real devices.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **One studio can take it into working software, with the designers staying in the build.** [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) store was redesigned and developed in our studio, so the specialist detail buyers check sits next to the price and the buy button, as designed.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We prove the hard parts in code while they can still change.** We tested [ConnectX's](/case-studies/ai-native-building-energy-product-connectx) AI dashboard as a coded demo on sample data, while it could still change, and then took it through to a production-ready module.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has kept the same studio for three years: we have designed every one of its products and still improve them as part of its team.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about mobile app development for SaaS {#faq}
 
@@ -328,6 +326,6 @@ In a van, on a ward or between meetings? Share the task, the phones they carry a
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

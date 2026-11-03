@@ -22,7 +22,7 @@ export const HERO_MEDIA_ROUTES: ReadonlySet<string> = new Set([
   servicePath('ai-product-ux'),
   servicePath('product-modernisation'),
   servicePath('software-development'),
-  servicePath('new-product-design-first-release'),
+  servicePath('mvp-development'),
 ]);
 
 /** Whether a route's hero must carry an illustration or an image. */

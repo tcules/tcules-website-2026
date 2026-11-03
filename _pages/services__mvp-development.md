@@ -1,24 +1,24 @@
 ---
-route: /services/new-product-design-first-release
-slug: new-product-design-first-release
-page_name: New Product Design & First Release
+route: /services/mvp-development
+slug: mvp-development
+page_name: Design-led MVP Development
 page_type: service
 seo:
-  title: 'MVP Development Services for SaaS and New Products | Tcules'
+  title: 'MVP Development for Startups, Led by Designers | Tcules'
   description: 'MVP development services led by product design: we agree what your first release must do, then take your idea or AI-built prototype through to launch.'
-  canonical: https://www.tcules.com/services/new-product-design-first-release
+  canonical: https://www.tcules.com/services/mvp-development
   robots: index,follow
 social:
-  og_title: 'MVP Development Services for SaaS and New Products | Tcules'
+  og_title: 'MVP Development for Startups, Led by Designers | Tcules'
   og_description: 'MVP development services led by product design: we agree what your first release must do, then take your idea or AI-built prototype through to launch.'
   og_image: IMAGE_ASSET_REQUIRED
-  og_image_alt: Tcules New Product Design and First Release for SaaS and complex software.
+  og_image_alt: Tcules Design-led MVP Development for SaaS and complex software.
   og_type: website
-  og_url: https://www.tcules.com/services/new-product-design-first-release
+  og_url: https://www.tcules.com/services/mvp-development
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'MVP Development Services for SaaS and New Products | Tcules'
+  twitter_title: 'MVP Development for Startups, Led by Designers | Tcules'
   twitter_description: 'MVP development services led by product design: we agree what your first release must do, then take your idea or AI-built prototype through to launch.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
@@ -33,8 +33,9 @@ search_context:
   - Do we need customer research before we start?
   - How much does MVP development cost?
   - Who owns the code and the launch?
-  primary_query: MVP development services
+  primary_query: MVP development
   secondary_queries:
+  - 'MVP development services'
   - MVP development company
   - SaaS MVP development
   - B2B SaaS MVP
@@ -53,8 +54,8 @@ navigation:
     url: /
   - name: Services
     url: /services
-  - name: New Product Design & First Release
-    url: /services/new-product-design-first-release
+  - name: Design-led MVP Development
+    url: /services/mvp-development
 conversion:
   form: project_enquiry
   anchor: enquiry
@@ -64,11 +65,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -144,15 +145,13 @@ content_governance:
 
 *MVP and new product design*
 
-# MVP development services that start with what your first release must do
+# MVP development led by designers: from your idea or AI-built prototype to a launch-ready product
 
-An MVP is for the first paying customer who uses it without you on the call, and the investor meeting where you explain what it leaves out. It is also for a second release built on the first.
-
-Tcules provides MVP development services for founders and product teams: we agree what the first release must do, then design it, build it and support the launch.
+Led by product design, our MVP development takes your product to a launch-ready first release that paying customers can use on their own.
 
 *Selected work: [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design)*
 
-[Start an MVP enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -180,8 +179,6 @@ ConnectX came with early concepts for an AI building-energy product. We shaped t
 
 Bring an idea, research, designs or a prototype built with AI tools; we start from what exists. A new product inside an established company is shaped around your existing systems and teams.
 
-**What you receive**
-
 - **Five product choices made with you,** written down where everyone can see them (below).
 
 - **Designs tested before the build,** with people who match your customers trying the core flow.
@@ -194,13 +191,13 @@ Bring an idea, research, designs or a prototype built with AI tools; we start fr
 
 **Who does the work.** A senior designer leads and designs it, with an account lead as your contact. Specialists join as each part needs them.
 
-**What we need from you.** Whatever exists, from a pitch deck to a working prototype, someone who can make the product calls, and access to people who match your first customers.
+**What we need from you.** Whatever exists, from a pitch deck to a working prototype, someone who can make the product decisions, and access to people who match your first customers.
 
-**Where our part stops.** You own the code and decide when to launch. Payments and health data raise the bar, so specialist checks such as a security review go into the release plan from the start, each with an agreed owner.
+**Where our part stops.** Once the work is paid for, the code is yours, and you decide when to launch. Payments and health data raise the bar, so specialist checks such as a security review go into the release plan from the start, each with an agreed owner.
 
-## A first release that's narrow, not hollow {#decisions}
+## What an MVP should include: five choices {#decisions}
 
-What should an MVP include? Getting a prototype on screen is quick now; getting customers to rely on it is the work, and it starts with five choices. Left to a tool, each becomes a plausible default.
+A prototype is quick to make now. Getting customers to rely on it starts with the decisions below. Left to a tool, each becomes a plausible default.
 
 - **Who it's for, and the one job it does.** The customer, the task they can finish, and what counts as done.
 
@@ -249,41 +246,41 @@ A demo has to work for the person showing it; a first release has to work for st
 > “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a new product, a good first piece of work is a [Prototype Readiness Review](/audits/prototype-readiness-review) of one core flow, or a pilot on your first release's one job.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** For [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), eight interviews mapped what six specialist roles each add to a quotation before we shaped the MVP around one shared quote.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), a new jewellery brand entering the UK market online, we began with a UX audit, designed the store mobile first and then built it on Magento.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** For three years and counting, Primelis has had us design every one of its products.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about MVP design and development {#faq}
 
@@ -317,7 +314,7 @@ The cost depends on what the first release must do, so Tcules prices MVP work as
 
 ### Who owns the code and the launch?
 
-Once the work is paid for, the code and designs Tcules makes for you are yours, and anything from other makers comes with a licence spelled out in the agreement. Before work starts, we agree who holds access and who runs the launch, and the final calls stay with you. [Who owns what](/how-we-work#shared-ownership)
+Once the work is paid for, the code and designs Tcules makes for you are yours, and anything from other makers comes with a licence spelled out in the agreement. Before work starts, we agree who holds access and who runs the launch, and the final decisions stay with you. [Who owns what](/how-we-work#shared-ownership)
 
 ## Tell us about the MVP you want to build {#enquiry}
 
@@ -329,6 +326,6 @@ An idea, a pitch deck or a prototype someone built over a weekend. Bring what yo
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

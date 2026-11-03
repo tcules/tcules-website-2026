@@ -173,4 +173,4 @@ When intent and running code part ways, tracing one behaviour through both shows
 
 Written intent matters more now that AI tools generate interface code from designs and prompts. A tool can copy a layout exactly and miss the reason behind it. Intent written as plain statements gives the tool and the reviewer the same thing to check against.
 
-[See the Design-to-Code Audit](/audits/design-to-code-audit)
+[See the Design-to-Code Audit →](/audits/design-to-code-audit)

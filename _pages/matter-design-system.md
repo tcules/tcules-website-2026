@@ -70,10 +70,10 @@ page_composition:
 conversion:
   form: project_enquiry
   anchor: enquiry
-  submit_label: Send enquiry
+  submit_label: Request a call
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
 structured_data:
@@ -92,7 +92,7 @@ Matter is our own design system, published free on Figma Community. Duplicate it
 
 [Open Matter on Figma](https://www.figma.com/community/file/1314109325852179933/matter-design-system-free)
 
-[Start a conversation](#enquiry)
+[Book a call](#enquiry)
 
 ## What's inside: a Figma design system with purpose-named tokens {#contents}
 
@@ -148,6 +148,6 @@ Starting one, repairing one or getting teams to use the one you have: tell us wh
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

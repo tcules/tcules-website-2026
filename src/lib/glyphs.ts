@@ -42,7 +42,7 @@ const SERVICES: Readonly<Record<string, RouterGlyph>> = {
   '/services/ai-product-ux': 'stars',
   '/services/design-engineering': 'monitor',
   '/services/software-development': 'database',
-  '/services/new-product-design-first-release': 'flag',
+  '/services/mvp-development': 'flag',
   /* The audits hub, where a list of the services closes on it (/expertise, /about; 29 Oct 2026). */
   '/audits': 'checklist',
 };

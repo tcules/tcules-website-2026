@@ -66,8 +66,8 @@ structured_data:
   - /insights/guides/how-to-use-a-ux-product-audit
   - /insights/guides/marketing-automation-software-design-best-practices
   - /insights/guides/inclusive-product-design-for-older-and-disabled-people
-  - /insights/articles/design-thinking-vs-cx-vs-ux-explained
-  - /insights/articles/cognitive-biases-in-ecommerce-and-saas-products
+  - /insights/design-thinking-vs-cx-vs-ux-explained
+  - /insights/cognitive-biases-in-ecommerce-and-saas-products
 release:
   content_state: AUTHOR_PROFILE_DRAFT_2026-10-13
   site_release_state: SITE_RELEASE_HOLD
@@ -122,6 +122,6 @@ Other pieces cover commissioning a UX audit a team can act on, and telling UX, C
 
 - **[Inclusive product design for older and disabled people, from standard to release](/insights/guides/inclusive-product-design-for-older-and-disabled-people)**
 
-- **[UX vs CX vs design thinking: the difference, and when to use each](/insights/articles/design-thinking-vs-cx-vs-ux-explained)**
+- **[UX vs CX vs design thinking: the difference, and when to use each](/insights/design-thinking-vs-cx-vs-ux-explained)**
 
-- **[Cognitive biases in UX: use them ethically, starting with your own team](/insights/articles/cognitive-biases-in-ecommerce-and-saas-products)**
+- **[Cognitive biases in UX: use them ethically, starting with your own team](/insights/cognitive-biases-in-ecommerce-and-saas-products)**

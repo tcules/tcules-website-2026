@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -181,13 +181,15 @@ content_governance:
 
 # FinTech UX design for lending and payments, with each status explained
 
-A borrower checks a loan status at night, a finance manager approves a payment between meetings, and a support agent explains why another one failed. Money products are judged in those minutes. Tcules provides FinTech UX design for lending, payments and business finance products, new or already live.
+In lending, payments and business finance, our FinTech UX design gives every decline a reason and every failed payment a way forward.
 
-[Tell us about your FinTech product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in FinTech {#what-we-design}
+
+For founders and product teams in finance, from a first app to one already live with customers.
 
 - **Mobile lending apps**, from sign-up to loan issuance · [OctiFi](/case-studies/octifi-mobile-lending-product-design)
 
@@ -201,9 +203,7 @@ A borrower checks a loan status at night, a finance manager approves a payment b
 
 - **Insurance quote, claims and underwriting tools** · Cover explained before anyone pays
 
-## Selected FinTech UX design work {#selected-work}
-
-Two FinTech clients, and the closest work from outside finance: a sign-off chain where one reviewer answers for every call.
+## FinTech and related UX design work {#selected-work}
 
 ### OctiFi: lending flows prototyped with realistic figures
 
@@ -213,13 +213,13 @@ OctiFi was preparing its mobile lending app for a second market. We designed onb
 
 A client planning a payment app for kirana stores, India's neighbourhood grocery shops, had to choose which merchant problems to fund. Twenty interviews, alongside stakeholder, competitor and app-store research, became product priorities and a UX strategy while changing direction was still cheap. [Read the merchant payments case](/case-studies/ux-research-for-kirana-store-payment-app)
 
-### BuildTwin: an overrule that keeps its reason
+### BuildTwin: every override recorded with its reason
 
-In BuildTwin's structural-engineering software, a quality engineer signs off each drawing the AI has checked and must defend the call. In the redesign, every check shows its source, and changing a result takes a reason that stays on the record, as a credit or fraud reviewer's would. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+In BuildTwin's structural-engineering software, a quality engineer signs off each drawing the AI has checked and must defend the decision. In the redesign, every check shows its source, and changing a result takes a reason that stays on the record, as a credit or fraud reviewer's would. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
 ## FinTech app design for approvals, statuses and money in motion {#hard-parts}
 
-A money product makes a promise on every screen: each status says something about someone's money, several people act on one application, and the rules decide what a screen may say. So we map every state a loan, payment or claim can reach before drawing any screen.
+Every status tells someone about their money, several people act on one application, and the rules limit what each screen says. So we map every state a loan, payment or claim can reach before drawing any screen.
 
 ### One status, read the same way by customer and staff
 
@@ -241,7 +241,7 @@ A spend request in a business finance tool, and a credit approval or fraud case 
 
 When a model helps approve an application or flags a payment, the reviewer sees what the result rests on and can overrule it with a reason. The customer gets the main reasons in plain words, within the limits your compliance team sets.
 
-### Money that moves in parts
+### Loans and payouts that arrive in stages
 
 A loan may fund in stages, a payout lands days after the sale, and a lender may fund some invoices in a request and not others. A bare *declined* on half a request sends a business owner straight to the phone.
 
@@ -271,8 +271,6 @@ Underwriter and broker screens sort submissions by what needs a person first. An
 
 We take on the customer journeys and the staff screens behind them, for a new product or a live app.
 
-**What you receive**
-
 - **A status map:** every state a loan, payment or claim can reach, with what the customer sees, what staff see and what happens next
 
 - **Customer journeys:** customer journeys from sign-up and identity checks to repayment or payout, with every decline and failure designed beside the main path
@@ -289,15 +287,13 @@ We take on the customer journeys and the staff screens behind them, for a new pr
 
 **Who does the work.** One senior product designer leads it and designs the screens, and an account lead keeps it moving. A researcher joins when a concept needs testing with customers, and design engineers or developers when the work moves into code.
 
-**What we need from you.** Your compliance or risk lead's time on wording and decline reasons, and the policy rules behind each status. We also need the support calls each status causes, time with customers and with the staff who review cases, and the person on your side who makes product calls.
+**What we need from you.** Your compliance or risk lead's time on wording and decline reasons, and the policy rules behind each status. We also need the support calls each status causes, time with customers and with the staff who review cases, and the person on your side who makes product decisions.
 
 **Where our part stops.** Lending policy, credit models, fraud rules and regulatory sign-off stay with your compliance, risk and legal teams; our designs present their rules clearly. Payment integrations stay with your engineers unless [Software Development](/services/software-development) builds with you.
 
 A concept that needs testing with real users first can start with [UX Research](/services/product-design/ux-research) or [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing).
 
 ## What clients say {#testimonials}
-
-Amin Nordin speaks for a FinTech client; the others are clients from other fields on working with us.
 
 > “They deliver the works required on time. They deliberate sufficiently and outline clear thought processes in the flows.”  
 > **Amin Nordin, Head of Growth, OctiFi**
@@ -308,41 +304,41 @@ Amin Nordin speaks for a FinTech client; the others are clients from other field
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a FinTech product, a good first piece of work is the status that sends the most customers to support, redesigned with the wording agreed with your compliance team.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** Our audit of Dealpath's deal-management software found that one action assumed every listing was a new deal, and our redesign changed that step. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** Primelis brought us in as an ongoing partnership three years ago, and we have designed each of its products since.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** ConnectX's AI workspace went from our coded demo to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about FinTech UX design {#faq}
 
@@ -372,6 +368,6 @@ Share the product, the step and roughly how often it happens.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

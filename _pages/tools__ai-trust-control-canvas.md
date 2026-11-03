@@ -149,9 +149,9 @@ The AI Trust and Control Canvas is a free template that maps what a person must 
 
 The canvas starts from what can happen once someone accepts the output. The result is a control brief your designer and engineer can work through together.
 
-[Build a control canvas](#workspace)
+[Use the canvas](#workspace)
 
-## A sent customer notice: what users must check before AI acts {#example}
+## Worked example: an AI-drafted notice to a customer {#example}
 
 *Illustration, not client work.* An assistant drafts a notice about a change to a customer's account. Before it goes, the reviewer sees the recipient, the proposed change and the account record behind it, and can edit or reject the draft.
 
@@ -183,7 +183,7 @@ From there, the canvas runs in three steps:
 
 3. **Try it with a wrong answer.** Run the plan with a plausible wrong output, then download the brief and give each open control an owner.
 
-## AI output control template: seven parts to fill in {#workspace}
+## Seven parts of the canvas to fill in {#workspace}
 
 | Part of the interaction | What to set out |
 |---|---|
@@ -216,7 +216,7 @@ The canvas draws on [Microsoft's human-AI interaction guidelines](https://www.mi
 
 Download the canvas and turn each open control into a check the finished feature must pass. The [BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin) shows our design work around expert review of AI-generated analysis.
 
-To have a live or beta AI feature tested on real tasks, see the [AI Product UX Readiness Review](/audits/ai-product-ux-readiness). For help designing the controls themselves, see [Trust, Control & Recovery](/services/ai-product-ux/trust-control-recovery).
+To have a live or beta AI feature tested on real tasks, see the [AI UX Audit](/audits/ai-product-ux-readiness). For help designing the controls themselves, see [Trust, Control & Recovery](/services/ai-product-ux/trust-control-recovery).
 
 ## AI trust and control canvas FAQs {#faq}
 
