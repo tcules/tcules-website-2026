@@ -242,9 +242,11 @@ designed well. Everything here is designed before the lock on Wed 4 Nov. Not our
 page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
 the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
 checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
-- [~] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
       plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
+      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
 - [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
@@ -252,20 +254,20 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
       success and failure copy, and CTA-source analytics come after launch.
-- [ ] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
-- [ ] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+- [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
       (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
 - [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
       Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
       links to `/expertise`.
-- [ ] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+- [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
       "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
       social media, the other ways to reach us, and the studio address.
 - [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
       the article page, and bring the comparison to the owner.
-- [ ] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+- [~] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.

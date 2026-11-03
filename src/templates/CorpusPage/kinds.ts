@@ -16,6 +16,10 @@ import type { OfferKind } from './plan';
  *              not failed.
  *
  * A kind missing from this list fails the check: register it in the same change that adds it.
+ *
+ * Not a kind: a band's onward line lifted onto its own ink island after the band (tracker 2.53;
+ * `OnwardIsland`, `data-band="onward"`, id `<band>-onward`). It is part of the band it came from, so
+ * the check reads the island's words as that band's and the band keeps its own kind and component.
  */
 export type KindStatus = 'approved' | 'to-design';
 
@@ -101,5 +105,21 @@ export const KIND_COMPONENTS: Readonly<
     component: ['L', 'C-text'],
     status: 'to-design',
     note: 'A closing ask: the ink island with its link (L); with no link, prose.',
+  },
+};
+
+/**
+ * Bands the owner moved out of the band loop into another element's state, by route, each with
+ * where its words now live. The template does not draw them as bands; `npm run kinds:check` lists
+ * them instead of failing on the missing `<section>`, so a band only leaves the page by an entry
+ * here, never silently.
+ *
+ *   /contact next-steps  "What happens after you send" merges into the post-send state (tracker
+ *                        2.56, owner, 3 Nov 2026): the steps show in the enquiry form's sent view,
+ *                        word for word, and the record line it ends on is the hero's figures.
+ */
+export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  '/contact': {
+    'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
   },
 };

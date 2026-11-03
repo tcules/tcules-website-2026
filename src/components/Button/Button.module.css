@@ -147,10 +147,15 @@
      line's length away from the word it belongs to (`where-this-work-sits` at 390). As inline
      content the glyph follows the label's last word on whichever line that ends. One line long,
      the two forms render identically: same 8 between label ink and glyph, glyph centred on the
-     label. */
+     label.
+
+     Its lines take the CONTAINER's alignment (`inherit`, 3 Nov 2026), not `.button`'s centring and
+     not a fixed start: a link has no box to centre within, so a wrapped label in a centred column
+     (the onward island at 390) ranged left under a centred heading. In a start-aligned column it
+     inherits start, as before. */
   display: inline-block;
   white-space: normal;
-  text-align: start;
+  text-align: inherit;
   height: auto;
   min-block-size: 0;
   padding-block: 0;

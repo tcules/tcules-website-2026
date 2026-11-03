@@ -20,7 +20,12 @@ export type { RatingsById } from './blocks';
 export { coverFor, slugOf } from './images';
 export { AboutPage } from './AboutPage';
 export { ContactPage } from './ContactPage';
-export type { ContactPageProps } from './ContactPage';
+export type {
+  ContactChannel,
+  ContactChannelKind,
+  ContactFollow,
+  ContactPageProps,
+} from './ContactPage';
 export { PlainPage } from './PlainPage';
 export type { PlainPageProps } from './PlainPage';
 export type { AboutPageProps } from './AboutPage';

@@ -1,7 +1,7 @@
 ---
 title: "Bento's texture is the pixel grid in one continuous wave per row"
 date: 2026-10-19
-status: active
+status: superseded
 area: [imagery, cards]
 source: "Owner, 19 Oct 2026 (What we do mocks S3 v3–v13, with a sketch of the wave)"
 supersedes: []

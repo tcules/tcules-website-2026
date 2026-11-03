@@ -1,5 +1,10 @@
 # Bento
 
+> **3 Nov 2026: no texture, drawings on plates.** Each tile keeps its card, but its drawing now sits
+> on the Sketch plate filling the tile's width, and the tile carries no texture
+> (decisions/2026-11-03-flat-graphics-on-one-plate). The texture (§ 4) and the bare drawing scales below
+> are superseded; everything else stands.
+
 ## 0 · Front matter
 
 | | |
@@ -9,7 +14,7 @@
 | **Token prefix** | `--bnt-*` |
 | **Designer / date** | Claude, owner decisions 19 Oct 2026 (What we do mocks, references round, S1–S3 v1–v13) |
 | **Implements** | Home queue item "What we do: hover tile grid; indent optically off; title and description steal weight" (review 15 Oct 2026), and the plan in `decisions/2026-10-19-no-hover-only-grounds` |
-| **Implemented at** | `src/patterns/Bento/`, `src/styles/tokens/components/bento.css`, `public/textures/bento-wave-*.svg` (`scripts/bento-waves.mjs`), `/design/bento` |
+| **Implemented at** | `src/patterns/Bento/`, `src/styles/tokens/components/bento.css`, `/design/bento` |
 | **Mocks** | references https://claude.ai/artifact/UddfwEVAWfhuWe6g8iCsXp · directions https://claude.ai/artifact/SkS1Zngh96SnziuKxZnUFj (S3 is the build) |
 
 ## 1 · Identity
