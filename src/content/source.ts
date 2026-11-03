@@ -12,7 +12,9 @@ import { OFFER_SCENES } from './sources/offer-scenes';
 import { CLAIM_FIGURES, CLAIM_FIGURE_SIZE } from './sources/claim-figures';
 import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
 import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
+import type { ContactChannel } from '@/templates';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
+import { CONTACT_CHANNELS } from './sources/fixtures/contact-channels';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { authorsSource } from './sources/strapi/authors';
@@ -185,6 +187,11 @@ export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPage
  * (fixtures/testimonial-ratings.ts, owner 10 Oct 2026); each carries `placeholder: true` until a real
  * per-review rating replaces it. An id with no rating is absent, so its quote renders without stars.
  */
+/** The other ways to reach the studio, for the contact page's cards (tracker 2.56). Fixture today. */
+export async function getContactChannels(): Promise<readonly ContactChannel[]> {
+  return CONTACT_CHANNELS;
+}
+
 export async function getTestimonialRatings(
   ids: readonly string[],
 ): Promise<Record<string, TestimonialRating>> {

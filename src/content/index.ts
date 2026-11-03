@@ -44,6 +44,7 @@ export {
   getCorpusPage,
   listCorpusPages,
   getTestimonialRatings,
+  getContactChannels,
   getTestimonialAvatars,
   getOfferScenes,
   getClaimFigure,

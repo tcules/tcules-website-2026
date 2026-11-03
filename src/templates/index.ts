@@ -75,6 +75,8 @@ export {
 } from './CorpusPage';
 export type {
   AboutPageProps,
+  ContactChannel,
+  ContactChannelKind,
   ContactPageProps,
   CorpusBandViewProps,
   HomePageProps,

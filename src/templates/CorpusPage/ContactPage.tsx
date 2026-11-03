@@ -1,7 +1,8 @@
-import { Icon, Layout, type IconName } from '@/components';
+import { Icon, Layout, Section, type IconName } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import {
+  BlockCardSet,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -16,10 +17,29 @@ import { CorpusHero, EnquiryBand, headingIdOf, head } from './blocks';
 import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
+import { BANDS_ELSEWHERE } from './kinds';
 import { planOffer, type TEMPLATE_BANDS } from './plan';
 import { boldLead, hasLink, labelTitle, leadOf, plain, sentenceLead, trimStart } from './text';
 
-export type ContactPageProps = Omit<OfferContext, 'page'> & { page: CorpusPage };
+/** What a way to reach the studio is, which decides its glyph. */
+export type ContactChannelKind = 'email' | 'partners' | 'careers' | 'social' | 'studio';
+
+/**
+ * One way to reach the studio other than the form (tracker 2.56): a title and its lines, each line a
+ * run list so an address, a profile or a mailbox is a link where it is one. The page passes them in
+ * from the content seam.
+ */
+export type ContactChannel = {
+  kind: ContactChannelKind;
+  title: string;
+  lines: readonly (readonly InlineRun[])[];
+};
+
+export type ContactPageProps = Omit<OfferContext, 'page'> & {
+  page: CorpusPage;
+  /** The other ways to reach the studio, as a row of icon cards after the hero. Absent, no band. */
+  channels?: readonly ContactChannel[];
+};
 
 type ContactBand = (typeof TEMPLATE_BANDS)['/contact'][number];
 
@@ -128,6 +148,40 @@ function NextSteps({ band }: { band: CorpusBand }) {
   );
 }
 
+/* One Solar glyph per kind of channel, heading its card (an icon heads its card). */
+const CHANNEL_GLYPHS = {
+  email: 'letter',
+  partners: 'hand-shake',
+  careers: 'users-group-rounded',
+  social: 'share-circle',
+  studio: 'map-point',
+} as const satisfies Record<ContactChannelKind, IconName>;
+
+/**
+ * The other ways to reach the studio (tracker 2.56, after tcules.com/contact): one icon card per
+ * channel, glyph then title then its lines, in a set of peers with no featured card. Nobody clicks a
+ * card: each line that goes somewhere is its own link (a mailbox, a profile, the careers page), so a
+ * card holding four profiles answers the pointer the way a card holding one mailbox does. No head:
+ * the copy authors none, and the cards' titles name every channel. The band is named for assistive
+ * technology only.
+ */
+function Channels({ channels }: { channels: readonly ContactChannel[] }) {
+  return (
+    <Section surface="paper" aria-label="Other ways to reach us" data-band="C-channels">
+      <BlockCardSet
+        lead="none"
+        across={3}
+        items={channels.map((channel) => ({
+          id: channel.kind,
+          title: channel.title,
+          icon: CHANNEL_GLYPHS[channel.kind],
+          bodyHtml: [channel.lines.map((line) => inlineToHtml(line)).join('<br>')],
+        }))}
+      />
+    </Section>
+  );
+}
+
 /**
  * Keep the first message high-level: a boundary on the form, under its own heading, the head in the
  * leading third and the note beside it, so the short band does not repeat the centred questions under
@@ -149,12 +203,17 @@ function Confidentiality({ band }: { band: CorpusBand }) {
 /**
  * TIER 3 — the contact page from the `_pages/` copy (component-map § E /contact). The hero centred
  * with the studio's record as figures (the line `next-steps` ends on, Q10) and no media, the enquiry
- * island straight under it (owner, 31 Oct 2026), then the brief (head above its read-down) and the
- * next steps (head beside its steps) as two bands, the quotes on tint, the confidentiality note and
- * the questions. Every other band renders as the plan names it.
+ * island straight under it (owner, 31 Oct 2026), then the other ways to reach the studio as a row of
+ * icon cards (tracker 2.56), then the questions. Next steps is not a band: its steps are the form's
+ * sent state and its record line the hero's figures (BANDS_ELSEWHERE). The brief, next-steps and
+ * confidentiality views stay for copy that still authors those bands. Every other band renders as
+ * the plan names it.
  */
-export function ContactPage({ page, ...rest }: ContactPageProps) {
-  const units = planOffer(page);
+export function ContactPage({ page, channels = [], ...rest }: ContactPageProps) {
+  /* A band the owner moved into another element's state (BANDS_ELSEWHERE) is read for its words
+     but not drawn as a band: next steps lives in the form's sent state (tracker 2.56). */
+  const elsewhere = BANDS_ELSEWHERE[page.route] ?? {};
+  const units = planOffer({ ...page, bands: page.bands.filter((b) => !(b.id in elsewhere)) });
   const ctx: OfferContext = { page, ...rest };
   const next = page.bands.find((b) => b.id === ('next-steps' satisfies ContactBand));
   /* The form sits in the hero where an image would (owner, 31 Oct 2026): the enquiry island, as
@@ -188,6 +247,7 @@ export function ContactPage({ page, ...rest }: ContactPageProps) {
           ) : undefined
         }
       />
+      {channels.length > 0 ? <Channels channels={channels} /> : null}
       {units.map((unit) => {
         if (enquiry && unit.part !== 'b' && unit.band === enquiry) return null;
         if (unit.part === 'b') return <UnitView key={unit.id} unit={unit} ctx={ctx} />;
