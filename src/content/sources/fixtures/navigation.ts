@@ -233,7 +233,7 @@ const WORK: SiteNavItem = {
   form: 'link',
   href: ROUTES.caseStudies,
   matchPaths: [ROUTES.clients],
-  children: [soon('Case Studies', ROUTES.caseStudies), soon('Clients', ROUTES.clients)],
+  children: [soon('Case Studies', ROUTES.caseStudies), { label: 'Clients', href: ROUTES.clients, status: 'live' }],
 };
 
 const LAB: SiteNavItem = {

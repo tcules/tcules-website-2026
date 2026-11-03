@@ -145,6 +145,9 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
      `why_work_wall` binding, which its Reasons band no longer carries (reasons take drawings). The team
      photograph stays the studio band's. */
   [ROUTES.whyTcules]: ABOUT_WALL,
+  /* "Who we've worked with and what each asked for": the studio presenting work in review, the nearest
+     of the three to client work; the page binds no hero of its own (docs/page-build/pages/clients.md). */
+  [ROUTES.clients]: ABOUT_REVIEW,
 };
 
 /** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */
