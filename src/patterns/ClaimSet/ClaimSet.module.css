@@ -1,6 +1,7 @@
 /* ClaimSet — a page's hard parts. Values are the --clm-* layer (tokens/components/claim-set.css),
-   the gap scale and the text roles; arrangement is Layout's. Two media queries: the tabs layout
-   is a stage from 1024 and a stack below it, and the drawing's size steps down on a phone. */
+   the gap scale and the text roles; arrangement is Layout's. The media queries: the tabs layout
+   is a stage from 1024 and a stack below it; a hovered tab's lift is for a mouse only; reduced motion
+   stills every transition. */
 
 /* ── Shared parts ──────────────────────────────────────────────────────────── */
 
@@ -194,8 +195,12 @@
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
 
-  .tab[aria-selected='false']:hover .tabTitle {
-    transform: translateY(var(--clm-tab-lift));
+  /* With a mouse, resting on a tab chooses it (ClaimTabs): the title lifts as the pointer arrives and
+     settles as it leaves, one move there and back, chosen or not. Never on touch, where :hover sticks. */
+  @media (hover: hover) and (pointer: fine) {
+    .tab:hover .tabTitle {
+      transform: translateY(var(--clm-tab-lift));
+    }
   }
 
   /* The panel: paper, its height following the slide; the slide moves inside it and is clipped by it. */
@@ -233,12 +238,37 @@
   .panel[data-moving] .slide {
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
+
+  /* The peek (ClaimTabs, once, as the stage comes into view): the next slide waits one gap past the
+     first, inside the panel's clip; the first eases aside by the peek's travel and the next's edge
+     shows in the space it leaves, then both come back. The tab row never moves. */
+  .slide[data-peek] {
+    display: block;
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    transform: translateX(calc(100% + var(--gap-stack)));
+  }
+
+  .panel[data-peek='out'] .slide,
+  .panel[data-peek='back'] .slide {
+    transition: transform var(--clm-peek-duration) var(--clm-slide-easing);
+  }
+
+  .panel[data-peek='out'] .slide[data-active] {
+    transform: translateX(calc(-1 * var(--clm-peek-travel)));
+  }
+
+  .panel[data-peek='out'] .slide[data-peek] {
+    transform: translateX(calc(100% + var(--gap-stack) - var(--clm-peek-travel)));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .piece,
   .arrow,
   .tabTitle,
+  .panel[data-peek] .slide,
   .panel[data-moving],
   .panel[data-moving] .slide {
     transition: none;

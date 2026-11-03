@@ -115,7 +115,7 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
 
 **Visual pass — before Stage 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
-- [ ] **2.17** ★ Visual overhaul: review every shipped component's specimen at 1440 and 390 against CLAUDE.md
+- [x] **2.17** ★ Visual overhaul (done, owner 3 Nov 2026): review every shipped component's specimen at 1440 and 390 against CLAUDE.md
       § Design quality and the brand chapters, and propose per component what to change. The owner approves each
       proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
 - [x] **2.18** Reasons: the "why Tcules" band (15 Oct queue). Six argued reasons, each with an isometric drawing of
@@ -132,23 +132,23 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
 
 *Batch 2: exploratory, after batch 1 is reviewed.*
-- [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
+- [-] **2.24** Moved to phase 2 (owner, 3 Nov 2026). Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
       improve the current card instead, on a paper-deep card ground.
-- [ ] **2.25** Recolour every Reasons isometric without peridot, to see the set in blue only.
-- [~] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
+- [x] **2.25** (done, owner 3 Nov 2026) Recolour every Reasons isometric without peridot, to see the set in blue only.
+- [x] **2.26** (done, owner 3 Nov 2026) Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
       The bento's six drawings are redrawn and solve their story on hover (decisions/2026-10-25-bento-drawings-tell-their-story).
       Rolled out 26 Oct (branch design/s2-flat-grammar, awaiting the owner's look): every Sketch plate draws the
       redrawn scenes, still and held solved, in the two weights; EngagementOptions and TracePlates draw through
       Sketch, their 14 drawings redrawn as kit scenes; EngagementModel takes the weights and dash. Logged as proposed: decisions/2026-10-26-flat-graphics-grammar and
       -flat-or-isometric-two-questions.
-- [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
-- [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
+- [x] **2.27** (done, owner 3 Nov 2026) Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
+- [-] **2.28** Moved to phase 2 (owner, 3 Nov 2026). Tools in the listings, looking like tools rather than standard cards.
 - [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further
       (owner, 23 Oct 2026): the close at 1:1 (`islandArrangement="halves"`, the panel at a `stack` inset),
       the TextureFlow field, and the sketch-to-shipped drawing; both versions on /design/cta-section § 1d.
       Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
-- [~] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
+- [-] **2.30** Scrapped (owner, 3 Nov 2026). Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
       cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
       Photos replaced (owner, 26 Oct 2026): no faces, a close crop on the main part of each sector's activity.
       The band stays the 4×2 grid for now; accordion, contact-sheet and sentence directions were mocked and set aside.
@@ -242,9 +242,11 @@ designed well. Everything here is designed before the lock on Wed 4 Nov. Not our
 page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
 the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
 checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
-- [ ] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
       plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
+      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
 - [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
@@ -252,20 +254,20 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
       success and failure copy, and CTA-source analytics come after launch.
-- [ ] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
-- [ ] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+- [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
       (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
 - [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
       Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
       links to `/expertise`.
-- [ ] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+- [~] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
       "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
       social media, the other ways to reach us, and the studio address.
 - [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
       the article page, and bring the comparison to the owner.
-- [ ] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+- [~] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
@@ -336,6 +338,8 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 ## Phase 2 — after the 6 Nov launch
 
 - [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
+- [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
+- [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs

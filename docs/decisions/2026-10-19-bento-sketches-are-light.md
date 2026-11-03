@@ -1,7 +1,7 @@
 ---
 title: "Bento's drawings are the Sketch scenes, bare and in the light weight"
 date: 2026-10-19
-status: active
+status: superseded
 area: [illustration]
 source: "Owner, 19 Oct 2026 (What we do mocks S1/S3)"
 supersedes: []

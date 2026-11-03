@@ -16,6 +16,10 @@ import type { OfferKind } from './plan';
  *              not failed.
  *
  * A kind missing from this list fails the check: register it in the same change that adds it.
+ *
+ * Not a kind: a band's onward line lifted onto its own ink island after the band (tracker 2.53;
+ * `OnwardIsland`, `data-band="onward"`, id `<band>-onward`). It is part of the band it came from, so
+ * the check reads the island's words as that band's and the band keeps its own kind and component.
  */
 export type KindStatus = 'approved' | 'to-design';
 

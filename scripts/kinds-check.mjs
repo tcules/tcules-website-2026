@@ -187,8 +187,12 @@ for (const page of pages) {
     } else if (entry.status === 'to-design') {
       queue.set(kind, [...(queue.get(kind) ?? []), page.route]);
     }
+    /* A band's onward line is lifted onto its own ink island after the band (tracker 2.53;
+       CopyBands `OnwardIsland`, id `<band>-onward`): the band's words are the band's and its island's. */
+    const onward = sectionOf(html, `${band.id}-onward`);
+    const words = onward ? `${section.text} ${onward.text}` : section.text;
     for (const s of samplesOf(band.blocks)) {
-      if (!section.text.includes(s)) failures.push(`${where}: copy missing from the page: "…${s}…"`);
+      if (!words.includes(s)) failures.push(`${where}: copy missing from the page: "…${s}…"`);
     }
   }
 }

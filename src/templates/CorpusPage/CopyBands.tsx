@@ -57,6 +57,7 @@ import {
   linkLead,
   plain,
   trimStart,
+  type OnwardLine,
 } from './text';
 
 /**
@@ -2104,6 +2105,31 @@ export function AskIsland({ link }: { link: CorpusLink }) {
       arrangement="open"
       heading={ASK_ISLAND_HEADING}
       actions={[{ label: link.labelText, href: link.href }]}
+    />
+  );
+}
+
+/* ── The onward line: a band's pointer to a piece of reading, as its own ink island ─ */
+
+/** The island's id: the band's own, so the island answers for the line the band no longer holds. */
+export const onwardId = (bandId: string) => `${bandId}-onward`;
+
+/**
+ * A band's onward line as an ink island after the band (tracker 2.53, 3 Nov 2026): the line's words
+ * split, never rewritten (`onwardLine`, text.ts), and the link's own words as the one LINK action,
+ * not a solid: it points to reading, it does not ask (`intent="onward"`). Placed by the plan
+ * (`placeOnward`): never beside another island or the close.
+ */
+export function OnwardIsland({ bandId, line }: { bandId: string; line: OnwardLine }) {
+  return (
+    <CtaSection
+      id={onwardId(bandId)}
+      data-band="onward"
+      arrangement="open"
+      intent="onward"
+      heading={line.heading}
+      body={line.lead ? [line.lead] : undefined}
+      actions={[line.link]}
     />
   );
 }

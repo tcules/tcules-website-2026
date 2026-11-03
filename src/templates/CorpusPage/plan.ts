@@ -1,7 +1,7 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
 import { formBeforeFaq } from './order';
-import { boldLead, exampleLink, linkLead, plain } from './text';
+import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
 /**
  * OfferPage's plan: for every band of a corpus page, WHAT SHAPE it is and, from the page's rhythm,
@@ -94,7 +94,47 @@ export type OfferUnit = {
   visual: boolean;
   /** The register the band is drawn in; adjacent bands change it (a development warning). */
   register: VisualRegister;
+  /**
+   * The band's onward line, lifted out of it and set as an ink island after it (tracker 2.53;
+   * `placeOnward`). Absent where the band has none, or where an island there would break a rule.
+   */
+  onward?: OnwardLine;
 };
+
+/* ── Onward lines (tracker 2.53) ────────────────────────────────────────────────── */
+
+/** The bands that are, or end in, an ink island of their own: an island beside one would be two. */
+const ISLAND_KINDS: ReadonlySet<OfferKind> = new Set(['enquiry', 'close']);
+const ENQUIRY_HREF = '#enquiry';
+
+function endsInAsk(band: CorpusBand): boolean {
+  const scan = (blocks: readonly CorpusBlock[]): boolean =>
+    blocks.some(
+      (block) =>
+        (block.type === 'links' && block.links.some((link) => link.href === ENQUIRY_HREF)) ||
+        (block.type === 'item' && scan(block.blocks)),
+    );
+  return scan(band.blocks);
+}
+
+/**
+ * A band's onward line becomes an ink island after the band (`OnwardIsland`) unless that would set
+ * two islands side by side or one beside the close (tracker 2.53): the next unit is the enquiry close
+ * or a closing ask (`close`), or the band already ends in its own ask island (`AskIsland`, a band
+ * carrying an `#enquiry` link). Where it may not, the line stays in its band, as written. Only the
+ * band's last unit carries it, since the line is the band's last block. The island is a visual band,
+ * so it never makes a text-heavy pair, and it sits on paper, so it never makes two tints touch.
+ */
+function placeOnward(planned: OfferUnit[]): void {
+  planned.forEach((unit, index) => {
+    const next = planned[index + 1];
+    if (!next || next.band === unit.band) return;
+    if (ISLAND_KINDS.has(unit.kind) || ISLAND_KINDS.has(next.kind) || unit.kind === 'faq') return;
+    if (endsInAsk(unit.band)) return;
+    const line = onwardLine(unit.band);
+    if (line) unit.onward = line;
+  });
+}
 
 /* ── Shape signatures ───────────────────────────────────────────────────────────── */
 
@@ -709,6 +749,8 @@ export function planOffer(
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
+
+  placeOnward(planned);
 
   /* Rhythm: never two text-heavy bands adjacent (page-mapping § 3). A warning, not a refusal: the
      page renders as written and the fault is visible on it. */
