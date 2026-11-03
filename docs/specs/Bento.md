@@ -121,3 +121,19 @@ hover, ring colour.
   not designed yet. Today the tile moves; the scene does not.
 - About, the offer pages and the service-page router still use BlockCardSet `frame="box"`. Retiring it is
   the follow-up `decisions/2026-10-19-no-hover-only-grounds` plans.
+
+## Amendment · 4 Nov 2026 — the audits, tools and glossary run (status proposed; owner to judge)
+
+Additive variants, each with its `/design/bento` row. None changes a tile already shipped.
+
+- **A split tile alone on the last row takes the whole row from 1024** (row 2d3): its drawing beside its
+  words in the named half (`[1, 1]`), the panel the last third (`lg: [2, 1]`). Used by the /audits chooser
+  (five tiles) and any odd split-tile compare set.
+- **`detail.fields`** (row 2d4): the panel holds further labelled lines under its first ("Best for" /
+  "You leave with"), so a router table's value columns fold into the tile and no tool is shown twice.
+- **`tracks={2}`** (row 2d5): a set of two tracks, for two single-item groups sharing a row as headed halves
+  (/tools).
+- **ServiceTile `body`** (rows 9b, 9b2): one paragraph, or several, under the title and over the action.
+- **ServiceTile `visual="start"`** (row 9c): the drawing on the inline-start side of a wide tile.
+- **ServiceTile `frame="none"`** (row 9d): a wide tile on the band's own ground, no hairline and no inset,
+  for one named offer alone on its band; it still lifts on hover and no edge appears on hover.

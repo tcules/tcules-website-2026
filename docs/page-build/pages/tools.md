@@ -1,4 +1,4 @@
-# /tools and the six tool pages — design pass, 4 Nov 2026 (local, in review)
+# /tools and the six tool pages — design pass, 4 Nov 2026 (built on design/audits-tools-glossary, awaiting owner approval)
 
 The hub routes to six free tools; each tool page is the worksheet itself. Composed from the library: the
 hub through OfferPage's plan with DirectoryBand's tool tiles, the tool pages through LongformPage's new
@@ -35,11 +35,16 @@ hub through OfferPage's plan with DirectoryBand's tool tiles, the tool pages thr
   at the example plate's drawing scale (half the column, centred, from 1440). Steps take `measure="reading"`.
 
 ## Owed
-- Drawings: four hub tile scenes (components/Sketch/wyg-tools.tsx; the drift checker's and the prototype
-  checklist's are in wyg-glossary-destinations.tsx), six example stories and three diagrams
-  (components/Sketch/wyg-tool-<slug>.tsx). All empty plates until drawn.
-- The 27 Aug ruling (tools are not long-form) is still active: the article shape needs a /decide entry that
-  limits it for tools, citing the 28 Oct launch plan, for Devagya to confirm.
+- Drawings: every tile, example story and diagram is drawn (no empty plate on the seven routes, checked
+  4 Nov). The final gate applied the blind check's fixes to the trust canvas tile (only the start port lit at
+  rest; the arrow meets the action), the rebuild tile (part 60 square, the two built routes fill as they
+  land), the trust canvas example (the deleted notice as a letter in a dashed screen) and the prototype
+  checklist example (cases centred, a button so the plate reads as a screen). The three diagrams the tools
+  critic asked for were drawn by hand and have had no independent blind check.
+- The /tools hero reuses the About studio review photograph; the critic asked for a hub drawing ("one
+  question in, a brief out"). Owner to judge.
+- The 27 Aug ruling (tools are not long-form) is limited for tools by decisions/2026-11-04-tools-are-article-shaped
+  (proposed), with -one-tool-tile and -worksheet-tables-read-down-on-a-phone; Devagya to confirm.
 - **Open decision for Devagya (tools critic, 4 Nov 2026):** the copy promises a worksheet you type into and
   download ("You type your answers into the page and download the result as a brief"); it is not built, so
   the hero action lands on the authored table. Either build it as a variant of DataTable/EnquiryForm

@@ -222,8 +222,14 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   it, its drawing, the action for what it opens), never one ruled row beside the head.
 - **A hero line that redirects the wrong reader** ("Already live with customers? See …") keeps its authored
   place after the ask, in the proof-line voice; it is never suppressed with the "Selected work" line.
-- **A text band about who carries the work on** reuses a studio photograph by plan (images.ts
-  `STUDIO_BAND`), its closing "→" link a link row under the words.
+- ~~A text band about who carries the work on reuses a studio photograph~~ (withdrawn the same day by the
+  audits critic: a photo the copy never asks for, the same one on six pages). "After the audit" is its
+  sentence and its links as authored, the closing "→" link a link row under the words.
+- **What you get never sets more than four deliverables a row**: five read 3 + 2 from 1024; below 768 each
+  drawing stacks full width over its words (decisions/2026-11-04-deliverables-never-more-than-four-a-row).
+- Logged as proposed: decisions/2026-11-04-worked-example-table-is-a-report-page,
+  -option-tables-take-split-tiles, -lone-named-offer-on-band-ground, -redirect-hero-line-keeps-its-place,
+  -split-tile-panel-is-ruled, -placeholders-show-their-label-only.
 
 ## Added 4 Nov 2026 (/tools and the six tool pages; proposed until the owner sees the pages)
 
@@ -257,3 +263,5 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   prose beside a narrow tile.
 - **A listing rail with one view collapses on a phone** to the section-in-view button that opens the jump list
   (IndexRail), never a sideways line of group names cut at the edge.
+- Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
+  -term-page-closes-in-one-shape, -comparison-picks-its-term.
