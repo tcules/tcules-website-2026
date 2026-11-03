@@ -231,6 +231,8 @@ export function ArticleSection({
     return (
       <Layout as="section" id={band.id} aria-labelledby={headingIdOf(band)} rowGap="block">
         <h2 id={headingIdOf(band)}>{band.headingText}</h2>
+        {/* The hub's term card exactly: the small step and an h3 title, so one card is one size
+            on the hub and here (ListingIndex/glossary.tsx TermCard). */}
         <BlockCardSet
           items={terms}
           across={3}
@@ -238,6 +240,8 @@ export function ArticleSection({
           frame="none"
           cue="title"
           scroll="never"
+          size="sm"
+          titleAs="h3"
         />
       </Layout>
     );
@@ -517,7 +521,12 @@ export function ArticleShell({
   const seen = new Set<string>([page.route]);
   const outline: TocItem[] = sections
     .filter((band) => band.headingText !== '')
-    .map((band) => ({ label: band.headingText, href: `#${headingIdOf(band)}` as const }));
+    /* The section's short navigation label where the copy authors one (`navigation.section_labels`),
+       so the rail reads as a list of names rather than wrapped headings; else the heading. */
+    .map((band) => ({
+      label: band.navLabel ?? band.headingText,
+      href: `#${headingIdOf(band)}` as const,
+    }));
   return (
     <div data-fold-exempt="Long-form argument: a document read by scrolling beside its outline (page-mapping M19).">
       <Section as="div" surface="paper" data-band="long-form">

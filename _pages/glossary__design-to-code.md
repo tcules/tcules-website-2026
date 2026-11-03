@@ -42,6 +42,12 @@ navigation:
     url: /glossary
   - name: Design to Code
     url: /glossary/design-to-code
+  section_labels:
+    practice: Where it fits
+    workflow: The workflow
+    comparison: Vs handoff
+    faq: FAQs
+    next: Relatives and help
 render:
   band_order:
   - practice

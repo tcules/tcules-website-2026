@@ -42,6 +42,11 @@ navigation:
     url: /glossary
   - name: Design System Governance
     url: /glossary/design-system-governance
+  section_labels:
+    practice: Example
+    comparison: Vs adoption and docs
+    faq: FAQs
+    next: Related terms and help
 render:
   band_order:
   - practice

@@ -322,11 +322,16 @@ function CloseBand({ band }: { band: CorpusBand }) {
 }
 
 /**
- * A term's close (4 Nov 2026): where Tcules does this work. Its sentences keep their inline links
- * (the related services and terms, named in passing); the link it ends on is ONE destination, so it
- * is that destination's service tile, wide, its own drawing beside its name
+ * A term's close (4 Nov 2026): where Tcules does this work. The link it ends on is ONE destination,
+ * so it is that destination's service tile, its own drawing beside its name
  * (decisions/2026-10-29-named-services-are-service-tiles, -related-destination-is-a-card). Paper: it
  * is a route to a page, not the form's ask, and a tint band here was a plain band at the foot.
+ *
+ * Where the close's sentences are plain, they are the tile's words: the wide tile carries them under
+ * its title and over its action, beside the drawing, so its words half holds the argument rather than
+ * a title alone in an empty card. Where a sentence carries links of its own (the related services and
+ * terms, named in passing) it cannot sit inside the tile's one anchor, so the sentences stay prose
+ * across two thirds and the tile stands at one third beside them: a split, a `section` apart.
  */
 function TermClose({ band }: { band: CorpusBand }) {
   const link = closingLink(band);
@@ -335,10 +340,21 @@ function TermClose({ band }: { band: CorpusBand }) {
     block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
   );
   const scene = serviceSceneFor(link.href);
+  const linked = paragraphs.some((runs) => runs.some((run) => run.type !== 'text'));
+  const tile = (wide: boolean, body?: string[]) => (
+    <ServiceTile
+      title={destinationName(link.labelText)}
+      href={link.href}
+      action={labelWithoutArrow(link.labelText)}
+      {...(scene ? { scene } : {})}
+      {...(body ? { body } : {})}
+      wide={wide}
+    />
+  );
   return (
     <ContentSection {...head(band)} data-band="L">
-      <Layout rowGap="stack">
-        {paragraphs.length > 0 ? (
+      {linked ? (
+        <Layout columns={{ base: 1, lg: [2, 1] }} colGap="section" rowGap="stack" align="start">
           <ContentSectionText>
             <Layout rowGap="text">
               {paragraphs.map((runs, index) => (
@@ -346,19 +362,17 @@ function TermClose({ band }: { band: CorpusBand }) {
               ))}
             </Layout>
           </ContentSectionText>
-        ) : null}
+          <Layout as="ul" rowGap="none">
+            <li>{tile(false)}</li>
+          </Layout>
+        </Layout>
+      ) : (
         <Layout as="ul" rowGap="none">
           <li data-media-row="">
-            <ServiceTile
-              title={destinationName(link.labelText)}
-              href={link.href}
-              action={labelWithoutArrow(link.labelText)}
-              {...(scene ? { scene } : {})}
-              wide
-            />
+            {tile(true, paragraphs.map((runs) => plain(runs).trim()))}
           </li>
         </Layout>
-      </Layout>
+      )}
     </ContentSection>
   );
 }

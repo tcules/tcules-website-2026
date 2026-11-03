@@ -599,6 +599,38 @@ export default function BentoSpecimen() {
         </Layout>
       </Section>
       <Variation
+        id="tile-body-paragraphs"
+        title="9b2 · ServiceTile wide with several paragraphs — the sentences that lead to it"
+        note="`body` as a list: each string a paragraph, a `text` apart, in the words column over the action (a glossary term's close, 4 Nov 2026: the close's own sentences inside the tile, so its words half is not a title alone in an empty card). Plain text only — the tile is one anchor. One paragraph and two, real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Design-to-Code Audit"
+              body={[
+                'When intent and running code part ways, tracing one behaviour through both shows where and why.',
+                'Written intent matters more now that AI tools generate interface code from designs and prompts. A tool can copy a layout exactly and miss the reason behind it. Intent written as plain statements gives the tool and the reviewer the same thing to check against.',
+              ]}
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the Design-to-Code Audit"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body={['Shared components teams use.']}
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="See Design Systems"
+              wide
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
         id="tile-visual-start"
         title="9c · ServiceTile wide, visual on the start side — whole-row tiles alternate"
         note="`visual=&quot;start&quot;`: from 768 the visual leads and the words and action sit on the end side, so two whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start). Below 768 the order is the card's: words, visual, action. Shortest and longest real copy."

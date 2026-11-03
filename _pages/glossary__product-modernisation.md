@@ -42,6 +42,11 @@ navigation:
     url: /glossary
   - name: Product Modernisation
     url: /glossary/product-modernisation
+  section_labels:
+    practice: Examples
+    comparison: Vs redesign
+    faq: FAQs
+    next: How Tcules does it
 render:
   band_order:
   - practice

@@ -266,6 +266,18 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The key column on a phone: a narrower floor than any key behaviour sets, so the first value column
+   is the one in view (tokens/components/data-table.css --dtab-key-compact-size). After the column
+   behaviours, so it beats `hold` at equal weight; the record below lifts every floor and wins.
+   `.keyHead` is the key column's own head cell, so a table of peer columns (no key) is untouched. The
+   shape and the scroll are unchanged (7 Oct ruling 6): only how much of the track the key takes. */
+@media (max-width: 767.98px) {
+  .keyHead,
+  .key {
+    min-inline-size: var(--dtab-key-compact-size);
+  }
+}
+
 /* ── The record (`head={false}`, or one value column) ────────────────────────────────────────────
    A record is read DOWN its rows, a key and its value, never across columns: it has one value column
    and nothing to compare. The floors above exist so a comparison scrolls instead of crushing a
@@ -394,4 +406,68 @@
 .pickHead {
   color: var(--dtab-pick-key-ink);
   box-shadow: inset 0 var(--dtab-pick-bar-width) 0 var(--dtab-pick-bar-ink);
+}
+
+/* ── Read down (`narrow="read-down"`, 4 Nov 2026, status proposed) ──────────────────────────────
+   A worksheet on a phone: below 768 each row is one block in the same box, the box's own border
+   around the set and a hairline between rows, as the table draws them. The key is the row's title
+   in the key's voice; each value sits under its column head in the head's mono label voice. From
+   768 the boxed table, unchanged. One view shows at a time: `display: none` on the wrapper that is
+   not in use, the same toggle ReportBand's sheet uses. Not an arrangement: the stacking inside a row
+   is Layout's. The insets are the cell's (`text` block, `block` inline). */
+.acrossView {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .downView {
+    display: none;
+  }
+
+  .acrossView {
+    display: block;
+  }
+}
+
+.down {
+  padding: 0;
+  list-style: none;
+  border: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  background: var(--dtab-body-ground);
+}
+
+.downRow {
+  padding-block: var(--gap-text);
+  padding-inline: var(--gap-block);
+  border-block-end: var(--dtab-rule-width) solid var(--dtab-rule-ink);
+  overflow-wrap: anywhere;
+}
+
+.downRow:last-child {
+  border-block-end: 0;
+}
+
+.downTitle {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--dtab-key-ink);
+  text-wrap: var(--text-title-wrap);
+  overflow-wrap: normal;
+}
+
+.downLabel {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--dtab-head-ink);
+}
+
+.downPick {
+  background: var(--dtab-pick-ground);
+  box-shadow: inset var(--dtab-pick-bar-width) 0 0 var(--dtab-pick-bar-ink);
+}
+
+.downPick .downTitle,
+.downLabelPick {
+  color: var(--dtab-pick-key-ink);
 }

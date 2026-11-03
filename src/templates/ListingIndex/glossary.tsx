@@ -1,4 +1,4 @@
-import { Prose } from '@/components';
+import { Layout, Prose } from '@/components';
 import type { CorpusBand, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
 import { glossarySceneFor } from '@/lib/sketches';
@@ -18,7 +18,8 @@ import type {
    title across the column, the lede beside it and the texture field, then the rail beside the term
    groups. What this file adds is the answer to "what goes in a section" for terms: each term a drawn
    card, its own scene on the plate (`glossarySceneFor`), the term as the title and its one-line
-   definition as the body, three tracks as every listing's grid. Every word is the copy's. */
+   definition as the body, each group opening on its lead as the insights hub's groups do. Every word
+   is the copy's. */
 
 type Link = Extract<InlineRun, { type: 'link' }>;
 
@@ -76,28 +77,81 @@ const railLabelOf = (heading: string) => {
   return at > 0 ? heading.slice(0, at).trim() : undefined;
 };
 
-/** One group's cards: each term drawn, titled by its link and told by its definition. */
-function TermCards({ terms }: { terms: readonly { term: Term; card: string }[] }) {
+/** The lead's action, in the verb a term takes (the insights lead's `ACTION`, for a definition). */
+const TERM_ACTION = 'Read the definition';
+
+type TermEntry = { term: Term; card: string };
+
+/** One term as the site's card: its own scene on the plate, the term as the title, the definition as
+    the body. The SAME card at every placement (a term page's related terms set it at this step too). */
+function TermCard({
+  entry: { term, card },
+  orientation = 'vertical',
+  imageSide,
+}: {
+  entry: TermEntry;
+  orientation?: 'vertical' | 'horizontal';
+  imageSide?: 'left' | 'right';
+}) {
+  const scene = glossarySceneFor(term.link.href);
+  const shared = {
+    title: inlineToText(term.link.children),
+    body: capitalised(card),
+    href: term.link.href,
+    titleAs: 'h3' as const,
+    ...(scene ? { media: { type: 'sketch' as const, name: scene } } : {}),
+  };
+  /* No `compact`: that is the insights card's phone row, which drops the standfirst. A term card's
+     definition IS its content, so on a phone it stacks as plate, title, definition. */
+  return orientation === 'horizontal' ? (
+    <BlockCard
+      {...shared}
+      orientation="horizontal"
+      imageSide={imageSide}
+      size="lg"
+      tracks={2}
+      cue="cta"
+      ctaLabel={TERM_ACTION}
+      split="grid"
+    />
+  ) : (
+    <BlockCard {...shared} size="sm" tracks={3} cue="title" />
+  );
+}
+
+/**
+ * One group, in the listing's own group shape (decisions/2026-10-22-listings-share-one-structure;
+ * the insights hub's Feature): its first term as the horizontal lead, the drawing across two thirds
+ * and the definition in the third, then the rest as cards in rows of three. A group never ends on a
+ * lone card under a row: where one term would be left over (a group of two, or of five), it closes
+ * the group as a second horizontal card with its drawing on the other side, so the group opens and
+ * closes on the same wide shape and every row in between is full (or two of three tracks, as the
+ * insights grid sets a pair).
+ */
+function TermGroup({ terms }: { terms: readonly TermEntry[] }) {
+  const [lead, ...rest] = terms;
+  const tail = rest.length % 3 === 1 ? rest[rest.length - 1] : undefined;
+  const grid = tail ? rest.slice(0, -1) : rest;
   return (
-    <ListingGrid>
-      {terms.map(({ term, card }) => {
-        const scene = glossarySceneFor(term.link.href);
-        return (
-          <BlockCard
-            key={term.link.href}
-            title={inlineToText(term.link.children)}
-            body={capitalised(card)}
-            href={term.link.href}
-            {...(scene ? { media: { type: 'sketch' as const, name: scene } } : {})}
-            size="sm"
-            titleAs="h3"
-            tracks={3}
-            cue="title"
-            compact
-          />
-        );
-      })}
-    </ListingGrid>
+    <Layout rowGap="column">
+      {lead ? (
+        <ul>
+          <TermCard entry={lead} orientation="horizontal" />
+        </ul>
+      ) : null}
+      {grid.length > 0 ? (
+        <ListingGrid>
+          {grid.map((entry) => (
+            <TermCard key={entry.term.link.href} entry={entry} />
+          ))}
+        </ListingGrid>
+      ) : null}
+      {tail ? (
+        <ul>
+          <TermCard entry={tail} orientation="horizontal" imageSide="right" />
+        </ul>
+      ) : null}
+    </Layout>
   );
 }
 
@@ -125,7 +179,7 @@ export function glossaryIndex(page: CorpusPage): GlossaryIndex {
   let closing: ListingClosing | undefined;
 
   const sections: ListingSection[] = groups.map((band) => {
-    const terms: { term: Term; card: string }[] = [];
+    const terms: TermEntry[] = [];
     const notes: InlineRun[][] = [];
     for (const runs of paragraphsOf(band)) {
       const term = termOf(runs);
@@ -149,10 +203,10 @@ export function glossaryIndex(page: CorpusPage): GlossaryIndex {
     return {
       id: band.id,
       heading: band.headingText,
-      railLabel: railLabelOf(band.headingText),
+      railLabel: band.navLabel ?? railLabelOf(band.headingText),
       count: terms.length,
       band: 'listing-section',
-      content: <TermCards terms={terms} />,
+      content: <TermGroup terms={terms} />,
       note:
         notes.length > 0 ? (
           <Prose html={notes.map((runs) => paragraphHtml(runs)).join('')} />

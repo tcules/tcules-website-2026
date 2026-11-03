@@ -43,6 +43,12 @@ navigation:
     url: /glossary
   - name: Workflow Design
     url: /glossary/workflow-design
+  section_labels:
+    practice: Examples
+    patterns: Patterns
+    comparison: Vs process design
+    faq: FAQs
+    next: Rules before screens
 render:
   band_order:
   - practice

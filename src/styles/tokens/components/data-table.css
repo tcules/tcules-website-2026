@@ -53,6 +53,13 @@
      different column behaviours. */
   --dtab-fluid-size: 176px;
   --dtab-hold-size: 192px;
+  /* The key column's floor below 768, where a comparison's key is a row's NAME beside the values a
+     reader came to compare. At 192 (hold) the empty key head took most of a 326 phone column and cut
+     off the first value column, the one the page is about (the glossary's comparisons, 4 Nov 2026).
+     128 is 80 of text between the two `block` insets: a short key wraps by word, a longer key word
+     still gets its own width (a cell's min-content beats its floor), and the first value column
+     stays in view with the next one clipped at the edge, so the fade still says the table scrolls. */
+  --dtab-key-compact-size: 128px;
   /* A record's key column (no floors, see DataTable.module.css `.record`): its share of the table,
      so the table's own column algorithm cannot hand the key more than the value. Sized by content
      it took 167 of 326 in the glossary comparison at 390 and split the value mid-word. 38% leaves

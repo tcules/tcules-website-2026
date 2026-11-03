@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: AI Product UX
     url: /glossary/ai-product-ux
+  section_labels:
+    practice: Examples
+    principles: Principles
+    comparison: Vs traditional UX
+    related-terms: Related terms
+    faq: FAQs
+    next: The work around the model
 render:
   band_order:
   - practice

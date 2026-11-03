@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Agentic UX
     url: /glossary/agentic-ux
+  section_labels:
+    examples: Examples
+    practice: Principles
+    comparison: Vs conversational UX
+    related-terms: Related terms
+    faq: FAQs
+    next: How much it does
 render:
   band_order:
   - examples

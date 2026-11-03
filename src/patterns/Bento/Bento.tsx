@@ -336,8 +336,13 @@ export type ServiceTileProps = {
    * One line under the title, in the bento body role: what the destination is, where the copy says it
    * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
    * engineer …"). Plain text, verbatim. Absent renders nothing.
+   *
+   * Several strings are several paragraphs, a \`text\` apart: a WIDE tile carrying the sentences that
+   * lead to it (a glossary term's close, 4 Nov 2026), so its words column holds the argument beside
+   * the drawing rather than a title alone in half a row. Plain text only: the tile is one anchor, so a
+   * sentence with a link of its own stays outside it.
    */
-  body?: string;
+  body?: string | readonly string[];
 };
 
 /**
@@ -362,11 +367,21 @@ export function ServiceTile({
   titleAs: Title = 'h3',
   body,
 }: ServiceTileProps) {
+  const paragraphs = (typeof body === 'string' ? [body] : (body ?? [])).filter((p) => p.trim());
   const words = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
       <Title className={styles.title}>{title}</Title>
-      {body?.trim() ? <p className={styles.body}>{body}</p> : null}
+      {paragraphs.length === 1 ? <p className={styles.body}>{paragraphs[0]}</p> : null}
+      {paragraphs.length > 1 ? (
+        <Layout rowGap="text">
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className={styles.body}>
+              {paragraph}
+            </p>
+          ))}
+        </Layout>
+      ) : null}
     </Layout>
   );
   const visual = picture ? (

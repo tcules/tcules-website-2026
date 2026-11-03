@@ -123,6 +123,17 @@ export type DataTableProps = {
    * by its own content and would not; it should not be split. Default false.
    */
   split?: boolean;
+  /**
+   * What the table does on a phone (below 768). `scroll`, the default, is the boxed table at every
+   * width, scrolling sideways when its columns' floors outrun the track (7 Oct ruling 6). `read-down`
+   * (4 Nov 2026, the tools' worksheets; status proposed) is for a table a reader WORKS through
+   * rather than compares at a glance: below 768 each row becomes one block in the same box, its key
+   * as the title and each value under its column head in the mono label voice, read down the page
+   * instead of across a clipped frame. From 768 it is the boxed table, unchanged. The precedent is the
+   * audits' report sheet (ReportBand: "below 768 the sheet reads down, each row's key its title").
+   * One view shows at a time, and `display: none` keeps the other out of the accessibility tree.
+   */
+  narrow?: 'scroll' | 'read-down';
 };
 
 /*
@@ -230,6 +241,7 @@ export function DataTable({
   rows,
   split = false,
   pickColumn,
+  narrow = 'scroll',
 }: DataTableProps) {
   const captionId = useId();
 
@@ -304,7 +316,14 @@ export function DataTable({
             <thead className={joins ? styles.joinHead : undefined}>
               <tr>
                 {keyColumn ? (
-                  <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
+                  <th
+                    scope="col"
+                    className={cx(
+                      styles.colHead,
+                      styles.keyHead,
+                      BEHAVIOUR_CLASS[keyBehaviour],
+                    )}
+                  >
                     {keyColumn.heading}
                   </th>
                 ) : null}
@@ -384,6 +403,58 @@ export function DataTable({
     </div>
   );
 
+  /* The phone reading (`narrow="read-down"`): one block per row inside the same box. The key is the
+     row's title; a keyless table has no title and every column reads as a labelled value. A picked
+     row keeps its ground; a picked column's label takes the pick ink. */
+  const renderDown = () => (
+    <div className={styles.downView}>
+      <ul
+        className={styles.down}
+        {...(caption
+          ? { 'aria-labelledby': captionId }
+          : labelledBy
+            ? { 'aria-labelledby': labelledBy }
+            : {})}
+      >
+        {rows.map((row, rowIndex) => (
+          <li key={rowIndex} className={cx(styles.downRow, row.pick && styles.downPick)}>
+            <Layout rowGap="text">
+              {keyColumn ? (
+                row.headerHtml ? (
+                  <Prose as="span" html={row.headerHtml} className={styles.downTitle} />
+                ) : (
+                  <p className={styles.downTitle}>{row.header}</p>
+                )
+              ) : null}
+              {columns.map((column, index) => {
+                const cell = row.cellsHtml[index] ?? '';
+                const html = typeof cell === 'string' ? cell : '';
+                return (
+                  <Layout key={index} rowGap="inline">
+                    <p className={cx(styles.downLabel, picked(index) && styles.downLabelPick)}>
+                      {column.heading}
+                    </p>
+                    {typeof cell !== 'string' ? (
+                      <div>{cell.node}</div>
+                    ) : html.trim() ? (
+                      <Prose html={html} className={styles.value} />
+                    ) : (
+                      <span className={styles.empty} aria-hidden="true">
+                        —
+                      </span>
+                    )}
+                  </Layout>
+                );
+              })}
+            </Layout>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  const readDown = narrow === 'read-down' && head;
+
   return (
     <Layout rowGap="block" className={styles.root}>
       {summary ? (
@@ -401,7 +472,10 @@ export function DataTable({
             {caption}
           </p>
         ) : null}
-        {split && rows.length > 1 ? (
+        {readDown ? renderDown() : null}
+        {readDown ? (
+          <div className={styles.acrossView}>{renderFrame(rows, false, false)}</div>
+        ) : split && rows.length > 1 ? (
           /* The halves: side by side from 1024, a `gutter` apart, and ONE table below it — no row
              gap, and the second frame's top edge and head row give way (DataTable.module.css). */
           <Layout columns={{ lg: 2 }} colGap="gutter" rowGap="none" align="start">
