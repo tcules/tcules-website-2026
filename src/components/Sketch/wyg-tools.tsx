@@ -77,14 +77,17 @@ function AiTrustCanvas() {
         <g key={x}>
           <Rect x={x - 18} y={52} w={36} h={36} rx={8} className={styles.frame} />
           <Glyph name={glyph} cx={x} cy={70} size={18} className={styles.glyph} />
-          <circle className={styles.node} cx={x - 18} cy={70} r="2.5" />
-          <circle className={styles.node} cx={x + 18} cy={70} r="2.5" />
+          {/* Its ports grow in as the route reaches them: at rest only the start port is lit. */}
+          <GrowIn>
+            <circle className={styles.node} cx={x - 18} cy={70} r="2.5" />
+            <circle className={styles.node} cx={x + 18} cy={70} r="2.5" />
+          </GrowIn>
         </g>
       ))}
       <circle className={styles.node} cx={90} cy={70} r="2.5" />
-      <TraceIn d="M90,70 L122,70 M158,70 L192,70 M228,70 L243,70" />
+      <TraceIn d="M90,70 L122,70 M158,70 L192,70 M228,70 L245,70" />
       <GrowIn>
-        <ArrowRight x={250} y={70} />
+        <ArrowRight x={252} y={70} />
       </GrowIn>
       {/* The action at rest: a neutral port, so the undo leaves from its edge. */}
       <circle className={styles.frame} cx={270} cy={70} r={18} />
@@ -147,11 +150,11 @@ function FidelityChecklist() {
 function RebuildWorksheet() {
   return (
     <>
-      <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
-      <Glyph name="widget" cx={70} cy={78} size={24} className={styles.glyph} />
-      <Copy x={50} y={108} w={40} quiet />
-      <circle className={styles.node} cx={110} cy={90} r="2.5" />
-      <TraceIn d="M110,90 L193,90 M150,90 L150,56 A6,6 0 0 1 156,50 L193,50 M150,90 L150,124 A6,6 0 0 0 156,130 L193,130" />
+      <Rect x={30} y={60} w={60} h={60} rx={8} className={styles.frame} />
+      <Glyph name="widget" cx={60} cy={82} size={24} className={styles.glyph} />
+      <Copy x={44} y={106} w={32} quiet />
+      <circle className={styles.node} cx={90} cy={90} r="2.5" />
+      <TraceIn d="M90,90 L193,90 M150,90 L150,56 A6,6 0 0 1 156,50 L193,50 M150,90 L150,124 A6,6 0 0 0 156,130 L193,130" />
       <GrowIn>
         <circle className={styles.node} cx={150} cy={90} r="3.5" />
       </GrowIn>
@@ -165,10 +168,13 @@ function RebuildWorksheet() {
         <ArrowRight x={200} y={130} />
       </GrowIn>
       <Rect x={200} y={36} w={90} h={28} rx={8} className={styles.frame} />
-      <Glyph name="refresh" cx={218} cy={50} size={14} className={styles.glyph} />
+      {/* The two routes that exist fill as they land; the rebuild slot stays unlit, not built yet. */}
+      <circle className={styles.press} cx={218} cy={50} r={10} />
+      <Glyph name="refresh" cx={218} cy={50} size={14} className={styles.releaseMark} />
       <Copy x={234} y={50} w={40} quiet />
       <Rect x={200} y={76} w={90} h={28} rx={8} className={styles.frame} />
-      <Glyph name="ruler-pen" cx={218} cy={90} size={14} className={styles.glyph} />
+      <circle className={styles.press} cx={218} cy={90} r={10} />
+      <Glyph name="ruler-pen" cx={218} cy={90} size={14} className={styles.releaseMark} />
       <Copy x={234} y={90} w={32} quiet />
       <Hatched x={200} y={116} w={90} h={28} />
     </>

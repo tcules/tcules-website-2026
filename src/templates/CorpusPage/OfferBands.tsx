@@ -1478,7 +1478,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* An option table always takes the tiles, from two rows (one full row of two split tiles; owner,
      2 Nov 2026: "the new pattern we made for services hub", on every audit page, 4 Nov 2026): a
      missing drawing is the labelled empty plate. */
-  if ((rows.length >= 3 || (optionTable && rows.length >= 2)) && (optionTable || scenes.every(Boolean))) {
+  if (
+    (rows.length >= 3 || (optionTable && rows.length >= 2)) &&
+    (optionTable || scenes.every(Boolean))
+  ) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and

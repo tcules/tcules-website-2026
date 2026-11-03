@@ -1,6 +1,7 @@
 import { Layout, Prose } from '@/components';
 import type { CorpusBand, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
+import { ROUTES } from '@/lib/routes';
 import { glossarySceneFor } from '@/lib/sketches';
 import { BlockCard } from '@/patterns';
 
@@ -25,7 +26,7 @@ const capitalised = (text: string) => text.charAt(0).toUpperCase() + text.slice(
 /** `[Term](/glossary/x): definition` — the term and its definition, or null for any other line. */
 function termOf(runs: readonly InlineRun[]): Term | null {
   const [first, second, ...rest] = runs;
-  if (first?.type !== 'link' || !first.href.startsWith('/glossary/')) return null;
+  if (first?.type !== 'link' || !first.href.startsWith(`${ROUTES.glossary}/`)) return null;
   if (second?.type !== 'text' || !second.text.startsWith(':')) return null;
   const tail = second.text.replace(/^:\s*/, '');
   return { link: first, body: tail ? [{ type: 'text', text: tail }, ...rest] : rest };

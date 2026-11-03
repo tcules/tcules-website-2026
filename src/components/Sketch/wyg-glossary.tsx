@@ -123,23 +123,25 @@ function HumanInTheLoop() {
 function AiNativeProductDesign() {
   return (
     <>
-      <Focus x={60} y={90} glyph="user" size={13} />
-      <path className={styles.line} d="M78,90 L123,90" />
-      <ArrowRight x={130} y={90} />
-      <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      {/* The routine tasks, handed to an agent and to automation. */}
-      <Rect x={146} y={42} w={128} h={28} className={styles.tile} />
-      <Chip x={150} y={48} glyph="cpu" />
-      <Copy x={176} y={56} w={64} quiet />
-      <Glyph name="check-circle" cx={262} cy={56} size={12} className={styles.glyphQuiet} />
-      <Rect x={146} y={110} w={128} h={28} className={styles.tile} />
-      <Chip x={150} y={116} glyph="refresh-square" />
-      <Copy x={176} y={124} w={52} quiet />
-      <Glyph name="check-circle" cx={262} cy={124} size={12} className={styles.glyphQuiet} />
-      {/* The decision, kept in hand: the one row still open. */}
-      <Rect x={146} y={76} w={128} h={28} className={styles.region} />
-      <path className={styles.regionCopy} d="M158,90 L230,90" />
-      <Glyph name="question-circle" cx={262} cy={90} size={14} className={styles.glyphAccent} />
+      <Tile cx={60} cy={90} glyph="user" />
+      <path className={styles.line} d="M80,90 L129,90" />
+      <ArrowRight x={136} y={90} />
+      <g transform="translate(6 0)">
+        <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
+        {/* The routine tasks, handed to an agent and to automation. */}
+        <Rect x={146} y={42} w={128} h={28} className={styles.tile} />
+        <Chip x={150} y={48} glyph="cpu" />
+        <Copy x={176} y={56} w={64} quiet />
+        <Glyph name="check-circle" cx={262} cy={56} size={12} className={styles.glyphQuiet} />
+        <Rect x={146} y={110} w={128} h={28} className={styles.tile} />
+        <Chip x={150} y={116} glyph="refresh-square" />
+        <Copy x={176} y={124} w={52} quiet />
+        <Glyph name="check-circle" cx={262} cy={124} size={12} className={styles.glyphQuiet} />
+        {/* The decision, kept in hand: the one row that stays the person's. */}
+        <Rect x={146} y={76} w={128} h={28} className={styles.region} />
+        <path className={styles.regionCopy} d="M158,90 L230,90" />
+        <Glyph name="user" cx={262} cy={90} size={14} className={styles.glyphAccent} />
+      </g>
     </>
   );
 }
@@ -170,26 +172,28 @@ function CodedPrototype() {
   const right = [32, 40, 24, 36, 28, 40, 24];
   return (
     <>
-      <Rect x={50} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      <Copy x={66} y={42} w={40} />
-      {rows.map((y, i) => (
-        <g key={y}>
-          <Copy x={66} y={y} w={left[i] ?? 48} quiet />
-          <Copy x={146} y={y} w={right[i] ?? 32} quiet />
-        </g>
-      ))}
-      {/* The row reached from the keyboard: a focus ring, not a selection. */}
-      <Rect x={56} y={78} w={148} h={24} rx={4} className={styles.line} />
-      <Rect x={58} y={80} w={144} h={20} className={styles.region} />
-      <path className={styles.regionCopy} d="M66,90 L114,90 M146,90 L178,90" />
-      <Hop x1={250} x2={210} y={90} />
-      {/* The arrow keys, two caps that float on their flat offsets. */}
-      <Rect x={252} y={36} w={40} h={32} rx={6} className={styles.liftUnder} />
-      <Rect x={250} y={34} w={40} h={32} rx={6} className={styles.lift} />
-      <Glyph name="alt-arrow-up" cx={270} cy={50} size={18} className={styles.glyph} />
-      <Rect x={252} y={76} w={40} h={32} rx={6} className={styles.liftUnder} />
-      <Rect x={250} y={74} w={40} h={32} rx={6} className={styles.lift} />
-      <Glyph name="alt-arrow-down" cx={270} cy={90} size={18} className={styles.glyph} />
+      <g transform="translate(-12 0)">
+        <Rect x={50} y={30} w={160} h={120} rx={8} className={styles.frame} />
+        <Copy x={66} y={42} w={40} />
+        {rows.map((y, i) => (
+          <g key={y}>
+            <Copy x={66} y={y} w={left[i] ?? 48} quiet />
+            <Copy x={146} y={y} w={right[i] ?? 32} quiet />
+          </g>
+        ))}
+        {/* The row reached from the keyboard: a focus ring, not a selection. */}
+        <Rect x={56} y={78} w={148} h={24} rx={4} className={styles.line} />
+        <Rect x={58} y={80} w={144} h={20} className={styles.region} />
+        <path className={styles.regionCopy} d="M66,90 L114,90 M146,90 L178,90" />
+        <Hop x1={250} x2={210} y={90} />
+        {/* The arrow keys, two caps that float on their flat offsets. */}
+        <Rect x={252} y={36} w={40} h={32} rx={6} className={styles.liftUnder} />
+        <Rect x={250} y={34} w={40} h={32} rx={6} className={styles.lift} />
+        <Glyph name="alt-arrow-up" cx={270} cy={50} size={18} className={styles.glyph} />
+        <Rect x={252} y={76} w={40} h={32} rx={6} className={styles.liftUnder} />
+        <Rect x={250} y={74} w={40} h={32} rx={6} className={styles.lift} />
+        <Glyph name="alt-arrow-down" cx={270} cy={90} size={18} className={styles.glyph} />
+      </g>
     </>
   );
 }
@@ -227,15 +231,17 @@ function DesignEngineering() {
 function DesignIntent() {
   return (
     <>
-      <Rect x={30} y={40} w={140} h={100} rx={8} className={styles.frameQuiet} />
-      <Rect x={42} y={52} w={56} h={76} className={styles.region} />
-      <Rect x={106} y={52} w={52} h={34} className={styles.tile} />
-      <Rect x={106} y={94} w={52} h={34} className={styles.tile} />
-      <Hop x1={170} x2={210} y={90} />
-      <Rect x={210} y={30} w={60} h={120} rx={8} className={styles.frame} />
-      <Rect x={220} y={40} w={40} h={44} className={styles.region} />
-      <Rect x={220} y={92} w={40} h={22} className={styles.tile} />
-      <Rect x={220} y={120} w={40} h={20} className={styles.tile} />
+      <g transform="translate(10 0)">
+        <Rect x={30} y={40} w={140} h={100} rx={8} className={styles.frameQuiet} />
+        <Rect x={42} y={52} w={56} h={76} className={styles.region} />
+        <Rect x={106} y={52} w={52} h={34} className={styles.tile} />
+        <Rect x={106} y={94} w={52} h={34} className={styles.tile} />
+        <Hop x1={170} x2={210} y={90} />
+        <Rect x={210} y={30} w={60} h={120} rx={8} className={styles.frame} />
+        <Rect x={220} y={40} w={40} h={44} className={styles.region} />
+        <Rect x={220} y={92} w={40} h={22} className={styles.tile} />
+        <Rect x={220} y={120} w={40} h={20} className={styles.tile} />
+      </g>
     </>
   );
 }
@@ -349,7 +355,7 @@ function DesignSystemDrift() {
   return (
     <>
       <Rect x={70} y={30} w={180} h={120} rx={8} className={styles.frame} />
-      <path className={styles.trail} d="M150,40 L150,140" />
+      <path className={styles.trail} d="M140,40 L140,140" />
       {rows.map(([g, dx, w, rx], i) => {
         const y = 48 + i * 28;
         const last = i === rows.length - 1;
@@ -460,15 +466,17 @@ function UserJourneyMapping() {
   ];
   return (
     <>
-      <Glyph name="user" cx={36} cy={110} size={18} className={styles.glyph} />
-      <path className={styles.line} d="M50,110 L70,110 M110,110 L150,110 M190,110 L230,110" />
-      <Port x={50} y={110} />
-      {stages.map(([x, g]) => (
-        <Tile key={x} cx={x} cy={110} glyph={g} />
-      ))}
-      <Glyph name="check-circle" cx={90} cy={60} size={16} className={styles.glyph} />
-      <Focus x={170} y={60} glyph="danger-triangle" size={12} />
-      <Glyph name="check-circle" cx={250} cy={60} size={16} className={styles.glyph} />
+      <g transform="translate(12 0)">
+        <Glyph name="user" cx={36} cy={110} size={18} className={styles.glyph} />
+        <path className={styles.line} d="M50,110 L70,110 M110,110 L150,110 M190,110 L230,110" />
+        <Port x={50} y={110} />
+        {stages.map(([x, g]) => (
+          <Tile key={x} cx={x} cy={110} glyph={g} />
+        ))}
+        <Glyph name="check-circle" cx={90} cy={60} size={16} className={styles.glyph} />
+        <Focus x={170} y={60} glyph="danger-triangle" size={12} />
+        <Glyph name="check-circle" cx={250} cy={60} size={16} className={styles.glyph} />
+      </g>
     </>
   );
 }

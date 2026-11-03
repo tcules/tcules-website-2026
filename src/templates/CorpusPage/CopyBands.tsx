@@ -2135,8 +2135,9 @@ function ToolGroupRows({
     if (single && prev?.length === 1 && toolGroup(prev[0]!).tools.length === 1) prev.push(band);
     else rows.push([band]);
   }
-  const after = bands.flatMap((band) => toolGroup(band).after);
-  const last = bands.at(-1);
+  /* Each group's words after its set keep their band: the wrapper carries the band's onward id
+     (`onwardId`), the seam kinds:check reads a band's lifted words through, as for OnwardIsland. */
+  const closing = bands.filter((band) => toolGroup(band).after.length > 0);
   return (
     <Layout rowGap="stack">
       <Layout rowGap="section">
@@ -2160,7 +2161,17 @@ function ToolGroupRows({
           ),
         )}
       </Layout>
-      {after.length > 0 && last ? <BandBody blocks={after} labelledBy={headingIdOf(last)} /> : null}
+      {closing.map((band) => (
+        <Layout
+          key={band.id}
+          as="section"
+          id={onwardId(band.id)}
+          aria-labelledby={headingIdOf(band)}
+          rowGap="stack"
+        >
+          <BandBody blocks={toolGroup(band).after} labelledBy={headingIdOf(band)} />
+        </Layout>
+      ))}
     </Layout>
   );
 }

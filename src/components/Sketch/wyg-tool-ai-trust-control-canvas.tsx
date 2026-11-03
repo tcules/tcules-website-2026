@@ -14,9 +14,9 @@ function Example() {
   return (
     <>
       {/* The sender's screen, the sent copy deleted from it: the effect stays where it landed. */}
-      <Rect x={30} y={40} w={80} h={100} rx={8} className={styles.frameQuiet} />
+      <Rect x={30} y={40} w={80} h={100} rx={8} className={styles.trailFrame} />
       <Copy x={46} y={58} w={32} quiet />
-      <Hatched x={46} y={74} w={48} h={32} />
+      <Glyph name="letter" cx={70} cy={86} size={24} className={styles.glyphQuiet} />
       <Glyph name="close-circle" cx={70} cy={122} size={14} className={styles.glyphQuiet} />
       {/* The correction, and its two routes: to the account, and to the recipient. */}
       <Rect x={130} y={60} w={60} h={60} rx={8} className={styles.region} />

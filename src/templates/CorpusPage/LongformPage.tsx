@@ -14,6 +14,7 @@ import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 import { glossarySceneFor, serviceSceneFor } from '@/lib/sketches';
+import { toolPath } from '@/lib/routes';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
 import { ArticleShell, type ToolShell } from './LongformShell';
@@ -163,7 +164,7 @@ function ArticlePage({ page }: { page: CorpusPage }) {
  * drawn from that page's own words (components/Sketch/wyg-tool-<slug>.tsx); undrawn, its empty plate.
  */
 const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
-  '/tools/ai-product-ux-readiness-check': {
+  [toolPath('ai-product-ux-readiness-check')]: {
     stories: { example: 'tool-ai-product-ux-readiness-check-example' },
     diagrams: {
       marking: {
@@ -172,7 +173,7 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
       },
     },
   },
-  '/tools/ai-trust-control-canvas': {
+  [toolPath('ai-trust-control-canvas')]: {
     stories: { example: 'tool-ai-trust-control-canvas-example' },
     diagrams: {
       /* The band is its table alone, so the diagram follows the table (`after` names its head). */
@@ -182,7 +183,7 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
       },
     },
   },
-  '/tools/audit-redesign-modernise-rebuild': {
+  [toolPath('audit-redesign-modernise-rebuild')]: {
     stories: { example: 'tool-audit-redesign-modernise-rebuild-example' },
     diagrams: {
       'reading-your-results': {
@@ -191,13 +192,13 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
       },
     },
   },
-  '/tools/design-system-drift-checker': {
+  [toolPath('design-system-drift-checker')]: {
     stories: { 'reading-your-results': 'tool-design-system-drift-checker-example' },
     diagrams: {
       workspace: { after: 'intentional exception', scene: 'tool-design-system-drift-checker-marks' },
     },
   },
-  '/tools/figma-storybook-fidelity-checklist': {
+  [toolPath('figma-storybook-fidelity-checklist')]: {
     stories: { example: 'tool-figma-storybook-fidelity-checklist-example' },
     diagrams: {
       corrections: {
@@ -206,7 +207,7 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
       },
     },
   },
-  '/tools/prototype-readiness-checklist': {
+  [toolPath('prototype-readiness-checklist')]: {
     stories: { example: 'tool-prototype-readiness-checklist-example' },
     diagrams: {
       /* The marks, then the brief's three lists: after the paragraph that sorts into the lists. */

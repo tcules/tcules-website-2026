@@ -5,6 +5,7 @@ import { ContentSection, ContentSectionText, CtaRow, DataTable } from '@/pattern
 import type { CorpusBand, CorpusBlock } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
+import { ROUTES } from '@/lib/routes';
 
 import { head } from './blocks';
 import styles from './CorpusPage.module.css';
@@ -61,7 +62,7 @@ function trailingCaseLink(
 ): { link: LinkRun; rest: InlineRun[] } | undefined {
   const trimmed = trimEnd(runs);
   const last = trimmed.at(-1);
-  if (last?.type !== 'link' || !last.href.startsWith('/case-studies/')) return undefined;
+  if (last?.type !== 'link' || !last.href.startsWith(`${ROUTES.caseStudies}/`)) return undefined;
   return { link: last, rest: trimEnd(trimmed.slice(0, -1)) };
 }
 

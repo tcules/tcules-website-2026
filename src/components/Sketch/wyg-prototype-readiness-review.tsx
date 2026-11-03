@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { Team } from './l1-terms';
-import { ArrowRight, Copy, Cursor, Hop, Rect } from './offer';
+import { ArrowRight, Copy, Hop, Rect } from './offer';
 import { Chip, Focus, Glyph, Hatched } from './scenes';
 import styles from './Sketch.module.css';
 
@@ -60,14 +60,15 @@ function FixesCustomersNotice() {
       <Glyph name="user" cx={60} cy={90} size={24} className={styles.glyph} />
       <Hop x1={90} x2={130} y={90} />
       <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      <Copy x={146} y={48} w={48} quiet />
-      <Rect x={146} y={60} w={128} h={18} className={styles.tile} />
-      <Copy x={154} y={69} w={44} quiet />
-      <Rect x={146} y={84} w={128} h={18} className={styles.tile} />
-      <Copy x={154} y={93} w={60} quiet />
-      <Rect x={140} y={110} w={72} h={30} rx={10} className={styles.halo} />
-      <Rect x={146} y={116} w={60} h={18} rx={9} className={styles.solid} />
-      <Cursor x={194} y={126} />
+      <Copy x={146} y={44} w={48} quiet />
+      <Rect x={146} y={53} w={128} h={18} className={styles.tile} />
+      <Copy x={154} y={62} w={44} quiet />
+      {/* Where people get stuck: the field the route lands on, lit and flagged. The button waits. */}
+      <Rect x={140} y={75} w={140} h={30} rx={10} className={styles.halo} />
+      <Rect x={146} y={81} w={128} h={18} className={styles.region} />
+      <path className={styles.regionCopy} d="M170,90 L240,90" />
+      <Glyph name="danger-triangle" cx={158} cy={90} size={12} className={styles.glyphAccent} />
+      <Rect x={146} y={116} w={60} h={18} rx={9} className={styles.tile} />
     </>
   );
 }

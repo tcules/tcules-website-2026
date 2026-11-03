@@ -227,8 +227,9 @@ function Stops() {
   return (
     <>
       {/* Our last piece: the recommendation. */}
-      <Rect x={38} y={42} w={80} h={80} rx={8} className={styles.frameQuiet} />
-      <Rect x={34} y={46} w={80} h={80} rx={8} className={styles.frameQuiet} />
+      {/* The stack fans up-left, so the hop leaves the front sheet's edge clear of the others. */}
+      <Rect x={22} y={42} w={80} h={80} rx={8} className={styles.frameQuiet} />
+      <Rect x={26} y={46} w={80} h={80} rx={8} className={styles.frameQuiet} />
       <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
       <Copy x={42} y={66} w={40} />
       <Copy x={42} y={80} w={56} quiet />

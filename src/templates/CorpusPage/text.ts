@@ -1,5 +1,6 @@
 import type { CorpusBand, CorpusBlock, CorpusLink } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
+import { ROUTES } from '@/lib/routes';
 
 /**
  * Reading a corpus band's shapes.
@@ -287,9 +288,9 @@ export function withoutBlock(band: CorpusBand, index: number): CorpusBand {
  */
 export function tileActionFor(href: string | undefined): string {
   const route = href?.split('#')[0];
-  if (route?.startsWith('/tools/')) return 'Try the tool';
-  if (route === '/audits') return 'See the audits';
-  if (route?.startsWith('/audits/')) return 'See the audit';
+  if (route?.startsWith(`${ROUTES.tools}/`)) return 'Try the tool';
+  if (route === ROUTES.audits) return 'See the audits';
+  if (route?.startsWith(`${ROUTES.audits}/`)) return 'See the audit';
   return 'Explore the service';
 }
 

@@ -184,11 +184,6 @@
 }
 
 /* ── A worked example's key as a legend of marks, and the report page that uses it (2 Nov 2026) ── */
-.statusGlyph {
-  display: inline-flex;
-  color: var(--cpg-mark);
-}
-
 .statusName {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);

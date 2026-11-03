@@ -17,6 +17,7 @@ import { FULL_COLUMN } from '@/lib/image-sizes';
 import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
 import { glossarySceneFor, type SketchName } from '@/lib/sketches';
 
 import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
@@ -648,7 +649,7 @@ function relatedTerms(band: CorpusBand): BlockCardSetItem[] | null {
   const items: BlockCardSetItem[] = [];
   for (const block of live) {
     const lead = linkLead(block);
-    if (!lead || !lead.link.href.startsWith('/glossary/')) return null;
+    if (!lead || !lead.link.href.startsWith(`${ROUTES.glossary}/`)) return null;
     const body = plain(lead.body).trim();
     const scene = glossarySceneFor(lead.link.href);
     items.push({

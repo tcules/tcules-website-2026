@@ -22,10 +22,10 @@ import { Chip, Focus, Glyph } from './scenes';
  */
 function InvitationExample() {
   const cases: [number, number, IconName][] = [
-    [204, 46, 'clock-circle'],
-    [250, 46, 'user'],
-    [204, 94, 'refresh'],
-    [250, 94, 'danger-triangle'],
+    [200, 50, 'clock-circle'],
+    [244, 50, 'user'],
+    [200, 94, 'refresh'],
+    [244, 94, 'danger-triangle'],
   ];
   return (
     <>
@@ -33,8 +33,8 @@ function InvitationExample() {
       <Rect x={30} y={40} w={80} h={100} rx={8} className={styles.frame} />
       <Copy x={44} y={56} w={32} quiet />
       <Glyph name="check-circle" cx={70} cy={86} size={22} className={styles.glyphQuiet} />
-      <Copy x={50} y={114} w={40} />
-      <Copy x={56} y={126} w={28} quiet />
+      {/* Its one button: a screen, not a document. */}
+      <Rect x={50} y={118} w={40} h={12} rx={6} className={styles.tile} />
       {/* The real path: delivery, the letter that has to go out. */}
       <circle className={styles.node} cx={110} cy={90} r="2.5" />
       <path className={styles.line} d="M110,90 L132,90" />
@@ -42,11 +42,11 @@ function InvitationExample() {
       <path className={styles.line} d="M168,90 L183,90" />
       <ArrowRight x={190} y={90} />
       {/* What the build must add around it. */}
-      <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frameQuiet} />
+      <Rect x={190} y={40} w={100} h={100} rx={8} className={styles.frameQuiet} />
       {cases.map(([x, y, glyph]) => (
         <g key={glyph}>
-          <Rect x={x} y={y} w={36} h={40} rx={4} className={styles.trailFrame} />
-          <Glyph name={glyph} cx={x + 18} cy={y + 20} size={16} className={styles.glyphQuiet} />
+          <Rect x={x} y={y} w={36} h={36} rx={4} className={styles.trailFrame} />
+          <Glyph name={glyph} cx={x + 18} cy={y + 18} size={16} className={styles.glyphQuiet} />
         </g>
       ))}
     </>
