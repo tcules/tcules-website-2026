@@ -16,32 +16,68 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
   is past DataTable's designed 12; every row stays visible (no-hidden-cards). Below 768 it scrolls inside its
   frame, as every DataTable does.
 - Testimonials: five quotes, so the one-at-a-time slider with an eyebrow head, on tint; every quote rated by
-  its person (one-person-one-rating).
+  its person (one-person-one-rating). The band's closing line, "**4.8 on Clutch.** [Read the reviews](…)",
+  is the band's RatingBadge footer under the slider (rating-is-always-the-badge), linking the copy's
+  saas-product-design-studio profile.
 - Enquiry before FAQ (formBeforeFaq), on the blue island.
+
+## Fixed after the critic (3 Nov 2026)
+- **The Clutch line was dropped.** Cause: the copy closes the claim's bold on its full stop ("**4.8 on
+  Clutch.**"), and the body parser reads a bold run ending in `.` as a `labelled` block, not a paragraph.
+  `ratingOf` only read paragraphs, so QuoteGroupBand found no score and rendered no footer, and no other
+  renderer took the block. Fix at the band: `ratingOf` reads a labelled line as the same score line
+  (`scoreRuns`, blocks.tsx), and QuoteGroupBand and RecognitionBand look for the score in any block. The copy
+  is unchanged. Every page whose score line ends its bold on a full stop gets its badge back the same way.
+- **Why kinds:check missed it.** It sampled a labelled block's body only ("Read the reviews", three words),
+  and a sample needs six. It now samples the label and body as one line, so a dropped score line fails.
+- The earlier note in page-mapping §24 accepting the text-heavy pair is withdrawn: an active ruling
+  (2026-10-07-no-two-text-heavy-bands-in-a-row) is not accepted by a builder. The pairs are open questions
+  below.
 
 ## Band → component
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio review photo, record figures | |
 | client-recognition | recognition · LogoGrid (H) | 4 of 15 named clients have a file |
-| product-responsibility | set · offer-sheet | kind still `to-design` |
+| product-responsibility | set · offer-sheet | kind still `to-design`; ⚠ text-heavy pair with client-list (Q2) |
 | client-list | table · DataTable (E) | 16 rows |
-| testimonials | quotes · slider (G), stars on every quote | tint |
-| returning-clients | text · C-text | ⚠ text-heavy pair (page-mapping §24) |
-| case-studies | close → prose (C-text): its link is inline, and an island here would touch the enquiry island | ⚠ |
+| testimonials | quotes · slider (G), stars on every quote, RatingBadge footer | tint |
+| returning-clients | text · C-text | ⚠ text-heavy pair with case-studies (Q1) |
+| case-studies | close · renders C-text today | ⚠ breaks its kind's mapping (Q3) |
 | enquiry, faq | L, D-faq | |
 
 ## Content mapping
-- No copy changed. The Clutch line under the testimonials renders as the band authors it.
+- No copy changed. The Clutch line under the testimonials renders as the band's RatingBadge.
 
-## Open
+## Open — BLOCKING (owner)
+- **Q1 · BLOCKING. `returning-clients` → `case-studies` are two text-heavy bands touching**, against the active
+  ruling 2026-10-07-no-two-text-heavy-bands-in-a-row and treatment rules § 2. Both are one paragraph on paper
+  between the quote slider and the enquiry island. Options with existing parts:
+  (a) the 3-column case card grid under "Case studies behind the client names" (treatment rules § 1, "A case
+  study … elsewhere: the 3-column card grid"), showing cases the client list already links: existing case
+  data, no new copy, but cards the band does not author, so the owner picks which and how many;
+  (b) client marks on `returning-clients` (Primelis, Benchmark Gensuite, Omny): only Omny has a file today;
+  (c) another treatment. Not fixed on this branch.
+- **Q2 · BLOCKING. `product-responsibility` → `client-list` are two text-heavy bands touching**: the text-only
+  offer sheet (six titled cells, no drawings) directly above the 16-row table. Options: (a) a flat drawing per
+  cell, drawn per item (flat-drawings-pages), which the `set` kind already takes where a page assigns scenes;
+  (b) client marks per row of the client list (needs the missing logo files below); (c) another treatment.
+  Not fixed on this branch.
+- **Q3 · BLOCKING. `case-studies` has a link, so its kind (`close`) maps it to the ink island (L), but an
+  island here would touch the enquiry island** (form before FAQ puts the enquiry island directly under it;
+  treatment rules § 2: the island touches no island). Today CloseBand renders it as C-text because the link is
+  inline in the paragraph, not a line of its own; that is the no-link rendering, and the
+  one-kind-one-component ruling does not allow it as a fallback. Options: (a) the band becomes the case
+  grid of Q1(a), its link the head's end action ("Browse the case studies"), which answers Q1 and Q3 together;
+  (b) the island, with the enquiry island moved away (breaks form before FAQ); (c) a rule for a close that
+  sits directly above the enquiry.
+
+## Open — not blocking
 - Client marks missing (files needed in `public/clients/`, then `src/lib/client-marks.ts`): Benchmark Gensuite,
   Dealpath, Ringier Media Switzerland, JoVE, Primelis, Auxentios, ConnectX, BuildTwin, Novus Insights,
   Scissors, Gold Image Printing. Eden AI is still a PNG (ch05 §10 wants SVG).
 - The wall also shows approved marks the copy does not name here (Omny, LatitudePay, Quoter, SafeXpay, Pledge,
   Incluude), as RecognitionBand does on every page. Owner: keep, or show only the clients this page names?
-- `returning-clients` and `case-studies` are two short prose bands in a row. Options for the owner: case cards
-  under "Case studies behind the client names" (the cases the client list links), or accept as is.
 - `set` (What clients have asked us to do) uses the blue-marker ruled cell, which treatment rules § 2 keeps for
   figures; the kind is still to design site-wide.
 - og/twitter image: `IMAGE_ASSET_REQUIRED` in the copy.

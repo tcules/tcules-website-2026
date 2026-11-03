@@ -1429,10 +1429,3 @@ only.
 /design/case-spread), EngagementOptions (`--eop-*`, /design/engagement-options). OfferBands maps
 `outcomes`, `symptoms`, `record` and `tiles` to them, so every offer page with those band types takes
 them without an edit.
-
-## §24 · /clients: the accepted text-heavy pairs (3 Nov 2026)
-
-⚠ `testimonials` → `returning-clients` → `case-studies`. The fixed narrative puts two one-paragraph bands
-between the quote slider and the enquiry island: the returning clients have no marks or pictures of their
-own (Primelis and Benchmark Gensuite have no file), and the case-studies line cannot be an island because it
-would touch the enquiry island. Accepted until the owner picks a treatment (docs/page-build/pages/clients.md).

@@ -110,7 +110,10 @@ function samplesOf(blocks) {
   const out = [];
   for (const block of blocks) {
     if (block.type === 'paragraph') out.push(sample(runText(block.runs)));
-    else if (block.type === 'labelled') out.push(sample(runText(block.body)));
+    /* The label and its body as one line: a short labelled line ("**4.8 on Clutch.** [Read the
+       reviews](…)", /clients) has too few words in its body alone to be sampled, so it went unchecked. */
+    else if (block.type === 'labelled')
+      out.push(sample(`${runText(block.label)} ${runText(block.body)}`));
     else if (block.type === 'list') for (const item of block.items) out.push(sample(runText(item)));
     else if (block.type === 'table')
       for (const row of block.rows) for (const cell of row) out.push(sample(runText(cell)));
