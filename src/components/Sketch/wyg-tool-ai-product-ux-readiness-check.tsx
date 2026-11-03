@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { ArrowRight, Copy, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph } from './scenes';
+import { Focus, Glyph } from './scenes';
 import styles from './Sketch.module.css';
 
 /**
@@ -21,9 +21,10 @@ function Example() {
       <Copy x={44} y={114} w={20} quiet />
       <Hop x1={90} x2={130} y={90} />
       <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      <Chip x={142} y={42} glyph="stars" />
+      <Rect x={142} y={42} w={16} h={16} rx={4} className={styles.tile} />
+      <Glyph name="stars" cx={150} cy={50} size={10} className={styles.glyph} />
       <Copy x={166} y={50} w={48} quiet />
-      <Copy x={146} y={74} w={112} quiet />
+      <Copy x={146} y={74} w={88} quiet />
       <Rect x={140} y={84} w={100} h={20} className={styles.region} />
       <path className={styles.regionCopy} d="M148,94 L210,94" />
       <Copy x={146} y={118} w={36} quiet />

@@ -23,40 +23,37 @@ import styles from './Sketch.module.css';
  * the top. The use case's route lands on the one rung agreed for it.
  */
 function AiReadinessCheck() {
-  const rungs: [number, IconName][] = [
-    [50, 'bolt-circle'],
-    [90, 'document-text'],
-    [130, 'chat-round-dots'],
+  const stops: [number, IconName, number][] = [
+    [50, 'bolt-circle', 32],
+    [90, 'document-text', 44],
+    [130, 'chat-round-dots', 36],
   ];
   return (
     <>
-      <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
-      <Glyph name="stars" cx={70} cy={78} size={24} className={styles.glyph} />
-      <Copy x={50} y={108} w={40} quiet />
-      <path className={styles.rule} d="M190,64 L190,76 M190,104 L190,116" />
-      <GrowIn>
-        <Rect x={164} y={70} w={132} h={40} rx={20} className={styles.halo} />
-      </GrowIn>
-      {rungs.map(([y, glyph]) =>
+      <Rect x={30} y={60} w={60} h={60} rx={8} className={styles.frame} />
+      <Glyph name="stars" cx={60} cy={82} size={20} className={styles.glyph} />
+      <Copy x={46} y={106} w={28} quiet />
+      {/* The one authority gauge, most at the top: act, prepare, suggest. */}
+      <Rect x={190} y={30} w={40} h={120} rx={20} className={styles.frame} />
+      {stops.map(([y, glyph, w]) =>
         y === 90 ? (
           <g key={y}>
             {/* The authority agreed for this use case: neutral until the route reaches it. */}
-            <Rect x={170} y={y - 14} w={120} h={28} rx={14} className={styles.press} />
-            <Glyph name={glyph} cx={190} cy={y} size={14} className={styles.releaseMark} />
-            <Rect x={208} y={y - 1} w={44} h={2} rx={1} className={styles.releaseMark} />
+            <circle className={styles.press} cx={210} cy={y} r={12} />
+            <Glyph name={glyph} cx={210} cy={y} size={14} className={styles.releaseMark} />
+            <Copy x={244} y={y} w={w} quiet />
           </g>
         ) : (
           <g key={y}>
-            <Rect x={170} y={y - 14} w={120} h={28} rx={14} className={styles.tile} />
-            <Glyph name={glyph} cx={190} cy={y} size={14} className={styles.glyph} />
-            <Copy x={210} y={y} w={y === 50 ? 32 : 48} quiet />
+            <Glyph name={glyph} cx={210} cy={y} size={14} className={styles.glyph} />
+            <Copy x={244} y={y} w={w} quiet />
           </g>
         ),
       )}
-      <circle className={styles.node} cx={110} cy={90} r="2.5" />
-      <TraceIn d="M110,90 L163,90" />
+      <circle className={styles.node} cx={90} cy={90} r="2.5" />
+      <TraceIn d="M90,90 L183,90" />
       <GrowIn>
-        <ArrowRight x={170} y={90} />
+        <ArrowRight x={190} y={90} />
       </GrowIn>
     </>
   );
@@ -70,35 +67,37 @@ function AiTrustCanvas() {
   return (
     <>
       <Rect x={30} y={40} w={60} h={60} rx={8} className={styles.frame} />
-      <Glyph name="stars" cx={60} cy={70} size={24} className={styles.glyph} />
+      <Glyph name="letter" cx={60} cy={70} size={24} className={styles.glyph} />
       {(
         [
-          [130, 'eye'],
-          [190, 'user'],
+          [140, 'eye'],
+          [210, 'user'],
         ] as const
       ).map(([x, glyph]) => (
         <g key={x}>
-          <Rect x={x - 20} y={50} w={40} h={40} rx={8} className={styles.frame} />
-          <Glyph name={glyph} cx={x} cy={70} size={20} className={styles.glyph} />
-          <circle className={styles.node} cx={x - 20} cy={70} r="2.5" />
-          <circle className={styles.node} cx={x + 20} cy={70} r="2.5" />
+          <Rect x={x - 18} y={52} w={36} h={36} rx={8} className={styles.frame} />
+          <Glyph name={glyph} cx={x} cy={70} size={18} className={styles.glyph} />
+          <circle className={styles.node} cx={x - 18} cy={70} r="2.5" />
+          <circle className={styles.node} cx={x + 18} cy={70} r="2.5" />
         </g>
       ))}
       <circle className={styles.node} cx={90} cy={70} r="2.5" />
-      <TraceIn d="M90,70 L110,70 M150,70 L170,70 M210,70 L243,70" />
+      <TraceIn d="M90,70 L122,70 M158,70 L192,70 M228,70 L243,70" />
       <GrowIn>
         <ArrowRight x={250} y={70} />
       </GrowIn>
+      {/* The action at rest: a neutral port, so the undo leaves from its edge. */}
+      <circle className={styles.frame} cx={270} cy={70} r={18} />
       <GrowIn>
         <Focus x={270} y={70} glyph="bolt-circle" size={12} />
       </GrowIn>
       {/* The undo: back from the action to the output, its mark on the way. */}
       <path
         className={styles.trail}
-        d="M270,88 L270,124 A6,6 0 0 1 264,130 L202,130 M178,130 L66,130 A6,6 0 0 1 60,124 L60,107"
+        d="M270,88 L270,124 A6,6 0 0 1 264,130 L177,130 M153,130 L66,130 A6,6 0 0 1 60,124 L60,107"
       />
       <path className={styles.quietMark} d="M60,100 L56,107 L64,107 Z" />
-      <Glyph name="undo-left" cx={190} cy={130} size={16} className={styles.glyph} />
+      <Glyph name="undo-left" cx={165} cy={130} size={16} className={styles.glyph} />
     </>
   );
 }
