@@ -27,6 +27,15 @@ export const CONTACT_CHANNELS: readonly ContactChannel[] = [
     action: 'partners@tcules.com',
   },
   { kind: 'careers', title: 'Looking to work with us?', href: ROUTES.careers, action: 'Careers' },
+  /* The studio as a fourth route (owner, 3 Nov 2026): the live page's "Ahmedabad, India", the
+     footer's address, and a way to find it. "Open in Maps" is the owner's addition. */
+  {
+    kind: 'studio',
+    title: 'Ahmedabad, India',
+    body: STUDIO_ADDRESS,
+    href: EXTERNAL.studioMap,
+    action: 'Open in Maps',
+  },
 ];
 
 /** The live page's "Follow us on" and its four profiles. The address is not part of it (owner, 3 Nov 2026). */

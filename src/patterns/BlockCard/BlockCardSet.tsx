@@ -192,6 +192,7 @@ function peerGrid(
   count: number,
   across: BlockCardSetAcross | undefined,
   pair = false,
+  controls = false,
 ): { columns: Columns; tracks: BlockCardTracks; widest: BlockCardSetAcross } {
   const widest = across ?? (count <= 2 ? 2 : count === 4 ? 4 : 3);
   /* The phone pair: two across from the base up, the set's widest from lg (or md for three). */
@@ -204,6 +205,10 @@ function peerGrid(
   /* Four across from lg, not xl (cmp-feature fix round 2): at 1024 the 2×2 put 460-wide 16:9
      photographs in a band 1140 to 1300 tall — an image wall larger than anything at 1440. Four at
      216 hold the row's shape; the `sm` step is already the four-across one. */
+  /* Tiles that end on a labelled control (frame="tile", the contact routes, owner 3 Nov 2026) hold
+     four across only from xl: at 1024 a 216 track is narrower than a mailbox as a button label, which
+     must not wrap or spill. Below xl they sit two by two. */
+  if (widest === 4 && controls) return { columns: { base: 1, md: 2, xl: 4 }, tracks: 2, widest };
   if (widest === 4) return { columns: { base: 1, md: 2, lg: 4 }, tracks: 2, widest };
   /* Exactly three: three across from md (cmp-services fix round 1). Two from md put the third card
      alone on a second row beside an empty cell at 768 to 1023, an orphan in every three-card
@@ -411,7 +416,7 @@ export function BlockCardSet({
   const peers = featured ? items.slice(1) : items;
   const covered = items.some(hasCover);
   const pair = phone === 'pair';
-  const { columns, tracks, widest } = peerGrid(peers.length, across, pair);
+  const { columns, tracks, widest } = peerGrid(peers.length, across, pair, frame === 'tile');
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
   /* Icon cards are h5 and body-sm, always (§ 1.4; the glyph is the h5's em, on its own row above it, 9 Oct 2026). `size` is not an
      option for them: an override set one grid's titles a step above the next one's on one page. */

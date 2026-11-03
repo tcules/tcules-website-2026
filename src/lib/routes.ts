@@ -418,6 +418,10 @@ export const EXTERNAL = {
   youtube: 'https://www.youtube.com/@tcules',
   /* Instagram and X as tcules.com/contact links them (read 3 Nov 2026, tracker 2.56). */
   instagram: 'https://www.instagram.com/tcules.ux',
+  /* The studio on Google Maps, searched by its street address (owner, 3 Nov 2026: /contact's studio
+     tile opens it). */
+  studioMap:
+    'https://www.google.com/maps/search/?api=1&query=614%2C+Silver+Radiance+2%2C+Science+City+Road%2C+Sola%2C+Ahmedabad+380060',
   x: 'https://x.com/tculesux',
 } as const;
 

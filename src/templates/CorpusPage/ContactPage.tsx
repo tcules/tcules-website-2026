@@ -23,7 +23,7 @@ import { planOffer, type TEMPLATE_BANDS } from './plan';
 import { boldLead, hasLink, labelTitle, leadOf, plain, sentenceLead, trimStart } from './text';
 
 /** What a way to reach the studio is, which decides its glyph. */
-export type ContactChannelKind = 'email' | 'partners' | 'careers';
+export type ContactChannelKind = 'email' | 'partners' | 'careers' | 'studio';
 
 /**
  * One way to reach the studio other than the form (tracker 2.56): its title and its one action, a
@@ -33,6 +33,8 @@ export type ContactChannelKind = 'email' | 'partners' | 'careers';
 export type ContactChannel = {
   kind: ContactChannelKind;
   title: string;
+  /** One line under the title, where the route needs it (the studio's street address). */
+  body?: string;
   href: string;
   action: string;
 };
@@ -164,6 +166,7 @@ const CHANNEL_GLYPHS = {
   email: 'letter',
   partners: 'hand-shake',
   careers: 'users-group-rounded',
+  studio: 'map-point',
 } as const satisfies Record<ContactChannelKind, IconName>;
 
 /**
@@ -182,7 +185,7 @@ function Channels({ channels }: { channels: readonly ContactChannel[] }) {
     >
       <BlockCardSet
         lead="none"
-        across={3}
+        across={channels.length >= 4 ? 4 : 3}
         frame="tile"
         linkScope="cta"
         ctaEmphasis="outline"
@@ -190,6 +193,7 @@ function Channels({ channels }: { channels: readonly ContactChannel[] }) {
           id: channel.kind,
           title: channel.title,
           icon: CHANNEL_GLYPHS[channel.kind],
+          body: channel.body,
           href: channel.href,
           ctaLabel: channel.action,
         }))}
