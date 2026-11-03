@@ -556,6 +556,13 @@ type PageHeroBaseProps = {
    * and a hero adjunct is subordinate to them.
    */
   children?: ReactNode;
+  /**
+   * A quiet line straight after the actions, a `block` under them: the copy's redirect for the reader
+   * who is on the wrong page ("Already live with customers? See the UX & Product Audit.", the six
+   * audits, 4 Nov 2026), in its authored place after the ask. The caller's node, like `children`: it
+   * carries no colour or distance of its own here. Rendered only where the hero has actions.
+   */
+  actionsNote?: ReactNode;
 };
 
 /** One figure in the hero's record row. Structurally `Stat`'s value, unit and label. */
@@ -780,6 +787,7 @@ export function PageHero({
   texture = false,
   announcement,
   children,
+  actionsNote,
   'data-band': dataBand,
   'data-fold-hero': dataFoldHero,
 }: PageHeroProps) {
@@ -1092,7 +1100,7 @@ export function PageHero({
      ghost 24 under the solid (`stackUntil`): the phone shape no longer depends on how long the
      labels are (fix round 2). size="md" with extendHitArea on both: each box is 40 and the
      extension covers the missing 4. */
-  const actionsNode =
+  const actionsRow =
     controls.length > 0 ? (
       <Cluster
         colGap="block"
@@ -1116,6 +1124,17 @@ export function PageHero({
         ))}
       </Cluster>
     ) : null;
+
+  /* The redirect line after the ask: one unit with it, a `block` under the row. */
+  const actionsNode =
+    actionsRow && actionsNote != null ? (
+      <Layout rowGap="block" justifyItems={justify}>
+        {actionsRow}
+        <div>{actionsNote}</div>
+      </Layout>
+    ) : (
+      actionsRow
+    );
 
   /* ── tags · an unboxed mono grid, each mark a blue pixel ───────────────────
      Each tag is a mono label after a 6px blue square (the eyebrow's mark), set in three equal

@@ -147,6 +147,10 @@ export function CorpusHero({
   const recordLine = proofs.find((line) => isStudioRecord(plain(line)));
   const figures = stats ?? (recordLine ? recordFigures(plain(recordLine)) : undefined);
   const [firstProof] = proofs.filter((line) => line !== recordLine);
+  /* Every other line is the copy's redirect for the reader on the wrong page ("Already live with
+     customers? See the UX & Product Audit.", the six audits): it is never suppressed with the
+     "Selected work" line, and it keeps its authored place after the ask (4 Nov 2026). */
+  const redirects = proofs.filter((line) => line !== recordLine && line !== firstProof);
   return (
     <PageHero
       data-band="A"
@@ -168,6 +172,17 @@ export function CorpusHero({
       credits={byline?.credits}
       dates={byline?.dates}
       readingTime={byline?.readingTime}
+      actionsNote={
+        redirects.length > 0 ? (
+          <Layout rowGap="tight">
+            {redirects.map((line, index) => (
+              <p key={index} className={styles.proofLine}>
+                {renderInline(linkProofLine(line))}
+              </p>
+            ))}
+          </Layout>
+        ) : undefined
+      }
     >
       {proofLine && firstProof ? (
         <p className={styles.proofLine}>{renderInline(linkProofLine(firstProof))}</p>

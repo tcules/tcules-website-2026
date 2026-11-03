@@ -42,7 +42,10 @@ export type OfferPartsProps = {
   deliverablesTitle: string;
   /** Two to seven; built for five. */
   deliverables: readonly OfferPartsDeliverable[];
-  /** Zero to three; built for three. */
+  /**
+   * Two or three: who does the work, what we need, where our part stops. The audits' 3 Nov 2026 copy
+   * has no "What we need", so two is a built count, not a gap.
+   */
   parts: readonly OfferPart[];
   /**
    * What the copy sets between the deliverables and the terms — a worked example, the table a
@@ -114,8 +117,8 @@ export function OfferParts({
     if (deliverables.length < 2 || deliverables.length > 7) {
       console.warn(`OfferParts: ${deliverables.length} deliverables; built for two to seven.`);
     }
-    if (parts.length !== 3) {
-      console.warn(`OfferParts: ${parts.length} parts; built for three.`);
+    if (parts.length < 2 || parts.length > 3) {
+      console.warn(`OfferParts: ${parts.length} parts; built for two or three.`);
     }
     for (const part of [...deliverables, ...parts]) {
       if (!part.scene) {
