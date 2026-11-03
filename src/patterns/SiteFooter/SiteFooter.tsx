@@ -75,8 +75,9 @@ export function SiteFooter({
           line, so the grid churns under the watermark and dissolves upward. One field, no shape and
           no frame. Reduced motion draws it once and holds.
 
-          `magnetic` (owner, 4 Nov 2026): the swirls and ripples bend round the watermark's letters
-          as they drift past; the cells themselves stay free. */}
+          `magnetic` (owner, 4 Nov 2026): the moving field draws the watermark's letters — the
+          swirls bend round them, the ripples travel out as their contours and a faster current runs
+          through the strokes — so "Tcules" reads from the motion, not from the faint mark. */}
       <div className={styles.field} aria-hidden="true">
         <TextureFlow flow="turbulent" magnetic />
       </div>

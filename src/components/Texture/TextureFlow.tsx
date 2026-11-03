@@ -31,11 +31,12 @@ export type TextureFlowProps = {
    */
   bleed?: boolean;
   /**
-   * The field's swirls and ripples bend round a shape as they drift past it, like water round a
-   * stone (owner, 4 Nov 2026, the footer's watermark). The shape is the first `[data-texture-attract]`
+   * The moving field draws a shape (owner, 4 Nov 2026, the footer's watermark): readable from the
+   * motion alone, with no cell held or blanked. The shape is the first `[data-texture-attract]`
    * element in the field's band — the host or an ancestor a few levels up, so the caller marks a
-   * sibling and this never reaches for a pattern. Only the space the noise is read in is warped: the
-   * cells stay free, none is aligned to the outline, and the shape is never traced.
+   * sibling and this never reaches for a pattern. Round it the swirls bend and the ripples become
+   * its contours, travelling outward; through it a faster current runs. Every cell still points
+   * wherever the noise says.
    */
   magnetic?: boolean;
 };
@@ -60,7 +61,7 @@ const FRAG = `
 precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform vec4 uCalm;
 uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec4 uFocus; uniform float uFaint; uniform vec3 uInk;
-uniform float uMagnet; uniform sampler2D uHalo;
+uniform float uMagnet; uniform sampler2D uHalo; uniform sampler2D uShape;
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -91,22 +92,28 @@ void main(){
   // only quieter there, so a formless island reads turbulent across (owner, 31 Oct 2026).
   float loose = (1.0 - settle) * (1.0 - calm * uSettle);
 
-  // The magnet (owner, 4 Nov 2026) warps the SPACE the field is read in, never the cells. uHalo is the
-  // shape blurred wide; its gradient points away from the outline. Near the shape the point the
-  // noise is sampled at is pushed along that gradient and sheared along the outline, so the swirls
-  // and ripples drifting past bend round the letters the way water bends round a stone. Every cell
-  // still points wherever the warped noise says: nothing is aligned to the outline or held by it.
+  // The magnet (owner, 4 Nov 2026): the moving field DRAWS the shape, it is never cut out of it.
+  // Two maps of the shape at the field's CSS size: uShape, the shape itself softened by a few px,
+  // and uHalo, the shape blurred wide. Three things happen near it, and none of them holds a cell —
+  // every cell still points wherever the noise says.
+  //   1  The space the noise is read in is warped round the shape (pushed off it along the halo's
+  //      gradient, sheared along its outline), so the swirls drifting past bend round the letters.
+  //   2  Outside, the ripples become the shape's own contours, travelling outward from it.
+  //   3  Inside, the ripples are a fast current running through the strokes, so the letters read
+  //      as moving water inside calmer water rather than as blanks.
   vec2 q = c;
+  float h = 0.0, sh = 0.0;
   if (uMagnet > 0.5) {
     vec2 uv = c / W; vec2 e = vec2(P * 2.0) / W;
-    float h = texture2D(uHalo, uv).r;
+    h = texture2D(uHalo, uv).r;
+    sh = smoothstep(0.35, 0.65, texture2D(uShape, uv).r);
     vec2 g = vec2(texture2D(uHalo, uv + vec2(e.x, 0.0)).r - texture2D(uHalo, uv - vec2(e.x, 0.0)).r,
                   texture2D(uHalo, uv + vec2(0.0, e.y)).r - texture2D(uHalo, uv - vec2(0.0, e.y)).r);
     float gm = length(g);
     vec2 nrm = gm > 1e-4 ? g / gm : vec2(0.0);
     vec2 tng = vec2(-nrm.y, nrm.x);
-    float w = smoothstep(0.0, 0.5, h);
-    q = c - nrm * 160.0 * w + tng * 110.0 * w * (1.0 - w) * 4.0;
+    float w = smoothstep(0.0, 0.5, h) * (1.0 - sh);
+    q = c - nrm * 70.0 * w + tng * 60.0 * w * (1.0 - w) * 4.0;
   }
 
   vec2 T = vec2(W.x + 900.0, W.y * 0.5);
@@ -117,8 +124,19 @@ void main(){
   float ang = mix(atan(d.y, d.x), 0.0, settle) + loose * (1.5 * n1 + 0.55 * n2);
   float psi = mix(atan(d.y, d.x) * K, (T.y - c.y) / 56.0, settle) + loose * 2.0 * n1;
 
+  float lo = 0.5;
+  if (uMagnet > 0.5) {
+    // 2 · contours: the halo's levels, read as ripples moving outward, the noise roughening them.
+    float near = smoothstep(0.02, 0.25, h) * (1.0 - sh);
+    psi = mix(psi, h * 11.0 - uTime * 0.55 + 0.35 * n1, near);
+    // 3 · the current: diagonal bands racing through the strokes, a little noise in their front.
+    psi = mix(psi, (c.x * 0.8 + c.y * 0.6) / 22.0 - uTime * 1.6 + 0.5 * n2, sh);
+    // The ripples near and inside the shape run at higher contrast, so the drawing is evident.
+    lo = mix(0.5, 0.15, max(near, sh));
+  }
+
   float line = 1.0 - smoothstep(0.0, 0.32, abs(fract(psi) - 0.5) * 2.0);
-  float tone = mix(0.5, 1.0, line) * mix(1.0, 0.6, calm);
+  float tone = mix(lo, 1.0, line) * mix(1.0, 0.6, calm);
   tone *= mix(1.0, smoothstep(0.18 * W.x, 0.62 * W.x, c.x), uFade);
 
   vec2 l = px - c; float cs = cos(ang), sn = sin(ang);
@@ -262,9 +280,10 @@ export function TextureFlow({
       ink: u('uInk'),
       magnet: u('uMagnet'),
       halo: u('uHalo'),
+      shape: u('uShape'),
     };
 
-    /* The magnet's map, a texture on unit 0. Linear and clamped, which is all WebGL 1
+    /* The magnet's two maps, textures on units 0 and 1. Linear and clamped, which is all WebGL 1
        allows a texture whose sides are not powers of two. */
     const map = (unit: number) => {
       const t = gl.createTexture();
@@ -277,7 +296,9 @@ export function TextureFlow({
       return t;
     };
     const haloTex = magneticOn ? map(0) : null;
+    const shapeTex = magneticOn ? map(1) : null;
     gl.uniform1i(U.halo, 0);
+    gl.uniform1i(U.shape, 1);
     gl.uniform1f(U.magnet, 0);
     /* The attractor: searched for in the host, then up to three ancestors, so a field in its own box
        finds a shape set beside it in the band. */
@@ -298,7 +319,7 @@ export function TextureFlow({
        first and again once it has one. */
     const rasterise = (box: DOMRect) => {
       const svg = attractor?.querySelector('svg') ?? (attractor instanceof SVGElement ? attractor : null);
-      if (!magneticOn || !svg || !haloTex) return;
+      if (!magneticOn || !svg || !haloTex || !shapeTex) return;
       const run = ++shapeRun;
       const r = svg.getBoundingClientRect();
       const clone = svg.cloneNode(true) as SVGElement;
@@ -323,6 +344,9 @@ export function TextureFlow({
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, haloTex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(REACH));
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, shapeTex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(3));
         gl.uniform1f(U.magnet, 1);
         run2();
       };
