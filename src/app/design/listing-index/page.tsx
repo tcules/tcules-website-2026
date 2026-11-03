@@ -1,9 +1,21 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsFixturePage, type InsightsPage } from '@/content';
+import {
+  getCorpusPage,
+  getInsightsFixturePage,
+  type CorpusPage,
+  type InsightsPage,
+} from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { AuthorPieces, ListingClose, ListingIndex, type CaseView } from '@/templates';
+import {
+  AuthorPieces,
+  CorpusBandView,
+  ListingClose,
+  ListingIndex,
+  glossaryIndex,
+  type CaseView,
+} from '@/templates';
 
 import { caseIndexProps } from '../../_corpus/case-index';
 import { closingOf, insightCards, insightsIndexProps } from '../../_insights/hub';
@@ -89,6 +101,10 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
  *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
+ *   ?data=glossary        the glossary hub from its copy (glossaryIndex): the lead beside the rail,
+ *                         each group a section of drawn term cards, a group's note under its cards,
+ *                         the ask as the close, the FAQ after it
+ *   ?data=glossary&state=sparse   one group of one term (the shortest), no lead, no note, no ask
  *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
  *                         pieces, one with many and no covers, one with two and none; then the close
  *                         with its `lead` set, as the authors index sets it
@@ -108,6 +124,38 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
     return <ListingIndex {...props} />;
   }
 
+  if (one(query.data) === 'glossary') {
+    const corpus = await getCorpusPage(ROUTES.glossary);
+    if (!corpus) notFound();
+    const page: CorpusPage =
+      state === 'sparse'
+        ? {
+            ...corpus,
+            bands: corpus.bands
+              .filter((band) => band.id === 'ai-in-practice')
+              .map((band) => ({ ...band, blocks: band.blocks.slice(0, 1) })),
+          }
+        : corpus;
+    const index = glossaryIndex(page);
+    return (
+      <ListingIndex
+        breadcrumbs={page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }))}
+        hero={index.hero}
+        label="Glossary"
+        railLabel="Browse the glossary"
+        views={[{ id: 'groups', label: 'Groups', sections: index.sections }]}
+        lead={index.lead}
+        empty="No terms are published yet."
+        closing={index.closing}
+        bands={{
+          afterClose: index.after.map((band) => (
+            <CorpusBandView key={band.id} page={page} band={band} />
+          )),
+        }}
+      />
+    );
+  }
+
   const fixture = await getInsightsFixturePage();
 
   if (one(query.data) === 'author') {
@@ -120,9 +168,18 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
     );
     return (
       <>
-        <AuthorPieces heading="17 pieces by Alice" items={insightCards(fixture, mixed.slice(0, 17))} />
-        <AuthorPieces heading="12 pieces by Ben" items={insightCards(fixture, bare.slice(0, 12))} />
-        <AuthorPieces heading="2 pieces by Cleo" items={insightCards(fixture, bare.slice(0, 2))} />
+        <AuthorPieces
+          heading="17 pieces by Alice"
+          items={insightCards(fixture, mixed.slice(0, 17))}
+        />
+        <AuthorPieces
+          heading="12 pieces by Ben"
+          items={insightCards(fixture, bare.slice(0, 12))}
+        />
+        <AuthorPieces
+          heading="2 pieces by Cleo"
+          items={insightCards(fixture, bare.slice(0, 2))}
+        />
         <ListingClose
           closing={closingOf(fixture, PATH, 'design-specimen')}
           lead="If one of these writers works on the problem in your own product, tell us about it."
