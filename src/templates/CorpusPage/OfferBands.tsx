@@ -472,6 +472,8 @@ function scopeOf(title: string): EngagementScope | undefined {
   if (term) return term;
   /* The 26 Oct copy's three engagements (component-map C9): a focused piece of work draws one
      feature, a defined project an area, an ongoing partnership the embedded designer. */
+  /* "A pilot project." (3 Nov copy): the fixed price agreed first, then one flow. */
+  if (/\bpilot\b/.test(name)) return 'pilot';
   if (/\bfocused\b/.test(name)) return 'feature';
   if (/\bdefined project\b/.test(name)) return 'area';
   if (/\bongoing\b/.test(name)) return 'embedded';

@@ -61,6 +61,7 @@ export function glossarySceneFor(href: string): GlossarySceneName | undefined {
  */
 export type ScopeSceneName =
   | 'scope-feature'
+  | 'scope-pilot'
   | 'scope-area'
   | 'scope-embedded'
   | 'scope-build'

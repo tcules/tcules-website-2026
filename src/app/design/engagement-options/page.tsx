@@ -13,9 +13,9 @@ import t from '../_specimen/typeroles.module.css';
 
 const TOGETHER: EngagementOption[] = [
   {
-    title: 'A focused engagement.',
-    body: 'One flow, one hard question or an audit, at a fixed price agreed before we start.',
-    scope: 'feature',
+    title: 'A pilot project.',
+    body: 'Optional: one flow, one hard question or an audit, at a fixed price agreed up front.',
+    scope: 'pilot',
   },
   {
     title: 'A defined project.',

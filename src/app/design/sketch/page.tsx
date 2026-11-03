@@ -71,6 +71,7 @@ const ARTICLE: readonly SketchName[] = [
 /** The kit scenes: EngagementOptions' scopes and TracePlates' stages, in the same grammar. */
 const KIT: readonly SketchName[] = [
   'scope-feature',
+  'scope-pilot',
   'scope-area',
   'scope-embedded',
   'scope-build',
