@@ -240,7 +240,22 @@ export function scenarioParts(blocks: readonly CorpusBlock[]): {
       block.type === 'paragraph' &&
       /^illustration, not client work$/i.test(plain(block.runs).trim()),
   );
-  if (at < 0) return { before: [...blocks], scenario: [] };
+  if (at < 0) {
+    /* The tools' copy runs the label into the scenario's first paragraph ("*Illustration, not client
+       work.* A report builder…"): the italic run is the label, the rest of the paragraph the
+       scenario's first. The label's closing full stop belongs to the sentence form, not the label. */
+    const inline = blocks.findIndex((block) => inlineLabel(block) !== null);
+    if (inline < 0) return { before: [...blocks], scenario: [] };
+    const split = inlineLabel(blocks[inline] as CorpusBlock)!;
+    return {
+      before: blocks.slice(0, inline),
+      label: split.label,
+      scenario: [
+        ...(split.rest.length > 0 ? [{ type: 'paragraph' as const, runs: split.rest }] : []),
+        ...blocks.slice(inline + 1),
+      ],
+    };
+  }
   const found = blocks[at];
   return {
     before: blocks.slice(0, at),
@@ -249,15 +264,28 @@ export function scenarioParts(blocks: readonly CorpusBlock[]): {
   };
 }
 
+/** A paragraph opening on the italic label "Illustration, not client work." and the words after it. */
+function inlineLabel(block: CorpusBlock): { label: string; rest: InlineRun[] } | null {
+  if (block.type !== 'paragraph') return null;
+  const [first, ...rest] = block.runs;
+  if (first?.type !== 'em') return null;
+  const text = plain(first.children).trim();
+  if (!/^illustration, not client work\.?$/i.test(text)) return null;
+  return { label: text.replace(/\.$/, ''), rest: trimStart(rest) };
+}
+
 /** A scenario's label and words, with its drawing on the end side (copy beside a drawing is a split). */
 function ScenarioSplit({
   label,
   blocks,
   scene,
+  plate = false,
 }: {
   label: string;
   blocks: CorpusBlock[];
   scene?: SketchName;
+  /** Hold the drawing's place with the empty plate until the story is drawn (a panel never half-empty). */
+  plate?: boolean;
 }) {
   const words = (
     <Layout rowGap="block">
@@ -267,12 +295,29 @@ function ScenarioSplit({
       <BandBody blocks={blocks} />
     </Layout>
   );
-  if (!scene) return words;
+  if (!scene && !plate) return words;
   return (
     <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
       {words}
-      <Sketch name={scene} />
+      <Sketch {...(scene ? { name: scene } : {})} />
     </Layout>
+  );
+}
+
+/**
+ * A band that IS a worked example ("Illustration, not client work"; the tool pages): its head, any
+ * words before the label, then everything the example is inside the example panel (owner, 2 Nov 2026:
+ * one unit on its own ground), the scenario's words beside its story drawing. Until the story is drawn
+ * its empty plate holds the place, so the panel is never words in half of it.
+ */
+export function WorkedExampleBand({ band, scene }: { band: CorpusBand; scene?: SketchName }) {
+  const parts = scenarioParts(content(band));
+  return (
+    <ContentSection {...head(band)} data-band="example">
+      <ExamplePanel intro={parts.before} labelledBy={head(band).headingId}>
+        <ScenarioSplit label={parts.label ?? ''} blocks={parts.scenario} scene={scene} plate />
+      </ExamplePanel>
+    </ContentSection>
   );
 }
 
@@ -686,7 +731,7 @@ function StatusMark({ name }: { name: string }) {
  * above, and everything the example is — its label, scenario, table and the reading of it — sits inside
  * one tint panel, the example's own ground.
  */
-function ExamplePanel({
+export function ExamplePanel({
   intro,
   labelledBy,
   children,
