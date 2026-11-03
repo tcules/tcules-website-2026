@@ -224,3 +224,16 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   place after the ask, in the proof-line voice; it is never suppressed with the "Selected work" line.
 - **A text band about who carries the work on** reuses a studio photograph by plan (images.ts
   `STUDIO_BAND`), its closing "→" link a link row under the words.
+
+## Added 4 Nov 2026 (/tools and the six tool pages; proposed until the owner sees the pages)
+
+- **A directory of free tools is clickable tool tiles, each with the tool's own scene** (kind `directory`,
+  `tool-tiles`): a group whose table names each tool folds the table into split tiles, every value column a
+  labelled field in the one result panel (Bento `detail.fields`); a pair is two wide tiles in one row; a single
+  tool is its wide service tile across the row. Consecutive whole-row tiles alternate their visual's side
+  (ServiceTile `visual="start"`). The tile's action is "Try the tool" (`tileActionFor`).
+- **A free tool renders as an article-style page** (LongformPage `family="tool"`, the 28 Oct launch plan): the
+  hero's one action to `#workspace`, the worksheet in one shell beside its outline, the FAQ last. In the column:
+  a bold-led numbered method is Steps; the worked example is the tint example panel, its words beside the
+  story drawing from 1440, any table it carries at the panel's full width; a diagram follows the paragraph
+  naming its marks, held to the lead measure; the band sending the reader on stays prose with inline links.
