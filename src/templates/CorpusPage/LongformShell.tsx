@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, Prose, Section } from '@/components';
+import { Layout, Media, Prose, Section, Sketch } from '@/components';
 import {
   Accordion,
   BlockCardSet,
@@ -17,12 +17,21 @@ import { FULL_COLUMN } from '@/lib/image-sizes';
 import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
-import { glossarySceneFor } from '@/lib/sketches';
+import { glossarySceneFor, type SketchName } from '@/lib/sketches';
 
 import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
+import { ExamplePanel, scenarioParts } from './CopyBands';
 import { isFaqBand } from './order';
 import styles from './CorpusPage.module.css';
-import { html, labelWithoutArrow, linkLead, plain, trimStart } from './text';
+import {
+  boldLead,
+  html,
+  labelTitle,
+  labelWithoutArrow,
+  linkLead,
+  plain,
+  trimStart,
+} from './text';
 
 /**
  * The long-form argument: a run of sections in ONE shell, a table-of-contents rail beside a reading
@@ -55,6 +64,34 @@ export function stepsOf(items: readonly InlineRun[][]) {
   });
   return steps.every(Boolean) ? (steps as NonNullable<(typeof steps)[number]>[]) : null;
 }
+
+/**
+ * A numbered list whose items each open on a bold lead ("**Choose one use case.** …"): the lead is the
+ * step's title, the rest its body (a tool's method, 4 Nov 2026). Read only where the shell is asked to
+ * (`tool`), so an article's or a term's bold-led list keeps the flow it has today.
+ */
+export function boldStepsOf(items: readonly InlineRun[][]) {
+  const steps = items.map((runs) => {
+    const lead = boldLead(runs);
+    return lead ? { title: labelTitle(lead.label), ...bodyOf(lead.body) } : null;
+  });
+  return steps.length >= 2 && steps.every(Boolean)
+    ? (steps as NonNullable<(typeof steps)[number]>[])
+    : null;
+}
+
+/**
+ * What a TOOL's argument adds to the shell (LongformPage family "tool", 4 Nov 2026; the tools
+ * shape-off): its bold-led method as Steps, its worked example as the example panel with the story's
+ * drawing beside the words, and a flat diagram after the paragraph that names what it shows. Keyed by
+ * band id; a scene not drawn yet shows its empty plate.
+ */
+export type ToolShell = {
+  /** The worked example's story scene, by the band that holds "Illustration, not client work". */
+  stories: Readonly<Record<string, SketchName>>;
+  /** A diagram after the first paragraph containing `after`. */
+  diagrams: Readonly<Record<string, { after: string; scene: SketchName }>>;
+};
 
 const COUNTS: Readonly<Record<string, number>> = { two: 2, three: 3, four: 4, five: 5 };
 
@@ -137,9 +174,12 @@ export function ArticleSection({
   page,
   band,
   seen = new Set([page.route]),
+  tool,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** A tool's additions (`ToolShell`): bold-led steps, the example panel, a diagram plate. */
+  tool?: ToolShell;
   /**
    * The case pages already linked earlier in the argument (and the page's own route), so a case the
    * prose names links at its FIRST mention only (owner, 11 Oct 2026: every case mention links to its
@@ -153,6 +193,26 @@ export function ArticleSection({
   const items = withMethods(band.blocks.filter((block) => block.type !== 'comment'));
   const diagramAt = diagramIndex(page, band, items);
   const isFaq = isFaqBand(band);
+  const toolDiagram = tool?.diagrams[band.id];
+  const toolDiagramAt = toolDiagram
+    ? items.findIndex(
+        (item) => item.type === 'paragraph' && plain(item.runs).includes(toolDiagram.after),
+      )
+    : -1;
+  if (tool) {
+    const example = scenarioParts(band.blocks.filter((block) => block.type !== 'comment'));
+    if (example.label) {
+      return (
+        <ToolExample
+          band={band}
+          label={example.label}
+          before={example.before}
+          scenario={example.scenario}
+          scene={tool.stories[band.id]}
+        />
+      );
+    }
+  }
 
   let mediaAfter = -1;
   if (binding) {
@@ -200,7 +260,9 @@ export function ArticleSection({
         flow += `<p><strong>${inlineToHtml(item.label)}</strong> ${inlineToHtml(item.body)}</p>`;
         break;
       case 'list': {
-        const steps = item.ordered ? stepsOf(item.items) : null;
+        const steps = item.ordered
+          ? (stepsOf(item.items) ?? (tool ? boldStepsOf(item.items) : null))
+          : null;
         if (steps) {
           flush();
           out.push(<Steps key={`steps-${out.length}`} steps={steps} />);
@@ -281,6 +343,16 @@ export function ArticleSection({
         />,
       );
     }
+    /* A tool's diagram: the flat drawing on its plate at the reading measure, so it reads with the
+       words it follows and never fills the column with dotted ground. */
+    if (toolDiagram && index === toolDiagramAt) {
+      flush();
+      out.push(
+        <div key={`plate-${out.length}`} className={styles.reading}>
+          <Sketch name={toolDiagram.scene} />
+        </div>,
+      );
+    }
   });
   flush();
   if (isFaq) out.push(<Accordion key={`faq-${out.length}`} items={faqItems(band)} />);
@@ -297,6 +369,70 @@ export function ArticleSection({
       {out.map((node, index) => (
         <Fragment key={index}>{node}</Fragment>
       ))}
+    </Layout>
+  );
+}
+
+/** A tool example's words: paragraphs and lists as Prose at the measure, a table boxed. */
+function exampleFlow(blocks: readonly CorpusBlock[], labelledBy: string): ReactNode[] {
+  const out: ReactNode[] = [];
+  let flow = '';
+  const flush = () => {
+    if (flow)
+      out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
+    flow = '';
+  };
+  for (const block of blocks) {
+    if (block.type === 'paragraph') flow += html(block.runs);
+    else if (block.type === 'list') flow += listHtml(block);
+    else if (block.type === 'table') {
+      flush();
+      out.push(<CorpusTable key={`table-${out.length}`} table={block} labelledBy={labelledBy} />);
+    }
+  }
+  flush();
+  return out;
+}
+
+/**
+ * A tool's worked example ("Illustration, not client work") as ONE panel on its own ground (owner,
+ * 2 Nov 2026): any words before the label stay in the column; in the panel, the label and the
+ * scenario's words beside the story's drawing from 1440 (stacked below, where the column is too narrow
+ * for two halves), then any table the example carries at the panel's full width.
+ */
+function ToolExample({
+  band,
+  label,
+  before,
+  scenario,
+  scene,
+}: {
+  band: CorpusBand;
+  label: string;
+  before: readonly CorpusBlock[];
+  scenario: readonly CorpusBlock[];
+  scene?: SketchName;
+}) {
+  const labelledBy = headingIdOf(band);
+  const firstTable = scenario.findIndex((block) => block.type === 'table');
+  const words = firstTable < 0 ? scenario : scenario.slice(0, firstTable);
+  const tail = firstTable < 0 ? [] : scenario.slice(firstTable);
+  return (
+    <Layout as="section" id={band.id} aria-labelledby={labelledBy} rowGap="block">
+      <h2 id={labelledBy}>{band.headingText}</h2>
+      {exampleFlow(before, labelledBy)}
+      <ExamplePanel intro={[]} labelledBy={labelledBy}>
+        <Layout rowGap="stack">
+          <Layout columns={{ base: 1, xl: [1, 1] }} colGap="section" rowGap="stack" align="center">
+            <Layout rowGap="block">
+              <p className={styles.legend}>{label}</p>
+              {exampleFlow(words, labelledBy)}
+            </Layout>
+            <Sketch name={scene} />
+          </Layout>
+          {tail.length > 0 ? <Layout rowGap="block">{exampleFlow(tail, labelledBy)}</Layout> : null}
+        </Layout>
+      </ExamplePanel>
     </Layout>
   );
 }
@@ -370,9 +506,12 @@ export function CorpusTable({
 export function ArticleShell({
   page,
   sections,
+  tool,
 }: {
   page: CorpusPage;
   sections: readonly CorpusBand[];
+  /** A tool page's additions to the column (`ToolShell`). Absent: the article's column as it was. */
+  tool?: ToolShell;
 }) {
   /* One set for the whole argument: a case links at its first mention, never on the page's own. */
   const seen = new Set<string>([page.route]);
@@ -391,7 +530,7 @@ export function ArticleShell({
           {outline.length >= 2 ? <TableOfContents items={outline} /> : null}
           <Layout as="article" rowGap="stack">
             {sections.map((band) => (
-              <ArticleSection key={band.id} page={page} band={band} seen={seen} />
+              <ArticleSection key={band.id} page={page} band={band} seen={seen} tool={tool} />
             ))}
           </Layout>
         </Layout>

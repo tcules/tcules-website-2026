@@ -6,8 +6,6 @@ export { planOffer, kindOf } from './plan';
 export type { OfferKind, OfferPart, OfferUnit } from './plan';
 export { LongformPage } from './LongformPage';
 export type { LongformFamily, LongformPageProps } from './LongformPage';
-export { ToolPage } from './ToolPage';
-export type { ToolPageProps } from './ToolPage';
 export {
   corpusEnquiryForm,
   ENQUIRY_DESK,

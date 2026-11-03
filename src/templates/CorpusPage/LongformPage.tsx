@@ -16,12 +16,12 @@ import { renderInline } from '@/lib/inline-render';
 import { glossarySceneFor, serviceSceneFor } from '@/lib/sketches';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
-import { ArticleShell } from './LongformShell';
+import { ArticleShell, type ToolShell } from './LongformShell';
 import { coverFor } from './images';
 import { formBeforeFaq } from './order';
 import { blocksOf, destinationName, hasLink, labelWithoutArrow, loneLink, plain } from './text';
 
-export type LongformFamily = 'case' | 'article' | 'term';
+export type LongformFamily = 'case' | 'article' | 'term' | 'tool';
 
 export type LongformPageProps = {
   page: CorpusPage;
@@ -53,11 +53,19 @@ export type LongformPageProps = {
  *            from the hero); the rest of the definition opens the shell as a head-less section above
  *            the headed ones; a close with one link as the page's ask.
  *
+ *   tool     a free tool (4 Nov 2026, the tools shape-off: "tools launch as article-style pages"): the
+ *            hero with its one action to the worksheet (#workspace), no byline and no dates, then the
+ *            whole worksheet in one shell beside its outline, the FAQ last in the column. The column
+ *            adds the tool's shapes (`ToolShell`): the bold-led method as Steps, the worked example as
+ *            the example panel with its story drawing, a flat diagram after the words it explains.
+ *            The band sending the reader on ("next") stays prose with its links, in its authored place.
+ *
  * Nothing is reordered, and every word is the corpus's.
  */
 export function LongformPage({ page, family, caseRefs }: LongformPageProps) {
   if (family === 'article') return <ArticlePage page={page} />;
   if (family === 'term') return <TermPage page={page} />;
+  if (family === 'tool') return <ToolArticlePage page={page} />;
   return <CasePage page={page} caseRefs={caseRefs} />;
 }
 
@@ -134,6 +142,72 @@ function ArticlePage({ page }: { page: CorpusPage }) {
       <CorpusHero page={page} texture />
       {shell.length > 0 ? <ArticleShell page={page} sections={shell} /> : null}
       {close ? <CloseBand band={close} /> : null}
+    </>
+  );
+}
+
+/* ── The tool ─────────────────────────────────────────────────────────────────── */
+
+/**
+ * Each tool's drawings in its column, by route then band id: the worked example's story and the
+ * diagram after the paragraph naming what it shows (the tools assessment, 4 Nov 2026). Every scene is
+ * drawn from that page's own words (components/Sketch/wyg-tool-<slug>.tsx); undrawn, its empty plate.
+ */
+const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
+  '/tools/ai-product-ux-readiness-check': {
+    stories: { example: 'tool-ai-product-ux-readiness-check-example' },
+    diagrams: {
+      marking: { after: 'evidence available', scene: 'tool-ai-product-ux-readiness-check-marking' },
+    },
+  },
+  '/tools/ai-trust-control-canvas': {
+    stories: { example: 'tool-ai-trust-control-canvas-example' },
+    diagrams: {},
+  },
+  '/tools/audit-redesign-modernise-rebuild': {
+    stories: { example: 'tool-audit-redesign-modernise-rebuild-example' },
+    diagrams: {
+      'reading-your-results': {
+        after: 'candidate',
+        scene: 'tool-audit-redesign-modernise-rebuild-reading',
+      },
+    },
+  },
+  '/tools/design-system-drift-checker': {
+    stories: { 'reading-your-results': 'tool-design-system-drift-checker-example' },
+    diagrams: {},
+  },
+  '/tools/figma-storybook-fidelity-checklist': {
+    stories: { example: 'tool-figma-storybook-fidelity-checklist-example' },
+    diagrams: {
+      corrections: {
+        after: 'Put first',
+        scene: 'tool-figma-storybook-fidelity-checklist-corrections',
+      },
+    },
+  },
+  '/tools/prototype-readiness-checklist': {
+    stories: { example: 'tool-prototype-readiness-checklist-example' },
+    diagrams: {},
+  },
+};
+
+const NO_TOOL_SCENES: ToolShell = { stories: {}, diagrams: {} };
+
+/**
+ * A free tool: the hero (its one action to the worksheet), then every band in one shell beside the
+ * outline, the FAQ last. A tool has no close band: its last words are its questions, and the band
+ * sending the reader on keeps its place and its inline links.
+ */
+function ToolArticlePage({ page }: { page: CorpusPage }) {
+  return (
+    <>
+      <CorpusHero page={page} texture />
+      <ArticleShell
+        page={page}
+        sections={formBeforeFaq(page.bands)}
+        tool={TOOL_SCENES[page.route] ?? NO_TOOL_SCENES}
+      />
     </>
   );
 }
