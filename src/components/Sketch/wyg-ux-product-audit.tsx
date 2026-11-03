@@ -222,7 +222,7 @@ function MethodUxAudit() {
     <>
       <path className={styles.rule} d="M46,100 L274,100" />
       {steps.map(([x, h]) => (
-        <Rect key={x} x={x - 10} y={96 - h} w={20} h={h} rx={3} className={styles.tile} />
+        <Rect key={x} x={x - 10} y={100 - h} w={20} h={h} rx={3} className={styles.tile} />
       ))}
       <path className={styles.line} d="M90,130 L110,130 M150,130 L170,130 M210,130 L230,130" />
       <Rect x={164} y={112} w={52} h={36} rx={10} className={styles.halo} />

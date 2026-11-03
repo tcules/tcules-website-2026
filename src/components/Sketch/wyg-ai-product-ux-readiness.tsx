@@ -30,9 +30,9 @@ function RankedFixList() {
       <Copy x={98} y={50} w={48} quiet />
       {(
         [
-          [76, 96],
-          [102, 68],
-          [128, 44],
+          [76, 64],
+          [102, 40],
+          [128, 20],
         ] as const
       ).map(([y, w], i) => (
         <g key={y}>
@@ -45,11 +45,15 @@ function RankedFixList() {
           />
           <Glyph name="monitor" cx={87} cy={y} size={12} className={styles.glyphQuiet} />
           <Glyph name="user" cx={108} cy={y} size={12} className={styles.glyph} />
-          {i === 0 ? (
-            <path className={styles.regionCopy} d={`M122,${y} L${122 + w},${y}`} />
-          ) : (
-            <Copy x={122} y={y} w={w} quiet />
-          )}
+          <Copy x={122} y={y} w={36} quiet />
+          <Rect
+            x={170}
+            y={y - 3}
+            w={w}
+            h={6}
+            rx={3}
+            className={i === 0 ? styles.solid : styles.quietMark}
+          />
         </g>
       ))}
     </>

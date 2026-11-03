@@ -191,7 +191,7 @@ function StopsReadiness() {
  * third hits the failure a demo skips, lit where it breaks.
  */
 function MethodReadiness() {
-  const steps = [110, 170, 230];
+  const steps = [120, 180, 240];
   const lanes: [number, IconName, boolean][] = [
     [50, 'user', true],
     [90, 'users-group-rounded', true],
@@ -205,11 +205,11 @@ function MethodReadiness() {
           <Glyph name={glyph} cx={50} cy={y} size={16} className={styles.glyph} />
           {through ? (
             <>
-              <path className={styles.line} d={`M70,${y} L263,${y}`} />
-              <ArrowRight x={270} y={y} />
+              <path className={styles.line} d={`M70,${y} L283,${y}`} />
+              <ArrowRight x={290} y={y} />
             </>
           ) : (
-            <path className={styles.line} d={`M70,${y} L204,${y}`} />
+            <path className={styles.line} d={`M70,${y} L222,${y}`} />
           )}
           <circle className={styles.node} cx={70} cy={y} r="2.5" />
           {steps.slice(0, through ? 3 : 2).map((x) => (
@@ -217,7 +217,7 @@ function MethodReadiness() {
           ))}
         </g>
       ))}
-      <Focus x={230} y={130} glyph="danger-triangle" size={12} />
+      <Focus x={240} y={130} glyph="danger-triangle" size={12} />
     </>
   );
 }
