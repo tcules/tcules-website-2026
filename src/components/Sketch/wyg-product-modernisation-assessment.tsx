@@ -90,11 +90,11 @@ function WhatMustSurvive() {
       <Hatched x={46} y={114} w={228} h={24} />
       {/* The daily path, step by step, kept. */}
       <Glyph name="user" cx={50} cy={90} size={16} className={styles.glyph} />
-      {[70, 130, 190].map((x) => (
-        <Rect key={x} x={x} y={82} w={40} h={16} rx={8} className={styles.tile} />
+      {[70, 126, 182].map((x) => (
+        <Rect key={x} x={x} y={82} w={36} h={16} rx={8} className={styles.tile} />
       ))}
-      <path className={styles.line} d="M110,90 L130,90 M170,90 L190,90" />
-      <Hop x1={230} x2={244} y={90} />
+      <path className={styles.line} d="M106,90 L126,90 M162,90 L182,90" />
+      <Hop x1={218} x2={244} y={90} />
       <Focus x={262} y={90} glyph="shield-check" size={12} />
     </>
   );

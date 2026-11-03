@@ -149,13 +149,13 @@ function DeveloperChangesWorthKeeping() {
     <>
       {/* The code, with the change worth keeping. */}
       <Rect x={30} y={40} w={80} h={100} rx={8} className={styles.frame} />
-      <path className={styles.rule} d="M50,40 L50,140" />
-      <Copy x={58} y={56} w={36} quiet />
-      <Copy x={64} y={68} w={30} quiet />
+      <Chip x={38} y={48} glyph="code" />
+      <Copy x={62} y={56} w={28} quiet />
+      <Copy x={42} y={70} w={36} quiet />
       <Rect x={56} y={80} w={46} h={20} className={styles.region} />
       <path className={styles.regionCopy} d="M62,90 L94,90" />
-      <Copy x={64} y={112} w={28} quiet />
-      <Copy x={58} y={124} w={40} quiet />
+      <Copy x={42} y={112} w={28} quiet />
+      <Copy x={42} y={124} w={40} quiet />
       <Hop x1={110} x2={150} y={90} />
       {/* Written down. */}
       <Rect x={150} y={70} w={40} h={40} rx={8} className={styles.frame} />

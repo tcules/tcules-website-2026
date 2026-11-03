@@ -47,7 +47,7 @@ function WhatToKeep() {
       {(
         [
           [54, false, 44],
-          [90, true, 52],
+          [90, true, 44],
           [126, false, 36],
         ] as const
       ).map(([cy, kept, w]) => (
@@ -132,14 +132,14 @@ function EarlyWarnings() {
       <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
       <Copy x={42} y={64} w={32} quiet />
       <Rect x={42} y={78} w={44} h={14} rx={7} className={styles.tile} />
-      <Rect x={42} y={102} w={44} h={14} rx={7} className={styles.tile} />
+      <Rect x={42} y={102} w={44} h={14} rx={7} className={styles.trailFrame} />
       <Hop x1={110} x2={150} y={90} />
       {/* The automatic check. */}
       <Rect x={150} y={70} w={40} h={40} rx={8} className={styles.frame} />
       <Glyph name="cpu" cx={170} cy={90} size={20} className={styles.glyph} />
       <Hop x1={190} x2={252} y={90} />
       {/* The flag it raises. */}
-      <Focus x={270} y={90} glyph="danger-triangle" size={12} />
+      <Focus x={270} y={90} glyph="flag" size={12} />
     </>
   );
 }
@@ -261,28 +261,29 @@ function Method() {
   return (
     <>
       {/* The need. */}
-      <Glyph name="user" cx={38} cy={90} size={16} className={styles.glyph} />
-      <Hop x1={50} x2={70} y={90} />
-      <Hop x1={130} x2={150} y={90} />
-      <path className={styles.trail} d="M210,90 L230,90" />
+      <Glyph name="user" cx={30} cy={90} size={16} className={styles.glyph} />
       {stages.map(([x, glyph]) => (
         <g key={x}>
           <Rect x={x} y={30} w={60} h={120} rx={8} className={styles.frame} />
-          <C cx={x + 16} cy={46} glyph={glyph} />
+          <C cx={x + 16} cy={44} glyph={glyph} />
           {/* The library version, the local copy, the workaround. */}
-          <Rect x={x + 10} y={62} w={40} h={16} rx={8} className={styles.tile} />
+          <Rect x={x + 10} y={58} w={40} h={16} rx={8} className={styles.tile} />
           {x === 150 ? null : x === 230 ? (
-            <Hatched x={x + 10} y={92} w={40} h={16} />
+            <Hatched x={x + 10} y={82} w={40} h={16} />
           ) : (
-            <Rect x={x + 10} y={92} w={40} h={16} rx={3} className={styles.tile} />
+            <Rect x={x + 10} y={82} w={40} h={16} rx={3} className={styles.tile} />
           )}
-          <Rect x={x + 10} y={122} w={40} h={16} rx={4} className={styles.trailFrame} />
+          <Rect x={x + 10} y={106} w={40} h={16} rx={4} className={styles.trailFrame} />
         </g>
       ))}
+      {/* The local copy's route, over the frames. */}
+      <Hop x1={50} x2={70} y={90} />
+      <Hop x1={130} x2={150} y={90} />
+      <path className={styles.trail} d="M210,90 L230,90" />
       {/* Where it breaks first: the local copy, in code. */}
-      <Rect x={154} y={86} w={52} h={28} rx={10} className={styles.halo} />
-      <Rect x={160} y={92} w={40} h={16} rx={3} className={styles.solid} />
-      <Glyph name="danger-triangle" cx={180} cy={100} size={11} className={styles.glyphOn} />
+      <Rect x={154} y={76} w={52} h={28} rx={10} className={styles.halo} />
+      <Rect x={160} y={82} w={40} h={16} rx={3} className={styles.solid} />
+      <Glyph name="danger-triangle" cx={180} cy={90} size={11} className={styles.glyphOn} />
     </>
   );
 }
