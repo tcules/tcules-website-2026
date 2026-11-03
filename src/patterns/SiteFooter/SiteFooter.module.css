@@ -35,15 +35,15 @@
    newsletter then follows a stack below that last rule and carries none of its own — a second rule
    48 under the list's closing one read as an empty band.
 
-   At lg the directory has no rule at all: it continues the brand band rather than starting a new
-   one. The newsletter takes the ordinary band rule there, closing the directory. */
+   At lg both are ordinary bands: a hairline with air on both sides, as every band below the brand
+   one. */
 .directoryBand {
   border-block-start: var(--foot-rule-width) solid var(--foot-rule);
 }
 
 @media (min-width: 1024px) {
   .directoryBand {
-    border-block-start: 0;
+    padding-block-start: var(--foot-band-inset);
   }
 
   .newsletterBand {
@@ -315,8 +315,6 @@
    cannot drift; a footer given `density="tight"` would need this to follow, and nothing renders
    one. */
 .watermark {
-  position: relative;
-  isolation: isolate;
   margin-block-start: var(--gap-stack);
   margin-block-end: calc(-1 * var(--sec-padding-y));
   overflow: hidden;

@@ -10,7 +10,8 @@ import {
   Logo,
   RatingBadge,
   Section,
-  TextureFlow,
+  Texture,
+  TextureShape,
 } from '@/components';
 
 import styles from './SiteFooter.module.css';
@@ -69,6 +70,14 @@ export function SiteFooter({
 }: SiteFooterProps) {
   return (
     <Section as="footer" surface={surface}>
+      {/* The field (owner, 4 Nov 2026: "a faded shape from the bottom"). One wide ellipse sunk
+          below the band's foot and blurred, so the pixel grid rises from the bottom edge behind the
+          watermark and fades out long before the legal line. Shapes, blur, texture — the Figma
+          workflow Texture is built for. It fills the Section edge to edge, gutter included, so the
+          fade has no side edges either. */}
+      <Texture>
+        <TextureShape kind="ellipse" bottom={-240} width="120%" height={520} blur={240} />
+      </Texture>
       <Layout rowGap="stack">
         {/* ── 1 · Brand ───────────────────────────────────────────────────────────────
             No hairline and no inset: it is the first band, and a rule above the mark would be a
@@ -113,10 +122,9 @@ export function SiteFooter({
         {/* ── 2 · Directory ───────────────────────────────────────────────────────────
             Three tracks at lg, accordions below it. The link rest state is ink rather than blue:
             forty blue links is not forty signals, it is a blue block. */}
-        {/* No hairline above it at lg (owner, 4 Nov 2026): the directory follows the brand band as its
-            continuation, so the rule that separates every later band would cut the footer's head
-            off from its own index. Below lg the rule stays — it is the top edge of the accordion
-            list, which reads as a ruled list closed at both ends. */}
+        {/* A band like the others at lg. Below it the hairline is the top edge of the accordion
+            list, with no air under it, so the list reads as ruled and closed at both ends (owner,
+            4 Nov 2026). */}
         <div className={styles.directoryBand}>
           {/* Desktop. Three tracks, two rows: Services and the two expertise groups, then Work,
               Studio and Resources. The breakpoint toggle lives on this wrapper rather than on the
@@ -294,11 +302,6 @@ export function SiteFooter({
           mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
           already announced once at the top of the band, and twice is noise. */}
       <div className={styles.watermark} aria-hidden="true">
-        {/* The field (owner, 4 Nov 2026: "texture play at the bottom"). The site's one moving
-            texture, TextureFlow, run turbulent and feathered across the watermark's box only — so
-            the grid churns slowly under the mark at the foot of the page and fades out before it
-            reaches the legal line. One field, no frame and no second effect. */}
-        <TextureFlow flow="turbulent" />
         <Logo size="lg" variant="mono" title="" />
       </div>
     </Section>
