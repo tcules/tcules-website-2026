@@ -123,11 +123,27 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  *         foot, filling its row's height (from md, never less than a square), so a row of covered
  *         and uncovered pieces ends on one line. Title-cued; no top hairline. In place of a picture
  *         it carries what the piece has: its `icon` before the label, its `meta` under the title.
+ *   tile  the filled tile (owner, 3 Nov 2026, /contact "Other ways to reach us"): at rest a ground of
+ *         its own (--bcrd-tile-ground, one step off the surface) at the 16 radius, no edge and no
+ *         hover ground, the copy a `gutter` inside. For a short set of destinations each led by its
+ *         glyph and closed by its own action (`linkScope` `cta`): the ground makes each one an
+ *         object without a rule, and the action, not the tile, answers the pointer.
  *
  * A set's decision, like the type step: BlockCardSet `frame` states it for every card. `panel` is
  * the one a caller may set per card, for the card that has no cover.
  */
-export type BlockCardFrame = 'none' | 'box' | 'panel';
+export type BlockCardFrame = 'none' | 'box' | 'panel' | 'tile';
+
+/**
+ * How a cta-scoped card's action is drawn. `link` (default) the link Button with its arrow; `outline`
+ * the labelled outline Button (owner, 3 Nov 2026, /contact), for a set where each card's action is
+ * the card's whole point, a mailbox or a page, and must read as a control. Never beside a solid.
+ */
+export type BlockCardCtaEmphasis = 'link' | 'outline';
+
+/* A destination that leaves the site (another origin, a mailbox) takes the up-right arrow; one that
+   stays takes the right arrow (owner, 3 Nov 2026: the email buttons ↗, Careers →). */
+const leavesSite = (href: string) => /^(mailto:|tel:|https?:\/\/)/.test(href);
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -310,6 +326,8 @@ export type BlockCardProps = {
    * differently reads as a recommendation.
    */
   linkScope?: BlockCardLinkScope;
+  /** How a cta-scoped card's action is drawn. Default `link`. See `BlockCardCtaEmphasis`. */
+  ctaEmphasis?: BlockCardCtaEmphasis;
   /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
@@ -495,6 +513,7 @@ export function BlockCard({
   cue,
   frame = 'none',
   linkScope = 'card',
+  ctaEmphasis = 'link',
   meta,
   play = false,
   compact = false,
@@ -561,11 +580,12 @@ export function BlockCard({
      it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
   const boxed = frame === 'box';
+  const tiled = frame === 'tile';
   /* The panel is an uncovered card's own frame: a cover outranks it. Its icon, if any, leads its
      label line rather than heading the card on a row of its own. */
   const panel = frame === 'panel' && !imageNode && !horizontal;
   const ruleNode =
-    textOnly && !boxed && !panel ? (
+    textOnly && !boxed && !panel && !tiled ? (
       <span className={styles.textRule} aria-hidden="true" />
     ) : null;
 
@@ -628,9 +648,9 @@ export function BlockCard({
         <Button
           as="a"
           href={destination}
-          emphasis="link"
+          emphasis={ctaEmphasis}
           tone="primary"
-          icon={<Icon name="arrow-right" />}
+          icon={<Icon name={leavesSite(destination) ? 'arrow-right-up' : 'arrow-right'} />}
         >
           {label}
         </Button>
@@ -866,6 +886,7 @@ export function BlockCard({
         SIZE_CLASS[step],
         horizontal && styles.horizontal,
         boxed && styles.boxed,
+        tiled && styles.tiled,
         panel && styles.panel,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}

@@ -281,6 +281,11 @@ type CtaSplitProps = {
    * NDA first?" sits outside the island so the island stays the ask and the form). Island only.
    */
   footnote?: string;
+  /**
+   * A glyph leading the footnote, on its first line, in the accent: what kind of line it is at a
+   * glance (owner, 3 Nov 2026: contact's NDA line takes a shield). Ignored without `footnote`.
+   */
+  footnoteIcon?: IconName;
 };
 
 type CtaOpenProps = {
@@ -1050,6 +1055,7 @@ export function CtaSection(props: CtaSectionProps) {
       <IslandBand
         inBand={props.inBand}
         footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1091,6 +1097,7 @@ export function CtaSection(props: CtaSectionProps) {
       <IslandBand
         inBand={props.inBand}
         footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1125,6 +1132,7 @@ export function CtaSection(props: CtaSectionProps) {
     <IslandBand
       inBand={props.inBand}
       footnote={props.footnote}
+      footnoteIcon={props.footnoteIcon}
       surface={band}
       id={props.id}
       data-band={props['data-band']}
@@ -1162,6 +1170,7 @@ export function CtaSection(props: CtaSectionProps) {
 function IslandBand({
   inBand,
   footnote,
+  footnoteIcon,
   surface,
   id,
   'data-band': dataBand,
@@ -1170,6 +1179,7 @@ function IslandBand({
 }: {
   inBand?: boolean;
   footnote?: string;
+  footnoteIcon?: IconName;
   surface: SectionSurface;
   id?: string;
   'data-band'?: string;
@@ -1180,7 +1190,16 @@ function IslandBand({
   const body = footnote ? (
     <Layout rowGap="block">
       {children}
-      <p className={styles.footnote}>{footnote}</p>
+      {footnoteIcon ? (
+        <Cluster colGap="tight" align="start" nowrap>
+          <span className={styles.footnoteIcon} aria-hidden="true">
+            <Icon name={footnoteIcon} />
+          </span>
+          <p className={styles.footnote}>{footnote}</p>
+        </Cluster>
+      ) : (
+        <p className={styles.footnote}>{footnote}</p>
+      )}
     </Layout>
   ) : (
     children

@@ -1,6 +1,7 @@
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
 import { ENDPOINTS, EXTERNAL, ROUTES } from '@/lib/routes';
 
+import { STUDIO_ADDRESS } from './contact-channels';
 import { CLUTCH_RATING } from './ratings';
 
 import type { Navigation } from '../../types';
@@ -393,7 +394,7 @@ const FOOTER: SiteFooterProps = {
     { key: 'Across time zones', value: 'India · United States · Europe' },
     { key: 'Response', value: 'Within 2 business days' },
   ],
-  address: '614, Silver Radiance 2, Science City Road, Sola, Ahmedabad 380060, India',
+  address: STUDIO_ADDRESS,
   utility: [
     { label: 'Privacy', href: ROUTES.privacy },
     { label: 'Terms', href: ROUTES.terms },
