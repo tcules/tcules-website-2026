@@ -1,7 +1,7 @@
 ---
 route: /audits/ai-product-ux-readiness
 slug: ai-product-ux-readiness
-page_name: AI Product UX Readiness Review
+page_name: AI UX Audit
 page_type: audit
 seo:
   title: 'AI UX Audit: Test Your AI Feature Before Rollout | Tcules'
@@ -30,7 +30,7 @@ search_context:
   - Is this a test of the AI model's accuracy?
   - Can you audit an AI agent as well as a chatbot?
   - Do you give the feature a score?
-  - Is a beta too early for an AI UX review?
+  - Is a beta too early for an AI UX audit?
   - How much does an AI UX audit cost?
   primary_query: AI UX audit
   secondary_queries:
@@ -52,7 +52,7 @@ navigation:
     url: /
   - name: Audits & Assessments
     url: /audits
-  - name: AI Product UX Readiness Review
+  - name: AI UX Audit
     url: /audits/ai-product-ux-readiness
 conversion:
   form: project_enquiry
@@ -63,11 +63,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -75,12 +75,13 @@ render:
   band_order:
   - deliverables
   - method
-  - compare
+  - worked-example
+  - talk
   - selected-work
   - testimonials
-  - how-we-work-together
   - why-tcules
-  - industries
+  - after-the-audit
+  - compare
   - faq
   - enquiry
 page_composition:
@@ -156,98 +157,68 @@ method_governance:
   note: No completed engagement of this review yet. Do not claim past runs, scores or benchmarks.
 ---
 
-*AI Product UX Readiness Review*
+*AI UX Audit*
 
 # AI UX audit: test your AI feature on real tasks before rollout
 
-An AI feature belongs in someone's working day once they can see what it did, check it and undo it, and support can tell a customer what happened. Tcules' AI UX audit, the AI Product UX Readiness Review, tests a running AI feature on real tasks before more people rely on it.
-
-The review is new. It covers what people see, check, approve and undo around the AI's output, while the model's accuracy, security and compliance stay with your engineers and specialists.
+For an AI feature about to launch, or live but under-used: in about two days, at a fixed price, a senior designer finds where people can't check or undo what your AI did, and ranks the fixes.
 
 *Selected work: [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)*
 
-[Tell us about your AI feature](#enquiry)
+[Book a call](#enquiry)
+
+*Problems beyond the AI feature? See the [UX & Product Audit](/audits/ux-product-audit).*
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get: a ranked fix list for one AI feature {#deliverables}
+## What you get from an AI UX audit {#deliverables}
 
-The review starts with one AI feature, tested over about two days on a few tasks your users rely on it for. The price is fixed and agreed before the review begins.
+- **A ranked fix list.** Where each problem shows up, who it hurts and what it costs them.
 
-**What you receive**
+- **Fixes users would notice.** A clearer label, a visible source, an undo where one is missing.
 
-- **A ranked fix list:** where each problem appears, who it affects and what it costs them.
+- **Questions for your specialists.** Accuracy, security and compliance, each with the example that raised it.
 
-- **Fixes users would notice,** such as a clearer label, a visible source or an undo.
+- **A walkthrough with your team.** So everyone agrees what to fix first.
 
-- **Questions for your specialists** on accuracy, security or compliance, each with the example that raised it.
+**Who does the work.** A senior designer who works on AI products leads, with a design engineer when needed.
 
-- **A walkthrough with your team** to agree what comes first.
+**Where our part stops.** Model accuracy, security, compliance and rollout timing stay with your team.
 
-Here is the top of a fix list, as a report would set it out.
+## How an AI UX audit runs {#method}
+
+1. **Agree the feature and the price.** One call with the team that built it, then access with realistic data, key tasks and tickets.
+
+2. **Use it on real tasks.** We work each task as every role that touches the result.
+
+3. **Push it where it's unsure.** Tasks it may get wrong, and who notices when it does.
+
+4. **Rank the fixes, walk you through.** Ranked by what they cost users, with specialist questions listed.
+
+## What the report looks like {#worked-example}
+
+<!-- Small label above the heading: Example -->
 
 *Illustration, not client work*
 
-A customer support platform has added an AI that drafts replies and can close tickets it judges solved. It goes to every customer next quarter.
+A support platform's AI drafts replies and closes tickets it judges solved, and it reaches every customer next quarter.
 
-| Rank | What we saw on the tasks | Who it affects | The fix |
+| Rank | What we saw | Who it affects | The fix |
 |---|---|---|---|
-| 1 | The AI closed a ticket as solved, and the customer's reply opened a new ticket with no link to the old one | Customers and support agents | Show what the AI closed, and let an agent reopen it in one step |
-| 2 | Drafts draw on the help centre without saying which article, so agents check every answer twice | Support agents | Show the source article beside each draft |
-| 3 | Each draft shows a confidence percentage, and agents send high scores unread | Customers | Show what the draft is based on, and flag what it could not find |
-| 4 | Rejecting a draft and retrying brings back the same draft | Support agents | Ask why, and retry with that reason |
+| 1 | The AI closes a ticket; the customer's reply starts another | Customers and agents | Show what it closed; reopen in one step |
+| 2 | Drafts name no help article, so agents check twice | Support agents | Show the source beside each draft |
+| 3 | Agents send high-confidence drafts unread | Customers | Show what each draft is based on |
+| 4 | Retrying a rejected draft brings back the same one | Support agents | Ask why, then retry with that reason |
 
-Closing comes first, because a customer meets that mistake before any person sees it. For your engineers: how often the AI closes tickets it should not, measured on real volumes.
+Closing comes first, because customers meet that mistake before anyone at the company does.
 
-**Who does the work.** A senior designer who works on AI products runs the review and is your main contact. A design engineer joins when a question reaches into how the feature is built.
+## Get a report like this for your AI feature {#talk}
 
-**What we need from you.** Access to the running feature with realistic data, a few tasks your users rely on it for, and any feedback or support tickets about it. A short call with the people who built it shows us what it is meant to do.
-
-**Where our part stops.** Accuracy, security and compliance stay with your engineers and specialists, and anything we spot in their area reaches them with its example. When to roll the feature out wider is your call.
-
-## How the AI product UX review runs {#method}
-
-1. **Choose the feature and the tasks.** We pick a few tasks your users rely on the AI for, including ones where it is likely to be unsure or wrong.
-
-2. **Start from what users already report.** Feedback and support tickets show where people hesitate, so testing begins there.
-
-3. **Use the running feature.** A senior designer works through each task with realistic data, as each role that touches the result.
-
-4. **Follow each result to the person who owns it.** For every output we note what people could see, check, change or undo, and who accepted it.
-
-5. **Rank the fixes and hand over.** Findings are ranked by what they cost users, specialist questions are listed, and we walk your team through both.
-
-On every task, our AI UX audit checklist asks six questions.
-
-| The question | What we look for |
-|---|---|
-| What is the AI doing for the user? | Whether people can tell if it is finding, suggesting, drafting or acting |
-| What can people check? | Sources, reasons or comparisons shown where the result appears |
-| What may it do alone? | Which actions need approval, and whether the product makes that obvious |
-| What is the reviewer's job? | Whether the person approving knows what to look at and what their approval changes |
-| How do people fix a wrong result? | Editing, rejecting, retrying and undoing, and how easy each one is to find |
-| Who owns the outcome? | Whether anyone can see who accepted a result, and when |
-
-The emphasis shifts with the kind of feature. For [generative AI and LLM features that draft](/services/ai-product-ux/ai-copilots-agents), it is whether people can tell what the AI wrote. For [AI search and recommendations](/services/ai-product-ux/ai-search-recommendation), a visible reason for each result. For [agents and review steps](/services/ai-product-ux/human-in-the-loop-workflows), what waits for approval and how someone stops a run.
-
-A confidence score alone rarely helps the person approving. Our article explains [why an AI review step must hand control back to people](/insights/confidence-scores-dont-fix-trust-when-review-step-never).
-
-## AI UX audit, usability testing or model evaluation? {#compare}
-
-Each option looks at a different part of an AI feature, and some features need more than one.
-
-| Option | What it looks at | Best for |
-|---|---|---|
-| **AI Product UX Readiness Review** | What people see, check, approve and undo around the AI's output | AI features about to reach more users |
-| **[AI feature readiness checklist](/tools/ai-product-ux-readiness-check)** | The questions to answer for one AI use case, worked through by your own team | A free first look before you bring anyone in |
-| **[Usability testing](/services/product-design/prototyping-usability-testing)** | How people handle a new AI design when they try it on set tasks | Testing an AI design before it is built |
-| **[UX & Product Audit](/audits/ux-product-audit)** | Where customers get stuck across the whole product | Trouble that reaches beyond the AI feature |
-| **Model evaluation by your engineers** | Accuracy, security and compliance of the model itself | Checking whether the AI's answers are right |
-| **[AI Product UX design](/services/ai-product-ux)** | How the AI feature should work, designed and tested with users | Teams that already know what has to change |
+[Book a call](#enquiry)
 
 ## Selected AI product UX work {#selected-work}
 
-Work closest to this service: three AI features we redesigned, each around a question this review asks.
+Work closest to this service: three AI features we redesigned, each around a question this audit asks.
 
 ### BuildTwin: every AI check shows what it looked at
 
@@ -275,55 +246,59 @@ AI-written product benefits were filling the listing before anyone had properly 
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Why founders and product teams choose Tcules {#why-tcules}
 
-After the review, your team can work from the fix list alone, or our [AI Product UX](/services/ai-product-ux) designers can redesign the flagged parts and [AI Product Engineering](/services/software-development/ai-product-engineering) can build them.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+[See why teams choose Tcules →](/why-tcules)
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+## After the audit {#after-the-audit}
 
-## Why teams choose Tcules {#why-tcules}
+Your team can work from the fix list, or our [AI Product UX](/services/ai-product-ux) designers can redesign the flagged parts and [AI Product Engineering](/services/software-development/ai-product-engineering) can build them. [See how we work →](/how-we-work)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+## Other ways to start {#compare}
 
-- **We tell you what is really wrong.** At Dealpath, our audit placed the fault in a single assumption, that every listing becomes a new deal, and the redesign asks people to find the existing deal first. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
-
-- **We design AI that people can check and correct.** In the survey product we designed for Novus Insights, the AI drafts and the researcher decides, and a rewritten question keeps the AI's original visible beneath it. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
-
-- **One studio can take it into working software, with the designers staying in the build.** We proved ConnectX's AI dashboard in a coded demo, then took it through to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
-
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
-
-## Industries we know well {#industries}
-
-The review is new, so no industry has registered review work yet. The related work above includes [AI products](/expertise/ai-products-developer-tools), [PropTech and ConTech](/expertise/proptech-contech-field-operations), [Content platforms](/expertise/content-knowledge-discovery-platforms), [MarTech](/expertise/martech-salestech) and [Commerce](/expertise/commerce-transactional-products).
+| Option | Best for | What you get |
+|---|---|---|
+| [Usability testing](/services/product-design/prototyping-usability-testing) | An AI design not yet built | People try a new AI design on set tasks |
+| [UX & Product Audit](/audits/ux-product-audit) | Trouble that reaches beyond the AI feature | Where customers get stuck across the whole product |
 
 ## Questions about an AI UX audit {#faq}
 
 ### Is our AI feature ready to launch?
 
-Try a few of the tasks your users will rely on it for. If people can tell what the AI did, check the result and reverse a wrong one, it is close. The review tests exactly that and ranks whatever stands in the way.
+Try a few of the tasks your users will rely on it for. If people can tell what the AI did, check the result and reverse a wrong one, it is close. The audit tests exactly that and ranks whatever stands in the way.
 
 ### How do we know if users will trust our AI feature?
 
-Watch what they do with its output on real tasks. People who check every answer twice and people who accept everything unread are both showing misplaced trust. The review finds which screens cause each, and what would let people judge a result for themselves.
+Watch what they do with its output on real tasks. People who check every answer twice and people who accept everything unread are both showing misplaced trust. The audit finds which screens cause each, and what would let people judge a result for themselves.
 
 ### Is this a test of the AI model's accuracy?
 
-The Tcules readiness review tests the experience around the model: what people see, check, approve and undo. Your engineers and specialists own accuracy, security and compliance, and any issue we spot in their area reaches them with the example that showed it.
+The Tcules AI UX audit tests the experience around the model: what people see, check, approve and undo. Your engineers and specialists own accuracy, security and compliance, and any issue we spot in their area reaches them with the example that showed it.
+
+### What does an AI UX audit checklist cover?
+
+Six questions, asked on every task:
+
+- What is the AI doing for the user?
+- What can people check?
+- What may it do alone?
+- What is the reviewer's job?
+- How do people fix a wrong result?
+- Who owns the outcome?
 
 ### Can you audit an AI agent as well as a chatbot?
 
@@ -331,15 +306,17 @@ Yes. With an agent, Tcules checks what its plan shows before it runs and which a
 
 ### Do you give the feature a score?
 
-No. A Tcules review gives you a ranked list instead of a single number, because a score hides which problem to fix first. Each finding says who it affects and how much it matters.
+No. A Tcules AI UX audit gives you a ranked list instead of a single number, because a score hides which problem to fix first. Each finding says who it affects and how much it matters.
 
-### Is a beta too early for an AI UX review?
+Our article explains [why a confidence score alone rarely helps the person approving](/insights/confidence-scores-dont-fix-trust-when-review-step-never).
 
-A beta with real users is a good time for a review. Changing how the AI shows its work or asks for approval costs less before everyone has learned the current version, and your beta group's feedback shows us where to start.
+### Is a beta too early for an AI UX audit?
+
+A beta with real users is a good time for an audit. Changing how the AI shows its work or asks for approval costs less before everyone has learned the current version, and your beta group's feedback shows us where to start.
 
 ### How much does an AI UX audit cost?
 
-The review has a fixed price, agreed before it begins. One AI feature tested on a few tasks is the smallest scope. Several features, or an agent that acts across your product, take longer and are priced with the dates once the scope is agreed. [How We Work](/how-we-work) sets out how pricing works.
+The audit has a fixed price, agreed before it begins. One AI feature tested on a few tasks is the smallest scope. Several features, or an agent that acts across your product, take longer and are priced with the dates once the scope is agreed. [How We Work](/how-we-work) sets out how pricing works.
 
 ## Tell us who is about to rely on your AI {#enquiry}
 
@@ -351,6 +328,6 @@ Share the feature, who acts on what it produces and when the wider rollout is pl
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.
