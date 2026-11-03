@@ -1,9 +1,9 @@
 # Bento
 
-> **3 Nov 2026: the frame changed.** Every tile is now its drawing on the Sketch plate with its name
-> and arrow under it: no hairline, no texture, no lift (decisions/2026-11-03-flat-graphics-on-one-plate).
-> The texture (§ 4), the drawing scales and the hover below are superseded; the tracks, spans, split
-> tile, note cell and CTA cards stand.
+> **3 Nov 2026: no texture, drawings on plates.** Each tile keeps its card, but its drawing now sits
+> on the Sketch plate filling the tile's width, and the tile carries no texture
+> (decisions/2026-11-03-flat-graphics-on-one-plate). The texture (§ 4) and the bare drawing scales below
+> are superseded; everything else stands.
 
 ## 0 · Front matter
 

@@ -8,7 +8,7 @@ import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
 
 /**
- * /design/bento — linked tiles of two sizes on four tracks, each its drawing on the plate with its name under it
+ * /design/bento — linked tiles of two sizes on four tracks, each its drawing on the plate inside the card
  * (home "What we do", owner 19 Oct 2026, mocks S3). The six-tile diagonal home ships, the even
  * four-up row, a two-wide row, the tint, ink and blue grounds, and one tile on its own as a card in
  * another set (ServiceTile, 29 Oct 2026): a related service, a related expertise with its photo, and
@@ -336,7 +336,7 @@ export default function BentoSpecimen() {
       <Variation
         id="service-tile"
         title="7 · ServiceTile — a related service as a card in another set"
-        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same plate, words and hover (owner, 3 Nov 2026: one plate for every flat drawing). As a card: the drawing on its plate, the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, &ldquo;Explore the service&rdquo; at the foot."
+        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, plate and hover (owner, 3 Nov 2026: one plate for every flat drawing, no texture). As a card: the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, the drawing on its plate in the spare height, &ldquo;Explore the service&rdquo; at the foot."
       />
       <Section>
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">

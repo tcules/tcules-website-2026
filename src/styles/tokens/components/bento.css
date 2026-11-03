@@ -1,36 +1,38 @@
 /* ══ Component layer — Bento ════════════════════════════════════════════════════
-   Tier 2. A set of linked tiles on four tracks, some two tracks wide, each its service's drawing on
-   the Sketch plate with its name and line under it (owner, 3 Nov 2026,
-   decisions/2026-11-03-flat-graphics-on-one-plate: one frame for every flat drawing).
+   Tier 2. A set of linked tiles on four tracks, some two tracks wide, each a title, a line and its
+   service's drawing (home "What we do", owner 19 Oct 2026, mocks S1–S3 v1–v13, after Supabase's
+   product grid). Each drawing sits on the Sketch plate inside its tile; the tile carries no texture
+   (owner, 3 Nov 2026, decisions/2026-11-03-flat-graphics-on-one-plate).
 
    Naming: --bnt-{part}-{role}
-     parts  rule · title · body · eyebrow · arrow · ring · cta (roles: rule-ink · rule-width)
-     roles  ink · width · radius · text · tracking · measure · size · inset · shift · duration · easing
+     parts  tile · rule · title · body · ring · lift · cta (roles: rule-ink · rule-width)
+     roles  ink · width · radius · text · tracking · measure · duration · easing
 
-   One state, hover (and keyboard focus, which gets what the pointer gets): the arrow moves toward
-   its destination and the drawing tells its story. No ground, edge or colour changes. Every surface block declares every surface-dependent token.
+   One state, hover (and keyboard focus, which gets what the pointer gets): the tile lifts, its
+   hairline turns light blue and its title takes the accent
+   (owner, 19 Oct 2026). Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
-  /* The plate's radius (Sketch's --skt-plate-radius by value): the CTA card, a picture in the plate's
-     place, and the focus ring's corner. */
-  --bnt-radius: var(--radius-8);
+  --bnt-radius: var(--radius-16);
   --bnt-rule-width: var(--border-width-hairline);
-  /* The name under the plate: GatewayPaths' service label by value, so a service reads the same in
-     every set. */
-  --bnt-title-text: var(--text-h5-lg);
-  --bnt-title-tracking: var(--text-h5-lg-tracking);
+  --bnt-title-text: var(--text-h5);
+  --bnt-title-tracking: var(--text-h5-tracking);
+  --bnt-title-text-wide: var(--text-h4);
+  --bnt-title-tracking-wide: var(--text-h4-tracking);
   --bnt-body-text: var(--text-body-sm);
   /* The lone tile's eyebrow (ServiceTile `eyebrow`): the mono label voice, as a card's eyebrow. */
   --bnt-eyebrow-text: var(--text-eyebrow);
   --bnt-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* A picture in the drawing's place (ServiceTile `picture`): the card crop box's radius. */
+  --bnt-picture-radius: var(--radius-8);
   --bnt-body-measure: var(--measure-lead);
-  /* The arrow after the name: a lg button glyph's size, its side bearing off the word, and its move
-     (optical values from the ramp, not distances between two things). */
-  --bnt-arrow-size: var(--icon-size-24);
-  --bnt-arrow-inset: var(--space-8);
-  --bnt-arrow-shift: var(--space-4);
+  /* The split tile's result panel: the card crop box's radius, one step inside the tile's 16. */
+  --bnt-panel-radius: var(--radius-8);
+  /* An optical lift, not a distance between two things: the ramp's 2, so the tile rises off the
+     band by a hair rather than travelling. */
+  --bnt-lift: var(--space-2);
   /* The owner's hover curve (19 Oct 2026, the gateway's curve editor): one duration, both ways. */
   --bnt-duration: var(--duration-slow);
   --bnt-easing: var(--easing-ease);
@@ -38,50 +40,58 @@
   /* the CTA card's dotted outline: at 2 the dots read as dotted (Chromium draws them square-ish on straight runs, rounder at corners); at 1 they merge into a grey line */
   --bnt-cta-rule-width: var(--border-width-2);
   /* The ring's offset off the tile's edge: an optical gap, as Button's ring offset is. */
-  --bnt-ring-offset: var(--space-4);
+  --bnt-ring-offset: var(--space-2);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
-  --bnt-rule-ink: var(--color-neutral-200); /* decoration: the split tile's result rule */
-  --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration) */
+  --bnt-rule-ink: var(--color-neutral-200); /* decoration */
+  --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
+  --bnt-rule-ink-hover: var(--color-brandeis-100); /* decoration */
   --bnt-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --bnt-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
   --bnt-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bnt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 */
-  --bnt-arrow-ink: var(--color-brandeis-500); /* 6.17:1 */
   --bnt-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  --bnt-panel-ground: var(--color-paper-deep); /* the result panel: one step off the band's ground */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --bnt-rule-ink: var(--color-neutral-300);
-  --bnt-cta-rule-ink: var(--color-neutral-400);
+  --bnt-cta-rule-ink: var(--color-neutral-400); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
+  --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --bnt-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --bnt-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bnt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
-  --bnt-arrow-ink: var(--color-brandeis-500); /* 5.51:1 */
   --bnt-ring-color: var(--color-brandeis-500);
+  --bnt-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --bnt-rule-ink: var(--color-neutral-800);
-  --bnt-cta-rule-ink: var(--color-neutral-600);
+  --bnt-cta-rule-ink: var(--color-neutral-600); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
+  --bnt-rule-ink-hover: var(--color-brandeis-700);
   --bnt-title-ink: var(--color-white); /* 17.26:1 */
+  --bnt-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --bnt-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bnt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --bnt-arrow-ink: var(--color-brandeis-300); /* 7.32:1 */
   --bnt-ring-color: var(--color-brandeis-300);
+  --bnt-panel-ground: var(--color-neutral-800);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
 [data-surface='blue'] {
   --bnt-rule-ink: var(--color-brandeis-400);
-  --bnt-cta-rule-ink: var(--color-brandeis-300);
+  --bnt-cta-rule-ink: var(--color-brandeis-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
+  --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-white); /* 6.23:1 */
+  --bnt-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-eyebrow-ink: var(--color-brandeis-50); /* 5.57:1 */
-  --bnt-arrow-ink: var(--color-white); /* 6.23:1 */
   --bnt-ring-color: var(--color-white);
+  --bnt-panel-ground: var(--color-brandeis-600);
 }

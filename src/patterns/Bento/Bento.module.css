@@ -1,8 +1,7 @@
 /* Bento — every value is a --bnt-* token (tokens/components/bento.css) or a gap-scale step. Layout
-   owns the set's tracks and each tile's inner stack or pair; this module supplies the wide tile's
-   span, the words' type and the arrow's move. A tile is its drawing on the Sketch plate with its
-   words under it: no edge, no ground, no texture (owner, 3 Nov 2026,
-   decisions/2026-11-03-flat-graphics-on-one-plate). Layout's breakpoints: md 768, lg 1024. */
+   owns the set's tracks and each tile's inner stack or pair; this module supplies the tile's edge,
+   inset and states and the wide tile's span. The drawing is Sketch's plate, filling its track (owner,
+   3 Nov 2026, decisions/2026-11-03-flat-graphics-on-one-plate). Layout's breakpoints: md 768, lg 1024. */
 
 .cell {
   min-inline-size: 0;
@@ -16,12 +15,14 @@
   }
 }
 
-/* The text cell (`note`): the band's closing words in the grid's last row. No plate, so it never
-   reads as a tile. From 1024 it takes the tracks the last row leaves (`data-span`);
+/* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
+   texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
+   where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
    below, where the grid is two tracks or one, it takes a whole row. Placement of this unit's own
    cell inside the Layout it renders, as `.wide`. */
 .note {
   min-inline-size: 0;
+  padding: var(--gap-block);
 }
 
 @media (min-width: 768px) {
@@ -44,8 +45,9 @@
   }
 }
 
-/* A CTA card (`cta`): a cell of its own kind, one per route. A dotted outline, no fill, the plate's
-   radius, a `block` inset. One cell like a tile; the last card takes the tracks its row leaves
+/* A CTA card (`cta`): a cell of its own kind, one per route. A dotted outline, no fill, the tile's
+   radius, no texture, no lift; a `block` inset (the single tile's, so its first line starts where a
+   neighbouring title does). One cell like a tile; the last card takes the tracks its row leaves
    (`data-span-md` from 768, `data-span` from 1024). Placement as `.wide`/`.note`. */
 .cta {
   min-inline-size: 0;
@@ -96,26 +98,29 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* The tile is the link: no edge and no ground of its own, the plate inside it is the card.
-   `display: block` sizes the anchor to fill the stretched cell; the Layout inside arranges. */
+/* The tile is the link and the frame: its hairline at rest, its inset inside that hairline (a
+   `block` in a single tile, a `gutter` in a wide one), its corners. `display: block` sizes the anchor
+   to fill the stretched cell; the Layout inside arranges. */
 .tile {
   display: block;
   block-size: 100%;
+  padding: var(--gap-block);
+  border: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  border-radius: var(--bnt-radius);
   color: inherit;
   text-decoration: none;
-  border-radius: var(--bnt-radius);
+  transition:
+    transform var(--bnt-duration) var(--bnt-easing),
+    border-color var(--bnt-duration) var(--bnt-easing);
 }
 
-.tile:hover,
-.tile:focus-visible {
-  text-decoration: none;
+@media (min-width: 768px) {
+  .wide .tile {
+    padding: var(--gap-gutter);
+  }
 }
 
-.tile:focus {
-  outline: none;
-}
-
-/* The inner stack fills the tile, so an action pins to its foot. Sizing only. */
+/* The inner stack fills the tile, so a single tile's drawing pins to its foot. Sizing only. */
 .fill {
   block-size: 100%;
 }
@@ -125,12 +130,18 @@
   block-size: 100%;
 }
 
-/* ── Words ─────────────────────────────────────────────────────────────────── */
+/* ── Words and drawing ──────────────────────────────────────────────────────── */
 .title {
   color: var(--bnt-title-ink);
   font: var(--bnt-title-text);
   letter-spacing: var(--bnt-title-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: balance;
+  transition: color var(--bnt-duration) var(--bnt-easing);
+}
+
+.wide .title {
+  font: var(--bnt-title-text-wide);
+  letter-spacing: var(--bnt-title-tracking-wide);
 }
 
 .body {
@@ -139,32 +150,17 @@
   font: var(--bnt-body-text);
 }
 
-/* The arrow after the name's last word: the accent at a lg button glyph's size, set off the word by
-   its side bearing (an optical inset); on hover or focus it moves toward its destination and back,
-   on transform only (decisions/2026-10-19-hover-is-a-move). */
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  padding-inline-start: var(--bnt-arrow-inset);
-  box-sizing: content-box;
-  inline-size: var(--bnt-arrow-size);
-  block-size: var(--bnt-arrow-size);
-  color: var(--bnt-arrow-ink);
-  transition: transform var(--bnt-duration) var(--bnt-easing);
-}
-
-.arrow > svg {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-}
-
-a.tile:is(:hover, :focus-visible) .arrow {
-  transform: translateX(var(--bnt-arrow-shift));
+/* The drawing on its plate fills the tile's width (a wide tile's half), so every plate in a row is
+   one size of one ground. Sizing only. */
+.art {
+  min-inline-size: 0;
 }
 
 /* ── The lone tile as a card (ServiceTile) ─────────────────────────────────────
-   Its eyebrow in the mono label voice; a picture in the plate's place, 16:9 at the plate's radius. */
+   Its eyebrow in the mono label voice; the plate centred in the spare height between the words and
+   the action (self-alignment of the child in its own row); a picture in the plate's place fills the
+   tile's width at 16:9 with the card crop box's radius. A wide tile takes the wide
+   tile's inset. */
 .eyebrow {
   color: var(--bnt-eyebrow-ink);
   font: var(--bnt-eyebrow-text);
@@ -173,30 +169,89 @@ a.tile:is(:hover, :focus-visible) .arrow {
 }
 
 .picture {
+  align-self: center;
   overflow: hidden;
-  border-radius: var(--bnt-radius);
+  border-radius: var(--bnt-picture-radius);
+}
+
+@media (min-width: 768px) {
+  .tileWide {
+    padding: var(--gap-gutter);
+  }
+
+  .wideWords {
+    align-self: end;
+  }
+
+  .wideVisual {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .wideAction {
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .tileWide .title {
+    font: var(--bnt-title-text-wide);
+    letter-spacing: var(--bnt-title-tracking-wide);
+  }
 }
 
 /* ── States ─────────────────────────────────────────────────────────────────
-   Hover and keyboard focus: the arrow moves and the drawing tells its story (Sketch). Keyboard gets
-   the ring as well. A tile with no destination is a still card and does neither. */
+   Hover and keyboard focus, one curve both ways: the tile lifts, its hairline turns blue, its title
+   takes the accent and its drawing tells its story. Keyboard gets the ring as well. Only a LINKED tile moves: a tile with no
+   destination (the page itself in a comparison, an option outside the studio) is a still card. */
+a.tile:is(:hover, :focus-visible) {
+  transform: translateY(calc(-1 * var(--bnt-lift)));
+  border-color: var(--bnt-rule-ink-hover);
+}
+
+a.tile:is(:hover, :focus-visible) .title {
+  color: var(--bnt-title-ink-hover);
+}
+
 .tile:focus-visible {
   outline: var(--bnt-ring-width) solid var(--bnt-ring-color);
   outline-offset: var(--bnt-ring-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .arrow {
-    transition-duration: var(--duration-instant);
+  .tile {
+    transition: border-color var(--bnt-duration) var(--bnt-easing);
+  }
+
+  a.tile:is(:hover, :focus-visible) {
+    transform: none;
   }
 }
 
 /* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A) ─────────────────────────────
-   Two tracks wide, two halves: the plate with its name, and the result ruled off at its head. */
+   Two tracks wide, two halves. The tile's own inset drops to `tight` so the result panel sits a hair
+   inside the tile's edge; the named half adds `text` back, so its words start where a single tile's
+   would (8 + 16 = the single tile's 24). The panel is a ground inside the tile, its own `block` inset.
+   The drawing at the split scale, at the start of its half. */
+.split .tile {
+  padding: var(--gap-tight);
+}
+
+@media (min-width: 768px) {
+  .split .tile {
+    padding: var(--gap-tight);
+  }
+}
+
+.named {
+  padding: var(--gap-text);
+}
+
 .panel {
   block-size: 100%;
-  padding-block-start: var(--gap-block);
-  border-block-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  padding: var(--gap-block);
+  border-radius: var(--bnt-panel-radius);
+  background: var(--bnt-panel-ground);
 }
 
 .panelText {

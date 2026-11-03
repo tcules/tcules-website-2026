@@ -32,7 +32,7 @@ export type BentoItem = {
    * set among the others so no row of the table is dropped. It does not move and carries no action.
    */
   href?: string;
-  /** The destination's own Sketch scene, on its plate. Absent, the empty plate. */
+  /** The destination's own Sketch scene, on its plate inside the tile. Absent, the empty plate. */
   scene?: SketchName;
   /**
    * Tracks the tile takes from 1024: 1 (default) or 2. A wide tile puts its drawing beside its words
@@ -166,32 +166,7 @@ function TileBox({ href, children }: { href?: string; children: ReactNode }) {
   );
 }
 
-/** The tile's name, with the arrow after its last word when the tile is a link (as GatewayPaths). */
-function Named({
-  title,
-  linked,
-  Title,
-}: {
-  title: string;
-  linked: boolean;
-  Title: 'h2' | 'h3' | 'h4';
-}) {
-  return (
-    <Title className={styles.title}>
-      {title}
-      {linked ? (
-        <span className={styles.arrow} aria-hidden="true">
-          <Icon name="arrow-right" />
-        </span>
-      ) : null}
-    </Title>
-  );
-}
-
-/**
- * One tile: its drawing on the plate, then its name and line under it (owner, 3 Nov 2026,
- * decisions/2026-11-03-flat-graphics-on-one-plate). A wide tile sets the plate beside its words.
- */
+/** One tile's link: its words and its drawing, stacked, or side by side when it is wide. */
 function TileLink({
   item,
   wide,
@@ -201,34 +176,41 @@ function TileLink({
   wide: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
-  const linked = Boolean(item.href);
   const named = (
     <Layout rowGap="tight">
-      <Named title={item.title} linked={linked && !item.detail?.action} Title={Title} />
+      <Title className={styles.title}>{item.title}</Title>
       {item.body ? <p className={styles.body}>{item.body}</p> : null}
     </Layout>
   );
-  /* No drawing yet: the labelled empty plate. The drawing moves on the link's hover. */
-  const art = <Sketch name={item.scene} story={linked} />;
+  const words = named;
+  const art = (
+    <div className={styles.art}>
+      {/* The drawing on its plate, the one frame every flat drawing sits in (owner, 3 Nov 2026,
+          decisions/2026-11-03-flat-graphics-on-one-plate). No drawing yet: the empty plate. */}
+      <Sketch name={item.scene} story={Boolean(item.href)} />
+    </div>
+  );
   if (item.detail) {
-    /* The split tile: the named half (the plate, then the name and line) and the result half, ruled
-       off at its head, its action at its foot. Side by side from 768, the result under the named half
+    /* The split tile: the named half (drawing, then title and body) and the result half, an inset
+       panel whose action sits at its foot. Side by side from 768, the panel under the named half
        below. */
     return (
       <TileBox href={item.href}>
-        {/* equalRows: the halves' row takes the tile's whole height, so every result in a row of
+        {/* equalRows: the halves' row takes the tile's whole height, so every panel in a row of
             tiles ends on the same line however long its neighbour's words run. */}
         <Layout
           className={styles.fill}
           columns={{ base: 1, md: [1, 1] }}
-          colGap="gutter"
-          rowGap="block"
+          colGap="tight"
+          rowGap="tight"
           equalRows
         >
-          <Layout rowGap="text">
-            {art}
-            {named}
-          </Layout>
+          <div className={styles.named}>
+            <Layout rowGap="block">
+              {art}
+              {named}
+            </Layout>
+          </div>
           <div className={styles.panel}>
             <Layout
               className={styles.fill}
@@ -260,14 +242,19 @@ function TileLink({
   return (
     <TileBox href={item.href}>
       {wide ? (
-        <Layout columns={{ base: 1, md: [1, 1] }} colGap="gutter" rowGap="text" align="center">
+        <Layout
+          className={styles.fill}
+          columns={{ base: 1, md: [1, 1] }}
+          colGap="gutter"
+          rowGap="block"
+        >
+          {words}
           {art}
-          {named}
         </Layout>
       ) : (
-        <Layout rowGap="text">
+        <Layout className={styles.fill} rowGap="block" pinLast>
+          {words}
           {art}
-          {named}
         </Layout>
       )}
     </TileBox>
@@ -285,7 +272,7 @@ export type ServiceTileProps = {
    * sets the case.
    */
   eyebrow?: string;
-  /** The service's own flat Sketch scene, on its plate. */
+  /** The service's own flat Sketch scene, on its plate inside the tile. */
   scene?: SketchName;
   /**
    * A picture in the drawing's place, composed by the caller (an expertise's sector photograph, or
@@ -312,9 +299,10 @@ export type ServiceTileProps = {
 /**
  * ServiceTile — ONE bento tile on its own, for a named destination that sits as a card in another
  * set (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
- * related service or related expertise beside its pieces. The same tile as the bento's: the visual on
- * the plate, the words under it (decisions/2026-11-03-flat-graphics-on-one-plate). As a card it reads
- * top to bottom: the visual, the eyebrow, the title, the action at the foot. `wide`, the words and action beside the visual.
+ * related service or related expertise beside its pieces. The same tile as the bento's (its hairline,
+ * its drawing on the plate, its hover). As a card it reads top to bottom (owner, 29 Oct 2026;
+ * decisions/2026-10-29-related-destination-is-a-card): the eyebrow, the title, the visual in the
+ * middle of the spare height, the action at the foot. `wide`, the words and action beside the visual.
  * It renders a `div`; the caller's set supplies the `li`. A set of services is a `Bento`, never a row
  * of these.
  */
@@ -328,20 +316,20 @@ export function ServiceTile({
   wide = false,
   titleAs: Title = 'h3',
 }: ServiceTileProps) {
-  const hasAction = Boolean(action?.trim());
   const words = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-      <Named title={title} linked={!hasAction} Title={Title} />
+      <Title className={styles.title}>{title}</Title>
     </Layout>
   );
-  /* The visual on the plate: the service's scene, or a picture in the plate's place. */
   const visual = picture ? (
     <div className={styles.picture}>{picture}</div>
-  ) : (
-    <Sketch name={scene} story />
-  );
-  const button = hasAction ? (
+  ) : scene ? (
+    <div className={styles.art}>
+      <Sketch name={scene} story />
+    </div>
+  ) : null;
+  const button = action?.trim() ? (
     <Cluster colGap="tight">
       <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
         {action}
@@ -350,22 +338,30 @@ export function ServiceTile({
   ) : null;
   return (
     <div className={cx(styles.cell, styles.solo)}>
-      <a href={href} className={styles.tile}>
+      <a href={href} className={cx(styles.tile, wide && styles.tileWide)} data-btn-link-group>
         {wide ? (
-          /* From 768 the visual beside the words and the action; a phone stacks them as the card. */
-          <Layout columns={{ base: 1, md: [1, 1] }} colGap="section" rowGap="block" align="center">
-            {visual}
-            <Layout rowGap="block">
-              {words}
-              {button}
-            </Layout>
+          /* Words, visual, action in reading order, so a phone stacks them as the card does; from
+             768 the visual takes the second track across both rows, the words over the action
+             beside it (each child places itself: `.wideWords`, `.wideVisual`, `.wideAction`). */
+          <Layout
+            className={styles.fill}
+            columns={{ base: 1, md: [1, 1] }}
+            colGap="section"
+            rowGap="block"
+          >
+            <div className={styles.wideWords}>{words}</div>
+            {visual ? <div className={styles.wideVisual}>{visual}</div> : null}
+            {button ? <div className={styles.wideAction}>{button}</div> : null}
           </Layout>
         ) : (
-          /* The plate, the words, then the action pinned to the card's foot. */
-          <Layout className={styles.fill} rowGap="text" pinLast={Boolean(button)}>
-            {visual}
+          /* Words at the head, then a stack that takes the spare height: the visual centred in it,
+             the action pinned under it. */
+          <Layout className={styles.fill} rowGap="block" fillLast>
             {words}
-            {button}
+            <Layout rowGap="block" fillFirst>
+              {visual ?? <span />}
+              {button}
+            </Layout>
           </Layout>
         )}
       </a>
@@ -380,13 +376,14 @@ export function ServiceTile({
  * heart of every project, and Software Development wide at the end. The whole set is always in view;
  * no tile hides behind a scroll or a tab.
  *
- * Every tile is its drawing on the Sketch plate, the one frame every flat drawing on the site sits in,
- * with its name and line under it: no edge, no ground and no texture of its own (owner, 3 Nov 2026,
- * decisions/2026-11-03-flat-graphics-on-one-plate, superseding the textured tile). A linked tile's name
- * ends in the arrow, which moves toward its destination on hover or focus.
+ * Every tile shows its hairline edge at rest, so its inset is honest (no ground exists only on
+ * hover). Its drawing sits on the Sketch plate, the dotted frame every flat drawing on the site takes;
+ * the tile carries no texture of its own (owner, 3 Nov 2026,
+ * decisions/2026-11-03-flat-graphics-on-one-plate). On hover the tile lifts, its hairline turns light
+ * blue and its title takes the accent.
  *
- * Every linked tile's drawing moves on hover or focus: a story scene tells its story, any other makes its
- * one `Move`/`GrowIn` move.
+ * Every tile's drawing moves on hover or focus: a story scene tells its story, any other makes its one
+ * `Move`/`GrowIn` move on the tile's own curve (decisions/2026-10-30-service-tile-drawing-moves-on-hover).
  * The set may close on a CTA card (`cta`, decisions/2026-10-30-set-ends-in-a-cta-card).
  *
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
@@ -417,15 +414,17 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   const mdSpan = mdCells % 2 === 1 ? 2 : 1;
 
   return (
-    /* A borderless card set: its rows a `column` apart (CLAUDE.md, the gap scale). */
     <Layout
       as="ul"
       columns={{ base: 1, md: 2, lg: tracks }}
       colGap="gutter"
-      rowGap="column"
+      rowGap="gutter"
     >
       {placed.map(({ item, span }) => (
-        <li key={item.id} className={cx(styles.cell, span === 2 && styles.wide)}>
+        <li
+          key={item.id}
+          className={cx(styles.cell, span === 2 && styles.wide, item.detail && styles.split)}
+        >
           <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
       ))}

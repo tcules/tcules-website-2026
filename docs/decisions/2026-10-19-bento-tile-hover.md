@@ -1,7 +1,7 @@
 ---
 title: "A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow"
 date: 2026-10-19
-status: superseded
+status: active
 area: [motion, cards]
 source: "Owner, 19 Oct 2026 (What we do mocks S3 v7–v13)"
 supersedes: []

@@ -275,7 +275,7 @@ const SPECIMENS = [
       {
         href: '/design/bento',
         name: 'Bento',
-        note: 'linked tiles of two sizes on four tracks, each its drawing on the plate with its name under it — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
+        note: 'linked tiles of two sizes on four tracks, each its drawing on the plate inside the card — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
       },
       {
         href: '/design/reasons',

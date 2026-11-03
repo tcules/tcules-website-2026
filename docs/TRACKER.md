@@ -246,7 +246,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
       Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
-      the one dotted plate, words under it; the textured tile is retired (decisions/2026-11-03-flat-graphics-on-one-plate).
+      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
 - [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
