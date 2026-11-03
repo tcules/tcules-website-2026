@@ -153,17 +153,18 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
 /**
  * A band that reuses a studio photograph, by band id and the routes it applies on (page-mapping § 0
  * rule 5, step 3: a studio photograph the corpus binds elsewhere, where the page's plan names the
- * reuse). An audit's "After the audit" says who carries the report on, "your team … or our people":
- * the people take the review session (proposed, 4 Nov 2026, the audits' 3 Nov outline). One use a
- * page; the photograph grade is the shared tone layer.
+ * reuse). One use a page; the photograph grade is the shared tone layer.
+ *
+ * Empty since 4 Nov 2026: the audits' "After the audit" took the studio review photograph on all six
+ * pages, and the critic found it an addition the copy never asks for (no-bespoke-additions), the same
+ * picture on every audit, and a ~370 photo carrying a band of one sentence. The band is the copy's
+ * sentence and its link, sized to its words.
  */
-const STUDIO_BAND: readonly { band: string; routes: (route: string) => boolean; photo: CorpusMediaBinding }[] = [
-  {
-    band: 'after-the-audit',
-    routes: (route) => route.startsWith(`${ROUTES.audits}/`),
-    photo: ABOUT_REVIEW,
-  },
-];
+const STUDIO_BAND: readonly {
+  band: string;
+  routes: (route: string) => boolean;
+  photo: CorpusMediaBinding;
+}[] = [];
 
 /** The studio photograph a band reuses on this route, if its plan names one (`STUDIO_BAND`). */
 export function studioBandPhoto(route: string, bandId: string): CorpusMediaBinding | undefined {

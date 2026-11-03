@@ -172,42 +172,39 @@ function AiTrust() {
 }
 
 /**
- * Readiness: the AI feature already in use, its problems flagged, is reviewed into a report of fixes
- * ranked by size, and the first fix lights. Motion: the route draws into the report (1) and lands on
- * the highlight (3), as in Audits.
+ * Readiness (the AI UX Audit, redrawn 4 Nov 2026 from its own claim, "where people can't check or undo
+ * what the AI did"; it had been derived from the Audits scene, a flagged panel into a ranked list): the
+ * AI's change goes straight into the person's screen with nothing between them, the place for a check
+ * an empty dashed ring. Motion: the route draws from the AI through that ring into the row it changed
+ * (1), and the ring grows solid with the eye, the check people were missing (2).
  */
 function AiReadiness() {
   return (
     <>
-      {/* The AI feature in use, flagged where it goes wrong. */}
-      <Rect x={30} y={30} w={80} h={120} rx={8} className={styles.frame} />
-      <Glyph name="stars" cx={46} cy={48} size={14} className={styles.glyph} />
-      <Copy x={60} y={48} w={34} quiet />
-      <Rect x={42} y={74} w={40} h={32} className={styles.tile} />
-      <Copy x={50} y={86} w={24} />
-      <Copy x={50} y={96} w={16} quiet />
-      <Glyph name="danger-triangle" cx={94} cy={90} size={14} className={styles.glyph} />
-      <Copy x={42} y={130} w={40} quiet />
-      <Glyph name="danger-triangle" cx={94} cy={130} size={10} className={styles.glyph} />
-      <circle className={styles.node} cx="110" cy="90" r="2.5" />
-      {/* The report: the fixes, ranked, the largest first. */}
-      <Rect x={160} y={30} w={130} h={120} rx={8} className={styles.frame} />
-      <TraceIn d="M110,90 L144,90 A6,6 0 0 0 150,84 L150,56 A6,6 0 0 1 156,50 L165,50" />
-      {/* The port where the route enters the report, landing as the pen reaches it. */}
+      {/* The AI, its port on its edge. */}
+      <Rect x={30} y={50} w={60} h={80} rx={8} className={styles.frame} />
+      <Glyph name="stars" cx={60} cy={78} size={20} className={styles.glyph} />
+      <Copy x={46} y={106} w={28} quiet />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      {/* Where the check should sit: empty, dashed. */}
+      <circle className={styles.trailFrame} cx="150" cy="90" r="11" />
+      {/* The person's screen, the row the AI changed in its middle. */}
+      <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      <Copy x={206} y={50} w={52} quiet />
+      <Copy x={206} y={62} w={68} />
+      <Rect x={200} y={78} w={80} h={24} className={styles.tile} />
+      <Copy x={212} y={90} w={48} />
+      <Copy x={206} y={118} w={64} quiet />
+      <Copy x={206} y={130} w={40} quiet />
+      {/* The route runs through the ring into the changed row, and the check is there. */}
+      <TraceIn d="M90,90 L139,90" />
+      <TraceIn d="M161,90 L193,90" />
       <GrowIn>
-        <circle className={styles.node} cx="160" cy="50" r="2.5" />
+        <ArrowRight x={200} y={90} />
       </GrowIn>
       <GrowIn>
-        <Rect x={166} y={34} w={112} h={32} rx={10} className={styles.halo} />
+        <Focus x={150} y={90} glyph="eye" size={12} />
       </GrowIn>
-      <Rect x={172} y={40} w={100} h={20} className={styles.press} />
-      <GrowIn>
-        <ArrowRight x={172} y={50} />
-      </GrowIn>
-      <Rect x={172} y={80} w={76} h={20} className={styles.tile} />
-      <Copy x={184} y={90} w={40} quiet />
-      <Rect x={172} y={120} w={52} h={20} className={styles.tile} />
-      <Copy x={184} y={130} w={20} quiet />
     </>
   );
 }

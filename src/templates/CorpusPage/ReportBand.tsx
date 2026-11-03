@@ -126,11 +126,17 @@ export function ReportBand({ band, surface }: { band: CorpusBand; surface: 'pape
   const pickRow = (row: readonly (readonly InlineRun[])[]) =>
     row.slice(1).some((runs) => trimStart(runs)[0]?.type === 'strong');
 
+  /* An answer the key defines takes the key's label voice at every width, so the rows and the key
+     under them visibly match on a phone as in the table (critic, 4 Nov 2026: the read-down set them
+     in the sans, "Keep" against the key's KEEP). One renderer for both views. */
+  const answer = (runs: readonly InlineRun[]) => (
+    <span className={styles.legend}>{plain(runs)}</span>
+  );
   const cell = (runs: readonly InlineRun[], index: number): string | { node: ReactNode } =>
     index === statusAt
       ? { node: <StatusMark name={plain(runs)} /> }
       : index === answerAt
-        ? { node: <span className={styles.legend}>{plain(runs)}</span> }
+        ? { node: answer(runs) }
         : inlineToHtml(runs);
 
   const headProps = head(band);
@@ -172,7 +178,7 @@ export function ReportBand({ band, surface }: { band: CorpusBand; surface: 'pape
                     {index === statusAt ? (
                       <StatusMark name={plain(row[index + 1] ?? [])} />
                     ) : index === answerAt ? (
-                      <p className={styles.statusName}>{plain(row[index + 1] ?? [])}</p>
+                      <p>{answer(row[index + 1] ?? [])}</p>
                     ) : (
                       <p>{renderInline(row[index + 1] ?? [])}</p>
                     )}

@@ -60,14 +60,16 @@ export type OfferPartsProps = {
 };
 
 /**
- * Deliverable tracks. From 1024 the deliverables sit in a 3/4 column, so five across only fit at the
- * 1240 cap (xl); below it they read three then two.
+ * Deliverable tracks. Never more than four a row: five across packed ~220 plates under three-line
+ * bodies, the crammed row the owner has turned down before ("fewer, larger items per row",
+ * service-page round 1), so five read three then two at every width from 1024 (critic, audits run,
+ * 4 Nov 2026; the strip rule in treatment-rules § What you get is still proposed).
  */
-const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 | 5 }> = {
+const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 }> = {
   2: { lg: 2, xl: 2 },
   3: { lg: 3, xl: 3 },
   4: { lg: 2, xl: 4 },
-  5: { lg: 3, xl: 5 },
+  5: { lg: 3, xl: 3 },
   6: { lg: 3, xl: 3 },
   /* Seven (most expertise pages): 4 + 3 from 1280. From 1024 to 1279 three tracks leave one alone. */
   7: { lg: 3, xl: 4 },
