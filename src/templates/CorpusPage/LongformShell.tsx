@@ -294,7 +294,13 @@ export function ArticleSection({
           : null;
         if (steps) {
           flush();
-          out.push(<Steps key={`steps-${out.length}`} steps={steps} />);
+          out.push(
+            <Steps
+              key={`steps-${out.length}`}
+              steps={steps}
+              {...(tool ? { measure: 'reading' as const } : {})}
+            />,
+          );
         } else {
           flow += listHtml(item);
         }
@@ -302,7 +308,13 @@ export function ArticleSection({
       }
       case 'methods':
         flush();
-        out.push(<Steps key={`methods-${out.length}`} steps={item.steps} />);
+        out.push(
+          <Steps
+            key={`methods-${out.length}`}
+            steps={item.steps}
+            {...(tool ? { measure: 'reading' as const } : {})}
+          />,
+        );
         break;
       case 'table':
         flush();
@@ -379,14 +391,16 @@ export function ArticleSection({
         />,
       );
     }
-    /* A tool's diagram: the flat drawing on its plate at the lead measure, so it reads with the
-       words it follows and never fills the column with dotted ground. */
+    /* A tool's diagram: the flat drawing on its plate at the page's one drawing scale (the worked
+       example's plate width, centred in the column from 1440; tools critic, 4 Nov 2026). */
     if (toolDiagram && index === toolDiagramAt) {
       flush();
       out.push(
-        <div key={`plate-${out.length}`} className={styles.diagram}>
-          <Sketch name={toolDiagram.scene} />
-        </div>,
+        <Layout key={`plate-${out.length}`} className={styles.diagram} justifyItems="center">
+          <div className={styles.diagramPlate}>
+            <Sketch name={toolDiagram.scene} />
+          </div>
+        </Layout>,
       );
     }
   });
@@ -410,7 +424,12 @@ export function ArticleSection({
 }
 
 /** A tool example's words: paragraphs and lists as Prose at the measure, a table boxed. */
-function exampleFlow(blocks: readonly CorpusBlock[], labelledBy: string): ReactNode[] {
+function exampleFlow(
+  blocks: readonly CorpusBlock[],
+  labelledBy: string,
+  /** Inside the example panel, whose ground bounds a table (CorpusTable `bounded`). */
+  inPanel = false,
+): ReactNode[] {
   const out: ReactNode[] = [];
   let flow = '';
   const flush = () => {
@@ -429,6 +448,7 @@ function exampleFlow(blocks: readonly CorpusBlock[], labelledBy: string): ReactN
           table={block}
           labelledBy={labelledBy}
           narrow="read-down"
+          bounded={inPanel}
         />,
       );
     }
@@ -474,12 +494,12 @@ function ToolExample({
           >
             <Layout rowGap="block">
               <p className={styles.legend}>{label}</p>
-              {exampleFlow(words, labelledBy)}
+              {exampleFlow(words, labelledBy, true)}
             </Layout>
             <Sketch name={scene} />
           </Layout>
           {tail.length > 0 ? (
-            <Layout rowGap="block">{exampleFlow(tail, labelledBy)}</Layout>
+            <Layout rowGap="block">{exampleFlow(tail, labelledBy, true)}</Layout>
           ) : null}
         </Layout>
       </ExamplePanel>
@@ -513,9 +533,12 @@ export function CorpusTable({
   labelledBy,
   term,
   narrow,
+  bounded = false,
 }: {
   table: TableBlock;
   labelledBy: string;
+  /** On a ground that already bounds it, the tool's example panel (DataTable `bounded`). */
+  bounded?: boolean;
   /** DataTable's phone reading: a tool's worksheet reads down (4 Nov 2026); else the table scrolls. */
   narrow?: 'scroll' | 'read-down';
   /** The page's defined term, on a glossary page: a table comparing it with its peers is keyless. */
@@ -528,6 +551,7 @@ export function CorpusTable({
         labelledBy={labelledBy}
         columns={table.header.map((cell) => ({ heading: plain(cell) }))}
         pickColumn={pick}
+        bounded={bounded}
         {...(narrow ? { narrow } : {})}
         rows={table.rows.map((row) => ({
           header: plain(row[0] ?? []),
@@ -541,6 +565,7 @@ export function CorpusTable({
     <DataTable
       labelledBy={labelledBy}
       keyColumn={{ heading: plain(key) }}
+      bounded={bounded}
       {...(narrow ? { narrow } : {})}
       columns={columns.map((cell) => ({ heading: plain(cell) }))}
       rows={table.rows.map((row) => ({

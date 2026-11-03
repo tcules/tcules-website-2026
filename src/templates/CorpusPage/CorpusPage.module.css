@@ -17,12 +17,24 @@
   max-inline-size: var(--measure-body);
 }
 
-/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026). It takes the
-   column at its own ratio, the example panel's width, so it no longer hangs at the left of the column
-   with an empty right half (tools critic, 4 Nov: held to the lead measure it left ~400 of white
-   beside every plate). */
+/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026). Its drawing is
+   at the page's one drawing scale: from 1440, where the worked example sets its story plate in half the
+   panel, the diagram takes that same half of the column, centred, so a tick in the diagram is the tick
+   of the example and the hero beside it (tools critic, 4 Nov: at the column's full width its glyphs drew
+   2.5 times their siblings'). Below 1440 the example plate takes the column, and so does the diagram.
+   Sizing only: the wrapper is a Layout centring its one item (LongformShell). */
 .diagram {
   min-inline-size: 0;
+}
+
+.diagramPlate {
+  inline-size: 100%;
+}
+
+@media (min-width: 1440px) {
+  .diagramPlate {
+    inline-size: calc((100% - var(--gap-section)) / 2);
+  }
 }
 
 .proofLine {

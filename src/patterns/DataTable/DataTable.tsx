@@ -144,6 +144,14 @@ export type DataTableProps = {
    * more than one value column is compared across its rows and stays `boxed`.
    */
   appearance?: 'boxed' | 'sheet';
+  /**
+   * The table sits on a ground that already bounds it (a tool's worked-example panel, 4 Nov 2026,
+   * tools critic: on a phone the panel's inset and the box's stacked, leaving the answers ~210 wide).
+   * With `narrow="read-down"`, below 768 the rows drop the box's side edges, fill and inline inset and
+   * keep its rules above, between and below them, so the answers take the panel's whole measure. From
+   * 768 the boxed table, unchanged.
+   */
+  bounded?: boolean;
 };
 
 /*
@@ -222,7 +230,10 @@ function warn(message: string) {
  * It is a table at every width. The frame — outer border, head fill, body ground, and a hairline
  * between every row and every column — is what makes it readable as a structure, so a narrow track does not
  * restructure it: when its columns' floors add up to more than the track, the frame scrolls
- * sideways and the table inside keeps its shape. The body is never re-laid out as a stack.
+ * sideways and the table inside keeps its shape. The body is never re-laid out as a stack, with one
+ * opt-in exception for a worksheet a reader works through (`narrow="read-down"`, 4 Nov 2026, status
+ * proposed: decisions/2026-11-04-worksheet-tables-read-down-on-a-phone): below 768 its rows read down
+ * as blocks inside the same box.
  *
  * When it scrolls, a fade to the body ground marks each edge that has more beyond it, driven by the
  * frame's own scroll position (a scroll-driven animation, so no client JS). A browser without
@@ -253,6 +264,7 @@ export function DataTable({
   pickColumn,
   narrow = 'scroll',
   appearance = 'boxed',
+  bounded = false,
 }: DataTableProps) {
   const captionId = useId();
 
@@ -432,7 +444,7 @@ export function DataTable({
   const renderDown = () => (
     <div className={styles.downView}>
       <ul
-        className={styles.down}
+        className={cx(styles.down, bounded && styles.downBounded)}
         {...(caption
           ? { 'aria-labelledby': captionId }
           : labelledBy

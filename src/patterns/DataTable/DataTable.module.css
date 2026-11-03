@@ -511,6 +511,17 @@
   border-block-end: 0;
 }
 
+/* `bounded`: on a ground that already bounds the table (an example panel), no side edges, no fill and
+   no inline inset; the rules above, between and below the rows stay, so it still reads as one table. */
+.downBounded {
+  border-inline: 0;
+  background: none;
+}
+
+.downBounded > .downRow {
+  padding-inline: 0;
+}
+
 .downTitle {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);

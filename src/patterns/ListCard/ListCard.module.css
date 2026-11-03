@@ -470,6 +470,18 @@
   max-inline-size: var(--lcrd-stacked-body-measure);
 }
 
+/* `measure="reading"` (4 Nov 2026, the tool pages): the set is a block of an article's reading column,
+   so the whole ladder takes the column's one measure: the rules end at it, and the titles and bodies
+   run to it rather than breaking at 32ch and 56ch beside an empty half. A measure, not a distance. */
+.stepsReading {
+  max-inline-size: var(--measure-body);
+}
+
+.stepsReading .title,
+.stepsReading .body {
+  max-inline-size: none;
+}
+
 /* ── ReadDown: the D set mode (ReadDown.tsx) ─────────────────────────────────────
    No inline inset, as in Steps (and every row since 7 Oct 2026): the glyph sits on the edge the
    band's head and the rows' own rules share. The
