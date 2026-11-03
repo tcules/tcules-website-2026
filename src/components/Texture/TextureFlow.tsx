@@ -93,26 +93,25 @@ void main(){
   float loose = (1.0 - settle) * (1.0 - calm * uSettle);
 
   // The magnet (owner, 4 Nov 2026): the moving field DRAWS the shape, it is never cut out of it.
-  // Two maps of the shape at the field's CSS size: uShape, the shape itself softened by a few px,
-  // and uHalo, the shape blurred wide. Three things happen near it, and none of them holds a cell —
+  // Two maps of the shape at the field's CSS size: uShape, the shape softened by 10px,
+  // and uHalo, the shape blurred wide. Two things happen near it, and none of them holds a cell —
   // every cell still points wherever the noise says.
   //   1  The space the noise is read in is warped round the shape (pushed off it along the halo's
   //      gradient, sheared along its outline), so the swirls drifting past bend round the letters.
-  //   2  Outside, the ripples become the shape's own contours, travelling outward from it.
-  //   3  Inside, the ripples are a fast current running through the strokes, so the letters read
-  //      as moving water inside calmer water rather than as blanks.
+  //   2  The ripples become the shape's contours: one level map, steepest at the outline, so they
+  //      bunch there and run on through the strokes and out past them as a single field.
   vec2 q = c;
   float h = 0.0, sh = 0.0;
   if (uMagnet > 0.5) {
     vec2 uv = c / W; vec2 e = vec2(P * 2.0) / W;
     h = texture2D(uHalo, uv).r;
-    sh = smoothstep(0.35, 0.65, texture2D(uShape, uv).r);
+    sh = texture2D(uShape, uv).r;
     vec2 g = vec2(texture2D(uHalo, uv + vec2(e.x, 0.0)).r - texture2D(uHalo, uv - vec2(e.x, 0.0)).r,
                   texture2D(uHalo, uv + vec2(0.0, e.y)).r - texture2D(uHalo, uv - vec2(0.0, e.y)).r);
     float gm = length(g);
     vec2 nrm = gm > 1e-4 ? g / gm : vec2(0.0);
     vec2 tng = vec2(-nrm.y, nrm.x);
-    float w = smoothstep(0.0, 0.5, h) * (1.0 - sh);
+    float w = smoothstep(0.0, 0.5, h);
     q = c - nrm * 70.0 * w + tng * 60.0 * w * (1.0 - w) * 4.0;
   }
 
@@ -126,13 +125,14 @@ void main(){
 
   float lo = 0.5;
   if (uMagnet > 0.5) {
-    // 2 · contours: the halo's levels, read as ripples moving outward, the noise roughening them.
-    float near = smoothstep(0.02, 0.25, h) * (1.0 - sh);
-    psi = mix(psi, h * 11.0 - uTime * 0.18 + 0.35 * n1, near);
-    // 3 · the current: diagonal bands racing through the strokes, a little noise in their front.
-    psi = mix(psi, (c.x * 0.8 + c.y * 0.6) / 22.0 - uTime * 0.45 + 0.5 * n2, sh);
-    // The ripples near and inside the shape run at higher contrast, so the drawing is evident.
-    lo = mix(0.5, 0.15, max(near, sh));
+    // ONE ripple field across the shape and round it, never two: its phase is a single continuous
+    // level map — the softened shape over the wide halo — so the ripples bunch at the outline,
+    // where that map is steepest, and run on through the strokes and out past them without a seam.
+    // They travel slowly outward, the noise roughening them as everywhere else.
+    float f = 0.6 * sh + 0.4 * h;
+    float near = smoothstep(0.02, 0.3, f);
+    psi = mix(psi, f * 12.0 - uTime * 0.18 + 0.35 * n1, near);
+    lo = mix(0.5, 0.2, near);
   }
 
   float line = 1.0 - smoothstep(0.0, 0.32, abs(fract(psi) - 0.5) * 2.0);
@@ -346,7 +346,7 @@ export function TextureFlow({
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(REACH));
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, shapeTex);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(3));
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(10));
         gl.uniform1f(U.magnet, 1);
         run2();
       };
