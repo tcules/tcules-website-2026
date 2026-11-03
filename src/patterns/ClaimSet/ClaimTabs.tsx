@@ -85,10 +85,15 @@ export function ClaimTabs({
     visible: false,
     stopped: true,
   });
+  /* Restarts the clock's frame loop, which ends whenever the clock cannot count. Called by whatever
+     can make it count again (coming into view, the pointer leaving, focus leaving) and by `stop`, so
+     the fill is cleared even while the loop is idle. */
+  const wake = useRef(() => {});
 
   const stop = useCallback(() => {
     clock.current.stopped = true;
     clock.current.elapsed = 0;
+    wake.current();
   }, []);
 
   /* The chosen tab's paper piece: one element that travels between tabs. */
@@ -217,7 +222,8 @@ export function ClaimTabs({
     };
   }, []);
 
-  /* The clock: a frame loop that only counts while every condition to run holds. */
+  /* The clock: a frame loop that runs only while every condition to count holds, and ends otherwise,
+     so an idle, finished or off-screen set costs no frames. */
   useEffect(() => {
     const c = clock.current;
     c.stopped =
@@ -225,10 +231,12 @@ export function ClaimTabs({
       matchMedia('(prefers-reduced-motion: reduce)').matches;
     let last = 0;
     let frame = 0;
+    const counting = () => !c.stopped && !c.hold && !c.focus && c.visible;
     const tick = (now: number) => {
+      frame = 0;
       const dt = last ? Math.min(now - last, 100) : 0;
       last = now;
-      if (!c.stopped && !c.hold && !c.focus && c.visible) {
+      if (counting()) {
         c.elapsed += dt;
         if (c.elapsed >= DWELL_MS) {
           c.elapsed = 0;
@@ -243,12 +251,17 @@ export function ClaimTabs({
         if (fill)
           fill.style.transform = `scaleX(${i === shown.current && !c.stopped ? c.elapsed / DWELL_MS : 0})`;
       });
-      frame = requestAnimationFrame(tick);
+      if (counting()) frame = requestAnimationFrame(tick);
+      else last = 0;
     };
-    frame = requestAnimationFrame(tick);
+    wake.current = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+    wake.current();
     const seen = new IntersectionObserver(
       ([entry]) => {
         c.visible = entry?.isIntersecting ?? false;
+        wake.current();
       },
       { threshold: 0.35 },
     );
@@ -261,6 +274,7 @@ export function ClaimTabs({
     document.addEventListener('selectionchange', selecting);
     return () => {
       cancelAnimationFrame(frame);
+      wake.current = () => {};
       seen.disconnect();
       document.removeEventListener('selectionchange', selecting);
     };
@@ -316,9 +330,15 @@ export function ClaimTabs({
       ref={stage}
       className={styles.stage}
       onPointerEnter={() => (clock.current.hold = true)}
-      onPointerLeave={() => (clock.current.hold = false)}
+      onPointerLeave={() => {
+        clock.current.hold = false;
+        wake.current();
+      }}
       onFocus={() => (clock.current.focus = true)}
-      onBlur={() => (clock.current.focus = false)}
+      onBlur={() => {
+        clock.current.focus = false;
+        wake.current();
+      }}
       onClick={(event) => {
         if ((event.target as Element).closest('a')) stop();
       }}
