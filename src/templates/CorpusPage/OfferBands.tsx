@@ -89,6 +89,7 @@ import {
   RelatedBand,
   SheetBand,
   TableBand,
+  withToolKeyLinks,
   TextBand,
   WhatYouGetBand,
   sheetParts,
@@ -875,8 +876,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* M15 — a comparison: a key column against rows, boxed. */
-    case 'table':
+    /* M15 — a comparison: a key column against rows, boxed. A table naming the page's free tools
+       links each to its tool and reads down on a phone (withToolKeyLinks). */
+    case 'table': {
+      const toolTable = withToolKeyLinks(page, band);
+      if (toolTable) return <TableBand band={toolTable} narrow="read-down" />;
       return ctx.scenes?.items[band.id] &&
         !sceneFor(ctx, band, 'agree') &&
         blocksOf(band, 'table').length > 0 ? (
@@ -894,6 +898,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           agreement={sceneFor(ctx, band, 'agree')}
         />
       );
+    }
 
     /* What you receive: a list of deliverables, with the product shot beside it. */
     /* What you receive — the deliverables as ONE offer (OfferSheet, as "What you get" on the service

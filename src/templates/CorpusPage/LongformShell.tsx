@@ -133,6 +133,19 @@ function withMethods(blocks: readonly CorpusBlock[]): Item[] {
   return out;
 }
 
+/**
+ * A paragraph that names a tool's marks: it tells the reader to mark each item and quotes three or
+ * more marks ('Mark each item "demonstrated", "simulated", "unknown" or "not applicable"'). The tool
+ * shell's rule is that a diagram follows it (treatment rules, 4 Nov 2026); a tool page whose marks
+ * paragraph has no scene registered warns in development, so a gap shows in the build rather than
+ * passing silently (tools critic, 4 Nov 2026).
+ */
+function namesMarks(text: string): boolean {
+  return (
+    /^(Mark|Give)\b/.test(text.trim()) && (text.match(/["“][^"”]+["”]/g) ?? []).length >= 3
+  );
+}
+
 /* ── Diagram slots ────────────────────────────────────────────────────────────── */
 
 /**
@@ -199,6 +212,18 @@ export function ArticleSection({
         (item) => item.type === 'paragraph' && plain(item.runs).includes(toolDiagram.after),
       )
     : -1;
+  if (tool && !isFaq && toolDiagramAt < 0 && process.env.NODE_ENV !== 'production') {
+    const marks = items.find(
+      (item) => item.type === 'paragraph' && namesMarks(plain(item.runs)),
+    );
+    if (marks) {
+      console.warn(
+        `ArticleSection: ${page.route}#${band.id} names its marks ("${plain(
+          (marks as Extract<Item, { type: 'paragraph' }>).runs,
+        ).slice(0, 60)}…") but has no diagram; register its scene in LongformPage TOOL_SCENES.`,
+      );
+    }
+  }
   if (tool) {
     const example = scenarioParts(band.blocks.filter((block) => block.type !== 'comment'));
     if (example.label) {
@@ -287,6 +312,7 @@ export function ArticleSection({
             table={item}
             labelledBy={headingIdOf(band)}
             term={page.pageType === 'defined_term' ? page.name : undefined}
+            {...(tool ? { narrow: 'read-down' as const } : {})}
           />,
         );
         break;
@@ -391,7 +417,14 @@ function exampleFlow(blocks: readonly CorpusBlock[], labelledBy: string): ReactN
     else if (block.type === 'list') flow += listHtml(block);
     else if (block.type === 'table') {
       flush();
-      out.push(<CorpusTable key={`table-${out.length}`} table={block} labelledBy={labelledBy} />);
+      out.push(
+        <CorpusTable
+          key={`table-${out.length}`}
+          table={block}
+          labelledBy={labelledBy}
+          narrow="read-down"
+        />,
+      );
     }
   }
   flush();
@@ -473,9 +506,12 @@ export function CorpusTable({
   term?: string;
 }) {
   const pick = termColumn(table, term);
+  narrow,
   if (pick >= 0) {
     return (
       <DataTable
+  /** DataTable's phone reading: a tool's worksheet reads down (4 Nov 2026); else the table scrolls. */
+  narrow?: 'scroll' | 'read-down';
         labelledBy={labelledBy}
         columns={table.header.map((cell) => ({ heading: plain(cell) }))}
         pickColumn={pick}
@@ -486,6 +522,7 @@ export function CorpusTable({
       />
     );
   }
+        {...(narrow ? { narrow } : {})}
   const [key = [], ...columns] = table.header;
   return (
     <DataTable
@@ -498,6 +535,7 @@ export function CorpusTable({
       }))}
     />
   );
+      {...(narrow ? { narrow } : {})}
 }
 
 /* ── The shell ────────────────────────────────────────────────────────────────── */

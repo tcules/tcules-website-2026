@@ -202,7 +202,15 @@ const NO_TOOL_SCENES: ToolShell = { stories: {}, diagrams: {} };
 function ToolArticlePage({ page }: { page: CorpusPage }) {
   return (
     <>
-      <CorpusHero page={page} texture />
+      {scene ? (
+        <CorpusHero page={page} arrangement="beside" media={{ type: 'sketch', name: scene }} />
+      ) : (
+        <CorpusHero page={page} texture />
+      )}
+  /* The tool's own scene in its hero (tools critic, 4 Nov 2026): the drawing its hub tile carries,
+     registered once by route (`serviceSceneFor`), so the page that IS the tool shows the picture the
+     card promised and the right half is not an empty fade. A tool with no scene keeps the end-fade. */
+  const scene = serviceSceneFor(page.route);
       <ArticleShell
         page={page}
         sections={formBeforeFaq(page.bands)}

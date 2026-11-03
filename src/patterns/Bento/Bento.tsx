@@ -333,8 +333,20 @@ export type ServiceTileProps = {
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
   /**
+   *
+   * As a CARD (not \`wide\`), \`start\` puts the visual at the head of the card: the drawing, then the
+   * title, body and fields, then the action at the foot (4 Nov 2026, the /tools directory: one tool
+   * tile for all six, the drawing heading each card at every width, as an icon heads its card). The
+   * default card keeps its words over the visual (decisions/2026-10-29-related-destination-is-a-card).
    * One line under the title, in the bento body role: what the destination is, where the copy says it
    * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
+  /**
+   * Labelled lines under the body, each its label in the mono label voice over its text: a router
+   * table's value columns carried by the tile that names the row ("Best for", "You leave with"; 4 Nov
+   * 2026, /tools), so a table that becomes tiles drops no column and no tile needs a second panel.
+   * Plain text, verbatim, in the table's column order. Absent renders nothing.
+   */
+  fields?: readonly { label: string; text: string }[];
    * engineer …"). Plain text, verbatim. Absent renders nothing.
    *
    * Several strings are several paragraphs, a \`text\` apart: a WIDE tile carrying the sentences that
@@ -368,9 +380,10 @@ export function ServiceTile({
   body,
 }: ServiceTileProps) {
   const paragraphs = (typeof body === 'string' ? [body] : (body ?? [])).filter((p) => p.trim());
-  const words = (
+  const named = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+  fields = [],
       <Title className={styles.title}>{title}</Title>
       {paragraphs.length === 1 ? <p className={styles.body}>{paragraphs[0]}</p> : null}
       {paragraphs.length > 1 ? (
@@ -389,6 +402,23 @@ export function ServiceTile({
   ) : scene ? (
     <div className={styles.art}>
       <Sketch name={scene} story />
+  /* The fields are a `text` set a `block` under the named words: head to body inside the card. */
+  const words =
+    fields.length > 0 ? (
+      <Layout rowGap="block">
+        {named}
+        <Layout rowGap="text">
+          {fields.map((field) => (
+            <Layout key={field.label} rowGap="inline">
+              <p className={styles.eyebrow}>{field.label}</p>
+              <p className={styles.body}>{field.text}</p>
+            </Layout>
+          ))}
+        </Layout>
+      </Layout>
+    ) : (
+      named
+    );
     </div>
   ) : null;
   const button = action?.trim() ? (
@@ -428,6 +458,14 @@ export function ServiceTile({
              the action pinned under it. */
           <Layout className={styles.fill} rowGap="block" fillLast>
             {words}
+        ) : side === 'start' && visual ? (
+          /* The visual heads the card, then the words, then the action pinned to the foot, so the
+             actions of cards sharing a row sit on one line. */
+          <Layout className={styles.fill} rowGap="block" pinLast={Boolean(button)}>
+            {visual}
+            {words}
+            {button}
+          </Layout>
             <Layout rowGap="block" fillFirst>
               {visual ?? <span />}
               {button}
@@ -491,12 +529,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   const mdSpan = mdCells % 2 === 1 ? 2 : 1;
 
   return (
-    <Layout
-      as="ul"
-      columns={{ base: 1, md: 2, lg: tracks }}
-      colGap="gutter"
-      rowGap="gutter"
-    >
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: tracks }} colGap="gutter" rowGap="gutter">
       {placed.map(({ item, span }, index) => (
         <li
           key={item.id}

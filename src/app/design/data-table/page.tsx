@@ -741,6 +741,33 @@ export default function DataTableSpecimenPage() {
               </div>
             </Specimen>
           </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+            <Specimen
+              title='Read down below 768 · narrow="read-down" · key + 3 data columns'
+              note="A worksheet a reader works through (the tools, 4 Nov 2026; proposed). Below 768 each row is one block in the same box: the key as its title, each value under its column head in the mono label voice. From 768 it is the boxed table, unchanged. Resize the window below 768 to see it; the 326 track here is the table at 1440."
+            >
+              <div className={s.trackMobile}>
+                <DataTable {...THREE_COLUMNS} narrow="read-down" />
+              </div>
+            </Specimen>
+            <Specimen
+              title="Read down · keyless peers with a picked column, and a picked row"
+              note="Keyless: no title, every column a labelled value. The picked column's label takes the pick ink; a picked row keeps its ground and bar."
+            >
+              <div className={s.trackMobile}>
+                <Layout rowGap="stack">
+                  <DataTable {...PEERS} pickColumn={2} narrow="read-down" />
+                  <DataTable
+                    {...ROUTE_TABLE}
+                    rows={ROUTE_TABLE.rows.map((row, i) =>
+                      i === 1 ? { ...row, pick: true } : row,
+                    )}
+                    narrow="read-down"
+                  />
+                </Layout>
+              </div>
+            </Specimen>
+          </Layout>
           <Specimen
             title="The 392 three-up track"
             note="The brief’s open question: a five-column table in a three-up grid. Each frame scrolls inside its own track; the grid does not widen."

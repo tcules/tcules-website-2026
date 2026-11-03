@@ -11,6 +11,7 @@ import {
   Media,
   RatingBadge,
   Section,
+  Sketch,
   Stat,
   Tag,
   Texture,
@@ -20,6 +21,7 @@ import {
   type ClipRendition,
   type MediaRatioSpec,
   type SectionSurface,
+  type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
@@ -194,7 +196,18 @@ export type HeroVideo = {
  * at the CALL SITE, on 129 routes, in a tier whose whole job is composition. The two renderings
  * are a closed set and the component owns them.
  */
-export type HeroMedia = HeroImage | HeroVideo | HeroScene | HeroClip;
+export type HeroMedia = HeroImage | HeroVideo | HeroScene | HeroClip | HeroSketch;
+
+/**
+ * A flat Sketch drawing on its dotted plate (4 Nov 2026, the tool pages: each tool's hero carries
+ * the scene its hub tile draws, so the page that IS the tool shows the picture the card promised).
+ * An illustration in every sense the split reads: no edge of its own beyond the plate, centred on
+ * the copy, the drawing's third from 1024. `name` is a registered scene, never markup.
+ */
+export type HeroSketch = {
+  type: 'sketch';
+  name: SketchName;
+};
 
 /**
  * An animated drawing from the site's own files (owner, 2 Nov 2026, the home hero): the Arena,
@@ -861,7 +874,9 @@ export function PageHero({
      illustration has no box, so the copy is centred on it and the two read as one pair; a
      photograph, a capture or a video has an edge, so the h1 and that top edge share a line. */
   const isIllustration =
-    (media?.type === 'image' && media.image.kind === 'illustration') || media?.type === 'scene';
+    (media?.type === 'image' && media.image.kind === 'illustration') ||
+    media?.type === 'scene' ||
+    media?.type === 'sketch';
   const isPhotograph = media?.type === 'image' && media.image.kind === 'photograph';
   const centred = split && isIllustration;
 
@@ -1240,7 +1255,9 @@ export function PageHero({
       />
     ) : null;
   const mediaNode =
-    media === undefined ? null : media.type === 'scene' ? (
+    media === undefined ? null : media.type === 'sketch' ? (
+      <Sketch name={media.name} />
+    ) : media.type === 'scene' ? (
       <Arena
         src={HERO_SCENES[media.scene]}
         label={media.title}

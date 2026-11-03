@@ -17,11 +17,12 @@
   max-inline-size: var(--measure-body);
 }
 
-/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026): held to the
-   lead measure so a 16:9 plate reads with the words it follows and never fills the column with
-   dotted ground. */
+/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026). It takes the
+   column at its own ratio, the example panel's width, so it no longer hangs at the left of the column
+   with an empty right half (tools critic, 4 Nov: held to the lead measure it left ~400 of white
+   beside every plate). */
 .diagram {
-  max-inline-size: var(--measure-lead);
+  min-inline-size: 0;
 }
 
 .proofLine {
@@ -198,4 +199,19 @@
   .sheetTable {
     display: block;
   }
+}
+
+/* A tool group's head inside the joined directory band (CopyBands ToolGroupsBand, 4 Nov 2026): the
+   authored h2, set at the h3 scale because it heads a group of one or two tiles inside a band rather
+   than a band of its own (the /expertise group heads are h3). */
+.groupHeading {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* A set of tool tiles fills the height its group leaves under the head, so tiles in groups sharing a
+   row end on one line (CopyBands ToolTiles). Sizing only. */
+.fillHeight {
+  block-size: 100%;
 }
