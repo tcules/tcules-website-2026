@@ -298,6 +298,12 @@ const SPECIALIST_BY_ROUTE: Readonly<
   '/audits/design-to-code-audit': 'specialist-design-to-code-audit',
   '/tools/design-system-drift-checker': 'specialist-drift-checker',
   '/tools/prototype-readiness-checklist': 'specialist-prototype-readiness-checklist',
+  /* The other four tools, each drawn from its own page's argument (4 Nov 2026, the /tools hub tiles;
+     components/Sketch/wyg-tools.tsx). */
+  '/tools/ai-product-ux-readiness-check': 'specialist-ai-readiness-check',
+  '/tools/ai-trust-control-canvas': 'specialist-ai-trust-canvas',
+  '/tools/figma-storybook-fidelity-checklist': 'specialist-fidelity-checklist',
+  '/tools/audit-redesign-modernise-rebuild': 'specialist-rebuild-worksheet',
 };
 
 /**
