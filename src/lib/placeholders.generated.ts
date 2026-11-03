@@ -107,6 +107,22 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Product Design at the centre of the studio: Tcules designers and engineers modelling a product together at a wall in the Ahmedabad studio. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: three short paragraphs beside it).',
   },
+  '/audits/ai-product-ux-readiness#hero': {
+    src: '/placeholders/audits-ai-product-ux-readiness--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'An AI feature about to reach every user, pushed where it is unsure: its output, the source it should show, the check and the undo a person needs, and the places where the person cannot yet tell or reverse what the AI did, marked before launch.',
+  },
+  '/audits/design-system-audit#hero': {
+    src: '/placeholders/audits-design-system-audit--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One shared component followed from the product need through Figma, code and the live product, its local copies and workarounds beside it, the point where it first breaks marked and the reason teams go around it shown.',
+  },
   '/audits/design-to-code-audit#deliverables': {
     src: '/placeholders/audits-design-to-code-audit--deliverables.svg',
     width: 1280,
@@ -130,6 +146,30 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'studio photo',
     shows:
       'A Tcules design engineer with the Figma file and the repository open together, following a gap back to where it started.',
+  },
+  '/audits/product-modernisation-assessment#hero': {
+    src: '/placeholders/audits-product-modernisation-assessment--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'An established product split into its areas, each given one of five answers (keep, simplify, redesign, new platform, rebuild or retire), the workflows customers rely on held intact, and the order of work set by what depends on what.',
+  },
+  '/audits/prototype-readiness-review#hero': {
+    src: '/placeholders/audits-prototype-readiness-review--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "Fallback only: the page's hero is the worked-example film (storyboard v14c, `hero-clips.ts`). A prototype's one key flow, from sign-up to first payment, run the way real users will: the happy path holding, the cases a demo skips (a failed card, a double tap, a locked-out user) lit where they break, before the first paying customer.",
+  },
+  '/audits/ux-product-audit#hero': {
+    src: '/placeholders/audits-ux-product-audit--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "One workflow in a live product walked role by role, the places people stall marked, each traced to its cause and the causes ranked by harm, so a team that disagreed about why can agree what to fix first. Audits page set (4 Nov 2026): one illustration per audit, as the /audits hub's.",
   },
   '/case-studies#designed-and-built:the-wandering-raven': {
     src: '/placeholders/case-studies--designed-and-built--the-wandering-raven.svg',

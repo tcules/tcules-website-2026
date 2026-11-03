@@ -207,3 +207,20 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).
 - **A group head told as "Label: statement"** ("By product type: what your product does") sets the label as the
   group's eyebrow and the statement as its h3, first letter raised. A head with no colon stays one h3.
+
+## Added 4 Nov 2026 (/audits, the 3 Nov outline; proposed until the owner sees the pages)
+
+- **A worked example that carries a table is a page of the report** (kind `example`, ReportBand): the band on
+  tint, one paper page on it holding everything the example is, in order — its italic label in the mono label
+  voice, the scenario, the sheet, the reading. A column of statuses takes its marks; a column whose values a
+  key after the table defines is set in the label voice, and the key is the page's legend under the reading.
+  A trailing case link is the band's head action at the heading's end. A worked example told as bold-led
+  story rows stays `record` (CaseSpread). Below 768 the sheet reads down, each row's key its title.
+- **An option table takes the split tiles from two rows**, and **a split tile left alone on the last row takes
+  the whole row** (its drawing beside its words, the panel the last third). Never a split tile beside a hole.
+- **One named offer on its own under a heading is its wide service tile** (name, the copy's sentence beside
+  it, its drawing, the action for what it opens), never one ruled row beside the head.
+- **A hero line that redirects the wrong reader** ("Already live with customers? See …") keeps its authored
+  place after the ask, in the proof-line voice; it is never suppressed with the "Selected work" line.
+- **A text band about who carries the work on** reuses a studio photograph by plan (images.ts
+  `STUDIO_BAND`), its closing "→" link a link row under the words.
