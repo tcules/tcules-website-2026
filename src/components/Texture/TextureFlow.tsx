@@ -105,8 +105,8 @@ void main(){
     float gm = length(g);
     vec2 nrm = gm > 1e-4 ? g / gm : vec2(0.0);
     vec2 tng = vec2(-nrm.y, nrm.x);
-    float w = smoothstep(0.0, 0.6, h);
-    q = c - nrm * 70.0 * w + tng * 45.0 * w * (1.0 - w) * 4.0;
+    float w = smoothstep(0.0, 0.5, h);
+    q = c - nrm * 160.0 * w + tng * 110.0 * w * (1.0 - w) * 4.0;
   }
 
   vec2 T = vec2(W.x + 900.0, W.y * 0.5);
@@ -290,7 +290,7 @@ export function TextureFlow({
       return null;
     })();
     /* How far the warp reaches past the outline, as the halo's blur, in CSS px. */
-    const REACH = 40;
+    const REACH = 72;
     let shapeRun = 0;
     /* Rasterise the attractor's SVG into the map, blurred, at the field's CSS size and the shape's
        offset in it. Drawn white so the maps read their red channel; an unbound sampler reads 0 there,

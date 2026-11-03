@@ -45,7 +45,10 @@
  nothing to layout height, so a scaled mark paints outside the document and cannot be scrolled
  to. This is a real height, so the band grows to hold it. */
   --foot-watermark-size: var(--space-160);
-  --foot-watermark-opacity: var(--opacity-faint);
+  /* 0.02, below the system's faint step (owner, 4 Nov 2026): the mark is barely there, so the
+     field bending round it is what shows where it is. One component's value, so it stays here
+     rather than becoming a primitive nothing else reads. */
+  --foot-watermark-opacity: 0.02;
 
   /* The moving field under the watermark (owner, 4 Nov 2026). Its box is the watermark's height
      plus the stack above it plus a gutter, so its top sits just over the legal line and the mask —
