@@ -273,6 +273,11 @@ const SPECIMENS = [
         note: 'what you get as four rows in a label column — the deliverables as a drawn strip, then who does the work, what we need and where our part stops each a 16:9 drawing beside its words; five, four and six deliverables, two parts, one part, an undrawn part, tint',
       },
       {
+        href: '/design/collage',
+        name: 'Collage',
+        note: "a band's words in one corner and six studio photographs round them in an L — /about's Ahmedabad studio with the owner's crops, one paragraph, four paragraphs (stress), tint",
+      },
+      {
         href: '/design/bento',
         name: 'Bento',
         note: 'linked tiles of two sizes on four tracks over one continuous texture per row — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',

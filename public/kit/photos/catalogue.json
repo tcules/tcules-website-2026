@@ -2289,5 +2289,193 @@
       652,
       320
     ]
+  },
+  {
+    "file": "studio-team-group-a.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "The whole Tcules team standing together under the studio sign, in front of the whiteboard wall and projector screen",
+    "mood": "together, celebratory, warm light",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "hero-beside",
+      "feature-media",
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.13,
+      "sat": 0.336
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-desks-plants-b.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A desk row in the studio with plants and monitors, people at work at their screens",
+    "mood": "everyday, focused, calm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.3,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "collage",
+      "feature-media"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.1,
+      "sat": 0.267
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-sticky-wall-sorting.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "Two people sorting a dense wall of colour sticky notes on a whiteboard, one pointing",
+    "mood": "working session, close, bright",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "collage",
+      "feature-media",
+      "card"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.15,
+      "sat": 0.287
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-book-showing-c.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A designer at the studio table holding up an open notebook to explain an idea, others around",
+    "mood": "conversation, candid",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.7,
+      "y": 0.45
+    },
+    "bestPlacements": [
+      "collage",
+      "card"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.116,
+      "sat": 0.245
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-desk-monitor-corner.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A quiet corner of the studio: desks, monitors and chairs, no one in shot",
+    "mood": "quiet, place, calm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.026,
+      "sat": 0.192
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-desk-analyst-portrait.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A person at a studio desk with a chart on the monitor, the studio mural behind",
+    "mood": "focused, everyday",
+    "orientation": "portrait",
+    "width": 1800,
+    "height": 2400,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "collage",
+      "feature-media",
+      "hero-beside"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the About studio collage, 3 Nov 2026.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.072,
+      "sat": 0.26
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   }
 ]

@@ -13,6 +13,8 @@ import {
   type MediaImage,
 } from '@/components';
 import {
+  Collage,
+  type CollagePhotos,
   Banner,
   Bento,
   BlockCardSet,
@@ -379,6 +381,30 @@ const STUDIO_PHOTOS: readonly ((page: CorpusPage) => MediaImage)[] = [
     }),
 ];
 
+/**
+ * The Ahmedabad studio's collage: six of the November studio photographs, each tile's photo, focal
+ * point and zoom as the owner picked them (3 Nov 2026). Only the lead says what it shows; the rest
+ * are the studio's atmosphere around it and carry the decorative empty alt (ch05 §7).
+ */
+const STUDIO_COLLAGE: CollagePhotos = {
+  lead: {
+    image: getKitPhoto('studio-team-group-a', {
+      alt: 'The Tcules team together in the Ahmedabad studio',
+    }),
+    focus: { x: 0.3, y: 0.75 },
+    zoom: 1.2,
+  },
+  start: { image: getKitPhoto('studio-desks-plants-b'), focus: { x: 0.19, y: 0.66 }, zoom: 1.2 },
+  middle: { image: getKitPhoto('studio-sticky-wall-sorting'), focus: { x: 0.5, y: 0.5 } },
+  middleStart: { image: getKitPhoto('studio-book-showing-c'), focus: { x: 0.8, y: 0.5 } },
+  middleEnd: {
+    image: getKitPhoto('studio-desk-monitor-corner'),
+    focus: { x: 0.5, y: 0.57 },
+    zoom: 1.25,
+  },
+  end: { image: getKitPhoto('studio-desk-analyst-portrait'), focus: { x: 0.5, y: 0.5 } },
+};
+
 function LeadershipBand({ page, band: b }: AboutBandProps) {
   const blocks = b.blocks.filter((block) => block.type !== 'comment');
   const lead = blocks[0]?.type === 'paragraph' ? plain(blocks[0].runs) : undefined;
@@ -419,6 +445,28 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           studio's other places, so they leave the story for a block of their own. */}
       {studio.map((item, index) => {
         const photo = STUDIO_PHOTOS[index];
+        const body = <Prose html={paragraphRuns(item.blocks).map(html).join('')} />;
+        if (index === 0) {
+          /* The Ahmedabad studio: its words in the corner of a collage of the studio itself (owner,
+             3 Nov 2026, mock "Studio collage", Direction A as revised; photos, crops and zoom picked
+             by the owner in the collage picker). */
+          return (
+            <Section
+              key={item.headingText}
+              id={`${b.id}-${index + 2}`}
+              data-band="B-collage"
+              aria-labelledby={`${b.id}-${index + 2}-heading`}
+            >
+              <Collage
+                heading={item.headingText}
+                headingId={`${b.id}-${index + 2}-heading`}
+                photos={STUDIO_COLLAGE}
+              >
+                {body}
+              </Collage>
+            </Section>
+          );
+        }
         return (
           <ContentSection
             key={item.headingText}
@@ -433,9 +481,7 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
               weight: 'photo',
             }}
           >
-            <ContentSectionText>
-              <Prose html={paragraphRuns(item.blocks).map(html).join('')} />
-            </ContentSectionText>
+            <ContentSectionText>{body}</ContentSectionText>
           </ContentSection>
         );
       })}
