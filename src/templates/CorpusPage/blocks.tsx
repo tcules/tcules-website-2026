@@ -741,6 +741,7 @@ export function EnquiryBand({
         islandArrangement="halves"
         inBand={island.inBand}
         footnote={footnote}
+        footnoteIcon="shield-check"
         islandTexture="flow"
         art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}
@@ -756,6 +757,7 @@ export function EnquiryBand({
       data-band="L"
       island={surface}
       footnote={footnote}
+      footnoteIcon="shield-check"
       islandTexture="frame"
       art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}

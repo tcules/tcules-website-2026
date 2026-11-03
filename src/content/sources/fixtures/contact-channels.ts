@@ -29,7 +29,7 @@ export const CONTACT_CHANNELS: readonly ContactChannel[] = [
   { kind: 'careers', title: 'Looking to work with us?', href: ROUTES.careers, action: 'Careers' },
 ];
 
-/** The live page's "Follow us on", its four profiles, and the studio address under them. */
+/** The live page's "Follow us on" and its four profiles. The address is not part of it (owner, 3 Nov 2026). */
 export const CONTACT_FOLLOW: ContactFollow = {
   heading: 'Follow us on',
   links: [
@@ -38,5 +38,4 @@ export const CONTACT_FOLLOW: ContactFollow = {
     { label: 'Instagram', href: EXTERNAL.instagram },
     { label: 'X', href: EXTERNAL.x },
   ],
-  address: STUDIO_ADDRESS,
 };

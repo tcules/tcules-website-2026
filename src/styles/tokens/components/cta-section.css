@@ -19,6 +19,10 @@
   /* The lede's mark (`mark`): a bare glyph at 40, the eye's entry into the close. A component size,
      read from the space ramp because no gap step names a glyph's box. */
   --cta-mark-size: var(--space-40);
+  /* The footnote's leading glyph (owner, 3 Nov 2026) and the line box it centres in: the small
+     body's size and line height, so the glyph sits on the footnote's first line. Component sizes. */
+  --cta-footnote-glyph: var(--icon-size-16);
+  --cta-footnote-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
   /* The OFFER's heading — the K band only (`.heading`). h2, because the offer interrupts a page
