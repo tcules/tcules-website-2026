@@ -228,6 +228,14 @@
   }
 }
 
+/* `frame="none"`: a wide tile on the band's own ground, no hairline and no inset, so its words and
+   plate sit on the content column's edges as a media row does. After the wide inset (same
+   specificity, later), and the hover's edge below is cancelled for it there. */
+.tile.tileBare {
+  padding: 0;
+  border-color: transparent;
+}
+
 /* ── States ─────────────────────────────────────────────────────────────────
    Hover and keyboard focus, one curve both ways: the tile lifts, its hairline turns blue, its title
    takes the accent and its drawing tells its story. Keyboard gets the ring as well. Only a LINKED tile moves: a tile with no
@@ -235,6 +243,11 @@
 a.tile:is(:hover, :focus-visible) {
   transform: translateY(calc(-1 * var(--bnt-lift)));
   border-color: var(--bnt-rule-ink-hover);
+}
+
+/* A bare wide tile (`frame="none"`) has no edge to turn blue: it lifts and its title takes the accent. */
+a.tile.tileBare:is(:hover, :focus-visible) {
+  border-color: transparent;
 }
 
 a.tile:is(:hover, :focus-visible) .title {

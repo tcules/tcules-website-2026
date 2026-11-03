@@ -1717,7 +1717,9 @@ export function RelatedBand({ band }: { band: CorpusBand }) {
   /* One named offer on its own (/audits `prototype`: the sixth audit, kept apart from the chooser) is
      that offer's service tile, a whole row under the band's heading (named-services-are-service-tiles;
      media-rows-take-a-whole-row): its name, the sentence the copy sets beside it, its own drawing and
-     the action for what it opens. Words unchanged. 4 Nov 2026. */
+     the action for what it opens. Words unchanged. 4 Nov 2026. It sits on the band's ground with no
+     box (ServiceTile `frame="none"`): one item a row needs none, and boxed it read as a stray sixth
+     tile under the chooser's full-row tile (critic, audits run, 4 Nov 2026). */
   const [only] = entries;
   const onlyScene = entries.length === 1 && only?.href ? serviceSceneFor(only.href) : undefined;
   if (only?.href && onlyScene && !only.bodyHtml) {
@@ -1732,6 +1734,7 @@ export function RelatedBand({ band }: { band: CorpusBand }) {
               scene={onlyScene}
               action={tileActionFor(only.href)}
               wide
+              frame="none"
             />
           </li>
         </Layout>

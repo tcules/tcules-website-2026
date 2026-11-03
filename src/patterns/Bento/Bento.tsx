@@ -350,6 +350,15 @@ export type ServiceTileProps = {
    * Plain text, verbatim, in the table's column order. Absent renders nothing.
    */
   fields?: readonly { label: string; text: string }[];
+  /**
+   * With `wide`, whether the tile draws its hairline box. `hairline` (default): the card. `none`: a
+   * lone offer on its own band, one item a row, set on the band's ground as a media row (no box, no
+   * inset), so it reads as the band's own offer rather than one more tile of the set above it (critic,
+   * audits run, 4 Nov 2026: /audits' Prototype Readiness Review sat 100 under the chooser's full-row
+   * split tile, two boxed rows in two dialects; one item a row needs no box, no-ruled-cards). The
+   * whole row stays the one anchor and lifts on hover; no edge appears on hover either.
+   */
+  frame?: 'hairline' | 'none';
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
   /**
@@ -387,6 +396,7 @@ export function ServiceTile({
   titleAs: Title = 'h3',
   body,
   fields = [],
+  frame = 'hairline',
 }: ServiceTileProps) {
   const paragraphs = (typeof body === 'string' ? [body] : (body ?? [])).filter((p) => p.trim());
   const named = (
@@ -444,6 +454,7 @@ export function ServiceTile({
           styles.tile,
           wide && styles.tileWide,
           wide && side === 'start' && styles.visualStart,
+          wide && frame === 'none' && styles.tileBare,
         )}
         data-btn-link-group
       >

@@ -712,6 +712,38 @@ export default function BentoSpecimen() {
         </Layout>
       </Section>
       <Variation
+        id="tile-bare"
+        title="9d · ServiceTile wide, no box — a lone offer on its own band"
+        note="`frame=&quot;none&quot;`: one item a row on the band's ground, no hairline and no inset, so the words and plate sit on the content column's edges as a media row does; it still lifts and its title takes the accent on hover, with no edge appearing (critic, audits run, 4 Nov 2026: /audits' Prototype Readiness Review under the chooser's full-row split tile). Wide only. Shortest and longest real copy, the visual at the end and at the start."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype Readiness Review"
+              body="A senior designer and an engineer put one key flow through real use and show you what breaks before launch."
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the audit"
+              wide
+              frame="none"
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body="Shared components teams use."
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="Explore the service"
+              wide
+              visual="start"
+              frame="none"
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
         id="cta"
         title="2c · Seven peers and two cards on three tracks (9 cells)"
         note="`cta`: one dotted card per question, each a normal cell: its question, its sentence, then its destinations as arrow links pinned to the foot; no fill, no drawing, no outline button. Tracks are chosen so tiles plus cards fill whole rows; where 3 and 4 both leave a hole, the last card takes what its row leaves. Seven tiles and two cards are nine cells: three full rows."
