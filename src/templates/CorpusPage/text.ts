@@ -131,6 +131,23 @@ export function linksIn(runs: readonly InlineRun[]): Extract<InlineRun, { type: 
 /** Plain text of runs. */
 export const plain = inlineToText;
 
+/** The most words a Statement's line carries: "Without a named choice to inform, a map becomes wall
+    art." is 11; "Left unchecked, it can turn one shared system back into several parallel ones." 13. */
+const STATEMENT_WORDS = 16;
+
+/**
+ * Whether a paragraph can be a Statement (glossary critic, 4 Nov 2026; treatment rules): ONE short
+ * line the page stands on, with no link of its own. A Statement is set near title scale, so a
+ * paragraph of several sentences promoted to it is a wall of serif bigger than every h2 on the page
+ * (ux-debt ran 10 lines at 1440), and it takes no inline links, so a linked sentence promoted to it
+ * lost its links (agentic-ux). Anything else stays prose at body size, its links kept.
+ */
+export function isStatementLine(runs: readonly InlineRun[]): boolean {
+  if (hasLink(runs)) return false;
+  const words = plain(runs).trim().split(/\s+/).filter(Boolean);
+  return words.length > 0 && words.length <= STATEMENT_WORDS;
+}
+
 export function blocksOf<T extends CorpusBlock['type']>(
   band: CorpusBand,
   type: T,

@@ -4,13 +4,7 @@ import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib
 import { glossarySceneFor } from '@/lib/sketches';
 import { BlockCard } from '@/patterns';
 
-import { ListingGrid } from './compositions';
-import type {
-  ListingClosing,
-  ListingHero,
-  ListingLead,
-  ListingSection,
-} from './ListingIndex';
+import type { ListingClosing, ListingHero, ListingLead, ListingSection } from './ListingIndex';
 
 /* ── The glossary hub as a listing ───────────────────────────────────────────────────
    The glossary is the listing family's term index (cms-templates: glossary_hub beside knowledge_hub
@@ -18,7 +12,7 @@ import type {
    title across the column, the lede beside it and the texture field, then the rail beside the term
    groups. What this file adds is the answer to "what goes in a section" for terms: each term a drawn
    card, its own scene on the plate (`glossarySceneFor`), the term as the title and its one-line
-   definition as the body, each group opening on its lead as the insights hub's groups do. Every word
+   definition as the body, every term the same card in full rows (peers, equal weight). Every word
    is the copy's. */
 
 type Link = Extract<InlineRun, { type: 'link' }>;
@@ -46,7 +40,10 @@ function termOf(runs: readonly InlineRun[]): Term | null {
 function splitAtLink(body: readonly InlineRun[]): { card: string; rest: InlineRun[] | null } {
   const at = body.findIndex((run) => run.type !== 'text');
   if (at < 0) return { card: inlineToText(body).trim(), rest: null };
-  const before = body.slice(0, at).map((run) => (run.type === 'text' ? run.text : '')).join('');
+  const before = body
+    .slice(0, at)
+    .map((run) => (run.type === 'text' ? run.text : ''))
+    .join('');
   const stop = before.lastIndexOf('. ');
   if (stop < 0) return { card: inlineToText(body).trim(), rest: null };
   return {
@@ -77,80 +74,73 @@ const railLabelOf = (heading: string) => {
   return at > 0 ? heading.slice(0, at).trim() : undefined;
 };
 
-/** The lead's action, in the verb a term takes (the insights lead's `ACTION`, for a definition). */
-const TERM_ACTION = 'Read the definition';
-
 type TermEntry = { term: Term; card: string };
 
 /** One term as the site's card: its own scene on the plate, the term as the title, the definition as
     the body. The SAME card at every placement (a term page's related terms set it at this step too). */
-function TermCard({
-  entry: { term, card },
-  orientation = 'vertical',
-  imageSide,
-}: {
-  entry: TermEntry;
-  orientation?: 'vertical' | 'horizontal';
-  imageSide?: 'left' | 'right';
-}) {
+function TermCard({ entry: { term, card }, tracks }: { entry: TermEntry; tracks: 2 | 3 }) {
   const scene = glossarySceneFor(term.link.href);
-  const shared = {
-    title: inlineToText(term.link.children),
-    body: capitalised(card),
-    href: term.link.href,
-    titleAs: 'h3' as const,
-    ...(scene ? { media: { type: 'sketch' as const, name: scene } } : {}),
-  };
   /* No `compact`: that is the insights card's phone row, which drops the standfirst. A term card's
      definition IS its content, so on a phone it stacks as plate, title, definition. */
-  return orientation === 'horizontal' ? (
+  return (
     <BlockCard
-      {...shared}
-      orientation="horizontal"
-      imageSide={imageSide}
-      size="lg"
-      tracks={2}
-      cue="cta"
-      ctaLabel={TERM_ACTION}
-      split="grid"
+      title={inlineToText(term.link.children)}
+      body={capitalised(card)}
+      href={term.link.href}
+      titleAs="h3"
+      {...(scene ? { media: { type: 'sketch' as const, name: scene } } : {})}
+      size="sm"
+      tracks={tracks}
+      cue="title"
     />
-  ) : (
-    <BlockCard {...shared} size="sm" tracks={3} cue="title" />
   );
 }
 
 /**
- * One group, in the listing's own group shape (decisions/2026-10-22-listings-share-one-structure;
- * the insights hub's Feature): its first term as the horizontal lead, the drawing across two thirds
- * and the definition in the third, then the rest as cards in rows of three. A group never ends on a
- * lone card under a row: where one term would be left over (a group of two, or of five), it closes
- * the group as a second horizontal card with its drawing on the other side, so the group opens and
- * closes on the same wide shape and every row in between is full (or two of three tracks, as the
- * insights grid sets a pair).
+ * A group's terms as full rows: threes, closing on a pair where a row would be left short (a group
+ * of four is two pairs, of five a three and a pair, of seven a three and two pairs). Every row is
+ * filled across the column, so no group ends on a row two thirds full.
+ */
+export function termRows<T>(items: readonly T[]): T[][] {
+  const rows: T[][] = [];
+  let at = 0;
+  while (at < items.length) {
+    const left = items.length - at;
+    const size = left === 4 || left === 2 ? 2 : left === 1 ? 1 : 3;
+    rows.push(items.slice(at, at + size));
+    at += size;
+  }
+  return rows;
+}
+
+/**
+ * One group (glossary critic, 4 Nov 2026): its terms are PEERS, so every term is the same vertical
+ * drawn card, none promoted (service-page-round1: "a set of peers gets equal weight"). The insights
+ * hub's featured-then-list shape opened every group on a horizontal lead and closed the five-term
+ * groups on a second one as a row filler, so the band's weight went to terms by their place in the
+ * list and every group squinted the same. Rows of three, re-tracked to two where the count leaves a
+ * pair (`termRows`), so each row fills the column.
  */
 function TermGroup({ terms }: { terms: readonly TermEntry[] }) {
-  const [lead, ...rest] = terms;
-  const tail = rest.length % 3 === 1 ? rest[rest.length - 1] : undefined;
-  const grid = tail ? rest.slice(0, -1) : rest;
   return (
     <Layout rowGap="column">
-      {lead ? (
-        <ul>
-          <TermCard entry={lead} orientation="horizontal" />
-        </ul>
-      ) : null}
-      {grid.length > 0 ? (
-        <ListingGrid>
-          {grid.map((entry) => (
-            <TermCard key={entry.term.link.href} entry={entry} />
+      {termRows(terms).map((row) => (
+        <Layout
+          key={row[0]?.term.link.href}
+          as="ul"
+          columns={{ md: row.length === 2 ? 2 : 3 }}
+          colGap="gutter"
+          rowGap="column"
+        >
+          {row.map((entry) => (
+            <TermCard
+              key={entry.term.link.href}
+              entry={entry}
+              tracks={row.length === 2 ? 2 : 3}
+            />
           ))}
-        </ListingGrid>
-      ) : null}
-      {tail ? (
-        <ul>
-          <TermCard entry={tail} orientation="horizontal" imageSide="right" />
-        </ul>
-      ) : null}
+        </Layout>
+      ))}
     </Layout>
   );
 }

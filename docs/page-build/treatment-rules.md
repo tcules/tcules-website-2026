@@ -239,3 +239,21 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   a bold-led numbered method is Steps; the worked example is the tint example panel, its words beside the
   story drawing from 1440, any table it carries at the panel's full width; a diagram follows the paragraph
   naming its marks, at the column's width (a marks paragraph with no diagram warns in development); the band sending the reader on stays prose with inline links.
+
+## Added 4 Nov 2026 (/glossary and the term pages; proposed until the owner sees the pages)
+
+- **A Statement holds one short line, never a paragraph** (`isStatementLine`: no link, at most 16 words). A
+  paragraph promoted to a Statement is a wall of near-title serif larger than every h2 on the page, and the
+  Statement drops its links. Anything longer stays prose at body size, its links kept. A term page's drawing
+  stands beside its definition in the hero, so it is in the same place whether or not the page has a statement.
+- **A set of peers gets equal weight in a listing too**: the glossary's terms are each the same vertical drawn
+  card, in rows of three re-tracked to two where the count leaves a pair (`termRows`: 4 = 2 + 2, 5 = 3 + 2), so
+  no row is left two thirds full. A horizontal lead is for a featured item (the insights hub's newest piece),
+  never a term promoted by its place in the list or a horizontal used to fill a row.
+- **A term's comparison table reads down on a phone** (DataTable `narrow="read-down"`, as a tool's worksheet):
+  the term's own column is the table's point and was the one cut behind the scroll fade at 390.
+- **A term page closes in one shape**: the close's sentences as running text with their links, then the
+  destination's wide service tile across the row. Never a per-page choice between sentences inside the tile and
+  prose beside a narrow tile.
+- **A listing rail with one view collapses on a phone** to the section-in-view button that opens the jump list
+  (IndexRail), never a sideways line of group names cut at the edge.

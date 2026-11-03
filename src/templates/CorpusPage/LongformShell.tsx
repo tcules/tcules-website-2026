@@ -312,7 +312,13 @@ export function ArticleSection({
             table={item}
             labelledBy={headingIdOf(band)}
             term={page.pageType === 'defined_term' ? page.name : undefined}
-            {...(tool ? { narrow: 'read-down' as const } : {})}
+            /* A tool's worksheet reads down on a phone, and so does a TERM's table (glossary critic,
+               4 Nov 2026): its comparison's point is the term's own column, and scrolled it was the
+               one cut, behind a fade at 390. Below 768 each row is one block, every column's value
+               under its head, the term's head in the pick ink. */
+            {...(tool || page.pageType === 'defined_term'
+              ? { narrow: 'read-down' as const }
+              : {})}
           />,
         );
         break;
@@ -460,14 +466,21 @@ function ToolExample({
       {exampleFlow(before, labelledBy)}
       <ExamplePanel intro={[]} labelledBy={labelledBy}>
         <Layout rowGap="stack">
-          <Layout columns={{ base: 1, xl: [1, 1] }} colGap="section" rowGap="stack" align="center">
+          <Layout
+            columns={{ base: 1, xl: [1, 1] }}
+            colGap="section"
+            rowGap="stack"
+            align="center"
+          >
             <Layout rowGap="block">
               <p className={styles.legend}>{label}</p>
               {exampleFlow(words, labelledBy)}
             </Layout>
             <Sketch name={scene} />
           </Layout>
-          {tail.length > 0 ? <Layout rowGap="block">{exampleFlow(tail, labelledBy)}</Layout> : null}
+          {tail.length > 0 ? (
+            <Layout rowGap="block">{exampleFlow(tail, labelledBy)}</Layout>
+          ) : null}
         </Layout>
       </ExamplePanel>
     </Layout>
@@ -499,22 +512,23 @@ export function CorpusTable({
   table,
   labelledBy,
   term,
+  narrow,
 }: {
   table: TableBlock;
   labelledBy: string;
+  /** DataTable's phone reading: a tool's worksheet reads down (4 Nov 2026); else the table scrolls. */
+  narrow?: 'scroll' | 'read-down';
   /** The page's defined term, on a glossary page: a table comparing it with its peers is keyless. */
   term?: string;
 }) {
   const pick = termColumn(table, term);
-  narrow,
   if (pick >= 0) {
     return (
       <DataTable
-  /** DataTable's phone reading: a tool's worksheet reads down (4 Nov 2026); else the table scrolls. */
-  narrow?: 'scroll' | 'read-down';
         labelledBy={labelledBy}
         columns={table.header.map((cell) => ({ heading: plain(cell) }))}
         pickColumn={pick}
+        {...(narrow ? { narrow } : {})}
         rows={table.rows.map((row) => ({
           header: plain(row[0] ?? []),
           cellsHtml: table.header.map((_, index) => inlineToHtml(row[index] ?? [])),
@@ -522,12 +536,12 @@ export function CorpusTable({
       />
     );
   }
-        {...(narrow ? { narrow } : {})}
   const [key = [], ...columns] = table.header;
   return (
     <DataTable
       labelledBy={labelledBy}
       keyColumn={{ heading: plain(key) }}
+      {...(narrow ? { narrow } : {})}
       columns={columns.map((cell) => ({ heading: plain(cell) }))}
       rows={table.rows.map((row) => ({
         header: plain(row[0] ?? []),
@@ -535,7 +549,6 @@ export function CorpusTable({
       }))}
     />
   );
-      {...(narrow ? { narrow } : {})}
 }
 
 /* ── The shell ────────────────────────────────────────────────────────────────── */

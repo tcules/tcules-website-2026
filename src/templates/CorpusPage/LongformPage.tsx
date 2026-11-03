@@ -1,4 +1,4 @@
-import { Layout, Sketch } from '@/components';
+import { Layout } from '@/components';
 import {
   BlockCardSet,
   CtaRow,
@@ -19,7 +19,15 @@ import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from 
 import { ArticleShell, type ToolShell } from './LongformShell';
 import { coverFor } from './images';
 import { formBeforeFaq } from './order';
-import { blocksOf, destinationName, hasLink, labelWithoutArrow, loneLink, plain } from './text';
+import {
+  blocksOf,
+  destinationName,
+  hasLink,
+  isStatementLine,
+  labelWithoutArrow,
+  loneLink,
+  plain,
+} from './text';
 
 export type LongformFamily = 'case' | 'article' | 'term' | 'tool';
 
@@ -49,9 +57,10 @@ export type LongformPageProps = {
  *            outline rail, then the close the author wrote last: a tinted band whose sentences keep
  *            their inline links, with the ask as a link button.
  *
- *   term     the hero holds the definition; the term's sharpest sentence is its statement (a split
- *            from the hero); the rest of the definition opens the shell as a head-less section above
- *            the headed ones; a close with one link as the page's ask.
+ *   term     the hero holds the definition beside the term's drawing; a second paragraph that is one
+ *            short line with no link is its statement (a split from the hero); the rest of the
+ *            definition opens the shell as a head-less section above the headed ones; a close with
+ *            one link as the page's ask.
  *
  *   tool     a free tool (4 Nov 2026, the tools shape-off: "tools launch as article-style pages"): the
  *            hero with its one action to the worksheet (#workspace), no byline and no dates, then the
@@ -157,7 +166,10 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
   '/tools/ai-product-ux-readiness-check': {
     stories: { example: 'tool-ai-product-ux-readiness-check-example' },
     diagrams: {
-      marking: { after: 'evidence available', scene: 'tool-ai-product-ux-readiness-check-marking' },
+      marking: {
+        after: 'evidence available',
+        scene: 'tool-ai-product-ux-readiness-check-marking',
+      },
     },
   },
   '/tools/ai-trust-control-canvas': {
@@ -200,6 +212,10 @@ const NO_TOOL_SCENES: ToolShell = { stories: {}, diagrams: {} };
  * sending the reader on keeps its place and its inline links.
  */
 function ToolArticlePage({ page }: { page: CorpusPage }) {
+  /* The tool's own scene in its hero (tools critic, 4 Nov 2026): the drawing its hub tile carries,
+     registered once by route (`serviceSceneFor`), so the page that IS the tool shows the picture the
+     card promised and the right half is not an empty fade. A tool with no scene keeps the end-fade. */
+  const scene = serviceSceneFor(page.route);
   return (
     <>
       {scene ? (
@@ -207,10 +223,6 @@ function ToolArticlePage({ page }: { page: CorpusPage }) {
       ) : (
         <CorpusHero page={page} texture />
       )}
-  /* The tool's own scene in its hero (tools critic, 4 Nov 2026): the drawing its hub tile carries,
-     registered once by route (`serviceSceneFor`), so the page that IS the tool shows the picture the
-     card promised and the right half is not an empty fade. A tool with no scene keeps the end-fade. */
-  const scene = serviceSceneFor(page.route);
       <ArticleShell
         page={page}
         sections={formBeforeFaq(page.bands)}
@@ -223,14 +235,27 @@ function ToolArticlePage({ page }: { page: CorpusPage }) {
 /* ── The term ─────────────────────────────────────────────────────────────────── */
 
 /**
- * A defined term. The hero keeps the definition (its first paragraph); the sharpest sentence after
- * it is the term's statement (J, a split from the hero); the paragraphs that follow open the shell as
- * a head-less section, so the definition reads on into the headed sections beside the same rail.
+ * A defined term. The hero keeps the definition (its first paragraph) beside the term's own drawing;
+ * the paragraph after it is the term's statement (J, a split from the hero) only where it is ONE short
+ * line with no link (`isStatementLine`), and otherwise it opens the shell at body size with its links
+ * kept, the rest of the definition reading on into the headed sections beside the same rail.
+ *
+ * The gate (glossary critic, 4 Nov 2026): the statement had taken the second paragraph whatever its
+ * length, so ux-debt and ai-assisted-product-development set 10 to 12 lines of near-h1 serif, larger
+ * than every h2 on the page, and agentic-ux lost the two links in it. The drawing had stood beside the
+ * statement; it now stands beside the definition in the hero, so every term page carries it in the same
+ * place whether or not it has a statement.
  */
 function TermPage({ page }: { page: CorpusPage }) {
   const { hero } = page;
-  const [definition, sharpest, ...rest] = hero.lede;
+  const [definition, second, ...after] = hero.lede;
+  const statement = second && isStatementLine(second) ? second : undefined;
+  const rest = statement
+    ? after
+    : [second, ...after].filter((runs): runs is InlineRun[] => Boolean(runs));
   const { shell, close } = splitClose(formBeforeFaq(page.bands));
+  /* The term's own drawing: the same picture as its hub card and every related-term card, so a
+     reader who clicked one lands on it. */
   const scene = glossarySceneFor(page.route);
   const continued: CorpusBand | undefined =
     rest.length > 0
@@ -242,19 +267,22 @@ function TermPage({ page }: { page: CorpusPage }) {
           blocks: rest.map((runs) => ({ type: 'paragraph' as const, runs })),
         }
       : undefined;
+  const ledes = definition ? [definition] : [];
   return (
     <>
-      <CorpusHero page={page} ledes={definition ? [definition] : []} texture />
-      {sharpest ? (
-        <Statement
-          as="p"
-          align="start"
-          id="definition"
-          /* The term's own drawing beside its sharpest sentence (4 Nov 2026): the same picture as its
-             hub card and every related-term card, so a reader who clicked one lands on it. */
-          {...(scene ? { figure: <Sketch name={scene} /> } : {})}
-        >
-          {plain(sharpest)}
+      {scene ? (
+        <CorpusHero
+          page={page}
+          ledes={ledes}
+          arrangement="beside"
+          media={{ type: 'sketch', name: scene }}
+        />
+      ) : (
+        <CorpusHero page={page} ledes={ledes} texture />
+      )}
+      {statement ? (
+        <Statement as="p" align="start" id="definition">
+          {plain(statement)}
         </Statement>
       ) : null}
       <ArticleShell page={page} sections={continued ? [continued, ...shell] : shell} />
@@ -335,11 +363,13 @@ function CloseBand({ band }: { band: CorpusBand }) {
  * (decisions/2026-10-29-named-services-are-service-tiles, -related-destination-is-a-card). Paper: it
  * is a route to a page, not the form's ask, and a tint band here was a plain band at the foot.
  *
- * Where the close's sentences are plain, they are the tile's words: the wide tile carries them under
- * its title and over its action, beside the drawing, so its words half holds the argument rather than
- * a title alone in an empty card. Where a sentence carries links of its own (the related services and
- * terms, named in passing) it cannot sit inside the tile's one anchor, so the sentences stay prose
- * across two thirds and the tile stands at one third beside them: a split, a `section` apart.
+ * ONE shape on every term page (glossary critic, 4 Nov 2026): the close's sentences as running text
+ * under the head, their inline links kept, then the tile across the whole row (a media row: its name
+ * and action beside its drawing). It had been two shapes, picked per page by whether a sentence
+ * carried a link: plain sentences inside a wide tile, linked ones as prose at two thirds beside a
+ * narrow tile, which left a void under the shorter column; terms side by side in the hub ended
+ * differently. The tile is one anchor, so a sentence with links of its own can never sit inside it,
+ * and the shape every close can take is the one that keeps them outside.
  */
 function TermClose({ band }: { band: CorpusBand }) {
   const link = closingLink(band);
@@ -348,21 +378,10 @@ function TermClose({ band }: { band: CorpusBand }) {
     block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
   );
   const scene = serviceSceneFor(link.href);
-  const linked = paragraphs.some((runs) => runs.some((run) => run.type !== 'text'));
-  const tile = (wide: boolean, body?: string[]) => (
-    <ServiceTile
-      title={destinationName(link.labelText)}
-      href={link.href}
-      action={labelWithoutArrow(link.labelText)}
-      {...(scene ? { scene } : {})}
-      {...(body ? { body } : {})}
-      wide={wide}
-    />
-  );
   return (
     <ContentSection {...head(band)} data-band="L">
-      {linked ? (
-        <Layout columns={{ base: 1, lg: [2, 1] }} colGap="section" rowGap="stack" align="start">
+      <Layout rowGap="stack">
+        {paragraphs.length > 0 ? (
           <ContentSectionText>
             <Layout rowGap="text">
               {paragraphs.map((runs, index) => (
@@ -370,17 +389,19 @@ function TermClose({ band }: { band: CorpusBand }) {
               ))}
             </Layout>
           </ContentSectionText>
-          <Layout as="ul" rowGap="none">
-            <li>{tile(false)}</li>
-          </Layout>
-        </Layout>
-      ) : (
+        ) : null}
         <Layout as="ul" rowGap="none">
           <li data-media-row="">
-            {tile(true, paragraphs.map((runs) => plain(runs).trim()))}
+            <ServiceTile
+              title={destinationName(link.labelText)}
+              href={link.href}
+              action={labelWithoutArrow(link.labelText)}
+              {...(scene ? { scene } : {})}
+              wide
+            />
           </li>
         </Layout>
-      )}
+      </Layout>
     </ContentSection>
   );
 }

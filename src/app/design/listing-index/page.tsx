@@ -105,6 +105,8 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *                         each group a section of drawn term cards, a group's note under its cards,
  *                         the ask as the close, the FAQ after it
  *   ?data=glossary&state=sparse   one group of one term (the shortest), no lead, no note, no ask
+ *   ?data=glossary&state=sizes    groups of two to six terms (the copy's terms reused): every row
+ *                         full, threes closing on a pair where one would be left short (`termRows`)
  *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
  *                         pieces, one with many and no covers, one with two and none; then the close
  *                         with its `lead` set, as the authors index sets it
@@ -135,7 +137,9 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
               .filter((band) => band.id === 'ai-in-practice')
               .map((band) => ({ ...band, blocks: band.blocks.slice(0, 1) })),
           }
-        : corpus;
+        : state === 'sizes'
+          ? { ...corpus, bands: [...termGroupSizes(corpus), ...corpus.bands.slice(-1)] }
+          : corpus;
     const index = glossaryIndex(page);
     return (
       <ListingIndex
@@ -193,4 +197,27 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   /* The finder's links and form come back to the specimen, the state kept. */
   const path = state ? `${PATH}?${new URLSearchParams({ state }).toString()}` : PATH;
   return <ListingIndex {...insightsIndexProps(page, query, path)} />;
+}
+
+/** Groups of two to six terms, from the copy's own term lines in order (reused past the last). */
+function termGroupSizes(corpus: CorpusPage): CorpusPage['bands'] {
+  const lines = corpus.bands.flatMap((band) =>
+    band.blocks.filter(
+      (block) =>
+        block.type === 'paragraph' &&
+        block.runs[0]?.type === 'link' &&
+        block.runs[0].href.startsWith('/glossary/'),
+    ),
+  );
+  let at = 0;
+  return [2, 3, 4, 5, 6].map((size) => {
+    const blocks = Array.from({ length: size }, () => lines[at++ % lines.length]!);
+    return {
+      id: `sizes-${size}`,
+      anchored: true,
+      heading: [{ type: 'text' as const, text: `A group of ${size} terms` }],
+      headingText: `A group of ${size} terms`,
+      blocks,
+    };
+  });
 }
