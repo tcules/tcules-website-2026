@@ -29,8 +29,10 @@ hub through OfferPage's plan with DirectoryBand's tool tiles, the tool pages thr
   retired.
 - In the column (`ToolShell`): bold-led numbered methods as Steps; the worked example as the tint example
   panel, words beside the story plate from 1440 and stacked below, any table at the panel's full width
-  (drift checker); a diagram plate after the paragraph naming the marks (readiness `marking`, rebuild
-  `reading-your-results`, fidelity `corrections`), held to `--measure-lead`.
+  (drift checker; `bounded` on a phone, so the answers take the panel's measure); a diagram plate after
+  the paragraph naming the marks (readiness `marking`, rebuild `reading-your-results`, fidelity
+  `corrections`, drift `workspace`, prototype `brief`, trust canvas `reading-your-canvas` after its table),
+  at the example plate's drawing scale (half the column, centred, from 1440). Steps take `measure="reading"`.
 
 ## Owed
 - Drawings: four hub tile scenes (components/Sketch/wyg-tools.tsx; the drift checker's and the prototype
@@ -38,8 +40,11 @@ hub through OfferPage's plan with DirectoryBand's tool tiles, the tool pages thr
   (components/Sketch/wyg-tool-<slug>.tsx). All empty plates until drawn.
 - The 27 Aug ruling (tools are not long-form) is still active: the article shape needs a /decide entry that
   limits it for tools, citing the 28 Oct launch plan, for Devagya to confirm.
-- The copy promises an interactive record builder ("download the result as a brief"); it is not built, so
-  the hero action lands on the authored table.
+- **Open decision for Devagya (tools critic, 4 Nov 2026):** the copy promises a worksheet you type into and
+  download ("You type your answers into the page and download the result as a brief"); it is not built, so
+  the hero action lands on the authored table. Either build it as a variant of DataTable/EnquiryForm
+  (editable answer cells plus "Download as brief"), or ship read-only and change the copy. The run does not
+  edit copy.
 - Outline labels are long (the TOC warns on 7–8 per page); short markers are the TOC's open content item.
 - Register adjacency: design-systems, modernisation and prototypes are three adjacent drawn-tile bands
   (the copy fixes the order); mitigated by arrangement only (a pair, then whole-row tiles alternating).
