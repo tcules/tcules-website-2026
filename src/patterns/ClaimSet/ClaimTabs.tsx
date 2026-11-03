@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent,
+  type PointerEvent,
 } from 'react';
 
 import { Layout } from '@/components';
@@ -20,6 +21,19 @@ import styles from './ClaimSet.module.css';
 const DWELL_MS = 15000;
 /** Where autoplay may run at all: a mouse, and the stage's own width (below it every claim is stacked). */
 const AUTOPLAY_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
+/** Where resting the pointer on a tab chooses it: a mouse or trackpad, never touch or a stylus. */
+const HOVER_QUERY = '(hover: hover) and (pointer: fine)';
+/**
+ * How long the pointer rests on a tab before it is chosen: long enough that sweeping across the row
+ * to reach another tab, or out of the stage, changes nothing; short enough to read as immediate.
+ */
+const HOVER_INTENT_MS = 140;
+
+/** A CSS time read back from a token in ms. The build may write `520ms` as `.52s`, so read the unit. */
+const toMs = (value: string) => {
+  const v = value.trim();
+  return v.endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000;
+};
 
 /**
  * The tabs layout: the claims as tabs along the top of a paper-deep stage, the chosen claim's slide
@@ -31,6 +45,15 @@ const AUTOPLAY_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fin
  * inside it holds the timer; any deliberate act (a tab, an arrow key, selected text, a link) stops it
  * for good; it plays through once, returns to the first claim and rests. Reduced motion never starts
  * it. The rule after each tab's number is its timer.
+ *
+ * Where there is a mouse, moving the pointer onto a tab chooses it after a short intent delay, so a
+ * sweep across the row does not flicker; it is a deliberate act and stops autoplay. Only the hand
+ * moving the pointer counts: a tab scrolled under a still pointer is never chosen. It never moves
+ * focus: click, tap and the keyboard (arrows, Home, End) work exactly as before. Once, when the stage
+ * first comes into view, the slide peeks: the first claim's slide eases a little to the side, the edge
+ * of the next one shows in the space it leaves, and both come back. The tab row never moves. It shows
+ * there is more without choosing anything, so autoplay is untouched; any choice made during it ends it
+ * at once. Never under reduced motion, or below 1024, where every claim is already on the page.
  */
 export function ClaimTabs({
   id,
@@ -50,6 +73,11 @@ export function ClaimTabs({
   const fills = useRef<(HTMLSpanElement | null)[]>([]);
   const shown = useRef(0);
   const finish = useRef<(() => void) | null>(null);
+  const endPeek = useRef<(() => void) | null>(null);
+  const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intentFor = useRef<number | null>(null);
+  /* Whether the latest pointermove was the hand moving the mouse, not the page scrolling under it. */
+  const handMoved = useRef(false);
   const clock = useRef({
     elapsed: 0,
     hold: false,
@@ -76,6 +104,7 @@ export function ClaimTabs({
   useLayoutEffect(() => {
     const from = shown.current;
     if (from === active) return;
+    endPeek.current?.();
     finish.current?.();
     shown.current = active;
     placePiece();
@@ -124,6 +153,69 @@ export function ClaimTabs({
     if (stage.current) resize.observe(stage.current);
     return () => resize.disconnect();
   }, [placePiece]);
+
+  /* The peek, once, when the stage first comes into view: the first slide eases aside by the peek's
+     travel and the next slide's edge shows in the space it leaves, then both come back on the same
+     curve. Transform only; nothing is chosen, so autoplay is untouched. */
+  useEffect(() => {
+    const box = panel.current;
+    if (!box || items.length < 2) return;
+    if (
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !matchMedia('(min-width: 1024px)').matches
+    )
+      return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const end = () => {
+      timers.forEach(clearTimeout);
+      delete box.dataset.peek;
+      const next = slides.current[1];
+      if (next) delete next.dataset.peek;
+      endPeek.current = null;
+    };
+    const seen = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        seen.disconnect();
+        const next = slides.current[1];
+        if (shown.current !== 0 || !next) return;
+        const style = getComputedStyle(box);
+        const move = toMs(style.getPropertyValue('--clm-peek-duration')) || 520;
+        const hold = toMs(style.getPropertyValue('--clm-peek-hold')) || 360;
+        next.dataset.peek = '';
+        box.dataset.peek = 'ready';
+        void box.offsetHeight;
+        box.dataset.peek = 'out';
+        endPeek.current = end;
+        timers.push(setTimeout(() => (box.dataset.peek = 'back'), move + hold));
+        timers.push(setTimeout(end, move * 2 + hold + 40));
+      },
+      { threshold: 0.6 },
+    );
+    seen.observe(box);
+    return () => {
+      seen.disconnect();
+      end();
+    };
+  }, [items.length]);
+
+  /* A pointermove counts as the hand's only if the pointer moved on the screen. Scrolling fires
+     pointerenter and a synthetic pointermove with the pointer still: same screen point, no movement.
+     Read on window in the capture phase, so it is settled before the tab's own handler runs. */
+  useEffect(() => {
+    let at: { x: number; y: number } | null = null;
+    const record = (event: globalThis.PointerEvent) => {
+      handMoved.current = at
+        ? event.screenX !== at.x || event.screenY !== at.y
+        : event.movementX !== 0 || event.movementY !== 0;
+      at = { x: event.screenX, y: event.screenY };
+    };
+    addEventListener('pointermove', record, { capture: true, passive: true });
+    return () => {
+      removeEventListener('pointermove', record, { capture: true });
+      if (intent.current) clearTimeout(intent.current);
+    };
+  }, []);
 
   /* The clock: a frame loop that only counts while every condition to run holds. */
   useEffect(() => {
@@ -180,6 +272,28 @@ export function ClaimTabs({
     if (focus) tabs.current[i]?.focus();
   };
 
+  /* Hover: choose the tab the pointer rests on, after the intent delay. Mouse only, and only from the
+     hand moving the pointer over the tab: a tab scrolled under a still pointer is not chosen, since
+     that is not a deliberate act and would stop autoplay. */
+  const cancelIntent = () => {
+    if (intent.current) clearTimeout(intent.current);
+    intent.current = null;
+    intentFor.current = null;
+  };
+  const onHover = (event: PointerEvent<HTMLButtonElement>, i: number) => {
+    if (event.pointerType !== 'mouse' || !matchMedia(HOVER_QUERY).matches) return;
+    if (!handMoved.current) return;
+    if (i === shown.current) return cancelIntent();
+    if (intentFor.current === i) return;
+    cancelIntent();
+    intentFor.current = i;
+    intent.current = setTimeout(() => {
+      intent.current = null;
+      intentFor.current = null;
+      choose(i);
+    }, HOVER_INTENT_MS);
+  };
+
   const onKey = (event: KeyboardEvent, i: number) => {
     const n = items.length;
     const to =
@@ -225,7 +339,12 @@ export function ClaimTabs({
               aria-selected={i === active}
               tabIndex={i === active ? 0 : -1}
               className={styles.tab}
-              onClick={() => choose(i)}
+              onClick={() => {
+                cancelIntent();
+                choose(i);
+              }}
+              onPointerMove={(event) => onHover(event, i)}
+              onPointerLeave={cancelIntent}
               onKeyDown={(event) => onKey(event, i)}
             >
               <span className={styles.index} aria-hidden="true">
