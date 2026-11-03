@@ -174,7 +174,13 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
   },
   '/tools/ai-trust-control-canvas': {
     stories: { example: 'tool-ai-trust-control-canvas-example' },
-    diagrams: {},
+    diagrams: {
+      /* The band is its table alone, so the diagram follows the table (`after` names its head). */
+      'reading-your-canvas': {
+        after: 'If the canvas shows',
+        scene: 'tool-ai-trust-control-canvas-reading',
+      },
+    },
   },
   '/tools/audit-redesign-modernise-rebuild': {
     stories: { example: 'tool-audit-redesign-modernise-rebuild-example' },
@@ -187,7 +193,9 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
   },
   '/tools/design-system-drift-checker': {
     stories: { 'reading-your-results': 'tool-design-system-drift-checker-example' },
-    diagrams: {},
+    diagrams: {
+      workspace: { after: 'intentional exception', scene: 'tool-design-system-drift-checker-marks' },
+    },
   },
   '/tools/figma-storybook-fidelity-checklist': {
     stories: { example: 'tool-figma-storybook-fidelity-checklist-example' },
@@ -200,7 +208,10 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
   },
   '/tools/prototype-readiness-checklist': {
     stories: { example: 'tool-prototype-readiness-checklist-example' },
-    diagrams: {},
+    diagrams: {
+      /* The marks, then the brief's three lists: after the paragraph that sorts into the lists. */
+      brief: { after: 'three lists', scene: 'tool-prototype-readiness-checklist-brief' },
+    },
   },
 };
 

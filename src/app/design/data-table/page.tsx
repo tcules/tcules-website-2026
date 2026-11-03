@@ -1,4 +1,4 @@
-import { Icon, Layout, Section, type SectionSurface } from '@/components';
+import { Icon, Island, Layout, Section, type SectionSurface } from '@/components';
 import { auditPath, ROUTES, servicePath } from '@/lib/routes';
 import { DataTable, type DataTableProps, type DataTableRow } from '@/patterns';
 
@@ -810,6 +810,16 @@ export default function DataTableSpecimenPage() {
                     narrow="read-down"
                   />
                 </Layout>
+              </div>
+            </Specimen>
+            <Specimen
+              title="Read down · bounded, inside a tool's example panel"
+              note="`bounded` (4 Nov 2026): the table sits on a ground that already bounds it (the tint example panel), so below 768 its rows drop the box's side edges, fill and inline inset and keep the rules above, between and below, and the answers take the panel's whole measure. From 768 the boxed table."
+            >
+              <div className={s.trackMobile}>
+                <Island surface="tint">
+                  <DataTable {...THREE_COLUMNS} narrow="read-down" bounded />
+                </Island>
               </div>
             </Specimen>
           </Layout>

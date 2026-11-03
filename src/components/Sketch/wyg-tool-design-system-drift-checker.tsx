@@ -59,7 +59,63 @@ function ExampleCopiedMultiSelect() {
   );
 }
 
+/**
+ * One component followed through the four places, each place carrying its mark: the design matches
+ * (aligned), the shared code holds an agreed variation with its flag (intentional exception), the live
+ * product runs a different version (difference found, the one lit), and the requests behind it cannot
+ * yet say why (unknown). The trace runs through the component in every place.
+ */
+function MarksFourPlaces() {
+  const places: {
+    x: number;
+    glyph: 'ruler-pen' | 'code' | 'monitor' | 'notebook';
+    mark: 'check-circle' | 'danger-triangle' | 'question-circle' | 'flag';
+  }[] = [
+    { x: 30, glyph: 'ruler-pen', mark: 'check-circle' },
+    { x: 100, glyph: 'code', mark: 'flag' },
+    { x: 170, glyph: 'monitor', mark: 'danger-triangle' },
+    { x: 240, glyph: 'notebook', mark: 'question-circle' },
+  ];
+  return (
+    <>
+      {/* The trace through the component, place to place. */}
+      <path className={styles.line} d="M80,82 L100,82 M150,82 L170,82 M220,82 L240,82" />
+      {places.map(({ x, glyph, mark }, i) => (
+        <g key={glyph}>
+          <Rect x={x} y={34} w={50} h={84} rx={8} className={styles.frame} />
+          <Chip x={x + 8} y={42} glyph={glyph} />
+          {/* The component in this place: the live product's copy is the one that differs. */}
+          {i === 2 ? (
+            <>
+              <Rect x={x + 6} y={70} w={38} h={24} rx={8} className={styles.halo} />
+              <Rect x={x + 9} y={75} w={32} h={14} rx={7} className={styles.region} />
+            </>
+          ) : i === 3 ? (
+            <>
+              <Copy x={x + 10} y={78} w={30} quiet />
+              <Copy x={x + 10} y={88} w={20} quiet />
+            </>
+          ) : (
+            <Rect x={x + 9} y={75} w={32} h={14} rx={7} className={styles.tile} />
+          )}
+          <Copy x={x + 10} y={106} w={24} quiet />
+          <path className={styles.line} d={`M${x + 25},118 L${x + 25},128`} />
+          <Glyph
+            name={mark}
+            cx={x + 25}
+            cy={140}
+            size={16}
+            className={i === 2 ? styles.glyphAccent : i === 3 ? styles.glyphQuiet : styles.glyph}
+          />
+        </g>
+      ))}
+    </>
+  );
+}
+
 export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   /* Worked example: tracing a copied multi-select (#reading-your-results): An orders team uses its own copy of a multi-select because the shared field allows only one choice. What you saw is a local copy. The likely cause is an interaction the shared component lacks. Before proposing a replacement, check where multi-select belongs: in the shared component, as a separate component or built for this one product. Draw the story: the orders team's local multi-select beside the shared single-select field, the trace running from the copy back to the interaction the shared component lacks. No type on the image. */
   'tool-design-system-drift-checker-example': ExampleCopiedMultiSelect,
+  /* Figma vs Storybook vs live product: follow the component through four places (#workspace): For each finding, note the design version, the code version and where it appears in the product. Mark it "aligned", "difference found", "unknown" or "intentional exception". An exception needs an owner and a reason. A difference needs looking into before anyone names its cause. Draw the diagram: one component followed through the four places (design, shared code, live product, requests and releases), each place carrying one of the four marks. No type on the image. */
+  'tool-design-system-drift-checker-marks': MarksFourPlaces,
 };

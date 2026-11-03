@@ -441,12 +441,15 @@ export const PAGE_SCENE_NAMES = [
   'tool-ai-product-ux-readiness-check-example',
   'tool-ai-product-ux-readiness-check-marking',
   'tool-ai-trust-control-canvas-example',
+  'tool-ai-trust-control-canvas-reading',
   'tool-audit-redesign-modernise-rebuild-example',
   'tool-audit-redesign-modernise-rebuild-reading',
   'tool-design-system-drift-checker-example',
+  'tool-design-system-drift-checker-marks',
   'tool-figma-storybook-fidelity-checklist-example',
   'tool-figma-storybook-fidelity-checklist-corrections',
   'tool-prototype-readiness-checklist-example',
+  'tool-prototype-readiness-checklist-brief',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

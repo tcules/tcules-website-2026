@@ -89,7 +89,10 @@ export function boldStepsOf(items: readonly InlineRun[][]) {
 export type ToolShell = {
   /** The worked example's story scene, by the band that holds "Illustration, not client work". */
   stories: Readonly<Record<string, SketchName>>;
-  /** A diagram after the first paragraph containing `after`. */
+  /**
+   * A diagram after the first paragraph containing `after`, or after the first table whose head names
+   * it, where a band is its table alone (the trust canvas's reading table).
+   */
   diagrams: Readonly<Record<string, { after: string; scene: SketchName }>>;
 };
 
@@ -209,10 +212,19 @@ export function ArticleSection({
   const toolDiagram = tool?.diagrams[band.id];
   const toolDiagramAt = toolDiagram
     ? items.findIndex(
-        (item) => item.type === 'paragraph' && plain(item.runs).includes(toolDiagram.after),
+        (item) =>
+          (item.type === 'paragraph' && plain(item.runs).includes(toolDiagram.after)) ||
+          (item.type === 'table' &&
+            item.header.some((cell) => plain(cell).includes(toolDiagram.after))),
       )
     : -1;
-  if (tool && !isFaq && toolDiagramAt < 0 && process.env.NODE_ENV !== 'production') {
+  /* A tool whose marks paragraph has no diagram anywhere on the page: the gap the registry must fill. */
+  if (
+    tool &&
+    !isFaq &&
+    Object.keys(tool.diagrams).length === 0 &&
+    process.env.NODE_ENV !== 'production'
+  ) {
     const marks = items.find(
       (item) => item.type === 'paragraph' && namesMarks(plain(item.runs)),
     );

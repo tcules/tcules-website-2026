@@ -5,7 +5,7 @@ import type { PageSceneName } from '@/lib/page-scenes';
 
 import styles from './Sketch.module.css';
 import { ArrowRight, Copy, Rect } from './offer';
-import { Focus, Glyph } from './scenes';
+import { Chip, Focus, Glyph } from './scenes';
 
 /* /tools/prototype-readiness-checklist: the page's still plate (LongformPage family "tool", 4 Nov
    2026): the worked example's STORY scene, inside the example panel beside its words, drawn from this
@@ -53,7 +53,64 @@ function InvitationExample() {
   );
 }
 
+/**
+ * One workflow sorted, then sorted again: the workflow's checks each carry their mark (demonstrated,
+ * simulated, not applicable, and the unknown lit), and what the marks leave open routes out into the
+ * brief's three lists: decisions to make, research to run, build work to scope.
+ */
+function BriefThreeLists() {
+  const rows: [number, IconName, number][] = [
+    [58, 'check-circle', 56],
+    [80, 'layers', 44],
+    [124, 'close-circle', 36],
+  ];
+  const lists: [number, IconName][] = [
+    [46, 'flag'],
+    [90, 'users-group-rounded'],
+    [134, 'code'],
+  ];
+  return (
+    <>
+      {/* The workflow, one check per row, each with its mark; the unknown is the one lit. */}
+      <Rect x={30} y={34} w={120} h={112} rx={8} className={styles.frame} />
+      {rows.map(([y, glyph, w]) => (
+        <g key={glyph}>
+          <Glyph
+            name={glyph}
+            cx={46}
+            cy={y}
+            size={14}
+            className={glyph === 'close-circle' ? styles.glyphQuiet : styles.glyph}
+          />
+          <Copy x={60} y={y} w={w} quiet />
+        </g>
+      ))}
+      <Rect x={38} y={92} w={104} h={20} className={styles.region} />
+      <Glyph name="question-circle" cx={46} cy={102} size={14} className={styles.glyphAccent} />
+      <path className={styles.regionCopy} d="M60,102 L120,102" />
+      {/* Out of the workflow into the brief, branching to its three lists. */}
+      <circle className={styles.node} cx={150} cy={102} r="2.5" />
+      <path
+        className={styles.line}
+        d="M150,102 L180,102 M180,102 L180,96 L180,52 A6,6 0 0 1 186,46 L207,46 M180,90 L207,90 M180,102 L180,128 A6,6 0 0 0 186,134 L207,134"
+      />
+      <circle className={styles.node} cx={180} cy={102} r="3.5" />
+      {lists.map(([y, glyph]) => (
+        <g key={glyph}>
+          <ArrowRight x={214} y={y} />
+          <Rect x={214} y={y - 16} w={76} h={32} rx={6} className={styles.frame} />
+          <Chip x={222} y={y - 8} glyph={glyph} />
+          <Copy x={246} y={y - 4} w={34} quiet />
+          <Copy x={246} y={y + 5} w={22} quiet />
+        </g>
+      ))}
+    </>
+  );
+}
+
 export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   /* Simulated vs real features: an invitation screen with no email service (#example): An invitation flow shows "Invitation sent", but no email service is connected. If the research question was whether a team owner understands invitations, the simulation may have done its job. The build brief still has to cover delivery, expired links, people who already have an account, resend rules and what happens when delivery fails. Draw the story: the success screen with nothing behind it, then the real path drawn underneath (delivery, an expired link, an existing account, resend, failed delivery) as what the build must add. No type on the image. */
   'tool-prototype-readiness-checklist-example': InvitationExample,
+  /* Prototype build brief template: sort your answers into three lists (#brief): Group what you found into three lists: decisions to make, research to run and build work to scope. Give each item an owner and a check that would close it. Draw the diagram: one workflow's checks, each marked demonstrated, simulated, unknown or not applicable, and what stays open sorted into the brief's three lists. No type on the image. */
+  'tool-prototype-readiness-checklist-brief': BriefThreeLists,
 };
