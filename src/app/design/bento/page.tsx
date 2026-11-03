@@ -122,6 +122,17 @@ const SIX: BentoItem[] = [
 
 const single: BentoItem[] = SIX.map((item) => ({ ...item, span: 1 }));
 
+/* Two split tiles, for the paper row and each surface ground: the panel has no ground of its own, so
+   its hairline is what has to read on every band. */
+const SPLIT: BentoItem[] = single.slice(0, 4).map((item) => ({
+  ...item,
+  detail: {
+    label: 'What you come away with',
+    text: 'Research, workflows, interface design and tested prototypes',
+    action: 'Explore the service',
+  },
+}));
+
 export default function BentoSpecimen() {
   return (
     <>
@@ -281,20 +292,10 @@ export default function BentoSpecimen() {
       <Variation
         id="detail"
         title="2d2 · Split tiles: a detail makes the tile two halves (a router table's third column)"
-        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; an inset panel in the second with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A). Two a row on four tracks; the panel under the named half below 768. Every tile or none."
+        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; a panel in the second, on the band's own ground behind a start-edge hairline inset 16 from the tile's edges, with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A; panel restyled 4 Nov 2026). Two a row on four tracks; below 768 the panel sits under the named half and its hairline moves to its top edge. Every tile or none."
       />
       <Section>
-        <Bento
-          items={single.slice(0, 4).map((item) => ({
-            ...item,
-            detail: {
-              label: 'What you come away with',
-              text: 'Research, workflows, interface design and tested prototypes',
-              action: 'Explore the service',
-            },
-          }))}
-          tracks={4}
-        />
+        <Bento items={SPLIT} tracks={4} />
       </Section>
 
       <Variation
@@ -309,10 +310,13 @@ export default function BentoSpecimen() {
       <Variation
         id="tint"
         title="4 · Tint ground"
-        note="Every --bnt-* token restated on tint: the hairline steps to neutral-300 and the texture to neutral-600, so both still read on paper-deep."
+        note="Every --bnt-* token restated on tint: the hairline steps to neutral-300 and the texture to neutral-600, so both still read on paper-deep. The split tiles under it: the panel's start-edge rule is the tile's own hairline, so it reads wherever the frame does."
       />
       <Section surface="tint">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation
@@ -321,7 +325,10 @@ export default function BentoSpecimen() {
         note="Declared for self-containment: white titles, a neutral-800 hairline lifting to brandeis-700, a neutral-600 texture lifting to brandeis-300. Home sets the band on paper."
       />
       <Section surface="ink">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation
@@ -330,7 +337,10 @@ export default function BentoSpecimen() {
         note="Declared for self-containment: white titles, a brandeis-400 hairline, a brandeis-300 texture lifting to white."
       />
       <Section surface="blue">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation

@@ -228,30 +228,40 @@ a.tile:is(:hover, :focus-visible) .title {
   }
 }
 
-/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A) ─────────────────────────────
-   Two tracks wide, two halves. The tile's own inset drops to `tight` so the result panel sits a hair
-   inside the tile's edge; the named half adds `text` back, so its words start where a single tile's
-   would (8 + 16 = the single tile's 24). The panel is a ground inside the tile, its own `block` inset.
-   The drawing at the split scale, at the start of its half. */
+/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A; panel restyled 4 Nov 2026) ─────
+   Two tracks wide, two halves. The result panel is no box: it stands on the band's own ground, set
+   off by the tile's own hairline on its inline-start edge (from 768) or its top edge (stacked, below
+   768). The tile's `text` inset keeps that rule clear of the frame, 16 from its edges; each half adds
+   `tight` back so its words start where a single tile's would (16 + 8 = the single tile's 24), and the
+   halves' `text` gap plus that `tight` puts the words 24 either side of the rule. */
 .split .tile {
-  padding: var(--gap-tight);
-}
-
-@media (min-width: 768px) {
-  .split .tile {
-    padding: var(--gap-tight);
-  }
+  padding: var(--gap-text);
 }
 
 .named {
-  padding: var(--gap-text);
+  padding: var(--gap-tight);
 }
 
 .panel {
   block-size: 100%;
-  padding: var(--gap-block);
-  border-radius: var(--bnt-panel-radius);
-  background: var(--bnt-panel-ground);
+  padding-block: var(--gap-block) var(--gap-tight);
+  padding-inline: var(--gap-tight);
+  border-block-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  transition: border-color var(--bnt-duration) var(--bnt-easing);
+}
+
+/* The panel's rule is the tile's hairline, so it takes the frame's hover ink with it. */
+a.tile:is(:hover, :focus-visible) .panel {
+  border-color: var(--bnt-rule-ink-hover);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding-block: var(--gap-tight);
+    padding-inline: var(--gap-block) var(--gap-tight);
+    border-block-start: 0;
+    border-inline-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  }
 }
 
 .panelText {

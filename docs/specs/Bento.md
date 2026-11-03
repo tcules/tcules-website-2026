@@ -5,6 +5,15 @@
 > (decisions/2026-11-03-flat-graphics-on-one-plate). The texture (§ 4) and the bare drawing scales below
 > are superseded; everything else stands.
 
+> **4 Nov 2026: the split tile's panel is ruled, not boxed.** A tile with a `detail` is a split tile, two
+> tracks wide (owner, 2 Nov 2026, /services mock A): drawing, title and body in the named half, and a
+> result panel in the second half holding the label, the text and the action at its foot. Since 4 Nov
+> (owner) the panel has no ground and no radius: it stands on the band's own ground behind the tile's
+> hairline (`--bnt-rule-width` in `--bnt-rule-ink`, following the frame to `--bnt-rule-ink-hover`) on its
+> inline-start edge, the tile's `text` inset keeping the rule 16 clear of the frame. Below 768 the halves
+> stack and the rule moves to the panel's top edge. `--bnt-panel-radius` and `--bnt-panel-ground` are
+> deleted. Ruling to be logged (`status: proposed`).
+
 ## 0 · Front matter
 
 | | |

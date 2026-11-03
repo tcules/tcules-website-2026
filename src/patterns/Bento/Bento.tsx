@@ -21,7 +21,7 @@ export type BentoItem = {
   /**
    * What the destination gives you, as the tile's second half (owner, 2 Nov 2026, /services, mock A):
    * a tile with a detail is a SPLIT tile, two tracks wide, its drawing, title and body in the first
-   * half and an inset panel in the second holding the label (a router table's header, as authored;
+   * half and a ruled panel in the second holding the label (a router table's header, as authored;
    * the mono label voice sets its case), the text, and the tile's action at the panel's foot. A
    * router table's third column, so a table that becomes tiles drops no column. Every tile or none.
    */
@@ -191,8 +191,9 @@ function TileLink({
     </div>
   );
   if (item.detail) {
-    /* The split tile: the named half (drawing, then title and body) and the result half, an inset
-       panel whose action sits at its foot. Side by side from 768, the panel under the named half
+    /* The split tile: the named half (drawing, then title and body) and the result half, a panel on
+       the band's own ground set off by a hairline, its action at its foot. Side by side from 768, the
+       panel under the named half
        below. */
     return (
       <TileBox href={item.href}>
@@ -201,8 +202,8 @@ function TileLink({
         <Layout
           className={styles.fill}
           columns={{ base: 1, md: [1, 1] }}
-          colGap="tight"
-          rowGap="tight"
+          colGap="text"
+          rowGap="text"
           equalRows
         >
           <div className={styles.named}>
