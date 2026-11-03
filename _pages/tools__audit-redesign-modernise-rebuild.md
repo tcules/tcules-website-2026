@@ -150,13 +150,13 @@ content_governance:
 
 # Redesign or rebuild worksheet: compare every route before you commit
 
-Redesign or rebuild? The free Audit, Redesign, Modernise or Rebuild worksheet compares the routes for one part of your product, including how you would get from the old version to the new one.
+The free Audit, Redesign, Modernise or Rebuild worksheet compares the routes for one part of your product, including how you would get from the old version to the new one.
 
 A rebuild proposal can describe the destination in detail and leave the way there almost blank. Customers still need their records, integrations must keep running and someone has to support both versions until the move is done.
 
 You leave with a brief that sets out the case for and against each route, what you still need to find out and the next test before you commit.
 
-[Compare your routes](#workspace)
+[Use the worksheet](#workspace)
 
 ## How to use the rebuild decision worksheet in four steps {#how-to-use-it}
 
@@ -210,7 +210,7 @@ Keep expected benefits in their own column, each with a note of how you would me
 
 ## Mark where each route stands before anyone commits {#reading-your-results}
 
-Mark each route "candidate", "needs evidence", "ruled out" or "preferred for next test". A preference stays provisional until the evidence is written down and someone owns the call.
+Mark each route "candidate", "needs evidence", "ruled out" or "preferred for next test". A preference stays provisional until the evidence is written down and someone owns the decision.
 
 The worksheet draws on [AWS's guidance on assessing an application portfolio](https://docs.aws.amazon.com/prescriptive-guidance/latest/application-portfolio-assessment-guide/introduction.html). It turns your team's answers into reasoning on paper and a list of what to check next. That is exactly what the people who look inside the system will ask for when they assess architecture, hidden dependencies and cost.
 

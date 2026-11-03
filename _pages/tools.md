@@ -70,7 +70,7 @@ page_composition:
 
 *Tools*
 
-# Free product design checklists: pick one question, leave with a brief
+# Free product design checklists that end in a brief
 
 Six free product design checklists and worksheets, with no sign-up. Each takes one question, such as whether an AI feature is ready or why a component keeps drifting, and ends in a brief your team can act on. Pick the one that matches the question in front of you.
 
@@ -93,7 +93,7 @@ With both questions on the table, start with the readiness check. The canvas the
 
 Both are written for AI that acts as well as suggests. They stay useful as a feature takes on more authority, from a drafted reply to an agent that changes records on its own.
 
-## Product team worksheets compared: components, routes and prototypes {#compare}
+## Product team worksheets for components, rebuilds and prototypes {#compare}
 
 Four more worksheets, for shared components, established products and prototypes heading into a build. Each row says when to open it.
 

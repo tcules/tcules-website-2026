@@ -55,7 +55,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         '/services/product-design/interaction-ui-design': 'specialist-ui',
         '/services/product-design/data-visualisation': 'specialist-dataviz',
         '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
-        '/services/new-product-design-first-release': 'specialist-new-product',
+        '/services/mvp-development': 'specialist-new-product',
         '/audits/ux-product-audit': 'specialist-audit',
       },
       'specialist-capabilities': {
@@ -99,7 +99,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         'Who does the work': 'team-design-engineering',
         'A coded prototype': 'outcome-tried-in-code',
         'Behaviour your developers can build from': 'outcome-build',
-        'Hard components built to hold up': 'outcome-hard-component',
+        'Tables, editors and drag and drop, built to hold up': 'outcome-hard-component',
         'A check of what shipped': 'symptom-match',
         'Production code': 'outcome-code-in-repo',
         'What we need from you': 'needs-design-engineering',
@@ -119,11 +119,11 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
     items: {
       'what-you-get': by({
         'Who does the work': 'team-design-systems',
-        'Foundations named by meaning': 'outcome-ds-tokens',
+        'Colours, type and spacing named by use': 'outcome-ds-tokens',
         'Components in Figma and in code': 'design-engineering',
         'Documentation in plain words': 'outcome-ds-docs',
         'A first release': 'outcome-ds-first-release',
-        'A route for change': 'outcome-ds-route-for-change',
+        'A way to change the system': 'outcome-ds-route-for-change',
         'What we need from you': 'needs-design-systems',
         'Where our part stops': 'stops-design-systems',
       }),
@@ -138,7 +138,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
     },
     stories: {},
   },
-  '/services/new-product-design-first-release': {
+  '/services/mvp-development': {
     items: {
       'what-you-get': by({
         'Who does the work': 'team-new-product',
@@ -167,7 +167,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
       'how-it-runs': by({ figure: 'method-modernise' }),
       'what-you-get': by({
         'Who does the work': 'team-product-modernisation',
-        'A call on every part of the product': 'outcome-part-calls',
+        'A decision on every part of the product': 'outcome-part-calls',
         'A written record': 'outcome-habits-record',
         'One high-use workflow': 'outcome-one-workflow',
         'A plan for old and new': 'outcome-old-new',

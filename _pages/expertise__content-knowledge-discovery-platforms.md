@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -182,13 +182,15 @@ content_governance:
 
 # Knowledge platform product design for search, current documents and sourced AI answers
 
-The result someone picks is where a knowledge platform earns its place: the procedure an engineer follows, the passage a researcher cites, the answer a newcomer gets without knowing the term. Tcules designs search, sources and AI answers for knowledge, content and research platforms, new and established.
+People pick the right material first time when our knowledge platform design shows the owner, version and source behind every result and AI answer.
 
-[Tell us what people search for](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in content and knowledge platforms {#what-we-design}
+
+For product teams running a knowledge, research or publishing platform, new or long established.
 
 - **Search and documentation** inside a developer platform · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)
 
@@ -200,15 +202,15 @@ The result someone picks is where a knowledge platform earns its place: the proc
 
 - **Policy and document libraries** with versions and owners · The current version obvious in every result
 
-- **Media and publishing products** · Ringier Media Switzerland
+- **Media and publishing products** · [Ringier Media Switzerland](/case-studies/news-app-ux-shared-design-media-group-ringier)
 
 ## Selected knowledge platform design work {#selected-work}
 
-### Eden AI: one search box that reads how you want to start
+### Eden AI: one search box for every way to start a workflow
 
 Eden AI's developers could start a workflow from a template, by asking the AI or from scratch, and each route led somewhere slightly different. We brought all three into one search box that recognises the intent, with searching and asking the AI kept as two separate moves you can see. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-### BuildTwin: sources kept in the reading path
+### BuildTwin: every AI check shown beside its source
 
 At BuildTwin, a quality engineer reviews every AI check on a structural drawing before approval. Our first concept tucked the sources into folding panels, which meant click after click. The chosen design is one continuous feed, with each observation beside its source, status and conclusion. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
@@ -218,7 +220,7 @@ GT Tools' buyers often confirm compatibility before choosing specialist equipmen
 
 ## Where knowledge platforms and search get hard {#hard-parts}
 
-Search problems hide in logs and in people's habits. Search quality is partly the engine and partly the screen, and labels, previews, filters and empty results do much of the work.
+Good search depends on the screen as much as the engine: labels, previews, filters and empty results.
 
 ### Which version is current, and who still owns it
 
@@ -236,9 +238,9 @@ Research platform design adds the reader who cites what they find. A researcher 
 
 Example: in our design for BuildTwin's review, every AI check links to its drawing reference and source document, and a check that cannot run says which information is missing. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-### The expert's exact name and the newcomer's description
+### Experts type exact names, newcomers describe the problem
 
-Experts type the exact name. Newcomers can only describe the problem. Separate searches for each look tidy until an expert meets an unfamiliar machine, and one box that guesses fails the moment nobody can see why it guessed.
+Separate searches for each look tidy until an expert meets an unfamiliar machine, and one box that guesses fails the moment nobody can see why it guessed.
 
 Example: GT Tools' navigation and search were reworked for buyers who know a part number and for buyers still comparing equipment. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
 
@@ -251,8 +253,6 @@ We would design one box that recognises a part number and goes straight to it, a
 ## What you get when Tcules designs your knowledge platform {#what-you-get}
 
 We design search, sources and AI answers as one product, tested on your own content.
-
-**What you receive**
 
 - **A review of the searches that fail:** a review of the searches that fail: zero results, repeated queries and the support tickets they cause
 
@@ -278,8 +278,6 @@ AI answers inside a wider product sit under [AI Search & Recommendation](/servic
 
 ## What clients say {#testimonials}
 
-Two voices from content and knowledge platforms, and one from a client in another field.
-
 > “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
@@ -289,41 +287,41 @@ Two voices from content and knowledge platforms, and one from a client in anothe
 > “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
 > **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a knowledge platform, a good first piece of work is the searches that fail most often, with their results redesigned and tested on your own content.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** Our audit of Dealpath found that Add to pipeline assumed every listing was a new deal, so the redesign asks people to search existing deals before creating one. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** For three years Primelis has had us design every one of its products, as an ongoing partnership.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** For The Wandering Raven, we designed the learning world, then installed and configured its Moodle plugins and created the custom theme ourselves. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about knowledge platform design {#faq}
 
@@ -333,7 +331,7 @@ Yes. Much of the trouble sits in the interface: how the search box suggests and 
 
 ### How should AI answers show their sources?
 
-Close to the answer, with a way to open the exact passage or document. People should be able to tell a quoted source from the AI's own summary. Our article looks at [how much an AI interface should show before people can trust it](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces).
+Close to the answer, with a way to open the exact passage or document. People should be able to tell a quoted source from the AI's own summary. Our article looks at [how much an AI interface should show before people can trust it](/insights/building-trust-and-transparency-in-ai-first-user-interfaces).
 
 ### How do we show which version of a document is current?
 
@@ -357,6 +355,6 @@ Paste the query, what came back and what the person needed. Add a link to the pl
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

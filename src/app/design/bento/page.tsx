@@ -23,7 +23,7 @@ const PD_SEVEN = (
     ['ui', 'Interaction & UI Design', 'Products whose structure works but whose screens confuse people', 'specialist-ui', '/services/product-design/interaction-ui-design'],
     ['dataviz', 'Data Visualisation', 'Dashboards that people export to a spreadsheet', 'specialist-dataviz', '/services/product-design/data-visualisation'],
     ['prototyping', 'Prototyping & Usability Testing', 'Choosing between directions before engineers start', 'specialist-prototype', '/services/product-design/prototyping-usability-testing'],
-    ['new-product', 'New Product Design & First Release', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/new-product-design-first-release'],
+    ['new-product', 'Design-led MVP Development', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/mvp-development'],
     ['audit', 'UX & Product Audit', 'Teams who know something is wrong but not yet what', 'specialist-audit', '/audits/ux-product-audit'],
   ] as const
 ).map(([id, title, body, scene, href]) => ({ id, title, body, href, scene })) satisfies BentoItem[];
@@ -251,7 +251,7 @@ export default function BentoSpecimen() {
               ],
               [
                 'new-product',
-                'New Product Design & First Release',
+                'Design-led MVP Development',
                 'Founders turning an idea or prototype into an MVP',
                 'specialist-new-product',
               ],
@@ -366,7 +366,7 @@ export default function BentoSpecimen() {
           />
           <li>
             <ServiceTile
-              title="New Product Design & First Release"
+              title="Design-led MVP Development"
               eyebrow="Our related service"
               href={ROUTES.services}
               scene="new-product"
@@ -518,11 +518,11 @@ export default function BentoSpecimen() {
             routes: [
               {
                 question: 'Building a new AI product?',
-                answer: 'New Product Design & First Release takes it from idea to MVP.',
+                answer: 'Design-led MVP Development takes it from idea to MVP.',
                 actions: [
                   {
-                    label: 'New Product Design & First Release',
-                    href: '/services/new-product-design-first-release',
+                    label: 'Design-led MVP Development',
+                    href: '/services/mvp-development',
                   },
                 ],
               },

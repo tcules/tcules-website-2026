@@ -695,12 +695,19 @@ export function EnquiryBand({
   island?: EnquiryIsland;
 }) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
+  /* A plain line after the lead ("Need an NDA first? Say so…", contact, 3 Nov 2026 copy) has no link
+     to become a contact entry and no score to become the badge: it is the island's footnote, under
+     the island on the band's ground (owner, 3 Nov 2026), so the island stays the ask and the form. */
+  const notes = band.blocks.flatMap((block) =>
+    block !== lead &&
+    block.type === 'paragraph' &&
+    !ratingOf(block) &&
+    !block.runs.some((run) => run.type === 'link')
+      ? [plain(block.runs)]
+      : [],
+  );
+  const footnote = notes.length > 0 ? notes.join(' ') : undefined;
   const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
-  /* The band's other lines, kept in the copy half: the independent score ("**4.8 on Clutch** from 13
-     reviews. [Read the reviews]") as the RatingBadge alone (owner, 29 Oct 2026: a rating is always
-     the badge, never a key and a link), and the other ways in ("Or email [hello@tcules.com]") as the
-     close's contact strip, each its words as the key and its link as the value. Text never crosses
-     the island edge. */
   const score = band.blocks.flatMap((block) => {
     const found = block === lead ? undefined : ratingOf(block);
     return found ? [found] : [];
@@ -733,6 +740,7 @@ export function EnquiryBand({
         island={surface}
         islandArrangement="halves"
         inBand={island.inBand}
+        footnote={footnote}
         islandTexture="flow"
         art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}
@@ -747,6 +755,7 @@ export function EnquiryBand({
       id={band.id}
       data-band="L"
       island={surface}
+      footnote={footnote}
       islandTexture="frame"
       art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}
@@ -785,6 +794,7 @@ export function corpusEnquiryForm(
       /* A dressed form is compact (owner, 16 Oct 2026: the close fits one laptop screen). */
       fieldScale={treatment.dress ? 'md' : 'lg'}
       submit={treatment.dress ? 'inline' : 'full'}
+      {...(conversion?.submitLabel ? { submitLabel: conversion.submitLabel } : {})}
       caption={after}
       nextSteps={treatment.nextSteps}
       success={

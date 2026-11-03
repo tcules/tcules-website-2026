@@ -37,6 +37,7 @@ import {
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
@@ -118,7 +119,13 @@ export function LinkActions({
    */
   pair?: boolean;
 }): ReactNode {
-  const [first, second] = links;
+  /* The 3 Nov copy ends its onward links on "→" ("See how we work →"); the link control draws its own
+     arrow, so the authored one goes rather than printing twice. Presentation only: the words stay. */
+  const bare = (link: CorpusLink): CorpusLink => ({
+    ...link,
+    labelText: link.labelText.replace(/\s*[→➝➔⟶]\s*$/u, ''),
+  });
+  const [first, second] = links.map(bare);
   if (!first) return null;
   if (links.length === 1) {
     return <CtaRow rule={rule} actions={[{ label: first.labelText, href: first.href }]} />;
@@ -136,7 +143,7 @@ export function LinkActions({
   }
   return (
     <Layout rowGap="text" justifyItems="start">
-      {links.map((link) => (
+      {links.map(bare).map((link) => (
         <Button
           key={`${link.href}-${link.labelText}`}
           as="a"
@@ -1713,10 +1720,24 @@ function sectorLinks(band: CorpusBand): { href: string; title: string }[] {
  * after the links is the footer.
  */
 export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
-  const links = sectorLinks(band);
+  /* A link to the industries hub ("See all industries →", 3 Nov 2026 copy) is not a sector: it is the
+     band's action, in the head (owner, 3 Nov 2026), never a card with a placeholder photograph. */
+  const all = sectorLinks(band);
+  const links = all.filter((link) => link.href !== ROUTES.expertise);
+  const onward: CorpusLink[] = all
+    .filter((link) => link.href === ROUTES.expertise)
+    .map((link) => ({
+      href: link.href,
+      label: [{ type: 'text', text: link.title }],
+      labelText: link.title,
+    }));
   const blocks = content(band);
+  const only = blocks.length === 1 && blocks[0]?.type === 'paragraph' ? blocks[0] : undefined;
+  /* A sentence of links is the lead only where it has words of its own beyond the links. */
   const sentence =
-    blocks.length === 1 && blocks[0]?.type === 'paragraph' ? blocks[0] : undefined;
+    only && only.runs.some((run) => run.type === 'text' && /[a-z]{3}/i.test(run.text))
+      ? only
+      : undefined;
   const trailing = blocks.filter((block, index) => index > 0 && block.type === 'paragraph');
   const footer = trailing.length > 0 ? <BandBody blocks={trailing} /> : undefined;
   const image = (href: string, title: string) => {
@@ -1734,6 +1755,8 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
       {...head(band)}
       data-band="C-image"
       footer={footer}
+      actionsAt="end"
+      actions={onward.length > 0 ? <LinkActions links={onward} /> : undefined}
       {...(sentence ? { lead: plain(sentence.runs) } : {})}
     >
       <BlockCardSet items={cards} lead="none" across={3} cue="title" phone="pair" />
@@ -2035,4 +2058,52 @@ export function CloseBand({
     );
   }
   return <TextBand page={page} band={band} />;
+}
+
+/* ── The ask: a band's link to the page's enquiry form, as its own ink island ───── */
+
+/**
+ * PLACEHOLDER (owner, 3 Nov 2026): the 3 Nov copy closes some bands on a bare "[Book a call](#enquiry)"
+ * and gives the island no heading of its own. This stands in until the copy supplies one; it is the
+ * ask the 26 Oct copy wrote ("Tell us what you're working on"). Replace it, never reword it per page.
+ */
+export const ASK_ISLAND_HEADING = 'Tell us what you’re working on';
+
+/** A link to the page's own enquiry form (`#enquiry`): the band's ask, never a destination. */
+export function isAskLink(link: { href: string }): boolean {
+  return link.href === anchorHref(ANCHORS.enquiry);
+}
+
+/** The band's ask, wherever the copy filed it (a link row of its own, or under its last `###` item). */
+export function askLinkIn(band: CorpusBand): CorpusLink | undefined {
+  const scan = (blocks: readonly CorpusBlock[]): CorpusLink | undefined => {
+    for (const block of blocks) {
+      if (block.type === 'links') {
+        const found = block.links.find(isAskLink);
+        if (found) return found;
+      }
+      if (block.type === 'item') {
+        const found = scan(block.blocks);
+        if (found) return found;
+      }
+    }
+    return undefined;
+  };
+  return scan(band.blocks);
+}
+
+/**
+ * The ask as its own band after the one that wrote it (owner, 3 Nov 2026: "Book a call is the CTA that
+ * needs to be presented in the island"): an ink island, the placeholder heading, the link's own words
+ * as the one solid, to the form. A page link in the same row stays in the band's head.
+ */
+export function AskIsland({ link }: { link: CorpusLink }) {
+  return (
+    <CtaSection
+      data-band="L"
+      arrangement="open"
+      heading={ASK_ISLAND_HEADING}
+      actions={[{ label: link.labelText, href: link.href }]}
+    />
+  );
 }

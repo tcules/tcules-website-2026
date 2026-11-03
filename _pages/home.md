@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -88,12 +88,17 @@ page_composition:
     placement: after_hero
     clients: &id001
     - Doodle
-    - Dealpath
-    - Benchmark Gensuite
-    - Eden AI
-    - ConnectX
+    - Ringier
     - JoVE
-    - Ringier Media Switzerland
+    - Benchmark Gensuite
+    - Dealpath
+    - Primelis
+    - Eden AI
+    - Knovos
+    - DataBahn
+    - Chestnut
+    - ConnectX
+    - CuramCare
     asset_policy: Use approved client logo assets; render names as fallback; never invent a logo asset.
   visual_plan: thesis_hero_two_doors_one_practice_three_case_artefacts_why_voices_ways_to_start_studio_people_ai_thinking_enquiry
   media_bindings:
@@ -169,25 +174,27 @@ content_governance:
 
 # Design for what software is becoming
 
-Tcules is a digital product design studio with a particular focus on SaaS, creating ambitious new software and making established products better. AI, agents and new ways of working are changing what products can do. We design the experiences that make those changes useful, trustworthy and simple.
+Tcules is a digital product design studio for SaaS and other ambitious software. As AI-built products look more alike, we help founders and product teams stand apart.
 
-[Start a conversation](#enquiry)
+[A new product or an AI-built prototype](/services/mvp-development) · [An established product customers find hard](/services/product-modernisation) · [AI features people don't rely on yet](/services/ai-product-ux)
+
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Some of the teams we've worked with {#client-recognition}
 
-[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · Ringier Media Switzerland
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Ringier](/case-studies/news-app-ux-shared-design-media-group-ringier) · JoVE · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · Primelis · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · Knovos · DataBahn · Chestnut · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · CuramCare
 
 ## Start where your product is: brand new, or already in use {#product-situations}
 
 ### Creating a new product
 
-You can see the product, maybe in a deck, maybe in a prototype you built over a weekend. What you need now is a first release customers choose, built on choices that still hold when the second release arrives.
+You can picture the product, maybe in a deck, maybe in a prototype you built over a weekend. What you need now is a first release customers choose, built on choices that still hold when the second release arrives.
 
 We shape it with you and carry it all the way to launch.
 
-- [Design and launch your MVP](/services/new-product-design-first-release)
+- [Design and launch your MVP](/services/mvp-development)
 - [Check whether your prototype is ready for customers](/audits/prototype-readiness-review)
 
 ### Taking an established product further
@@ -198,6 +205,8 @@ Your product works, customers rely on it, and the business wants it to do more: 
 - [Modernise a product customers rely on](/services/product-modernisation)
 - [Add AI features to your product](/services/ai-product-ux)
 
+[Book a call](#enquiry)
+
 ## One studio, from the first question to working software {#product-design}
 
 Product Design is the centre of everything we do: research, product thinking, interaction design and visual craft, applied to the people and systems behind the screens.
@@ -206,19 +215,19 @@ Around it sit design systems that keep a growing product coherent, design engine
 
 [Product Design](/services/product-design) · [Design Systems](/services/design-systems) · [Design Engineering](/services/design-engineering) · [Software Development](/services/software-development)
 
-## Selected work: three products, three different kinds of ambition {#selected-work}
+## Selected work: new products, AI features and a modernised suite {#selected-work}
 
 ### Doodle: research that redrew an enterprise MVP
 
-Doodle was planning an enterprise scheduling MVP. Our research found that a meeting's type, its priority and people's "maybe" availability decide whether a free slot will hold. So we designed the MVP to show how dependable each time is, and the product idea grew with it.
+Research changed the MVP: it now shows how dependable each free meeting slot is.
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-### Auxentios: six specialist roles, one quotation
+### ConnectX: ask a question, get the right energy dashboard
 
-Every industrial quotation at Auxentios passes through six specialist roles, across sales, product, solution, pricing and maintenance. After eight interviews we designed one shared quotation workflow, where each role adds its part without being forced through a fixed sequence.
+Facilities operators, finance leads and sustainability teams ask ConnectX a question in plain words, and it builds the dashboard each of them needs.
 
-[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
 ### Benchmark Gensuite: a modern suite that keeps customers' habits
 
@@ -226,25 +235,41 @@ Specialists run environment, health and safety work on Benchmark Gensuite every 
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-[See all case studies](/case-studies)
+### Eden AI: three ways to start a workflow, one search box
 
-## A product design partner for ambitious SaaS teams {#why-tcules}
+Developers can start from a template, from the AI or from a blank canvas. We brought all three into one search box that recognises which they mean.
 
-Tcules has delivered more than 90 projects for clients in 19 countries since 2017. Here is the evidence a product leader can check for themselves.
+[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-### Products customers rely on
+### Omny AI: suggestions people check before they accept
 
-Enterprise scheduling for [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), the deal pipeline at [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), the print store and production system at [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) and search across hundreds of AI models at [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign).
+The content area now starts empty, each AI suggestion waits for a person's click, and colour shows what the AI wrote and what a person added. Omny AI was acquired by Primelis.
 
-### AI that reached production
+[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-The AI dashboard we designed for ConnectX, first proved in a coded demo, has been live as a production-ready module since late 2025. [See how ConnectX got there](/case-studies/ai-native-building-energy-product-connectx)
+### Phoenix: two trade models, prototyped for testing
 
-### Relationships that last
+Working within the design team of an on-chain crypto exchange, we made two complete clickable prototypes of competing trade models for testing, then a design system its engineers could build from.
 
-Primelis has worked with us for three years and [Vovisto](/services/software-development/product-maintenance) since its first concept. Our work with Benchmark Gensuite has continued since the first coded prototypes.
+[Read the Phoenix case](/case-studies/fintech-ux-design-crypto-exchange-phoenix)
 
-[Why teams choose Tcules](/why-tcules)
+[See all case studies →](/case-studies)
+
+## Why founders and product teams choose Tcules {#why-tcules}
+
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
+
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## What clients say {#testimonials}
 
@@ -266,17 +291,19 @@ Primelis has worked with us for three years and [Vovisto](/services/software-dev
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-Bring what you have: an idea, a hunch that something is wrong, a prototype or a product with ten years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-**A focused problem or assessment.** One flow, one hard question or an audit of what holds the product back. A small, fixed-price start that shows you how we think.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**An ongoing product relationship.** A senior designer joins your team, with specialists as the work needs them, improving the product month after month.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-[How we work together](/how-we-work)
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
+
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
 ## The people behind Tcules {#people}
 
@@ -284,13 +311,13 @@ Tcules is a studio of product designers, design engineers and developers working
 
 The same people explore new ideas in our Future Interfaces Lab, from AI-assisted design reviews to workflows that run across several AI models.
 
-[Meet the studio](/about) · [Careers at Tcules](/careers)
+[See the studio →](/about)
 
 ## What our designers can now do with AI {#ai-native-practice}
 
-Before anyone proposes a change, our designers can have AI walk through your live product screen by screen, group what it finds and list where the product has drifted from its design system. A designer then judges which differences matter, tries the correction in working code and signs it off.
+Our designers can have AI check your live product screen by screen and list where it no longer matches its design system. A designer then judges which differences matter, tries the correction in working code and signs it off.
 
-More of your product gets examined, with people making every call. [See a typical AI-assisted design run](/how-we-work/ai-native-product-design)
+More of your product gets examined, with people making every decision. [See a typical AI-assisted design run](/how-we-work/ai-native-product-design)
 
 ## Selected thinking from the studio {#insights}
 
@@ -306,7 +333,7 @@ Pieces that show how we think, written from our own work.
 
 ## Industries we know well {#expertise}
 
-[B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software) · [AI products and developer tools](/expertise/ai-products-developer-tools) · [Data and analytics products](/expertise/data-analytics-decision-products) · [Commerce and transactional products](/expertise/commerce-transactional-products) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [MarTech and SalesTech](/expertise/martech-salestech)
+[B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software) · [AI products and developer tools](/expertise/ai-products-developer-tools) · [Data and analytics products](/expertise/data-analytics-decision-products) · [Commerce and transactional products](/expertise/commerce-transactional-products) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [MarTech and SalesTech](/expertise/martech-salestech) · [See all industries →](/expertise)
 
 ## Questions SaaS teams ask before hiring a product design studio {#faq}
 
@@ -334,7 +361,7 @@ Yes. Through AI Product UX we design copilots, agents, AI search and the review 
 
 An idea, a prototype or a product with years behind it. One line is enough to start.
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 **Enquiry form**
 
@@ -342,6 +369,6 @@ An idea, a prototype or a product with years behind it. One line is enough to st
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

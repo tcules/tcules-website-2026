@@ -120,7 +120,7 @@ See [Design to Code](/services/design-engineering/design-to-code) or inspect an 
 
 Design-to-code work fits when the main risk sits in the build, after the design is approved. The team follows the important states, content, responsive behaviour, permissions and recovery from the design into the running interface.
 
-Each difference is then sorted into a build defect, an out-of-date design or an intentional change that needs a product call.
+Each difference is then sorted into a build defect, an out-of-date design or an intentional change that needs a product decision.
 
 Tcules applies this through [Design to Code](/services/design-engineering/design-to-code) and the [Design-to-Code Audit](/audits/design-to-code-audit).
 
@@ -164,4 +164,4 @@ This work exists to make design and code agree on how the product behaves. Its s
 
 Tcules carries designs into production code through Design to Code, checks a build that already exists with the Design-to-Code Audit, and reviews a release against the design through [Implementation QA](/services/design-engineering/implementation-qa).
 
-[See Design to Code](/services/design-engineering/design-to-code)
+[See Design to Code →](/services/design-engineering/design-to-code)

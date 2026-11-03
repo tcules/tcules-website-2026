@@ -162,4 +162,4 @@ Structure matters most once several roles need the same record to mean the same 
 
 Tcules works out records, relationships, roles and routes through Information Architecture and Workflow Design, before the screens are drawn.
 
-[See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
+[See Information Architecture and Workflow Design →](/services/product-design/information-architecture-workflow-design)

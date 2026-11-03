@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -168,19 +168,17 @@ content_governance:
 
 # AI product development for SaaS, from first demo to live feature
 
-AI product development is for the customer who hands the feature real work, the support team asked what the AI just did, and the finance lead who reads the model bill. Tcules provides AI product development for SaaS teams: copilots, search and agents built into your product, on your customers' data and inside their permissions.
+With our AI product development, your copilot, search or agent is tested on real tasks and only shows each person what they may see.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin)*
 
-[Tell us about the AI feature](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from AI product development {#what-you-get}
 
-Custom AI product development for one feature: designed and built into your product, starting from an idea or a demo that only works on sample data.
-
-**What you receive**
+One AI feature, designed and built into your product, starting from an idea or a demo that only works on sample data.
 
 - **A working AI feature.** Answers from your own documents and records with the sources shown (engineers call this RAG). Or a copilot that drafts, summarises or fills in a form where the work happens, or an agent that updates real records with only the rights of the person it works for.
 
@@ -192,7 +190,7 @@ Custom AI product development for one feature: designed and built into your prod
 
 - **Corrections that become tests.** When someone overrules the AI, the design keeps the reason, and the engineers turn it into a new test.
 
-- **A view after release.** Usage, cost per use and failures, starting with a few customers and watching what they accept, edit and reject.
+- **Usage, cost and failures after release.** Usage, cost per use and failures, starting with a few customers and watching what they accept, edit and reject.
 
 - **Documented code in your codebase,** with the permissions and action log an agent will need, and designs for slow, unsure and wrong answers.
 
@@ -200,13 +198,13 @@ Custom AI product development for one feature: designed and built into your prod
 
 **What we need from you.** One task the AI must do well, with examples of a good result, which become the first tests. Access to the data that task needs, within each user's existing permissions.
 
-**Where our part stops.** Your security and legal teams decide which providers and regions the data may go to, and we build to their rules. Once the feature is live, the code is yours to run, or we keep developing it with you.
+**Where our part stops.** Your security and legal teams decide which providers and regions the data may go to, and we build to their rules. Once the work is paid for, the code is yours to run, or we keep developing it with you.
 
 ## Selected AI product development work {#selected-work}
 
 Of these three, ConnectX is the AI we took from a coded demo into live use. For Eden AI and BuildTwin we designed how the AI behaves, the part of the build that users see.
 
-### ConnectX: a question that builds the workspace
+### ConnectX: a plain question opens the right workspace
 
 In ConnectX's energy product, each plain-language question is matched to a known situation, only permitted tools fetch the data, and the right modules and digital twin appear. Eight scenarios became a coded demo, which we then carried into production, where the module has run since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
@@ -232,13 +230,13 @@ Connecting a model is the quick part of AI integration. In generative AI product
 
 An AI feature can pass every test and still go unused when people cannot see what it looked at or put it right. So the behaviour is designed alongside the code. Tests include questions where the right answer is "I don't know".
 
-## AI engineering, AI UX design or a review: which do you need? {#routes}
+## Build the AI feature, design it, or review it {#routes}
 
 | Service | What you get | Best for |
 |---|---|---|
 | **AI Product Engineering** | The AI feature designed, built, tested on real tasks and released in your product | Teams that want a working feature and lack engineers who have shipped AI before |
 | **[AI Product UX](/services/ai-product-ux)** | How the AI behaves for users: what it shows, what it may do and how people correct it | Teams with engineers ready to build who need the behaviour worked out first |
-| **[AI UX audit](/audits/ai-product-ux-readiness)** | A fixed-price review of an AI feature you already have | Features that work in testing and go unused, or worry the people who rely on them |
+| **[AI UX Audit](/audits/ai-product-ux-readiness)** | A fixed-price review of an AI feature you already have | Features that work in testing and go unused, or worry the people who rely on them |
 | **[SaaS & Web Application Development](/services/software-development/saas-web-app-development)** | The product around the AI: accounts, workflows, data and integrations | New products where AI is one part of a larger build |
 
 ## What clients say {#testimonials}
@@ -255,41 +253,41 @@ An AI feature can pass every test and still go unused when people cannot see wha
 > “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
 > **Clément Contamine, CPO, Primelis**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For AI product development, a good first piece of work is one task the AI must do well, with its first tests, tried on your own data.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we researched with families and carers, redesigned the web platform and both apps, and our developers coded the frontend of each from those designs.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We design AI that people can check and correct.** In our redesign for [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign), AI suggestions stayed apart from the listing until a person chose them, and every line showed who wrote it.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), the eight scenarios ran first as a coded demo on sample data, and only after the product was judged as a whole did we take it to a production-ready module.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about AI product development {#faq}
 
@@ -323,6 +321,6 @@ An idea, a demo on sample data or a feature customers ignore. Share the task and
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

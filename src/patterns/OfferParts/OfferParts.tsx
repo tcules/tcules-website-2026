@@ -34,7 +34,11 @@ export type OfferPartsProps = {
   heading: string;
   headingId: string;
   lead?: string;
-  /** The first part's title: the authored label over the list ("What you receive"). */
+  /**
+   * The first part's title: the authored label over the list ("What you receive"). Empty (the 3 Nov
+   * copy drops it), the deliverables take the full width under the heading and the terms stay rows
+   * (owner, 3 Nov 2026): an empty label column left a blank quarter beside the set.
+   */
   deliverablesTitle: string;
   /** Two to seven; built for five. */
   deliverables: readonly OfferPartsDeliverable[];
@@ -120,6 +124,35 @@ export function OfferParts({
     }
   }
   const t = TRACKS[deliverables.length] ?? { lg: 3, xl: 3 };
+  const labelled = deliverablesTitle.trim().length > 0;
+  /* Unlabelled, the item titles are the h3s under the band's h2; labelled, they sit under the row's. */
+  const ItemTitle = labelled ? 'h4' : 'h3';
+  const set = (
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: t.lg, xl: t.xl }}
+      colGap="gutter"
+      rowGap="stack"
+      shareRows={2}
+    >
+      {deliverables.map((item) => (
+        <Layout
+          as="li"
+          key={item.title}
+          columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
+          colGap="gutter"
+          rowGap="block"
+          align="start"
+        >
+          <Sketch name={item.scene} />
+          <Layout rowGap="text">
+            <ItemTitle className={styles.itemTitle}>{item.title}</ItemTitle>
+            {words(item)}
+          </Layout>
+        </Layout>
+      ))}
+    </Layout>
+  );
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-parts">
@@ -137,32 +170,7 @@ export function OfferParts({
           </h2>
         )}
         <Layout rowGap="column">
-          <Row title={deliverablesTitle}>
-            <Layout
-              as="ul"
-              columns={{ base: 1, lg: t.lg, xl: t.xl }}
-              colGap="gutter"
-              rowGap="stack"
-              shareRows={2}
-            >
-              {deliverables.map((item) => (
-                <Layout
-                  as="li"
-                  key={item.title}
-                  columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
-                  colGap="gutter"
-                  rowGap="block"
-                  align="start"
-                >
-                  <Sketch name={item.scene} />
-                  <Layout rowGap="text">
-                    <h4 className={styles.itemTitle}>{item.title}</h4>
-                    {words(item)}
-                  </Layout>
-                </Layout>
-              ))}
-            </Layout>
-          </Row>
+          {labelled ? <Row title={deliverablesTitle}>{set}</Row> : set}
           {example}
           {parts.length > 0 ? (
             <Layout rowGap="stack">

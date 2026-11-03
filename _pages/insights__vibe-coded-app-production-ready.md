@@ -319,7 +319,7 @@ Our [Prototype Readiness Review](/audits/prototype-readiness-review) covers both
 
 Anything that needs a security, infrastructure or compliance specialist is named in the plan, with an owner.
 
-When the review is done, your engineers can work from the plan, or Tcules can take the first release into working software. See [New Product Design & First Release](/services/new-product-design-first-release).
+When the review is done, your engineers can work from the plan, or Tcules can take the first release into working software. See [Design-led MVP Development](/services/mvp-development).
 
 If you are not sure you need a review yet, start with the free checklist in step 2. It will tell you how much of your app is real.
 
@@ -353,6 +353,6 @@ It depends on who uses the app next, how many workflows customers rely on and ho
 
 - [Prototype Readiness Checklist](/tools/prototype-readiness-checklist): sort what one workflow really does from what it only simulates.
 - [What is prototype hardening?](/glossary/prototype-hardening) The engineering work that replaces a demo's shortcuts with the real thing.
-- [New Product Design & First Release](/services/new-product-design-first-release): when you want Tcules to take the first release into working software.
+- [Design-led MVP Development](/services/mvp-development): when you want Tcules to take the first release into working software.
 
-[Tell us who will use your app and what data it holds](/contact).
+[Book a call](/contact)

@@ -156,4 +156,4 @@ Tcules sets up ownership, contribution and release routes through Governance and
 
 Governance is gaining new contributors. When an AI agent proposes a component or a code change, the same route applies: an owner, a check against the system's rules and a release that products can follow.
 
-[See Governance and Adoption](/services/design-systems/governance-adoption)
+[See Governance and Adoption →](/services/design-systems/governance-adoption)

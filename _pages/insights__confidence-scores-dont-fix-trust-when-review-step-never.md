@@ -227,7 +227,7 @@ Each of these products uses a different return point. In all three, the AI still
 |---|---|---|---|
 | [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), AI-assisted surveys | The researcher | **At the field.** In the MVP design, generated questions sit in the same list as the researcher's edits and stay editable | The questionnaire as the researcher shaped it, with the model's original kept visible beneath any rewritten question |
 | [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign), Amazon listing content | The seller or agency writing the listing | **At the decision.** Suggestions wait in their own panel, and adding one takes a deliberate click | Only the content a person chose, shown in blue; AI material is shown in purple |
-| [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), structural drawing checks | The quality engineer who signs off | **At the boundary.** An engineer with authority can change a check's status before the drawing is approved | The engineer's call, with a reason, and the original AI result kept on the record |
+| [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), structural drawing checks | The quality engineer who signs off | **At the boundary.** An engineer with authority can change a check's status before the drawing is approved | The engineer's decision, with a reason, and the original AI result kept on the record |
 
 Omny reported that once choosing a suggestion became deliberate, users grew more aware of how they used the AI and more forgiving when a suggestion was wrong. That is the handoff doing its job.
 
@@ -244,7 +244,7 @@ You can find the gap without instrumentation or a workshop. Open the feature and
 
 Redesign the step where every action is approve or dismiss and the binding value is the system's. There the user is a gate on the system's result. Adding signals to that step changes what the user is told about the output and leaves the output with the machine. The fix is to move the handoff into the binding moment.
 
-The same trace is the first move in our [AI Product UX Readiness Review](/audits/ai-product-ux-readiness). Run it there if you would rather use a rubric than work by hand.
+The same trace is the first move in our [AI UX Audit](/audits/ai-product-ux-readiness). Run it there if you would rather use a rubric than work by hand.
 
 The shortest version of the diagnosis: signals tell the user how much to trust the output, and a handoff lets them own it. Before anything else, run the trace yourself and mark the exact moment control returns to the user, or confirm that it never does.
 
@@ -268,7 +268,7 @@ Choose one of four return points by how reversible the commit is and what an err
 
 ## Related reading on AI review and trust {#related-reading}
 
-- [What should an AI interface show, and how much?](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces) The five things people need to see.
+- [What should an AI interface show, and how much?](/insights/building-trust-and-transparency-in-ai-first-user-interfaces) The five things people need to see.
 - [AI Trust and Control Canvas](/tools/ai-trust-control-canvas): plan the controls for a single AI output on one page.
 - [Human-in-the-Loop Workflows](/services/ai-product-ux/human-in-the-loop-workflows): how Tcules designs review into AI products.
 

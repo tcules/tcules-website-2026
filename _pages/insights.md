@@ -85,15 +85,15 @@ For founders and product teams taking an idea, or an app built with AI tools, to
 
 **[How to choose a product design agency and test the fit](/insights/guides/how-to-choose-a-product-design-agency).** What to check before you hire, and how a studio compares with a freelancer, an in-house hire or a development company.
 
-Our related service: [New Product Design & First Release](/services/new-product-design-first-release).
+Our related service: [Design-led MVP Development](/services/mvp-development).
 
 ## AI product UX articles for teams adding AI to their software {#ai-product-ux}
 
 For teams adding generated answers, recommendations or automated actions to software that people rely on at work.
 
-**[Trust and transparency in AI interfaces: what to show, and how much](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces).** Five things an AI feature should show the person using it, and why a risky action deserves more review than a routine one.
+**[Trust and transparency in AI interfaces: what to show, and how much](/insights/building-trust-and-transparency-in-ai-first-user-interfaces).** Five things an AI feature should show the person using it, and why a risky action deserves more review than a routine one.
 
-**[Seven generative AI product patterns for SaaS and the controls each needs](/insights/articles/generative-ai-product-patterns-for-saas).** Where AI can work inside a SaaS workflow, from drafting something for a person to judge to acting on their behalf.
+**[Seven generative AI product patterns for SaaS and the controls each needs](/insights/generative-ai-product-patterns-for-saas).** Where AI can work inside a SaaS workflow, from drafting something for a person to judge to acting on their behalf.
 
 Our related service: [AI Product UX](/services/ai-product-ux).
 
@@ -101,7 +101,7 @@ Our related service: [AI Product UX](/services/ai-product-ux).
 
 For teams building a design system, or wondering why product teams keep working around the one they have.
 
-**[How to build a SaaS design system product teams keep using](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency).** One test for any design system. A team needs something the library lacks: does the request end in a shared release or another local copy?
+**[How to build a SaaS design system product teams keep using](/insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency).** One test for any design system. A team needs something the library lacks: does the request end in a shared release or another local copy?
 
 **[Design systems for everyone, from basics to advanced](/insights/events).** Our Ahmedabad meetup on design systems, from auto-layout and design tokens to composable systems.
 
@@ -113,7 +113,7 @@ For teams whose product has become hard to change after years of releases, and w
 
 **[How to use a UX audit: from first question to ranked plan](/insights/guides/how-to-use-a-ux-product-audit).** How to run or commission an audit whose findings your team can own, prioritise and check afterwards.
 
-**[Silent UI regressions: how to catch them before customers lose confidence](/insights/articles/silent-ui-regression-debt).** The small interface slips that get past release checks: retried saves, double-checked results and a product that feels a little less dependable with each release.
+**[Silent UI regressions: how to catch them before customers lose confidence](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows).** The small interface slips that get past release checks: retried saves, double-checked results and a product that feels a little less dependable with each release.
 
 Our related service: [Product Modernisation](/services/product-modernisation).
 
@@ -135,7 +135,7 @@ Our related expertise: [B2B SaaS and workflow software](/expertise/b2b-saas-work
 |---|---|---|
 | [Articles](/insights/articles) | Twelve pieces that take a position on AI inside products, design systems, prototypes and SaaS design | Product leaders who want the argument before the method |
 | [Guides](/insights/guides) | Ten practical walkthroughs, from choosing a design partner to landing pages | Teams with one job to do, step by step |
-| [Podcasts](/insights/podcasts) | Two recorded conversations with product, engineering and design leaders, each written up | Listening to how other leaders make product calls |
+| [Podcasts](/insights/podcasts) | Two recorded conversations with product, engineering and design leaders, each written up | Listening to how other leaders make product decisions |
 | [Events](/insights/events) | Write-ups of two sessions we hosted for the design and product community | Designers and product people near Ahmedabad |
 | [Authors](/insights/authors) | The eight people who write for Insights, with everything each has published | Checking who wrote a piece and what else they cover |
 
@@ -155,7 +155,7 @@ Two articles: one on building a SaaS design system that product teams keep using
 
 ### Are there product design podcasts from Tcules?
 
-Yes, two episodes so far. One is with Eden AI's CPTO on building AI around the work users need done; the other is a panel of product, engineering and design leaders on making product calls together. Each comes with a written summary.
+Yes, two episodes so far. One is with Eden AI's CPTO on building AI around the work users need done; the other is a panel of product, engineering and design leaders on making product decisions together. Each comes with a written summary.
 
 ### Who writes Tcules insights?
 

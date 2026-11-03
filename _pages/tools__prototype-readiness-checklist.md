@@ -151,7 +151,7 @@ The demo saves an order: that could mean it wrote to a database, kept something 
 
 You leave with the questions and checks a development brief needs.
 
-[Review a prototype workflow](#workspace)
+[Use the checklist](#workspace)
 
 ## Simulated vs real features: an invitation screen with no email service {#example}
 
@@ -191,7 +191,7 @@ Mark each item "demonstrated", "simulated", "unknown" or "not applicable". "Demo
 
 For each unknown, note what it is about (saving, permissions, recovery, an outside service or another product rule) and the decision or build work that would answer it.
 
-## Prototype build brief template: turn the record into three lists {#brief}
+## Prototype build brief template: sort your answers into three lists {#brief}
 
 Group what you found into three lists: decisions to make, research to run and build work to scope. Give each item an owner and a check that would close it. Bring engineering in early, because some decisions only become clear once an engineer has looked.
 

@@ -270,7 +270,7 @@ Phenomenon Studio lists offices in Tallinn, Lugano and Dover in the US, and call
 Tcules is a digital product design studio in Ahmedabad, India, working on new and established software with a particular focus on SaaS. Product design leads, and design engineering and software development sit in the same practice, so the work can stop at designs for your engineers, a finished interface or a defined part of the application. A senior designer leads and does the work, with an account lead alongside. A small pilot at a fixed price agreed up front is a good first step, and it is optional. Ongoing work runs at a fixed monthly fee, with no minimum term and two weeks' notice to change the team or end.
 
 **Best for:** SaaS teams with multi-role workflow software that want senior designers to shape the product and carry it into code, starting small.
-**Worth knowing:** the team is in India, so shared working hours are agreed before each project starts. Brand identity is not among its services.
+**Worth knowing:** the team is in India and overlaps four to five hours with US working days, extending that when the work needs it. Brand identity is not among its services.
 
 ### UX Studio
 

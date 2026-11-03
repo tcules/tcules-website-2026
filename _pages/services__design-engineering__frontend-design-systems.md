@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -174,11 +174,11 @@ content_governance:
 
 # Frontend design system engineering for the components developers avoid touching
 
-A frontend design system is for the screens people spend their day in: the data table, the editor, the list they drag and reorder. It is also for the developer who has to change one of them next sprint. Tcules builds those components in code for SaaS teams, with every state, keyboard behaviour and test.
+We build data tables, editors and drag-and-drop lists into your frontend design system, with tests and keyboard support, so they work alike on every screen.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-[Tell us which screen keeps breaking](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -186,11 +186,9 @@ A frontend design system is for the screens people spend their day in: the data 
 
 One hard component, the kind your busiest screens rest on, rebuilt in your codebase so your team can extend it and see what a change affects.
 
-**What you receive**
-
 - **The component, rebuilt in code.** A data table, rich text editor, complex form or drag-and-drop list, built in place on the screen that depends on it, with your real data.
 
-- **Its contract.** Purpose, options, states, behaviour, accessibility and the real data it must handle, written down (an example follows below).
+- **The component's rules, written down.** Purpose, options, states, behaviour, accessibility and the real data it must handle, written down (an example follows below).
 
 - **Every state on show.** Each one in Storybook, or the tool your team already uses, so designers, developers and testers look at the same thing.
 
@@ -220,9 +218,9 @@ We developed GT Tools' Shopify store from our own design. Its product pages carr
 
 Ryzeo's reporting redesign came with documented, reusable components. Filters, states and data treatments each got shared rules, so later reports can build on the same parts. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
-## Component states and variants in code: what a hard component needs {#component-contract}
+## Component states and variants in code, for tables, editors and lists {#component-contract}
 
-A screen is only as dependable as the component it leans on. A button or a badge needs little of what follows. A data table, a rich text editor or a drag-and-drop list needs all of it, which is why we start there.
+A button or a badge needs little of what follows. A data table, a rich text editor or a drag-and-drop list needs all of it, which is why we start there.
 
 *Illustration, not client work*
 
@@ -240,7 +238,7 @@ The contract for a data table in a SaaS product's account list.
 
 Later changes run against those tests, so your team can see what a fix affects before it ships.
 
-## Frontend design system, shared library or frontend build: which do you need? {#which-do-you-need}
+## One component, a shared library or a full build {#which-do-you-need}
 
 | Option | What it covers | Best for |
 |---|---|---|
@@ -263,41 +261,41 @@ Later changes run against those tests, so your team can see what a fix affects b
 > “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a frontend design system, a good first piece of work is the component your team avoids touching, rebuilt with its states and its tests.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We prove the hard parts in code while they can still change.** [ConnectX's](/case-studies/ai-native-building-energy-product-connectx) modules and digital twin first ran as a coded demo on sample data, where their behaviour could still change, before we took them to a production-ready module.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we ran the UX audit, designed the store mobile first and built it on Magento, with a style guide to keep it consistent.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **We know what to leave alone in a product people rely on.** For [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) scheduling MVP, we kept Doodle's existing components for standard interactions and designed new ones only where the calendar and bookability work had nothing to use.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about frontend design systems {#faq}
 
@@ -331,6 +329,6 @@ Share the screen, the component it depends on and what goes wrong when people us
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

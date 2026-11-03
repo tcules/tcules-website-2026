@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -193,13 +193,15 @@ content_governance:
 
 # Healthcare UX design for apps patients, clinicians and carers can trust
 
-Around one patient's care, a family decides what to share, a carer saves notes between visits, a clinician looks for one result between patients, and a safety lead reviews it all. Tcules provides healthcare UX design for each of them, from first concept to daily use.
+With our healthcare UX design, each person gets a clear next step and a plain consent request, and your clinical safety lead reviews screens early.
 
-[Tell us about your health product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in HealthTech and digital health {#what-we-design}
+
+For founders and product teams in digital health, from a first concept to software in daily use.
 
 - **[Care platforms](/expertise/marketplaces-multi-sided-platforms)** that connect families with carers at home · CuramCare
 
@@ -213,11 +215,9 @@ Around one patient's care, a family decides what to share, a carer saves notes b
 
 - **Remote check-in apps** for care after a hospital stay · A plain answer on when someone will look
 
-## Selected healthcare UX design work {#selected-work}
+## Related product design work {#selected-work}
 
-Work closest to health products, from three other fields. Our health clients, CuramCare and Vovisto, appear in the sections below.
-
-### Benchmark Gensuite: the wrong scope shows the wrong data
+### Benchmark Gensuite: three clear views for choosing where you work
 
 Benchmark Gensuite's safety and sustainability suite rests on the scope selector, where people say which part of the organisation they work in. Choose wrongly, and the wrong records appear, looking right. Our redesign gives it three views with their own search boundaries, one listing sites by where the person stands. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
@@ -266,7 +266,7 @@ Health products have reviewers as well as users. In England, the NHS standard DC
 
 Software that informs diagnosis or treatment may count as a medical device, and then usability evidence becomes part of the file. So we meet your clinical safety and privacy leads first, and their hazards shape the brief.
 
-Wireframes and walkthroughs reach them while screens are cheap to change, with the research and reasoning behind each step in writing. Where AI drafts a clinical note, the draft sits beside its source with a quick way to correct it, and the record shows who made the call.
+Wireframes and walkthroughs reach them while screens are cheap to change, with the research and reasoning behind each step in writing. Where AI drafts a clinical note, the draft sits beside its source with a quick way to correct it, and the record shows who made the decision.
 
 ### Care away from the ward and the desk
 
@@ -282,8 +282,6 @@ Example: CuramCare's families and carers each use their own app, joined by a web
 
 We take on health products with several kinds of user and a safety or privacy review to pass, new or live.
 
-**What you receive**
-
 - **Each role's journey around one patient:** each role's journey around one patient, with what they may see and what they hand on
 
 - **Consent, sharing and access steps:** consent, sharing and access steps, worded with your privacy lead
@@ -298,15 +296,13 @@ We take on health products with several kinds of user and a safety or privacy re
 
 **Who does the work.** The design sits with a senior product designer, who also leads the project, and an account lead keeps it on track. Researchers come in for work with patients and carers, and design engineers or developers when the design moves into code.
 
-**What we need from you.** Your clinical safety and privacy leads from the first week, with the hazards and requirements they already know. We also need access to the people who will use the product and someone with the authority to make product calls.
+**What we need from you.** Your clinical safety and privacy leads from the first week, with the hazards and requirements they already know. We also need access to the people who will use the product and someone with the authority to make product decisions.
 
 **Where our part stops.** Hazard logs, risk assessments and medical device classification stay with your clinical safety, privacy and regulatory specialists, and clinical rules come from your clinicians. We design and document so their review has something solid to check.
 
-A health service that exists only as a concept, as Vovisto's once did, can start with [New Product Design & First Release](/services/new-product-design-first-release). A live platform people struggle with suits [Product Redesign](/services/product-modernisation/product-redesign), or a [UX & Product Audit](/audits/ux-product-audit) when nobody can trace the complaints to one cause.
+A health service that exists only as a concept, as Vovisto's once did, can start with [Design-led MVP Development](/services/mvp-development). A live platform people struggle with suits [Product Redesign](/services/product-modernisation/product-redesign), or a [UX & Product Audit](/audits/ux-product-audit) when nobody can trace the complaints to one cause.
 
 ## What clients say {#testimonials}
-
-Jody O'Neill and Aldrin Gomes speak for health clients; the third voice is a client from another field.
 
 > “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
@@ -317,41 +313,41 @@ Jody O'Neill and Aldrin Gomes speak for health clients; the third voice is a cli
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a health product, a good first piece of work is the step where people ring for help or go back to paper, redesigned with your clinical safety lead from day one.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** One Doodle interview showed that people make time for a meeting that matters to them, so meeting priority joined the scheduling model before the interface was designed. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** Three years into an ongoing partnership, we still design every product Primelis makes.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** The team that designed The Wandering Raven's learning world also installed its Moodle plugins and created its custom theme. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about healthcare UX design {#faq}
 
@@ -365,7 +361,7 @@ Yes. If you face an NHS DTAC assessment or a regulator's review, the risk assess
 
 ### How do you design AI features for clinicians and patients?
 
-AI suggestions show what they are based on, so a professional can check, edit or reject them, and the product records who made the call. For AI features across products, see [AI Product UX](/services/ai-product-ux).
+AI suggestions show what they are based on, so a professional can check, edit or reject them, and the product records who made the decision. For AI features across products, see [AI Product UX](/services/ai-product-ux).
 
 ### Do you design patient portals?
 
@@ -381,6 +377,6 @@ Patients, professionals, staff or all three. Share where they ring for help or g
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

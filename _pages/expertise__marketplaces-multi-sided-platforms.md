@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -189,13 +189,15 @@ content_governance:
 
 # Marketplace product design for two-sided platforms and the teams that run them
 
-Each side of a marketplace decides whether to come back on one screen: the buyer weighing a provider's terms, the provider sizing up a request. Behind them, your operations team rescues the bookings that slip. Tcules designs two-sided platforms, each side's app and the tools that run them.
+Buyers book providers they trust, and providers spot requests worth taking. Our marketplace product design makes every booking clear from request to completion.
 
-[Tell us about your marketplace](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in marketplaces and multi-sided platforms {#what-we-design}
+
+For founders launching a marketplace and teams already running one, from each side's app to your operations tools.
 
 - **[Care marketplaces](/expertise/healthtech)** matching families with self-employed carers · CuramCare
 
@@ -209,15 +211,13 @@ Each side of a marketplace decides whether to come back on one screen: the buyer
 
 - **B2B marketplaces** connecting trade buyers with suppliers · Contract prices and approvals kept plain
 
-## Selected marketplace product design work {#selected-work}
-
-Related work from three other kinds of product, each serving more than one side. CuramCare, our care marketplace client, appears in the sections below.
+## Related product design work {#selected-work}
 
 ### Doodle: a meeting time both sides will keep
 
 Doodle was exploring scheduling across companies, where a free slot means little unless people keep it. Research found that availability depends on how much a meeting matters, so the MVP direction rates each possible time by how likely it is to hold. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-### Scissors: clients, candidates and jobs on one model
+### Scissors: clients and candidates linked across four workflows
 
 Scissors' staffing software sits between client organisations and the candidates who fill their jobs. We modelled clients, candidates, jobs and talent pools first. Onboarding, shortlisting, talent pools and job creation were then redesigned on that one model, so details entered once are designed to carry through all four. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -235,7 +235,7 @@ Every marketplace turns on one thing changing hands: a booking, an order, a job 
 | The provider | "Is this request worth my time?" | "What changed, and when do I get paid?" |
 | Your operations team | "Which matches look wrong?" | "Who is stuck, and what can I change for them?" |
 
-### One record, three angles
+### One booking that every side sees correctly
 
 Buyer, provider and operations each see their own part of the same booking, so a change made by one shows up correctly for the others. Give each side its own app joined only by notifications, and your operations team ends up doing the joining by hand.
 
@@ -253,7 +253,7 @@ Rules now ask for some of this. In the EU, the Digital Services Act asks online 
 
 The Platform-to-Business Regulation asks for clarity on how rankings work, and DAC7 requires platforms to report sellers' income to tax authorities. Your legal team decides what applies; we design the seller onboarding, ranking explanations and reporting screens that meet it.
 
-### The way back: cancellations, changes, refunds and disputes
+### Cancellations, changes, refunds and disputes
 
 Cancelling, changing, refunding and disputing are stages of the booking, with rules both sides can read. Each stage has its own screen, so a problem can be worked out in the product.
 
@@ -273,9 +273,7 @@ B2B marketplaces sell on account, with quotes, contract prices, approvals and pa
 
 ## What you get when Tcules designs your marketplace {#what-you-get}
 
-We take on the exchange itself, across both sides and the team in the middle.
-
-**What you receive**
+We design the booking, order or job itself, for both sides and the team in the middle.
 
 - **What changes hands:** a written description of what changes hands: its states, when it binds and who acts at each one
 
@@ -299,8 +297,6 @@ Provider or buyer apps people use on the move may also need [Mobile App Developm
 
 ## What clients say {#testimonials}
 
-Jody O'Neill speaks for a marketplace client; the other two are clients from other fields.
-
 > “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
@@ -310,41 +306,41 @@ Jody O'Neill speaks for a marketplace client; the other two are clients from oth
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a marketplace, a good first piece of work is one booking flow designed for both sides and for the team that steps in when it goes wrong.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** Before designing BuildTwin's review screen, we mapped the three roles a drawing passes through and the four questions its reviewer has to answer. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has kept us on for three years as an ongoing partnership, designing every one of its products.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **One studio can take it into working software, with the designers staying in the build.** The Chain Hut's store began with our UX audit, was designed mobile first and then built by us on Magento, with its purchase workflow kept intact. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
-## Other industries we know {#industries}
+## Other industries {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about marketplace product design {#faq}
 
@@ -358,7 +354,7 @@ A view of every exchange and its history, a list of the exceptions that need a p
 
 ### What does marketplace trust and safety UX cover?
 
-Two sides of one job. Buyers and providers see what they can check before they commit: availability, real prices, response times and cancellation terms. Your trust team gets screens for reports, suspensions and appeals, with a record of every action and its reason.
+Buyers and providers see what they can check before they commit: availability, real prices, response times and cancellation terms. Your trust team gets screens for reports, suspensions and appeals, with a record of every action and its reason.
 
 ### Can AI help with marketplace matching?
 
@@ -382,6 +378,6 @@ A booking, a job, an order or a lead. Share who is on each side and where your t
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

@@ -60,11 +60,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -159,19 +159,17 @@ content_governance:
 
 # UX research company for SaaS: what users say, and what they do
 
-UX research is for the roadmap meeting where half the room blames onboarding and half blames pricing, and for the first release you are about to fund. Tcules is a UX research company for SaaS and complex software, answering one product question at a time from interviews, observation and the data you already hold.
+You get clear evidence for your next product decision, from UX research with your users and the data you already hold.
 
 *Selected work: [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Merchant payments](/case-studies/ux-research-for-kirana-store-payment-app)*
 
-[Bring us the question your team can't agree on](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from our UX research services {#what-you-get}
 
 Every study starts from one question your team needs answered and ends with what to change, what to test next and what to leave alone.
-
-**What you receive**
 
 - **The question, written down.** What the research must answer, and what your team would do differently depending on the answer.
 
@@ -181,13 +179,13 @@ Every study starts from one question your team needs answered and ends with what
 
 - **Every source checked against the others.** Words against behaviour, interviews against analytics, so you learn how often a problem happens as well as why.
 
-- **A readout you can act on.** Findings tied to your question and the choices they point to. Depending on the study, it also includes a research synthesis, personas, experience maps or a UX strategy.
+- **Findings you can act on.** Findings tied to your question and the choices they point to. Depending on the study, it also includes a research synthesis, personas, experience maps or a UX strategy.
 
 **Who does the work.** A senior designer leads the study and does the work, with a researcher for interviews and sessions and an account lead keeping it on track. Researchers and designers work as one team, so findings can go straight into prototypes and screens.
 
 **What we need from you.** The question and what hangs on it; the analytics, tickets and past studies you already have; and help reaching the people who use the product, from long-time customers to trial users.
 
-**Where our part stops.** You get the findings and the choices they point to, and the product calls stay with you. If you want the findings designed, our designers carry them into [Product Design](/services/product-design). Once you have a direction to check, [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing) tests it.
+**Where our part stops.** You get the findings and the choices they point to, and the product decisions stay with you. If you want the findings designed, our designers carry them into [Product Design](/services/product-design). Once you have a direction to check, [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing) tests it.
 
 ## Selected UX research work {#selected-work}
 
@@ -224,7 +222,7 @@ Example: for [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), user i
 
 ## UX research, a UX audit or usability testing: which do you need? {#routes}
 
-Each starts from a different place. Pick by what you have in hand today.
+Research answers a new question, an audit checks a live product, and testing tries a design you already have.
 
 | Service | What it covers | Best for |
 |---|---|---|
@@ -245,41 +243,41 @@ Each starts from a different place. Pick by what you have in hand today.
 > “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For UX research, a good first piece of work is one question, such as why adoption is weak, answered from interviews and the data you already hold.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), some intended users had yet to use the product, so we studied the staffing work itself and modelled clients, candidates and jobs before redesigning four workflows.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), the research pointed to the Add to pipeline action alone, so our redesign changed that step and left the other three listing actions largely as users knew them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we turned the questions operators, finance leaders and sustainability leads ask into eight scenarios, then proved them in a coded demo on sample data.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [MarTech](/expertise/martech-salestech) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about working with a UX research company {#faq}
 
@@ -299,6 +297,10 @@ Interviews usually explain why people work the way they do. To learn how often s
 
 Findings tied to the question you started with, and the choices they point to. Depending on the study, that can include a research synthesis, personas, experience maps and a UX strategy, as on the Auxentios and merchant payments projects.
 
+### How do you handle our customers' data during research?
+
+Recordings, notes and participant details stay in tools we agree with you, and we sign your NDA and data processing agreement.
+
 ### How long does UX research take?
 
 Most studies start with one workflow, on a timeline agreed before work starts. For research across a whole product, we start recruiting while the plan is agreed, so recruiting is already under way when sessions are due to begin.
@@ -317,6 +319,6 @@ Share the question, what you know so far and what you'll do with the answer.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

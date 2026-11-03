@@ -128,11 +128,11 @@ The three interfaces differ, and the same questions come back each time. What ma
 
 ## AI Product UX principles: what makes an AI product easy to trust {#principles}
 
-An AI recommendation needs a visible goal, the reasons behind it, alternatives and a person who owns the final call. An AI action also needs permission, a visible state and a way back.
+An AI recommendation needs a visible goal, the reasons behind it, alternatives and a person who owns the final decision. An AI action also needs permission, a visible state and a way back.
 
 A handful of principles carry most of the weight. Show where an answer came from, so people can check it. Keep the AI's suggestion apart from the person's own work until they accept it. Let the right person overrule the model. Plan how the product recovers when the output is wrong.
 
-Read about [building trust in AI interfaces](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces).
+Read about [building trust in AI interfaces](/insights/building-trust-and-transparency-in-ai-first-user-interfaces).
 
 ## AI UX vs traditional UX: designing for output that varies {#comparison}
 
@@ -176,4 +176,4 @@ The work covers what the model contributes, what people can inspect and how reco
 
 The field is widening as AI moves from answering to acting. Products now need designs for agents that change records, answers that arrive in stages and models that change between releases, and each raises the same questions of trust and recovery.
 
-[See AI Product UX](/services/ai-product-ux)
+[See AI Product UX →](/services/ai-product-ux)

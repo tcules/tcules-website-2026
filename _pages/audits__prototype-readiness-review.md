@@ -237,7 +237,7 @@ A vibe-coded app audit is one of several ways forward. The right one depends on 
 | **Prototype Readiness Review** | A gap map, experience fixes and an ordered plan before launch | Working prototypes about to take on paying customers |
 | **[Prototype Readiness Checklist](/tools/prototype-readiness-checklist)** | A record of what one workflow proved and skipped, made by your own team | A free self-check before you talk to anyone |
 | **[Coded prototyping](/services/design-engineering/coded-prototyping)** | A working prototype that tests a tricky interaction or idea | Ideas that still need testing before anyone builds for launch |
-| **[New Product Design & First Release](/services/new-product-design-first-release)** | Design and build through to a first release | Teams who already know the prototype needs finishing work |
+| **[Design-led MVP Development](/services/mvp-development)** | Design and build through to a first release | Teams who already know the prototype needs finishing work |
 | **Your own engineers** | A build that starts straight from the prototype | Teams that have already mapped the gaps themselves |
 
 Reviews for products already in customers' hands sit under [Audits & Assessments](/audits).
@@ -273,7 +273,7 @@ Eight interviews mapped how six specialist roles add to one industrial quotation
 
 ## How we work together {#how-we-work-together}
 
-After the review, your engineers can work from the plan alone, or we can carry it into a first release through [New Product Design & First Release](/services/new-product-design-first-release).
+After the review, your engineers can work from the plan alone, or we can carry it into a first release through [Design-led MVP Development](/services/mvp-development).
 
 Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 

@@ -45,7 +45,7 @@ export const PASS_1_OFFER_ROUTES: ReadonlySet<string> = new Set([
   '/services/ai-product-ux',
   '/services/design-engineering',
   '/services/design-systems',
-  '/services/new-product-design-first-release',
+  '/services/mvp-development',
   '/services/product-modernisation',
   '/services/software-development',
   '/services/ai-product-ux/ai-copilots-agents',

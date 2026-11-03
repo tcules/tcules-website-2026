@@ -56,13 +56,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -250,9 +250,9 @@ The search-before-create step protects more than one screen. A pipeline is only 
 
 Simplifying a product means separating the detail the work needs from the friction that crept in.
 
-When a workflow feels crowded, first ask which information people need to make the call. Then look at the defaults and the sequence. One wrong assumption in a workflow can carry more risk than a dense screen.
+When a workflow feels crowded, first ask which information people need to make the decision. Then look at the defaults and the sequence. One wrong assumption in a workflow can carry more risk than a dense screen.
 
-The hardest call in a mature product is often what to leave alone. Tcules looks for the one assumption costing the most, changes it, and protects everything users have already learned.
+The hardest decision in a mature product is often what to leave alone. Tcules looks for the one assumption costing the most, changes it, and protects everything users have already learned.
 
 Tcules treats this kind of change as [SaaS Product Redesign](/services/product-modernisation/product-redesign): established software, live customers and continuity to protect. Related domain work sits under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
 
@@ -282,11 +282,11 @@ The work stayed demanding in these products too, and the screens became easier t
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-[See SaaS Product Redesign](/services/product-modernisation/product-redesign)
+[See SaaS Product Redesign →](/services/product-modernisation/product-redesign)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us which step in your workflow people keep working around {#enquiry}
 

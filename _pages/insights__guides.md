@@ -146,6 +146,6 @@ Yes. The inclusive product design guide covers the accessibility standard to mee
 
 A guide walks through one job step by step and ends in something you can use, such as a checklist or a template. An article takes a position on a question and argues it. Browse the articles when you want the argument behind a method.
 
-## Tell us which guide matches your product {#talk}
+## Tell us about the problem you're working on {#talk}
 
-Want an argument as well as a method? Read the [articles](/insights/articles). If a guide matches a problem you are working on, [send us a note](/contact).
+[Send us a note](/contact), or read the [articles](/insights/articles) for the reasoning behind each method.

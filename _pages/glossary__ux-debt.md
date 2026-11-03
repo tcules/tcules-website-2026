@@ -162,10 +162,10 @@ Usually, yes. Most UX debt clusters around a few shared causes, and fixing one c
 
 ### Who should own UX debt?
 
-The product owner usually makes the call to repay or accept it, with design and engineering estimating the cost. Each item needs a named owner and a place in the same backlog as feature work, so it competes for time in the open.
+The product owner usually makes the decision to repay or accept it, with design and engineering estimating the cost. Each item needs a named owner and a place in the same backlog as feature work, so it competes for time in the open.
 
 ## Find the shared cause of UX debt first {#next}
 
 Find the shared cause before you fund another redesign. A shared cause, where there is one, gives the team a sharper change to make. When AI tools speed up adding features, debt can build sooner if nobody looks after the model underneath, and the remedy stays the same. [Information architecture](/glossary/information-architecture) is often where it sits, and [design system drift](/glossary/design-system-drift) is a common source of design debt.
 
-[See Product Modernisation](/services/product-modernisation) or [the UX & Product Audit](/audits/ux-product-audit)
+[See Product Modernisation →](/services/product-modernisation)

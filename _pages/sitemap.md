@@ -101,7 +101,7 @@ Every page on the Tcules website, grouped by section.
 ## Services {#services}
 
 - [All services](/services)
-- [New Product Design & First Release](/services/new-product-design-first-release)
+- [Design-led MVP Development](/services/mvp-development)
 
 ### Product Design
 
@@ -157,7 +157,7 @@ Every page on the Tcules website, grouped by section.
 
 - [All audits](/audits)
 - [UX & Product Audit](/audits/ux-product-audit)
-- [AI Product UX Readiness Review](/audits/ai-product-ux-readiness)
+- [AI UX Audit](/audits/ai-product-ux-readiness)
 - [Design System Audit](/audits/design-system-audit)
 - [Design-to-Code Audit](/audits/design-to-code-audit)
 - [Product Modernisation Assessment](/audits/product-modernisation-assessment)
@@ -202,6 +202,7 @@ Every page on the Tcules website, grouped by section.
 - [Benchmark Gensuite: modernising an enterprise suite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 - [Dealpath: adding listings to the deal pipeline](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 - [Gold Image Printing: print ordering and production](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+- [Ringier: one match card for every sport](/case-studies/news-app-ux-shared-design-media-group-ringier)
 - [Ryzeo: marketing automation reports](/case-studies/ryzeo-marketing-automation-ux-revamp)
 - [Scissors: staffing software redesign](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -229,29 +230,29 @@ Every page on the Tcules website, grouped by section.
 #### AI inside the product
 
 - [Confidence scores and the AI review step](/insights/confidence-scores-dont-fix-trust-when-review-step-never)
-- [Trust in AI features as the stakes rise](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces)
-- [Generative AI patterns for SaaS](/insights/articles/generative-ai-product-patterns-for-saas)
+- [Trust in AI features as the stakes rise](/insights/building-trust-and-transparency-in-ai-first-user-interfaces)
+- [Generative AI patterns for SaaS](/insights/generative-ai-product-patterns-for-saas)
 
 #### Design systems
 
 - [When to hire a design system consultant](/insights/when-to-hire-a-design-system-consultant)
-- [Design systems in everyday product work](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency)
+- [Design systems in everyday product work](/insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency)
 
 #### Prototypes, releases and quality
 
 - [From vibe-coded app to production](/insights/vibe-coded-app-production-ready)
-- [Silent UI regressions](/insights/articles/silent-ui-regression-debt)
+- [Silent UI regressions](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows)
 
 #### Designing SaaS products
 
 - [CPQ UX design](/insights/cpq-ux-design)
-- [Cognitive bias as a design risk](/insights/articles/cognitive-biases-in-ecommerce-and-saas-products)
-- [UX, CX and design thinking compared](/insights/articles/design-thinking-vs-cx-vs-ux-explained)
+- [Cognitive bias as a design risk](/insights/cognitive-biases-in-ecommerce-and-saas-products)
+- [UX, CX and design thinking compared](/insights/design-thinking-vs-cx-vs-ux-explained)
 
 #### Interviews
 
-- [Karthik Pasupathy on clarity](/insights/articles/my-experiments-with-ux-karthik-pasupathy)
-- [Aishwarya Ashok on AI-first products](/insights/articles/my-experiments-with-ux-aishwarya-ashok)
+- [Karthik Pasupathy on clarity](/insights/experiments-with-ux-karthik-pasupathy-context-clarity-core-functionality)
+- [Aishwarya Ashok on AI-first products](/insights/my-experiments-with-ux-aishwarya-ashok-on-ux-evolution-from-traditional-to-ai-first-products)
 
 ### Guides
 

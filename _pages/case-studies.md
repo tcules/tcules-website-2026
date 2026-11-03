@@ -54,11 +54,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -86,7 +86,7 @@ page_composition:
   - capability
   - sector
   - evidence_class
-  case_entity_count: 16
+  case_entity_count: 17
   testimonial_ids:
   - DRAFT-DOODLE-RESEARCH
   - DRAFT-CONNECTX-GHOSHAL
@@ -122,13 +122,13 @@ content_governance:
 
 These product design case studies cover SaaS, business and consumer software. Find the case closest to your situation: a new product, an established one, an AI feature, or work we carried through to working software.
 
-[Tell us about your product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Some of the teams we've worked with {#client-recognition}
 
-[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · Ringier Media Switzerland
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · [Ringier Media Switzerland](/case-studies/news-app-ux-shared-design-media-group-ringier)
 
 ## Featured SaaS UX case studies: modernisation, AI and an MVP {#featured}
 
@@ -166,6 +166,7 @@ An empty slot in a calendar is no promise someone will turn up. We studied which
 |---|---|---|
 | [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) | An audit, then a clearer listing and a search-before-create flow in the redesign, so people check existing deals before adding another. | Changing one workflow inside software people use every day |
 | [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) | The online ordering site and the internal production system, designed as one product. | Businesses whose customer site and back office must change together |
+| [Ringier](/case-studies/news-app-ux-shared-design-media-group-ringier) | An embedded design partner across Blick, cash.ch and Bilanz: one match card for every sport, then the same thinking in subscriptions and onboarding. | Products several brands or teams share |
 | [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) | Interviews, analytics and a product review decided what to fix first in a marketing automation platform. | Teams unsure what to fix first |
 | [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux) | Staffing software redesigned around one connected model, so a detail typed once follows the client, the candidate and the job. | Software where people keep typing the same details again |
 
@@ -203,7 +204,7 @@ An empty slot in a calendar is no promise someone will turn up. We studied which
 > “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Questions about our product design case studies {#faq}
 
@@ -237,6 +238,6 @@ A new product, a redesign, or the design work your roadmap is waiting on. Tell u
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

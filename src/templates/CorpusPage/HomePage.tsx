@@ -18,7 +18,6 @@ import {
   CtaRow,
   Gateway,
   GatewayPaths,
-  Reasons,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
@@ -44,6 +43,7 @@ import type {
 } from '@/lib/corpus-types';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { recordFigures } from '@/lib/studio-record';
 
@@ -57,10 +57,19 @@ import {
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { LinkActions, RelatedBand, content, entriesOf, sheetParts } from './CopyBands';
+import {
+  AskIsland,
+  LinkActions,
+  RelatedBand,
+  askLinkIn,
+  content,
+  entriesOf,
+  isAskLink,
+  sheetParts,
+} from './CopyBands';
 import { bindingNamed, coverFor, slugOf } from './images';
 import { UnitView, type OfferContext } from './OfferBands';
-import { planOffer, TEMPLATE_BANDS, type OfferUnit } from './plan';
+import { planOffer, TEMPLATE_BANDS } from './plan';
 import { bandLinks, labelTitle, leadOf, plain, trimEnd } from './text';
 
 export type HomePageProps = {
@@ -155,11 +164,9 @@ export function HomePage({
       />
       {units.map((unit) => {
         const b = unit.band;
-        /* Why Tcules on home: the head beside the three claims, words only (WhyTcules, below). */
-        if (b.id === 'why-tcules' && unit.part !== 'b') {
-          const why = whyTcules(b);
-          if (why) return <WhyTcules key={unit.id} unit={unit} b={b} items={why} />;
-        }
+        /* Why Tcules on home renders as on every other page: the plan's Reasons, one illustration
+           per reason (owner, 3 Nov 2026, superseding 2026-10-30-home-reasons-beside-words-only: the
+           3 Nov copy's six reasons are the services pages' six, so one drawn set serves both). */
         const Band = unit.part === 'b' ? undefined : BANDS[b.id];
         /* Home composes its own bands (the table below); every other band of the copy renders as
            the plan names it, so no band is ever skipped (component-map § E, 29 Oct 2026). */
@@ -295,7 +302,11 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
     const links = path.blocks.flatMap((block) => {
       if (block.type === 'links') {
-        return block.links.map((link) => ({ label: link.labelText, href: link.href }));
+        /* The ask filed under the last path ("Book a call") is not a service: Situations sets it as
+           its own island (owner, 3 Nov 2026). */
+        return block.links
+          .filter((link) => !isAskLink(link))
+          .map((link) => ({ label: link.labelText, href: link.href }));
       }
       if (block.type === 'list') {
         return block.items.flatMap((item) =>
@@ -336,10 +347,14 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
 function Situations({ b, eyebrows }: BandProps) {
   const paths = gatewayPaths(b);
   const multi = paths.some((path) => path.links.length > 1);
+  const ask = askLinkIn(b);
   return multi ? (
-    <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
-      <GatewayPaths paths={paths} />
-    </ContentSection>
+    <>
+      <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+        <GatewayPaths paths={paths} />
+      </ContentSection>
+      {ask ? <AskIsland link={ask} /> : null}
+    </>
   ) : (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
       <Gateway items={gatewayBoardItems(b)} arrangement="board" />
@@ -616,34 +631,6 @@ export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   );
 }
 
-/**
- * "A product design partner for ambitious SaaS teams" on home: Reasons `beside`, the heading, lead and
- * link in the leading track and the three claims reading down the trailing one. No drawing, no figure,
- * no rule. The band keeps the plan's surface.
- */
-function WhyTcules({
-  unit,
-  b,
-  items: reasons,
-}: {
-  unit: OfferUnit;
-  b: CorpusBand;
-  items: ReasonsItem[];
-}) {
-  const parts = sheetParts(b);
-  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
-  return (
-    <Reasons
-      {...head(b)}
-      arrangement="beside"
-      surface={unit.surface === 'tint' ? 'tint' : 'paper'}
-      lead={parts.lead}
-      action={links.length > 0 ? <LinkActions links={links} /> : undefined}
-      items={reasons}
-    />
-  );
-}
-
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
 
 function ClientVoices({ b, ratings, avatars }: BandProps) {
@@ -696,7 +683,11 @@ function AiPractice({ page, b }: BandProps) {
  * no faces), else its register slot.
  */
 function Expertise({ page, b }: BandProps) {
-  const cards: BlockCardSetItem[] = bandLinks(b).map((link) => {
+  /* "See all industries →" (3 Nov 2026 copy) is the band's action in the head, never a sector card
+     (owner, 3 Nov 2026), as IndustriesBand sets it on every other page. */
+  const onward = bandLinks(b).filter((link) => link.href === ROUTES.expertise);
+  const sectors = bandLinks(b).filter((link) => link.href !== ROUTES.expertise);
+  const cards: BlockCardSetItem[] = sectors.map((link) => {
     const photo = HOME_SECTOR_PHOTOS[link.href];
     return {
       id: link.href,
@@ -711,7 +702,12 @@ function Expertise({ page, b }: BandProps) {
     };
   });
   return (
-    <ContentSection {...head(b)} data-band="C-image">
+    <ContentSection
+      {...head(b)}
+      data-band="C-image"
+      actionsAt="end"
+      actions={onward.length > 0 ? <LinkActions links={onward} /> : undefined}
+    >
       <BlockCardSet items={cards} lead="none" across={4} cue="title" phone="pair" />
     </ContentSection>
   );

@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -150,19 +150,17 @@ content_governance:
 
 # Product design services that get the product right before the screens
 
-Good product design shows up all week. It is in people who use the software all day without carrying half the task in their heads, and in a roadmap meeting that starts from what customers do. It is in engineers who begin each sprint with their questions answered.
-
-Tcules provides product design services for SaaS and complex software, from a founder's first release to a product customers have relied on for years.
+From research to tested screens, our product design services make new and established SaaS products easier to use and simpler to build.
 
 *Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)*
 
-[Start a Product Design enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Selected product design work {#selected-work}
 
-### Dealpath: one assumption reversed, the rest kept familiar
+### Dealpath: one listing step fixed, the rest kept familiar
 
 Dealpath's deal-management software opened a new deal whenever someone added a listing to the pipeline, even one the team already tracked. After an audit, our redesign changed that one step to find the existing deal first, and left the other three listing actions largely as users knew them.
 
@@ -180,11 +178,9 @@ Developers on Eden AI could begin a workflow three ways: pick a template, ask th
 
 [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-## What you get from our product design services {#what-you-get}
+## What you get from our digital product design services {#what-you-get}
 
-Our digital product design services cover the thinking behind your product and every screen in it. We size each part to what your team already knows, so the budget goes on what it has not learned yet, and we agree the deliverables before work starts.
-
-**What you receive**
+We size each part to what your team already knows, and agree the deliverables before work starts.
 
 - **A tested brief:** what goes in, what waits and what stays out, checked against the people who use the product.
 
@@ -198,11 +194,11 @@ Our digital product design services cover the thinking behind your product and e
 
 **Who does the work.** Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.
 
-**What we need from you.** The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product calls.
+**What we need from you.** The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product decisions.
 
-**Where our part stops.** You make the product calls: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build.
+**Where our part stops.** You make the product decisions: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build.
 
-## The hard parts of SaaS product design {#hard-parts}
+## SaaS product design problems we solve {#hard-parts}
 
 **Rules nobody has written down.** People who use a product follow rules the brief never mentions, such as which meetings matter enough to move another. We find those rules in research and give them a place in the product before anyone draws a screen.
 
@@ -231,7 +227,7 @@ Most projects draw on several of these. When one problem stands out, each can be
 | **[Interaction & UI Design](/services/product-design/interaction-ui-design)** | Products whose structure works but whose screens confuse people |
 | **[Data Visualisation](/services/product-design/data-visualisation)** | Dashboards that people export to a spreadsheet |
 | **[Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing)** | Choosing between directions before engineers start |
-| **[New Product Design & First Release](/services/new-product-design-first-release)** | Founders turning an idea or prototype into an MVP |
+| **[Design-led MVP Development](/services/mvp-development)** | Founders turning an idea or prototype into an MVP |
 | **[UX & Product Audit](/audits/ux-product-audit)** | Teams who know something is wrong but not yet what |
 
 Want the riskiest screens tried in code, or the whole product built? [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) carry the design on. Already have finished screens? [Design to Code](/services/design-engineering/design-to-code) takes them from there.
@@ -250,41 +246,41 @@ Want the riskiest screens tried in code, or the whole product built? [Design Eng
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For product design, a good first piece of work is one workflow redesigned in full, or an audit first when the cause is unclear, as at Dealpath.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We work out what the product has to know before we draw it.** For [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), we mapped the detailer, the quality engineer and the approver, and the four questions a reviewer asks of an AI check, before redesigning the review screen.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We prove the hard parts in code while they can still change.** One of [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers, reviewing our coded prototypes of the suite's new shared patterns, asked how drag and drop would work in Bootstrap 5 while the choice was still open.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years as an ongoing partnership, and we have designed every one of its products in that time.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [See all industries →](/expertise)
 
 ## Questions about product design services {#faq}
 
@@ -298,7 +294,7 @@ It is the studio's own process, sized to your product. We start from what you al
 
 ### How much research does a product design project need?
 
-Tcules sizes research to the problem: a handful of user interviews, your analytics and support tickets, or research you already have. We size it so your team can make the product calls with confidence, and agree the scope before work starts.
+Tcules sizes research to the problem: a handful of user interviews, your analytics and support tickets, or research you already have. We size it so your team can make the product decisions with confidence, and agree the scope before work starts.
 
 ### Can you hand over to our developers, or do you build it?
 
@@ -326,6 +322,6 @@ A new idea, a live product or one stubborn workflow your users keep tripping ove
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

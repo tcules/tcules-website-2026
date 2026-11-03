@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -185,11 +185,11 @@ content_governance:
 
 # Legacy software modernisation services that keep staff and customers working
 
-Legacy modernisation is for the staff who keep a spreadsheet open beside the old system, the customers whose orders still run through it, and the sales demo that opens with an apology. Tcules provides legacy software modernisation services for established products: a map of what the system really does, then change in stages.
+If staff still work around your old system, legacy modernisation replaces it with software they want to use, keeping every rule the business relies on.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-[Tell us about the system everyone's afraid to touch](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -197,11 +197,9 @@ Legacy modernisation is for the staff who keep a spreadsheet open beside the old
 
 Before anything is switched off, you know what the old system does and what each stage of the change will ask of the people using it. It is the part of our [Product Modernisation](/services/product-modernisation) work for systems whose rules are buried in old code.
 
-**What you receive**
-
 - **A map of what the system really does.** Its behaviour, rules, data, connected systems and the workarounds people rely on, written down.
 
-- **A keep-or-change call on each rule.** Judged by what the rule does for your users and the business, with a reason for every rule that stays and a plan for every one that goes.
+- **A keep-or-change decision on each rule.** Judged by what the rule does for your users and the business, with a reason for every rule that stays and a plan for every one that goes.
 
 - **A staged plan.** The order of change, and how the old and new systems share the work in between.
 
@@ -213,7 +211,7 @@ Before anything is switched off, you know what the old system does and what each
 
 **What we need from you.** The running system, staff we can watch at work, and whatever documentation exists for the system and the software connected to it.
 
-**Where our part stops.** Cloud migration and other infrastructure moves stay with your platform team or a specialist firm. We plan alongside them so product and platform move in step, and the product calls stay yours.
+**Where our part stops.** Cloud migration and other infrastructure moves stay with your platform team or a specialist firm. We plan alongside them so product and platform move in step, and the product decisions stay yours.
 
 ## Selected legacy modernisation work {#selected-work}
 
@@ -257,7 +255,7 @@ The change itself runs as incremental legacy modernisation, in four stages that 
 
 3. **Review with users and engineers.** Separate visual fixes from changes to how the work is done.
 
-4. **Extend where it pays.** Put the next round of effort where the product and its users gain most.
+4. **Pick the next area to improve.** Put the next round of effort where the product and its users gain most.
 
 ## Legacy application modernisation strategies: which fits each part? {#strategies}
 
@@ -286,41 +284,41 @@ Moving to a new platform has its own page: [Replatforming Product Design](/servi
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For legacy software, a good first piece of work is a map of what one area of the system really does, followed by one high-use workflow changed in full.
+**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+You keep the product decisions, and what we make is yours once it's paid for.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+We overlap four to five hours with US working days, and extend that whenever the work needs it.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-## Why teams choose Tcules {#why-tcules}
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we redesigned the one listing action built on a wrong assumption and left the other three largely as users knew them.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-- **We prove the hard parts in code while they can still change.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer reviewing our coded prototypes asked whether drag and drop would need an external library, while that choice was still open.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-- **Senior people do the work, and clients keep us for years.** Primelis has kept us for three years, and we keep improving each of its products as they grow.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [Commerce](/expertise/commerce-transactional-products)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Legacy software modernisation FAQs {#faq}
 
@@ -330,7 +328,7 @@ Software becomes legacy when its structure makes important change slow, risky or
 
 ### Should we rebuild from scratch?
 
-Usually not from scratch. Many legacy systems need parts rebuilt and the rest kept, so Tcules separates the knowledge worth keeping from the foundations that block you. When the old structure stops most of the product, a full rebuild is the right call.
+Usually not from scratch. Many legacy systems need parts rebuilt and the rest kept, so Tcules separates the knowledge worth keeping from the foundations that block you. When the old structure stops most of the product, a full rebuild is the right decision.
 
 ### Can we start with one part of the system?
 
@@ -354,6 +352,6 @@ Tell us what it still does well, what the business needs next and which workarou
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.
