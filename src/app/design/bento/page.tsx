@@ -299,6 +299,90 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="detail-odd"
+        title="2d3 · An odd split tile takes the whole row"
+        note="A split tile left alone on the last row of four tracks takes every track from 1024, so the set ends on a full row (4 Nov 2026, /audits' five audits and an audit's three-option comparison). Its named half sets the drawing beside the words, as the wide tile does, so the plate keeps a single tile's size; the panel keeps its start-edge hairline and takes the last third. Below 1024 it is every split tile. Shortest and longest real copy: three tiles, then five."
+      />
+      <Section>
+        <Layout rowGap="column">
+          <Bento
+            items={[
+              ...SPLIT.slice(0, 2),
+              {
+                ...SPLIT[2]!,
+                title: 'Design System Implementation',
+                body: 'Teams that agree what needs building',
+                detail: {
+                  label: 'What you get',
+                  text: 'Shared components built in Figma and code',
+                  action: 'Explore the service',
+                },
+              },
+            ]}
+            tracks={4}
+          />
+          <Bento
+            items={[
+              ...SPLIT,
+              {
+                ...SPLIT[0]!,
+                id: 'pma',
+                title: 'Product Modernisation Assessment',
+                body: 'A team split between redesign, new platform and rebuild',
+                detail: {
+                  label: 'What you get',
+                  text: 'An answer and an order of work for each area',
+                  action: 'See the audit',
+                },
+              },
+            ]}
+            tracks={4}
+          />
+        </Layout>
+      </Section>
+
+      <Variation
+        id="detail-fields"
+        title="2d4 · A split tile with two labelled fields"
+        note="A router table with two value columns folds into ONE result panel (4 Nov 2026, /tools' AI tools: Best for, You leave with): each field its authored header in the mono label voice over its text, the action at the panel's foot. Two tiles of two tracks fill the row. Shortest and longest real copy: the readiness check's two cells, then the canvas's."
+      />
+      <Section>
+        <Bento
+          items={[
+            {
+              id: 'readiness',
+              title: 'AI feature readiness checklist: agree what the AI may do before launch',
+              body: 'The AI Product UX Readiness Check takes one AI use case through what the AI may do, what users can inspect and how mistakes get handled. You leave with the open questions and the tests to bring to your next product review.',
+              href: '#detail-fields',
+              detail: {
+                label: 'Best for',
+                text: 'One AI feature before you build or launch it',
+                fields: [
+                  { label: 'You leave with', text: 'Open questions, and the tests to run before launch' },
+                ],
+                action: 'Try the tool',
+              },
+            },
+            {
+              id: 'canvas',
+              title: 'AI trust and control canvas: plan what people check, approve and undo',
+              body: 'The AI Trust and Control Canvas follows one AI output to the action it can trigger. It ends in a short brief listing what people can check, approve and undo before that action happens.',
+              href: '#detail-fields',
+              detail: {
+                label: 'Best for',
+                text: 'One AI output that can change a record, send a message or start an action',
+                fields: [
+                  { label: 'You leave with', text: 'A control brief your designer and engineer can build from' },
+                ],
+                action: 'Try the tool',
+              },
+            },
+          ]}
+          tracks={4}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."
@@ -477,6 +561,35 @@ export default function BentoSpecimen() {
             <ServiceTile
               title="Design Systems"
               eyebrow="Our related service"
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="Explore the service"
+              wide
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
+        id="tile-body"
+        title="9b · ServiceTile wide with a body — a named offer on its own"
+        note="`body`: the line the copy sets beside the name, under the title in the bento body role (/audits `prototype`: the sixth audit, apart from the chooser). Shortest and longest real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype Readiness Review"
+              body="A senior designer and an engineer put one key flow through real use and show you what breaks before launch."
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the audit"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body="Shared components teams use."
               href={ROUTES.designSystems}
               scene="design-systems"
               action="Explore the service"

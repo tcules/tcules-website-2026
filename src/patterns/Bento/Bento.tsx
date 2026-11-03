@@ -25,7 +25,18 @@ export type BentoItem = {
    * the mono label voice sets its case), the text, and the tile's action at the panel's foot. A
    * router table's third column, so a table that becomes tiles drops no column. Every tile or none.
    */
-  detail?: { label: string; text: string; action?: string };
+  detail?: {
+    label: string;
+    text: string;
+    /**
+     * Further labelled fields after the first, in the router table's column order (4 Nov 2026, the
+     * /tools AI tools: "Best for" and "You leave with"): a table with two value columns becomes ONE
+     * panel holding both, each its label over its text, so no column is dropped and no tile carries a
+     * second panel. Absent: the one field.
+     */
+    fields?: readonly { label: string; text: string }[];
+    action?: string;
+  };
   /**
    * The whole tile is the link. Absent, the tile is a still card (owner, 2 Nov 2026, the audits'
    * comparisons): the option the page itself is, or one outside the studio ("your own engineers"),
@@ -170,10 +181,13 @@ function TileBox({ href, children }: { href?: string; children: ReactNode }) {
 function TileLink({
   item,
   wide,
+  full = false,
   Title,
 }: {
   item: BentoItem;
   wide: boolean;
+  /** A split tile alone on the set's last row, which it takes whole from 1024 (`full`). */
+  full?: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
   const named = (
@@ -201,16 +215,26 @@ function TileLink({
             tiles ends on the same line however long its neighbour's words run. */}
         <Layout
           className={styles.fill}
-          columns={{ base: 1, md: [1, 1] }}
+          columns={full ? { base: 1, md: [1, 1], lg: [2, 1] } : { base: 1, md: [1, 1] }}
           colGap="text"
           rowGap="text"
           equalRows
         >
           <div className={styles.named}>
-            <Layout rowGap="block">
-              {art}
-              {named}
-            </Layout>
+            {full ? (
+              /* The whole row: from 1024 the named half sets its words beside its drawing, as the
+                 wide tile does, so the plate keeps a single tile's size and the panel keeps its
+                 third; below, the drawing over the words as every split tile. */
+              <Layout columns={{ base: 1, lg: [1, 1] }} colGap="gutter" rowGap="block" align="center">
+                {art}
+                {named}
+              </Layout>
+            ) : (
+              <Layout rowGap="block">
+                {art}
+                {named}
+              </Layout>
+            )}
           </div>
           <div className={styles.panel}>
             <Layout
@@ -218,9 +242,16 @@ function TileLink({
               rowGap="block"
               pinLast={Boolean(item.detail.action && item.href)}
             >
-              <Layout rowGap="tight">
-                <p className={styles.eyebrow}>{item.detail.label}</p>
-                <p className={styles.panelText}>{item.detail.text}</p>
+              <Layout rowGap="block">
+                {[
+                  { label: item.detail.label, text: item.detail.text },
+                  ...(item.detail.fields ?? []),
+                ].map((field) => (
+                  <Layout key={field.label} rowGap="tight">
+                    <p className={styles.eyebrow}>{field.label}</p>
+                    <p className={styles.panelText}>{field.text}</p>
+                  </Layout>
+                ))}
               </Layout>
               {item.detail.action && item.href ? (
                 <Cluster>
@@ -295,6 +326,12 @@ export type ServiceTileProps = {
   wide?: boolean;
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
+  /**
+   * One line under the title, in the bento body role: what the destination is, where the copy says it
+   * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
+   * engineer …"). Plain text, verbatim. Absent renders nothing.
+   */
+  body?: string;
 };
 
 /**
@@ -316,11 +353,13 @@ export function ServiceTile({
   action,
   wide = false,
   titleAs: Title = 'h3',
+  body,
 }: ServiceTileProps) {
   const words = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
       <Title className={styles.title}>{title}</Title>
+      {body?.trim() ? <p className={styles.body}>{body}</p> : null}
     </Layout>
   );
   const visual = picture ? (
@@ -409,6 +448,13 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   /* The CTA cards follow the tiles one cell each; the LAST card takes every track its row leaves, so
      the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
   const routes = cta?.routes ?? [];
+  /* A split tile alone on the last row of four tracks takes the whole row (4 Nov 2026, the audits'
+     choosers and comparisons: five or three split tiles left the last one beside a hole). Only when
+     nothing follows it in the grid: a CTA card or a note takes the tracks it leaves instead. */
+  const fullAt =
+    tracks === 4 && last?.item.detail && last.col === 0 && routes.length === 0 && !note
+      ? placed.length - 1
+      : -1;
   const ctaAt = used % tracks;
   const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
   const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
@@ -421,12 +467,17 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
       colGap="gutter"
       rowGap="gutter"
     >
-      {placed.map(({ item, span }) => (
+      {placed.map(({ item, span }, index) => (
         <li
           key={item.id}
-          className={cx(styles.cell, span === 2 && styles.wide, item.detail && styles.split)}
+          className={cx(
+            styles.cell,
+            span === 2 && styles.wide,
+            item.detail && styles.split,
+            index === fullAt && styles.full,
+          )}
         >
-          <TileLink item={item} wide={span === 2} Title={Title} />
+          <TileLink item={item} wide={span === 2} full={index === fullAt} Title={Title} />
         </li>
       ))}
       {routes.length > 0 ? (

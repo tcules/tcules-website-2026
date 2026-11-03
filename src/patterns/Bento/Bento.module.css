@@ -15,6 +15,14 @@
   }
 }
 
+/* A split tile alone on the set's last row (`full`, 4 Nov 2026): from 1024 it takes every track, so
+   the set ends on a full row. Placement of this unit's own cell, as `.wide`. */
+@media (min-width: 1024px) {
+  .full {
+    grid-column: 1 / -1;
+  }
+}
+
 /* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
    texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
    where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
