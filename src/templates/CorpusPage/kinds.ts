@@ -100,6 +100,11 @@ export const KIND_COMPONENTS: Readonly<
     note: 'Ruled link rows (open roles, glossary groups).',
   },
   directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  index: {
+    component: ['listing-lead', 'listing-section'],
+    status: 'to-design',
+    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a section of drawn term cards (/glossary, 4 Nov 2026).',
+  },
   note: { component: ['C-note'], status: 'to-design' },
   close: {
     component: ['L', 'C-text'],

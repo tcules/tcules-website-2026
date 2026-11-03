@@ -5,6 +5,7 @@ export type {
   ListingFinder,
   ListingHero,
   ListingIndexProps,
+  ListingLead,
   ListingOffer,
   ListingSection,
   ListingView,
@@ -16,5 +17,7 @@ export type { FinderArgs, FinderGroup, FinderOption, FinderPick } from './listin
 export type { InsightItem, InsightKind } from './compositions';
 export { caseFinder, caseViews } from './cases';
 export { InsightResources } from './resources';
+export { glossaryIndex } from './glossary';
+export type { GlossaryIndex } from './glossary';
 export { AuthorPieces } from './authors';
 export type { CaseGroup, CaseItem, CaseView } from './cases';

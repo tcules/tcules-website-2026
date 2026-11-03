@@ -106,6 +106,35 @@ export type ListingSection = {
   count?: number;
   /** The section's pieces, composed by the caller. */
   content: ReactNode;
+  /**
+   * The rail's name for it, where the heading is a long authored line (4 Nov 2026, the glossary: "AI
+   * product design terms: how AI behaves inside a product" is the h2, "AI product design terms" the
+   * rail's row). Absent, the heading.
+   */
+  railLabel?: string;
+  /**
+   * Run-on words under the section's pieces (4 Nov 2026, the glossary's design-and-code group): the
+   * section's last sentence, with its inline links, where it speaks for the whole set rather than one
+   * piece. One paragraph at the body measure, a `stack` under the pieces, never a card or a CTA.
+   */
+  note?: ReactNode;
+  /** The band the copy authors this section as, written as `data-band` so kinds:check sees it. */
+  band?: string;
+};
+
+/**
+ * The listing's opening section (4 Nov 2026, the glossary's "How to use"): a headed, anchored block
+ * at the top of the content column, beside the rail, before the first section. It is a preface to
+ * the list, not a part of it, so it has no rail row and no "See more"; its words point at the rail
+ * beside it. With several views it leads the first.
+ */
+export type ListingLead = {
+  id: string;
+  heading: string;
+  /** The words, composed by the caller (a Prose flow). The template sets the body measure. */
+  content: ReactNode;
+  /** The band the copy authors it as, written as `data-band`. */
+  band?: string;
 };
 
 /** One way of curating the listing (BY TYPE, BY TOPIC, BY STAGE …) and its sections. */
@@ -181,6 +210,8 @@ export type ListingIndexProps = {
   views?: readonly ListingView[];
   /** The view the page opens on: the route reads it from `?view=`. Absent, the first. */
   view?: string;
+  /** The opening section above the first view's sections (see `ListingLead`). */
+  lead?: ListingLead;
   /** The rail as the finder; the first view is the curated content while nothing is picked. */
   finder?: ListingFinder;
   /** What the band says when there is nothing to list ("Nothing has been published yet."). */
@@ -241,7 +272,9 @@ export function ListingIndex({
   offer,
   closing,
   bands,
+  lead,
 }: ListingIndexProps) {
+  const leadView = lead ? <ListingLeadView lead={lead} /> : null;
   const lede = (hero.lede ?? []).filter((paragraph) => paragraph.trim());
   const shown = views
     .map((v) => ({ ...v, sections: v.sections.filter((section) => section.content) }))
@@ -274,6 +307,7 @@ export function ListingIndex({
             </Layout>
           ) : curated ? (
             <Layout rowGap="section-open">
+              {leadView}
               {curated.sections.map((section) => (
                 <ListingSectionView key={section.id} section={section} />
               ))}
@@ -290,17 +324,18 @@ export function ListingIndex({
         ariaLabel={railLabel}
         initialMode={view}
         param="view"
-        modes={shown.map((v) => ({
+        modes={shown.map((v, index) => ({
           id: v.id,
           label: v.label,
           items: v.sections.map((section) => ({
-            label: section.heading,
+            label: section.railLabel ?? section.heading,
             href: `#${section.id}`,
             count: section.count,
           })),
           panel: (
             /* Groups open as chapters: section-open between them, against the 64 seams inside one. */
             <Layout rowGap="section-open">
+              {index === 0 ? leadView : null}
               {v.sections.map((section) => (
                 <ListingSectionView key={section.id} section={section} />
               ))}
@@ -367,7 +402,12 @@ export function ListingIndex({
 function ListingSectionView({ section }: { section: ListingSection }) {
   const headingId = `${section.id}-heading`;
   return (
-    <section id={section.id} aria-labelledby={headingId} className={styles.section}>
+    <section
+      id={section.id}
+      aria-labelledby={headingId}
+      className={styles.section}
+      data-band={section.band}
+    >
       <Layout rowGap="stack">
         {/* The link at the heading's end, vertically centred on it, as every head's end action
             (owner, 29 Oct 2026; decisions/2026-10-29-head-end-action-centred-on-heading). */}
@@ -389,6 +429,30 @@ function ListingSectionView({ section }: { section: ListingSection }) {
           ) : null}
         </Layout>
         {section.content}
+        {section.note ? <div className={styles.note}>{section.note}</div> : null}
+      </Layout>
+    </section>
+  );
+}
+
+/**
+ * The listing's opening section: the same head as a section's, over its words at the body measure,
+ * a `block` apart (a head over its own body, not over a set of pieces).
+ */
+function ListingLeadView({ lead }: { lead: ListingLead }) {
+  const headingId = `${lead.id}-heading`;
+  return (
+    <section
+      id={lead.id}
+      aria-labelledby={headingId}
+      className={styles.section}
+      data-band={lead.band}
+    >
+      <Layout rowGap="block">
+        <h2 id={headingId} className={styles.sectionTitle}>
+          {lead.heading}
+        </h2>
+        <div className={styles.note}>{lead.content}</div>
       </Layout>
     </section>
   );

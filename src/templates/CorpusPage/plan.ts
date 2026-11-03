@@ -61,6 +61,8 @@ export type OfferKind =
   | 'set'
   | 'note'
   | 'close'
+  /** A listing's term index (4 Nov 2026, /glossary): its lead and its groups, set by ListingIndex. */
+  | 'index'
   /** No rule names this band: it renders every block plainly and warns (a planning gap). */
   | 'generic';
 
@@ -206,7 +208,7 @@ const boldLedList = (band: CorpusBand): boolean =>
 const personaOrChallenges: ShapeRule = (band) =>
   isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'challenges';
 /** A term index (`A` lines) where the copy uses the same id for a tool group (`L` + `P`). */
-const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'related' : 'directory');
+const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'index' : 'directory');
 
 /**
  * THE LOOKUP, SECTION ID FIRST (component-map § A and § B, 29 Oct 2026). The content team's band ids
@@ -329,10 +331,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'product-situations': 'destinations',
   /* ── G18 · open roles · G6 term indexes ── */
   'open-roles': 'related',
-  'ai-in-products': 'related',
-  'ai-in-practice': 'related',
-  'design-and-code': 'related',
-  structure: 'related',
+  /* The glossary's term groups: sections of the listing's index, each term a drawn card (4 Nov 2026). */
+  'ai-in-products': 'index',
+  'ai-in-practice': 'index',
+  'design-and-code': 'index',
+  structure: 'index',
   /* ── G23 · tool hub groups, or a term index where the same id names one ── */
   ai: termsOrTools,
   'design-systems': termsOrTools,
@@ -360,9 +363,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
-  /* Three instructions as plain paragraphs: numbered steps (MethodBand), so the glossary opens on a
-     shape before its five term groups (review 29 Oct). */
-  'how-to-use': 'method',
+  /* Three instructions on reading the index: the listing's lead, beside the rail of groups it points
+     at (4 Nov 2026). Not a method: the order is not a sequence (2026-10-11-no-decorative-numbering). */
+  'how-to-use': 'index',
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
   lab: 'close',

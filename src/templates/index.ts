@@ -16,6 +16,7 @@ export {
   ListingIndex,
   caseFinder,
   caseViews,
+  glossaryIndex,
   insightFinder,
   insightViews,
 } from './ListingIndex';
@@ -26,6 +27,7 @@ export type {
   FinderGroup,
   FinderOption,
   FinderPick,
+  GlossaryIndex,
   InsightFormat,
   InsightItem,
   InsightKind,
@@ -34,6 +36,7 @@ export type {
   ListingFinder,
   ListingHero,
   ListingIndexProps,
+  ListingLead,
   ListingOffer,
   ListingSection,
   ListingView,
