@@ -128,9 +128,9 @@ void main(){
   if (uMagnet > 0.5) {
     // 2 · contours: the halo's levels, read as ripples moving outward, the noise roughening them.
     float near = smoothstep(0.02, 0.25, h) * (1.0 - sh);
-    psi = mix(psi, h * 11.0 - uTime * 0.55 + 0.35 * n1, near);
+    psi = mix(psi, h * 11.0 - uTime * 0.18 + 0.35 * n1, near);
     // 3 · the current: diagonal bands racing through the strokes, a little noise in their front.
-    psi = mix(psi, (c.x * 0.8 + c.y * 0.6) / 22.0 - uTime * 1.6 + 0.5 * n2, sh);
+    psi = mix(psi, (c.x * 0.8 + c.y * 0.6) / 22.0 - uTime * 0.45 + 0.5 * n2, sh);
     // The ripples near and inside the shape run at higher contrast, so the drawing is evident.
     lo = mix(0.5, 0.15, max(near, sh));
   }
