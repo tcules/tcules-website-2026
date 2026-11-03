@@ -73,9 +73,12 @@ export function SiteFooter({
           site's moving texture, TextureFlow, run turbulent across the band's lower part edge to
           edge, and masked by a gradient that is full at the foot and gone well before the legal
           line, so the grid churns under the watermark and dissolves upward. One field, no shape and
-          no frame. Reduced motion draws it once and holds. */}
+          no frame. Reduced motion draws it once and holds.
+
+          `magnetic` (owner, 4 Nov 2026): the field gathers round the watermark's letters like filings
+          round a magnet, running along their outlines and quiet inside them. */}
       <div className={styles.field} aria-hidden="true">
-        <TextureFlow flow="turbulent" />
+        <TextureFlow flow="turbulent" magnetic />
       </div>
       <Layout rowGap="stack">
         {/* ── 1 · Brand ───────────────────────────────────────────────────────────────
@@ -300,7 +303,7 @@ export function SiteFooter({
           rather than transformed: a transform contributes nothing to layout height, so a scaled
           mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
           already announced once at the top of the band, and twice is noise. */}
-      <div className={styles.watermark} aria-hidden="true">
+      <div className={styles.watermark} aria-hidden="true" data-texture-attract>
         <Logo size="lg" variant="mono" title="" />
       </div>
     </Section>

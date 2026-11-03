@@ -30,6 +30,16 @@ export type TextureFlowProps = {
    * field on an open band (Section `density="open"`, which raises the band so it shows).
    */
   bleed?: boolean;
+  /**
+   * The grid gathers round a shape like iron filings round a magnet (owner, 4 Nov 2026, the footer's
+   * watermark). The shape is the first `[data-texture-attract]` element in the field's band — the
+   * field's host or an ancestor a few levels up, so the caller marks a sibling and this never
+   * reaches for a pattern. Near its outline every cell turns to run along it and the grid gathers
+   * brighter; inside it the field is quiet, so the shape reads as a void the field flows round. The
+   * pull fades with distance and the churn keeps running under it, so the outline is suggested
+   * rather than traced.
+   */
+  magnetic?: boolean;
 };
 
 /* The grid's rows as GLSL: the same cells Texture draws (pixel-grid.json), so the moving field and
@@ -52,6 +62,7 @@ const FRAG = `
 precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform vec4 uCalm;
 uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec4 uFocus; uniform float uFaint; uniform vec3 uInk;
+uniform float uMagnet; uniform sampler2D uHalo; uniform sampler2D uShape;
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -90,8 +101,26 @@ void main(){
   float ang = mix(atan(d.y, d.x), 0.0, settle) + loose * (1.5 * n1 + 0.55 * n2);
   float psi = mix(atan(d.y, d.x) * K, (T.y - c.y) / 56.0, settle) + loose * 2.0 * n1;
 
+  // The magnet. uHalo is the shape blurred wide, uShape the shape itself, both drawn at the field's
+  // CSS size. The halo's gradient points away from the outline, so its normal turned a quarter is
+  // the outline's direction. A cell is an "=", the same turned half round, so angles blend as
+  // doubled-angle vectors: a plain mix across the -pi/pi seam would spin cells the long way.
+  float pull = 0.0, inside = 0.0;
+  if (uMagnet > 0.5) {
+    vec2 uv = c / W; vec2 e = vec2(P) / W;
+    float h = texture2D(uHalo, uv).r;
+    vec2 g = vec2(texture2D(uHalo, uv + vec2(e.x, 0.0)).r - texture2D(uHalo, uv - vec2(e.x, 0.0)).r,
+                  texture2D(uHalo, uv + vec2(0.0, e.y)).r - texture2D(uHalo, uv - vec2(0.0, e.y)).r);
+    inside = texture2D(uShape, uv).r;
+    pull = smoothstep(0.03, 0.4, h) * smoothstep(0.0005, 0.01, length(g)) * (1.0 - inside);
+    float t = atan(g.y, g.x) + 1.5707963;
+    vec2 v = mix(vec2(cos(2.0 * ang), sin(2.0 * ang)), vec2(cos(2.0 * t), sin(2.0 * t)), 0.8 * pull);
+    ang = 0.5 * atan(v.y, v.x);
+  }
+
   float line = 1.0 - smoothstep(0.0, 0.32, abs(fract(psi) - 0.5) * 2.0);
   float tone = mix(0.5, 1.0, line) * mix(1.0, 0.6, calm);
+  tone = mix(tone, 1.0, 0.7 * pull) * mix(1.0, 0.12, inside);
   tone *= mix(1.0, smoothstep(0.18 * W.x, 0.62 * W.x, c.x), uFade);
 
   vec2 l = px - c; float cs = cos(ang), sn = sin(ang);
@@ -152,11 +181,13 @@ export function TextureFlow({
   flow = 'resolve',
   feather = false,
   bleed = false,
+  magnetic = false,
 }: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
   const settleOn = flow === 'turbulent' ? 0 : 1;
   const featherOn = feather;
+  const magneticOn = magnetic;
   /* `generation` moves whenever `near` does, so every approach gets a canvas that never held a context. */
   const [{ near, generation }, setLife] = useState({ near: false, generation: 0 });
 
@@ -231,6 +262,79 @@ export function TextureFlow({
       focus: u('uFocus'),
       faint: u('uFaint'),
       ink: u('uInk'),
+      magnet: u('uMagnet'),
+      halo: u('uHalo'),
+      shape: u('uShape'),
+    };
+
+    /* The magnet's two maps, as textures on units 0 and 1. Linear and clamped, which is all WebGL 1
+       allows a texture whose sides are not powers of two. */
+    const map = (unit: number) => {
+      const t = gl.createTexture();
+      gl.activeTexture(gl.TEXTURE0 + unit);
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      return t;
+    };
+    const haloTex = magneticOn ? map(0) : null;
+    const shapeTex = magneticOn ? map(1) : null;
+    gl.uniform1i(U.halo, 0);
+    gl.uniform1i(U.shape, 1);
+    gl.uniform1f(U.magnet, 0);
+    /* The attractor: searched for in the host, then up to three ancestors, so a field in its own box
+       finds a shape set beside it in the band. */
+    const attractor = (() => {
+      let scope: Element | null = host;
+      for (let i = 0; scope && i < 4; i += 1, scope = scope.parentElement) {
+        const found = scope.querySelector('[data-texture-attract]');
+        if (found) return found;
+      }
+      return null;
+    })();
+    /* How far the pull reaches past the outline, as the halo's blur, in CSS px. */
+    const REACH = 22;
+    let shapeRun = 0;
+    /* Rasterise the attractor's SVG into the two maps, at the field's CSS size and the shape's
+       offset in it. Drawn white so the maps read their red channel; an unbound sampler reads 0 there,
+       which is "no magnet". Async (the SVG loads as an image), so the field draws without the magnet
+       first and again once it has one. */
+    const rasterise = (box: DOMRect) => {
+      const svg = attractor?.querySelector('svg') ?? (attractor instanceof SVGElement ? attractor : null);
+      if (!magneticOn || !svg || !haloTex || !shapeTex) return;
+      const run = ++shapeRun;
+      const r = svg.getBoundingClientRect();
+      const clone = svg.cloneNode(true) as SVGElement;
+      clone.setAttribute('width', String(r.width));
+      clone.setAttribute('height', String(r.height));
+      clone.setAttribute('style', 'fill: white');
+      const img = new Image();
+      img.onload = () => {
+        if (run !== shapeRun) return;
+        const W = Math.max(1, Math.round(box.width)),
+          H = Math.max(1, Math.round(box.height));
+        const paint = (blur: number) => {
+          const cv = document.createElement('canvas');
+          cv.width = W;
+          cv.height = H;
+          const ctx = cv.getContext('2d');
+          if (!ctx) return cv;
+          ctx.filter = blur ? `blur(${blur}px)` : 'none';
+          ctx.drawImage(img, r.left - box.left, r.top - box.top, r.width, r.height);
+          return cv;
+        };
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, haloTex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(REACH));
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, shapeTex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, paint(0));
+        gl.uniform1f(U.magnet, 1);
+        run2();
+      };
+      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(clone))}`;
     };
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -296,6 +400,7 @@ export function TextureFlow({
           .color.match(/[\d.]+/g)
           ?.map(Number) ?? [];
       gl.uniform3f(U.ink, r0 / 255, g0 / 255, b0 / 255);
+      rasterise(box);
     };
     const draw = (sec: number) => {
       gl.uniform1f(U.time, sec);
@@ -320,6 +425,11 @@ export function TextureFlow({
         draw(held);
       }
     };
+
+    /* The magnet's maps arrive after the first frame; redraw once they do. */
+    function run2() {
+      run();
+    }
 
     measure();
     run();
@@ -346,7 +456,7 @@ export function TextureFlow({
       document.removeEventListener('visibilitychange', run);
       reduce.removeEventListener('change', run);
     };
-  }, [fadeOn, settleOn, featherOn, near]);
+  }, [fadeOn, settleOn, featherOn, magneticOn, near]);
 
   return (
     <canvas
