@@ -269,7 +269,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
-- [ ] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed in #<this PR>):
+- [ ] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
       `/why-tcules` (two new bands, `design-to-code` and `ai-products`, match no kind), the six audit pages (new
       outline: worked example, talk, after the audit; compare moves last; how-we-work-together and industries
       cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
