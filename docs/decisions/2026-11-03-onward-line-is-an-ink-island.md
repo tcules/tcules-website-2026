@@ -15,7 +15,10 @@ one link goes to a piece of reading (`/insights/…`). It leaves the band and be
 after it: `CtaSection arrangement="open" intent="onward"`, the same island and turbulent field as every
 formless call-to-action island. Its words are split, never rewritten: the sentence before the one holding
 the link is the heading; the sentence holding the link is the lead, or the heading when there is no
-setup; a link that closes the line on its own is only the button. The button is the link's own words as
+setup; a link that closes the line on its own is only the button. A title the sentence runs through
+("[Is your vibe-coded app ready for production?](…) covers …", "Our guide, [Does my SaaS need a mobile app?
+…](…), walks through …") keeps its mark as the copy's own curly quotation marks, since the link that marked it
+has become the button; without them the heading reads "…production? covers …", broken where the title ends. The button is the link's own words as
 the blue **link** with its arrow, never a solid: it points to reading, and the page's one main action
 belongs to the hero and the close.
 
@@ -28,7 +31,7 @@ argument (three sentences or more, or not the band's last block), nor an "Exampl
 An island makes each one a step the reader can take, without becoming the page's ask.
 
 **The mistake it prevents.** An onward line set as a blue solid (a second main action mid-page); two islands
-touching (an onward island before the close or after an ask island); a line rewritten to fit the island.
+touching (an onward island before the close or after an ask island); a line rewritten to fit the island; a title flattened into its sentence with nothing to show where it ends.
 
 **How to apply.** The rule is structural: new copy that ends a band on a reading pointer gets its island
 with no per-page work. The placements, and every line left inline with its reason, are in

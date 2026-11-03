@@ -12,7 +12,8 @@ Built 3 Nov 2026 on `feat/2-53-link-ctas`. The rule is logged `status: proposed`
   (`OnwardIsland`, `CopyBands.tsx`): `CtaSection arrangement="open" intent="onward"`, the same island and
   turbulent field as every formless CTA island. The words are split, never rewritten: the sentence before
   the one holding the link is the heading; the sentence holding the link is the lead (or the heading when
-  there is no setup); a link that closes the line on its own is the button alone. The button is the link's
+  there is no setup); a link that closes the line on its own is the button alone. A title the
+  sentence runs through keeps its mark as curly quotation marks, since its link is now the button. The button is the link's
   own words as the blue **link** with its arrow (the authored "→" is dropped, the control draws one), never
   a solid.
 - **Where it may go** (`placeOnward`, `plan.ts`). Not when the next band is the enquiry close or a closing
@@ -32,11 +33,11 @@ Built 3 Nov 2026 on `feat/2-53-link-ctas`. The rule is logged `status: proposed`
 
 | Page | Line (`_pages/`) | Decision | Reason |
 |---|---|---|---|
-| `/audits/prototype-readiness-review` | `audits__prototype-readiness-review.md:229` "[Is your vibe-coded app ready for production?](…) covers where AI-built apps break first." | **Island** after `#method` | The tracker's example. Next band is `#compare`, not an island. Heading is the whole sentence (no setup), so the title is said in the heading and on the button: see open question 1. |
+| `/audits/prototype-readiness-review` | `audits__prototype-readiness-review.md:229` "[Is your vibe-coded app ready for production?](…) covers where AI-built apps break first." | **Island** after `#method` | The tracker's example. Next band is `#compare`, not an island. Heading is the whole sentence (no setup), with the title in quotation marks: “Is your vibe-coded app ready for production?” covers where AI-built apps break first. The button is the title again: see open question 1. |
 | `/audits/ai-product-ux-readiness` | `audits__ai-product-ux-readiness.md:233` "A confidence score alone rarely helps the person approving. Our article explains [why …](…)." | **Island** after `#method` | Setup as heading, pointer sentence as lead. Next band is `#compare`. |
 | `/services/ai-product-ux` | `services__ai-product-ux.md:229` "Added a confidence score and usage stayed flat? [Read why a score alone doesn't earn trust →](…)" | **Island** after `#autonomy` | Question as heading, link as the button. Next band is `#whats-next`. |
 | `/services/ai-product-ux/trust-control-recovery` | `services__ai-product-ux__trust-control-recovery.md:237` "A score beside each answer doesn't fix trust on its own. [What does: a review step people control →](…)" | **Island** after `#recovery` | Next band is the testimonials (tint): paper around the island, no tint pair. |
-| `/services/software-development/mobile-app-development` | `services__software-development__mobile-app-development.md:241` "Still weighing it up? Our guide, [Does my SaaS need a mobile app? …](…), walks through the questions." | **Island** after `#format` | Next band is `#platforms` (a table). The longest button label the copy carries; it wraps centred at 390. |
+| `/services/software-development/mobile-app-development` | `services__software-development__mobile-app-development.md:241` "Still weighing it up? Our guide, [Does my SaaS need a mobile app? …](…), walks through the questions." | **Island** after `#format` | Next band is `#platforms` (a table). The lead quotes the guide's title: Our guide, “Does my SaaS need a mobile app? …”, walks through the questions. The longest button label the copy carries; it wraps centred at 390. |
 | `/services/product-modernisation/legacy-software-modernisation` | `…legacy-software-modernisation.md:274` "Moving to a new platform has its own page: [Replatforming Product Design](…)." | Inline | A link to a sibling service, not to reading: services point to each other in the copy and in the router bands. Open question 2. |
 | `/audits/prototype-readiness-review` | `audits__prototype-readiness-review.md:243` "Reviews for products already in customers' hands sit under [Audits & Assessments](/audits)." | Inline | A footnote to the comparison table, pointing to the audits hub, not reading. An island here would also follow `#compare`, two bands after the `#method` island. |
 | `/audits/product-modernisation-assessment` | `audits__product-modernisation-assessment.md:240` "If you only need to know where users struggle, a [UX & Product Audit](…) is more focused." | Inline | Qualifies the comparison table it closes; a sibling audit, not reading. |
@@ -66,8 +67,9 @@ text.
 ## Open questions for the owner
 
 1. **The no-setup form repeats the title.** "[Is your vibe-coded app ready for production?](…) covers where
-   AI-built apps break first." has no sentence before the link, so its island's heading is the whole line and
-   the button is the title again. A one-word change in the copy (a setup sentence, or a button label) would
+   AI-built apps break first." has no sentence before the link, so its island's heading is the whole line, with
+   the title in quotation marks so the sentence reads (fixed 3 Nov after review: flattened, it read
+   "…production? covers …"), and the button is the title again. A one-word change in the copy (a setup sentence, or a button label) would
    end the repeat; the rule renders whatever the copy gives it.
 2. **Sibling-service pointers.** The rule lifts only links to reading. Should a band's last line that points to
    a sibling service ("Moving to a new platform has its own page: [Replatforming Product Design]") take an

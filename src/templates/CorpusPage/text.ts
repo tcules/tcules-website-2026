@@ -199,8 +199,10 @@ export function isExample(runs: readonly InlineRun[]): boolean {
  *
  * Its words are split, never rewritten: the sentence before the one holding the link (the setup) is
  * the island's heading; the sentence holding the link is its lead, or the heading when there is no
- * setup; a link that closes the line on its own is the button alone. The link's own words are the
- * one button, to its href, without the authored arrow (the control draws one).
+ * setup; a link that closes the line on its own is the button alone. A title the sentence runs
+ * through keeps its mark as the copy's quotation marks, since the link that marked it is now the
+ * button. The link's own words are the one button, to its href, without the authored arrow (the
+ * control draws one).
  *
  * Not an onward line: a link to a case (the case-mention rule links it in place), a service or the
  * form (an ask), a paragraph that argues and then points (three sentences or more), an "Example:".
@@ -237,7 +239,15 @@ export function onwardLine(band: CorpusBand): OnwardLine | null {
   const setup = cut > 0 ? before.slice(0, cut).trim() : '';
   const prefix = cut > 0 ? before.slice(cut) : before;
   const tail = /^\s*[.]?\s*$/.test(after);
-  const pointer = `${prefix}${label}${after}`.trim();
+  /* A title the sentence runs through ("Our guide, Does my SaaS need a mobile app? …, walks through
+     the questions"; "Is your vibe-coded app ready for production? covers …") was marked by its link
+     alone. Plain text drops the link, so the title takes the copy's own quotation marks, or the
+     sentence reads broken where the title ends (critic, 3 Nov 2026). A clause link ("explains why …")
+     opens lower-case and is prose either way. */
+  const embedded = !tail || prefix.trim() !== '';
+  const title =
+    embedded && /^\p{Lu}/u.test(label) && (prefix.trim() !== '' || /[.?!…]/.test(label));
+  const pointer = `${prefix}${title ? `“${label}”` : label}${after}`.trim();
   const button = { label: label.replace(/\s*[→➝➔⟶]\s*$/u, ''), href: link.href };
 
   if (tail && !prefix.trim()) {
