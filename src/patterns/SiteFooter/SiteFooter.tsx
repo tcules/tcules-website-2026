@@ -75,8 +75,8 @@ export function SiteFooter({
           line, so the grid churns under the watermark and dissolves upward. One field, no shape and
           no frame. Reduced motion draws it once and holds.
 
-          `magnetic` (owner, 4 Nov 2026): the field gathers round the watermark's letters like filings
-          round a magnet, running along their outlines and quiet inside them. */}
+          `magnetic` (owner, 4 Nov 2026): the swirls and ripples bend round the watermark's letters
+          as they drift past; the cells themselves stay free. */}
       <div className={styles.field} aria-hidden="true">
         <TextureFlow flow="turbulent" magnetic />
       </div>
