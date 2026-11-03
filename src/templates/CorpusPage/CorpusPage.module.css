@@ -201,17 +201,14 @@
   }
 }
 
-/* A tool group's head inside the joined directory band (CopyBands ToolGroupsBand, 4 Nov 2026): the
-   authored h2, set at the h3 scale because it heads a group of one or two tiles inside a band rather
-   than a band of its own (the /expertise group heads are h3). */
+/* A tool group's head under the band that hosts it (CopyBands ToolGroupRows, 4 Nov 2026): the
+   authored h2, set at the h3 scale because it heads a group of the band's tools, not a band of its own
+   (the /expertise group heads are h3). Two groups sharing a row share their head row (Layout
+   `shareRows`), and the head sits at its row's foot, so a two-line head and a three-line one each stand
+   the group's one `block` over their tiles. Alignment only. */
 .groupHeading {
+  align-self: end;
   font: var(--text-h3);
   letter-spacing: var(--text-h3-tracking);
   text-wrap: var(--text-title-wrap);
-}
-
-/* A set of tool tiles fills the height its group leaves under the head, so tiles in groups sharing a
-   row end on one line (CopyBands ToolTiles). Sizing only. */
-.fillHeight {
-  block-size: 100%;
 }

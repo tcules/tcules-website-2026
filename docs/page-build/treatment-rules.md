@@ -227,13 +227,13 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 
 ## Added 4 Nov 2026 (/tools and the six tool pages; proposed until the owner sees the pages)
 
-- **A directory of free tools is one tool tile for every tool** (kind `directory`, `tool-tiles`; tools critic,
-  4 Nov 2026, proposed: decisions/2026-11-04-one-tool-tile): the ServiceTile card with `visual="start"`, its
-  own scene at the head, title, the tool's paragraph, a router table's value columns as labelled lines
-  (`fields`), "Try the tool" at the foot (`tileActionFor`), two to a row from 768, whatever the group holds.
-  Consecutive groups with no router table are one band: each group's h2 at the h3 scale a `block` from its
-  tiles, groups a `section` apart, two single-tool groups sharing a row as two headed halves. A table whose
-  rows name the page's tools links each key to its tool and reads down on a phone (`withToolKeyLinks`).
+- **A directory of free tools is the /services hub's split tile for every tool** (kind `directory`, `tool-tiles`;
+  tools critic, 4 Nov 2026, proposed: decisions/2026-11-04-one-tool-tile): drawing, name and paragraph in the
+  named half, the router table's value columns as the result panel's fields, "Try the tool" at its foot, two to
+  a row. A table of tools ("Tool | …") with no tools of its own hosts the plain groups after it: its head and
+  lead as the band's, each group's h2 at the h3 scale a `block` over its tiles, groups a `section` apart, two
+  single-tool groups sharing a row as two headed halves (Bento `tracks={2}`); the words after the set go under
+  it at the body measure. No tool is shown twice, so the table is not also drawn as a grid.
 - **A free tool renders as an article-style page** (LongformPage `family="tool"`, the 28 Oct launch plan): the
   hero's one action to `#workspace`, the worksheet in one shell beside its outline, the FAQ last. In the column:
   a bold-led numbered method is Steps; the worked example is the tint example panel, its words beside the

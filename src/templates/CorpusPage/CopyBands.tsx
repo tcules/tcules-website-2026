@@ -183,8 +183,8 @@ export function CorpusTable({
   return (
     <DataTable
       labelledBy={labelledBy}
-      keyColumn={{ heading: plain(key) }}
       {...(narrow ? { narrow } : {})}
+      keyColumn={{ heading: plain(key) }}
       columns={columns.map((cell) => ({ heading: plain(cell) }))}
       rows={table.rows.map((row) => {
         const keyCell = row[0] ?? [];
@@ -210,13 +210,13 @@ export function CorpusTable({
 export function BandBody({
   blocks,
   labelledBy,
-}: {
   narrow,
+}: {
   blocks: readonly CorpusBlock[];
   labelledBy?: string;
-}): ReactNode {
   /** A table's phone reading (DataTable `narrow`); absent, the table scrolls. */
   narrow?: 'scroll' | 'read-down';
+}): ReactNode {
   const groups: { type: string; blocks: CorpusBlock[] }[] = [];
   for (const block of blocks) {
     if (block.type === 'comment' || block.type === 'form') continue;
@@ -354,8 +354,8 @@ function proseHtml(blocks: readonly CorpusBlock[]): string {
 function groupNode(
   group: { type: string; blocks: CorpusBlock[] },
   labelledBy?: string,
-): ReactNode {
   narrow?: 'scroll' | 'read-down',
+): ReactNode {
   switch (group.type) {
     case 'prose':
       return (
@@ -1363,12 +1363,9 @@ export function MethodBand({
                   />
                 ) : (
                   <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
-  narrow,
                 ),
               )}
             </Layout>
-  /** The table's phone reading (DataTable `narrow`): a directory of tools reads down (4 Nov 2026). */
-  narrow?: 'scroll' | 'read-down';
           ) : (
             <BandBody blocks={after} labelledBy={head(band).headingId} />
           )
@@ -1388,9 +1385,12 @@ export function TableBand({
   band,
   scenario,
   agreement,
+  narrow,
 }: {
   band: CorpusBand;
   scenario?: SketchName;
+  /** The table's phone reading (DataTable `narrow`): a directory of tools reads down (4 Nov 2026). */
+  narrow?: 'scroll' | 'read-down';
   /**
    * The drawing of a two-column agreement table whose key column has no heading (what we agree before
    * a build). Set, the table is read as the agreement: its one real heading as the legend, each key
@@ -1906,6 +1906,28 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
     const labelled = cards.every((card) => card.ctaLabel);
     set = (
       <BlockCardSet
+        items={cards}
+        lead="none"
+        across={cards.length % 4 === 0 ? 4 : 3}
+        cue={labelled ? 'cta' : 'title'}
+        scroll="never"
+      />
+    );
+  }
+  return (
+    <ContentSection {...head(band)} data-band="C-icon" lead={leadText}>
+      {introNode ? (
+        <Layout rowGap="stack">
+          {introNode}
+          {set}
+        </Layout>
+      ) : (
+        set
+      )}
+    </ContentSection>
+  );
+}
+
 /**
  * A table naming the page's free tools in its key column, each key linked to its tool (tools critic,
  * 4 Nov 2026: the /tools compare table was the one place a tool's name did not open the tool). A key
@@ -1945,31 +1967,10 @@ export function withToolKeyLinks(page: CorpusPage, band: CorpusBand): CorpusBand
   return linked ? { ...band, blocks } : null;
 }
 
-        items={cards}
-        lead="none"
-        across={cards.length % 4 === 0 ? 4 : 3}
-        cue={labelled ? 'cta' : 'title'}
-        scroll="never"
-      />
-    );
-  }
-  return (
-    <ContentSection {...head(band)} data-band="C-icon" lead={leadText}>
-      {introNode ? (
-        <Layout rowGap="stack">
-          {introNode}
-          {set}
-        </Layout>
-      ) : (
-        set
-      )}
-    </ContentSection>
-  );
-}
-
 /* ── Tool groups (G23) ───────────────────────────────────────────────────────── */
 
 type ToolEntry = { title: string; href?: string; body?: string };
+
 /** A tool group's parts: its tools, the router table naming them (if any), and the words after. */
 function toolGroup(band: CorpusBand) {
   const blocks = content(band);
@@ -1995,7 +1996,6 @@ function toolGroup(band: CorpusBand) {
       rest.push(block);
     }
   }
-
   /* The router table: one row per tool, matched by the tool's name in the row's key cell (the tile's
      body opens with that name), so the key column is carried by the tile itself. */
   const table = rest.find(
@@ -2010,13 +2010,37 @@ function toolGroup(band: CorpusBand) {
   return { tools, table, after: rest.filter((block) => block !== table) };
 }
 
-/** A group of tools with no router table: the groups that run together into one band. */
+type ToolGroup = ReturnType<typeof toolGroup>;
+
+/** A group of tools with no router table of its own: the groups that run together into one band. */
 const isPlainToolGroup = (band: CorpusBand) => {
   const group = toolGroup(band);
   return group.tools.length > 0 && !group.table;
 };
 
-/** The consecutive plain tool groups on the page that `band` belongs to, in order (itself alone if none). */
+/**
+ * A band with no tools of its own whose table names, row by row, the tools of the plain groups right
+ * after it (/tools `compare`: "Four more worksheets…", one row per worksheet). It is the head of
+ * those groups: its table's columns ride in their tiles, so no tool is shown twice.
+ */
+function hostedRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[] {
+  const bands = page?.bands ?? [];
+  const at = bands.indexOf(band);
+  if (at < 0 || toolGroup(band).tools.length > 0) return [];
+  const table = content(band).find((block): block is TableBlock => block.type === 'table');
+  if (!table) return [];
+  const run: CorpusBand[] = [];
+  for (let next = at + 1; next < bands.length && isPlainToolGroup(bands[next] as CorpusBand); next++)
+    run.push(bands[next] as CorpusBand);
+  const tools = run.flatMap((other) => toolGroup(other).tools);
+  const names = table.rows.map((row) => plain(row[0] ?? []).trim());
+  return names.length === tools.length &&
+    names.every((name) => name && tools.some((tool) => tool.body?.includes(name)))
+    ? run
+    : [];
+}
+
+/** The consecutive plain tool groups that `band` belongs to, in order (itself alone if none). */
 function toolGroupRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[] {
   const bands = page?.bands ?? [];
   const at = bands.indexOf(band);
@@ -2029,181 +2053,186 @@ function toolGroupRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBan
 }
 
 /**
- * ONE tool tile for every free tool (tools critic, 4 Nov 2026: the six are peers, so one form, one
- * drawing size, one order, one action): the ServiceTile card with its drawing at the head, then the
- * title and the tool's paragraph, then the router table's value columns as labelled lines where the
- * group has a table, then "Try the tool" at the foot. Side by side from 768.
+ * The tools as the /services hub's split tiles (owner, 2 Nov 2026, mock A; tools critic, 4 Nov 2026:
+ * one tile form for all six): the drawing, the tool's name and its paragraph in the named half, the
+ * router table's value columns ("Best for", "Bring", "You leave with") as the result panel's labelled
+ * fields, and "Try the tool" at the panel's foot. `table` is the group's own table or the hosting
+ * band's; a row is matched by the tool's name in its key cell (the tile's body opens with that name).
  */
-function ToolTiles({ group }: { group: ToolGroup }) {
-  const { tools, table } = group;
-  return (
-    <Layout
-      as="ul"
-      columns={{ base: 1, md: Math.min(tools.length, 3) as 1 | 2 | 3 }}
-      colGap="gutter"
-      rowGap="gutter"
-      className={styles.fillHeight}
-    >
-      {tools.map((tool) => {
-        const row = table?.rows.find((cells) =>
-          tool.body?.includes(plain(cells[0] ?? []).trim()),
-        );
-        const fields = row
-          ? (table?.header ?? []).slice(1).map((cell, index) => ({
-              label: plain(cell),
-              text: plain(row[index + 1] ?? []),
-            }))
-          : [];
-        const scene = tool.href ? serviceSceneFor(tool.href) : undefined;
-        return (
-          <li key={tool.href ?? tool.title}>
-            <ServiceTile
-              title={tool.title}
-              {...(tool.body ? { body: tool.body } : {})}
-              href={tool.href ?? ''}
-              {...(scene ? { scene } : {})}
-              action={tileActionFor(tool.href)}
-              visual="start"
-              {...(fields.length > 0 ? { fields } : {})}
-            />
-          </li>
-        );
-      })}
-    </Layout>
-  );
+function toolTiles(group: ToolGroup, table: TableBlock | undefined): BentoItem[] {
+  return group.tools.map((tool) => {
+    const row = table?.rows.find((cells) => tool.body?.includes(plain(cells[0] ?? []).trim()));
+    const fields = row
+      ? (table?.header ?? []).slice(1).map((cell, index) => ({
+          label: plain(cell),
+          text: plain(row[index + 1] ?? []),
+        }))
+      : [];
+    const [first, ...more] = fields;
+    const scene = tool.href ? serviceSceneFor(tool.href) : undefined;
+    const action = tileActionFor(tool.href);
+    return {
+      id: tool.href ?? tool.title,
+      title: tool.title,
+      ...(tool.body ? { body: tool.body } : {}),
+      ...(tool.href ? { href: tool.href } : {}),
+      ...(scene ? { scene } : {}),
+      ...(first
+        ? {
+            detail: {
+              ...first,
+              ...(more.length > 0 ? { fields: more } : {}),
+              ...(action ? { action } : {}),
+            },
+          }
+        : {}),
+    };
+  });
 }
 
-type ToolGroup = ReturnType<typeof toolGroup>;
-
-/** The tracks a set of tool tiles is laid on from 1024: every tile one track of three. */
+/** One headed group inside a shared band: its authored h2 at the group scale, a `block` over its set. */
+function ToolGroupNode({
+  band,
+  table,
+  tracks,
+}: {
+  band: CorpusBand;
+  table: TableBlock | undefined;
+  tracks: 2 | 4;
+}) {
+  const group = toolGroup(band);
   return (
-    <Layout rowGap="section">
-      {rows.map((row) =>
-        row.length === 1 ? (
-          <Fragment key={row[0]!.key}>{row[0]!.node}</Fragment>
-        ) : (
-          <Layout
-            key={row[0]!.key}
-            columns={{ base: 1, lg: row.map((cell) => cell.tracks) as [number, number] }}
-            /* Headed groups side by side share their rows (subgrid from 1024): the heads on one
-               row and the tiles on the next, so tiles start and end on one line however many lines
-               a neighbour's head runs to. */
-            {...(row.every((cell) => cell.headed) ? { shareRows: 2 as const } : {})}
-            colGap="gutter"
-            rowGap="stack"
-          >
-            {row.map((cell) => (
-              <Fragment key={cell.key}>{cell.node}</Fragment>
-            ))}
-          </Layout>
-        ),
-      )}
+    <Layout as="section" id={band.id} data-band="tool-tiles" rowGap="block">
+      <h2 id={headingIdOf(band)} className={styles.groupHeading}>
+        {band.headingText}
+      </h2>
+      <Bento items={toolTiles(group, table)} tracks={tracks} />
     </Layout>
   );
-}
-
-/** The words after a set, as the row's last cell: every track the tiles leave, else a row below. */
-function noteCell(
-  blocks: readonly CorpusBlock[],
-  labelledBy: string,
-  usedTracks: number,
-): ToolCell | null {
-  if (blocks.length === 0) return null;
-  const left = TOOL_TRACKS - (usedTracks % TOOL_TRACKS);
-  return {
-    key: `note-${labelledBy}`,
-    tracks: left === TOOL_TRACKS ? TOOL_TRACKS : left,
-    node: <BandBody blocks={blocks} labelledBy={labelledBy} />,
-  };
 }
 
 /**
- * A tool hub group (/tools, 4 Nov 2026; tracker 2.57: the glyph cards did not read as clickable). Each
- * tool is its bold linked name and the ONE paragraph after it, and it is a destination, so it is the
- * one tool tile (`ToolTiles`), one track of three from 1024 whatever the group holds; a router table's
- * value columns ride in each tile as labelled lines, so no column is dropped and no tool is shown
- * twice. The words after a set take the tracks its tiles leave (Bento's `note` cell, owner 29 Oct
- * 2026), at the body measure with their links inline.
+ * The plain groups as rows of one band: a group of two takes a row; two single-tool groups in a row
+ * share one as two headed halves (decisions/2026-11-04-one-tool-tile), their heads on one shared row
+ * from 1024 and bottom-aligned, so both sit a `block` over their tiles and the tiles start and end on
+ * one line. Then the groups' words after their sets, under the whole set at the body measure, as the
+ * band's onward line, never beside a head.
+ */
+function ToolGroupRows({
+  bands,
+  table,
+}: {
+  bands: readonly CorpusBand[];
+  table: TableBlock | undefined;
+}) {
+  const rows: CorpusBand[][] = [];
+  for (const band of bands) {
+    const prev = rows.at(-1);
+    const single = toolGroup(band).tools.length === 1;
+    if (single && prev?.length === 1 && toolGroup(prev[0]!).tools.length === 1) prev.push(band);
+    else rows.push([band]);
+  }
+  const after = bands.flatMap((band) => toolGroup(band).after);
+  const last = bands.at(-1);
+  return (
+    <Layout rowGap="stack">
+      <Layout rowGap="section">
+        {rows.map((row) =>
+          row.length === 2 ? (
+            <Layout
+              key={row[0]!.id}
+              columns={{ base: 1, lg: [1, 1] }}
+              shareRows={2}
+              colGap="gutter"
+              /* Stacked below 1024, the two groups are a `section` apart like every other row; from
+                 1024 each group's own `block` holds between its head and its tiles (subgrid gap). */
+              rowGap="section"
+            >
+              {row.map((band) => (
+                <ToolGroupNode key={band.id} band={band} table={table} tracks={2} />
+              ))}
+            </Layout>
+          ) : (
+            <ToolGroupNode key={row[0]!.id} band={row[0]!} table={table} tracks={4} />
+          ),
+        )}
+      </Layout>
+      {after.length > 0 && last ? <BandBody blocks={after} labelledBy={headingIdOf(last)} /> : null}
+    </Layout>
+  );
+}
+
+/**
+ * A tool hub group (/tools; tracker 2.57: the glyph cards did not read as clickable). Each tool is its
+ * bold linked name and the ONE paragraph after it, and it is a destination, so it is the /services
+ * hub's split tile (Bento `detail`), two to a row; its router table's value columns are the tile's
+ * result panel, so no column is dropped and no tool is shown twice (tools critic, 4 Nov 2026). Every
+ * tool on the page takes this one form, one drawing size, one density.
  *
- * Consecutive groups with no table are ONE band (tools critic, 4 Nov 2026: three adjacent bands of one
- * hairline rectangle, each with full section air, failed the squint test): each group keeps its
- * authored h2 and anchor, set at the h3 scale as a group head a `block` from its tiles, and the groups
- * pack onto the same three tracks in reading order, rows a `section` apart (the /expertise answer,
- * HubBands), so a lone tool keeps the pair's tile size without a hole beside it. The run's later bands
- * render nothing: the first renders the run. Band order and every word kept. A tool with no drawing
- * yet shows the empty plate.
+ * - A group with its own table (`ai`) is its band: the head, the tiles, then the words after the set
+ *   at the body measure.
+ * - A band whose table names the tools of the plain groups after it (`compare`) hosts them: its head
+ *   and lead as the band's, then each group under it with its authored h2 at the group scale (the copy:
+ *   "Four more worksheets, for shared components, established products and prototypes"), its table's
+ *   columns in their tiles. The hosted bands render nothing of their own.
+ * - Otherwise a run of plain groups is one band with no head of its own (the first renders the run).
+ *
+ * Band order and every word kept. A tool with no drawing yet shows the empty plate.
  */
 export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusBand }) {
-  const run = toolGroupRun(page, band);
-  if (run.length > 1) {
-    if (run[0] !== band) return null;
-    return <ToolGroupsBand bands={run} />;
+  const hosted = hostedRun(page, band);
+  if (hosted.length > 0) {
+    const blocks = content(band);
+    const table = blocks.find((block): block is TableBlock => block.type === 'table');
+    const rest = blocks.filter((block) => block !== table);
+    const [leadBlock, ...more] = rest;
+    const leadText =
+      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs) ? plain(leadBlock.runs) : undefined;
+    const intro = leadText ? more : rest;
+    return (
+      <ContentSection
+        {...head(band)}
+        data-band="tool-tiles"
+        {...(leadText ? { lead: leadText } : {})}
+      >
+        {intro.length > 0 ? (
+          <Layout rowGap="stack">
+            <BandBody blocks={intro} labelledBy={headingIdOf(band)} />
+            <ToolGroupRows bands={hosted} table={table} />
+          </Layout>
+        ) : (
+          <ToolGroupRows bands={hosted} table={table} />
+        )}
+      </ContentSection>
+    );
+  }
+  const bands = page?.bands ?? [];
+  if (isPlainToolGroup(band)) {
+    const run = toolGroupRun(page, band);
+    /* Hosted by the table band before the run, which renders it. */
+    const runHost = bands[bands.indexOf(run[0]!) - 1];
+    if (runHost && hostedRun(page, runHost).length > 0) return null;
+    if (run.length > 1) {
+      if (run[0] !== band) return null;
+      return (
+        <ContentSection data-band="tool-tiles">
+          <ToolGroupRows bands={run} table={undefined} />
+        </ContentSection>
+      );
+    }
   }
   const group = toolGroup(band);
-  const note = noteCell(group.after, head(band).headingId, group.tools.length);
-const TOOL_TRACKS = 3;
-
-/**
- * Cells on the three tracks, packed in reading order into rows: each cell takes as many tracks as it
- * has tiles (a group) or every track its row leaves (the closing words). A row that holds several
- * cells sets them side by side from 1024 at their track counts, so every tile on the page is one
- * track wide; below 1024 the cells stack.
- */
-type ToolCell = { key: string; tracks: number; node: ReactNode; headed?: boolean };
-
-function ToolRows({ cells }: { cells: readonly ToolCell[] }) {
-  const rows: ToolCell[][] = [];
-  let used = TOOL_TRACKS;
-  for (const cell of cells) {
-    const tracks = Math.min(cell.tracks, TOOL_TRACKS);
-    if (used + tracks > TOOL_TRACKS) {
-      rows.push([]);
-      used = 0;
-    }
-    rows.at(-1)!.push({ ...cell, tracks });
-    used += tracks;
-  }
+  const set = <Bento items={toolTiles(group, group.table)} />;
   return (
     <ContentSection {...head(band)} data-band="tool-tiles">
-      <ToolRows
-        cells={[
-          { key: band.id, tracks: group.tools.length, node: <ToolTiles group={group} /> },
-          ...(note ? [note] : []),
-        ]}
-      />
-    </ContentSection>
-  );
-}
-
-/** A run of plain tool groups as one band (see DirectoryBand). */
-function ToolGroupsBand({ bands }: { bands: readonly CorpusBand[] }) {
-  const cells: ToolCell[] = [];
-  let used = 0;
-  for (const band of bands) {
-    const group = toolGroup(band);
-    cells.push({
-      key: band.id,
-      tracks: group.tools.length,
-      headed: true,
-      node: (
-        <Layout id={band.id} rowGap="block">
-          <h2 id={headingIdOf(band)} className={styles.groupHeading}>
-            {band.headingText}
-          </h2>
-          <ToolTiles group={group} />
+      {group.after.length > 0 ? (
+        <Layout rowGap="stack">
+          {set}
+          <BandBody blocks={group.after} labelledBy={headingIdOf(band)} />
         </Layout>
-      ),
-    });
-    used += Math.min(group.tools.length, TOOL_TRACKS);
-    const note = noteCell(group.after, headingIdOf(band), used);
-    if (note) {
-      cells.push(note);
-      used = 0;
-    }
-  }
-  return (
-    <ContentSection data-band="tool-tiles">
-      <ToolRows cells={cells} />
+      ) : (
+        set
+      )}
     </ContentSection>
   );
 }

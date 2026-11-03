@@ -383,6 +383,57 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="half"
+        title="2d5 · Split tiles in half a row (tracks={2})"
+        note="Two headed groups of one tool each share a row as two halves (4 Nov 2026, /tools: the redesign worksheet and the prototype checklist). `tracks={2}` lays each group's set in its half: the split tile takes the half whole and keeps its two halves side by side, the width a split tile has on four tracks, never the whole-row form. Three labelled fields, the /tools compare table's columns. Below 1024 the halves stack."
+      />
+      <Section>
+        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="gutter" rowGap="section">
+          {[
+            {
+              id: 'rebuild',
+              title: 'Redesign or rebuild worksheet: compare every route before you commit',
+              body: 'The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. It ends in the case for and against each route, and the next test before you commit.',
+              fields: [
+                { label: 'Bring', text: 'A product owner, an engineer and someone who knows the daily use' },
+                { label: 'You leave with', text: 'The case for each route and the next test' },
+              ],
+              text: 'Choosing a route for one part of an established product',
+            },
+            {
+              id: 'prototype',
+              title: 'Prototype readiness checklist: show developers what is real and what is simulated',
+              body: 'The Prototype Readiness Checklist walks through one workflow of any prototype, AI-built ones included. It sorts what really works from what is simulated or still unknown.',
+              fields: [
+                { label: 'Bring', text: 'The prototype and sample data you may work with' },
+                { label: 'You leave with', text: 'A build brief: decisions, research and build work' },
+              ],
+              text: 'Handing a prototype to developers',
+            },
+          ].map((tool) => (
+            <Bento
+              key={tool.id}
+              tracks={2}
+              items={[
+                {
+                  id: tool.id,
+                  title: tool.title,
+                  body: tool.body,
+                  href: '#half',
+                  detail: {
+                    label: 'Best for',
+                    text: tool.text,
+                    fields: tool.fields,
+                    action: 'Try the tool',
+                  },
+                },
+              ]}
+            />
+          ))}
+        </Layout>
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

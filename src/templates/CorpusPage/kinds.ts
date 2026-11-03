@@ -107,7 +107,7 @@ export const KIND_COMPONENTS: Readonly<
   directory: {
     component: ['tool-tiles'],
     status: 'to-design',
-    note: "The /tools groups as clickable tool tiles (tracker 2.57, 4 Nov 2026): split tiles when the group's table names each tool (its columns in the result panel), two wide tiles for a pair, one service tile across the row for a single tool. Owner to judge on /tools.",
+    note: "The /tools groups as the /services hub's split tiles (tools critic, 4 Nov 2026): every tool one form, its router table's columns in the result panel; the compare table hosts the groups after it, two single-tool groups share a row as headed halves. Owner to judge on /tools.",
   },
   index: {
     component: ['listing-lead', 'listing-section'],

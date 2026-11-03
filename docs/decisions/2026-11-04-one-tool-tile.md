@@ -1,5 +1,5 @@
 ---
-title: "Every free tool is one tool tile; lone tool groups share a band"
+title: "Every free tool is the split tile; the tool table hosts the groups it names"
 date: 2026-11-04
 status: proposed
 area: [cards, layout]
@@ -10,10 +10,10 @@ dbf_status: none
 enforced_by: "review"
 ---
 
-The six free tools on /tools are one tile form whatever their group holds: the ServiceTile card with `visual="start"`, its drawing at the head, then title and the tool's paragraph, then a router table's value columns as labelled lines (`fields`), then "Try the tool" at the foot, two to a row from 768. Consecutive tool groups with no router table are ONE band: each group keeps its authored h2 and anchor at the h3 scale, a `block` from its tiles, the groups a `section` apart; two single-tool groups share one row as two headed halves, so a lone tool keeps the pair's track and drawing size.
+Every free tool on /tools is the /services hub's split tile (Bento `detail`): its drawing, name and paragraph in the named half, its router table's value columns ("Best for", "Bring", "You leave with") as the result panel's labelled fields, "Try the tool" at the panel's foot, two to a row on four tracks. One form, one drawing size, one density for all six. A table that names the tools of the plain groups after it (`compare`, "Tool | …") hosts them: its head and lead are the band's, each group follows with its authored h2 at the h3 scale, a `block` over its tiles, its tools carrying the table's columns, so no tool is shown twice and the page has no ruled grid. Two single-tool groups share one row as two headed halves (Bento `tracks={2}`), heads on one shared row and bottom-aligned. The words after the groups sit under the whole set at the body measure, never beside a head.
 
-**Why.** Peers get equal weight (service page round 1), and the 4 Nov directory rule picked a different component by count (split tiles, wide pair, whole-row tile), so the page read as three card systems with drawings at three sizes and a missing action on one pair. Three adjacent full-air bands of one rectangle failed the squint test.
+**Why.** Peers get equal weight (service page round 1). The first pass picked a different card by count, then a stacked ServiceTile on three tracks that left the prototypes tile alone in a third of its row, put the closing line beside a head, carried the table's fields on two tools only, and showed the other four twice (a ruled DataTable, then tiles). The /services hub already solved a router of destinations with a result each.
 
-**The mistake it prevents.** Choosing a card's shape by how many items a band happens to hold, and giving each small group its own band of section air.
+**The mistake it prevents.** Choosing a card's shape by how many items a band holds; a lone tile in a third of a row; the same items shown as a table and as tiles.
 
-**How to apply.** CopyBands DirectoryBand / ToolTiles / ToolGroupsBand. A tool group with a router table keeps its own band (its table's columns ride in the tiles).
+**How to apply.** plan.ts `compare` (a "Tool" key column is `directory`); CopyBands DirectoryBand / toolTiles / ToolGroupRows; Bento `tracks={2}` (specimen 2d5).

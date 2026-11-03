@@ -12,13 +12,12 @@ hub through OfferPage's plan with DirectoryBand's tool tiles, the tool pages thr
   result panel as two labelled fields (Bento `detail.fields`, specimen 2d4), so no column is dropped and the
   tools are not shown twice; the key cell is carried by the tile, whose body opens with the tool's name. The
   two paragraphs after the table follow at the body measure.
-- **`compare`** stays the boxed DataTable (a comparison read across rows), the page's one undrawn band
-  between the tile bands.
-- **`design-systems`**: two wide Bento tiles, drawing beside words, one row.
-- **`modernisation`, `prototypes`**: each a single tool, so its wide ServiceTile across the row (the audits'
-  answer for one named offer), the visual on the end side, then on the start side (ServiceTile
-  `visual="start"`, specimen 9c). The 29 Oct note asked for the stacked card at the set's track width;
-  treatment-rules § 2 (no lone tile on a row) was followed instead.
+- **`compare`** (tools critic, 4 Nov 2026) hosts the three groups after it: its head and lead as the band's,
+  its table folded into the four tools' result panels (Best for, Bring, You leave with), so no tool is shown
+  twice and the page carries no ruled grid. `design-systems` follows as a headed group of two split tiles;
+  `modernisation` and `prototypes` share one row as two headed halves (Bento `tracks={2}`), heads bottom-aligned
+  a `block` over their tiles; the closing line sits under the set at the body measure. Group heads at the
+  h3 scale under the compare h2 (decisions/2026-11-04-one-tool-tile, proposed).
 - **Hero**: CorpusHero beside the studio review photograph (images.ts STUDIO_HERO), a team acting on a
   brief; the photo register sets the hero apart from the drawn tiles.
 - **Tile action** "Try the tool" (`tileActionFor`, one wording per kind of tile).

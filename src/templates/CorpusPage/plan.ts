@@ -240,12 +240,13 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'hard-parts': personaOrChallenges,
   'what-we-design': 'catalog',
   /* A comparison of options to choose between ("Option | …") is the services hub's split tiles
-     (owner, 2 Nov 2026, audits); any other comparison stays a table. */
+     (owner, 2 Nov 2026, audits). A table of the free tools ("Tool | …", /tools) heads the tool groups
+     after it, its columns in their tiles (CopyBands DirectoryBand, tools critic 4 Nov 2026). Any other
+     comparison stays a table. */
   compare: (band) => {
     const table = band.blocks.find((block) => block.type === 'table');
-    return table?.type === 'table' && /^options?$/i.test(plain(table.header[0] ?? []).trim())
-      ? 'router'
-      : 'table';
+    const key = table?.type === 'table' ? plain(table.header[0] ?? []).trim() : '';
+    return /^options?$/i.test(key) ? 'router' : /^tools?$/i.test(key) ? 'directory' : 'table';
   },
   routes: 'table',
   articles: 'related',

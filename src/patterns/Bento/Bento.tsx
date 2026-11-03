@@ -75,9 +75,12 @@ export type BentoProps = {
   /**
    * Tracks from 1024. `4` (default): home's two sizes. `3`: a set of PEERS, every tile one size, three
    * a row (owner, 26 Oct 2026, the specialist services: "we can't weigh any 2 items heavier"); spans
-   * are ignored.
+   * are ignored. `2`: a set laid in HALF a row, where two headed groups share one row (4 Nov 2026,
+   * /tools: the redesign worksheet and the prototype checklist, a single tool each, as two headed
+   * halves): a split tile takes the half whole and keeps its two halves side by side, at the width a
+   * split tile has on four tracks, so it never turns into the whole-row (`full`) form.
    */
-  tracks?: 3 | 4;
+  tracks?: 2 | 3 | 4;
   /**
    * A TEXT CELL after the tiles: the band's closing words in the grid's own last row, where the tiles
    * leave a hole (owner, 29 Oct 2026, /services/product-design: seven services on four tracks, 4 + 3,
@@ -100,7 +103,7 @@ export type BentoProps = {
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
 
 /** Each tile's row and first track on the grid, read from the spans in order. */
-function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
+function place(items: readonly BentoItem[], TRACKS: 2 | 3 | 4): Placed[] {
   let row = 0;
   let col = 0;
   return items.map((item) => {
@@ -225,7 +228,12 @@ function TileLink({
               /* The whole row: from 1024 the named half sets its words beside its drawing, as the
                  wide tile does, so the plate keeps a single tile's size and the panel keeps its
                  third; below, the drawing over the words as every split tile. */
-              <Layout columns={{ base: 1, lg: [1, 1] }} colGap="gutter" rowGap="block" align="center">
+              <Layout
+                columns={{ base: 1, lg: [1, 1] }}
+                colGap="gutter"
+                rowGap="block"
+                align="center"
+              >
                 {art}
                 {named}
               </Layout>
@@ -328,18 +336,13 @@ export type ServiceTileProps = {
    * With \`wide\`, the side the visual takes from 768: \`end\` (default) or \`start\`. Two whole-row tiles
    * in consecutive bands alternate, so the page does not repeat one shape down its length (4 Nov
    * 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start).
-   */
-  visual?: 'start' | 'end';
-  /** The tile's heading element. Default h3. */
-  titleAs?: 'h2' | 'h3' | 'h4';
-  /**
    *
    * As a CARD (not \`wide\`), \`start\` puts the visual at the head of the card: the drawing, then the
    * title, body and fields, then the action at the foot (4 Nov 2026, the /tools directory: one tool
    * tile for all six, the drawing heading each card at every width, as an icon heads its card). The
    * default card keeps its words over the visual (decisions/2026-10-29-related-destination-is-a-card).
-   * One line under the title, in the bento body role: what the destination is, where the copy says it
-   * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
+   */
+  visual?: 'start' | 'end';
   /**
    * Labelled lines under the body, each its label in the mono label voice over its text: a router
    * table's value columns carried by the tile that names the row ("Best for", "You leave with"; 4 Nov
@@ -347,6 +350,11 @@ export type ServiceTileProps = {
    * Plain text, verbatim, in the table's column order. Absent renders nothing.
    */
   fields?: readonly { label: string; text: string }[];
+  /** The tile's heading element. Default h3. */
+  titleAs?: 'h2' | 'h3' | 'h4';
+  /**
+   * One line under the title, in the bento body role: what the destination is, where the copy says it
+   * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
    * engineer …"). Plain text, verbatim. Absent renders nothing.
    *
    * Several strings are several paragraphs, a \`text\` apart: a WIDE tile carrying the sentences that
@@ -378,12 +386,12 @@ export function ServiceTile({
   visual: side = 'end',
   titleAs: Title = 'h3',
   body,
+  fields = [],
 }: ServiceTileProps) {
   const paragraphs = (typeof body === 'string' ? [body] : (body ?? [])).filter((p) => p.trim());
   const named = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-  fields = [],
       <Title className={styles.title}>{title}</Title>
       {paragraphs.length === 1 ? <p className={styles.body}>{paragraphs[0]}</p> : null}
       {paragraphs.length > 1 ? (
@@ -397,11 +405,6 @@ export function ServiceTile({
       ) : null}
     </Layout>
   );
-  const visual = picture ? (
-    <div className={styles.picture}>{picture}</div>
-  ) : scene ? (
-    <div className={styles.art}>
-      <Sketch name={scene} story />
   /* The fields are a `text` set a `block` under the named words: head to body inside the card. */
   const words =
     fields.length > 0 ? (
@@ -419,6 +422,11 @@ export function ServiceTile({
     ) : (
       named
     );
+  const visual = picture ? (
+    <div className={styles.picture}>{picture}</div>
+  ) : scene ? (
+    <div className={styles.art}>
+      <Sketch name={scene} story />
     </div>
   ) : null;
   const button = action?.trim() ? (
@@ -453,11 +461,6 @@ export function ServiceTile({
             {visual ? <div className={styles.wideVisual}>{visual}</div> : null}
             {button ? <div className={styles.wideAction}>{button}</div> : null}
           </Layout>
-        ) : (
-          /* Words at the head, then a stack that takes the spare height: the visual centred in it,
-             the action pinned under it. */
-          <Layout className={styles.fill} rowGap="block" fillLast>
-            {words}
         ) : side === 'start' && visual ? (
           /* The visual heads the card, then the words, then the action pinned to the foot, so the
              actions of cards sharing a row sit on one line. */
@@ -466,6 +469,11 @@ export function ServiceTile({
             {words}
             {button}
           </Layout>
+        ) : (
+          /* Words at the head, then a stack that takes the spare height: the visual centred in it,
+             the action pinned under it. */
+          <Layout className={styles.fill} rowGap="block" fillLast>
+            {words}
             <Layout rowGap="block" fillFirst>
               {visual ?? <span />}
               {button}
