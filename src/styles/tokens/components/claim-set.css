@@ -32,12 +32,12 @@
   --clm-slide-duration: var(--duration-slow);
   --clm-slide-easing: var(--easing-ease);
   --clm-tab-lift: -2px; /* a hovered title's move: an optical nudge, not a distance */
-  /* The entry, once, as the stage scrolls in: the tabs after the chosen one slide in from the side,
-     one after another, so the row reads as more than one claim. The travel is a move, not a distance
-     between two things, so it reads the space ramp; the curve and duration are the slide's. */
-  --clm-entry-travel: var(--space-64);
-  --clm-entry-duration: var(--duration-slow);
-  --clm-entry-stagger: 80ms; /* the beat between one tab's start and the next's */
+  /* The peek, once, as the stage comes into view: the first slide eases aside and the next one's edge
+     shows, then both come back. The travel is a move, not a distance between two things, so it reads
+     the space ramp; the curve is the slide's. Slower than a slide, so it reads as a hint, not a change. */
+  --clm-peek-travel: var(--space-96);
+  --clm-peek-duration: 520ms; /* each leg, out and back */
+  --clm-peek-hold: 360ms; /* how long the next slide's edge stays in view before the return */
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

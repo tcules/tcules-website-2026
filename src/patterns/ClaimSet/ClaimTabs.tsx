@@ -29,6 +29,12 @@ const HOVER_QUERY = '(hover: hover) and (pointer: fine)';
  */
 const HOVER_INTENT_MS = 140;
 
+/** A CSS time read back from a token in ms. The build may write `520ms` as `.52s`, so read the unit. */
+const toMs = (value: string) => {
+  const v = value.trim();
+  return v.endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000;
+};
+
 /**
  * The tabs layout: the claims as tabs along the top of a paper-deep stage, the chosen claim's slide
  * on paper below: its title and words beside its example, with no drawing (owner, 31 Oct 2026). The slide is ONE piece and moves as one, out toward one side and in from the other,
@@ -42,13 +48,12 @@ const HOVER_INTENT_MS = 140;
  *
  * Where there is a mouse, moving the pointer onto a tab chooses it after a short intent delay, so a
  * sweep across the row does not flicker; it is a deliberate act and stops autoplay. Only the hand
- * moving the pointer counts: a tab scrolled under a still pointer, or sliding under it during the
- * entry, is never chosen. It never moves
+ * moving the pointer counts: a tab scrolled under a still pointer is never chosen. It never moves
  * focus: click, tap and the keyboard (arrows, Home, End) work exactly as before. Once, when the stage
- * scrolls into view, the claims after the first slide in from the side one after another, so the
- * row reads as more than its chosen tab. It is armed only while the stage is still off screen (a
- * stage already in view at load is left alone rather than snapped away and back), and never under
- * reduced motion or below 1024, where there are no tabs.
+ * first comes into view, the slide peeks: the first claim's slide eases a little to the side, the edge
+ * of the next one shows in the space it leaves, and both come back. The tab row never moves. It shows
+ * there is more without choosing anything, so autoplay is untouched; any choice made during it ends it
+ * at once. Never under reduced motion, or below 1024, where every claim is already on the page.
  */
 export function ClaimTabs({
   id,
@@ -68,6 +73,7 @@ export function ClaimTabs({
   const fills = useRef<(HTMLSpanElement | null)[]>([]);
   const shown = useRef(0);
   const finish = useRef<(() => void) | null>(null);
+  const endPeek = useRef<(() => void) | null>(null);
   const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
   const intentFor = useRef<number | null>(null);
   /* Whether the latest pointermove was the hand moving the mouse, not the page scrolling under it. */
@@ -98,6 +104,7 @@ export function ClaimTabs({
   useLayoutEffect(() => {
     const from = shown.current;
     if (from === active) return;
+    endPeek.current?.();
     finish.current?.();
     shown.current = active;
     placePiece();
@@ -147,38 +154,48 @@ export function ClaimTabs({
     return () => resize.disconnect();
   }, [placePiece]);
 
-  /* The entry: armed (the later tabs held off to the side) only while the stage is below or above
-     the fold, released once when it scrolls in, then cleared so nothing of it lingers. */
-  useLayoutEffect(() => {
-    const box = stage.current;
-    if (!box) return;
+  /* The peek, once, when the stage first comes into view: the first slide eases aside by the peek's
+     travel and the next slide's edge shows in the space it leaves, then both come back on the same
+     curve. Transform only; nothing is chosen, so autoplay is untouched. */
+  useEffect(() => {
+    const box = panel.current;
+    if (!box || items.length < 2) return;
     if (
       matchMedia('(prefers-reduced-motion: reduce)').matches ||
       !matchMedia('(min-width: 1024px)').matches
     )
       return;
-    const rect = box.getBoundingClientRect();
-    if (rect.top < innerHeight && rect.bottom > 0) return;
-    box.dataset.entry = 'armed';
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const end = () => {
+      timers.forEach(clearTimeout);
+      delete box.dataset.peek;
+      const next = slides.current[1];
+      if (next) delete next.dataset.peek;
+      endPeek.current = null;
+    };
     const seen = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
         seen.disconnect();
-        box.dataset.entry = 'play';
+        const next = slides.current[1];
+        if (shown.current !== 0 || !next) return;
         const style = getComputedStyle(box);
-        const total =
-          (parseFloat(style.getPropertyValue('--clm-entry-duration')) || 600) +
-          (parseFloat(style.getPropertyValue('--clm-entry-stagger')) || 80) * items.length;
-        timer = setTimeout(() => delete box.dataset.entry, total + 40);
+        const move = toMs(style.getPropertyValue('--clm-peek-duration')) || 520;
+        const hold = toMs(style.getPropertyValue('--clm-peek-hold')) || 360;
+        next.dataset.peek = '';
+        box.dataset.peek = 'ready';
+        void box.offsetHeight;
+        box.dataset.peek = 'out';
+        endPeek.current = end;
+        timers.push(setTimeout(() => (box.dataset.peek = 'back'), move + hold));
+        timers.push(setTimeout(end, move * 2 + hold + 40));
       },
-      { threshold: 0.35 },
+      { threshold: 0.6 },
     );
     seen.observe(box);
     return () => {
       seen.disconnect();
-      clearTimeout(timer);
-      delete box.dataset.entry;
+      end();
     };
   }, [items.length]);
 
@@ -256,8 +273,8 @@ export function ClaimTabs({
   };
 
   /* Hover: choose the tab the pointer rests on, after the intent delay. Mouse only, and only from the
-     hand moving the pointer over the tab: a tab scrolled under a still pointer, or sliding under it
-     during the entry, is not chosen, since that is not a deliberate act and would stop autoplay. */
+     hand moving the pointer over the tab: a tab scrolled under a still pointer is not chosen, since
+     that is not a deliberate act and would stop autoplay. */
   const cancelIntent = () => {
     if (intent.current) clearTimeout(intent.current);
     intent.current = null;
@@ -265,7 +282,7 @@ export function ClaimTabs({
   };
   const onHover = (event: PointerEvent<HTMLButtonElement>, i: number) => {
     if (event.pointerType !== 'mouse' || !matchMedia(HOVER_QUERY).matches) return;
-    if (!handMoved.current || stage.current?.dataset.entry) return;
+    if (!handMoved.current) return;
     if (i === shown.current) return cancelIntent();
     if (intentFor.current === i) return;
     cancelIntent();

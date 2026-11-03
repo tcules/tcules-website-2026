@@ -103,9 +103,9 @@ export default function ClaimSetSpecimen() {
             toward the chosen claim, and the panel&rsquo;s height follows it. With a mouse,
             resting on a tab for a moment chooses it (a quick sweep across the row changes
             nothing); click, tap and the arrow keys, Home and End work as before. Once, as a stage
-            scrolls into view, the tabs after the first slide in from the side one after another,
-            so the row reads as more than one claim; a stage already on screen at load is left
-            still, and reduced motion stills both. Autoplay has no
+            comes into view, the slide peeks: the first claim eases aside, the edge of the next one
+            shows, and both come back; the tab row never moves, and reduced motion stills it.
+            Autoplay has no
             control: it runs only where there is a mouse, the pointer or focus holds it, any
             deliberate act stops it, and it plays once. Below 1024 every claim is on the page.
             Page: every claim on the page, ruled, in three columns.
@@ -128,7 +128,7 @@ export default function ClaimSetSpecimen() {
       <Variation
         id="tabs-plain"
         title="2 · Tabs — four of five without an example"
-        note="A claim with no example fills the slide, its words in two columns from 1024. Scroll down to it to see the entry: the four later tabs slide in, one after another."
+        note="A claim with no example fills the slide, its words in two columns from 1024. Scroll down to it to see the peek: the slide eases aside to show the next claim's edge, then comes back."
       />
       <Section>
         <Layout rowGap="stack">

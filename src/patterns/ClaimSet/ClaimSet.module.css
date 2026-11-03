@@ -195,36 +195,6 @@
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
 
-  /* The entry (ClaimTabs arms it only while the stage is off screen): the tabs after the chosen one
-     wait off to the side, then slide home in turn, one curve each. The row is clipped while it runs. */
-  .stage[data-entry] .tablist {
-    overflow: clip;
-  }
-
-  .stage[data-entry='armed'] .tab[aria-selected='false'] {
-    transform: translateX(var(--clm-entry-travel));
-  }
-
-  .stage[data-entry='play'] .tab {
-    transition: transform var(--clm-entry-duration) var(--clm-slide-easing);
-  }
-
-  .stage[data-entry='play'] .tab:nth-child(3) {
-    transition-delay: var(--clm-entry-stagger);
-  }
-
-  .stage[data-entry='play'] .tab:nth-child(4) {
-    transition-delay: calc(var(--clm-entry-stagger) * 2);
-  }
-
-  .stage[data-entry='play'] .tab:nth-child(5) {
-    transition-delay: calc(var(--clm-entry-stagger) * 3);
-  }
-
-  .stage[data-entry='play'] .tab:nth-child(6) {
-    transition-delay: calc(var(--clm-entry-stagger) * 4);
-  }
-
   /* With a mouse, resting on a tab chooses it (ClaimTabs): the title lifts as the pointer arrives and
      settles as it leaves, one move there and back, chosen or not. Never on touch, where :hover sticks. */
   @media (hover: hover) and (pointer: fine) {
@@ -268,13 +238,37 @@
   .panel[data-moving] .slide {
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
+
+  /* The peek (ClaimTabs, once, as the stage comes into view): the next slide waits one gap past the
+     first, inside the panel's clip; the first eases aside by the peek's travel and the next's edge
+     shows in the space it leaves, then both come back. The tab row never moves. */
+  .slide[data-peek] {
+    display: block;
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    transform: translateX(calc(100% + var(--gap-stack)));
+  }
+
+  .panel[data-peek='out'] .slide,
+  .panel[data-peek='back'] .slide {
+    transition: transform var(--clm-peek-duration) var(--clm-slide-easing);
+  }
+
+  .panel[data-peek='out'] .slide[data-active] {
+    transform: translateX(calc(-1 * var(--clm-peek-travel)));
+  }
+
+  .panel[data-peek='out'] .slide[data-peek] {
+    transform: translateX(calc(100% + var(--gap-stack) - var(--clm-peek-travel)));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .piece,
   .arrow,
   .tabTitle,
-  .stage[data-entry='play'] .tab,
+  .panel[data-peek] .slide,
   .panel[data-moving],
   .panel[data-moving] .slide {
     transition: none;
