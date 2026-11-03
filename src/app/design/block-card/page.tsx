@@ -1350,6 +1350,95 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
+          <BandHead title='8c · The tile · frame="tile"'>
+            Owner, 3 Nov 2026 (/contact, &ldquo;Other ways to reach us&rdquo;). A filled ground at
+            rest, one step off the surface, at the 16 radius: no edge, and no ground that appears
+            only under the pointer. The copy sits a gutter inside. For a short set of destinations,
+            each led by its glyph and closed by its own action: linkScope=cta, so the tile does not
+            answer the pointer and the action does. ctaEmphasis=outline draws that action as a
+            labelled outline; a destination that leaves the site (a mailbox, another origin) takes
+            the up-right arrow, one that stays takes the right arrow.
+          </BandHead>
+          <Specimen
+            title="three routes, each with its own action · the contact page"
+            note="BlockCardSet lead=none across=3 frame=tile linkScope=cta ctaEmphasis=outline."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              frame="tile"
+              linkScope="cta"
+              ctaEmphasis="outline"
+              items={[
+                {
+                  id: 'tl-hello',
+                  icon: 'letter',
+                  title: 'General or press inquiries',
+                  href: 'mailto:hello@tcules.com',
+                  ctaLabel: 'hello@tcules.com',
+                },
+                {
+                  id: 'tl-partners',
+                  icon: 'hand-shake',
+                  title: 'For partnerships or vendors',
+                  href: 'mailto:partners@tcules.com',
+                  ctaLabel: 'partners@tcules.com',
+                },
+                {
+                  id: 'tl-careers',
+                  icon: 'users-group-rounded',
+                  title: 'Looking to work with us?',
+                  href: ROUTES.careers,
+                  ctaLabel: 'Careers',
+                },
+              ]}
+            />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Specimen
+            title="the tile on tint · its ground steps to paper"
+            note="--bcrd-tile-ground per surface: paper-deep on paper, paper on tint, one step off ink and blue."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              frame="tile"
+              linkScope="cta"
+              ctaEmphasis="outline"
+              items={[
+                {
+                  id: 'tt-one',
+                  icon: 'letter',
+                  title: 'General or press inquiries',
+                  body: 'A tile with a line of body under its title.',
+                  href: 'mailto:hello@tcules.com',
+                  ctaLabel: 'hello@tcules.com',
+                },
+                {
+                  id: 'tt-two',
+                  icon: 'users-group-rounded',
+                  title: 'Looking to work with us?',
+                  href: ROUTES.careers,
+                  ctaLabel: 'Careers',
+                },
+                {
+                  id: 'tt-three',
+                  icon: 'hand-shake',
+                  title: 'A static tile, no action',
+                  body: 'The ground and the inset, nothing under the pointer.',
+                },
+              ]}
+            />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
           <BandHead title="8c · The icon card · the glyph is the title's em">
             Owner, 7 Oct 2026: size each icon from the card title, from a token; 9 Oct 2026: the
             glyph stands on its own row ABOVE the title, never inline beside it. It is set in

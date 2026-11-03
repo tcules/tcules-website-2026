@@ -4,6 +4,7 @@ import { Layout } from '@/components';
 
 import {
   BlockCard,
+  type BlockCardCtaEmphasis,
   type BlockCardCue,
   type BlockCardFrame,
   type BlockCardImage,
@@ -33,6 +34,7 @@ export type BlockCardSetItem = Omit<
   | 'titleAs'
   | 'frame'
   | 'linkScope'
+  | 'ctaEmphasis'
 > & {
   id: string;
 };
@@ -124,6 +126,8 @@ export type BlockCardSetProps = {
    * decision, like `frame`.
    */
   linkScope?: BlockCardLinkScope;
+  /** How every cta-scoped card's action is drawn. A set's decision. See `BlockCardCtaEmphasis`. */
+  ctaEmphasis?: BlockCardCtaEmphasis;
   /**
    * The cards' heading element. Default h3, under a band's h2. `h2` only where the set IS the
    * page's list directly under its h1 (the case-study index), so the outline does not skip h2.
@@ -317,6 +321,7 @@ export function BlockCardSet({
   cue,
   frame,
   linkScope,
+  ctaEmphasis,
   titleAs,
   stagger = false,
   label,
@@ -346,6 +351,7 @@ export function BlockCardSet({
               cue={cue}
               frame={frame}
               linkScope={linkScope}
+              ctaEmphasis={ctaEmphasis}
               titleAs={titleAs}
               index={numbered ? 1 : undefined}
               size="lg"
@@ -357,6 +363,7 @@ export function BlockCardSet({
               cue={cue}
               frame={frame}
               linkScope={linkScope}
+              ctaEmphasis={ctaEmphasis}
               titleAs={titleAs}
               index={numbered ? index + 1 : undefined}
               size="md"
@@ -390,6 +397,7 @@ export function BlockCardSet({
             cue={cue}
             frame={frame}
             linkScope={linkScope}
+              ctaEmphasis={ctaEmphasis}
             titleAs={titleAs}
             index={numbered ? index + 1 : undefined}
             tracks={index === 0 ? 2 : 3}
@@ -432,7 +440,7 @@ export function BlockCardSet({
   /* Icon cards are smaller objects than covered or text tiles — an h5 led by its glyph and two lines —
      and at a `column` (64) apart a stacked 2×2 read as four loose items. They sit a `stack` (48)
      apart down the grid: the block-to-block step, still clearly more than the 16 inside a card. */
-  const rowGap = frame === 'box' ? 'gutter' : iconSet ? 'stack' : 'column';
+  const rowGap = frame === 'box' || frame === 'tile' ? 'gutter' : iconSet ? 'stack' : 'column';
   /* Icon rows are pinned to their content: no equalRows (fix round 2). Under a stretched beside
      body the 1fr rows took the tallest card's height, so a row of three-line bodies left 80 above
      the next icon and a row of two-line ones 53 — two beats in one grid. Cards in a row still share
@@ -443,7 +451,7 @@ export function BlockCardSet({
      widened the seam below it past `column`. Cards in one row still share its height (Layout's
      default stretch), so a pinned cta stays level along the row. Only a boxed set, whose boxes are
      seen, keeps every row the tallest one's height. */
-  const equalRows = frame === 'box' && !iconSet;
+  const equalRows = (frame === 'box' && !iconSet) || frame === 'tile';
   const staggered = stagger && !featured && peers.length <= widest;
   const tabStop = scrolls && !linked;
   if (tabStop && !label) warnUnnamed();
@@ -473,6 +481,7 @@ export function BlockCardSet({
           cue,
           frame,
           linkScope,
+          ctaEmphasis,
           titleAs,
         };
         return featured && index === 0 ? (

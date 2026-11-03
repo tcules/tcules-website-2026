@@ -7,6 +7,7 @@ import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import {
   getCaseRefs,
   getContactChannels,
+  getContactFollow,
   getContactPage,
   getCorpusPage,
   getTestimonialAvatars,
@@ -70,11 +71,12 @@ export async function generateMetadata(): Promise<Metadata> {
 async function ContactFromCopy() {
   const page = await getCorpusPage(ROUTES.contact);
   if (!page) notFound();
-  const [caseRefs, ratings, avatars, channels] = await Promise.all([
+  const [caseRefs, ratings, avatars, channels, follow] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getTestimonialRatings(page.composition.testimonialIds),
     getTestimonialAvatars(page.composition.testimonialIds),
     getContactChannels(),
+    getContactFollow(),
   ]);
   return (
     <ContactTemplate
@@ -84,6 +86,7 @@ async function ContactFromCopy() {
       ratings={ratings}
       avatars={avatars}
       channels={channels}
+      follow={follow}
     />
   );
 }

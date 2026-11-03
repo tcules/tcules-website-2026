@@ -142,6 +142,9 @@
      the hover ground's corner — the photograph radius, so a boxed card and the covers on its page
      share one corner. Its inset is --gap-block, read directly. Grounds per surface, below. */
   --bcrd-box-radius: var(--radius-8);
+  /* The tile (`frame="tile"`, 3 Nov 2026): a filled ground at rest, so the larger corner of a panel
+     that is seen, not the 8 of a ground that only appears under the pointer. Ground per surface. */
+  --bcrd-tile-radius: var(--radius-16);
   /* The panel (`frame="panel"`, 28 Oct 2026): its least proportion from md (a square, about a
      covered card's cover and copy together at three tracks), and how many lines of standfirst its
      foot holds. Component sizes. */
@@ -184,6 +187,7 @@
   --bcrd-box-ground-hover: var(--color-paper-deep); /* a boxed linked card only */
   --bcrd-box-ground-pressed: var(--color-neutral-100);
   --bcrd-panel-ground: var(--color-paper); /* the page's own ground, the hairline draws the box (owner, 28 Oct 2026: "paper-deep is too much") */
+  --bcrd-tile-ground: var(--color-paper-deep); /* the tile: one step off paper, at rest */
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper);
   --bcrd-rail-ink: var(--color-neutral-200); /* decoration */
@@ -206,6 +210,7 @@
   --bcrd-box-ground-hover: var(--color-neutral-100);
   --bcrd-box-ground-pressed: var(--color-neutral-200);
   --bcrd-panel-ground: var(--color-paper); /* the drawn covers' plate (sketch.css) */
+  --bcrd-tile-ground: var(--color-paper); /* the tile: paper on the paper-deep tint */
   --bcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper-deep);
   --bcrd-rail-ink: var(--color-neutral-300); /* decoration */
@@ -228,6 +233,7 @@
   --bcrd-box-ground-hover: var(--color-neutral-900);
   --bcrd-box-ground-pressed: var(--color-neutral-800);
   --bcrd-panel-ground: var(--color-neutral-900); /* the drawn covers' plate (sketch.css) */
+  --bcrd-tile-ground: var(--color-neutral-900); /* the tile: one step off ink */
   --bcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --bcrd-ring-gap-color: var(--color-neutral-950);
   --bcrd-rail-ink: var(--color-neutral-800); /* decoration */
@@ -253,6 +259,7 @@
   --bcrd-box-ground-hover: var(--color-brandeis-600);
   --bcrd-box-ground-pressed: var(--color-brandeis-700);
   --bcrd-panel-ground: var(--color-brandeis-600); /* the drawn covers' plate (sketch.css) */
+  --bcrd-tile-ground: var(--color-brandeis-600); /* the tile: one step off blue */
   --bcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --bcrd-ring-gap-color: var(--color-brandeis-500);
   --bcrd-rail-ink: var(--color-brandeis-400); /* decoration */

@@ -11,6 +11,7 @@ export type {
   BlockCardCue,
   BlockCardFrame,
   BlockCardLinkScope,
+  BlockCardCtaEmphasis,
   BlockCardTextureRecipe,
 } from './BlockCard';
 export { BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCardSet';

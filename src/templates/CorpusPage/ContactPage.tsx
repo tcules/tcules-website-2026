@@ -1,4 +1,4 @@
-import { Icon, Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, type IconName } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import {
@@ -18,27 +18,38 @@ import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { BANDS_ELSEWHERE } from './kinds';
+import { LinksIsland, type IslandLink } from './LinksIsland';
 import { planOffer, type TEMPLATE_BANDS } from './plan';
 import { boldLead, hasLink, labelTitle, leadOf, plain, sentenceLead, trimStart } from './text';
 
 /** What a way to reach the studio is, which decides its glyph. */
-export type ContactChannelKind = 'email' | 'partners' | 'careers' | 'social' | 'studio';
+export type ContactChannelKind = 'email' | 'partners' | 'careers';
 
 /**
- * One way to reach the studio other than the form (tracker 2.56): a title and its lines, each line a
- * run list so an address, a profile or a mailbox is a link where it is one. The page passes them in
- * from the content seam.
+ * One way to reach the studio other than the form (tracker 2.56): its title and its one action, a
+ * mailbox or a page, whose label is the destination as the reader will use it ("hello@tcules.com",
+ * "Careers"). The page passes them in from the content seam.
  */
 export type ContactChannel = {
   kind: ContactChannelKind;
   title: string;
-  lines: readonly (readonly InlineRun[])[];
+  href: string;
+  action: string;
+};
+
+/** The studio's profiles and address, for the contact page's "Follow us on" island. */
+export type ContactFollow = {
+  heading: string;
+  links: readonly IslandLink[];
+  address?: string;
 };
 
 export type ContactPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
-  /** The other ways to reach the studio, as a row of icon cards after the hero. Absent, no band. */
+  /** The other ways to reach the studio, as a row of tiles after the form. Absent, no band. */
   channels?: readonly ContactChannel[];
+  /** The profiles and the studio address, as a short links island after the tiles. */
+  follow?: ContactFollow;
 };
 
 type ContactBand = (typeof TEMPLATE_BANDS)['/contact'][number];
@@ -148,37 +159,42 @@ function NextSteps({ band }: { band: CorpusBand }) {
   );
 }
 
-/* One Solar glyph per kind of channel, heading its card (an icon heads its card). */
+/* One Solar glyph per kind of channel, heading its tile (an icon heads its card). */
 const CHANNEL_GLYPHS = {
   email: 'letter',
   partners: 'hand-shake',
   careers: 'users-group-rounded',
-  social: 'share-circle',
-  studio: 'map-point',
 } as const satisfies Record<ContactChannelKind, IconName>;
 
 /**
- * The other ways to reach the studio (tracker 2.56, after tcules.com/contact): one icon card per
- * channel, glyph then title then its lines, in a set of peers with no featured card. Nobody clicks a
- * card: each line that goes somewhere is its own link (a mailbox, a profile, the careers page), so a
- * card holding four profiles answers the pointer the way a card holding one mailbox does. No head:
- * the copy authors none, and the cards' titles name every channel. The band is named for assistive
- * technology only.
+ * The other ways to reach the studio (tracker 2.56; owner's Contact A, 3 Nov 2026): one filled tile
+ * per route, glyph then title then its one action as a labelled outline, the mailbox or the page
+ * itself as the label. The tile does not answer the pointer; the action does. Under the head "Other
+ * ways to reach us" (owner, 3 Nov 2026).
  */
 function Channels({ channels }: { channels: readonly ContactChannel[] }) {
   return (
-    <Section surface="paper" aria-label="Other ways to reach us" data-band="C-channels">
+    <ContentSection
+      id="channels"
+      data-band="C-channels"
+      heading="Other ways to reach us"
+      headingId="channels-heading"
+    >
       <BlockCardSet
         lead="none"
         across={3}
+        frame="tile"
+        linkScope="cta"
+        ctaEmphasis="outline"
         items={channels.map((channel) => ({
           id: channel.kind,
           title: channel.title,
           icon: CHANNEL_GLYPHS[channel.kind],
-          bodyHtml: [channel.lines.map((line) => inlineToHtml(line)).join('<br>')],
+          href: channel.href,
+          ctaLabel: channel.action,
         }))}
       />
-    </Section>
+    </ContentSection>
   );
 }
 
@@ -209,7 +225,7 @@ function Confidentiality({ band }: { band: CorpusBand }) {
  * confidentiality views stay for copy that still authors those bands. Every other band renders as
  * the plan names it.
  */
-export function ContactPage({ page, channels = [], ...rest }: ContactPageProps) {
+export function ContactPage({ page, channels = [], follow, ...rest }: ContactPageProps) {
   /* A band the owner moved into another element's state (BANDS_ELSEWHERE) is read for its words
      but not drawn as a band: next steps lives in the form's sent state (tracker 2.56). */
   const elsewhere = BANDS_ELSEWHERE[page.route] ?? {};
@@ -248,6 +264,15 @@ export function ContactPage({ page, channels = [], ...rest }: ContactPageProps) 
         }
       />
       {channels.length > 0 ? <Channels channels={channels} /> : null}
+      {follow ? (
+        <LinksIsland
+          id="follow"
+          band="C-links"
+          heading={follow.heading}
+          links={follow.links}
+          footnote={follow.address}
+        />
+      ) : null}
       {units.map((unit) => {
         if (enquiry && unit.part !== 'b' && unit.band === enquiry) return null;
         if (unit.part === 'b') return <UnitView key={unit.id} unit={unit} ctx={ctx} />;

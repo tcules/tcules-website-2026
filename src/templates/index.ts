@@ -77,6 +77,7 @@ export type {
   AboutPageProps,
   ContactChannel,
   ContactChannelKind,
+  ContactFollow,
   ContactPageProps,
   CorpusBandViewProps,
   HomePageProps,

@@ -12,9 +12,9 @@ import { OFFER_SCENES } from './sources/offer-scenes';
 import { CLAIM_FIGURES, CLAIM_FIGURE_SIZE } from './sources/claim-figures';
 import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
 import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
-import type { ContactChannel } from '@/templates';
+import type { ContactChannel, ContactFollow } from '@/templates';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
-import { CONTACT_CHANNELS } from './sources/fixtures/contact-channels';
+import { CONTACT_CHANNELS, CONTACT_FOLLOW } from './sources/fixtures/contact-channels';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { authorsSource } from './sources/strapi/authors';
@@ -190,6 +190,11 @@ export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPage
 /** The other ways to reach the studio, for the contact page's cards (tracker 2.56). Fixture today. */
 export async function getContactChannels(): Promise<readonly ContactChannel[]> {
   return CONTACT_CHANNELS;
+}
+
+/** The studio's profiles and address, for the contact page's "Follow us on" island. Fixture today. */
+export async function getContactFollow(): Promise<ContactFollow> {
+  return CONTACT_FOLLOW;
 }
 
 export async function getTestimonialRatings(
