@@ -31,6 +31,7 @@ import {
   type ReasonsItem,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
+import type { InlineRun } from '@/lib/inline';
 import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -304,6 +305,14 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
  * of links or as link lines, each with its service's own scene for its graphic card
  * (decisions/2026-10-31-paths-graphic-cards). Exported so /design/kit/gateway proves the paths form on the real words.
  */
+/** An "Example:" paragraph's runs without the lead word, which the card sets as the example's label. */
+function withoutExampleLead(runs: readonly InlineRun[]): InlineRun[] {
+  const [first, ...rest] = runs;
+  if (first?.type !== 'text') return [...runs];
+  const text = first.text.replace(/^\s*Example:\s*/, '');
+  return text ? [{ type: 'text', text }, ...rest] : rest;
+}
+
 export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
     const links = path.blocks.flatMap((block) => {
@@ -343,8 +352,17 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
         title: path.headingText,
         body: words.map((runs) => plain(runs)),
         ...(eyebrow ? { eyebrow } : {}),
+        /* The example under its card (owner, 4 Nov 2026, variant G): "Example:" becomes its label
+           and the sentence after it the example, every word kept. */
         ...(example
-          ? { example: <span dangerouslySetInnerHTML={{ __html: inline(example) }} /> }
+          ? {
+              exampleLabel: 'Example',
+              example: (
+                <span
+                  dangerouslySetInnerHTML={{ __html: inline(withoutExampleLead(example)) }}
+                />
+              ),
+            }
           : {}),
         /* Each service's own scene, the one its service page draws; none borrowed (owner, 31 Oct
            2026; decisions/2026-10-31-paths-graphic-cards). */
@@ -384,6 +402,7 @@ function Situations({ b, eyebrows }: BandProps) {
         eyebrow={eyebrows?.[b.id]}
         data-band="C-router"
         surface="tint"
+        align="center"
       >
         <GatewayPaths paths={paths} form="cards" />
         {ask ? (

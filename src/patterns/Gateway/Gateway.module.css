@@ -419,7 +419,20 @@
   color: var(--gwy-body-ink);
 }
 
-/* The example: a step quieter than the words, its case link in the link ink. */
+/* The example's label, under the card: the label voice, muted. */
+.doorExampleLabel {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--gwy-door-example-ink);
+}
+
+/* The example: a step quieter than the words, its case link in the link ink. Its first letter is set
+   in CSS, so a sentence the copy began after "Example:" ("the review feed…") opens as one. */
+.doorExample::first-letter {
+  text-transform: uppercase;
+}
+
 .doorExample {
   font: var(--gwy-door-example-text);
   text-wrap: var(--text-running-wrap);

@@ -697,3 +697,10 @@
   .share-rows-3 > * { grid-row: span 3; grid-template-rows: subgrid; }
   .share-rows-4 > * { grid-row: span 4; grid-template-rows: subgrid; }
 }
+
+/* spanRows — from lg this Layout spans N of its parent's rows and takes them as a subgrid. After the
+   share-rows rules, so a child of a shareRows item keeps its own span. */
+@media (min-width: 1024px) {
+  .span-rows-2 { grid-row: span 2; grid-template-rows: subgrid; }
+  .span-rows-3 { grid-row: span 3; grid-template-rows: subgrid; }
+}
