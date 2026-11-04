@@ -190,8 +190,6 @@ Tcules is a digital product design studio for SaaS. We take ideas and AI-built p
 
 You may have a deck, or a prototype built over a weekend. We keep what works and design a first release customers choose.
 
-Example: [Doodle's enterprise MVP](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), reshaped by research.
-
 - [Design and launch your MVP](/services/mvp-development)
 - [Check whether your prototype is ready for customers](/audits/prototype-readiness-review)
 
@@ -200,8 +198,6 @@ Example: [Doodle's enterprise MVP](/case-studies/doodle-case-study-automating-en
 *Established product*
 
 We find what holds it back and redesign it in stages, so customers keep their bearings.
-
-Example: [Benchmark Gensuite's modern patterns](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), tried in working prototypes first.
 
 - [Redesign how your product works](/services/product-design)
 - [Modernise a product customers rely on](/services/product-modernisation)
@@ -212,10 +208,10 @@ Example: [Benchmark Gensuite's modern patterns](/case-studies/benchmark-gensuite
 
 We design how people check, correct and override what the AI does, so they can rely on it.
 
-Example: the [review feed we designed for BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), where the engineer who signs off can trace and overrule each AI check.
-
 - [Design AI features people trust](/services/ai-product-ux)
 - [Audit an AI feature before more people rely on it](/audits/ai-product-ux-readiness)
+
+Every route starts with a call with the senior designer who would lead your work.
 
 [Book a call](#enquiry)
 

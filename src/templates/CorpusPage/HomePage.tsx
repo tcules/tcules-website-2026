@@ -312,6 +312,25 @@ function withoutExampleLead(runs: readonly InlineRun[]): InlineRun[] {
   return text ? [{ type: 'text', text }, ...rest] : rest;
 }
 
+/**
+ * The band's closing line before its ask ("Somewhere in between? Tell us where your product is…",
+ * owner, 4 Nov 2026): the copy writes it after the last door's links, so the parser files it under
+ * that door. The paragraphs after the last door's links, as plain text; none, undefined.
+ */
+function askLineIn(b: CorpusBand): string | undefined {
+  const last = items(b).at(-1);
+  if (!last) return undefined;
+  const linksAt = last.blocks.findIndex(
+    (block) => block.type === 'list' || block.type === 'links',
+  );
+  if (linksAt < 0) return undefined;
+  const line = paragraphRuns(last.blocks.slice(linksAt + 1))
+    .map((runs) => plain(runs).trim())
+    .filter(Boolean)
+    .join(' ');
+  return line || undefined;
+}
+
 export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
     const links = path.blocks.flatMap((block) => {
@@ -332,7 +351,12 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
       return [];
     });
     if (links.length === 0) return [];
-    const paragraphs = paragraphRuns(path.blocks);
+    /* A door's words stop at its links: a line after them under the last door is the band's own
+       closing line before its ask (askLineIn), not that door's. */
+    const linksAt = path.blocks.findIndex(
+      (block) => block.type === 'list' || block.type === 'links',
+    );
+    const paragraphs = paragraphRuns(linksAt < 0 ? path.blocks : path.blocks.slice(0, linksAt));
     /* A first paragraph wholly italic ("*New product*") names the kind of product the path is for:
        the card's label, not its first line (v2.1 copy, 4 Nov 2026). A paragraph opening "Example:"
        is the path's example, kept whole with its case link (decisions/2026-11-02-examples-are-one-
@@ -403,14 +427,22 @@ function Situations({ b, eyebrows }: BandProps) {
         surface="tint"
         align="center"
       >
-        <GatewayPaths paths={paths} form="cards" />
-        {ask ? (
-          <Cluster justify="center">
-            <Button as="a" href={ask.href} size="md">
-              {ask.labelText}
-            </Button>
-          </Cluster>
-        ) : null}
+        <GatewayPaths
+          paths={paths}
+          form="cards"
+          close={
+            ask
+              ? {
+                  line: askLineIn(b),
+                  action: (
+                    <Button as="a" href={ask.href} size="md">
+                      {ask.labelText}
+                    </Button>
+                  ),
+                }
+              : undefined
+          }
+        />
       </ContentSection>
     );
   }

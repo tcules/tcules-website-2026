@@ -512,3 +512,16 @@
 .doorArrow {
   flex: none;
 }
+
+/* The set's close (`close`): the line centred at h5-lg, its action under it. */
+.doorClose {
+  text-align: center;
+}
+
+.doorCloseLine {
+  font: var(--gwy-door-close-text);
+  letter-spacing: var(--gwy-door-close-tracking);
+  text-wrap: balance;
+  color: var(--gwy-title-ink);
+  max-inline-size: var(--gwy-door-close-measure);
+}
