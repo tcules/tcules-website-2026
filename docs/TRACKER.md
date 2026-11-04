@@ -291,6 +291,11 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       what is left of 2.55.
 - [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
       the header still needs work.
+- [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
+- [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
+      wire them in as they land.
+- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
+      only, its path added to `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · enquiry form autofill, success/failure copy
