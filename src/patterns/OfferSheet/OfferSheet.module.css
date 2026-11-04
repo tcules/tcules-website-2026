@@ -145,3 +145,11 @@
   width: var(--ofs-icon-size);
   height: var(--ofs-icon-size);
 }
+
+/* A glyph-headed grid item's head: the glyph at its own size (Icon `xl`, 24) in the accent ink, a
+   row of its own over the title. */
+.headIcon {
+  display: block;
+  color: var(--ofs-mark-ink);
+  line-height: 0;
+}

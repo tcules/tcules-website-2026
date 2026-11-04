@@ -11,7 +11,23 @@ import styles from './EnquiryForm.module.css';
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */
 export type EnquiryUrlLabel =
-  'Website' | 'Link to the work' | 'Where can we see it?' | 'Product or company URL';
+  | 'Website'
+  | 'Link to the work'
+  | 'Where can we see it?'
+  | 'Product or company URL'
+  /* The application wording (4 Nov 2026, /future-interfaces-lab/join): the copy's own words for
+     what an applicant links. */
+  | 'Links to your proof-of-work';
+
+/**
+ * The free-text question's label. The enquiry asks what someone is working on; the application
+ * wording (4 Nov 2026, /future-interfaces-lab/join, owner to confirm) asks for the two things the
+ * copy says an application carries, "your background … and why you want to build in FIL". A typed
+ * union, as the link's label is, so a page cannot pass free words.
+ */
+export type EnquiryWorkLabel =
+  | 'What are you working on?'
+  | 'Your background and why you want to build in FIL';
 
 export type AuditUrlLabel = 'Site to audit';
 
@@ -186,6 +202,8 @@ export type EnquiryDress =
 type EnquiryVariantProps = SharedProps & {
   variant?: 'enquiry';
   urlLabel?: EnquiryUrlLabel;
+  /** The free-text question's label. Default "What are you working on?". See `EnquiryWorkLabel`. */
+  workLabel?: EnquiryWorkLabel;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: string;
   /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
@@ -647,6 +665,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
      the form's own width holds two 192px tracks (`fit`, `xs`) and stacks where it does not, so the
      form decides from its track, not from the viewport. The optional link field is a row of its
      own at the end of the enquiry and audit sets. */
+  /* The free-text question, in the page's wording where the enquiry set names one. */
+  const work: FieldSpec =
+    (props.variant === undefined || props.variant === 'enquiry') && props.workLabel
+      ? { ...FIELD.work, label: props.workLabel }
+      : FIELD.work;
   type Row = readonly FieldSpec[] | 'url';
   const rows: Row[] =
     variant === 'contact'
@@ -656,8 +679,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
           [FIELD.message],
         ]
       : variant === 'compact'
-        ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
-        : [[FIELD.email('email')], [FIELD.work], 'url'];
+        ? [[FIELD.name('name'), FIELD.email('email')], [work]]
+        : [[FIELD.email('email')], [work], 'url'];
 
   /* The dress, when the enquiry set wears one (see EnquiryDress). */
   const dress =
@@ -669,9 +692,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
      message comes before its details. */
   const validated: readonly FieldSpec[] =
     dress?.kind === 'choice'
-      ? [FIELD.name('name'), FIELD.email('email'), FIELD.work]
+      ? [FIELD.name('name'), FIELD.email('email'), work]
       : dress?.kind === 'message'
-        ? [FIELD.work, FIELD.name('name'), FIELD.email('email')]
+        ? [work, FIELD.name('name'), FIELD.email('email')]
         : rows.flatMap((row) => (row === 'url' ? [] : row));
 
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
@@ -1177,9 +1200,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
                     look: 'fill',
                   })}
                 </Layout>
-                {renderField(FIELD.work, {
+                {renderField(work, {
                   visibleLabel: true,
-                  placeholder: pickedPrompt ?? dress.prompt ?? FIELD.work.label,
+                  placeholder: pickedPrompt ?? dress.prompt ?? work.label,
                   look: 'fill',
                   fill: true,
                 })}
@@ -1247,7 +1270,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <Layout rowGap="block">
             <Layout rowGap="text">
               {renderField(email, { visibleLabel: true, placeholder: null, look: 'fill' })}
-              {renderField(FIELD.work, { visibleLabel: true, placeholder: null, look: 'fill' })}
+              {renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })}
               {renderDressedUrl('fill', true)}
             </Layout>
             <div className={styles.dressFoot}>
@@ -1299,10 +1322,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
           ) : null}
           <div className={styles.composer}>
             <div className={styles.composerMain}>
-              {renderField(FIELD.work, {
+              {renderField(work, {
                 placeholder:
                   pickedPrompt ??
-                  (dress.prompt ? `${FIELD.work.label} ${dress.prompt}` : FIELD.work.label),
+                  (dress.prompt ? `${work.label} ${dress.prompt}` : work.label),
                 look: 'bare',
               })}
             </div>

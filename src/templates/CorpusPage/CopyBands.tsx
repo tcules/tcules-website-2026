@@ -51,7 +51,7 @@ import { ListTiles, head, headingIdOf } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
-import { isIllustratedProse, isWhatYouGet, signature } from './plan';
+import { isIllustratedProse, isIslandClose, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -652,9 +652,9 @@ export function SheetBand({
 }: {
   band: CorpusBand;
   scenes?: (title: string) => OfferSheetItem['scene'];
-  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_ROWS`). */
+  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_GLYPHS`). */
   arrangement?: 'grid' | 'rows';
-  /** A rows sheet's glyph per item title (OfferBands `SHEET_ROWS`). */
+  /** A glyph per item title, rows or grid (OfferBands `SHEET_GLYPHS`). */
   icons?: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
@@ -1254,11 +1254,39 @@ export function MethodBand({
   const rest = leadText ? blocks.slice(1) : blocks;
   const listAt = rest.findIndex((block) => block.type === 'list');
   const claimAt = rest.findIndex((block) => leadOf(block) !== null && !isBareLabel(block));
+  /* A step authored as a `###` item (its heading the title, its paragraphs the body) is the same step
+     as a bold-led paragraph, read the same way (4 Nov 2026, /future-interfaces-lab/join "How the
+     fellowship works": five `###` steps rendered no steps at all). */
+  const itemAt = rest.findIndex(
+    (block) =>
+      block.type === 'item' && block.blocks.every((inner) => inner.type === 'paragraph'),
+  );
   let steps: Step[] = [];
   const trailingNotes: Step[] = [];
   let from = 0;
   let to = 0;
-  if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
+  const firstOf = (...at: number[]) => Math.min(...at.filter((n) => n >= 0));
+  if (itemAt >= 0 && itemAt === firstOf(itemAt, claimAt, listAt)) {
+    from = itemAt;
+    to = itemAt;
+    for (
+      let block = rest[to];
+      block?.type === 'item' && block.blocks.every((inner) => inner.type === 'paragraph');
+      block = rest[to]
+    ) {
+      const paras = block.blocks.flatMap((inner) =>
+        inner.type === 'paragraph' ? [inner.runs] : [],
+      );
+      steps.push(
+        paras.length === 1
+          ? { title: block.headingText, ...rowBody(paras[0] ?? []) }
+          : paras.length > 1
+            ? { title: block.headingText, bodyHtml: paras.map((runs) => inlineToHtml(runs)) }
+            : { title: block.headingText },
+      );
+      to += 1;
+    }
+  } else if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
     from = claimAt;
     to = claimAt;
     /* A step authored as a bold-led paragraph keeps the plain paragraphs that follow it as more of
@@ -2510,6 +2538,40 @@ export function CloseBand({
             href: onward.href,
           },
         ]}
+      />
+    );
+  }
+  /* A close whose inline links all go to ONE place (4 Nov 2026, /future-interfaces-lab/join "Ask to
+     see work from an experiment": "the contact page … contact Tcules", both /contact): the ink island,
+     its words kept whole as the lede and that place its one action, labelled with the first link's
+     own words. A LINK action, never a solid: a side door for another reader, and the page's one main
+     action is elsewhere. Opted in per band (plan.ts `ISLAND_CLOSES`) until the owner rules it for every such
+     close, because it would also turn /how-we-work/ai-native-product-design's "your rules", the
+     /insights hubs' "talk" bands and /careers' "apply" into islands. */
+  const inline = paras.flatMap((block) =>
+    block.runs.flatMap((run) => (run.type === 'link' ? [run] : [])),
+  );
+  const [lead] = inline;
+  if (
+    isIslandClose(page.route, band.id) &&
+    lead &&
+    links.length === 0 &&
+    !others &&
+    paras.length > 0 &&
+    paras.length <= 2 &&
+    inline.every((run) => run.href === lead.href)
+  ) {
+    const words = plain(lead.children);
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        intent="onward"
+        {...(island ? { island } : {})}
+        heading={band.headingText}
+        body={paras.map((block) => plain(block.runs)) as [string] | [string, string]}
+        actions={[{ label: words.charAt(0).toUpperCase() + words.slice(1), href: lead.href }]}
       />
     );
   }

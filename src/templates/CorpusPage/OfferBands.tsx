@@ -51,6 +51,7 @@ import { renderInline } from '@/lib/inline-render';
 import {
   EnquiryBand,
   FaqItems,
+  faqFooter,
   GenericBlocks,
   ListTiles,
   bodyOf,
@@ -534,18 +535,49 @@ const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
 
-/* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
-   have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
-const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
-  /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
-     and the set warns as mixed. */
+/**
+ * Sheets that carry a glyph per item, by band id, with the arrangement the glyphs sit in. Each glyph by
+ * the item's title, as authored; a title the copy renames falls back to no glyph and the set warns as
+ * mixed. Every other sheet keeps its plain grid.
+ *
+ *   rows  one item per row, title beside its words, the glyph inline before the title
+ *         (decisions/2026-11-04-sheet-row-glyph-sits-inline): /clients' "What clients have asked us
+ *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026); /join's
+ *         "What you leave the fellowship with", two short payoffs, the page's quietest set.
+ *   grid  the glyph heads each item, over its title and words, no hairline or mark (4 Nov 2026,
+ *         /future-interfaces-lab/join "Why join": five abstract qualities, so an icon is the honest
+ *         visual; the marker cell is for figures). Owner to confirm.
+ */
+const SHEET_GLYPHS: Readonly<
+  Record<string, { arrangement: 'grid' | 'rows'; icons: Readonly<Record<string, IconName>> }>
+> = {
   'product-responsibility': {
-    'Shape a new product': 'ruler-pen',
-    'Improve software customers already rely on': 'refresh-square',
-    'Design AI into the product': 'stars',
-    'Carry the design into working software': 'code-square',
-    'Work as part of an internal product team': 'users-group-rounded',
-    "Find out what's wrong before fixing it": 'magnifier-bug',
+    arrangement: 'rows',
+    icons: {
+      'Shape a new product': 'ruler-pen',
+      'Improve software customers already rely on': 'refresh-square',
+      'Design AI into the product': 'stars',
+      'Carry the design into working software': 'code-square',
+      'Work as part of an internal product team': 'users-group-rounded',
+      "Find out what's wrong before fixing it": 'magnifier-bug',
+    },
+  },
+  'why-join': {
+    arrangement: 'grid',
+    icons: {
+      'Real build pressure': 'clock-circle',
+      'Direct critique': 'chat-round-dots',
+      'Work you can show': 'monitor',
+      'Small serious cohort': 'users-group-rounded',
+      'Product-level thinking': 'layers',
+    },
+  },
+  'what-youll-gain': {
+    arrangement: 'rows',
+    icons: {
+      'Shipped proof-of-work': 'code-square',
+      'Stronger product judgement': 'checklist',
+    },
   },
 };
 
@@ -577,7 +609,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
   switch (unit.kind) {
     case 'faq':
       return (
-        <ContentSection {...head(band)} data-band="D-faq" align="center">
+        <ContentSection
+          {...head(band)}
+          data-band="D-faq"
+          align="center"
+          footer={faqFooter(band)}
+        >
           <ContentSectionText>
             <FaqItems band={band} />
           </ContentSectionText>
@@ -623,9 +660,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         <SheetBand
           band={band}
           scenes={scenes}
-          {...(SHEET_ROWS[band.id]
-            ? { arrangement: 'rows' as const, icons: SHEET_ROWS[band.id] }
-            : {})}
+          {...(SHEET_GLYPHS[band.id] ?? {})}
         />
       );
     }

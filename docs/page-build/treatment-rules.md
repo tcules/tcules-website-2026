@@ -294,3 +294,25 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   halves** (`PAIRED_CLOSES` in plan.ts, CtaSection `second`): two islands would touch, and as prose they make
   a run of text bands after the FAQ. The first ask keeps the solid, the second the outline partner; the
   moved band is listed in `BANDS_ELSEWHERE`.
+
+## Added 4 Nov 2026 (/future-interfaces-lab/join; proposed until the owner sees the page)
+
+- **A set of abstract qualities** (reasons to join, what a programme is like) is the offer sheet headed by
+  glyphs: one Solar glyph per item over its title and words, no hairline or blue mark (those are for figures),
+  no card, no disc; 3 + 2 for five (OfferBands `SHEET_GLYPHS`, `arrangement: 'grid'`). A flat drawing would read
+  as a mechanism; an isometric set would be five placeholders.
+- **Roles or peers a reader places themselves among** are the drawn sheet across 3, one still flat drawing per
+  role drawing its title's idea, equal weight, no lead item.
+- **A method told as `###` steps is a method**: MethodBand reads each item as a numbered step beside the one
+  figure, exactly as bold-led paragraphs.
+- **An application the page takes itself** (the owner's 4 Nov answer) is the enquiry island in the application
+  wording (`APPLICATION_FORMS`, blocks.tsx): the band's selection steps as the island's numbered points and the
+  success view's next steps, its own link words as the submit, the programme's address as "or write to", no
+  reply promise unless authored. The hero's ask to the same external form lands on the band (`#apply`).
+- **A closing line filed under the last FAQ answer** ("Still got questions? Drop us a note: …") closes the band,
+  centred under the accordion, never hidden inside an answer.
+- **An island footnote's glyph names its kind**: a shield for an NDA or confidentiality line, the info mark for
+  any other.
+- **A close whose inline links all go to one place** is the ink island, its sentences whole as the lede, the
+  first link's words as one LINK action (never a solid when the page's main action is elsewhere). Opt-in by
+  route and band (`ISLAND_CLOSES`, plan.ts) until the owner rules it for every such close.

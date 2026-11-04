@@ -26,6 +26,20 @@ const CONTEXT = {
 
 const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
 
+/* The application's selection steps, as /future-interfaces-lab/join authors them. */
+const APPLICATION_STEPS = [
+  {
+    label: 'Send your application',
+    detail:
+      'Submit the form with your background, links to your proof-of-work and why you want to build in FIL.',
+  },
+  { label: 'We review', detail: 'We assess applications for merit, fit and relevance to Tcules.' },
+  {
+    label: 'Shortlisting',
+    detail: 'Shortlisted applicants go on to the practical round, followed by a final review.',
+  },
+] as const;
+
 /* The caller's next steps: the success view numbers what it is handed. */
 const STEPS = [
   { label: 'A reply within a working day', detail: 'From the person who would lead the work.' },
@@ -339,6 +353,42 @@ export default function EnquiryFormSpecimenPage() {
           />
         </Fragment>
       ))}
+
+      {/* The application wording (4 Nov 2026, /future-interfaces-lab/join, owner to confirm). */}
+      <Section>
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Blue island · dress “card” · application wording</p>
+          <p className={s.specNote}>
+            The same card, worded for an application: urlLabel “Links to your proof-of-work”,
+            workLabel “Your background and why you want to build in FIL” (both the copy’s words, typed
+            unions), the band’s own ask as the submit, “or write to” the programme’s address and no reply
+            promise (none is authored). In the halves close with no drawing, the selection steps as the
+            island’s numbered points; the success view repeats them as next steps. Send it to see.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandArrangement="halves"
+        islandTexture="flow"
+        heading="Apply to the Future Interfaces Lab (FIL): how selection works"
+        body={['Applications for the next cohort are now open.']}
+        points={APPLICATION_STEPS}
+        footnote="FIL is a selective fellowship, run separately from Tcules job openings."
+        footnoteIcon="info-circle"
+        form={
+          <EnquiryForm
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={{ ...CONTEXT, placement: 'application', family: 'future-interfaces-lab' }}
+            urlLabel="Links to your proof-of-work"
+            workLabel="Your background and why you want to build in FIL"
+            submitLabel="Apply to the Lab"
+            nextSteps={APPLICATION_STEPS}
+            dress={{ kind: 'card', writeTo: 'fil@tcules.com' }}
+            fieldScale="md"
+          />
+        }
+      />
 
       <CtaSection
         eyebrow="Variant · enquiry"

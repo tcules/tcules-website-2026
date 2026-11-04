@@ -118,7 +118,7 @@ export const KIND_COMPONENTS: Readonly<
   close: {
     component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026). A close the page draws (its `figure` scene): the sentence beside its one flat figure (C-text). Two closes a route pairs (plan.ts PAIRED_CLOSES): one ink island in two peer halves (L), /future-interfaces-lab (4 Nov 2026, owner to judge).',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026). A close the page draws (its `figure` scene): the sentence beside its one flat figure (C-text). Two closes a route pairs (plan.ts PAIRED_CLOSES): one ink island in two peer halves (L), /future-interfaces-lab (4 Nov 2026, owner to judge). A close whose inline links share one destination, opted in by route (plan.ts ISLAND_CLOSES): the ink island with that destination as one link action (L), /future-interfaces-lab/join (4 Nov 2026, owner to judge).',
   },
 };
 

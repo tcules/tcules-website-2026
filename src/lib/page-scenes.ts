@@ -460,6 +460,11 @@ export const PAGE_SCENE_NAMES = [
   'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
   'wyg-future-interfaces-lab-landing-page-audit-programme',
   'wyg-future-interfaces-lab-promotion',
+  /* /future-interfaces-lab/join: the three roles and the method's figure (components/Sketch/wyg-future-interfaces-lab-join.tsx) */
+  'wyg-future-interfaces-lab-join-ai-systems-builders',
+  'wyg-future-interfaces-lab-join-product-experience-designers',
+  'wyg-future-interfaces-lab-join-growth-brand-operators',
+  'wyg-future-interfaces-lab-join-method',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

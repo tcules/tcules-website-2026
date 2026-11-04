@@ -45,8 +45,11 @@ export type OfferSheetItem = {
    */
   href?: string;
   /**
-   * A glyph leading the item, `rows` only: before its title, on the title's first line (owner, 4 Nov
-   * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
+   * A glyph leading the item. In `rows`, before its title on the title's first line (owner, 4 Nov
+   * 2026: a row is not an icon card). In `grid`, the item's HEAD: glyph, then title, then body, each
+   * on its own row (decisions/2026-10-19-icon-heads-its-card), and the item drops its hairline and
+   * blue mark, which are for figures (decisions/2026-10-31-marker-cell-is-for-figures). Not with
+   * drawings. Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
 };
@@ -160,6 +163,18 @@ export function OfferSheet({
   if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
     console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
   }
+  /* Glyph-headed: every promise led by its glyph, in a grid (4 Nov 2026, /future-interfaces-lab/join
+     "Why join"). A set is all-glyph or none; a mixed set draws no glyph and says so. */
+  const glyphed =
+    !rows && !drawn && shown.length > 0 && shown.every((item) => item.icon !== undefined);
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    !rows &&
+    !glyphed &&
+    shown.some((item) => item.icon)
+  ) {
+    console.warn('OfferSheet: some promises carry a glyph and some do not; drawing none.');
+  }
   const words = (item: OfferSheetItem) => (
     <Layout rowGap="text">
       {item.title ? (
@@ -237,6 +252,22 @@ export function OfferSheet({
         </li>
       ))}
     </Layout>
+  ) : glyphed ? (
+    /* Glyph-headed items: no hairline, no mark, no card, no disc. The glyph is the item's head, a
+       `block` over its words (head to body inside a block). The items carry no rule, so the rows
+       are a borderless set's seam, `column` (the gap scale's row seam of a borderless set, 29 Sep 2026). */
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: across }} colGap="gutter" rowGap="column">
+      {shown.map((item) => (
+        <li key={keyOf(item)}>
+          <Layout rowGap="block">
+            <span className={styles.headIcon}>
+              {item.icon ? <Icon name={item.icon} size="xl" /> : null}
+            </span>
+            {words(item)}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
   ) : (
     <Layout
       as="ul"
@@ -269,7 +300,7 @@ export function OfferSheet({
     labelled
   );
   const side =
-    drawn || rows
+    drawn || rows || glyphed
       ? undefined
       : (aside ??
         (asideImage ? (

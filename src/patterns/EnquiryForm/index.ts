@@ -8,4 +8,5 @@ export type {
   EnquiryFormProps,
   EnquiryNextStep,
   EnquiryUrlLabel,
+  EnquiryWorkLabel,
 } from './EnquiryForm';

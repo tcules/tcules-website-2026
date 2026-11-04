@@ -51,6 +51,7 @@ import { SCENES as P_AUDIT_DESIGN_TO_CODE_AUDIT } from './wyg-design-to-code-aud
 import { SCENES as P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT } from './wyg-product-modernisation-assessment';
 import { SCENES as P_MATTER_DESIGN_SYSTEM } from './wyg-matter-design-system';
 import { SCENES as P_FUTURE_INTERFACES_LAB } from './wyg-future-interfaces-lab';
+import { SCENES as P_FUTURE_INTERFACES_LAB_JOIN } from './wyg-future-interfaces-lab-join';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
@@ -104,4 +105,5 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT,
   ...P_MATTER_DESIGN_SYSTEM,
   ...P_FUTURE_INTERFACES_LAB,
+  ...P_FUTURE_INTERFACES_LAB_JOIN,
 };

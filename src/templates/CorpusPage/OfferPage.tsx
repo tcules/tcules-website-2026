@@ -6,7 +6,7 @@ import { heroClip } from '@/lib/hero-clips';
 import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
-import { CorpusHero } from './blocks';
+import { CorpusHero, withApplicationAnchor } from './blocks';
 import { OnwardIsland } from './CopyBands';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer } from './plan';
@@ -87,8 +87,9 @@ export function OfferPage({
           (decisions/2026-10-29-studio-record-is-figures). The hero's "Selected … work:" line names the cases the page lists further down; where it
           does list them (a case band), the line only repeats that list and read as unfinished
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
+      {/* An application taken on the page: the hero's ask lands on it (blocks.ts APPLICATION_FORMS). */}
       <CorpusHero
-        page={page}
+        page={withApplicationAnchor(page)}
         arrangement={clip ? 'stacked' : heroIsCentred(page.route) ? 'centred' : 'beside'}
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}

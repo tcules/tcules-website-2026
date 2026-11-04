@@ -1,4 +1,5 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
+import { ROUTES } from '@/lib/routes';
 
 import { studioBandPhoto } from './images';
 import { formBeforeFaq } from './order';
@@ -326,7 +327,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'why-join': 'outcomes',
   'who-we-are-looking-for': 'outcomes',
   'what-youll-gain': 'outcomes',
-  'what-youll-do': 'outcomes',
+  /* /future-interfaces-lab/join "How the fellowship works": its lead names a sequence (apply, pass a
+     practical round, then build), so it is a method, not a set (4 Nov 2026). */
+  'what-youll-do': 'method',
   /* /how-we-work's practical details: drawn cards, as About's working terms (owner, 1 Nov 2026). */
   essentials: 'tiles',
   'engagement-shapes': 'tiles',
@@ -379,7 +382,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
   lab: 'close',
-  apply: 'close',
+  /* An application band that tells how selection works in `###` steps takes the application on the
+     page: the enquiry island in its application wording (owner, 4 Nov 2026: "reuse the existing
+     enquiry form"; /future-interfaces-lab/join). One without steps (/careers' email line) stays a
+     close until its page is designed. */
+  apply: (_band, sig) => (/I/.test(sig) ? 'enquiry' : 'close'),
   'case-studies': (_band, sig) => (/^P$/.test(sig) ? 'close' : 'text'),
   purpose: 'close',
   promotion: 'close',
@@ -640,6 +647,19 @@ export const PAIRED_CLOSES: Readonly<Record<string, Readonly<Record<string, stri
   '/future-interfaces-lab': { join: 'talk' },
 };
 
+/**
+ * Closes whose inline links all go to one destination, set as the ink island with that destination as
+ * the one action (CopyBands `CloseBand`), by route and band. Opt-in until the owner rules it for every
+ * such close (4 Nov 2026, /future-interfaces-lab/join "Ask to see work from an experiment").
+ */
+const ISLAND_CLOSES: ReadonlySet<string> = new Set([
+  `${ROUTES.futureInterfacesLabJoin}#artefact-access`,
+]);
+
+/** Whether this route sets the close as its single-destination island (`ISLAND_CLOSES`). */
+export const isIslandClose = (route: string, bandId: string): boolean =>
+  ISLAND_CLOSES.has(`${route}#${bandId}`);
+
 /** The band a close shares its island with on this route, if any (`PAIRED_CLOSES`). */
 export const pairedCloseOf = (route: string, bandId: string): string | undefined =>
   PAIRED_CLOSES[route]?.[bandId];
@@ -684,7 +704,9 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             /* A paired close is an island, and an island is a visual band. */
-            (kind === 'close' && pairedCloseOf(page.route, band.id) !== undefined) ||
+            (kind === 'close' &&
+              (pairedCloseOf(page.route, band.id) !== undefined ||
+                isIslandClose(page.route, band.id))) ||
             band.blocks.some(
               (block) =>
                 block.type === 'paragraph' &&

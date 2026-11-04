@@ -42,6 +42,10 @@ export const CENTRED_HERO_ROUTES: ReadonlySet<string> = new Set([
      split's half column it renders about 500 wide and its detail is lost; centred it takes the 860 cap
      (docs/page-build/pages/matter-design-system.md, 4 Nov 2026). */
   ROUTES.matterDesignSystem,
+  /* A 73-character title that ran to five display lines in the beside split's half column at 1440
+     (docs/page-build/pages/future-interfaces-lab-join.md, 4 Nov 2026). The studio photograph takes the
+     content width under the copy. */
+  ROUTES.futureInterfacesLabJoin,
 ]);
 
 /** Whether a route's hero is the centred stack with its media below. */

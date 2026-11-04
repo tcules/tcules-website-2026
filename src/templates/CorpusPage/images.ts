@@ -165,6 +165,10 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
      wall, work in progress; not one experiment's capture, because an image about one item belongs to
      that item (docs/page-build/pages/future-interfaces-lab.md). */
   [ROUTES.futureInterfacesLab]: ABOUT_WALL,
+  /* "Build AI products in Ahmedabad": a fellow presenting work to seated colleagues in the studio, which
+     is what the page describes (direct critique, weekly demos, review in the open). The page binds no
+     image of its own (docs/page-build/pages/future-interfaces-lab-join.md). */
+  [ROUTES.futureInterfacesLabJoin]: ABOUT_REVIEW,
 };
 
 /**

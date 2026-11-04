@@ -662,4 +662,17 @@ export const PAGE_OFFER_SCENES = {
     },
     stories: {},
   },
+  /* The three roles the fellowship looks for (the drawn offer sheet across 3) and the method's one
+     figure beside its steps; docs/page-build/pages/future-interfaces-lab-join.md. */
+  '/future-interfaces-lab/join': {
+    items: {
+      'who-we-are-looking-for': by({
+        'AI systems builders': 'wyg-future-interfaces-lab-join-ai-systems-builders',
+        'Product experience designers': 'wyg-future-interfaces-lab-join-product-experience-designers',
+        'Growth and brand operators': 'wyg-future-interfaces-lab-join-growth-brand-operators',
+      }),
+      'what-youll-do': { figure: 'wyg-future-interfaces-lab-join-method' },
+    },
+    stories: {},
+  },
 } as unknown as Readonly<Record<string, OfferScenes>>;

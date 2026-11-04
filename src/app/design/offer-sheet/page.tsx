@@ -348,6 +348,45 @@ export default function OfferSheetSpecimen() {
           },
         ]}
       />
+
+      <Variation
+        id="glyph-grid"
+        title="8 · Grid headed by glyphs"
+        note="`icon` on every item of a grid: the glyph heads the item (24, the accent), then the title, then the words, each on its own row. No hairline, no blue mark (those are for figures), no card, no disc. Three across from 1024 (five read 3 + 2), two from 768, one below. For abstract qualities an icon names honestly (/future-interfaces-lab/join &ldquo;Why join&rdquo;, 4 Nov 2026, owner to confirm)."
+      />
+      <OfferSheet
+        heading="Why join the Future Interfaces Lab"
+        headingId="ofs-glyph-grid"
+        lead="You will contribute directly to the research, design, prototyping and MVP development of products shaped under real constraints."
+        across={3}
+        items={[
+          {
+            title: 'Real build pressure',
+            icon: 'clock-circle',
+            body: 'Work in short build cycles where execution, iteration and clarity matter every week.',
+          },
+          {
+            title: 'Direct critique',
+            icon: 'chat-round-dots',
+            body: 'Get feedback on architecture, trade-offs, product framing and the quality of what you ship.',
+          },
+          {
+            title: 'Work you can show',
+            icon: 'monitor',
+            body: 'Build working prototypes and tools you can demonstrate and explain to your next employer.',
+          },
+          {
+            title: 'Small serious cohort',
+            icon: 'users-group-rounded',
+            body: 'Build alongside a small group of peers who care about ownership, craft and follow-through.',
+          },
+          {
+            title: 'Product-level thinking',
+            icon: 'layers',
+            body: 'Learn to think in systems, constraints, decisions and real-world product trade-offs.',
+          },
+        ]}
+      />
     </>
   );
 }
