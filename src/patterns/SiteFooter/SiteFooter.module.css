@@ -237,14 +237,15 @@
 }
 
 /* ── 4 · Studio ───────────────────────────────────────────────────────────────
-   The statement at body in its own ink — under the tagline's, over the directory's — so it reads
-   as the studio describing itself rather than as one more link. The address under it is small
-   print. */
+   The statement heads the band: a title role in the title ink, its top on the facts' label line,
+   so it reads as the studio describing itself rather than as an unlabelled third column of small
+   print (owner, 4 Nov 2026). */
 .statement {
   max-inline-size: var(--foot-statement-measure);
   color: var(--foot-statement-ink);
   font: var(--foot-statement-text);
-  text-wrap: var(--text-running-wrap);
+  letter-spacing: var(--foot-statement-tracking);
+  text-wrap: var(--text-title-wrap);
 }
 
 /* The address in the body ink, a line per authored line. `font-style: normal` because <address>

@@ -64,9 +64,13 @@
   --foot-link-text: var(--text-body-sm);
   --foot-social-text: var(--text-ui-sm);
   --foot-social-tracking: var(--text-ui-sm-tracking);
-  --foot-statement-text: var(--text-body);
-  /* The statement holds its half of the studio split at the lead measure, so a 16px sentence breaks
-     into three or four lines rather than running the whole half. */
+  /* The statement heads the studio band (owner, 4 Nov 2026: at body it "is getting lost" beside the
+     labelled facts). A title role, not body: it is the band's one line about the studio, so it takes
+     the size and the title ink, and its two lines balance the facts' height. */
+  --foot-statement-text: var(--text-h5-lg);
+  --foot-statement-tracking: var(--text-h5-lg-tracking);
+  /* The statement holds its half of the studio split at the lead measure, so it breaks into two or
+     three lines rather than running the whole half. */
   --foot-statement-measure: var(--measure-lead);
   --foot-legal-text: var(--text-caption);
 }
@@ -87,7 +91,7 @@
   --foot-label-ink: var(--color-neutral-700);
   --foot-link-ink: var(--color-neutral-700);
   --foot-link-ink-hover: var(--color-brandeis-500);
-  --foot-statement-ink: var(--color-neutral-800);
+  --foot-statement-ink: var(--color-neutral-900);
   --foot-legal-ink: var(--color-neutral-600);
   --foot-ring-color: var(--color-brandeis-500);
   --foot-ring-gap-color: var(--color-paper);
@@ -129,9 +133,8 @@
   --foot-label-ink: var(--color-neutral-500);
   --foot-link-ink: var(--color-neutral-300);
   --foot-link-ink-hover: var(--color-brandeis-300); /*  7.32:1 */
-  /* Under the tagline's white and over the directory's 300: the studio's one line about itself
-     reads as a statement, not as another link. */
-  --foot-statement-ink: var(--color-neutral-200);
+  /* Full white, the title ink: the studio's one line about itself heads its band. */
+  --foot-statement-ink: var(--color-white);
   --foot-legal-ink: var(--color-neutral-500);
   --foot-ring-color: var(--color-brandeis-300);
   --foot-ring-gap-color: var(--color-neutral-950);
