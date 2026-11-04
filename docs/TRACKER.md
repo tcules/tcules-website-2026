@@ -330,6 +330,10 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
+- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026): every page gets its own social image, generated
+      at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
+      No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
+      insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
 
 ## Parked (handoff says don't freeze yet)
 
