@@ -256,6 +256,7 @@
   block-size: var(--foot-statement-rule-row);
   background: linear-gradient(var(--foot-label-ink), var(--foot-label-ink)) left center /
     100% var(--foot-statement-rule-weight) no-repeat;
+  opacity: var(--foot-statement-rule-opacity);
 }
 
 /* The address in the body ink, a line per authored line. `font-style: normal` because <address>

@@ -75,6 +75,8 @@
   --foot-statement-rule-row: calc(var(--font-size-eyebrow) * var(--line-height-eyebrow));
   --foot-statement-rule-inline: var(--space-28);
   --foot-statement-rule-weight: var(--space-6);
+  /* Half strength (owner, 4 Nov 2026): at the label's full ink the bar outweighs the labels beside it. */
+  --foot-statement-rule-opacity: 0.5;
   --foot-statement-text: var(--text-h5-lg);
   --foot-statement-tracking: var(--text-h5-lg-tracking);
   /* The statement holds its half of the studio split at the lead measure, so it breaks into two or
