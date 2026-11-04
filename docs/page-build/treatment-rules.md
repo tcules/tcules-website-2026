@@ -268,25 +268,16 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 
 ## Added 4 Nov 2026 (/why-tcules and /how-we-work, the 3 Nov copy; proposed until the owner sees the pages)
 
-- **A claim carried by a client's words** (the copy's `“…”  ⏎ Name, Role, Company` under a claim) is the claim,
-  then the quote under its words as the small testimonial on the ground (TestimonialCard `sm`, `frame="none"`),
-  the speaker's one rating with it. One step quieter than the claim (claim-leads-proof-supports); never a band of
-  its own, never body text. The parser reads it as a quote; BandBody's items and Reasons' example slot draw it.
+- **A claim never carries a quote under it** (owner, 4 Nov 2026: "the embedded testimonials make the designs
+  bad"). Clients' words live in the page's quotes band; a quote authored under a claim is cut (content-changes).
 - **An example without its "Example:" label** ("**Doodle** asked … [Read the Doodle case]") is still the ClaimProof
-  panel, and every example stays where the copy sets it, never gathered at the band's foot.
-- **A claim that leads a case set** (an item with a quote and no case) is never a card: it heads the set, its words
-  at the start and its quote beside them, the cases under it.
-- **Three or more titled claims with the photograph the copy binds** take the full width under the photograph, the
-  3:1 banner under the head: three claims three across, four two by two. A paragraph before the claims is the
-  head's lead. One column of claims beside a 4:5 photo ran far past it.
-- **Starting situations** (the reader's own cases as bold-led paragraphs: "**A new product.** …") are home's
-  where-to-start cards (GatewayPaths `cards` on tint): one card a situation, its title and sentence, no ways in
-  where the copy links none. The words after them sit as one row under the cards, the paragraph beside the
-  example (plan `SITUATION_PROSE`; owner, 4 Nov 2026).
-- **Claims argued with one worked example and the picture the copy binds to show it** lead as peers under the
-  head, then the evidence as one row: the picture beside the example that names it.
-- **A run of prose bands is never one alternating image-and-words split each** (owner, 4 Nov 2026, /how-we-work:
-  "designed for the content"). Each band takes the shape of what it holds; one split in a run is fine.
-- **A band that argues for one named service and ends on its link** sets the service's own flat drawing beside the
-  words, the link the action under them (a split, never a service card beside the head).
+  panel, where the copy sets it. On tint the panel is paper.
+- **Starting situations** (bold-led paragraphs naming the reader's case) are home's where-to-start cards, each led
+  by a glyph; with no ways in the card is its head alone; one sentence after them is the set's close line.
+- **A set of short titled claims** (a sentence or two each) is home's Why Tcules list: heading, lead and link at the
+  left, the claims down the right as glyph rows (OfferSheet `list`).
+- **One claim arguing for one service, closing on its link**, is that service's wide tile under the head and lead.
+- **A prose band of a lead, one claim and a link** sits beside its heading in halves, as home's AI band and the FAQ.
+- **The north star is the home, service and expertise pages** (owner, 4 Nov 2026): a band takes one of their shapes,
+  never a merge of two; a run of prose bands is never one alternating image-and-words split each.
 - **A run of four or more destination links inside a claim** stays one line with the copy's dots, never a stack.

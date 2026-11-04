@@ -170,8 +170,6 @@ Bring an idea, a prototype or a product with years behind it. We learn it first,
 
 Your product managers, engineers and domain specialists bring the context, and customers join when the question calls for it.
 
-**Doodle** asked for scheduling automation. One interview shifted the question from who is free to how dependable each time is. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
-
 ## Three ways to work with us: our product design engagement models {#engagement-shapes}
 
 ### A pilot project, at a fixed price
@@ -196,9 +194,6 @@ An account lead keeps the work running beside your senior designer.
 
 We work inside your product team, with your people, tools and roadmap.
 
-“For six months Tcules worked beside our own product managers and designers on several product growth projects.”  
-Dhanur Aashray Majety, Director, Product Management, JoVE
-
 ### Seen your problem before
 
 The senior designer leading your product has worked through problems like yours before, and does the work too.
@@ -211,8 +206,6 @@ We overlap four to five hours with US working days, extend that whenever the wor
 
 Hand our designs to your engineers, or have us build the product with you. Designers stay through every build.
 
-**Benchmark Gensuite** tried its new shared patterns as coded prototypes before wider release. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
-
 ### Ready for your engineers
 
 We try each design in working code before handover, so what your engineers build matches what you approved.
@@ -220,9 +213,6 @@ We try each design in working code before handover, so what your engineers build
 ### Faster to first release
 
 A focused scope, with AI speeding the routine work, brings your launch forward.
-
-“Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
-Stephanie Leue, Doodle
 
 ## How we use AI in our own work {#ai-native-practice}
 

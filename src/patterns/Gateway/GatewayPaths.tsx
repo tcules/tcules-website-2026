@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Cluster, Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
+import type { IconName } from '@/lib/icon-glyphs';
 import type { SketchName } from '@/lib/sketches';
 
 import styles from './Gateway.module.css';
@@ -27,6 +28,8 @@ export type GatewayPath = {
    * its title. Authored case kept; the transform is CSS.
    */
   eyebrow?: string;
+  /** `cards` only: the glyph heading the card, above its label and title. */
+  glyph?: IconName;
   /**
    * `cards` only: the path's example, one line of inline content composed by the caller with its own
    * link to the case ("Example: Doodle's enterprise MVP, reshaped by research."), set under the words
@@ -61,7 +64,7 @@ export type GatewayPathsProps = {
    * "feels orphaned"): a line and the band's ask, composed by the caller, centred, the line over the
    * action.
    */
-  close?: { line?: string; action: ReactNode };
+  close?: { line?: string; action?: ReactNode };
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
@@ -92,6 +95,7 @@ export function GatewayPaths({
 }: GatewayPathsProps) {
   const Title = titleAs;
   if (form === 'cards') {
+    const ways = paths.some((path) => path.links.length > 0);
     return (
       <Layout rowGap="stack" className={className}>
         {/* Three items, one column below 1024 (three ~220 cards at 768 left each title a word a
@@ -111,13 +115,28 @@ export function GatewayPaths({
           rowGap={paths.some((path) => path.example) ? 'stack' : 'gutter'}
           /* A third shared row only when an example sits under a card; without one it would leave its
            track and seam under every card. */
-          shareRows={paths.some((path) => path.example) ? 3 : 2}
+          shareRows={
+            ways
+              ? paths.some((path) => path.example)
+                ? 3
+                : 2
+              : paths.some((path) => path.example)
+                ? 2
+                : undefined
+          }
           className={styles.root}
         >
           {paths.map((path) => (
             <Layout as="li" key={path.id} rowGap="text">
-              <Layout spanRows={2} rowGap="stack" className={styles.door}>
+              {/* A set with no ways in has no foot row: the card is its head alone, so no air is
+                  held open under the words (owner, 4 Nov 2026). */}
+              <Layout spanRows={ways ? 2 : undefined} rowGap="stack" className={styles.door}>
                 <Layout rowGap="text">
+                  {path.glyph ? (
+                    <span className={styles.doorGlyph} aria-hidden="true">
+                      <Icon name={path.glyph} />
+                    </span>
+                  ) : null}
                   {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
                   <Title className={styles.doorTitle}>{path.title}</Title>
                   {path.body.map((paragraph, index) => (

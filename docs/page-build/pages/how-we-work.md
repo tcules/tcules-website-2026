@@ -53,18 +53,16 @@ map to drawn scenes (decisions → `own`, no minimum term → `commercial`, hand
 make is yours" is an empty plate until 2.62 draws it.
 
 ### Owner review of the 3 Nov build (4 Nov 2026)
-"All sections are just alternating image + text sections instead of being designed for the content." And on
-product knowledge: "isn't this essentially the where to start section?" Each band now takes its content's shape:
-- product-knowledge → home's where-to-start cards (GatewayPaths `form="cards"`, centred head on tint, one paper
-  card per situation, no ways in since the copy links none; decisions/2026-11-04-where-to-start-no-examples). The
-  closing paragraph sits beside the Doodle example under the cards.
-- engagement-shapes → main's three-ways glyph cards (EngagementOptions `cards`; decisions/2026-11-04-three-ways-cards),
-  as the repeated band on every other page.
-- your-team → the bound studio photo as the 3:1 banner, the three claims three across under it, the JoVE quote
-  under its claim. Reverses the 1 Nov "illustrations here" for this band, to be confirmed by the owner.
-- design-to-release → the two claims as peers under the head, then the Benchmark Gensuite prototype capture beside
-  its example. Also uses the bound asset in place of the illustration slot.
-- ai-native-practice → the one illustrated split left (image end).
+"All sections are just alternating image + text"; "the embedded testimonials make the designs bad … the service
+page, expertise page, homepage are the north star". Each band now takes one north-star shape; cuts are in
+docs/content-changes.md ("cut for the design").
+- product-knowledge → home's where-to-start cards (GatewayPaths `cards`, tint), each led by a glyph (`glyph` on a
+  path, new), no foot row where no card has ways in; the paragraph after them is the close line. Doodle example cut.
+- engagement-shapes → the three-ways glyph cards (EngagementOptions `cards`), as every other page.
+- your-team → home's Why Tcules list (OfferSheet `list`, glyph rows; plan `CLAIM_LIST`). No photo.
+- design-to-release → the Benchmark prototype beside its head, lead and two claims (B). Example cut.
+- ai-native-practice → beside, in halves (heading, lead and link left; words right). No illustration.
+- Quotes under claims cut; the testimonials band is unchanged.
 
 ## Band → component (/how-we-work, 2 Nov)
 | Band | Kind / component | Notes |

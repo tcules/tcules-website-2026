@@ -899,3 +899,36 @@ that the Dealpath example still renders where it should once the line is gone.
 **Why.** Jatin's review, 2 Nov: the engagement band gets one clear CTA instead (tracker 2.51).
 
 **Found in.** Review with Jatin, 2 Nov 2026.
+
+## /why-tcules and /how-we-work: cut for the design (4 Nov 2026, owner)
+
+**Page / section.** `/why-tcules` and `/how-we-work`, the 3 Nov copy (tracker 2.60).
+
+**What changed.** Removed from `_pages/` so each band can take the home, service and expertise pages'
+shapes (the owner: "the embedded testimonials make the designs bad … the service page, expertise page,
+homepage are the north star"; "anywhere you think something needs to be removed … do it and note it"):
+
+- **Every quote under a claim** (12). Each page keeps its own "What clients say" band. Removed:
+  - /why-tcules: Trishanya Raju (The Wandering Raven), Pranjal Dev Goswami (Novus Insights), Stephanie
+    Leue (Doodle, "Their research changed…"), David Aghaei (Gold Image Printing), Jody O'Neill (CuramCare,
+    a cut-down copy of her quote on /how-we-work), Ashok Mohanty (Auxentios), Akshay Vyas (Knovos), Pratik
+    Ghoshal (ConnectX), Samy Melaine (Eden AI), Clément Contamine (Primelis, a fragment of his full quote).
+  - /how-we-work: Dhanur Aashray Majety (JoVE, a cut-down copy of his quote in /why-tcules' band),
+    Stephanie Leue (Doodle, "Impressed with the design team's efficiency…").
+  If any should stay on the site, add it to a page's "What clients say" band whole, not under a claim.
+- **/why-tcules selected-work: "Craft people notice"** and its sentence. A claim heading a set of cases
+  read as a fourth case; it is already one of the Why Tcules reasons on every other page.
+- **/why-tcules complex-software: the twelve industry links.** Only "See all industries →" stays, as the
+  band's link. Twelve links inside one claim row broke the list; the industries pill band carries them
+  on the other pages.
+- **/why-tcules alternatives: "Start small." and the OctiFi sentence.** They repeat the three ways to
+  work and floated under the table; "See how we work →" stays.
+- **/how-we-work product-knowledge: the Doodle example.** Home's where-to-start set dropped its examples
+  (decisions/2026-11-04-where-to-start-no-examples); the paragraph after the cards is now its close line.
+- **/how-we-work design-to-release: the Benchmark Gensuite example.** The prototype screenshot beside the
+  band shows the same work.
+
+**Why.** Each band now renders through one north-star shape: where-to-start cards, the Why Tcules list,
+a picture beside its words, a service tile, the beside-in-halves band. The cut lines had no place in them.
+
+**Found in.** Tracker 2.60, owner review 4 Nov 2026.

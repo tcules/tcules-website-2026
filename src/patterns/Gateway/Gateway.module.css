@@ -400,6 +400,20 @@
 }
 
 /* The kind of product: the label voice, so mono and uppercase in presentation only. */
+/* The door's glyph, heading its card above the label and title (an icon heads its card). */
+.doorGlyph {
+  display: block;
+  inline-size: var(--gwy-door-glyph-size);
+  block-size: var(--gwy-door-glyph-size);
+  color: var(--gwy-door-glyph-ink);
+}
+
+.doorGlyph > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
 .doorEyebrow {
   font: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow-tracking);

@@ -165,13 +165,6 @@ We're a digital product design studio for founders and product teams, focused on
 
 ## Selected work {#selected-work}
 
-### Craft people notice
-
-Your product stands out from lookalike software and feels effortless to use.
-
-“The finished product is intuitive and user-friendly. The site's unique look and feel is also noteworthy.”  
-Trishanya Raju, Founder, The Wandering Raven
-
 ### Eden AI: one search box for every way to start a workflow
 
 Templates, AI help and a blank canvas in one search box that recognises which you mean.
@@ -198,22 +191,13 @@ Working within Phoenix's design team, we made two complete clickable prototypes 
 
 We test your assumptions with real users before they become expensive mistakes.
 
-“Tcules interviewed our stakeholders and studied the market before drawing a single screen.”  
-Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights
-
 ### What to build first
 
 You leave knowing what to build, what can wait, and why.
 
-“Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
-Stephanie Leue, Doodle
-
 ### Design that pays back
 
 Every design decision is tied to the adoption, renewals or revenue it should move.
-
-“Our staff and our customers have both told us how much easier the new site is to use.”  
-David Aghaei, Senior Partner, Gold Image Printing
 
 ## Experienced in complex, specialist software {#complex-software}
 
@@ -227,24 +211,15 @@ Benchmark Gensuite's scope control, which every application in its suite depends
 
 Energy, property, construction, safety, fintech and healthcare, learned from the people inside them.
 
-“Tcules started by asking our families and carers what got in their way”  
-Jody O'Neill, CEO & Co-founder, CuramCare
-
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
-
 ### Fluent in SaaS
 
 Roles, permissions and data-heavy screens need no explaining to us.
-
-“Tcules interviewed people in all six roles that touch one of our quotations, then designed a single shared quotation where each role works on its own part.”  
-Ashok Mohanty, Founder, Auxentios
 
 ### Seen your problem before
 
 Senior designers who've solved problems like yours lead your product and do the work.
 
-“Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
-Akshay Vyas, Creative Head, Knovos
+[See all industries →](/expertise)
 
 ## Design-led, from first idea to working software {#design-to-code}
 
@@ -254,15 +229,9 @@ Your engineers can build from our designs, or we build the product with you.
 
 Bring an idea or your own prototype. Designers lead it through to launch.
 
-“They proved it in a working demo, then made it production-ready.”  
-Pratik Ghoshal, CEO, ConnectX
-
 ### Ready for your engineers
 
 Designs proven in working code, so your engineers build exactly what was designed.
-
-“Our developers had specs they could build from”  
-Samy Melaine, Founder & CPTO, Eden AI
 
 ## Building an AI product? {#ai-products}
 
@@ -271,9 +240,6 @@ When an AI acts for your users, they need to see what it did and overrule it. We
 ### Shorter AI learning curve
 
 We've designed AI products people check and trust, so you skip the costly lessons.
-
-“helping us shape AI features our customers can check and trust.”  
-Clément Contamine, CPO, Primelis
 
 [See AI Product UX →](/services/ai-product-ux)
 
@@ -312,10 +278,6 @@ Each option suits a different kind of work. Pick the one that matches yours.
 | **Tcules** | Your product needs product thinking, design craft and working code together. |
 
 For quick, low-cost screens or a fixed marketing site, a production-focused team is a better fit. Comparing studios? Our guide covers [what to ask before you hire a product design agency](/insights/guides/how-to-choose-a-product-design-agency).
-
-**Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
-
-OctiFi's first design pilot grew into continuing work on onboarding, loan issuance, new features and a second market.
 
 [See how we work →](/how-we-work)
 

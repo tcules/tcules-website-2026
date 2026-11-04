@@ -54,7 +54,7 @@ import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
-import { isIllustratedProse, isSituationProse, isWhatYouGet, signature } from './plan';
+import { isClaimList, isIllustratedProse, isSituationProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -2407,6 +2407,8 @@ export function TextBand({
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
      plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
   if (isSituationProse(band.id)) return <SituationsBand band={band} />;
+  if (isClaimList(band.id)) return <ClaimListBand band={band} />;
+  if (band.id === 'ai-native-practice') return <BesideBand band={band} />;
   if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
@@ -2479,47 +2481,6 @@ export function TextBand({
       </ContentSection>
     );
   }
-  /* Claims argued with a worked example and the picture the copy binds to show it ("From design to
-     working software": the Benchmark Gensuite prototype, /how-we-work): the claims lead as peers
-     under the head, then the evidence as one row, the picture beside the example that names it.
-     Claim leads, proof supports (home review); a picture beside words takes the whole row. */
-  if (bound && examples.length === 1 && claimItems.length >= 2) {
-    const intro2 = words.filter((block) => block.type !== 'item');
-    const lead2 =
-      intro2.length === 1 && intro2[0]?.type === 'paragraph' && !hasLink(intro2[0].runs)
-        ? plain(intro2[0].runs)
-        : undefined;
-    const example = examples[0]!;
-    return (
-      <ContentSection {...head(band)} lead={lead2} data-band="B" actions={actions}>
-        <Layout rowGap="column">
-          {intro2.length > 0 && !lead2 ? <BandBody blocks={intro2} /> : null}
-          <Layout
-            columns={{ base: 1, md: claimItems.length === 3 ? 3 : 2 }}
-            colGap="column"
-            rowGap="stack"
-          >
-            {claimItems.map((item) => (
-              <Layout key={item.headingText} id={item.id ?? undefined} rowGap="block">
-                <h3>{item.headingText}</h3>
-                <ItemBody blocks={item.blocks} />
-              </Layout>
-            ))}
-          </Layout>
-          <Layout
-            columns={{ base: 1, lg: [7, 5] }}
-            colGap="section"
-            rowGap="stack"
-            align="center"
-            data-media-row
-          >
-            <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
-            <ClaimProof example={claimExample(example.runs)} />
-          </Layout>
-        </Layout>
-      </ContentSection>
-    );
-  }
   if (bound) {
     return (
       <ContentSection
@@ -2585,25 +2546,33 @@ export function TextBand({
   const onward = [...links, ...nested];
   const serviceScene =
     onward.length === 1 && onward[0] ? serviceSceneFor(onward[0].href) : undefined;
-  if (serviceScene) {
-    const words = body.map((block) =>
-      block.type === 'item'
-        ? { ...block, blocks: block.blocks.filter((b) => b.type !== 'links') }
-        : block,
-    );
+  /* One claim that is one named service's argument, closing on its link: that service's wide tile
+     under the head and lead (one named offer is its service tile, as /audits; owner, 4 Nov 2026,
+     /why-tcules "Building an AI product?"). The claim is the tile's title and sentence. */
+  const soleClaim = claimItems.length === 1 ? claimItems[0] : undefined;
+  if (serviceScene && soleClaim && onward[0]) {
+    const leadWords = words.filter((block) => block.type !== 'item');
+    const leadLine =
+      leadWords.length === 1 && leadWords[0]?.type === 'paragraph'
+        ? plain(leadWords[0].runs)
+        : undefined;
+    const sentence = soleClaim.blocks
+      .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
+      .join(' ');
     return (
-      <ContentSection {...head(band)} data-band="B">
-        <Layout
-          columns={{ base: 1, lg: [1, 1] }}
-          colGap="section"
-          rowGap="stack"
-          align="center"
-        >
-          <Layout rowGap="stack">
-            <BandBody blocks={words} />
-            <LinkActions links={onward} />
-          </Layout>
-          <Sketch name={serviceScene} />
+      <ContentSection {...head(band)} lead={leadLine} data-band="service-tile">
+        <Layout as="ul" rowGap="none">
+          <li data-media-row="">
+            <ServiceTile
+              title={soleClaim.headingText}
+              body={sentence}
+              href={onward[0].href}
+              scene={serviceScene}
+              action={plain(onward[0].label).replace(/\s*→\s*$/, '')}
+              wide
+              frame="none"
+            />
+          </li>
         </Layout>
       </ContentSection>
     );
@@ -2644,14 +2613,21 @@ function SituationsBand({ band }: { band: CorpusBand }) {
     before.length === 1 && before[0]?.type === 'paragraph' && !hasLink(before[0].runs)
       ? plain(before[0].runs)
       : undefined;
+  /* Every card is led by its glyph, or none is: a set never mixes. */
+  const glyphs = situations.every((situation) => SITUATION_GLYPHS[situation.title]);
   const paths: GatewayPath[] = situations.map((situation) => ({
     id: slugOf(situation.title),
     title: situation.title,
     body: [situation.body],
     links: [],
+    ...(glyphs ? { glyph: SITUATION_GLYPHS[situation.title] } : {}),
   }));
-  const proof = after.filter(isExampleParagraph);
-  const words = after.filter((block) => !isExampleParagraph(block));
+  /* The one sentence after the cards is the set's close, centred under it, as home's line over its ask. */
+  const [closing] = after;
+  const closeLine =
+    after.length === 1 && closing?.type === 'paragraph' && !hasLink(closing.runs)
+      ? plain(closing.runs)
+      : undefined;
   return (
     <ContentSection
       {...head(band)}
@@ -2662,25 +2638,96 @@ function SituationsBand({ band }: { band: CorpusBand }) {
     >
       <Layout rowGap="column">
         {before.length > 0 && !lead ? <BandBody blocks={before} /> : null}
-        <GatewayPaths paths={paths} form="cards" />
-        {proof.length > 0 && words.length > 0 ? (
-          <Layout
-            columns={{ base: 1, lg: [1, 1] }}
-            colGap="section"
-            rowGap="stack"
-            align="center"
-          >
-            <BandBody blocks={words} />
-            <Layout rowGap="block">
-              {proof.map((block) => (
-                <ClaimProof key={inlineToText(block.runs)} example={claimExample(block.runs)} />
-              ))}
-            </Layout>
-          </Layout>
-        ) : after.length > 0 ? (
-          <ItemBody blocks={after} />
-        ) : null}
+        <GatewayPaths
+          paths={paths}
+          form="cards"
+          {...(closeLine ? { close: { line: closeLine } } : {})}
+        />
+        {after.length > 0 && !closeLine ? <ItemBody blocks={after} /> : null}
       </Layout>
+    </ContentSection>
+  );
+}
+
+/** Each starting situation's glyph, by its title as authored. */
+const SITUATION_GLYPHS: Readonly<Record<string, IconName>> = {
+  'A new product': 'ruler-pen',
+  'A prototype': 'code-square',
+  'An established product': 'refresh-square',
+};
+
+/** Each claim's glyph in a claim list, by its title as authored (one set never mixes). */
+const CLAIM_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Part of your team': 'hand-shake',
+  'Seen your problem before': 'users-group-rounded',
+  'Working across time zones': 'clock-circle',
+  'Complex made clear': 'widget',
+  'Industries we know well': 'map-point',
+  'Fluent in SaaS': 'layers',
+};
+
+/**
+ * A set of short titled claims (plan `CLAIM_LIST`): home's Why Tcules list (OfferSheet `list`), the
+ * heading, its lead and the band's onward link at the left, the claims down the right, one ruled row
+ * each, its glyph inline before its title and its words under it.
+ */
+function ClaimListBand({ band }: { band: CorpusBand }) {
+  const blocks = content(band);
+  const claims = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
+  );
+  const leadBlocks = blocks.filter((block) => block.type === 'paragraph');
+  const lead =
+    leadBlocks.length === 1 && leadBlocks[0]?.type === 'paragraph'
+      ? plain(leadBlocks[0].runs)
+      : undefined;
+  const links = [
+    ...blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
+    ...claims.flatMap((claim) =>
+      claim.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
+    ),
+  ];
+  const glyphs = claims.every((claim) => CLAIM_GLYPHS[claim.headingText]);
+  const items: OfferSheetItem[] = claims.map((claim) => ({
+    title: claim.headingText,
+    body: claim.blocks
+      .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
+      .join(' '),
+    ...(glyphs ? { icon: CLAIM_GLYPHS[claim.headingText] } : {}),
+  }));
+  return (
+    <OfferSheet
+      {...head(band)}
+      arrangement="list"
+      lead={lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
+/**
+ * A prose band beside its heading, in halves (/how-we-work "How we use AI in our own work"): the
+ * heading, lead and onward link at the left, the words down the right, as home's AI band and every FAQ
+ * set their halves. No drawing: the words are the band (owner, 4 Nov 2026).
+ */
+function BesideBand({ band }: { band: CorpusBand }) {
+  const blocks = content(band);
+  const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
+  const words = blocks.filter((block) => block.type !== 'links');
+  const [first, ...rest] = words;
+  const lead =
+    first?.type === 'paragraph' && !hasLink(first.runs) ? plain(first.runs) : undefined;
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="C-text"
+      arrangement="beside"
+      split="halves"
+      lead={lead}
+      actions={links.length > 0 ? <LinkActions links={links} /> : null}
+    >
+      <BandBody blocks={lead ? rest : words} />
     </ContentSection>
   );
 }

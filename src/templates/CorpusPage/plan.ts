@@ -560,13 +560,21 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
  * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
  */
-const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
-  /* The 3 Nov copy cut "You see the thinking" and added how we use AI in our own work. The owner
-     rejected the four bands as one alternating image-and-words split each (4 Nov 2026: "designed for
-     the content"), so the other three take their content's shape (SITUATION_PROSE; the bound photo and
-     prototype) and only this one keeps its drawing beside it. Home composes its own. */
-  'ai-native-practice',
-]);
+/* Empty since 4 Nov 2026: the owner rejected /how-we-work's four bands as one alternating
+   image-and-words split each ("designed for the content"); each now takes its content's shape
+   (SITUATION_PROSE, CLAIM_LIST, the bound prototype, the AI band beside its heading). */
+const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set<string>([]);
+
+/**
+ * Prose bands that are a set of short titled claims, a sentence or two each (/how-we-work "Who you
+ * work with", /why-tcules "Experienced in complex, specialist software"): home's Why Tcules list, the
+ * heading at the left, the claims down the right, one ruled row each led by its glyph (owner, 4 Nov
+ * 2026: "the service page, expertise page, homepage are the north star").
+ */
+const CLAIM_LIST: ReadonlySet<string> = new Set(['your-team', 'complex-software']);
+
+/** Whether a prose band is a set of short titled claims (`CLAIM_LIST`). */
+export const isClaimList = (bandId: string): boolean => CLAIM_LIST.has(bandId);
 
 /**
  * Prose bands that name the reader's starting situations, each a bold-led paragraph ("**A new
