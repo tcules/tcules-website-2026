@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Layout, Section, type IconName } from '@/components';
+import { Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -1850,24 +1850,28 @@ function CaseLinksBand({
       },
     ];
   });
+  const set = (
+    <BlockCardSet lead="none" scroll="never" cue="title" across={3} size="md" items={items} />
+  );
+  const leadProp = lead ? { lead } : {};
+  if (!link) {
+    return (
+      <ContentSection {...head(band)} data-band="M" {...leadProp}>
+        {set}
+      </ContentSection>
+    );
+  }
   return (
     <ContentSection
       {...head(band)}
       data-band="M"
-      {...(lead ? { lead } : {})}
-      footer={
-        link ? (
-          <Cluster justify="center">
-            <CtaRow
-              rule={false}
-              align="center"
-              actions={[{ label: plain(link.children), href: link.href }]}
-            />
-          </Cluster>
-        ) : undefined
+      {...leadProp}
+      actionsAt="end"
+      actions={
+        <CtaRow rule={false} actions={[{ label: plain(link.children), href: link.href }]} />
       }
     >
-      <BlockCardSet lead="none" scroll="never" cue="title" across={3} size="md" items={items} />
+      {set}
     </ContentSection>
   );
 }

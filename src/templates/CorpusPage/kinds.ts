@@ -100,6 +100,6 @@ export const KIND_COMPONENTS: Readonly<
   close: {
     component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link centred under it.',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026).',
   },
 };
