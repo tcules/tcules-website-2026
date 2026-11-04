@@ -61,7 +61,7 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Request a call
+  submit_label: Book a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
     heading: Thanks. Your request has reached us.
@@ -99,7 +99,7 @@ page_composition:
     role: demonstrate
     supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
-    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built. Check the cover shows the storefront before release; otherwise bind chain_hut_audit.
+    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built.
     source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   - id: mobile_octifi
@@ -316,7 +316,7 @@ Yes. We designed OctiFi's lending app for OctiFi's own engineers to build. Your 
 
 Usually it shares the backend and API of your web product, with a few additions for syncing, clashing edits and push notifications. Keeping one backend means the app and the web product follow the same rules. [Backend & API Development](/services/software-development/backend-api-development) covers that side of the work.
 
-## Tell us where your users are when they need the app {#enquiry}
+## Design, build and launch your mobile app {#enquiry}
 
 In a van, on a ward or between meetings? Share the task, the phones they carry and how good the signal is.
 
@@ -326,6 +326,6 @@ In a van, on a ward or between meetings? Share the task, the phones they carry a
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
+**Submit:** Book a call
 
 **After sending:** We'll reply within one business day to arrange the call.
