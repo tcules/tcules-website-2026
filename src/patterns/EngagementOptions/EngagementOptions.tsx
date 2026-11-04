@@ -265,29 +265,30 @@ export function EngagementOptions({
               })}
             </Layout>
           ) : arrangement === 'cards' ? (
-            /* One panel, the options its cells (owner, 4 Nov 2026: "something like this … icons or
-               small graphics"): a hairline round the set at the card radius, the cells parted by
-               hairlines, each its glyph, label, name and words. The cells share an edge, so the
-               Layout states no gap (rule 3: the seam is the point). */
-            <div className={styles.panel}>
-              <Layout as="ul" columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}>
-                {shown.map((option) => (
-                  <li key={option.title} className={styles.cell}>
-                    <Layout rowGap="block">
-                      {option.icon ? (
-                        <span className={styles.cellIcon} aria-hidden="true">
-                          {option.icon}
-                        </span>
-                      ) : null}
-                      <Layout rowGap="text">
-                        <OptionHead option={option} className={styles.title} />
-                        <OptionBody option={option} className={styles.body} />
-                      </Layout>
+            /* Each option its own card (owner, 4 Nov 2026: "make the boxes disjointed"), a `gutter`
+               apart, each headed by its glyph, then its label and name, then its words. */
+            <Layout
+              as="ul"
+              columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+              colGap="gutter"
+              rowGap="gutter"
+            >
+              {shown.map((option) => (
+                <li key={option.title} className={styles.card}>
+                  <Layout rowGap="block">
+                    {option.icon ? (
+                      <span className={styles.cellIcon} aria-hidden="true">
+                        {option.icon}
+                      </span>
+                    ) : null}
+                    <Layout rowGap="text">
+                      <OptionHead option={option} className={styles.title} />
+                      <OptionBody option={option} className={styles.body} />
                     </Layout>
-                  </li>
-                ))}
-              </Layout>
-            </div>
+                  </Layout>
+                </li>
+              ))}
+            </Layout>
           ) : arrangement === 'compare' ? (
             <>
               {/* From 1024: the options head the set three across, then each fact runs as one ruled
