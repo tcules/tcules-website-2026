@@ -513,8 +513,7 @@
   flex: none;
 }
 
-/* The set's close (`close`): the line centred, at the lead's role in the words' ink, its action after
-   it on the row from 768. */
+/* The set's close (`close`): the line centred at the lead's role, its action under it. */
 .doorClose {
   text-align: center;
 }
@@ -523,4 +522,5 @@
   font: var(--gwy-door-close-text);
   text-wrap: balance;
   color: var(--gwy-body-ink);
+  max-inline-size: var(--gwy-door-close-measure);
 }

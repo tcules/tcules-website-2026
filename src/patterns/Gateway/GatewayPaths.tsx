@@ -58,8 +58,8 @@ export type GatewayPathsProps = {
   form?: GatewayPathsForm;
   /**
    * `cards` only: the set's close, a `stack` (48) under the cards (owner, 4 Nov 2026: the lone button
-   * "feels orphaned"): a line for whoever is between the doors and the band's ask, composed by the
-   * caller, as one centred row from 768, the line then the action; stacked and centred below it.
+   * "feels orphaned"): a line and the band's ask, composed by the caller, centred, the line over the
+   * action.
    */
   close?: { line?: string; action: ReactNode };
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
@@ -155,17 +155,12 @@ export function GatewayPaths({
           ))}
         </Layout>
         {close ? (
-          <Cluster
-            justify="center"
-            align="center"
-            colGap="block"
-            rowGap="block"
-            stackUntil="md"
-            className={styles.doorClose}
-          >
+          /* The close, a `stack` under the cards: the line centred, the action under it a `block`
+             apart. */
+          <Layout rowGap="block" justifyItems="center" className={styles.doorClose}>
             {close.line ? <p className={styles.doorCloseLine}>{close.line}</p> : null}
             {close.action}
-          </Cluster>
+          </Layout>
         ) : null}
       </Layout>
     );
