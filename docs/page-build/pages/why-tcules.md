@@ -46,3 +46,4 @@ Every claim carries a client's quote (treatment rules, "Added 4 Nov 2026 (/why-t
   end action; design-to-code → the Why Tcules list (plan `CLAIM_LIST`). Swapped at the owner's word, positions kept.
 - ai-products → the ink CTA island. Claim quotes, "Craft people notice", the twelve industry links, the Start small /
   OctiFi lines and the AI band's sub-heading cut (docs/content-changes.md).
+- Hero → `studio-sticky-wall-sorting` (designers sorting notes on the wall); grounds alternate to the quotes band.

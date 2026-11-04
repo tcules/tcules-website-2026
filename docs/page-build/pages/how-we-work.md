@@ -63,6 +63,7 @@ docs/content-changes.md ("cut for the design").
 - design-to-release → the two claims as three-ways glyph cards (plan `CARD_SETS`). No case image. Example cut.
 - ai-native-practice → list rows (OfferSheet `list`), a glyph before each line; heading, lead and "See how we use AI" in the left half. Its h3 cut.
 - Grounds alternate tint / paper from product knowledge to the quotes band (plan `ALTERNATING`).
+- Hero → `studio-desk-pairing` (two designers working at a desk), in place of the team outdoors.
 - The close line under the where-to-start cards is body text across the column.
 - Quotes under claims cut; the testimonials band is unchanged.
 

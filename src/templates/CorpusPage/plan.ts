@@ -587,7 +587,7 @@ const CLAIM_LIST: ReadonlySet<string> = new Set([
 const CARD_SETS: ReadonlySet<string> = new Set(['design-to-release', 'complex-software']);
 
 /** Routes whose bands alternate tint and paper down to the quotes band (planOffer). */
-const ALTERNATING: ReadonlySet<string> = new Set(['/how-we-work']);
+const ALTERNATING: ReadonlySet<string> = new Set(['/how-we-work', '/why-tcules']);
 
 /** Whether a prose band is a set of cards (`CARD_SETS`). */
 export const isCardSet = (bandId: string): boolean => CARD_SETS.has(bandId);

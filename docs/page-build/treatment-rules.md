@@ -281,8 +281,10 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **A few one-line points with no titles** are list rows (OfferSheet `list`), each its glyph before its words,
   the heading, lead and link in the left half. Never boxed cards stacked beside the head (owner, 4 Nov 2026:
   "this isn't listcard").
-- **/how-we-work alternates tint and paper** from the first band after the client marks to the quotes band
-  (plan `ALTERNATING`; owner, 4 Nov 2026: "to keep rhythm").
+- **/how-we-work and /why-tcules alternate tint and paper** from the first band after the client marks to the
+  quotes band (plan `ALTERNATING`; owner, 4 Nov 2026: "to keep rhythm").
+- **A studio page's hero shows people at work in the studio**, from the kit's studio photographs (images.ts
+  `STUDIO_AT_WORK`; owner, 4 Nov 2026). Never the team outdoors or a bare wall.
 - **A table band's closing link line** is the head's end action, on the heading's row. A heading never takes its own row over a two-column split (decisions/2026-11-04-no-heading-row-over-a-split).
 - **Two to four short titled claims, or a few one-line points**, are the three-ways cards, each led by its glyph
   (plan `CARD_SETS`); never beside a case study's image (decisions/2026-11-04-no-case-images-in-sections).
