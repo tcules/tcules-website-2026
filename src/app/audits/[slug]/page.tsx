@@ -274,7 +274,7 @@ export async function generateMetadata({
       images: [],
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
       images: [],

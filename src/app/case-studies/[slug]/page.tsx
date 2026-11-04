@@ -196,7 +196,7 @@ export async function generateMetadata({
         : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
       images: image ? [image.src] : [],

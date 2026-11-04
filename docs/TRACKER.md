@@ -178,7 +178,7 @@ pass on another account; a page ships with its placeholders until then.
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
-- [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
+- [~] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
 - [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
@@ -209,8 +209,8 @@ choice (2.34).
       work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
       case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
       Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
-- [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
-- [ ] **2.43** `/matter-design-system`: crucial.
+- [~] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
+- [~] **2.43** `/matter-design-system`: crucial.
 - [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
       Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
@@ -218,7 +218,7 @@ choice (2.34).
       terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
-- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
+- [-] **2.46** Moved to phase 2 (owner, 4 Nov 2026). Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
       that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
       designed no-visual state.
 - [x] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap). All seven
@@ -256,7 +256,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
-      success and failure copy, and CTA-source analytics come after launch.
+      success and failure copy, and CTA-source analytics come after launch. May move to phase 2 (owner, 4 Nov 2026).
 - [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
@@ -292,12 +292,12 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
       The studio collage leaves home for /about (owner, 4 Nov 2026): its photo picks, focal points and zoom
       are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
-- [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
+- [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`); Done (owner, 4 Nov 2026).
       the header still needs work.
 - [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
 - [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
       wire them in as they land.
-- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
+- [-] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components Dropped: no longer required (owner, 4 Nov 2026).
       only, its path added to `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
@@ -353,7 +353,7 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
-- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
+- [~] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
       at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
       No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
       insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
@@ -365,6 +365,8 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 ## Phase 2 — after the 6 Nov launch
 
 - [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
+- [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (was 2.46;
+      owner, 4 Nov 2026).
 - [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
 - [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).

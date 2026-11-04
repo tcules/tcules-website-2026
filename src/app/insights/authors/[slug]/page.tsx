@@ -112,7 +112,7 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
           ]
         : [],
     },
-    twitter: { card: 'summary', title, description, images: author.image ? [author.image.src] : [] },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 
