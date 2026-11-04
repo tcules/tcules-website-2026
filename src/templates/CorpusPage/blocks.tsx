@@ -556,8 +556,8 @@ export function RecognitionBand({ band }: { band: CorpusBand }) {
         context={band.headingText}
         contextAs="h2"
         headingId={id}
-        align="center"
         edges="closed"
+        density="compact"
       />
     </Section>
   );

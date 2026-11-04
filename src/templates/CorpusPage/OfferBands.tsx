@@ -10,6 +10,7 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
+  CtaSection,
   EngagementOptions,
   ListCard,
   OfferSheet,
@@ -408,15 +409,59 @@ function trailingParagraphs(band: CorpusBand): InlineRun[][] {
 
 const quoteOf = (band: CorpusBand) => blocksOf(band, 'quote')[0];
 
-/** The paragraphs before a band's first labelled claim (its lead-in), as runs. */
+/** The paragraphs before a band's first labelled claim (its lead-in), as runs. A label line that
+    names the first claim's kind (`optionEyebrows`) is the claim's, not the lead-in's. */
 function leadingParagraphs(band: CorpusBand): InlineRun[][] {
   const out: InlineRun[][] = [];
+  const labels = optionEyebrows(band);
   for (const block of band.blocks) {
     if (block.type === 'comment') continue;
     if (block.type !== 'paragraph' || leadOf(block)) break;
+    if (labels.has(block)) continue;
     out.push(block.runs);
   }
   return out;
+}
+
+/** A paragraph that is one italic run and nothing else ("*A known goal*"), as its text. */
+function italicLine(block: CorpusBlock | undefined): string | undefined {
+  if (block?.type !== 'paragraph') return undefined;
+  const runs = block.runs.filter((run) => !(run.type === 'text' && run.text.trim() === ''));
+  const only = runs.length === 1 ? runs[0] : undefined;
+  return only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
+}
+
+/**
+ * The label lines over a band's bold-led options (v2.1 copy, 4 Nov 2026: "*Optional first step*" over
+ * "**A pilot project.** …"): an italic-only paragraph directly before a labelled claim names that
+ * claim's kind. Keyed by the paragraph, valued by the claim's title.
+ */
+function optionEyebrows(band: CorpusBand): Map<CorpusBlock, string> {
+  const out = new Map<CorpusBlock, string>();
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  blocks.forEach((block, index) => {
+    const line = italicLine(block);
+    const next = blocks[index + 1];
+    const lead = next ? leadOf(next) : null;
+    if (line && lead) out.set(block, line);
+  });
+  return out;
+}
+
+/** The eyebrow over a claim, by the claim's title. */
+function eyebrowFor(band: CorpusBand, title: string): string | undefined {
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  const at = blocks.findIndex((block) => {
+    const lead = leadOf(block);
+    return lead ? labelTitle(lead.label) === title : false;
+  });
+  return at > 0 ? italicLine(blocks[at - 1]) : undefined;
+}
+
+/** A plain closing line split into the island's heading (its first sentence) and lead (the rest). */
+function splitAsk(text: string): { heading: string; lead?: string } {
+  const match = /^(.+?[.?!])\s+(.+)$/.exec(text.trim());
+  return match ? { heading: match[1]!, lead: match[2] } : { heading: text.trim() };
 }
 
 /** A case band's closing links: the link lines after the last case's own "Read the … case". */
@@ -574,10 +619,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
   switch (unit.kind) {
     case 'faq':
       return (
-        <ContentSection {...head(band)} data-band="D-faq" align="center">
-          <ContentSectionText>
-            <FaqItems band={band} />
-          </ContentSectionText>
+        /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
+           decisions/2026-11-04-faq-beside-its-heading). One FAQ shape on every page. */
+        <ContentSection {...head(band)} data-band="D-faq" arrangement="beside">
+          <FaqItems band={band} />
         </ContentSection>
       );
 
@@ -807,18 +852,35 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'tiles': {
       const opening = leadingParagraphs(band);
       const closing = closingNote(band);
-      const terms = [...closing.rest, ...trailingParagraphs(band)];
+      const trailing = [...closing.rest, ...trailingParagraphs(band)];
       /* Links by role, never by position (owner, 3 Nov 2026): the page link ("See how we work") is
          the head's action, the ask ("Book a call", to the form) its own island after the band. */
       const ask = askLinkIn(band);
       const links = bandLinks(band).filter((link) => !isAskLink(link));
+      /* The v2.1 copy (4 Nov 2026) closes the set on a plain line before its links ("Not sure which
+         suits you? Tell us about the product, and we'll suggest one."): with an ask, that line is the
+         compact island's words, and both links its actions, the ask first. A term is labelled
+         ("*Working hours:* …"), so an unlabelled last line beside an ask is the ask's. */
+      const lastLine = trailing.at(-1);
+      const askWords =
+        ask && lastLine && !factOf(lastLine) && trailing.some((runs) => factOf(runs))
+          ? splitAsk(inlineToText(lastLine))
+          : undefined;
+      const terms = (askWords ? trailing.slice(0, -1) : trailing).map((runs) => {
+        const fact = factOf(runs);
+        return fact ? { label: fact.label, body: fact.body } : { body: renderInline(runs) };
+      });
       const options =
         leads(band).length > 0
-          ? leads(band).map((row) => ({
-              title: row.title,
-              body: renderInline(row.body),
-              scope: scopeOf(row.title),
-            }))
+          ? leads(band).map((row) => {
+              const eyebrow = eyebrowFor(band, row.title);
+              return {
+                ...(eyebrow ? { eyebrow } : {}),
+                title: row.title,
+                body: renderInline(row.body),
+                scope: scopeOf(row.title),
+              };
+            })
           : listOptions(band).length > 0
             ? listOptions(band)
             : itemOptions(band);
@@ -834,6 +896,32 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           (('more' in option && Array.isArray(option.more) && option.more.length > 0) ||
             ('facts' in option && Array.isArray(option.facts) && option.facts.length > 0)),
       );
+      /* Options that each name their kind in a label line and are told in one sentence are cards
+         (owner, 4 Nov 2026, homepage pass: "cards that look like cards"); no drawing. */
+      const carded =
+        !rich &&
+        options.length > 0 &&
+        options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow));
+      const compactAsk =
+        askWords && ask ? (
+          <CtaSection
+            id={`${band.id}-ask`}
+            data-band="onward"
+            arrangement="open"
+            density="compact"
+            inBand
+            heading={askWords.heading}
+            body={askWords.lead ? [askWords.lead] : undefined}
+            actions={
+              links[0]
+                ? [
+                    { label: ask.labelText, href: ask.href },
+                    { label: links[0].labelText.replace(/\s*→\s*$/, ''), href: links[0].href },
+                  ]
+                : [{ label: ask.labelText, href: ask.href }]
+            }
+          />
+        ) : undefined;
       return (
         <Fragment>
           {/* A rich set compares (owner, 1 Nov 2026, /how-we-work: picked over the rows, which stand in
@@ -842,9 +930,19 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={options}
-            arrangement={rich ? 'compare' : 'grid'}
-            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            options={
+              carded
+                ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
+                  options.map((option) => ({
+                    ...option,
+                    scope: undefined,
+                    title: option.title.replace(/\.$/, ''),
+                  }))
+                : options
+            }
+            arrangement={rich ? 'compare' : carded ? 'cards' : 'grid'}
+            terms={terms}
+            note={compactAsk}
             closing={
               closing.note
                 ? {
@@ -860,9 +958,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   }
                 : undefined
             }
-            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+            action={
+              !compactAsk && links.length > 0 ? (
+                <LinkActions links={links.slice(0, 1)} />
+              ) : undefined
+            }
           />
-          {ask ? <AskIsland link={ask} /> : null}
+          {ask && !compactAsk ? <AskIsland link={ask} /> : null}
         </Fragment>
       );
     }

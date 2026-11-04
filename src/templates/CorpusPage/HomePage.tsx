@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react';
 
 import {
+  Button,
+  Cluster,
   isSituationFigureName,
   Layout,
   Section,
@@ -21,6 +23,7 @@ import {
   CtaRow,
   Gateway,
   GatewayPaths,
+  OfferSheet,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
@@ -73,7 +76,7 @@ import {
 import { bindingNamed, coverFor, slugOf } from './images';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
-import { bandLinks, labelTitle, leadOf, plain, trimEnd } from './text';
+import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd } from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -321,11 +324,28 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
       return [];
     });
     if (links.length === 0) return [];
+    const paragraphs = paragraphRuns(path.blocks);
+    /* A first paragraph wholly italic ("*New product*") names the kind of product the path is for:
+       the card's label, not its first line (v2.1 copy, 4 Nov 2026). A paragraph opening "Example:"
+       is the path's example, kept whole with its case link (decisions/2026-11-02-examples-are-one-
+       pattern: the example is set apart from the argument). */
+    const [first] = paragraphs;
+    const only = first?.length === 1 ? first[0] : undefined;
+    const eyebrow = only?.type === 'em' ? plain(only.children).trim() : undefined;
+    const isExample = (runs: (typeof paragraphs)[number]) => /^\s*Example:/.test(plain(runs));
+    const example = paragraphs.find(isExample);
+    const words = paragraphs
+      .filter((runs) => runs !== first || !eyebrow)
+      .filter((runs) => !isExample(runs));
     return [
       {
         id: slugOf(path.headingText),
         title: path.headingText,
-        body: paragraphRuns(path.blocks).map((runs) => plain(runs)),
+        body: words.map((runs) => plain(runs)),
+        ...(eyebrow ? { eyebrow } : {}),
+        ...(example
+          ? { example: <span dangerouslySetInnerHTML={{ __html: inline(example) }} /> }
+          : {}),
         /* Each service's own scene, the one its service page draws; none borrowed (owner, 31 Oct
            2026; decisions/2026-10-31-paths-graphic-cards). */
         links: links.map((link) => {
@@ -351,6 +371,24 @@ function Situations({ b, eyebrows }: BandProps) {
   const paths = gatewayPaths(b);
   const multi = paths.some((path) => path.links.length > 1);
   const ask = askLinkIn(b);
+  /* The v2.1 copy's three doors, each named by its kind of product (owner, 4 Nov 2026, homepage
+     pass): a classic three-card set under the head, each card its label, title, words, example and
+     two ways in, then the band's ask centred under the set as the page's main action repeated — a
+     primary solid in the band, as the owner asked (decisions/2026-11-04-where-to-start-doors). */
+  if (paths.length > 0 && paths.every((path) => path.eyebrow)) {
+    return (
+      <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+        <GatewayPaths paths={paths} form="cards" />
+        {ask ? (
+          <Cluster justify="center">
+            <Button as="a" href={ask.href} size="lg">
+              {ask.labelText}
+            </Button>
+          </Cluster>
+        ) : null}
+      </ContentSection>
+    );
+  }
   return multi ? (
     <>
       <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
@@ -424,7 +462,11 @@ const PEOPLE_COLLAGE: CollagePhotos = {
     focus: { x: 0.3, y: 0.75 },
     zoom: 1.2,
   },
-  start: { image: getKitPhoto('studio-desks-plants-b'), focus: { x: 0.19, y: 0.66 }, zoom: 1.2 },
+  start: {
+    image: getKitPhoto('studio-desks-plants-b'),
+    focus: { x: 0.19, y: 0.66 },
+    zoom: 1.2,
+  },
   middle: { image: getKitPhoto('studio-sticky-wall-sorting'), focus: { x: 0.5, y: 0.5 } },
   middleStart: { image: getKitPhoto('studio-book-showing-c'), focus: { x: 0.8, y: 0.5 } },
   middleEnd: {
@@ -654,6 +696,52 @@ export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   );
 }
 
+/**
+ * Each reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each title gets an
+ * inline icon"). A title the copy renames drops the glyphs from the whole set, so a stale map never
+ * shows a set with holes.
+ */
+const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Craft people notice': 'eye',
+  'Evidence before screens': 'clipboard-check',
+  'Seen your problem before': 'users-group-rounded',
+  'Start small': 'hand-shake',
+};
+
+/**
+ * Why Tcules on home: the heading at the left with its way deeper under it, the six reasons down the
+ * right, one ruled row each, its glyph inline before its title and its sentence under it (owner,
+ * 4 Nov 2026, homepage pass: "simplify and bring it back to the heading left list right structure";
+ * decisions/2026-11-04-home-why-is-a-list, superseding the proposed 2026-11-03 illustrations). Home
+ * only: the offer pages keep the plan's Reasons. A reason whose title has no glyph sets the whole
+ * list without glyphs, so nothing is dropped and the set never mixes.
+ */
+function WhyTcules({ b }: BandProps) {
+  const parts = sheetParts(b);
+  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
+  const titled = parts.items.map((item) => ({
+    ...item,
+    title: item.title?.replace(/\.$/, ''),
+  }));
+  /* A set is all-glyph or all-text (OfferSheet): one title the map does not know drops every glyph. */
+  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
+  const items = titled.map((item) =>
+    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
+  );
+  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <OfferSheet
+      {...head(b)}
+      arrangement="list"
+      lead={parts.lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
 
 function ClientVoices({ b, ratings, avatars }: BandProps) {
@@ -801,6 +889,7 @@ const HOME_BANDS: Readonly<
   Record<(typeof TEMPLATE_BANDS)['/'][number], ComponentType<BandProps>>
 > = {
   'client-recognition': Recognition,
+  'why-tcules': WhyTcules,
   'product-situations': Situations,
   'product-design': OneStudio,
   'selected-work': SelectedWork,

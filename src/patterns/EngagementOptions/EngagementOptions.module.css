@@ -121,3 +121,12 @@
     display: none;
   }
 }
+
+/* `cards`: the option as a card, a hairline round it at the card radius, on the card's own ground,
+   the copy a `gutter` inside. */
+.card {
+  padding: var(--gap-gutter);
+  border: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+  border-radius: var(--eop-card-radius);
+  background: var(--eop-card-ground);
+}

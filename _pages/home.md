@@ -186,24 +186,40 @@ Tcules is a digital product design studio for SaaS and other ambitious software.
 
 [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Ringier](/case-studies/news-app-ux-shared-design-media-group-ringier) · JoVE · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · Primelis · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · Knovos · DataBahn · Chestnut · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · CuramCare
 
-## Start where your product is: brand new, or already in use {#product-situations}
+## Where is your product today? {#product-situations}
 
-### Creating a new product
+### An idea, or a prototype built with AI
 
-You can picture the product, maybe in a deck, maybe in a prototype you built over a weekend. What you need now is a first release customers choose, built on choices that still hold when the second release arrives.
+*New product*
 
-We shape it with you and carry it all the way to launch.
+You may have a deck, or a prototype built over a weekend. We keep what works and design a first release customers choose.
+
+Example: [Doodle's enterprise MVP](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), reshaped by research.
 
 - [Design and launch your MVP](/services/mvp-development)
 - [Check whether your prototype is ready for customers](/audits/prototype-readiness-review)
 
-### Taking an established product further
+### A product customers rely on, ready for its next step
 
-Your product works, customers rely on it, and the business wants it to do more: a new market, AI that people trust, a decade of features made coherent. We find what holds it back and redesign it in stages, so customers keep their bearings while the product takes its next step.
+*Established product*
+
+We find what holds it back and redesign it in stages, so customers keep their bearings.
+
+Example: [Benchmark Gensuite's modern patterns](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), tried in working prototypes first.
 
 - [Redesign how your product works](/services/product-design)
 - [Modernise a product customers rely on](/services/product-modernisation)
-- [Add AI features to your product](/services/ai-product-ux)
+
+### AI that works, but people hesitate to use it
+
+*AI features*
+
+We design how people check, correct and override what the AI does, so they can rely on it.
+
+Example: the [review feed we designed for BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), where the engineer who signs off can trace and overrule each AI check.
+
+- [Design AI features people trust](/services/ai-product-ux)
+- [Audit an AI feature before more people rely on it](/audits/ai-product-ux-readiness)
 
 [Book a call](#enquiry)
 
@@ -293,15 +309,23 @@ Working within the design team of an on-chain crypto exchange, we made two compl
 
 ## Three ways to work with us {#how-we-work-together}
 
+*Optional first step*
+
 **A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+
+*A known goal*
 
 **A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
 
+*A roadmap that keeps moving*
+
 **An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
 
-You keep the product decisions, and what we make is yours once it's paid for.
+*Yours:* You keep the product decisions, and what we make is yours once it's paid for.
 
-We overlap four to five hours with US working days, and extend that whenever the work needs it.
+*Working hours:* We overlap four to five hours with US working days, and extend that whenever the work needs it.
+
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 
@@ -337,25 +361,29 @@ Pieces that show how we think, written from our own work.
 
 ## Questions SaaS teams ask before hiring a product design studio {#faq}
 
+### How do we start, and what does it cost?
+
+Send a few lines and we'll reply to arrange a call. You can start small, with an audit or a pilot on one flow at a fixed price agreed up front. Defined projects are priced on their scope, and ongoing work has no minimum term.
+
+### Can you work with our own designers and engineers?
+
+Yes. Our designers work inside your files, design system and review rhythm, so your team sees the work as it happens. Your engineers can build from our designs, or our developers can build alongside them.
+
 ### Is Tcules a UI/UX design agency?
 
 Tcules is a digital product design studio in Ahmedabad, India, founded in 2017. We do UI and UX design, visual design included, plus the research, product thinking and engineering around it, for SaaS and other ambitious software.
 
 ### Do you only work with SaaS companies?
 
-SaaS is our particular focus, and we also design business applications, data-rich interfaces, consumer products and AI products, at any stage from new idea to established platform. [See the industries we know well](/expertise)
+SaaS is our particular focus, and we also design business applications, data-rich interfaces, consumer products and AI products, at any stage from new idea to established platform.
 
 ### Can Tcules design and build a SaaS product end to end?
 
-Yes. Product Design shapes what the product does, Design Engineering takes it into code, and Software Development carries it through frontend, backend, integrations, testing and release. You choose where our part stops: designs for your engineers, a finished interface or launch-ready software. [Software Development](/services/software-development)
+Yes. Product Design shapes what the product does, Design Engineering takes it into code, and Software Development carries it through frontend, backend, integrations, testing and release. You choose where our part stops: designs for your engineers, a finished interface or launch-ready software.
 
-### What should a SaaS company look for in a product design partner?
+### Does Tcules design AI features people trust?
 
-Look for a partner who asks what the product should do before drawing screens, and who can show real choices from past products. Ask who will lead your work each week, and whether the design can be carried into code.
-
-### Does Tcules design AI features and agents for SaaS products?
-
-Yes. Through AI Product UX we design copilots, agents, AI search and the review steps people use to check and correct AI work. Recent examples include BuildTwin's workspace for reviewing AI quality checks and Eden AI's search, which makes clear whether people are searching or asking the AI. [AI Product UX](/services/ai-product-ux)
+Yes. Through AI Product UX we design copilots, agents, AI search and the review steps people use to check and correct AI work. Recent examples include BuildTwin's workspace for reviewing AI quality checks and Eden AI's search, which makes clear whether people are searching or asking the AI.
 
 ## Tell us what you're building {#enquiry}
 

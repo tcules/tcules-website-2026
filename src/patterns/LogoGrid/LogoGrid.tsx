@@ -56,6 +56,21 @@ const RANGE: Record<LogoGridTrack, Record<Breakpoint, [max: number, min: number]
 };
 
 /**
+ * The compact wall's ranges (owner, 4 Nov 2026, homepage pass: "smaller logos and smaller boxes but
+ * enough space in every box so it still reads open and free"): the marks a step smaller (ClientMark
+ * `sm`) and the cells shorter, so more sit across — up to six in the full column from 1024 (ten
+ * marks are 5 × 2, twelve 6 × 2), five from 768. A phone stays two across: the cells are already
+ * the narrowest a mark fits.
+ */
+const RANGE_COMPACT: Record<LogoGridTrack, Record<Breakpoint, [max: number, min: number]>> = {
+  full: { base: [2, 2], md: [5, 4], lg: [6, 4], xl: [6, 4] },
+  body: { base: [2, 2], md: [5, 4], lg: [4, 3], xl: [4, 3] },
+};
+
+/** How much room each mark gets. See `LogoGridProps.density`. */
+export type LogoGridDensity = 'default' | 'compact';
+
+/**
  * The column count for `count` cells: the most across, within the range, that divides the count,
  * so every row is full and the grid is a whole rectangle — 8 is 4 × 2, 9 is 3 × 3, 12 is 4 × 3.
  * A count with no divisor in range (7, 11, 13) takes the count that leaves
@@ -78,8 +93,12 @@ function columnsFor(count: number, [max, min]: [number, number]): number {
 }
 
 /** The per-breakpoint columns for a count in a track — exported so a specimen can label them. */
-export function logoGridColumns(count: number, track: LogoGridTrack = 'full') {
-  const range = RANGE[track];
+export function logoGridColumns(
+  count: number,
+  track: LogoGridTrack = 'full',
+  density: LogoGridDensity = 'default',
+) {
+  const range = (density === 'compact' ? RANGE_COMPACT : RANGE)[track];
   return {
     base: columnsFor(count, range.base),
     md: columnsFor(count, range.md),
@@ -171,6 +190,13 @@ export type LogoGridProps = {
    * the alternative, for a band that wants the grid to sit in the paper rather than on it.
    */
   edges?: 'open' | 'closed';
+  /**
+   * `default`: the approved wall, 128-tall cells, at most four across, marks at ClientMark `md`.
+   * `compact` (owner, 4 Nov 2026, homepage pass): shorter cells and marks a step smaller (ClientMark
+   * `sm`), up to six across, the air in each cell kept in proportion so the wall still reads open.
+   * For a wall that sits under a hero and must not take a fold of its own.
+   */
+  density?: LogoGridDensity;
   className?: string;
 };
 
@@ -206,13 +232,15 @@ export function LogoGrid({
   align = 'start',
   track = 'full',
   edges = 'closed',
+  density = 'default',
   className,
 }: LogoGridProps) {
+  const compact = density === 'compact';
   const beside = arrangement === 'beside';
   const centred = !beside && align === 'center';
   const hasHead = Boolean(badge || context || heading || action);
 
-  const columns = logoGridColumns(marks.length, beside ? 'body' : track);
+  const columns = logoGridColumns(marks.length, beside ? 'body' : track, density);
   const fills = lastFills(marks.length, columns);
   const pairs = lastPairs(marks.length, columns);
   const Context = heading ? 'p' : (contextAs ?? 'h2');
@@ -227,6 +255,7 @@ export function LogoGrid({
           align="center"
           className={cx(
             styles.cell,
+            compact && styles.compact,
             ...(i === marks.length - 1 ? fills.map((bp) => FILL_CLASS[bp]) : []),
             ...(i >= marks.length - 2 ? pairs.map((bp) => PAIR_CLASS[bp]) : []),
           )}
@@ -234,7 +263,7 @@ export function LogoGrid({
           {!hasArt(mark) ? (
             <span className={styles.wordmark}>{mark.name}</span>
           ) : (
-            <ClientMark {...mark} />
+            <ClientMark {...mark} size={compact ? 'sm' : 'md'} />
           )}
         </Cluster>
       ))}

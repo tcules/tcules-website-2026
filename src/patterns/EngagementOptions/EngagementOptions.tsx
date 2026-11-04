@@ -42,6 +42,8 @@ export type EngagementScope =
   | 'hours';
 
 export type EngagementTerm = {
+  /** What the term is about ("Yours", "Working hours"), set as a mono key over its words. Optional. */
+  label?: string;
   /** The term's paragraph, inline content the caller renders. */
   body: ReactNode;
 };
@@ -84,11 +86,15 @@ export type EngagementOption = {
  *         each card's image, then the name and what it is. THE BAND (product design).
  *   compare  the options three across, then each fact as one ruled row, its values aligned under
  *         their option (owner, 1 Nov 2026, /how-we-work). Below 1024, `rows`.
+ *   cards  each option a card that reads as one (owner, 4 Nov 2026, homepage pass: "these also need
+ *         to be cards that look like cards"): a hairline round it at the card radius, its label, its
+ *         name and what it is, no drawing; three across from 1024, one column below. Peers, so no
+ *         card is featured.
  *   rows  one alternating row per option, the drawing in 5 of [5, 7] beside its words, sides
  *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
  *         1440).
  */
-export type EngagementArrangement = 'grid' | 'rows' | 'compare';
+export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -252,6 +258,23 @@ export function EngagementOptions({
                 return <li key={option.title}>{card}</li>;
               })}
             </Layout>
+          ) : arrangement === 'cards' ? (
+            /* Cards in a set are a `gutter` apart, across and down. */
+            <Layout
+              as="ul"
+              columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+              colGap="gutter"
+              rowGap="gutter"
+            >
+              {shown.map((option) => (
+                <li key={option.title} className={styles.card}>
+                  <Layout rowGap="text">
+                    <OptionHead option={option} className={styles.title} />
+                    <OptionBody option={option} className={styles.body} />
+                  </Layout>
+                </li>
+              ))}
+            </Layout>
           ) : arrangement === 'compare' ? (
             <>
               {/* From 1024: the options head the set three across, then each fact runs as one ruled
@@ -278,12 +301,23 @@ export function EngagementOptions({
             </Layout>
           ) : null}
           {terms.length > 0 ? (
-            <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
-              {terms.map((term, index) => (
-                <p key={index} className={styles.termText}>
-                  {term.body}
-                </p>
-              ))}
+            <Layout
+              columns={{ base: 1, lg: termTracks }}
+              colGap="gutter"
+              rowGap={terms.some((term) => term.label) ? 'block' : 'text'}
+            >
+              {terms.map((term, index) =>
+                term.label ? (
+                  <Layout key={index} rowGap="tight">
+                    <p className={styles.factKey}>{term.label}</p>
+                    <p className={styles.termText}>{term.body}</p>
+                  </Layout>
+                ) : (
+                  <p key={index} className={styles.termText}>
+                    {term.body}
+                  </p>
+                ),
+              )}
             </Layout>
           ) : null}
         </Layout>
