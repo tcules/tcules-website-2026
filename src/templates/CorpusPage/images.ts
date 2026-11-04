@@ -215,6 +215,54 @@ const ARTEFACT_HERO: Record<string, HeroCutOut> = {
 };
 
 /**
+ * A prose band that shows the page's own artefact beside its words, by route and band: a real image of
+ * the thing the page is about, from the live site, where the copy binds none (the page's
+ * `visual_plan` names the artefact). `crop` sets it as the media split's photograph (cover-cropped,
+ * the picture leading in 7); `own` keeps the whole image at its own ratio in a half beside the words,
+ * for an artefact a crop would cut into (ContentSection's figure track). Read before an illustration
+ * slot, so a real picture replaces a placeholder.
+ */
+export type BandArtefact = { image: CorpusImage; fit: 'crop' | 'own' };
+
+const ARTEFACT_BAND: Readonly<Record<string, BandArtefact>> = {
+  /* /matter-design-system "Duplicate Matter from Figma Community and take it apart": Matter's own
+     components exploded off the canvas (Blue 500 and Cyan 500 swatches, the Primary and Secondary
+     buttons, the select, the type styles), the live Matter page's picture beside its token naming.
+     A field of parts bleeding off every edge, so it crops without loss (owner, 4 Nov 2026: "there
+     are some images for MDS on the live website ... use them where necessary"). */
+  [`${ROUTES.matterDesignSystem}#use`]: {
+    image: {
+      src: '/matter-design-system/matter-components.webp',
+      alt: 'Matter components laid out in perspective: Blue 500 and Cyan 500 colour swatches, Primary and Secondary buttons, a select menu, checkboxes, radio buttons and the primary and secondary type styles.',
+      width: 1600,
+      height: 1200,
+      kind: 'capture',
+    },
+    fit: 'crop',
+  },
+  /* /matter-design-system "What a working design system adds to a Figma file": the live Matter page's
+     picture of a screen beside its front-end code with an assistant's suggestions, which is the band's
+     claim (coded components, and AI tools building screens and code from the system). It replaces the
+     isometric placeholder; a 1.8 : 1 drawing whose two panels a crop would cut, so it keeps its own
+     ratio. */
+  [`${ROUTES.matterDesignSystem}#beyond-the-file`]: {
+    image: {
+      src: '/matter-design-system/matter-component-code.webp',
+      alt: 'A product screen beside its front-end code, with an assistant suggesting parts as a person works on it.',
+      width: 1080,
+      height: 600,
+      kind: 'capture',
+    },
+    fit: 'own',
+  },
+};
+
+/** The page's own artefact a prose band shows on this route, if any (`ARTEFACT_BAND`). */
+export function bandArtefact(route: string, bandId: string): BandArtefact | undefined {
+  return ARTEFACT_BAND[`${route}#${bandId}`];
+}
+
+/**
  * The hero's picture: the page's own binding, then the page's own artefact, then a named studio reuse,
  * then its placeholder.
  */

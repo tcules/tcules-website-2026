@@ -45,13 +45,20 @@ import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 import { placeholderIllustration } from '@/lib/placeholders';
-import { MEDIA_SPLIT } from '@/lib/image-sizes';
+import { MEDIA_SPLIT, MEDIA_SPLIT_HALVES } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head, headingIdOf } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
-import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
+import {
+  bandArtefact,
+  caseCover,
+  slotImage,
+  slugOf,
+  studioBandPhoto,
+  type SlotImage,
+} from './images';
 import { isIllustratedProse, isIslandClose, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
@@ -2469,6 +2476,31 @@ export function TextBand({
      head's `actions` they sat between the heading and the paragraphs, a way on before the argument.
      Unpinned (`pin: false`): the link follows the last paragraph rather than dropping to the
      picture's bottom edge. */
+  /* The page's own artefact beside its words (images.ts `ARTEFACT_BAND`), ahead of any illustration
+     slot: a real picture of the thing the page is about replaces a placeholder (owner, 4 Nov 2026,
+     /matter-design-system). Cropped as the split's photograph, or whole at its own ratio in a half. */
+  const artefact = bandArtefact(page.route, band.id);
+  if (artefact) {
+    return (
+      <ContentSection
+        {...head(band)}
+        data-band="B"
+        arrangement="media"
+        media={
+          artefact.fit === 'crop'
+            ? { image: artefact.image, side, weight: 'photo', head: 'lg', pin: false }
+            : {
+                drawing: <Media image={artefact.image} sizes={MEDIA_SPLIT_HALVES} />,
+                side,
+                head: 'lg',
+              }
+        }
+        footer={actions}
+      >
+        {text}
+      </ContentSection>
+    );
+  }
   if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
@@ -2592,10 +2624,8 @@ const HEAD_BESIDE_PROSE: ReadonlySet<string> = new Set([`${ROUTES.careers}#lab`]
  */
 const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([
   `${ROUTES.careers}#product-work`,
-  /* /matter-design-system "Duplicate Matter from Figma Community and take it apart": how to use the
-     file, and the terms it comes on. One column ran about 95 characters a line with the band's right
-     third empty (matter critic, 4 Nov 2026, owner to confirm). */
-  `${ROUTES.matterDesignSystem}#use`,
+  /* /matter-design-system `use` left 4 Nov 2026 (pass 2): the band now carries Matter's own components
+     beside its words (images.ts ARTEFACT_BAND). */
 ]);
 
 /** A boundary on the band before it (`confidentiality`): one Callout under its own heading. */

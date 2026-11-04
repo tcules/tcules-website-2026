@@ -36,8 +36,8 @@ reader who needs more than a file reaches the design-system services and the enq
 |---|---|---|
 | hero | CorpusHero `centred`, cut-out collage on `paper-deep` | eyebrow suppressed under the breadcrumb, as before |
 | contents | set · OfferSheet, drawn, across 3 | three new still drawings |
-| use | text · C-text, peer paragraphs | two columns under the full-width head from 1024 (`PEER_PARAGRAPHS`) |
-| beyond-the-file | text · illustrated prose (B), isometric placeholder | side from the plan's alternation |
+| use | text · B media split, Matter's components (pass 2) | photo-led 7 : 5, cropped; was peer paragraphs |
+| beyond-the-file | text · B split in halves, the live page's screen-and-code picture (pass 2) | whole at its own ratio; was the isometric placeholder |
 | services | services · C-icon service tiles | four hairline cards with their drawings |
 | enquiry | enquiry · L, blue island in halves | before the FAQ |
 | faq | faq · D-faq | |
@@ -97,3 +97,61 @@ tint, no text-heavy pair, registers alternate (cut-out → flat → none → iso
   alpha bounds (1900 × 1041, shadows kept), dimensions updated in `ARTEFACT_HERO`.
 - Skipped: the services tiles' ragged title rows and their phone height. Both are Bento changes that move
   every service-tile set on the site; listed in Open for the owner.
+
+## Pass 2, owner review 4 Nov
+
+Owner note: "there are some images for MDS on the live website. go find them and use them where necessary."
+After main's merge (#219), checked first: the FAQ sits beside in halves (2026-11-04-faq-beside-in-halves) and
+the enquiry island stays before it; the page has no Why Tcules list, Three ways cards or industries pills, so
+nothing else from the 4 Nov rulings lands here; the merge broke nothing (0 page errors, no overflow at 1440 or 390).
+
+### What the live site holds (www.tcules.com/matter-design-system, the Lab page, sitemap; /matter times out, /resources/matter-design-system is an empty shell; og:image is empty)
+| Image (largest available) | What it is | Where it went |
+|---|---|---|
+| `961737187e…6b4860934f.webp`, 2000 × 1111, alpha | the collage of three Matter frames | already the hero (`matter-collage.webp`), unchanged |
+| `/assets/images/b050a84e…ed078.png`, 1600 × 1200 (the Lab page's `Matter_Design_System…webp` is a 698 × 481 crop of it) | Matter components exploded in perspective: Blue 500 / Cyan 500 swatches, Primary / Secondary buttons, select, checkboxes, radios, type styles | `use`, as `public/matter-design-system/matter-components.webp` |
+| `image_a3154e52ee.webp`, 1080 × 600 | the live page's "Matter component shown beside its front-end code": a screen, its code panel, an assistant's suggestions | `beyond-the-file`, as `public/matter-design-system/matter-component-code.webp` |
+| `Container_ebdebfea4c.webp`, 292 × 96 | three token chips (`color.orange.400` …) | not used: too small for any slot |
+| `Events_Design_system_for_everyone…webp`, 1290 × 770 | a meetup banner, type on the image | not used: an event, not the file |
+| five 3D icons (Tokens Studio, variables, arrow, magnifier, Figma), 96–168 px | decorative renders | not used: off-style and tiny |
+| `/assets/images/91ba78b8…png`, 2000 × 2000 | a noise texture laid over images | not used |
+
+### note → cause → fix
+- **Real Matter images where the page needs a picture of the file** → the template could show the page's own
+  artefact only as its hero (`ARTEFACT_HERO`); a prose band had a placeholder or nothing → new route-keyed
+  `ARTEFACT_BAND` in `CorpusPage/images.ts` (`bandArtefact()`), read by the text kind before its illustration
+  slot and by the plan (register `photo`, a visual band). `crop` sets the image as the media split's photograph;
+  `own` keeps it whole at its own ratio in the split's figure half (ContentSection `media.drawing`, the track the
+  /future-interfaces-lab pass added today). New `MEDIA_SPLIT_HALVES` sizes for that half. **Local by data,
+  general by mechanism**: only this route has entries; ContentSection itself is unchanged.
+  - `use` (the 'use' band had no frame): Matter's components beside "open a component and follow how a
+    foundation value flows into the finished piece", photo-led 7 : 5, cropped (a field of parts bleeding off
+    every edge loses nothing). Leaves `PEER_PARAGRAPHS`; /careers `product-work` still uses it, unchanged.
+  - `beyond-the-file`: the isometric placeholder replaced by the live page's screen-beside-its-code picture,
+    whole, in halves; it shows the band's claim (coded components, AI building screens and code from the
+    system). Leaves `ILLUSTRATED_PROSE` (the id is on this page only). The alt describes what it shows and does
+    not call it Matter's code (the FAQ says Matter has none).
+- **What's inside kept its three flat drawings**: each explains a mechanism (a value chosen for its purpose
+  routed to a button, parts joined into a component in three states, one path through the library) that no
+  live image shows; the only frames that would match are the hero collage's, which would repeat the hero at a
+  third of its resolution. Kept on purpose.
+- **Hero, 390 collage too small**: tried the collage with no panel (326 wide on a phone instead of ~262,
+  and larger at 1440). Not applied: decisions/2026-09-24-cut-out-contrast-panel-below-3-1 requires the panel
+  where the white frames fall below 3:1 against paper, and the panel inset is a site-wide token. Still Open.
+
+Rhythm now: centred head over the collage panel → three drawn plates → components photo (start) beside
+words → words beside the code picture (end) → four service cards → blue island → FAQ in halves. Registers:
+cut-out → flat → photo → photo → flat → isometric → none; no tint, no two text-heavy bands.
+
+### Open (pass 2)
+- **New arrangement for this route:** `ARTEFACT_BAND` (a prose band showing the page's own artefact); the
+  `own` fit puts a raster image in ContentSection's figure half, which was built for a flat drawing. Owner to
+  confirm.
+- The screen-and-code picture is drawn in green (the live Matter page's accent), the only green on the site,
+  and it is 1080 wide (1.9× at its 572 half; soft on a 3× phone). Owner: keep, or ask for a blue,
+  2× export; the isometric brief stays in docs/image-register.md if the owner prefers it drawn.
+- The components image is a 1600 PNG from the old site (served as WebP); a 2560 master would match
+  2026-09-25-cut-outs-png-master-webp-served.
+- Hero at 390 (carried over): the collage reads as the product, not its detail. Options for the owner: the
+  ink panel (passes 3:1, but ink is reserved), a phone-only tighter crop of the Button frame, or accepting it.
+- og/twitter image still `IMAGE_ASSET_REQUIRED` (carried over).

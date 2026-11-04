@@ -79,7 +79,7 @@ export const KIND_COMPONENTS: Readonly<
   text: {
     component: ['C-text', 'B', 'C-list', 'B-collage'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A band that shows the studio itself (images.ts STUDIO_COLLAGE, /careers `ahmedabad`): the studio collage, as home\'s people band (B-collage; studio-collage). Two peer paragraphs (CopyBands PEER_PARAGRAPHS, /careers `product-work`): two columns under the head (C-text). 4 Nov 2026, owner to judge on /careers.',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A band that shows the studio itself (images.ts STUDIO_COLLAGE, /careers `ahmedabad`): the studio collage, as home\'s people band (B-collage; studio-collage). Two peer paragraphs (CopyBands PEER_PARAGRAPHS, /careers `product-work`): two columns under the head (C-text). 4 Nov 2026, owner to judge on /careers. A band that shows the page\'s own artefact (images.ts ARTEFACT_BAND, /matter-design-system `use`, `beyond-the-file`): the real image beside the words, cropped as the photograph or whole in a half (B). 4 Nov 2026.',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
