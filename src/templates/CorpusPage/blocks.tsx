@@ -249,9 +249,6 @@ export function proofQuote(block: QuoteBlock): ProofQuote {
   const attribution = parseAttribution(block.attribution ?? []);
   return {
     quoteHtml: block.paragraphs.map(html).join(''),
-    /* Every testimonial shows its speaker's stars (owner, 2 Nov 2026;
-       decisions/2026-11-02-one-person-one-rating): the loader sets one rating per person. */
-    ...(block.rating ? { stars: block.rating.value } : {}),
     name: attribution.name,
     role: attribution.role,
     company: attribution.company,
@@ -541,38 +538,6 @@ export function RecognitionBand({ band }: { band: CorpusBand }) {
   const namesBlock = paragraphsIn.find((block) => !ratingOf(block));
   const ratingBlock = band.blocks.find((block) => ratingOf(block));
   const names = namesBlock ? plain(namesBlock.runs).split(' · ') : [];
-  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
-  return (
-    <ClientWall
-      id={band.id}
-      headingId={headingIdOf(band)}
-      context={band.headingText}
-      names={names}
-      badge={rating ? <ScoreBadge rating={rating} /> : undefined}
-    />
-  );
-}
-
-/**
- * The compact boxed logo wall, from a list of client names: the clients named lead, in order, where
- * the studio holds their file; the rest of the approved wall follows. RecognitionBand's wall, and
- * home's when the copy names its clients on the hero's proof line instead of in a band (4 Nov 2026
- * copy: "*Selected client work: Doodle · Dealpath · …*", page_composition `client_logo_strip` after
- * the hero).
- */
-export function ClientWall({
-  id,
-  headingId,
-  context,
-  names,
-  badge,
-}: {
-  id: string;
-  headingId: string;
-  context: string;
-  names: readonly string[];
-  badge?: ReactNode;
-}) {
   const named = names.flatMap((name) => {
     const mark = clientMark(name);
     return mark ? [mark] : [];
@@ -581,14 +546,16 @@ export function ClientWall({
     ...named,
     ...CLIENT_MARKS.filter((mark) => !named.includes(mark)),
   ];
+  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const id = headingIdOf(band);
   return (
-    <Section id={id} data-band="H" aria-labelledby={headingId}>
+    <Section id={band.id} data-band="H" aria-labelledby={id}>
       <LogoGrid
         marks={marks}
-        badge={badge}
-        context={context}
+        badge={rating ? <ScoreBadge rating={rating} /> : undefined}
+        context={band.headingText}
         contextAs="h2"
-        headingId={headingId}
+        headingId={id}
         edges="closed"
         density="compact"
       />

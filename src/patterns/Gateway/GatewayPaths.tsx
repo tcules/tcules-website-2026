@@ -12,8 +12,8 @@ export type GatewayPath = {
   id: string;
   /** The situation in the reader's words ("Creating a new product"). A label over its words. */
   title: string;
-  /** Its sentences, one entry per paragraph, as authored (inline emphasis kept by the caller). */
-  body: readonly ReactNode[];
+  /** Its sentences, one string per paragraph, as authored. */
+  body: readonly string[];
   /**
    * Where it leads, in the authored order: each a service, as a graphic card. `label` is the
    * action's authored words ("Design and launch your MVP"), never the service's name; `scene` is the
@@ -33,13 +33,6 @@ export type GatewayPath = {
    * at the small step.
    */
   example?: ReactNode;
-  /**
-   * `cards` only: the path's closing sentence when it names its services inline ("That is the
-   * territory of Product Modernisation, Design Systems…"), composed by the caller with its links.
-   * It stands where the link rows would, over the same hairline, at the card's foot. A path has
-   * `links` or a `foot`, not both.
-   */
-  foot?: ReactNode;
 };
 
 /** One of a path's services: the action's words, where it goes and the service's own scene. */
@@ -94,7 +87,7 @@ export function GatewayPaths({
          in. Cards in a set are a `gutter` apart. */
       <Layout
         as="ul"
-        columns={{ base: 1, lg: paths.length === 2 ? 2 : 3 }}
+        columns={{ base: 1, lg: 3 }}
         colGap="gutter"
         rowGap="gutter"
         shareRows={3}
@@ -114,27 +107,22 @@ export function GatewayPaths({
               ))}
               {path.example ? <p className={styles.doorExample}>{path.example}</p> : null}
             </Layout>
-            {path.foot ? (
-              /* The closing sentence that names the services, at the foot over the rows' hairline. */
-              <p className={cx(styles.doorRow, styles.doorFoot)}>{path.foot}</p>
-            ) : (
-              /* The ways in: one ruled row each, the whole row the link, its arrow at the row's end.
-                 The rows close the card, so the card needs no action of its own. */
-              <ul>
-                {path.links.map((link) => (
-                  <li key={link.href} className={styles.doorRow}>
-                    <a href={link.href} className={styles.doorLink}>
-                      <Cluster colGap="text" justify="between" align="center" nowrap>
-                        <span>{link.label}</span>
-                        <span className={styles.doorArrow} aria-hidden="true">
-                          <Icon name="arrow-right" />
-                        </span>
-                      </Cluster>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {/* The ways in: one ruled row each, the whole row the link, its arrow at the row's end.
+                The rows close the card, so the card needs no action of its own. */}
+            <ul>
+              {path.links.map((link) => (
+                <li key={link.href} className={styles.doorRow}>
+                  <a href={link.href} className={styles.doorLink}>
+                    <Cluster colGap="text" justify="between" align="center" nowrap>
+                      <span>{link.label}</span>
+                      <span className={styles.doorArrow} aria-hidden="true">
+                        <Icon name="arrow-right" />
+                      </span>
+                    </Cluster>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </Layout>
         ))}
       </Layout>

@@ -87,7 +87,6 @@ export const RATINGS_BY_PERSON: Readonly<Record<string, TestimonialRating>> = {
   'Clément Contamine': rating(5),
   'David Aghaei': rating(4.5),
   'Dhanur Aashray Majety': rating(5),
-  'Eduard Stinga': rating(5),
   'Eagles Security Aruba & Hotel California Aruba': rating(4.5),
   "Jody O'Neill": rating(5),
   'Kalpesh Gohill': rating(4.5),

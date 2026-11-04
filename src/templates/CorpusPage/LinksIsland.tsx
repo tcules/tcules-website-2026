@@ -48,12 +48,7 @@ export function LinksIsland({
       {/* The field across the band, edges blurred wide and rounded; at full strength around the
           words, faint in the space around them (owner, 31 Oct 2026). */}
       <TextureFlow flow="turbulent" feather bleed />
-      <Layout
-        rowGap="stack"
-        justifyItems="center"
-        className={styles.centred}
-        data-texture-focus
-      >
+      <Layout rowGap="stack" justifyItems="center" className={styles.centred} data-texture-focus>
         <h2 id={headingId}>{heading}</h2>
         <Layout rowGap="block" justifyItems="center">
           <Cluster colGap="stack" rowGap="block" justify="center">

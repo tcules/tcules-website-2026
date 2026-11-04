@@ -115,8 +115,8 @@ function blockText(b) {
         b.fields.map((f) => f.labelText).join(' ') +
         ' Submit: ' +
         (b.submit ? runText(b.submit) : '') +
-        /* "After sending:" only where the copy writes it (the 4 Nov home copy does not). */
-        (b.after ? ' After sending: ' + runText(b.after) : '')
+        ' After sending: ' +
+        (b.after ? runText(b.after) : '')
       );
     default:
       return '';

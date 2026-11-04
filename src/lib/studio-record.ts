@@ -23,10 +23,6 @@ const RECORD_FORMS: Readonly<Record<string, RecordFigure | null>> = {
   'Based in Ahmedabad, India': null,
   /* The 26 Oct copy's wording of the same fact (component-map § E home 1). */
   'Studio in Ahmedabad, India': null,
-  /* The 4 Nov home copy's wording ("More than 90 projects · 19 countries · Founded 2017 in Ahmedabad"):
-     the same three figures, each label in the line's own words. */
-  '19 countries': { value: '19', label: 'Countries' },
-  'Founded 2017 in Ahmedabad': { value: '2017', label: 'Founded in Ahmedabad' },
 };
 
 /** The facts of a line written "a · b · c", trimmed, blanks dropped. */

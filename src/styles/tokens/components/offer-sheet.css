@@ -16,8 +16,6 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* A run-in row's bold lead (`list`): semibold, the weight a label takes in running text. */
-  --ofs-run-in-weight: var(--font-weight-semibold);
   --ofs-heading-text: var(--text-h2);
   --ofs-heading-tracking: var(--text-h2-tracking);
   --ofs-heading-measure: var(--measure-title);

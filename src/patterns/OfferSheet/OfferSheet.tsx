@@ -46,9 +46,8 @@ export type OfferSheetItem = {
    */
   href?: string;
   /**
-   * A glyph leading the item, `rows` and `list` only: before its title, on the title's first line
-   * (owner, 4 Nov 2026: a row is not an icon card); for an untitled run-in item (its `bodyHtml` opens
-   * on its own bold lead), before the sentence. Set on every item or on none.
+   * A glyph leading the item, `rows` only: before its title, on the title's first line (owner, 4 Nov
+   * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
 };
@@ -67,7 +66,7 @@ export type OfferSheetProps = {
    * design services cover the thinking behind your product…", component-map C4). Optional: most
    * sheets open straight on their promises.
    */
-  lead?: string | readonly string[];
+  lead?: string;
   /**
    * A label over the promises when the copy names the list ("What you receive", component-map C4):
    * set in the label voice above the first rule, so the authored words stay and the h2 stays the
@@ -110,8 +109,8 @@ export type OfferSheetProps = {
    * rows sheet takes no aside and no drawings.
    *
    * `list` (owner, 4 Nov 2026, home's Why Tcules: "heading left, list right, each title gets an inline
-   * icon"): a split. The heading and its lead in the head track from 1024, the `note` under the
-   * promises in their column; the promises down the body track, one a row, each its glyph inline before its title
+   * icon"): a split. The heading, its lead and the `note` (the band's way deeper) in the head track
+   * from 1024; the promises down the body track, one a row, each its glyph inline before its title
    * and its words UNDER the title (the track is too narrow for a label column), each row closed by a
    * hairline. For a set of short promises, a title and one sentence each, that would leave a grid
    * of six as six thin columns. Takes no aside, no drawings and no terms.
@@ -207,23 +206,7 @@ export function OfferSheet({
             rowGap="text"
             align="start"
           >
-            {item.icon && !item.title ? (
-              /* A run-in item (its bold lead opens the sentence, `bodyHtml`): the glyph before the
-                 sentence on its first line, `text` (16) from it. */
-              <Cluster colGap="text" align="start" nowrap>
-                <span className={cx(styles.rowIcon, styles.rowIconRunIn)}>
-                  <Icon name={item.icon} size="xl" />
-                </span>
-                {item.bodyHtml ? (
-                  <p
-                    className={cx(styles.body, styles.runIn)}
-                    dangerouslySetInnerHTML={{ __html: item.bodyHtml }}
-                  />
-                ) : (
-                  <p className={cx(styles.body, styles.runIn)}>{item.body}</p>
-                )}
-              </Cluster>
-            ) : item.icon ? (
+            {item.icon ? (
               /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
                  card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
               <Cluster colGap="text" align="start" nowrap>
@@ -235,7 +218,7 @@ export function OfferSheet({
             ) : item.title ? (
               <h3 className={styles.title}>{item.title}</h3>
             ) : null}
-            {item.icon && !item.title ? null : item.bodyHtml ? (
+            {item.bodyHtml ? (
               <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
             ) : item.body ? (
               <p className={styles.body}>{item.body}</p>
@@ -327,31 +310,22 @@ export function OfferSheet({
     </Layout>
   ) : null;
 
-  const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
-  const headText =
-    leads.length > 0 ? (
-      <Layout rowGap="block">
-        <h2 id={headingId} className={styles.heading}>
-          {heading}
-        </h2>
-        {/* Several opening paragraphs stack a `text` apart, one lead. */}
-        <Layout rowGap="text">
-          {leads.map((paragraph, index) => (
-            <p key={index} className={styles.lead}>
-              {paragraph}
-            </p>
-          ))}
-        </Layout>
-      </Layout>
-    ) : (
+  const headText = lead ? (
+    <Layout rowGap="block">
       <h2 id={headingId} className={styles.heading}>
         {heading}
       </h2>
-    );
+      <p className={styles.lead}>{lead}</p>
+    </Layout>
+  ) : (
+    <h2 id={headingId} className={styles.heading}>
+      {heading}
+    </h2>
+  );
 
   if (list) {
     /* A head beside its body is a split: `section` (96) between them, on the beside head tracks every
-       split band takes (5 : 7, then 1 : 2 from 1440). The note sits a `stack` under the promises. */
+       split band takes (5 : 7, then 1 : 2 from 1440). The head's way deeper sits a `stack` under it. */
     return (
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
         <Layout
@@ -360,15 +334,15 @@ export function OfferSheet({
           rowGap="stack"
           align="start"
         >
-          {headText}
           {note ? (
             <Layout rowGap="stack">
-              {promises}
+              {headText}
               {note}
             </Layout>
           ) : (
-            promises
+            headText
           )}
+          {promises}
         </Layout>
       </Section>
     );

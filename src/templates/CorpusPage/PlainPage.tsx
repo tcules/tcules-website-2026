@@ -36,12 +36,7 @@ export function PlainPage({ page }: PlainPageProps) {
           );
         if (kind === 'faq')
           return (
-            <ContentSection
-              key={band.id}
-              {...head(band)}
-              data-band="D-faq"
-              arrangement="beside"
-            >
+            <ContentSection key={band.id} {...head(band)} data-band="D-faq" arrangement="beside">
               <FaqItems band={band} />
             </ContentSection>
           );
