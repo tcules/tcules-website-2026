@@ -10,7 +10,6 @@ import {
   Logo,
   RatingBadge,
   Section,
-  TextureFlow,
 } from '@/components';
 
 import styles from './SiteFooter.module.css';
@@ -69,18 +68,6 @@ export function SiteFooter({
 }: SiteFooterProps) {
   return (
     <Section as="footer" surface={surface}>
-      {/* The field (owner, 4 Nov 2026: movement, under a gradient mask from the bottom). The
-          site's moving texture, TextureFlow, run turbulent across the band's lower part edge to
-          edge, and masked by a gradient that is full at the foot and gone well before the legal
-          line, so the grid churns under the watermark and dissolves upward. One field, no shape and
-          no frame. Reduced motion draws it once and holds.
-
-          `magnetic` (owner, 4 Nov 2026): the moving field draws the watermark's letters — the
-          swirls bend round them, the ripples travel out as their contours and a faster current runs
-          through the strokes — so "Tcules" reads from the motion, not from the faint mark. */}
-      <div className={styles.field} aria-hidden="true">
-        <TextureFlow flow="turbulent" magnetic />
-      </div>
       <Layout rowGap="stack">
         {/* ── 1 · Brand ───────────────────────────────────────────────────────────────
             No hairline and no inset: it is the first band, and a rule above the mark would be a
@@ -239,7 +226,7 @@ export function SiteFooter({
 
           <Layout columns={[1, 1]} colGap="gutter" rowGap="stack">
             <Layout rowGap="text">
-              <p className={styles.label}>Studio</p>
+              <p className={styles.label}>Address</p>
               <Layout rowGap="tight">
                 <address className={styles.address}>
                   {studio.address.map((line) => (
@@ -304,7 +291,7 @@ export function SiteFooter({
           rather than transformed: a transform contributes nothing to layout height, so a scaled
           mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
           already announced once at the top of the band, and twice is noise. */}
-      <div className={styles.watermark} aria-hidden="true" data-texture-attract>
+      <div className={styles.watermark} aria-hidden="true">
         <Logo size="lg" variant="mono" title="" />
       </div>
     </Section>

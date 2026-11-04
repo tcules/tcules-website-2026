@@ -295,22 +295,6 @@
   color: var(--foot-link-ink-hover);
 }
 
-/* ── The field ─────────────────────────────────────────────────────────────────
-   The moving grid's box: the band's lower part, edge to edge (the Section's padding box, gutter
-   included), under the content. The mask is the fade — opaque at the foot, transparent at the top
-   — so the field has no edge anywhere but the band's own bottom. Below the content on the
-   footer's own layer: the mask makes the box a stacking context, and without the negative layer it
-   would paint over the text. */
-.field {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  z-index: var(--foot-field-layer);
-  block-size: var(--foot-field-block-size);
-  pointer-events: none;
-  mask-image: linear-gradient(to top, var(--foot-field-mask-solid), transparent);
-}
-
 /* ── Watermark ─────────────────────────────────────────────────────────────────
    The mark as ground. At --opacity-faint it is a texture in the surface — a shape when looked
    for, gone when read past — which is the only way an oversized logo sits under live text without
@@ -334,6 +318,7 @@
   margin-block-start: var(--gap-stack);
   margin-block-end: calc(-1 * var(--sec-padding-y));
   overflow: hidden;
+  opacity: var(--foot-watermark-opacity);
 }
 
 /* The mark is sized by whichever axis runs out first, and the box always fits the artwork.
@@ -349,9 +334,6 @@
    enough, and the height cap binds instead and the width follows from it. Neither axis is ever
    told a value the other has to fake. */
 .watermark svg {
-  /* The faint opacity sits on the mark, not on the box: on the box it would fade the field under
-     the mark along with it. */
-  opacity: var(--foot-watermark-opacity);
   inline-size: fit-content;
   max-inline-size: 100%;
   block-size: auto;
