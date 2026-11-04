@@ -170,13 +170,11 @@ a template before the single pages it serves, since one pass there fixes every p
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
-- [~] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
-      from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
-      carry sector photos. Polished tier. Started 2 Nov in another session.
-      Checked 4 Nov on main (1355473a), not done on any of the 12: the hero is a placeholder on all of them
-      (healthtech's own placeholder, the generic slot on the other 11), so neither Bhumika's drawings nor the
-      sector photos are in; "What we design" has 5–6 empty plates per page; "Why founders and product teams
-      choose Tcules" shows 6 pending illustrations; "Other industries" shows 4 empty picture slots.
+- [x] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+      from what the service pages got in round 5. Polished tier. Done for launch (owner, 4 Nov 2026): the shared
+      components change with the homepage pass (2.63) and carry across these pages, and the missing visuals (the
+      12 hero placeholders, the empty "What we design" plates, the pending "Why founders…" illustrations and the
+      "Other industries" slots) belong to the illustration and flat graphics passes (2.61, 2.62).
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
