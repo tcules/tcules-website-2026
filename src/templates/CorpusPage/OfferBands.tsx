@@ -78,6 +78,7 @@ import {
   slugOf,
   type SlotImage,
   itemCovers,
+  photoBeside,
   studioCollage,
 } from './images';
 import {
@@ -656,8 +657,7 @@ const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
  *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026).
  *   list  the Why Tcules list (decisions/2026-11-04-why-tcules-is-a-list): heading and lead in the first
  *         half, the items down the second, one ruled row each, the glyph inline before the title.
- *         /future-interfaces-lab/join "Why join" (owner, 4 Nov 2026, pass 2: "why tcules style list")
- *         and "What you leave the fellowship with" (pass 2, so it alternates with the cards above it).
+ *         /future-interfaces-lab/join "Why join" (owner, 4 Nov 2026, pass 2: "why tcules style list").
  *   grid  the glyph heads each item, over its title and words, no hairline or mark. No band uses it
  *         since pass 2; the arrangement stays in OfferSheet (specimen 8).
  */
@@ -689,19 +689,6 @@ const SHEET_GLYPHS: Readonly<
       'Work you can show': 'monitor',
       'Small serious cohort': 'users-group-rounded',
       'Product-level thinking': 'layers',
-    },
-  },
-  /* Two payoffs, the page's reward. Pass 2 (4 Nov 2026): "Who we look for" above it is now a row of
-     glyph-headed cards under its heading, so the pair takes the split the page alternates with it, as
-     "Why join" does: heading in the first half, the two payoffs down the second, glyph inline. Beside
-     its heading, the pair no longer lines up under the method's numbered steps (the pass 1 critic's
-     "one long ruled list"), which sit in the other half. Judgement takes the compass, a filled glyph
-     of the code square's mass, so the peers weigh the same. */
-  'what-youll-gain': {
-    arrangement: 'list',
-    icons: {
-      'Shipped proof-of-work': 'code-square',
-      'Stronger product judgement': 'compass',
     },
   },
 };
@@ -787,6 +774,34 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       }
       if (glyphs?.arrangement === 'tiles') {
         return <GlyphTilesBand band={band} icons={glyphs.icons} />;
+      }
+      /* A few peers beside one studio photograph (images.ts PHOTO_BESIDE): the head and the items in
+         the copy column as the media split's own tiles (the two-reasons B band's shape), the photograph
+         in the other track. No glyphs: the photograph is the band's picture. */
+      const photo = photoBeside(page.route, band.id);
+      if (photo) {
+        const parts = sheetParts(band);
+        return (
+          <ContentSection
+            {...head(band)}
+            data-band="B"
+            arrangement="media"
+            media={{ image: photo, side: 'end', weight: 'photo', head: 'lg' }}
+          >
+            <ListTiles
+              rows={parts.items.flatMap((item) =>
+                item.title
+                  ? [
+                      {
+                        title: item.title,
+                        ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : { body: item.body }),
+                      },
+                    ]
+                  : [],
+              )}
+            />
+          </ContentSection>
+        );
       }
       return <SheetBand band={band} scenes={scenes} {...(SHEET_GLYPHS[band.id] ?? {})} />;
     }

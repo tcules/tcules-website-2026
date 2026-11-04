@@ -83,9 +83,9 @@ export const KIND_COMPONENTS: Readonly<
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
-    component: ['offer-sheet', 'D', 'list-beside', 'glyph-tiles'],
+    component: ['offer-sheet', 'D', 'list-beside', 'glyph-tiles', 'B'],
     status: 'to-design',
-    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge). Peers that are kinds of people (glyph-bands.ts `tiles`, /future-interfaces-lab/join `who-we-are-looking-for`): glyph-headed BlockCard tiles, three across (4 Nov 2026, owner\'s pick).',
+    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge). Peers that are kinds of people (glyph-bands.ts `tiles`, /future-interfaces-lab/join `who-we-are-looking-for`): glyph-headed BlockCard tiles, three across (4 Nov 2026, owner\'s pick). A few peers beside one studio photograph (images.ts PHOTO_BESIDE, /future-interfaces-lab/join `what-youll-gain`): the media split (B), the head and the items as tiles in the copy column (critic, 4 Nov 2026, owner to judge).',
   },
   record: {
     component: ['case-spread'],

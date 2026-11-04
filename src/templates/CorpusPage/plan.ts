@@ -2,7 +2,7 @@ import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { ROUTES } from '@/lib/routes';
 
 import { glyphBand } from './glyph-bands';
-import { bandArtefact, studioBandPhoto, studioCollage } from './images';
+import { bandArtefact, photoBeside, studioBandPhoto, studioCollage } from './images';
 import { formBeforeFaq } from './order';
 import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
@@ -638,6 +638,8 @@ export function registerOf(
       if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
       /* The studio collage is six photographs (images.ts STUDIO_COLLAGE). */
       if (studioCollage(page.route, band.id)) return 'photo';
+      /* A set beside one studio photograph (images.ts PHOTO_BESIDE). */
+      if (photoBeside(page.route, band.id)) return 'photo';
       return drawn.has(band.id)
         ? 'flat'
         : bound || studioBandPhoto(page.route, band.id)
@@ -718,6 +720,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             drawn.has(band.id) ||
             /* Six studio photographs, or an icon set (glyph-bands.ts). */
             studioCollage(page.route, band.id) !== undefined ||
+            photoBeside(page.route, band.id) !== undefined ||
             glyphBand(page.route, band.id) !== undefined ||
             /* A paired close is an island, and an island is a visual band. */
             (kind === 'close' &&

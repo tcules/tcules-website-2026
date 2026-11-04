@@ -1,4 +1,4 @@
-import { Fragment, type ReactElement, type ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import {
   Button,
@@ -2700,9 +2700,12 @@ export function CloseBand({
   }
   /* A close whose inline links all go to ONE place (4 Nov 2026, /future-interfaces-lab/join "Ask to
      see work from an experiment": "the contact page … contact Tcules", both /contact): the ink island,
-     its words kept whole as the lede, links live (a later link serves a different reader, "For
-     anything else, contact Tcules", and lost its link when the lede was plain; critic, 4 Nov 2026),
-     and that place its one action, labelled with the first link's own words. A LINK action, never a solid: a side door for another reader, and the page's one main
+     its words kept whole as the lede, and that place its one action, labelled with the first link's own
+     words. The lede is PLAIN text: the action is the link, so the sentence does not carry it again
+     (critic, 4 Nov 2026, pass 2: two underlined inline links and an action, all to /contact, read as
+     a paragraph of links with a button echoing one of them, and the links broke across lines in the
+     centred island on a phone). Every link goes where the action goes, so no reader loses a way on. A
+     LINK action, never a solid: a side door for another reader, and the page's one main
      action is elsewhere. Opted in per band (plan.ts `ISLAND_CLOSES`) until the owner rules it for every such
      close, because it would also turn /how-we-work/ai-native-product-design's "your rules", the
      /insights hubs' "talk" bands and /careers' "apply" into islands. */
@@ -2728,11 +2731,7 @@ export function CloseBand({
         intent="onward"
         {...(island ? { island } : {})}
         heading={band.headingText}
-        body={
-          paras.map((block, index) => (
-            <Fragment key={index}>{renderInline(block.runs)}</Fragment>
-          )) as unknown as [ReactElement] | [ReactElement, ReactElement]
-        }
+        body={paras.map((block) => plain(block.runs)) as [string] | [string, string]}
         actions={[{ label: words.charAt(0).toUpperCase() + words.slice(1), href: lead.href }]}
       />
     );

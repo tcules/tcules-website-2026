@@ -704,13 +704,15 @@ export function faqItems(band: CorpusBand): AccordionItem[] {
 }
 
 /**
- * The FAQ band's closing line (`faqClosing`) as its foot: centred with the column, its link kept.
- * Undefined where there is none, so the band reserves no seam for it.
+ * The FAQ band's closing line (`faqClosing`) as its foot, its link kept, start-aligned on the question
+ * list's left edge: the FAQ sits beside its heading in halves (decisions/2026-11-04-faq-beside-in-halves),
+ * and a line centred under a left-aligned list floated in the middle of the end half (critic, 4 Nov
+ * 2026, /future-interfaces-lab/join). Undefined where there is none, so the band reserves no seam for it.
  */
 export function faqFooter(band: CorpusBand): ReactNode {
   const closing = faqClosing(band);
   return closing ? (
-    <ContentSectionText align="center">
+    <ContentSectionText>
       <p>{renderInline(closing.paragraph.runs)}</p>
     </ContentSectionText>
   ) : undefined;

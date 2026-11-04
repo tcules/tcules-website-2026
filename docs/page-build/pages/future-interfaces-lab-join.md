@@ -187,3 +187,32 @@ adjacent bands share a shape (split, row of cards, split, steps + figure, island
 - `npm run kinds:check` needs a build (not run in this pass): the new `process-flow` and `glyph-tiles` values are
   registered in kinds.ts.
 - Strapi needs the heading split and the new band (docs/content-changes.md).
+
+### Pass 2, critic fixes (2.35)
+Rhythm after these fixes: hero photo; Why join as a split list; Who we look for as three glyph cards; What you
+leave as a media split with a studio photograph; the method's steps beside its figure; the blue application
+island; How selection works as a light flow; the FAQ in halves; the ink close. No two neighbours share a shape,
+and no three text-heavy bands run back to back.
+
+- **What you leave copied Why join one band later** (should) → its `what-youll-gain` SHEET_GLYPHS entry set the
+  two payoffs as the same OfferSheet `list` shape, which answered the pass 1 "one long ruled list" note by
+  repeating another band → it is now the page's photograph between the cards and the method. ContentSection
+  `media` (B): the head and the two payoffs in the copy column as the media split's own tiles (ListTiles, the
+  two-reasons B band's shape), verbatim, with no glyphs, and `studio-whiteboard-crit` in the end track (a system
+  diagram on the whiteboard, walked through for critique), graded only through the shared tone layer. The glyph
+  entry is gone. New route-keyed table images.ts `PHOTO_BESIDE`, read by OfferBands and by plan.ts, which now
+  counts the band as a photo band in the rhythm check. kinds.ts `set` lists `B`. **Local** (opt-in by route and
+  band). **New arrangement for the owner:** a kit photograph beside a set, as the /careers collage uses kit
+  photographs.
+- **The close sent readers to /contact three times** (should) → CopyBands `CloseBand`'s single-destination
+  island (`ISLAND_CLOSES`) lifted the first link into the action but left both inline links in the lede → the
+  lede is now plain text, verbatim, and "Contact page →" is its one action. Every inline link went to /contact,
+  so no reader loses a way on, and no underlined link breaks across lines in the centred island on a phone.
+  **Global** to the branch (the fix is in the branch, not the page), and only this close opts into it today.
+  Checked /future-interfaces-lab (its paired close already sets plain words with its own actions: no echo) and
+  /matter-design-system (closes on the form island: no echo).
+- **The FAQ's closing line was centred under a left-aligned list** (nit) → `faqFooter` kept the centred foot from
+  before the FAQ moved to halves → it is start-aligned on the question list's edge. **Global** (blocks.tsx
+  `faqFooter`, every OfferBands FAQ). /careers and /matter-design-system have no closing line, so nothing
+  changes there; only this page's FAQ carries one.
+- `npm run kinds:check` still needs a build (not run).

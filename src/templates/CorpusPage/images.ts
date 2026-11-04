@@ -354,3 +354,23 @@ const STUDIO_COLLAGE: Readonly<Record<string, CollagePhotos>> = {
 export function studioCollage(route: string, bandId: string): CollagePhotos | undefined {
   return STUDIO_COLLAGE[`${route}#${bandId}`];
 }
+
+/**
+ * A set of a few peers set beside ONE studio photograph, by route and band (ContentSection `media`): the
+ * items under the heading in the copy column, the photograph in the other track. A photograph may sit
+ * beside items nobody clicks (CLAUDE.md, design quality). /future-interfaces-lab/join "What you leave the
+ * fellowship with" (critic, 4 Nov 2026, pass 2): as a split list it copied "Why join" one band later and
+ * the run from the hero to the blue island held one picture in ~3,300px. The whiteboard critique is the
+ * band's two payoffs in one frame: a system's architecture drawn on the wall, walked through for the
+ * people who will critique it. Kit photograph, as the studio collage (owner to confirm).
+ */
+const PHOTO_BESIDE: Readonly<Record<string, ReturnType<typeof getKitPhoto>>> = {
+  [`${ROUTES.futureInterfacesLabJoin}#what-youll-gain`]: getKitPhoto('studio-whiteboard-crit', {
+    alt: 'Three colleagues listening as a teammate walks them through a system diagram on the studio whiteboard',
+  }),
+};
+
+/** The photograph a set sits beside on this route, if any (`PHOTO_BESIDE`). */
+export function photoBeside(route: string, bandId: string) {
+  return PHOTO_BESIDE[`${route}#${bandId}`];
+}
