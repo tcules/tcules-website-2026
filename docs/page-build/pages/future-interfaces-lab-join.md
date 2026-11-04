@@ -96,9 +96,8 @@ tint, no text-heavy pair; blue and ink islands do not touch.
 - **`apply` → enquiry is a shape rule** (`###` steps): /careers' "Apply for a role" (two plain paragraphs, an
   email line) stays a close, untouched, for its own designer. To take the owner's 4 Nov answer there too it
   needs an `APPLICATION_FORMS` entry and order.ts to move it before its FAQ.
-- **BLOCKING for launch (owner/ops):** applications post to `ENDPOINTS.enquiry`. Whether that endpoint may take
-  FIL applications, and who receives them (the copy lists FORM_ENDPOINT_VERIFICATION and
-  APPLICATION_STATE_REVERIFY).
+- ~~BLOCKING: the enquiry endpoint taking FIL applications~~: answered (owner, 4 Nov 2026), posting to the
+  enquiry endpoint is fine for launch.
 - The success view's heading is the form's default ("Thanks. We have your enquiry."): no application success
   words are authored. Content ask.
 - The frontmatter's `secondary_form` (artefact_access_request) is not rendered: the body sends the reader to
@@ -137,3 +136,54 @@ tint, no text-heavy pair; blue and ink islands do not touch.
 - **Not taken (nit):** centre the crumb trail at 390 and carry the separator with the next crumb. PageHero already
   centres the trail's row; the left-aligned wrap and the divider after each crumb are Breadcrumbs' spec
   (docs/specs/Breadcrumbs.md). A spec change for the owner, across every centred hero.
+
+## Pass 2, owner review 4 Nov 2026
+The owner reviewed the page in the browser; these notes are law for the page. Rhythm after the pass: centred
+title over the studio photograph; Why join as a split list; Who we look for as three glyph-headed cards under
+the heading; What you leave as a split list; the method's numbered steps beside the flat figure; the blue
+application island; How selection works as a light flow across; the FAQ in halves; the ink close. No two
+adjacent bands share a shape (split, row of cards, split, steps + figure, island, flow, split, island).
+
+- **"How selection works as a new section after the form"** → the steps were the island's points because the
+  copy wrote them under the application heading → the heading is split, verbatim (owner-approved; logged in
+  docs/content-changes.md): `apply` is "Apply to the Future Interfaces Lab (FIL)" with its lead, footnote and
+  link; a new band `how-selection-works` follows with the three `###` steps. It maps to `method` (plan.ts) and,
+  opted in by id (CopyBands `FLOW_METHODS`), renders ProcessFlow `ruled={false}`: three stages across, each
+  title and sentence, an arrow to the next, no rules, no drawing; stacked with down arrows on a phone. Light, so
+  it does not weigh against the blue island it follows, and a different shape from the page's own method.
+  The island without steps takes the enquiry's standard sketch-to-shipped drawing over its words (as /careers).
+  The sent view still lists the three steps: `APPLICATION_FORMS` `stepsBand` (blocks.tsx). **Local** (opt-ins
+  by band id and route); checked /careers (its `apply` island unchanged) and /clients. **New arrangement for the
+  owner:** ProcessFlow as a corpus method (kinds.ts `method` now lists `process-flow`). Its numerals restart at
+  01 under their own heading, a separate sequence from the method's 01–05.
+- **"Why tcules style list"** (Why join) → the band was the glyph-headed grid (SHEET_GLYPHS `grid`) → it is
+  OfferSheet `list`, as decisions/2026-11-04-why-tcules-is-a-list: heading and lead in the first half, the five
+  reasons down the second, one ruled row each, the same glyphs inline before each title (clock-circle,
+  chat-round-dots, monitor, users-group-rounded, layers). SheetBand now accepts `list`. **Local** (keyed by band
+  id); /clients' `rows` sheet checked unchanged.
+- **"Flat graphics seems the wrong idea here. Who we look for is qualities we look for in people"** → the band
+  was the drawn offer sheet with three new role drawings → the drawings and their wiring are gone
+  (Sketch/wyg-future-interfaces-lab-join.tsx keeps only the method's figure; page-scenes.ts and
+  offer-scenes-pages.ts entries removed), and the band is three text cards, glyph-headed, at equal weight:
+  BlockCard `tile` (its own ground, 16 radius, no edge, no hover ground; the /contact channels' card), glyph on
+  its own row over the title, then the words. New glyph-bands.ts arrangement `tiles`, registered under `set`
+  (`glyph-tiles`). Glyphs for the kind of person: cpu (AI systems builders, the machine under the agent),
+  ruler-pen (product experience designers), graph-up (growth and brand operators). The Solar set here has no
+  megaphone; graph-up says growth. **Local**; **new arrangement for the owner.**
+- **Re-judged: What you leave the fellowship with** → as the glyph-headed pair it sat right under the new
+  glyph-headed cards, the same head-glyph-title-body shape twice → it takes the split list too, so the page
+  alternates split / cards / split, and its rows sit in the opposite half from the method's numbered steps (the
+  pass 1 critic's "one long ruled list" does not return). Same glyphs (code-square, compass). The OfferSheet
+  glyph `grid` is now unused on any page; it stays in the pattern and its specimen.
+- **Method figure** kept: still sound beside the five steps.
+- **Main's 4 Nov rulings on this page:** the FAQ is beside in halves (faq-beside-in-halves); its closing line
+  "Still got questions?…" sits centred under the questions, ContentSection's foot (not changed here). The page
+  carries no Why Tcules, Three ways or industries band, so those rulings do not reach it. The merge broke
+  nothing: 1440 and 390 shot clean, no overflow, no page errors.
+
+### Open after pass 2
+- New arrangements to confirm: the selection flow (ProcessFlow unruled as a method), the glyph-headed tiles for
+  Who we look for, What you leave as a split list.
+- `npm run kinds:check` needs a build (not run in this pass): the new `process-flow` and `glyph-tiles` values are
+  registered in kinds.ts.
+- Strapi needs the heading split and the new band (docs/content-changes.md).

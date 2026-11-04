@@ -26,6 +26,7 @@ import {
   ClaimSet,
   OfferParts,
   OfferSheet,
+  ProcessFlow,
   ReadDown,
   Steps,
   type BentoItem,
@@ -653,8 +654,8 @@ export function SheetBand({
   band: CorpusBand;
   scenes?: (title: string) => OfferSheetItem['scene'];
   /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_GLYPHS`). */
-  arrangement?: 'grid' | 'rows';
-  /** A glyph per item title, rows or grid (OfferBands `SHEET_GLYPHS`). */
+  arrangement?: 'grid' | 'rows' | 'list';
+  /** A glyph per item title, rows, list or grid (OfferBands `SHEET_GLYPHS`). */
   icons?: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
@@ -1230,6 +1231,15 @@ function stepOf(runs: readonly InlineRun[]): Step {
 }
 
 /**
+ * Methods set as a light flow, by band id: a few one-sentence steps read across, each stage's title and
+ * its sentence, an arrow to the next, no rules and no drawing (ProcessFlow `ruled={false}`). For a short
+ * sequence that follows a heavy band and should not repeat the page's own method beside its figure:
+ * /future-interfaces-lab/join "How selection works", right after the blue application island (owner,
+ * 4 Nov 2026: "how selection works as a new section after the form"). New arrangement, owner to confirm.
+ */
+const FLOW_METHODS: ReadonlySet<string> = new Set(['how-selection-works']);
+
+/**
  * A method: the ordered steps (a list, or a run of labelled claims) as Steps under the head; the
  * opening paragraph as the lead; everything else, a table included, in order around them.
  */
@@ -1349,6 +1359,28 @@ export function MethodBand({
   }
   const before = rest.slice(0, from);
   const parts = scenarioParts(rest.slice(to));
+  if (
+    FLOW_METHODS.has(band.id) &&
+    steps.length >= 2 &&
+    steps.length <= 5 &&
+    steps.every((step) => step.body) &&
+    before.length === 0 &&
+    parts.before.length === 0 &&
+    !parts.label &&
+    trailingNotes.length === 0
+  ) {
+    return (
+      <ContentSection {...head(band)} data-band="process-flow" lead={leadText}>
+        <ProcessFlow
+          ruled={false}
+          stages={steps.map((step) => ({
+            label: step.title,
+            items: [step.body ?? ''],
+          }))}
+        />
+      </ContentSection>
+    );
+  }
   const after = parts.before;
   const stepsNode =
     steps.length === 0 ? null : figure ? (

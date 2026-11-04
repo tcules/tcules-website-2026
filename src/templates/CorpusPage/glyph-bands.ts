@@ -16,14 +16,33 @@ import { ROUTES } from '@/lib/routes';
  *                application with its chip picked, the meta line's facts beside it. Keyed by the
  *                discipline, the meta line's first cell, so a role the CMS adds takes its
  *                discipline's glyph without an edit. (Was four quarter tiles; critic, 4 Nov 2026.)
+ *   tiles        a few peers that are kinds of PEOPLE, each a text card that looks like a card: BlockCard
+ *                `tile` (its own ground, 16 radius, no edge, no hover ground), its glyph on its own row
+ *                over the title, then the words (icon-heads-its-card; no circle). Not drawings: the band
+ *                names qualities in people, not things a product does (owner, 4 Nov 2026,
+ *                /future-interfaces-lab/join "Who we look for": "flat graphics seems the wrong idea
+ *                here"). Keyed by the item's title as authored.
  *
- * docs/page-build/pages/careers.md, 4 Nov 2026; new arrangements, owner to confirm.
+ * docs/page-build/pages/careers.md and future-interfaces-lab-join.md, 4 Nov 2026; new arrangements,
+ * owner to confirm.
  */
 export type GlyphBand =
   | { arrangement: 'list-beside'; icons: Readonly<Record<string, IconName>> }
-  | { arrangement: 'role-rows'; icons: Readonly<Record<string, IconName>> };
+  | { arrangement: 'role-rows'; icons: Readonly<Record<string, IconName>> }
+  | { arrangement: 'tiles'; icons: Readonly<Record<string, IconName>> };
 
 const GLYPH_BANDS: Readonly<Record<string, GlyphBand>> = {
+  /* The kind of person each discipline is: one who builds the whole system (a CPU, the machine under
+     the agent), one who shapes what people see and use (the pen on a ruler), one who takes a product
+     to market and grows it (the rising graph). docs/page-build/pages/future-interfaces-lab-join.md, pass 2. */
+  [`${ROUTES.futureInterfacesLabJoin}#who-we-are-looking-for`]: {
+    arrangement: 'tiles',
+    icons: {
+      'AI systems builders': 'cpu',
+      'Product experience designers': 'ruler-pen',
+      'Growth and brand operators': 'graph-up',
+    },
+  },
   [`${ROUTES.careers}#what-we-look-for`]: {
     arrangement: 'list-beside',
     icons: {

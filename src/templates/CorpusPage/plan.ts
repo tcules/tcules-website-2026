@@ -331,6 +331,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   /* /future-interfaces-lab/join "How the fellowship works": its lead names a sequence (apply, pass a
      practical round, then build), so it is a method, not a set (4 Nov 2026). */
   'what-youll-do': 'method',
+  /* /future-interfaces-lab/join "How selection works": three steps after the application island, split
+     from its heading (owner, 4 Nov 2026: "how selection works as a new section after the form"). */
+  'how-selection-works': 'method',
   /* /how-we-work's practical details: drawn cards, as About's working terms (owner, 1 Nov 2026). */
   essentials: 'tiles',
   'engagement-shapes': 'tiles',

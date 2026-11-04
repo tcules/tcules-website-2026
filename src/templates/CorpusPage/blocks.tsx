@@ -782,6 +782,12 @@ type ApplicationForm = {
    * judged). Absent, the link is optional, as on every enquiry. Checked on send only.
    */
   urlRequired?: true;
+  /**
+   * The band whose `###` steps say what happens after a send, where they are a band of their own after
+   * the island rather than its points (/future-interfaces-lab/join "How selection works", owner 4 Nov
+   * 2026): the success view repeats them.
+   */
+  stepsBand?: string;
 };
 const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
   [`${ROUTES.futureInterfacesLabJoin}#apply`]: {
@@ -789,6 +795,7 @@ const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
     workLabel: 'Your background and why you want to build in FIL',
     writeTo: 'fil@tcules.com',
     family: 'future-interfaces-lab',
+    stepsBand: 'how-selection-works',
   },
   /* /careers "Apply for a role" (4 Nov 2026): the copy asks for "the role you want and a link to work
      that shows your reasoning", by email. The form asks exactly that: the role (the open roles, or the
@@ -913,18 +920,26 @@ export function EnquiryBand({
      method's 01–05, two "first steps" of two processes (critic, 4 Nov 2026). The page's numbered
      sequence is the method's. A link that is a line of its own inside a step is the form's submit,
      not more of the step. */
-  const points = band.blocks.flatMap((block) =>
-    block.type === 'item'
-      ? [
-          {
-            label: block.headingText,
-            detail: block.blocks
-              .flatMap((inner) => (inner.type === 'paragraph' ? [plain(inner.runs)] : []))
-              .join(' '),
-          },
-        ]
-      : [],
-  );
+  const stepsOf = (from: CorpusBand) =>
+    from.blocks.flatMap((block) =>
+      block.type === 'item'
+        ? [
+            {
+              label: block.headingText,
+              detail: block.blocks
+                .flatMap((inner) => (inner.type === 'paragraph' ? [plain(inner.runs)] : []))
+                .join(' '),
+            },
+          ]
+        : [],
+    );
+  const points = stepsOf(band);
+  /* Steps set as a band of their own after the island (`stepsBand`): not the island's points, but
+     still what the success view says happens next. */
+  const stepsBand = application?.stepsBand
+    ? page.bands.find((other) => other.id === application.stepsBand)
+    : undefined;
+  const afterSend = points.length > 0 ? points : stepsBand ? stepsOf(stepsBand) : [];
   /* A link that is a line of its own (the copy's "[Apply to the Lab](…)") is the form's own ask: its
      words are the submit, never a contact cell. */
   const [ask] = loneLinks(band.blocks);
@@ -983,7 +998,7 @@ export function EnquiryBand({
   /* The success view repeats what the island promised would happen next. */
   const treatment = {
     dress,
-    nextSteps: island.nextSteps ?? (application && points.length > 0 ? points : undefined),
+    nextSteps: island.nextSteps ?? (application && afterSend.length > 0 ? afterSend : undefined),
     ...(application ? { application } : {}),
     ...(ask
       ? { submitLabel: ask.labelText }

@@ -460,10 +460,7 @@ export const PAGE_SCENE_NAMES = [
   'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
   'wyg-future-interfaces-lab-landing-page-audit-programme',
   'wyg-future-interfaces-lab-promotion',
-  /* /future-interfaces-lab/join: the three roles and the method's figure (components/Sketch/wyg-future-interfaces-lab-join.tsx) */
-  'wyg-future-interfaces-lab-join-ai-systems-builders',
-  'wyg-future-interfaces-lab-join-product-experience-designers',
-  'wyg-future-interfaces-lab-join-growth-brand-operators',
+  /* /future-interfaces-lab/join: the method's figure (components/Sketch/wyg-future-interfaces-lab-join.tsx) */
   'wyg-future-interfaces-lab-join-method',
   /* Home, "How our designers use AI" (owner, 4 Nov 2026, direction A): one plate per step. */
   'home-ai-check',

@@ -61,9 +61,9 @@ export const KIND_COMPONENTS: Readonly<
   faq: { component: ['D-faq'], status: 'approved' },
   router: { component: ['C-icon'], status: 'approved' },
   method: {
-    component: ['F'],
+    component: ['F', 'process-flow'],
     status: 'approved',
-    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026).',
+    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026). A short sequence after a heavy band, opted in by id (CopyBands FLOW_METHODS, /future-interfaces-lab/join "How selection works"): the stages across, unruled, arrows between (process-flow; 4 Nov 2026, owner to judge).',
   },
   deliverables: { component: ['offer-sheet'], status: 'to-design' },
   table: {
@@ -83,9 +83,9 @@ export const KIND_COMPONENTS: Readonly<
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
-    component: ['offer-sheet', 'D', 'list-beside'],
+    component: ['offer-sheet', 'D', 'list-beside', 'glyph-tiles'],
     status: 'to-design',
-    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge).',
+    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge). Peers that are kinds of people (glyph-bands.ts `tiles`, /future-interfaces-lab/join `who-we-are-looking-for`): glyph-headed BlockCard tiles, three across (4 Nov 2026, owner\'s pick).',
   },
   record: {
     component: ['case-spread'],

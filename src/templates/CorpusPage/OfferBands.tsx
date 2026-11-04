@@ -654,14 +654,18 @@ const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
  *   rows  one item per row, title beside its words, the glyph inline before the title
  *         (decisions/2026-11-04-sheet-row-glyph-sits-inline): /clients' "What clients have asked us
  *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026).
- *   grid  the glyph heads each item, over its title and words, no hairline or mark (4 Nov 2026,
- *         /future-interfaces-lab/join "Why join": five abstract qualities, so an icon is the honest
- *         visual; the marker cell is for figures; and "What you leave the fellowship with", two
- *         payoffs at two tracks, after the critic found it reading as one ruled list with the method
- *         under it). Owner to confirm.
+ *   list  the Why Tcules list (decisions/2026-11-04-why-tcules-is-a-list): heading and lead in the first
+ *         half, the items down the second, one ruled row each, the glyph inline before the title.
+ *         /future-interfaces-lab/join "Why join" (owner, 4 Nov 2026, pass 2: "why tcules style list")
+ *         and "What you leave the fellowship with" (pass 2, so it alternates with the cards above it).
+ *   grid  the glyph heads each item, over its title and words, no hairline or mark. No band uses it
+ *         since pass 2; the arrangement stays in OfferSheet (specimen 8).
  */
 const SHEET_GLYPHS: Readonly<
-  Record<string, { arrangement: 'grid' | 'rows'; icons: Readonly<Record<string, IconName>> }>
+  Record<
+    string,
+    { arrangement: 'grid' | 'rows' | 'list'; icons: Readonly<Record<string, IconName>> }
+  >
 > = {
   'product-responsibility': {
     arrangement: 'rows',
@@ -674,8 +678,11 @@ const SHEET_GLYPHS: Readonly<
       "Find out what's wrong before fixing it": 'magnifier-bug',
     },
   },
+  /* Five reasons to join, set as Why Tcules is (owner, 4 Nov 2026, pass 2: "why tcules style list";
+     decisions/2026-11-04-why-tcules-is-a-list): the heading and its lead in the first half, the
+     reasons down the second, one ruled row each, the glyph inline before the title. */
   'why-join': {
-    arrangement: 'grid',
+    arrangement: 'list',
     icons: {
       'Real build pressure': 'clock-circle',
       'Direct critique': 'chat-round-dots',
@@ -684,11 +691,14 @@ const SHEET_GLYPHS: Readonly<
       'Product-level thinking': 'layers',
     },
   },
-  /* Two payoffs, the page's reward: a glyph-headed pair at two tracks, no hairline, so the band no
-     longer repeats the method's ruled steps under it (critic, 4 Nov 2026). Judgement takes the
-     compass, a filled glyph of the code square's mass, so the peers weigh the same. */
+  /* Two payoffs, the page's reward. Pass 2 (4 Nov 2026): "Who we look for" above it is now a row of
+     glyph-headed cards under its heading, so the pair takes the split the page alternates with it, as
+     "Why join" does: heading in the first half, the two payoffs down the second, glyph inline. Beside
+     its heading, the pair no longer lines up under the method's numbered steps (the pass 1 critic's
+     "one long ruled list"), which sit in the other half. Judgement takes the compass, a filled glyph
+     of the code square's mass, so the peers weigh the same. */
   'what-youll-gain': {
-    arrangement: 'grid',
+    arrangement: 'list',
     icons: {
       'Shipped proof-of-work': 'code-square',
       'Stronger product judgement': 'compass',
@@ -774,6 +784,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const glyphs = glyphBand(page.route, band.id);
       if (glyphs?.arrangement === 'list-beside') {
         return <ListBesideBand band={band} icons={glyphs.icons} />;
+      }
+      if (glyphs?.arrangement === 'tiles') {
+        return <GlyphTilesBand band={band} icons={glyphs.icons} />;
       }
       return <SheetBand band={band} scenes={scenes} {...(SHEET_GLYPHS[band.id] ?? {})} />;
     }
@@ -2190,6 +2203,38 @@ function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos
  * in the start half, the items as bodiless rows down the end half, each led by its glyph; the band's
  * closing line under the list at body. Words as authored, full stops kept.
  */
+/**
+ * Peers that are kinds of people, as text cards that look like cards (glyph-bands.ts `tiles`;
+ * /future-interfaces-lab/join "Who we look for", owner 4 Nov 2026): BlockCard `tile`, its glyph on its
+ * own row over the title, the item's words under it, all three at equal weight under the head. Every
+ * word as authored; a title with no glyph sets the whole set without glyphs, so the set never mixes.
+ */
+function GlyphTilesBand({
+  band,
+  icons,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const parts = sheetParts(band);
+  const glyphed = parts.items.every((item) => item.title && icons[item.title]);
+  const items: BlockCardSetItem[] = parts.items.map((item, index) => ({
+    id: item.id ?? item.title ?? String(index),
+    title: item.title ?? item.body ?? '',
+    ...(item.title && item.bodyHtml
+      ? { bodyHtml: [item.bodyHtml] }
+      : item.title && item.body
+        ? { body: item.body }
+        : {}),
+    ...(glyphed && item.title ? { icon: icons[item.title] } : {}),
+  }));
+  return (
+    <ContentSection {...head(band)} data-band="glyph-tiles" lead={parts.lead}>
+      <BlockCardSet lead="none" across={items.length >= 4 ? 2 : 3} frame="tile" items={items} />
+    </ContentSection>
+  );
+}
+
 function ListBesideBand({
   band,
   icons,
