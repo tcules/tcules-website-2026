@@ -50,6 +50,11 @@ export type OfferSheetItem = {
    * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
+  /**
+   * `list` only: a label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer":
+   * who acts at that step). Set on every item or on none.
+   */
+  eyebrow?: string;
 };
 
 /** One of the band's terms: a title and what it says. */
@@ -193,7 +198,34 @@ export function OfferSheet({
      as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
      again. Two across keeps the approved form, the drawing beside its words from 768. */
   const drawnThree = drawn && across === 3;
-  const promises = rows ? (
+  /* `list` with a drawing on every item (owner, 4 Nov 2026, home's AI run, direction A): each row its
+     plate beside its words, a sequence, so an <ol>; no rules, the rows parted by their own air. */
+  const listDrawn = list && shown.length > 0 && shown.every((item) => item.scene);
+  const promises = listDrawn ? (
+    <Layout as="ol" rowGap="stack">
+      {shown.map((item) => (
+        <li key={keyOf(item)}>
+          {/* The plate in 2 of [2, 3], beside the words and centred on them at every width (direction
+              A's phone cut too), `text` (16) apart: a small figure and its caption, one item. */}
+          <Layout columns={{ base: [2, 3] }} colGap="text" rowGap="block" align="center">
+            {item.scene ? <Sketch name={item.scene} /> : null}
+            <Layout rowGap="tight">
+              {item.eyebrow ? <p className={styles.listLabel}>{item.eyebrow}</p> : null}
+              {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+              {item.bodyHtml ? (
+                <p
+                  className={styles.body}
+                  dangerouslySetInnerHTML={{ __html: item.bodyHtml }}
+                />
+              ) : item.body ? (
+                <p className={styles.body}>{item.body}</p>
+              ) : null}
+            </Layout>
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  ) : rows ? (
     /* A head beside its body is a split, so the seam is `section` (96). */
     <ul>
       {shown.map((item) => (
@@ -328,12 +360,7 @@ export function OfferSheet({
        split band takes (5 : 7, then 1 : 2 from 1440). The head's way deeper sits a `stack` under it. */
     return (
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
-        <Layout
-          columns={{ base: 1, lg: [1, 1] }}
-          colGap="section"
-          rowGap="stack"
-          align="start"
-        >
+        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="start">
           {note ? (
             <Layout rowGap="stack">
               {headText}

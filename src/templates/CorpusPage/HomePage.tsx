@@ -21,7 +21,6 @@ import {
   Gateway,
   GatewayPaths,
   OfferSheet,
-  ProcessFlow,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
@@ -713,6 +712,9 @@ function ClientVoices({ b, ratings, avatars }: BandProps) {
 
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */
 
+/** The AI run's drawings, one per step in order (components/Sketch/wyg-home.tsx). */
+const AI_RUN_SCENES = ['home-ai-check', 'home-ai-decide', 'home-ai-fix'] as const;
+
 function AiPractice({ page, b }: BandProps) {
   /* The v2.1 copy (4 Nov 2026): one line, then the run as steps ("1. **AI:** Checks your live
      product…"), then the link. Each step's bold label is who acts, its words what they do: the
@@ -736,22 +738,23 @@ function AiPractice({ page, b }: BandProps) {
       (runs) => !runs.some((run) => run.type === 'link'),
     );
     const link = bandLinks(b)[0];
+    /* Direction A (owner, 4 Nov 2026): the head at the left with its link, the run down the right,
+       each step its drawing beside who acts and what they do. The drawings are the steps' own, by
+       position: the AI's check, the designer's choice, the fix signed off. */
+    const scenes = AI_RUN_SCENES.length === stages.length ? AI_RUN_SCENES : undefined;
     return (
-      <ContentSection
+      <OfferSheet
         {...head(b)}
-        data-band="F"
+        arrangement="list"
         lead={intro ? plain(intro) : undefined}
-        footer={
-          link ? (
-            <CtaRow
-              rule={false}
-              actions={[{ label: link.labelText.replace(/\s*→\s*$/, ''), href: link.href }]}
-            />
-          ) : undefined
-        }
-      >
-        <ProcessFlow stages={stages} ruled={false} />
-      </ContentSection>
+        items={stages.map((stage, index) => ({
+          id: `${index}-${stage.label}`,
+          eyebrow: `${index + 1} · ${stage.label}`,
+          title: stage.items[0] ?? '',
+          ...(scenes ? { scene: scenes[index] } : {}),
+        }))}
+        note={link ? <LinkActions links={[link]} /> : undefined}
+      />
     );
   }
   const [lead, ...rest] = paragraphRuns(b.blocks);
