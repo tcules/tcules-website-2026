@@ -96,7 +96,7 @@ export function GatewayPaths({
       >
         {paths.map((path) => (
           <Layout as="li" key={path.id} rowGap="text" className={styles.door}>
-            <Layout rowGap="tight">
+            <Layout rowGap="text">
               {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
               <Title className={styles.doorTitle}>{path.title}</Title>
             </Layout>

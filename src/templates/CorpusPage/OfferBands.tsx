@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -578,6 +578,13 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
 
 /* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
    have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+/** A carded option's glyph, by its name as authored (owner, 4 Nov 2026: "icons or small graphics"). */
+const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
+  'A pilot project': 'flag',
+  'A defined project': 'clipboard-check',
+  'An ongoing partnership': 'refresh',
+};
+
 const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
   /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
      and the set warns as mixed. */
@@ -934,11 +941,16 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={
               carded
                 ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
-                  options.map((option) => ({
-                    ...option,
-                    scope: undefined,
-                    title: option.title.replace(/\.$/, ''),
-                  }))
+                  options.map((option) => {
+                    const title = option.title.replace(/\.$/, '');
+                    const glyph = OPTION_GLYPHS[title];
+                    return {
+                      ...option,
+                      scope: undefined,
+                      title,
+                      ...(glyph ? { icon: <Icon name={glyph} size="xl" /> } : {}),
+                    };
+                  })
                 : options
             }
             arrangement={rich ? 'compare' : carded ? 'cards' : 'grid'}

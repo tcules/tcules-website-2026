@@ -76,6 +76,12 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /**
+   * `cards` only: the glyph that heads the option, composed by the caller (a pattern takes its
+   * sibling as a node): glyph, then label and name, then words, each on its own row. Set on every
+   * option or on none.
+   */
+  icon?: ReactNode;
   /** The option's terms as labelled blocks under its words, two across from 1024. */
   facts?: readonly EngagementFact[];
 };
@@ -259,22 +265,29 @@ export function EngagementOptions({
               })}
             </Layout>
           ) : arrangement === 'cards' ? (
-            /* Cards in a set are a `gutter` apart, across and down. */
-            <Layout
-              as="ul"
-              columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
-              colGap="gutter"
-              rowGap="gutter"
-            >
-              {shown.map((option) => (
-                <li key={option.title} className={styles.card}>
-                  <Layout rowGap="text">
-                    <OptionHead option={option} className={styles.title} />
-                    <OptionBody option={option} className={styles.body} />
-                  </Layout>
-                </li>
-              ))}
-            </Layout>
+            /* One panel, the options its cells (owner, 4 Nov 2026: "something like this … icons or
+               small graphics"): a hairline round the set at the card radius, the cells parted by
+               hairlines, each its glyph, label, name and words. The cells share an edge, so the
+               Layout states no gap (rule 3: the seam is the point). */
+            <div className={styles.panel}>
+              <Layout as="ul" columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}>
+                {shown.map((option) => (
+                  <li key={option.title} className={styles.cell}>
+                    <Layout rowGap="block">
+                      {option.icon ? (
+                        <span className={styles.cellIcon} aria-hidden="true">
+                          {option.icon}
+                        </span>
+                      ) : null}
+                      <Layout rowGap="text">
+                        <OptionHead option={option} className={styles.title} />
+                        <OptionBody option={option} className={styles.body} />
+                      </Layout>
+                    </Layout>
+                  </li>
+                ))}
+              </Layout>
+            </div>
           ) : arrangement === 'compare' ? (
             <>
               {/* From 1024: the options head the set three across, then each fact runs as one ruled
@@ -305,6 +318,9 @@ export function EngagementOptions({
               columns={{ base: 1, lg: termTracks }}
               colGap="gutter"
               rowGap={terms.some((term) => term.label) ? 'block' : 'text'}
+              /* Under the cards panel, a hairline parts the set from the terms that hold for all of
+                 it (owner, 4 Nov 2026). */
+              className={arrangement === 'cards' ? styles.termsRuled : undefined}
             >
               {terms.map((term, index) =>
                 term.label ? (

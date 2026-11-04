@@ -7,13 +7,13 @@ import {
   Layout,
   SituationFigure,
   Sketch,
+  Tag,
   type IconName,
 } from '@/components';
 import {
   Banner,
   Bento,
   BlockCard,
-  BlockCardSet,
   CaseCard,
   ContentSection,
   ContentSectionText,
@@ -26,7 +26,6 @@ import {
   TEASER_FORMAT_ICON,
   type TeaserFormat,
   type BentoItem,
-  type BlockCardSetItem,
   type GatewayItem,
   type GatewayPath,
   type HeroStat,
@@ -45,7 +44,6 @@ import type {
   PlaceholderReasons,
   ProposedEyebrows,
 } from '@/lib/corpus-types';
-import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
@@ -752,7 +750,7 @@ function AiPractice({ page, b }: BandProps) {
           ) : undefined
         }
       >
-        <ProcessFlow stages={stages} />
+        <ProcessFlow stages={stages} ruled={false} />
       </ContentSection>
     );
   }
@@ -798,33 +796,35 @@ function AiPractice({ page, b }: BandProps) {
  * its sector's stock photograph (owner, 26 Oct 2026: the main part of the sector's activity, close,
  * no faces), else its register slot.
  */
-function Expertise({ page, b }: BandProps) {
-  /* "See all industries →" (3 Nov 2026 copy) is the band's action in the head, never a sector card
-     (owner, 3 Nov 2026), as IndustriesBand sets it on every other page. */
+function Expertise({ b }: BandProps) {
+  /* A short band (owner, 4 Nov 2026, homepage pass: "short band like so"): the heading with "See all
+     industries" at its end, the sectors as destination pills under it, one wrapping row. A list of
+     places to go needs no picture each; eight photo cards made the band a fold of its own. */
   const onward = bandLinks(b).filter((link) => link.href === ROUTES.expertise);
   const sectors = bandLinks(b).filter((link) => link.href !== ROUTES.expertise);
-  const cards: BlockCardSetItem[] = sectors.map((link) => {
-    const photo = HOME_SECTOR_PHOTOS[link.href];
-    return {
-      id: link.href,
-      title: link.labelText,
-      href: link.href,
-      media: {
-        type: 'image',
-        image: photo
-          ? getKitPhoto(photo)
-          : placeholderImage(page.route, b.id, slugOf(link.labelText)),
-      },
-    };
-  });
-  return (
+  const pills = (
+    <Cluster as="ul" colGap="tight" rowGap="tight">
+      {sectors.map((link) => (
+        <li key={link.href}>
+          <Tag variant="link" href={link.href}>
+            {link.labelText}
+          </Tag>
+        </li>
+      ))}
+    </Cluster>
+  );
+  return onward.length > 0 ? (
     <ContentSection
       {...head(b)}
-      data-band="C-image"
+      data-band="C-pills"
       actionsAt="end"
-      actions={onward.length > 0 ? <LinkActions links={onward} /> : undefined}
+      actions={<LinkActions links={onward} />}
     >
-      <BlockCardSet items={cards} lead="none" across={4} cue="title" phone="pair" />
+      {pills}
+    </ContentSection>
+  ) : (
+    <ContentSection {...head(b)} data-band="C-pills">
+      {pills}
     </ContentSection>
   );
 }

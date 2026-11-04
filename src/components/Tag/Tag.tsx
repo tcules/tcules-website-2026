@@ -18,7 +18,7 @@ import styles from './Tag.module.css';
  * mistake an inert mark for a SELECTED filter, since a held chip is a reversal to the far end of
  * the ramp and a mark is a tint at 1.12:1.
  */
-export type TagVariant = 'mark' | 'filter';
+export type TagVariant = 'mark' | 'filter' | 'link';
 
 /* The inert half. It takes a string and nothing else — no href, because there is no taxonomy
    archive to link to (src/lib/routes.ts: "Insights — formats are index pages, not tags"), and no
@@ -65,7 +65,19 @@ type FilterTag = {
   icon?: ReactNode;
 };
 
-export type TagProps = (MarkTag | FilterTag) & {
+/* A destination pill (owner, 4 Nov 2026, home "Industries we know well": a short band of pills).
+   Not a filter — it goes to a page, it holds no state — so it takes the label in the case somebody
+   authored at the small body size, a hairline edge on round ends and the touch target's height: a
+   row of places to go, not a row of queries. Its own size, the one exception to the tag's one box. */
+type LinkTag = {
+  variant: 'link';
+  /** The page it goes to. Paths come from `@/lib/routes` or the content seam. */
+  href: string;
+  selected?: never;
+  icon?: never;
+};
+
+export type TagProps = (MarkTag | FilterTag | LinkTag) & {
   /**
    * The label, in the capitalisation somebody authored — "Product Modernisation Assessment", never
    * PRODUCT MODERNISATION ASSESSMENT in the data. The filter's uppercase is `text-transform` in
@@ -117,6 +129,13 @@ export function Tag({ variant = 'mark', href, selected, icon, children }: TagPro
   /* The inert half returns early rather than sharing a ternary with the anchor. It has no states,
      no glyph and no attributes: a styled text node, announced as text, not in the tab order, and
      with no `role` — the element supplies it. */
+  if (variant === 'link') {
+    return (
+      <a href={href} className={cx(styles.tag, styles.link)}>
+        <span>{children}</span>
+      </a>
+    );
+  }
   if (variant === 'mark') {
     return (
       <span className={cx(styles.tag, styles.mark)}>

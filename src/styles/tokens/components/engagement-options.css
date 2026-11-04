@@ -40,6 +40,8 @@
   /* `cards` (owner, 4 Nov 2026): the card radius the home doors take, so the two card sets on one
      page are one shape. */
   --eop-card-radius: var(--radius-16);
+  /* A cell's glyph (`cards`): the icon size a card's head takes. */
+  --eop-cell-icon-size: var(--icon-size-32);
   /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
   --eop-key-optical-offset: var(--space-2);
 }
@@ -47,6 +49,7 @@
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --eop-cell-icon-ink: var(--color-brandeis-500);
   --eop-card-ground: var(--color-paper);
   --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-300); /* decoration */
@@ -60,6 +63,7 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --eop-cell-icon-ink: var(--color-brandeis-500);
   --eop-card-ground: var(--color-paper);
   --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on tint */
@@ -73,6 +77,7 @@
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
 [data-surface='ink'] {
+  --eop-cell-icon-ink: var(--color-brandeis-300);
   --eop-card-ground: var(--color-neutral-900);
   --eop-card-rule-ink: var(--color-neutral-700); /* decoration */
   --eop-rule-ink: var(--color-neutral-700); /* decoration */
@@ -86,6 +91,7 @@
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
+  --eop-cell-icon-ink: var(--color-white);
   --eop-card-ground: var(--color-brandeis-600);
   --eop-card-rule-ink: var(--color-brandeis-300); /* decoration */
   --eop-rule-ink: var(--color-brandeis-300); /* decoration */

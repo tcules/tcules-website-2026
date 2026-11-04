@@ -543,8 +543,9 @@ type PageHeroBaseProps = {
   /**
    * A full-width row under the hero's split (owner, 4 Nov 2026, homepage pass: "move logo wall into
    * the hero as a row under the split spanning full width"), composed by the caller: in practice the
-   * compact LogoGrid. It spans the whole column whatever the arrangement, a `stack` under the split,
-   * so the clients read as part of the opening instead of a band of their own. Absent renders no row.
+   * compact LogoGrid. It spans the whole column whatever the arrangement,
+   * so the clients read as part of the opening instead of a band of their own. A `section` (96) under
+   * the split (owner, 4 Nov 2026): a region of another kind. Absent renders no row.
    */
   foot?: ReactNode;
   /**
@@ -1552,7 +1553,7 @@ export function PageHero({
   }
   if (foot != null) {
     top = (
-      <Layout rowGap="stack">
+      <Layout rowGap="section">
         {top}
         {foot}
       </Layout>

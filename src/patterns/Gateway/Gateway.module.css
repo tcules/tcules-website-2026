@@ -449,13 +449,13 @@
   font: var(--gwy-door-link-text);
   letter-spacing: var(--gwy-door-link-tracking);
   text-wrap: pretty;
-  color: var(--gwy-door-link-ink);
+  color: var(--gwy-door-row-ink);
   text-decoration: none;
   border-radius: var(--gwy-ring-radius);
 }
 
 .doorLink:hover {
-  color: var(--gwy-door-link-ink-hover);
+  color: var(--gwy-door-row-ink-hover);
   text-decoration: none;
 }
 
@@ -471,6 +471,7 @@
    (decisions/2026-10-19-hover-is-a-move). */
 .doorArrow {
   display: block;
+  color: var(--gwy-door-arrow-ink);
   inline-size: var(--gwy-door-arrow-size);
   block-size: var(--gwy-door-arrow-size);
   transition: transform var(--gwy-quick-duration) var(--gwy-easing);
@@ -484,6 +485,7 @@
 
 .doorLink:hover .doorArrow,
 .doorLink:focus-visible .doorArrow {
+  color: var(--gwy-door-row-ink-hover);
   transform: translateX(var(--gwy-service-arrow-shift));
 }
 

@@ -122,11 +122,47 @@
   }
 }
 
-/* `cards`: the option as a card, a hairline round it at the card radius, on the card's own ground,
-   the copy a `gutter` inside. */
-.card {
-  padding: var(--gap-gutter);
+/* `cards`: one panel, a hairline round it at the card radius, on the card's own ground; the cells
+   inside it parted by hairlines (block-start below 1024, inline-start from it), each the copy a
+   `gutter` inside. */
+.panel {
   border: var(--eop-rule-width) solid var(--eop-card-rule-ink);
   border-radius: var(--eop-card-radius);
   background: var(--eop-card-ground);
+  overflow: hidden;
+}
+
+.cell {
+  padding: var(--gap-gutter);
+}
+
+.cell + .cell {
+  border-block-start: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+}
+
+@media (min-width: 1024px) {
+  .cell + .cell {
+    border-block-start: 0;
+    border-inline-start: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+  }
+}
+
+/* The cell's glyph: the accent, at the glyph size a card's head takes. */
+.cellIcon {
+  display: block;
+  inline-size: var(--eop-cell-icon-size);
+  block-size: var(--eop-cell-icon-size);
+  color: var(--eop-cell-icon-ink);
+}
+
+.cellIcon > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* The terms under the panel: a hairline over them, the `block` step under it. */
+.termsRuled {
+  border-block-start: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+  padding-block-start: var(--gap-block);
 }

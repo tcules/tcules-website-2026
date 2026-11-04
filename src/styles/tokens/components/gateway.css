@@ -101,10 +101,13 @@
 [data-surface='paper'] {
   --gwy-door-ground: var(--color-paper);
   --gwy-door-rule-ink: var(--color-neutral-200); /* decoration */
-  --gwy-door-eyebrow-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --gwy-door-eyebrow-ink: var(--color-neutral-600); /* 4.92:1, the muted label (owner, 4 Nov 2026) */
   --gwy-door-example-ink: var(--color-neutral-600); /* 4.92:1 */
-  --gwy-door-link-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --gwy-door-link-ink: var(--color-brandeis-500); /* 6.17:1 — the example's case link */
   --gwy-door-link-ink-hover: var(--color-brandeis-700);
+  --gwy-door-row-ink: var(--color-neutral-900); /* the ways in, in ink (owner, 4 Nov 2026) */
+  --gwy-door-row-ink-hover: var(--color-brandeis-600);
+  --gwy-door-arrow-ink: var(--color-neutral-500); /* decoration */
   --gwy-title-ink: var(--color-neutral-900); /* 14.62:1; 13.9:1 on the marker */
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — board: a linked item's title */
   --gwy-arrow-ink: var(--color-brandeis-500); /* 5.6:1 on the marker */
@@ -119,10 +122,13 @@
 [data-surface='tint'] {
   --gwy-door-ground: var(--color-paper);
   --gwy-door-rule-ink: var(--color-neutral-200); /* decoration */
-  --gwy-door-eyebrow-ink: var(--color-brandeis-500); /* on the card's paper */
+  --gwy-door-eyebrow-ink: var(--color-neutral-600); /* on the card's paper */
   --gwy-door-example-ink: var(--color-neutral-600); /* on the card's paper */
   --gwy-door-link-ink: var(--color-brandeis-500);
   --gwy-door-link-ink-hover: var(--color-brandeis-700);
+  --gwy-door-row-ink: var(--color-neutral-900);
+  --gwy-door-row-ink-hover: var(--color-brandeis-600);
+  --gwy-door-arrow-ink: var(--color-neutral-500); /* decoration */
   --gwy-title-ink: var(--color-neutral-900);
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --gwy-arrow-ink: var(--color-brandeis-500);
@@ -137,10 +143,13 @@
 [data-surface='ink'] {
   --gwy-door-ground: var(--color-neutral-900);
   --gwy-door-rule-ink: var(--color-neutral-700); /* decoration */
-  --gwy-door-eyebrow-ink: var(--color-brandeis-300);
+  --gwy-door-eyebrow-ink: var(--color-neutral-400);
   --gwy-door-example-ink: var(--color-neutral-400);
   --gwy-door-link-ink: var(--color-brandeis-300);
   --gwy-door-link-ink-hover: var(--color-brandeis-200);
+  --gwy-door-row-ink: var(--color-white);
+  --gwy-door-row-ink-hover: var(--color-brandeis-200);
+  --gwy-door-arrow-ink: var(--color-neutral-400); /* decoration */
   --gwy-title-ink: var(--color-white);
   --gwy-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --gwy-arrow-ink: var(--color-brandeis-300);
@@ -159,6 +168,9 @@
   --gwy-door-example-ink: var(--color-brandeis-50);
   --gwy-door-link-ink: var(--color-white);
   --gwy-door-link-ink-hover: var(--color-brandeis-50);
+  --gwy-door-row-ink: var(--color-white);
+  --gwy-door-row-ink-hover: var(--color-brandeis-50);
+  --gwy-door-arrow-ink: var(--color-brandeis-100); /* decoration */
   --gwy-title-ink: var(--color-white);
   --gwy-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --gwy-arrow-ink: var(--color-white);
