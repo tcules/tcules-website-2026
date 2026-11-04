@@ -144,9 +144,3 @@
   inline-size: 100%;
   block-size: 100%;
 }
-
-/* The terms under the panel: a hairline over them, the `block` step under it. */
-.termsRuled {
-  border-block-start: var(--eop-rule-width) solid var(--eop-card-rule-ink);
-  padding-block-start: var(--gap-block);
-}

@@ -207,136 +207,137 @@ export function EngagementOptions({
       aria-labelledby={headingId}
       data-band="engagement-options"
     >
-      <Layout rowGap="stack">
-        {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
+      {/* `cards`: the ask closes the band a `section` (96) under the set (owner, 4 Nov 2026: "so the
+          hierarchy is clear"); otherwise a `stack`, the head's own seam. */}
+      <Layout rowGap={arrangement === 'cards' ? 'section' : 'stack'}>
+        <Layout rowGap="stack">
+          {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
             `actionsAt="end"`, the one rule for every head's end action), the lead under that row. */}
-        <Layout
-          columns={action ? { lg: [1, 'auto'] } : undefined}
-          colGap={action ? 'column' : undefined}
-          rowGap="block"
-          align={action ? 'center' : undefined}
-        >
-          <h2 id={headingId} className={styles.heading}>
-            {heading}
-          </h2>
-          {action ? <div>{action}</div> : null}
-          {leads.length > 0 ? (
-            <Layout rowGap="text">
-              {leads.map((paragraph, index) => (
-                <p key={index} className={styles.lead}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-          ) : null}
-        </Layout>
-        <Layout rowGap="column">
-          {arrangement === 'grid' ? (
-            /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
+          <Layout
+            columns={action ? { lg: [1, 'auto'] } : undefined}
+            colGap={action ? 'column' : undefined}
+            rowGap="block"
+            align={action ? 'center' : undefined}
+          >
+            <h2 id={headingId} className={styles.heading}>
+              {heading}
+            </h2>
+            {action ? <div>{action}</div> : null}
+            {leads.length > 0 ? (
+              <Layout rowGap="text">
+                {leads.map((paragraph, index) => (
+                  <p key={index} className={styles.lead}>
+                    {paragraph}
+                  </p>
+                ))}
+              </Layout>
+            ) : null}
+          </Layout>
+          <Layout rowGap={arrangement === 'cards' ? 'gutter' : 'column'}>
+            {arrangement === 'grid' ? (
+              /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
                column below: a borderless tile each (the drawing's plate is the image, the
                name and its words under it), 32 across and a `column` down the set — the row seam of
                every borderless card set. */
-            <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
-              {shown.map((option) => {
-                const card = (
-                  <Layout rowGap="block">
-                    {option.scope ? (
-                      <Drawing scope={option.scope} />
-                    ) : anyDrawn ? (
-                      /* Not drawn yet, in a set that is: the empty plate holds its place. */
-                      <Sketch />
-                    ) : null}
-                    <Layout rowGap="text">
-                      <OptionHead
-                        option={option}
-                        className={cx(styles.title, dense && styles.titleDense)}
-                      />
-                      <OptionBody
-                        option={option}
-                        className={cx(styles.body, dense && styles.bodyDense)}
-                      />
-                      {option.facts && option.facts.length > 0 ? (
-                        <Facts facts={option.facts} />
+              <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
+                {shown.map((option) => {
+                  const card = (
+                    <Layout rowGap="block">
+                      {option.scope ? (
+                        <Drawing scope={option.scope} />
+                      ) : anyDrawn ? (
+                        /* Not drawn yet, in a set that is: the empty plate holds its place. */
+                        <Sketch />
                       ) : null}
+                      <Layout rowGap="text">
+                        <OptionHead
+                          option={option}
+                          className={cx(styles.title, dense && styles.titleDense)}
+                        />
+                        <OptionBody
+                          option={option}
+                          className={cx(styles.body, dense && styles.bodyDense)}
+                        />
+                        {option.facts && option.facts.length > 0 ? (
+                          <Facts facts={option.facts} />
+                        ) : null}
+                      </Layout>
                     </Layout>
-                  </Layout>
-                );
-                return <li key={option.title}>{card}</li>;
-              })}
-            </Layout>
-          ) : arrangement === 'cards' ? (
-            /* Each option its own card (owner, 4 Nov 2026: "make the boxes disjointed"), a `gutter`
+                  );
+                  return <li key={option.title}>{card}</li>;
+                })}
+              </Layout>
+            ) : arrangement === 'cards' ? (
+              /* Each option its own card (owner, 4 Nov 2026: "make the boxes disjointed"), a `gutter`
                apart, each headed by its glyph, then its label and name, then its words. */
-            <Layout
-              as="ul"
-              columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
-              colGap="gutter"
-              rowGap="gutter"
-            >
-              {shown.map((option) => (
-                <li key={option.title} className={styles.card}>
-                  <Layout rowGap="block">
-                    {option.icon ? (
-                      <span className={styles.cellIcon} aria-hidden="true">
-                        {option.icon}
-                      </span>
-                    ) : null}
-                    <Layout rowGap="text">
-                      <OptionHead option={option} className={styles.title} />
-                      <OptionBody option={option} className={styles.body} />
+              <Layout
+                as="ul"
+                columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+                colGap="gutter"
+                rowGap="gutter"
+              >
+                {shown.map((option) => (
+                  <li key={option.title} className={styles.card}>
+                    <Layout rowGap="block">
+                      {option.icon ? (
+                        <span className={styles.cellIcon} aria-hidden="true">
+                          {option.icon}
+                        </span>
+                      ) : null}
+                      <Layout rowGap="text">
+                        <OptionHead option={option} className={styles.title} />
+                        <OptionBody option={option} className={styles.body} />
+                      </Layout>
                     </Layout>
-                  </Layout>
-                </li>
-              ))}
-            </Layout>
-          ) : arrangement === 'compare' ? (
-            <>
-              {/* From 1024: the options head the set three across, then each fact runs as one ruled
+                  </li>
+                ))}
+              </Layout>
+            ) : arrangement === 'compare' ? (
+              <>
+                {/* From 1024: the options head the set three across, then each fact runs as one ruled
                   row, its key over the three values aligned under their option, so a read across a
                   row compares the deals (owner, 1 Nov 2026, /how-we-work). Below 1024 there is no
                   across to read: the rows arrangement, one option a section. */}
-              <div className={styles.compareWide}>
-                <Compare shown={shown} />
-              </div>
-              <div className={styles.compareNarrow}>
-                <Rows shown={shown} />
-              </div>
-            </>
-          ) : (
-            <Rows shown={shown} />
-          )}
-          {closing ? (
-            <Layout rowGap="block">
-              <Layout rowGap="text">
-                <h3 className={styles.closingHeading}>{closing.heading}</h3>
-                <p className={styles.lead}>{closing.lead}</p>
+                <div className={styles.compareWide}>
+                  <Compare shown={shown} />
+                </div>
+                <div className={styles.compareNarrow}>
+                  <Rows shown={shown} />
+                </div>
+              </>
+            ) : (
+              <Rows shown={shown} />
+            )}
+            {closing ? (
+              <Layout rowGap="block">
+                <Layout rowGap="text">
+                  <h3 className={styles.closingHeading}>{closing.heading}</h3>
+                  <p className={styles.lead}>{closing.lead}</p>
+                </Layout>
+                {closing.proof}
               </Layout>
-              {closing.proof}
-            </Layout>
-          ) : null}
-          {terms.length > 0 ? (
-            <Layout
-              columns={{ base: 1, lg: termTracks }}
-              colGap="gutter"
-              rowGap={terms.some((term) => term.label) ? 'block' : 'text'}
-              /* Under the cards panel, a hairline parts the set from the terms that hold for all of
-                 it (owner, 4 Nov 2026). */
-              className={arrangement === 'cards' ? styles.termsRuled : undefined}
-            >
-              {terms.map((term, index) =>
-                term.label ? (
-                  <Layout key={index} rowGap="tight">
-                    <p className={styles.factKey}>{term.label}</p>
-                    <p className={styles.termText}>{term.body}</p>
-                  </Layout>
-                ) : (
-                  <p key={index} className={styles.termText}>
-                    {term.body}
-                  </p>
-                ),
-              )}
-            </Layout>
-          ) : null}
+            ) : null}
+            {terms.length > 0 ? (
+              <Layout
+                columns={{ base: 1, lg: termTracks }}
+                colGap="gutter"
+                rowGap={terms.some((term) => term.label) ? 'block' : 'text'}
+              >
+                {terms.map((term, index) =>
+                  term.label ? (
+                    <Layout key={index} rowGap="tight">
+                      <p className={styles.factKey}>{term.label}</p>
+                      <p className={styles.termText}>{term.body}</p>
+                    </Layout>
+                  ) : (
+                    <p key={index} className={styles.termText}>
+                      {term.body}
+                    </p>
+                  ),
+                )}
+              </Layout>
+            ) : null}
+          </Layout>
         </Layout>
         {note}
       </Layout>
