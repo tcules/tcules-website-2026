@@ -438,7 +438,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="3a · Two asks on one island (second)"
-        note="Two closing asks for two readers (4 Nov 2026, /future-interfaces-lab: the candidate's and the product owner's). Two peer halves from 1024, a section gap apart: each its heading at the close step, its one sentence as the lede and its action pinned to the half's foot, so the two actions share a line however the headings wrap. The first keeps the solid; the second takes the outline partner and its own anchor. Stacked below 1024. Second: a short heading beside a long one, and the longest lede."
+        note="Two closing asks for two readers (4 Nov 2026, /future-interfaces-lab: the candidate's and the product owner's). Two peer halves from 1024, a section gap apart: each its heading at the close step, its one sentence as the lede and its action pinned to the half's foot, so the two actions share a line however the headings wrap. The first keeps the solid; the second takes a blue link with its arrow and its own anchor. Stacked below 1024. Second: a short heading beside a long one, and the longest lede."
       />
       <CtaSection
         arrangement="open"

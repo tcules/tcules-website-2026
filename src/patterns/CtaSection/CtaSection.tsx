@@ -297,7 +297,7 @@ type CtaSplitProps = {
 
 /**
  * The open island's second ask (4 Nov 2026, /future-interfaces-lab: the candidate's ask and the
- * product owner's). Its own heading, one lede sentence and ONE action, which is the outline partner:
+ * product owner's). Its own heading, one lede sentence and ONE action, which is a blue link with its arrow:
  * the island's first ask keeps the page's one blue solid.
  */
 export type CtaSecondAsk = {
@@ -679,7 +679,7 @@ function CtaActions({
   justify,
 }: {
   actions: readonly CtaAction[];
-  /** `ask` on a close, `link` on the offer, `partner` a second ask's lone ghost. See above. */
+  /** `ask` on a close, `link` on the offer, `partner` a second ask's lone link. See above. */
   kind: 'ask' | 'link' | 'partner';
   /** `center` in the open close's centred column; otherwise the row starts at the copy's edge. */
   justify?: 'center';
@@ -688,7 +688,10 @@ function CtaActions({
     <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
       {actions.map((action, index) => {
         const solid = kind === 'ask' && index === 0;
-        const emphasis = solid ? 'solid' : kind === 'link' ? 'link' : 'ghost';
+        /* A lone partner is a link, not a ghost (critic, 4 Nov 2026): with no solid beside it a ghost's
+           inset put its label 12 inside the column, off the edge its heading and the other half's
+           solid start on; the link's label sits on the edge. */
+        const emphasis = solid ? 'solid' : kind === 'ask' ? 'ghost' : 'link';
         return (
           <Button
             key={`${index}-${action.href}-${action.label}`}
@@ -867,7 +870,7 @@ export function CtaSection(props: CtaSectionProps) {
        Two peer halves at `section` (96), the gap of two regions sharing a row: each its heading at
        the close step, its lede and its action pinned to the half's foot, so the two headings share
        a line and so do the two actions, however the headings wrap. The
-       first ask keeps the solid; the second takes the outline partner. Below 1024, stacked. The
+       first ask keeps the solid; the second takes a blue link. Below 1024, stacked. The
        field stays calm behind both ledes. */
     const second = props.second;
     if (second) {

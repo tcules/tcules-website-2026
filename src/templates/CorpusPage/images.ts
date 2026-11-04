@@ -163,10 +163,10 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
   /* "Who we've worked with and what each asked for": the studio presenting work in review, the nearest
      of the three to client work; the page binds no hero of its own (docs/page-build/pages/clients.md). */
   [ROUTES.clients]: ABOUT_REVIEW,
-  /* "Experiments in how AI changes software": the working wall, hands placing notes on a discovery
-     wall, work in progress; not one experiment's capture, because an image about one item belongs to
-     that item (docs/page-build/pages/future-interfaces-lab.md). */
-  [ROUTES.futureInterfacesLab]: ABOUT_WALL,
+  /* /future-interfaces-lab binds none (critic, 4 Nov 2026): the working wall is a design workshop, not
+     the Lab, it is already /why-tcules' and the AI-native page's hero, and at its 936 × 1262 portrait it
+     ran past the fold. The live Lab page holds no picture of the Lab, so its hero is the register's
+     labelled placeholder (`/future-interfaces-lab#hero`, 5:4) until the illustration is drawn. */
   /* "Build AI products in Ahmedabad": a fellow presenting work to seated colleagues in the studio, which
      is what the page describes (direct critique, weekly demos, review in the open). The page binds no
      image of its own (docs/page-build/pages/future-interfaces-lab-join.md). */

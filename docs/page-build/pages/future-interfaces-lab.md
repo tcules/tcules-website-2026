@@ -7,9 +7,9 @@ then candidates go to the Lab application page and product owners to /contact. T
 page's weight; purpose, direction, threshold and promotion stay quiet.
 
 ## Decisions
-- Hero: beside, the studio working wall (`STUDIO_HERO[futureInterfacesLab] = ABOUT_WALL`): hands placing notes
-  on a discovery wall, work in progress. Not one experiment's capture: an image about one item belongs to that
-  item. "Join the Lab" is the page's one blue solid. No record figures (the copy has none).
+- Hero: beside, the register's labelled placeholder (`/future-interfaces-lab#hero`, 5:4) until the Lab hero
+  illustration is drawn; the studio working wall was dropped after the critic (below). "Join the Lab" is the
+  page's one blue solid. No record figures (the copy has none).
 - `purpose`: the short intro, C-text, unchanged.
 - `direction`: illustrated prose (B), the id joins `ILLUSTRATED_PROSE` (plan.ts). The Lab's thesis is an
   abstract claim, so one band-scale isometric illustration; labelled placeholder until drawn (register row
@@ -33,13 +33,13 @@ page's weight; purpose, direction, threshold and promotion stay quiet.
 - `join` + `talk`: ONE ink island in two peer halves (CtaSection `open` with the new `second` ask; plan.ts
   `PAIRED_CLOSES`). Start half: "Apply to work on Lab projects", its sentence as the lede word for word, the
   link's words "Lab application page" as the island's solid. End half (id `talk`): "Talk to us", its two
-  sentences as the lede, "contact page" as the outline partner. Actions pinned to each half's foot so they
+  sentences as the lede, "contact page" as a blue link with its arrow. Actions pinned to each half's foot so they
   share a line. `talk` is listed in `BANDS_ELSEWHERE`. Stacked below 1024.
 
 ## Band → component
 | Band | Kind / component | Notes |
 |---|---|---|
-| hero | CorpusHero beside, ABOUT_WALL | eyebrow suppressed under the breadcrumb |
+| hero | CorpusHero beside, placeholder 5:4 | eyebrow suppressed under the breadcrumb |
 | purpose | close · C-text | no link, so prose |
 | direction | text · illustrated prose (B), isometric placeholder | image at the start |
 | design-work | destinations · Bento drawn tiles (C-icon), 4 across | Matter tile linked |
@@ -54,17 +54,18 @@ covers; a two-paragraph text band; a sentence beside a drawing; the centred acco
 Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tint, no text-heavy pair.
 
 ## Content mapping
-- No copy changed. The Matter tile's "See Matter Design System →" is the tile's destination; its words are not
-  printed (Bento bodies are plain text), the tile title "Matter Design System" names the page it opens.
+- No copy changed. The Matter tile's "See Matter Design System →" is the tile's destination and is printed as
+  its foot action (Bento item `action`), so the copy reaches the page whole.
 - The island ledes keep the link words as plain words in the sentence; the links' own words are the actions.
 - Cover alts are the live site's alts.
 
 ## Open
 - **New variant of the destinations kind (design-work):** still drawn Bento tiles with page-assigned scenes and
-  one linked tile. Owner to confirm. Tile bodies run 130–200 characters against Bento's 60–90 guide; kept whole,
+  one linked tile, read drawing first (new Bento `visual="start"`) with the linked tile's foot action (new
+  Bento item `action`). Owner to confirm both Bento additions. Tile bodies run 130–200 characters against Bento's 60–90 guide; kept whole,
   plates end on one line at 1440.
-- **New variant of the destinations kind (ai-interfaces):** per-item covers from a route map, no links. Owner to
-  confirm.
+- **New variant of the destinations kind (ai-interfaces):** per-item covers from a route map, no links, at the
+  card's `sm` title step so the two experiment sets carry equal weight. Owner to confirm.
 - **New arrangement of the close (promotion):** prose beside one flat figure. Owner to confirm.
 - **New CtaSection variant + band move (join/talk):** two asks on one island (`second`), specimen 3a on
   /design/cta-section. The boldest of the four. Fallback if rejected: `join` becomes prose beside a drawing and
@@ -74,11 +75,39 @@ Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tin
   image; if not, the set falls back to drawings (one register).
 - The tutor image looks like it may be generated (the tablet's UI text): owner to confirm it is a real
   photograph of the experiment. It carries a baked white vignette at its lower corners.
-- The three covers are 698 × 481 masters, about 392 CSS px wide at 1440: soft on a 2x screen. Originals wanted.
+- The three covers are 698 × 481 masters, about 392 CSS px wide at 1440: soft on a 2x screen. The live CMS holds
+  nothing larger (checked 4 Nov), and Open Canvas's chips and the shopping phones are cut by the source's own
+  crop, so they cannot be reframed here. **Owner question:** re-export the two UI renders at 800+ wide with the
+  subject whole, or make the set all screens (the tutor as its tablet screen), or keep the photo with them.
 - Live images rejected after viewing: AI Design Audit Agent (type set in the image, another illustration
   style), UI Pattern labelling (abstract shapes), Landing Page Audit (an unrelated email list), the generic
   Labs_* renders (not Tcules work). Real captures of the three internal tools could later replace the drawings.
 - The five drawings were drawn and checked by eye in this run; the blind `flat-drawings-pages` critic was not
   run, so a blind check is still owed.
-- Isometric art for `direction` (placeholder), and optionally a Lab hero illustration (people draw these).
+- Isometric art for `direction` and the hero (both placeholders; people draw these). Until then a phone opens
+  on two placeholders a short paragraph apart: the hero's, then `direction`'s, which ContentSection's `media`
+  arrangement puts above the head below 1024 (critic nit: left, a component change for every media band).
+- `purpose` is three sentences in a full band (critic nit): it could take the band's lead slot so it reads as a
+  statement. Left for the owner; a figure on `threshold` would put two flat bands side by side.
 - og/twitter image: `IMAGE_ASSET_REQUIRED` in the copy.
+
+## Fixed after the critic (4 Nov 2026, 6.5/10)
+- Matter's tile dropped "See Matter Design System →"; nothing visible said it was the one link → the C-icon
+  renderer took the trailing link as the href and threw its label away, and Bento had no foot action for a
+  single tile → Bento item `action` (link Button as a span, the tile still the one anchor, `data-btn-link-group`);
+  DestinationsBand passes the trailing link's words as authored. Only items whose paragraph ends on a "→" link
+  take it (the path that strips it from the body); link-line items elsewhere are unchanged.
+- Hero photo ran past the fold and showed a design workshop, shared with two other heroes → images.ts bound
+  `ABOUT_WALL` to the route → binding removed; the hero takes a registered 5:4 placeholder (Lab bench concept).
+  The fix's other half, a fixed hero frame, was NOT applied: hero media sits at its intrinsic ratio, never
+  cropped (decisions/2026-09-28-hero-media-at-intrinsic-ratio). The live Lab page has no Lab picture.
+- The two experiment sets, halves of one list, had unequal weight (18px boxed titles under 22px open ones, drawings
+  at the foot vs images at the top) → two kind components with different title steps and media order → the
+  covered set takes BlockCard `size="sm"` (Bento's h5 step) and the drawn set Bento's new `visual="start"`
+  (drawing, title, body, action pinned). 4-up and 3-up kept, so the bands still differ in shape.
+- The Talk half's action started 12 inside its column → CtaSection's lone `partner` was a ghost, whose box
+  inset moves the label off the edge → a lone partner is a link button (label on the edge). Only the `second`
+  ask uses `partner`.
+- Not fixed: the two weak UI renders (no larger originals; owner question in Open); purpose's thin band and the
+  phone placement of direction's placeholder (Open).
+

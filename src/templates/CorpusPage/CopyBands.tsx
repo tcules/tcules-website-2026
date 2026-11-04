@@ -1940,6 +1940,13 @@ export function DestinationsBand({
                 (trailing
                   ? plain(trailing.children).replace(/\s*[→➝➔⟶]\s*$/u, '')
                   : undefined),
+              /* The trailing link's words, which the body no longer carries: printed as the tile's
+                 foot action, so the copy reaches the page whole (critic, 4 Nov 2026). */
+              action: trailing
+                ? plain(trailing.children)
+                    .replace(/\s*[→➝➔⟶]\s*$/u, '')
+                    .trim()
+                : undefined,
               bodyHtml: bodyRuns.map((runs) => inlineToHtml(runs)),
               bodyText: bodyRuns.map((runs) => plain(runs).trim()).join(' '),
             },
@@ -1951,6 +1958,7 @@ export function DestinationsBand({
             title: link.labelText,
             href: link.href as string | undefined,
             ctaLabel: undefined as string | undefined,
+            action: undefined as string | undefined,
             bodyHtml: [] as string[],
             bodyText: '',
           }));
@@ -1972,7 +1980,9 @@ export function DestinationsBand({
       ...(d.href ? { href: d.href } : {}),
     }));
     const node = (
-      <BlockCardSet items={cards} lead="none" across={3} cue="title" scroll="never" />
+      /* `sm`: the drawn set's title step (Bento's h5), so two halves of one list on one page carry
+         equal weight (critic, 4 Nov 2026, /future-interfaces-lab). */
+      <BlockCardSet items={cards} lead="none" across={3} size="sm" cue="title" scroll="never" />
     );
     return (
       <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
@@ -1998,8 +2008,17 @@ export function DestinationsBand({
       ...(d.href ? { href: d.href } : {}),
       scene: scenes[index]!,
       ...(d.bodyText ? { body: d.bodyText } : {}),
+      ...(d.href && d.action ? { action: d.action } : {}),
     }));
-    set = <Bento items={tiles} tracks={dest.length % 4 === 0 ? 4 : 3} />;
+    /* A set the page draws (`sceneOf`) reads drawing first, then title and body, as the covered set
+       it sits beside does; the service bento keeps its words over the drawing. */
+    set = (
+      <Bento
+        items={tiles}
+        tracks={dest.length % 4 === 0 ? 4 : 3}
+        visual={drawn?.every(Boolean) ? 'start' : 'end'}
+      />
+    );
   } else {
     const cards: BlockCardSetItem[] = dest.map((d) => ({
       id: d.href ?? d.title,

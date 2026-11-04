@@ -220,6 +220,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
       shows:
         'A Tcules designer walking a client\'s team through a flow on screen, the client pointing at an open question while it is still cheap to change. Beside banner (11 Oct 2026, the home "why" pattern); the first reason uses the bound studio photograph.',
     },
+  '/future-interfaces-lab#hero': {
+    src: '/placeholders/future-interfaces-lab--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "The Lab's bench: a few experiments in progress side by side (a canvas of connected steps, a voice prompt answered in Gujarati, a design library a machine reads), each being tried, and one carried off the bench into the studio's client work. Not the `direction` band's three shifts on one interface: this is the Lab at work, that is where software is heading.",
+  },
   '/insights/cpq-ux-design#design-for-the-revision-not-the-first-draft': {
     src: '/placeholders/insights-cpq-ux-design--design-for-the-revision-not-the-first-draft.svg',
     width: 1600,
