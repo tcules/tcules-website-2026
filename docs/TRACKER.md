@@ -274,13 +274,17 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
-- [ ] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
+- [x] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
       `/why-tcules` (two new bands, `design-to-code` and `ai-products`, match no kind), the six audit pages (new
       outline: worked example, talk, after the audit; compare moves last; how-we-work-together and industries
       cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
       copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
       `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
-      The six audit pages: done 4 Nov (#213).
+      The six audit pages: done 4 Nov (#213). `/why-tcules` and `/how-we-work`: done 4 Nov
+      (design/2-60-why-how), every band on a home/service/expertise shape, claim quotes and stray lines cut
+      (content-changes), studio-at-work heroes, alternating grounds; rulings 2026-11-04-claims-carry-no-quotes,
+      -studio-pages-alternate-grounds, -studio-heroes-show-people-at-work, -no-heading-row-over-a-split,
+      -no-case-images-in-sections. The article URL scheme is set aside by the owner (4 Nov), still open.
 - [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.

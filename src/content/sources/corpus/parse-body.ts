@@ -302,9 +302,32 @@ function blocksFrom(tokens: Token[], pos: { i: number }, parentLevel: number): C
       case 'list':
         out.push({ type: 'list', ordered: t.ordered, items: t.items.map(parseInline) });
         break;
-      case 'para':
+      case 'para': {
+        /* A client's words quoted inline under a claim (the 3 Nov copy, /why-tcules and /how-we-work):
+           the quote in curly marks, a hard break, then who said it, plain
+           (`“They proved it…”  ⏎ Pratik Ghoshal, CEO, ConnectX`). It is a quote, not a paragraph. */
+        const [said, by] = t.lines;
+        if (
+          t.lines.length === 2 &&
+          said !== undefined &&
+          by !== undefined &&
+          /^“[^]*”\s{2,}$/.test(said) &&
+          by.trim().length > 0 &&
+          !/^[“*>]/.test(by.trim())
+        ) {
+          out.push({
+            type: 'quote',
+            paragraphs: [parseInline(said.trimEnd())],
+            attribution: parseInline(by.trim()),
+            pendingSignoff: false,
+            testimonialId: null,
+            rating: null,
+          });
+          break;
+        }
         out.push(...paragraphBlocks(t.lines));
         break;
+      }
     }
   }
   return assembleForms(out);

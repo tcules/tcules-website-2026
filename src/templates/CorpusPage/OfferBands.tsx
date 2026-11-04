@@ -97,6 +97,7 @@ import {
   AskIsland,
   askLinkIn,
   isAskLink,
+  SupportQuote,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { ReportBand } from './ReportBand';
@@ -510,6 +511,12 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
   'who decides, and who owns the work': 'own',
+  /* The 3 Nov copy's terms (2.60): the decision is yours (options meet at you), no minimum term is the
+     notice drawing, the handover is agreed in the proposal before the work starts. "What we make is
+     yours" has no scene yet: its empty plate until the flat graphics pass (2.62) draws it. */
+  'you keep the product decisions': 'own',
+  'no minimum term': 'commercial',
+  'handover agreed before work begins': 'getting-started',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -794,6 +801,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           band={band}
           side={unit.side}
           scenario={sceneFor(ctx, band, 'scenario')}
+          surface={unit.surface}
         />
       );
     }
@@ -884,7 +892,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       /* The 26 Oct copy: a lead paragraph, three `###` cases, and on some pages a closing link line
          after the last case ("See all case studies"), which is the band's action (component-map C3). */
       const caseLead = leadText(band);
-      const closing = closingCaseLinks(band);
+      const cases = band;
+      const closing = closingCaseLinks(cases);
+      const set = <CaseSet ctx={ctx} band={cases} />;
       return closing.length > 0 ? (
         <ContentSection
           {...head(band)}
@@ -893,11 +903,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           actionsAt="end"
           actions={<LinkActions links={closing} />}
         >
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       ) : (
         <ContentSection {...head(band)} data-band="M" lead={caseLead}>
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       );
     }
@@ -961,7 +971,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const carded =
         !rich &&
         options.length > 0 &&
+        /* /how-we-work's own "Three ways to work with us" is the same three options
+           (decisions/2026-11-04-three-ways-cards). */
         (band.id === 'how-we-work-together' ||
+          band.id === 'engagement-shapes' ||
           options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow)));
       const compactAsk =
         askWords && ask ? (
@@ -996,7 +1009,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                 ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
                   options.map((option) => {
                     const title = option.title.replace(/\.$/, '');
-                    const glyph = OPTION_GLYPHS[title];
+                    /* "A pilot project, at a fixed price": the option is named before its terms. */
+                    const glyph =
+                      OPTION_GLYPHS[title] ?? OPTION_GLYPHS[title.split(',')[0]?.trim() ?? ''];
                     return {
                       ...option,
                       scope: undefined,
@@ -1197,6 +1212,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             .join(' ');
           return { bodyHtml, example: claimExample(example.runs) };
         };
+        /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
+        const quoteOf = (title: string) =>
+          authored.get(title)?.find(
+            (block): block is Extract<CorpusBlock, { type: 'quote' }> => block.type === 'quote',
+          );
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
@@ -1216,7 +1236,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   ) : (
                     (item.body ?? '')
                   ),
-                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
+                  ...(parted
+                    ? { example: <ClaimProof example={parted.example} /> }
+                    : quoteOf(item.title!)
+                      ? { example: <SupportQuote block={quoteOf(item.title!)!} /> }
+                      : {}),
                   figure: drawn
                     ? { ...drawn, alt: '', kind: 'illustration' as const }
                     : { ...placeholderIllustration(item.title!), alt: '' },

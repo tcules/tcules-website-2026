@@ -265,3 +265,30 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   (IndexRail), never a sideways line of group names cut at the edge.
 - Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
   -term-page-closes-in-one-shape, -comparison-picks-its-term.
+
+## Added 4 Nov 2026 (/why-tcules and /how-we-work, the 3 Nov copy; proposed until the owner sees the pages)
+
+- **A claim never carries a quote under it** (owner, 4 Nov 2026: "the embedded testimonials make the designs
+  bad"). Clients' words live in the page's quotes band; a quote authored under a claim is cut (content-changes).
+- **An example without its "Example:" label** ("**Doodle** asked … [Read the Doodle case]") is still the ClaimProof
+  panel, where the copy sets it. On tint the panel is paper.
+- **Starting situations** (bold-led paragraphs naming the reader's case) are home's where-to-start cards, each led
+  by a glyph; with no ways in the card is its head alone; one sentence after them is the set's close line.
+- **A set of short titled claims** (a sentence or two each) is home's Why Tcules list: heading, lead and link at the
+  left, the claims down the right as glyph rows (OfferSheet `list`).
+- **A short band arguing for one service, closing on its link** ("Building an AI product?") is a CTA block, the
+  ink island: heading, its sentences, the service as the action. Never a service card beside the head.
+- **A few one-line points with no titles** are list rows (OfferSheet `list`), each its glyph before its words,
+  the heading, lead and link in the left half. Never boxed cards stacked beside the head (owner, 4 Nov 2026:
+  "this isn't listcard").
+- **/how-we-work and /why-tcules alternate tint and paper** from the first band after the client marks to the
+  quotes band (plan `ALTERNATING`; owner, 4 Nov 2026: "to keep rhythm").
+- **A studio page's hero shows people at work in the studio**, from the kit's studio photographs (images.ts
+  `STUDIO_AT_WORK`; owner, 4 Nov 2026). Never the team outdoors or a bare wall.
+- **A table band's closing link line** is the head's end action, on the heading's row. A heading never takes its own row over a two-column split (decisions/2026-11-04-no-heading-row-over-a-split).
+- **Two to four short titled claims, or a few one-line points**, are the three-ways cards, each led by its glyph
+  (plan `CARD_SETS`); never beside a case study's image (decisions/2026-11-04-no-case-images-in-sections).
+- **A set's closing sentence of its own words** sits under the cards at the body role across the column.
+- **The north star is the home, service and expertise pages** (owner, 4 Nov 2026): a band takes one of their shapes,
+  never a merge of two; a run of prose bands is never one alternating image-and-words split each.
+- **A run of four or more destination links inside a claim** stays one line with the copy's dots, never a stack.
