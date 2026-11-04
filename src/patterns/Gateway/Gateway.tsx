@@ -26,9 +26,14 @@ export type GatewayItem = {
   id: string;
   title: string;
   body: string;
-  href: string;
+  /**
+   * Where it leads. `board` only may leave it out: a situation the reader recognises but nothing to
+   * open (/how-we-work "Every project starts from your product", 4 Nov 2026) is the same drawing,
+   * title and sentence, not a link, and its drawing rests.
+   */
+  href?: string;
   /** The destination's name — "Product Design". Pass authored case; mono uppercases it. */
-  service: string;
+  service?: string;
   /**
    * A drawing for the answer (owner, 12 Oct 2026: "some visual element with the text on the right
    * side"), composed by the caller — a `Sketch` or an illustration. When the items carry visuals the
@@ -168,12 +173,7 @@ export function Gateway({
           const descId = `${uid}-${item.id}-desc`;
           return (
             <li key={item.id}>
-              <a
-                href={item.href}
-                className={styles.card}
-                aria-labelledby={titleId}
-                aria-describedby={descId}
-              >
+              <BoardItem href={item.href} titleId={titleId} descId={descId}>
                 <Layout rowGap="block">
                   {item.visual != null ? (
                     <span className={styles.cardVisual} aria-hidden="true">
@@ -189,7 +189,7 @@ export function Gateway({
                     </span>
                   </Layout>
                 </Layout>
-              </a>
+              </BoardItem>
             </li>
           );
         })}
@@ -247,7 +247,7 @@ export function Gateway({
                     <span id={descId} className={styles.body}>
                       {item.body}
                     </span>
-                    <span>{linkCue(item.service)}</span>
+                    <span>{linkCue(item.service ?? item.title)}</span>
                   </Layout>
                 </Layout>
               </span>
@@ -318,5 +318,26 @@ export function Gateway({
         </div>
       </div>
     </Layout>
+  );
+}
+
+/** A board item: the link when it leads somewhere, otherwise the same words and drawing at rest. */
+function BoardItem({
+  href,
+  titleId,
+  descId,
+  children,
+}: {
+  href?: string;
+  titleId: string;
+  descId: string;
+  children: ReactNode;
+}) {
+  return href ? (
+    <a href={href} className={styles.card} aria-labelledby={titleId} aria-describedby={descId}>
+      {children}
+    </a>
+  ) : (
+    <div>{children}</div>
   );
 }

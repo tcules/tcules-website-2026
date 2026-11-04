@@ -9,6 +9,8 @@ import {
   Layout,
   Media,
   Prose,
+  SituationFigure,
+  type SituationFigureName,
   Sketch,
 } from '@/components';
 import {
@@ -36,6 +38,8 @@ import {
   type Step,
   ServiceTile,
   TestimonialCard,
+  Gateway,
+  type GatewayItem,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage } from '@/lib/corpus-images';
@@ -52,7 +56,7 @@ import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
-import { isIllustratedProse, isWhatYouGet, signature } from './plan';
+import { isIllustratedProse, isSituationProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
   isExample,
@@ -2385,6 +2389,7 @@ export function TextBand({
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
      plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
+  if (isSituationProse(band.id)) return <SituationsBand band={band} />;
   if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
@@ -2413,23 +2418,86 @@ export function TextBand({
   const claimItems = body.filter(
     (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
   );
-  if (bound && claimItems.length >= 3 && claimItems.length === body.length) {
+  /* The words before the first claim are the band's lead ("An account lead keeps the work running
+     beside your senior designer.", /how-we-work your-team). */
+  const words: readonly CorpusBlock[] = body;
+  const firstClaim = words.findIndex((block) => block.type === 'item');
+  const intro = firstClaim > 0 ? words.slice(0, firstClaim) : [];
+  const introLead =
+    intro.length === 1 && intro[0]?.type === 'paragraph' && !hasLink(intro[0].runs)
+      ? plain(intro[0].runs)
+      : undefined;
+  if (
+    bound &&
+    examples.length === 0 &&
+    claimItems.length >= 3 &&
+    claimItems.length + intro.length === words.length &&
+    intro.every((block) => block.type === 'paragraph')
+  ) {
+    /* Three claims stand three across; four, two by two, so no row is left with one. */
+    const three = claimItems.length === 3;
     return (
-      <ContentSection {...head(band)} data-band="B" actions={actions}>
+      <ContentSection {...head(band)} lead={introLead} data-band="B" actions={actions}>
         <Layout rowGap="stack">
+          {intro.length > 0 && !introLead ? <BandBody blocks={intro} /> : null}
           {/* The copy binds a photograph of the people here (the team); only a photograph is cropped. */}
           <Media
             image={{ ...slotImage(page, band.id), kind: 'photograph' }}
             ratio="3/1"
             sizes={FULL_COLUMN}
           />
-          <Layout columns={{ base: 1, md: 2 }} colGap="column" rowGap="stack">
+          <Layout
+            columns={three ? { base: 1, lg: 3 } : { base: 1, md: 2 }}
+            colGap="column"
+            rowGap="stack"
+          >
             {claimItems.map((item) => (
-              <Layout key={item.headingText} rowGap="block">
+              <Layout key={item.headingText} id={item.id ?? undefined} rowGap="block">
                 <h3>{item.headingText}</h3>
                 <ItemBody blocks={item.blocks} />
               </Layout>
             ))}
+          </Layout>
+        </Layout>
+      </ContentSection>
+    );
+  }
+  /* Claims argued with a worked example and the picture the copy binds to show it ("From design to
+     working software": the Benchmark Gensuite prototype, /how-we-work): the claims lead as peers
+     under the head, then the evidence as one row, the picture beside the example that names it.
+     Claim leads, proof supports (home review); a picture beside words takes the whole row. */
+  if (bound && examples.length === 1 && claimItems.length >= 2) {
+    const intro2 = words.filter((block) => block.type !== 'item');
+    const lead2 =
+      intro2.length === 1 && intro2[0]?.type === 'paragraph' && !hasLink(intro2[0].runs)
+        ? plain(intro2[0].runs)
+        : undefined;
+    const example = examples[0]!;
+    return (
+      <ContentSection {...head(band)} lead={lead2} data-band="B" actions={actions}>
+        <Layout rowGap="column">
+          {intro2.length > 0 && !lead2 ? <BandBody blocks={intro2} /> : null}
+          <Layout
+            columns={{ base: 1, md: claimItems.length === 3 ? 3 : 2 }}
+            colGap="column"
+            rowGap="stack"
+          >
+            {claimItems.map((item) => (
+              <Layout key={item.headingText} id={item.id ?? undefined} rowGap="block">
+                <h3>{item.headingText}</h3>
+                <ItemBody blocks={item.blocks} />
+              </Layout>
+            ))}
+          </Layout>
+          <Layout
+            columns={{ base: 1, lg: [7, 5] }}
+            colGap="section"
+            rowGap="stack"
+            align="center"
+            data-media-row
+          >
+            <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
+            <ClaimProof example={claimExample(example.runs)} />
           </Layout>
         </Layout>
       </ContentSection>
@@ -2521,6 +2589,74 @@ export function TextBand({
   return (
     <ContentSection {...head(band)} data-band="C-text" footer={actions}>
       {text}
+    </ContentSection>
+  );
+}
+
+/** Each starting situation's own drawing, where one is drawn; the rest show the empty plate. */
+const SITUATION_FIGURES: Readonly<Record<string, SituationFigureName>> = {
+  'a new product': 'new-product',
+  'an established product': 'product-modernisation',
+};
+
+/**
+ * Starting situations (plan `SITUATION_PROSE`, /how-we-work "Every project starts from your product
+ * and your users"): home's where-to-start board, every situation at once, its drawing over its title
+ * and sentence, none a link (owner, 4 Nov 2026). The paragraph before them is the lead; the words
+ * after them sit as one row under the board, a paragraph beside the example that proves it.
+ */
+function SituationsBand({ band }: { band: CorpusBand }) {
+  const blocks = content(band).filter((block) => block.type !== 'links');
+  /* The parser files "**A new product.** We find…" as a labelled block: the bold label, its words. */
+  const situations = blocks.flatMap((block) =>
+    block.type === 'labelled'
+      ? [
+          {
+            block,
+            title: inlineToText(block.label).trim().replace(/\.$/, ''),
+            body: inlineToText(block.body).trim(),
+          },
+        ]
+      : [],
+  );
+  const taken = new Set<CorpusBlock>(situations.map((situation) => situation.block));
+  const rest = blocks.filter((block) => !taken.has(block));
+  const firstSituation = blocks.findIndex((block) => taken.has(block));
+  const before = rest.filter((block) => blocks.indexOf(block) < firstSituation);
+  const after = rest.filter((block) => blocks.indexOf(block) > firstSituation);
+  const lead =
+    before.length === 1 && before[0]?.type === 'paragraph' && !hasLink(before[0].runs)
+      ? plain(before[0].runs)
+      : undefined;
+  const items: GatewayItem[] = situations.map((situation) => {
+    const figure = SITUATION_FIGURES[situation.title.toLowerCase()];
+    return {
+      id: slugOf(situation.title),
+      title: situation.title,
+      body: situation.body,
+      visual: figure ? <SituationFigure name={figure} /> : <Sketch />,
+    };
+  });
+  const proof = after.filter(isExampleParagraph);
+  const words = after.filter((block) => !isExampleParagraph(block));
+  return (
+    <ContentSection {...head(band)} lead={lead} data-band="C-router">
+      <Layout rowGap="column">
+        {before.length > 0 && !lead ? <BandBody blocks={before} /> : null}
+        <Gateway items={items} arrangement="board" />
+        {proof.length > 0 && words.length > 0 ? (
+          <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+            <BandBody blocks={words} />
+            <Layout rowGap="block">
+              {proof.map((block) => (
+                <ClaimProof key={inlineToText(block.runs)} example={claimExample(block.runs)} />
+              ))}
+            </Layout>
+          </Layout>
+        ) : after.length > 0 ? (
+          <ItemBody blocks={after} />
+        ) : null}
+      </Layout>
     </ContentSection>
   );
 }

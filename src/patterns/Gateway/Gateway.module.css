@@ -260,6 +260,15 @@
   block-size: var(--gwy-card-visual-height);
 }
 
+/* A plate in the drawing's place (the empty plate of a situation whose drawing is not made yet,
+   /how-we-work, 4 Nov 2026) takes the box's height at its own ratio, so it stands where the drawing
+   will and never runs over the title. A drawing already sizes itself to the box. */
+.root .cardVisual > * {
+  max-block-size: 100%;
+  inline-size: auto;
+  max-inline-size: 100%;
+}
+
 .cardTitle {
   font: var(--gwy-title-text);
   letter-spacing: var(--gwy-title-tracking);

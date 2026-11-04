@@ -561,13 +561,23 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
  */
 const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
-  'your-team',
-  'design-to-release',
-  'product-knowledge',
-  /* The 3 Nov copy cut "You see the thinking" and added how we use AI in our own work: one more part
-     of the same story, so it takes the same register (2.60, 4 Nov 2026). Home composes its own. */
+  /* The 3 Nov copy cut "You see the thinking" and added how we use AI in our own work. The owner
+     rejected the four bands as one alternating image-and-words split each (4 Nov 2026: "designed for
+     the content"), so the other three take their content's shape (SITUATION_PROSE; the bound photo and
+     prototype) and only this one keeps its drawing beside it. Home composes its own. */
   'ai-native-practice',
 ]);
+
+/**
+ * Prose bands that name the reader's starting situations, each a bold-led paragraph ("**A new
+ * product.** We find who it's for…"): home's "where to start" board, every situation at once with its
+ * drawing, title and sentence, none of them a link (owner, 4 Nov 2026: "isn't this essentially the
+ * where to start section?").
+ */
+const SITUATION_PROSE: ReadonlySet<string> = new Set(['product-knowledge']);
+
+/** Whether a prose band names starting situations (`SITUATION_PROSE`). */
+export const isSituationProse = (bandId: string): boolean => SITUATION_PROSE.has(bandId);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
 export const isIllustratedProse = (bandId: string): boolean => ILLUSTRATED_PROSE.has(bandId);
@@ -612,7 +622,7 @@ export function registerOf(
     case 'table':
     case 'method':
     case 'text':
-      if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
+      if (ILLUSTRATED_PROSE.has(band.id) || SITUATION_PROSE.has(band.id)) return 'isometric';
       return drawn.has(band.id)
         ? 'flat'
         : bound || studioBandPhoto(page.route, band.id)
@@ -657,6 +667,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             PHOTOGRAPH_BANDS.has(band.id) ||
             studioBandPhoto(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
+            SITUATION_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             band.blocks.some(
               (block) =>

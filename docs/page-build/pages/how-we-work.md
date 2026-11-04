@@ -52,6 +52,19 @@ the Doodle and Benchmark Gensuite examples are ClaimProof panels where the copy 
 map to drawn scenes (decisions → `own`, no minimum term → `commercial`, handover → `getting-started`); "What we
 make is yours" is an empty plate until 2.62 draws it.
 
+### Owner review of the 3 Nov build (4 Nov 2026)
+"All sections are just alternating image + text sections instead of being designed for the content." And on
+product knowledge: "isn't this essentially the where to start section?" Each band now takes its content's shape:
+- product-knowledge → home's where-to-start board (Gateway `board`, unlinked items: `href` is optional on a board
+  item now). A new product → the `new-product` situation drawing, an established product → `product-modernisation`,
+  a prototype → empty plate until drawn. The closing paragraph sits beside the Doodle example under the board.
+- engagement-shapes → unchanged (three plated options).
+- your-team → the bound studio photo as the 3:1 banner, the three claims three across under it, the JoVE quote
+  under its claim. Reverses the 1 Nov "illustrations here" for this band, to be confirmed by the owner.
+- design-to-release → the two claims as peers under the head, then the Benchmark Gensuite prototype capture beside
+  its example. Also uses the bound asset in place of the illustration slot.
+- ai-native-practice → the one illustrated split left (image end).
+
 ## Band → component (/how-we-work, 2 Nov)
 | Band | Kind / component | Notes |
 |---|---|---|

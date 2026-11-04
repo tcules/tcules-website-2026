@@ -278,7 +278,7 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
  */
 export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
   return gatewayItems(b).map((item) => {
-    const scene = sketchForRoute(item.href);
+    const scene = item.href ? sketchForRoute(item.href) : undefined;
     return {
       ...item,
       visual:
