@@ -173,6 +173,10 @@ pass on another account; a page ships with its placeholders until then.
 - [~] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
       from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
       carry sector photos. Polished tier. Started 2 Nov in another session.
+      Checked 4 Nov on main (1355473a), not done on any of the 12: the hero is a placeholder on all of them
+      (healthtech's own placeholder, the generic slot on the other 11), so neither Bhumika's drawings nor the
+      sector photos are in; "What we design" has 5–6 empty plates per page; "Why founders and product teams
+      choose Tcules" shows 6 pending illustrations; "Other industries" shows 4 empty picture slots.
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
@@ -285,9 +289,13 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+- [ ] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
+      what is left of 2.55.
+- [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
+      the header still needs work.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
-screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
+screen or report where the problem is evident · enquiry form autofill, success/failure copy
 and CTA-source analytics · a pricing section · taxonomy collection pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
@@ -326,9 +334,10 @@ Jatin's explicit sign-off on the reduced type size.
 ## Stage 6 — Rollout and plumbing
 
 - [ ] **6.1** Remaining services, audits and expertise onto the templates.
-- [ ] **6.2** Draft preview, and an empty optional section renders nothing.
-- [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
-- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [-] **6.2** Draft preview, and an empty optional section renders nothing. Dropped: not needed (owner, 4 Nov 2026).
+- [~] **6.3** Ongoing, not a one-off task (owner, 4 Nov 2026). Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
+- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
+      launch (owner, 4 Nov 2026).
 - [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
       and 390 before changing anything:
       - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
