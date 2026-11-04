@@ -59,7 +59,7 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Request a call
+  submit_label: Book a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
     heading: Thanks. Your request has reached us.
@@ -305,7 +305,7 @@ With a direct edit or a choice of alternatives, plus a short reason when someone
 
 A pause costs a click, and it goes where it protects someone: before a person accepts AI content they answer for. Low-risk, reversible changes can apply straight away with an easy undo.
 
-## Tell us what happens when your AI gets it wrong {#enquiry}
+## Make your AI feel safe to use {#enquiry}
 
 Share the feature, what it produces and how users check or undo it today.
 
@@ -315,6 +315,6 @@ Share the feature, what it produces and how users check or undo it today.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
+**Submit:** Book a call
 
 **After sending:** We'll reply within one business day to arrange the call.

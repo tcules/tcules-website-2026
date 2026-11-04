@@ -63,7 +63,7 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Request a call
+  submit_label: Get your prototype reviewed
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
     heading: Thanks. Your request has reached us.
@@ -302,7 +302,7 @@ Yes. Established companies bring prototypes too, often a new module that has won
 
 Yes. Our designers and engineers can take the plan into a first release, keeping the code that is safe to build on. Your own engineers can work from the same plan just as well.
 
-## Tell us about your prototype {#enquiry}
+## Find the gaps before your customers do {#enquiry}
 
 Share a link or a short screen recording, who it's for and when you'd like customers using it.
 
@@ -312,6 +312,6 @@ Share a link or a short screen recording, who it's for and when you'd like custo
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
+**Submit:** Get your prototype reviewed
 
 **After sending:** We'll reply within one business day to arrange the call.

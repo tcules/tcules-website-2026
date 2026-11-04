@@ -63,7 +63,7 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Request a call
+  submit_label: Get your AI feature reviewed
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
     heading: Thanks. Your request has reached us.
@@ -318,7 +318,7 @@ A beta with real users is a good time for an audit. Changing how the AI shows it
 
 The audit has a fixed price, agreed before it begins. One AI feature tested on a few tasks is the smallest scope. Several features, or an agent that acts across your product, take longer and are priced with the dates once the scope is agreed. [How We Work](/how-we-work) sets out how pricing works.
 
-## Tell us who is about to rely on your AI {#enquiry}
+## Find the trust gaps before your users do {#enquiry}
 
 Share the feature, who acts on what it produces and when the wider rollout is planned.
 
@@ -328,6 +328,6 @@ Share the feature, who acts on what it produces and when the wider rollout is pl
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
+**Submit:** Get your AI feature reviewed
 
 **After sending:** We'll reply within one business day to arrange the call.

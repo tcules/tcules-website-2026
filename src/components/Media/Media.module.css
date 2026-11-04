@@ -100,6 +100,14 @@
   object-position: var(--media-focus);
 }
 
+/* `zoom`: a crop cut closer than cover, scaled about the same focal point the crop is anchored at, so
+   the point the placement chose stays where it was. The box around it clips (edge="placement"). */
+.zoom {
+  --media-zoom: 1;
+  transform: scale(var(--media-zoom));
+  transform-origin: var(--media-focus);
+}
+
 .ratio4x5 {
   aspect-ratio: var(--media-ratio-4x5);
 }

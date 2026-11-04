@@ -3,12 +3,15 @@ import type { ComponentType } from 'react';
 import {
   isSituationFigureName,
   Layout,
+  Section,
   SituationFigure,
   Sketch,
   type IconName,
 } from '@/components';
 import {
   Banner,
+  Collage,
+  type CollagePhotos,
   Bento,
   BlockCard,
   BlockCardSet,
@@ -406,30 +409,50 @@ function OneStudio({ b }: BandProps) {
 /* ── 2c · the people, and how the designers use AI ─────────────────────────────── */
 
 /**
- * The studio's people: the team photograph under the head (Banner `below`, component-map Q17
- * default). The band's two paragraphs are its lead, both at the lead's role and measure, and the
- * two links are one row under them: "Meet the studio" an outlined button, "Careers at Tcules" the
- * quieter link (owner, 29 Oct 2026).
+ * The studio's people (owner, 3 Nov 2026): the band's words in the corner of a collage of the studio
+ * itself, six of the November studio photographs round them in an L (mock "Studio collage",
+ * Direction A as revised; every tile's photo, focal point and zoom picked by the owner in the collage
+ * picker; decisions/2026-11-03-studio-collage). Only the lead says what it shows; the other five are
+ * the studio's atmosphere around it and carry the decorative empty alt (ch05 §7). The band's link
+ * stays under its words.
  */
-function People({ page, b }: BandProps) {
+const PEOPLE_COLLAGE: CollagePhotos = {
+  lead: {
+    image: getKitPhoto('studio-team-group-a', {
+      alt: 'The Tcules team together in the Ahmedabad studio',
+    }),
+    focus: { x: 0.3, y: 0.75 },
+    zoom: 1.2,
+  },
+  start: { image: getKitPhoto('studio-desks-plants-b'), focus: { x: 0.19, y: 0.66 }, zoom: 1.2 },
+  middle: { image: getKitPhoto('studio-sticky-wall-sorting'), focus: { x: 0.5, y: 0.5 } },
+  middleStart: { image: getKitPhoto('studio-book-showing-c'), focus: { x: 0.8, y: 0.5 } },
+  middleEnd: {
+    image: getKitPhoto('studio-desk-monitor-corner'),
+    focus: { x: 0.5, y: 0.57 },
+    zoom: 1.25,
+  },
+  end: { image: getKitPhoto('studio-desk-analyst-portrait'), focus: { x: 0.5, y: 0.5 } },
+};
+
+function People({ b }: BandProps) {
   const paras = paragraphRuns(b.blocks);
-  const binding = page.composition.mediaBindings.find(
-    (m) => m.bound && m.supportsSection === b.id,
-  );
+  const links = bandLinks(b);
   return (
-    <Banner
-      form="below"
-      id={b.id}
-      headingId={headingIdOf(b)}
-      heading={b.headingText}
-      lead={paras.map((runs) => plain(runs))}
-      actions={<LinkActions links={bandLinks(b)} pair />}
-      image={
-        binding
-          ? { ...corpusImage(binding), kind: 'photograph' }
-          : { ...placeholderImage(page.route, b.id), kind: 'photograph' }
-      }
-    />
+    <Section id={b.id} data-band="B-collage" aria-labelledby={headingIdOf(b)}>
+      <Collage
+        heading={b.headingText}
+        headingId={headingIdOf(b)}
+        photos={PEOPLE_COLLAGE}
+        actions={links.length > 0 ? <LinkActions links={links} pair /> : undefined}
+      >
+        <Layout rowGap="text">
+          {paras.map((runs, index) => (
+            <p key={index}>{plain(runs)}</p>
+          ))}
+        </Layout>
+      </Collage>
+    </Section>
   );
 }
 
