@@ -170,9 +170,11 @@ a template before the single pages it serves, since one pass there fixes every p
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
-- [~] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
-      from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
-      carry sector photos. Polished tier. Started 2 Nov in another session.
+- [x] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+      from what the service pages got in round 5. Polished tier. Done for launch (owner, 4 Nov 2026): the shared
+      components change with the homepage pass (2.63) and carry across these pages, and the missing visuals (the
+      12 hero placeholders, the empty "What we design" plates, the pending "Why founders…" illustrations and the
+      "Other industries" slots) belong to the illustration and flat graphics passes (2.61, 2.62).
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
@@ -248,7 +250,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
       Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
       the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
-- [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
+- [-] **2.51** Obsolete: the new homepage design (2.63) covers it (owner, 4 Nov 2026). How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
       engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
@@ -285,9 +287,18 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+- [ ] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
+      what is left of 2.55.
+- [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
+      the header still needs work.
+- [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
+- [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
+      wire them in as they land.
+- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
+      only, its path added to `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
-screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
+screen or report where the problem is evident · enquiry form autofill, success/failure copy
 and CTA-source analytics · a pricing section · taxonomy collection pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
@@ -326,9 +337,10 @@ Jatin's explicit sign-off on the reduced type size.
 ## Stage 6 — Rollout and plumbing
 
 - [ ] **6.1** Remaining services, audits and expertise onto the templates.
-- [ ] **6.2** Draft preview, and an empty optional section renders nothing.
-- [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
-- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [-] **6.2** Draft preview, and an empty optional section renders nothing. Dropped: not needed (owner, 4 Nov 2026).
+- [~] **6.3** Ongoing, not a one-off task (owner, 4 Nov 2026). Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
+- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
+      launch (owner, 4 Nov 2026).
 - [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
       and 390 before changing anything:
       - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
