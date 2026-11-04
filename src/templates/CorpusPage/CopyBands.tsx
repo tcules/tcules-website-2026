@@ -2691,6 +2691,32 @@ const CLAIM_GLYPHS: Readonly<Record<string, IconName>> = {
   'Ready for your engineers': 'code-square',
 };
 
+/** A paragraph that is one link and nothing else ("[See all industries →](/expertise)"): a link line. */
+function loneLink(block: CorpusBlock): CorpusLink | undefined {
+  if (block.type !== 'paragraph') return undefined;
+  const runs = trimEnd(block.runs);
+  const [only] = runs;
+  return runs.length === 1 && only?.type === 'link'
+    ? { href: only.href, label: only.children, labelText: plain(only.children) }
+    : undefined;
+}
+
+/** A band's onward links wherever the copy files them: link lines after the set or under a claim. */
+function onwardLinks(blocks: readonly CorpusBlock[]): CorpusLink[] {
+  return blocks.flatMap((block) => {
+    if (block.type === 'links') return block.links;
+    if (block.type === 'item') return onwardLinks(block.blocks);
+    const link = loneLink(block);
+    return link ? [link] : [];
+  });
+}
+
+/** A claim's words: its paragraphs, a link line left out. */
+const claimText = (claim: Extract<CorpusBlock, { type: 'item' }>): string =>
+  claim.blocks
+    .flatMap((block) => (block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : []))
+    .join(' ');
+
 /**
  * A set of short titled claims (plan `CLAIM_LIST`): home's Why Tcules list (OfferSheet `list`), the
  * heading, its lead and the band's onward link at the left, the claims down the right, one ruled row
@@ -2706,12 +2732,7 @@ function ClaimListBand({ band, surface }: { band: CorpusBand; surface?: 'paper' 
   );
   const [first] = paragraphs;
   const lead = first && !hasLink(first.runs) ? plain(first.runs) : undefined;
-  const links = [
-    ...blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
-    ...claims.flatMap((claim) =>
-      claim.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
-    ),
-  ];
+  const links = onwardLinks(blocks);
   /* Titled claims are rows with their titles; a band of untitled lines ("How we use AI in our own
      work") is a row a line, its glyph before its words. */
   const lines = claims.length > 0 ? [] : lead ? paragraphs.slice(1) : paragraphs;
@@ -2725,9 +2746,7 @@ function ClaimListBand({ band, surface }: { band: CorpusBand; surface?: 'paper' 
     claims.length > 0
       ? claims.map((claim, index) => ({
           title: claim.headingText,
-          body: claim.blocks
-            .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
-            .join(' '),
+          body: claimText(claim),
           ...(iconed ? { icon: glyphs[index]! } : {}),
         }))
       : lines.map((block, index) => ({
@@ -2778,12 +2797,7 @@ function CardSetBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 
   );
   /* The band's onward link, wherever the copy files it: after the set, or under its last claim
      ("See all industries →", /why-tcules). */
-  const links = [
-    ...blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
-    ...claims.flatMap((claim) =>
-      claim.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
-    ),
-  ];
+  const links = onwardLinks(blocks);
   const paragraphs = blocks.filter(
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
   );
@@ -2793,9 +2807,7 @@ function CardSetBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 
     claims.length > 0
       ? claims.map((claim) => ({
           title: claim.headingText,
-          body: claim.blocks
-            .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
-            .join(' '),
+          body: claimText(claim),
         }))
       : (lead ? lines : paragraphs).map((block) => ({
           title: '',
