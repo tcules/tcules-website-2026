@@ -9,9 +9,8 @@ import {
   Layout,
   Media,
   Prose,
-  SituationFigure,
-  type SituationFigureName,
   Sketch,
+  Tag,
 } from '@/components';
 import {
   Bento,
@@ -38,8 +37,8 @@ import {
   type Step,
   ServiceTile,
   TestimonialCard,
-  Gateway,
-  type GatewayItem,
+  GatewayPaths,
+  type GatewayPath,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage } from '@/lib/corpus-images';
@@ -47,8 +46,7 @@ import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
-import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
+import { placeholderIllustration } from '@/lib/placeholders';
 import { FULL_COLUMN, MEDIA_SPLIT } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
@@ -1893,9 +1891,9 @@ function sectorLinks(band: CorpusBand): { href: string; title: string }[] {
  * placeholder and its name, the whole card a link. A sentence of links (`P`) is the lead; a paragraph
  * after the links is the footer.
  */
-export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+export function IndustriesBand({ band }: { page?: CorpusPage; band: CorpusBand }) {
   /* A link to the industries hub ("See all industries →", 3 Nov 2026 copy) is not a sector: it is the
-     band's action, in the head (owner, 3 Nov 2026), never a card with a placeholder photograph. */
+     band's action, in the head (owner, 3 Nov 2026). */
   const all = sectorLinks(band);
   const links = all.filter((link) => link.href !== ROUTES.expertise);
   const onward: CorpusLink[] = all
@@ -1914,26 +1912,39 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
       : undefined;
   const trailing = blocks.filter((block, index) => index > 0 && block.type === 'paragraph');
   const footer = trailing.length > 0 ? <BandBody blocks={trailing} /> : undefined;
-  const image = (href: string, title: string) => {
-    const photo = HOME_SECTOR_PHOTOS[href];
-    return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
-  };
-  const cards: BlockCardSetItem[] = links.map((link) => ({
-    id: link.href,
-    title: link.title,
-    href: link.href,
-    media: { type: 'image', image: image(link.href, link.title) },
-  }));
-  return (
+  /* A short band (owner, 4 Nov 2026, homepage pass, carried to every page with the band): the sectors
+     as destination pills under the head, one wrapping row. A list of places to go needs no picture
+     each; photo cards made it a fold of its own. */
+  const pills = (
+    <Cluster as="ul" colGap="tight" rowGap="tight">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Tag variant="link" href={link.href}>
+            {link.title}
+          </Tag>
+        </li>
+      ))}
+    </Cluster>
+  );
+  return onward.length > 0 ? (
     <ContentSection
       {...head(band)}
-      data-band="C-image"
+      data-band="C-pills"
       footer={footer}
       actionsAt="end"
-      actions={onward.length > 0 ? <LinkActions links={onward} /> : undefined}
+      actions={<LinkActions links={onward} />}
       {...(sentence ? { lead: plain(sentence.runs) } : {})}
     >
-      <BlockCardSet items={cards} lead="none" across={3} cue="title" phone="pair" />
+      {pills}
+    </ContentSection>
+  ) : (
+    <ContentSection
+      {...head(band)}
+      data-band="C-pills"
+      footer={footer}
+      {...(sentence ? { lead: plain(sentence.runs) } : {})}
+    >
+      {pills}
     </ContentSection>
   );
 }
@@ -2131,7 +2142,11 @@ function hostedRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[]
   const table = content(band).find((block): block is TableBlock => block.type === 'table');
   if (!table) return [];
   const run: CorpusBand[] = [];
-  for (let next = at + 1; next < bands.length && isPlainToolGroup(bands[next] as CorpusBand); next++)
+  for (
+    let next = at + 1;
+    next < bands.length && isPlainToolGroup(bands[next] as CorpusBand);
+    next++
+  )
     run.push(bands[next] as CorpusBand);
   const tools = run.flatMap((other) => toolGroup(other).tools);
   const names = table.rows.map((row) => plain(row[0] ?? []).trim());
@@ -2299,7 +2314,9 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
     const rest = blocks.filter((block) => block !== table);
     const [leadBlock, ...more] = rest;
     const leadText =
-      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs) ? plain(leadBlock.runs) : undefined;
+      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs)
+        ? plain(leadBlock.runs)
+        : undefined;
     const intro = leadText ? more : rest;
     return (
       <ContentSection
@@ -2576,7 +2593,12 @@ export function TextBand({
     );
     return (
       <ContentSection {...head(band)} data-band="B">
-        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <Layout
+          columns={{ base: 1, lg: [1, 1] }}
+          colGap="section"
+          rowGap="stack"
+          align="center"
+        >
           <Layout rowGap="stack">
             <BandBody blocks={words} />
             <LinkActions links={onward} />
@@ -2593,17 +2615,12 @@ export function TextBand({
   );
 }
 
-/** Each starting situation's own drawing, where one is drawn; the rest show the empty plate. */
-const SITUATION_FIGURES: Readonly<Record<string, SituationFigureName>> = {
-  'a new product': 'new-product',
-  'an established product': 'product-modernisation',
-};
-
 /**
  * Starting situations (plan `SITUATION_PROSE`, /how-we-work "Every project starts from your product
- * and your users"): home's where-to-start board, every situation at once, its drawing over its title
- * and sentence, none a link (owner, 4 Nov 2026). The paragraph before them is the lead; the words
- * after them sit as one row under the board, a paragraph beside the example that proves it.
+ * and your users"): home's where-to-start cards (owner, 4 Nov 2026: "isn't this essentially the where
+ * to start section?"; decisions/2026-11-04-where-to-start-no-examples), the centred head on tint and
+ * one paper card a situation, its title and sentence. The copy links none, so no card has ways in.
+ * The words after them sit as one row under the cards, the paragraph beside the example.
  */
 function SituationsBand({ band }: { band: CorpusBand }) {
   const blocks = content(band).filter((block) => block.type !== 'links');
@@ -2620,32 +2637,39 @@ function SituationsBand({ band }: { band: CorpusBand }) {
       : [],
   );
   const taken = new Set<CorpusBlock>(situations.map((situation) => situation.block));
-  const rest = blocks.filter((block) => !taken.has(block));
   const firstSituation = blocks.findIndex((block) => taken.has(block));
-  const before = rest.filter((block) => blocks.indexOf(block) < firstSituation);
-  const after = rest.filter((block) => blocks.indexOf(block) > firstSituation);
+  const before = blocks.filter((block, index) => !taken.has(block) && index < firstSituation);
+  const after = blocks.filter((block, index) => !taken.has(block) && index > firstSituation);
   const lead =
     before.length === 1 && before[0]?.type === 'paragraph' && !hasLink(before[0].runs)
       ? plain(before[0].runs)
       : undefined;
-  const items: GatewayItem[] = situations.map((situation) => {
-    const figure = SITUATION_FIGURES[situation.title.toLowerCase()];
-    return {
-      id: slugOf(situation.title),
-      title: situation.title,
-      body: situation.body,
-      visual: figure ? <SituationFigure name={figure} /> : <Sketch />,
-    };
-  });
+  const paths: GatewayPath[] = situations.map((situation) => ({
+    id: slugOf(situation.title),
+    title: situation.title,
+    body: [situation.body],
+    links: [],
+  }));
   const proof = after.filter(isExampleParagraph);
   const words = after.filter((block) => !isExampleParagraph(block));
   return (
-    <ContentSection {...head(band)} lead={lead} data-band="C-router">
+    <ContentSection
+      {...head(band)}
+      lead={lead}
+      data-band="C-router"
+      surface="tint"
+      align="center"
+    >
       <Layout rowGap="column">
         {before.length > 0 && !lead ? <BandBody blocks={before} /> : null}
-        <Gateway items={items} arrangement="board" />
+        <GatewayPaths paths={paths} form="cards" />
         {proof.length > 0 && words.length > 0 ? (
-          <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+          <Layout
+            columns={{ base: 1, lg: [1, 1] }}
+            colGap="section"
+            rowGap="stack"
+            align="center"
+          >
             <BandBody blocks={words} />
             <Layout rowGap="block">
               {proof.map((block) => (

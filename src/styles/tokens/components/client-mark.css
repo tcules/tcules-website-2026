@@ -55,10 +55,18 @@
 --cmark-target-side-m:44px;
 --cmark-height-max-m:32px;
 --cmark-width-max-m:188px;
-/* component sizes: a mark in a citation line; one value at every width */
---cmark-target-side-sm:40px;
---cmark-height-max-sm:24px;
---cmark-width-max-sm:120px;
+/* component sizes: the compact client wall (sm, owner 4 Nov 2026, homepage pass: "smaller logos
+   and smaller boxes"), about four fifths of md in every number (46 / 56 ≈ 32 / 40 ≈ 188 / 240),
+   with its own phone step below; and a mark in a citation line (xs), one value at every width */
+--cmark-target-side-sm:46px;
+--cmark-height-max-sm:32px;
+--cmark-width-max-sm:188px;
+--cmark-target-side-sm-m:38px;
+--cmark-height-max-sm-m:26px;
+--cmark-width-max-sm-m:150px;
+--cmark-target-side-xs:40px;
+--cmark-height-max-xs:24px;
+--cmark-width-max-xs:120px;
 /* Forced colours (Windows High Contrast) — surface-independent, because in that mode the
    user's palette replaces every ground. CanvasText is a system colour KEYWORD, not a palette
    value: the one colour correct there by definition, since the user chose it. Read only
@@ -77,6 +85,9 @@
 --cmark-target-side:var(--cmark-target-side-m);
 --cmark-height-max:var(--cmark-height-max-m);
 --cmark-width-max:var(--cmark-width-max-m);
+--cmark-target-side-sm:var(--cmark-target-side-sm-m);
+--cmark-height-max-sm:var(--cmark-height-max-sm-m);
+--cmark-width-max-sm:var(--cmark-width-max-sm-m);
 }
 }
 

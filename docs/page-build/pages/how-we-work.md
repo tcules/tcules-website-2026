@@ -55,10 +55,11 @@ make is yours" is an empty plate until 2.62 draws it.
 ### Owner review of the 3 Nov build (4 Nov 2026)
 "All sections are just alternating image + text sections instead of being designed for the content." And on
 product knowledge: "isn't this essentially the where to start section?" Each band now takes its content's shape:
-- product-knowledge → home's where-to-start board (Gateway `board`, unlinked items: `href` is optional on a board
-  item now). A new product → the `new-product` situation drawing, an established product → `product-modernisation`,
-  a prototype → empty plate until drawn. The closing paragraph sits beside the Doodle example under the board.
-- engagement-shapes → unchanged (three plated options).
+- product-knowledge → home's where-to-start cards (GatewayPaths `form="cards"`, centred head on tint, one paper
+  card per situation, no ways in since the copy links none; decisions/2026-11-04-where-to-start-no-examples). The
+  closing paragraph sits beside the Doodle example under the cards.
+- engagement-shapes → main's three-ways glyph cards (EngagementOptions `cards`; decisions/2026-11-04-three-ways-cards),
+  as the repeated band on every other page.
 - your-team → the bound studio photo as the 3:1 banner, the three claims three across under it, the JoVE quote
   under its claim. Reverses the 1 Nov "illustrations here" for this band, to be confirmed by the owner.
 - design-to-release → the two claims as peers under the head, then the Benchmark Gensuite prototype capture beside

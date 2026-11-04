@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -10,6 +10,7 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
+  CtaSection,
   EngagementOptions,
   ListCard,
   OfferSheet,
@@ -410,15 +411,59 @@ function trailingParagraphs(band: CorpusBand): InlineRun[][] {
 
 const quoteOf = (band: CorpusBand) => blocksOf(band, 'quote')[0];
 
-/** The paragraphs before a band's first labelled claim (its lead-in), as runs. */
+/** The paragraphs before a band's first labelled claim (its lead-in), as runs. A label line that
+    names the first claim's kind (`optionEyebrows`) is the claim's, not the lead-in's. */
 function leadingParagraphs(band: CorpusBand): InlineRun[][] {
   const out: InlineRun[][] = [];
+  const labels = optionEyebrows(band);
   for (const block of band.blocks) {
     if (block.type === 'comment') continue;
     if (block.type !== 'paragraph' || leadOf(block)) break;
+    if (labels.has(block)) continue;
     out.push(block.runs);
   }
   return out;
+}
+
+/** A paragraph that is one italic run and nothing else ("*A known goal*"), as its text. */
+function italicLine(block: CorpusBlock | undefined): string | undefined {
+  if (block?.type !== 'paragraph') return undefined;
+  const runs = block.runs.filter((run) => !(run.type === 'text' && run.text.trim() === ''));
+  const only = runs.length === 1 ? runs[0] : undefined;
+  return only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
+}
+
+/**
+ * The label lines over a band's bold-led options (v2.1 copy, 4 Nov 2026: "*Optional first step*" over
+ * "**A pilot project.** …"): an italic-only paragraph directly before a labelled claim names that
+ * claim's kind. Keyed by the paragraph, valued by the claim's title.
+ */
+function optionEyebrows(band: CorpusBand): Map<CorpusBlock, string> {
+  const out = new Map<CorpusBlock, string>();
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  blocks.forEach((block, index) => {
+    const line = italicLine(block);
+    const next = blocks[index + 1];
+    const lead = next ? leadOf(next) : null;
+    if (line && lead) out.set(block, line);
+  });
+  return out;
+}
+
+/** The eyebrow over a claim, by the claim's title. */
+function eyebrowFor(band: CorpusBand, title: string): string | undefined {
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  const at = blocks.findIndex((block) => {
+    const lead = leadOf(block);
+    return lead ? labelTitle(lead.label) === title : false;
+  });
+  return at > 0 ? italicLine(blocks[at - 1]) : undefined;
+}
+
+/** A plain closing line split into the island's heading (its first sentence) and lead (the rest). */
+function splitAsk(text: string): { heading: string; lead?: string } {
+  const match = /^(.+?[.?!])\s+(.+)$/.exec(text.trim());
+  return match ? { heading: match[1]!, lead: match[2] } : { heading: text.trim() };
 }
 
 /** A case band's closing links: the link lines after the last case's own "Read the … case". */
@@ -541,6 +586,63 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
 
 /* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
    have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+/**
+ * Each Why Tcules reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each
+ * title gets an inline icon"). The same six reasons on every page that carries the band.
+ */
+const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Craft people notice': 'eye',
+  'Evidence before screens': 'clipboard-check',
+  'Seen your problem before': 'users-group-rounded',
+  'Start small': 'hand-shake',
+};
+
+/**
+ * "Why founders and product teams choose Tcules", on every page that repeats it (owner, 4 Nov 2026:
+ * the homepage's design carries across): the heading at the left with its way deeper under it, the
+ * six reasons down the right in halves, one ruled row each, its glyph inline before its title and its
+ * sentence under it (OfferSheet `list`). A reason whose title has no glyph sets the whole list
+ * without glyphs, so nothing is dropped and the set never mixes.
+ */
+export function WhyTculesBand({
+  band,
+  surface,
+}: {
+  band: CorpusBand;
+  surface?: 'paper' | 'tint';
+}) {
+  const parts = sheetParts(band);
+  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
+  const titled = parts.items.map((item) => ({
+    ...item,
+    title: item.title?.replace(/\.$/, ''),
+  }));
+  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
+  const items = titled.map((item) =>
+    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
+  );
+  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <OfferSheet
+      {...head(band)}
+      arrangement="list"
+      surface={surface}
+      lead={parts.lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
+/** A carded option's glyph, by its name as authored (owner, 4 Nov 2026: "icons or small graphics"). */
+const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
+  'A pilot project': 'flag',
+  'A defined project': 'clipboard-check',
+  'An ongoing partnership': 'refresh',
+};
+
 const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
   /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
      and the set warns as mixed. */
@@ -582,10 +684,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
   switch (unit.kind) {
     case 'faq':
       return (
-        <ContentSection {...head(band)} data-band="D-faq" align="center">
-          <ContentSectionText>
-            <FaqItems band={band} />
-          </ContentSectionText>
+        /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
+           decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
+           every page. */
+        <ContentSection {...head(band)} data-band="D-faq" arrangement="beside" split="halves">
+          <FaqItems band={band} />
         </ContentSection>
       );
 
@@ -831,18 +934,35 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'tiles': {
       const opening = leadingParagraphs(band);
       const closing = closingNote(band);
-      const terms = [...closing.rest, ...trailingParagraphs(band)];
+      const trailing = [...closing.rest, ...trailingParagraphs(band)];
       /* Links by role, never by position (owner, 3 Nov 2026): the page link ("See how we work") is
          the head's action, the ask ("Book a call", to the form) its own island after the band. */
       const ask = askLinkIn(band);
       const links = bandLinks(band).filter((link) => !isAskLink(link));
+      /* The v2.1 copy (4 Nov 2026) closes the set on a plain line before its links ("Not sure which
+         suits you? Tell us about the product, and we'll suggest one."): with an ask, that line is the
+         compact island's words, and both links its actions, the ask first. A term is labelled
+         ("*Working hours:* …"), so an unlabelled last line beside an ask is the ask's. */
+      const lastLine = trailing.at(-1);
+      const askWords =
+        ask && lastLine && !factOf(lastLine) && trailing.some((runs) => factOf(runs))
+          ? splitAsk(inlineToText(lastLine))
+          : undefined;
+      const terms = (askWords ? trailing.slice(0, -1) : trailing).map((runs) => {
+        const fact = factOf(runs);
+        return fact ? { label: fact.label, body: fact.body } : { body: renderInline(runs) };
+      });
       const options =
         leads(band).length > 0
-          ? leads(band).map((row) => ({
-              title: row.title,
-              body: renderInline(row.body),
-              scope: scopeOf(row.title),
-            }))
+          ? leads(band).map((row) => {
+              const eyebrow = eyebrowFor(band, row.title);
+              return {
+                ...(eyebrow ? { eyebrow } : {}),
+                title: row.title,
+                body: renderInline(row.body),
+                scope: scopeOf(row.title),
+              };
+            })
           : listOptions(band).length > 0
             ? listOptions(band)
             : itemOptions(band);
@@ -858,6 +978,38 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           (('more' in option && Array.isArray(option.more) && option.more.length > 0) ||
             ('facts' in option && Array.isArray(option.facts) && option.facts.length > 0)),
       );
+      /* Options that each name their kind in a label line and are told in one sentence are cards
+         (owner, 4 Nov 2026, homepage pass: "cards that look like cards"); no drawing. */
+      /* And the repeated "Three ways to work with us" band, wherever it appears (owner, 4 Nov 2026:
+         the homepage's cards carry across), with or without the label lines. */
+      const carded =
+        !rich &&
+        options.length > 0 &&
+        /* /how-we-work's own "Three ways to work with us" is the same three options
+           (decisions/2026-11-04-three-ways-cards). */
+        (band.id === 'how-we-work-together' ||
+          band.id === 'engagement-shapes' ||
+          options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow)));
+      const compactAsk =
+        askWords && ask ? (
+          <CtaSection
+            id={`${band.id}-ask`}
+            data-band="onward"
+            arrangement="open"
+            density="compact"
+            inBand
+            heading={askWords.heading}
+            body={askWords.lead ? [askWords.lead] : undefined}
+            actions={
+              links[0]
+                ? [
+                    { label: ask.labelText, href: ask.href },
+                    { label: links[0].labelText.replace(/\s*→\s*$/, ''), href: links[0].href },
+                  ]
+                : [{ label: ask.labelText, href: ask.href }]
+            }
+          />
+        ) : undefined;
       return (
         <Fragment>
           {/* A rich set compares (owner, 1 Nov 2026, /how-we-work: picked over the rows, which stand in
@@ -866,9 +1018,26 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={options}
-            arrangement={rich ? 'compare' : 'grid'}
-            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            options={
+              carded
+                ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
+                  options.map((option) => {
+                    const title = option.title.replace(/\.$/, '');
+                    /* "A pilot project, at a fixed price": the option is named before its terms. */
+                    const glyph =
+                      OPTION_GLYPHS[title] ?? OPTION_GLYPHS[title.split(',')[0]?.trim() ?? ''];
+                    return {
+                      ...option,
+                      scope: undefined,
+                      title,
+                      ...(glyph ? { icon: <Icon name={glyph} size="xl" /> } : {}),
+                    };
+                  })
+                : options
+            }
+            arrangement={rich ? 'compare' : carded ? 'cards' : 'grid'}
+            terms={terms}
+            note={compactAsk}
             closing={
               closing.note
                 ? {
@@ -884,9 +1053,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   }
                 : undefined
             }
-            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+            action={
+              !compactAsk && links.length > 0 ? (
+                <LinkActions links={links.slice(0, 1)} />
+              ) : undefined
+            }
           />
-          {ask ? <AskIsland link={ask} /> : null}
+          {ask && !compactAsk ? <AskIsland link={ask} /> : null}
         </Fragment>
       );
     }
@@ -1011,6 +1184,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
+      /* The repeated Why Tcules band takes the homepage's list (owner, 4 Nov 2026). */
+      if (band.id === 'why-tcules') {
+        return (
+          <WhyTculesBand band={band} surface={unit.surface === 'tint' ? 'tint' : 'paper'} />
+        );
+      }
       /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
          closing links. One isometric illustration per reason, band scale (`figureSize="lg"`), never
          a case cover or a figure panel (decisions/2026-10-30-reasons-take-illustrations): the case

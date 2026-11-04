@@ -280,9 +280,9 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   3:1 banner under the head: three claims three across, four two by two. A paragraph before the claims is the
   head's lead. One column of claims beside a 4:5 photo ran far past it.
 - **Starting situations** (the reader's own cases as bold-led paragraphs: "**A new product.** …") are home's
-  where-to-start board: every situation at once, its drawing over its title and sentence, none a link where the
-  copy links none; a situation not drawn yet shows the empty plate in the drawing's box. The words after them sit
-  as one row under the board, the paragraph beside the example (plan `SITUATION_PROSE`; owner, 4 Nov 2026).
+  where-to-start cards (GatewayPaths `cards` on tint): one card a situation, its title and sentence, no ways in
+  where the copy links none. The words after them sit as one row under the cards, the paragraph beside the
+  example (plan `SITUATION_PROSE`; owner, 4 Nov 2026).
 - **Claims argued with one worked example and the picture the copy binds to show it** lead as peers under the
   head, then the evidence as one row: the picture beside the example that names it.
 - **A run of prose bands is never one alternating image-and-words split each** (owner, 4 Nov 2026, /how-we-work:

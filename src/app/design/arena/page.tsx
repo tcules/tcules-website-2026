@@ -14,12 +14,12 @@ export default function ArenaSpecimen() {
         <Layout rowGap="block">
           <h1>Arena</h1>
           <p>
-            The home hero&rsquo;s animated drawing (owner, 2 Nov 2026). A field of grey apps holds
-            for half a second, one rises and opens, and underneath a client, a researcher, a
-            designer and an engineer work with agents until the finished card flies up into the
-            app. It loops every 10.3 seconds. The SVG is fetched after the page paints; the clock
-            stops out of view; under reduced motion the finished frame stands until play is pressed.
-            Below 640 the box is square and the camera holds on the studio floor.
+            The home hero&rsquo;s animated drawing (owner, 2 Nov 2026). A field of grey apps
+            holds for half a second, one rises and opens, and underneath a client, a researcher,
+            a designer and an engineer work with agents until the finished card flies up into
+            the app. It loops every 11.8 seconds. The SVG is fetched after the page paints; the
+            clock stops out of view; under reduced motion the finished frame stands until play
+            is pressed. Below 640 the box is square and the camera holds on the studio floor.
           </p>
         </Layout>
       </Section>

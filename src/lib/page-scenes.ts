@@ -450,6 +450,10 @@ export const PAGE_SCENE_NAMES = [
   'tool-figma-storybook-fidelity-checklist-corrections',
   'tool-prototype-readiness-checklist-example',
   'tool-prototype-readiness-checklist-brief',
+  /* Home, "How our designers use AI" (owner, 4 Nov 2026, direction A): one plate per step. */
+  'home-ai-check',
+  'home-ai-decide',
+  'home-ai-fix',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

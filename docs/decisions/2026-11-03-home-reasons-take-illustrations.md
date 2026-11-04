@@ -1,7 +1,7 @@
 ---
 title: "Home's Why Tcules as on every other page: Reasons with one illustration per reason"
 date: 2026-11-03
-status: proposed
+status: superseded
 area: [layout, illustration]
 source: "Owner (Devagya), 3 Nov 2026, review of home on the preview (PR #201), asked \"should this go back to having illustrations?\"; Claude proposed yes and built it; to be seen"
 supersedes: []

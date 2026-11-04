@@ -541,6 +541,14 @@ type PageHeroBaseProps = {
    */
   stats?: readonly HeroStat[];
   /**
+   * A full-width row under the hero's split (owner, 4 Nov 2026, homepage pass: "move logo wall into
+   * the hero as a row under the split spanning full width"), composed by the caller: in practice the
+   * compact LogoGrid. It spans the whole column whatever the arrangement,
+   * so the clients read as part of the opening instead of a band of their own. A `section` (96) under
+   * the split (owner, 4 Nov 2026): a region of another kind. Absent renders no row.
+   */
+  foot?: ReactNode;
+  /**
    * The Tcules pixel-grid texture, for a paper hero with NO media only: the end-fade, the field
    * Statement's `end-fade` draws (end −120, 30% wide, blur 160, the band's full height), so it runs
    * hard along the end edge and fades toward the copy. From 1024; not drawn below.
@@ -797,6 +805,7 @@ export function PageHero({
   surface = 'paper',
   tags = [],
   stats = [],
+  foot,
   texture = false,
   announcement,
   children,
@@ -1472,9 +1481,9 @@ export function PageHero({
                    drawing     [2, 1] from 1024 and [1, 1] from 1440. The 67px title needs 576 at
                                1024 ("unresolved product." is one line there); the drawing takes
                                the third and its numbered cut, so its labels stay readable.
-                   scene       the animated drawing takes wide's tracks: [1, 1] from 1024 and
-                               2 : 3 from 1440 — a scene has a camera and needs the room a
-                               still drawing's third cannot give it (home hero, 2 Nov 2026).
+                   scene       the animated drawing: [1, 1] at every split width (owner, 4 Nov
+                               2026, homepage pass: "50/50 split for hero"); a scene has a camera
+                               and needs more than a still drawing's third.
         wide     the photograph LEADS: [1, 1] from 1024 and copy 2 : media 3 from 1440, a 3:2
                  photograph at 686 × 457 beside a 458 copy column. The family's second photograph
                  idea, so the home and studio heroes are not one rectangle at a squint (fix round 2).
@@ -1483,11 +1492,13 @@ export function PageHero({
        anything else is top-aligned in its own box. */
     const columns = !split
       ? undefined
-      : wide || media?.type === 'scene'
-        ? { lg: [1, 1], xl: [2, 3] }
-        : isIllustration
-          ? { lg: [2, 1], xl: [1, 1] }
-          : { lg: [1, 1] };
+      : media?.type === 'scene'
+        ? { lg: [1, 1] }
+        : wide
+          ? { lg: [1, 1], xl: [2, 3] }
+          : isIllustration
+            ? { lg: [2, 1], xl: [1, 1] }
+            : { lg: [1, 1] };
 
     const copyTrack = stack;
 
@@ -1539,6 +1550,14 @@ export function PageHero({
       content
     );
     top = trailInCopy ? headed : withTrail(headed);
+  }
+  if (foot != null) {
+    top = (
+      <Layout rowGap="section">
+        {top}
+        {foot}
+      </Layout>
+    );
   }
 
   return (
