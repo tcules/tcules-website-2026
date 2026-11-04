@@ -86,12 +86,12 @@
      one-line row clears the 44 touch target (an inset inside the row, not a distance between two
      things); the underline sits 2 under the example's baseline, an optical offset. */
   --gwy-door-radius: var(--radius-16);
-  /* The set's closing line before its ask (owner, 4 Nov 2026): the card titles' role, h4 (22, the sans),
-     so the close sits on the doors' tier and the button has a line at its own weight to follow. At
-     body size it read as a footnote between the titles and the solid. A title measure, so it
-     balances over two lines. */
-  --gwy-door-close-text: var(--text-h4);
-  --gwy-door-close-tracking: var(--text-h4-tracking);
+  /* The set's closing line before its ask (owner, 4 Nov 2026): h5-lg (20, the sans), a step under the
+     card titles' 22, so the close carries the button without matching the doors. At body size it
+     read as a footnote between the titles and the solid. A title measure, so it balances over two
+     lines. */
+  --gwy-door-close-text: var(--text-h5-lg);
+  --gwy-door-close-tracking: var(--text-h5-lg-tracking);
   --gwy-door-close-measure: var(--measure-title);
   --gwy-door-title-text: var(--text-h4);
   --gwy-door-title-tracking: var(--text-h4-tracking);
