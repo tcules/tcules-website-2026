@@ -12,6 +12,7 @@ import {
   type SectionSurface,
   type SketchName,
 } from '@/components';
+import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 
 import styles from './OfferSheet.module.css';
@@ -33,6 +34,13 @@ export type OfferSheetItem = {
   /** Or trusted HTML from the content seam, for a body that carries a link or emphasis. */
   bodyHtml?: string;
   /**
+   * Or the body as a line of short facts, each as authored ("Design", "Full-time", "In-office,
+   * Ahmedabad"): set at the body role as one wrapping row parted by middle dots, each fact kept whole
+   * so a narrow track breaks BETWEEN facts, never inside one at a hyphen ("In-/office", /careers
+   * critic, 4 Nov 2026).
+   */
+  facts?: readonly string[];
+  /**
    * The promise drawn: what it changes in the product, a Sketch scene drawn for this promise
    * (owner, 26 Oct 2026, product-design page). Set on every item or on none; with all four drawn the
    * sheet is two rows of two, each drawing beside its words.
@@ -44,6 +52,12 @@ export type OfferSheetItem = {
    * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
    */
   href?: string;
+  /**
+   * With `href` to the page's own form (`#apply`): the choice that form picks when the link is
+   * followed (/careers' open roles → the role chip; `ENQUIRY_ROLE_ATTRIBUTE`). The value as the form
+   * posts it.
+   */
+  choice?: string;
   /**
    * A glyph leading the item. In `rows`, before its title on the title's first line (owner, 4 Nov
    * 2026: a row is not an icon card). In `grid`, the item's HEAD: glyph, then title, then body, each
@@ -151,9 +165,40 @@ export function OfferSheet({
 }: OfferSheetProps) {
   const rows = arrangement === 'rows';
   const shown = items.filter(
-    (item) => (item.title ?? item.body ?? item.bodyHtml ?? '').trim().length > 0,
+    (item) =>
+      (item.title ?? item.body ?? item.bodyHtml ?? item.facts?.join('') ?? '').trim().length > 0,
   );
   const keyOf = (item: OfferSheetItem) => item.id ?? item.title ?? item.body ?? item.bodyHtml;
+  /* The item's words under (or beside) its title: HTML, a line of facts, or plain text. */
+  const bodyOf = (item: OfferSheetItem) =>
+    item.bodyHtml ? (
+      <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+    ) : item.facts && item.facts.length > 0 ? (
+      <Cluster as="ul" colGap="tight" rowGap="inline" className={styles.facts}>
+        {item.facts.map((fact) => (
+          <li key={fact}>{fact}</li>
+        ))}
+      </Cluster>
+    ) : item.body ? (
+      <p className={styles.body}>{item.body}</p>
+    ) : null;
+  /* The title, a link where the item names a page or the page's own form. */
+  const titleOf = (item: OfferSheetItem) =>
+    item.title ? (
+      <h3 className={styles.title}>
+        {item.href ? (
+          <a
+            href={item.href}
+            className={styles.titleLink}
+            {...(item.choice ? { [ENQUIRY_ROLE_ATTRIBUTE]: item.choice } : {})}
+          >
+            {item.title}
+          </a>
+        ) : (
+          item.title
+        )}
+      </h3>
+    ) : null;
   if (process.env.NODE_ENV !== 'production' && (shown.length < 2 || shown.length > 6)) {
     console.warn(`OfferSheet: ${shown.length} promises; the sheet is built for two to six.`);
   }
@@ -179,22 +224,8 @@ export function OfferSheet({
   }
   const words = (item: OfferSheetItem) => (
     <Layout rowGap="text">
-      {item.title ? (
-        <h3 className={styles.title}>
-          {item.href ? (
-            <a href={item.href} className={styles.titleLink}>
-              {item.title}
-            </a>
-          ) : (
-            item.title
-          )}
-        </h3>
-      ) : null}
-      {item.bodyHtml ? (
-        <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-      ) : item.body ? (
-        <p className={styles.body}>{item.body}</p>
-      ) : null}
+      {titleOf(item)}
+      {bodyOf(item)}
     </Layout>
   );
   /* Drawn three across (five or six promises, `across={3}`): from 1024 each drawing heads its words,
@@ -219,16 +250,12 @@ export function OfferSheet({
                 <span className={styles.rowIcon}>
                   <Icon name={item.icon} size="xl" />
                 </span>
-                {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+                {titleOf(item)}
               </Cluster>
-            ) : item.title ? (
-              <h3 className={styles.title}>{item.title}</h3>
-            ) : null}
-            {item.bodyHtml ? (
-              <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-            ) : item.body ? (
-              <p className={styles.body}>{item.body}</p>
-            ) : null}
+            ) : (
+              titleOf(item)
+            )}
+            {bodyOf(item)}
           </Layout>
         </li>
       ))}

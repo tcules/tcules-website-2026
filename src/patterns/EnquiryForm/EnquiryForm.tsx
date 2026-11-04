@@ -1,10 +1,11 @@
 'use client';
 
-import type { FormEvent, ReactNode } from 'react';
+import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
 import { cx } from '@/lib/cx';
+import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 
 import styles from './EnquiryForm.module.css';
 
@@ -220,6 +221,12 @@ type EnquiryVariantProps = SharedProps & {
    * link to the work (4 Nov 2026, /careers) has no free text to ask for.
    */
   workLabel?: EnquiryWorkLabel | null;
+  /**
+   * The link field is asked for, not optional: its label loses "Optional" and a send checks it like
+   * the email (4 Nov 2026, /careers' application, whose copy asks for "a link to work that shows your
+   * reasoning"). Errors on send only, as everywhere. The card dress and the plain set honour it.
+   */
+  urlRequired?: boolean;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: string;
   /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
@@ -269,6 +276,7 @@ export type EnquiryFormProps =
 type Lifecycle = 'idle' | 'invalid' | 'submitting' | 'error' | 'success';
 type FieldMessages = {
   email: string;
+  url: string;
   work: string;
   name: string;
   company: string;
@@ -278,6 +286,7 @@ type FieldMessages = {
 
 const EMPTY_MESSAGES: FieldMessages = {
   email: '',
+  url: '',
   work: '',
   name: '',
   company: '',
@@ -419,7 +428,7 @@ function FieldGroup({
 function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
   if (control.value.trim() === '') return spec.empty;
   if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
-    return 'Enter a valid email';
+    return spec.type === 'url' ? 'Enter a valid link' : 'Enter a valid email';
   }
   return '';
 }
@@ -450,7 +459,7 @@ type FieldSpec = {
   key: FieldKey;
   label: string;
   name: string;
-  type?: 'text' | 'email' | 'tel';
+  type?: 'text' | 'email' | 'tel' | 'url';
   as?: 'textarea';
   autoComplete?: string;
   /** The message when a send finds the field empty. */
@@ -472,6 +481,15 @@ const FIELD = {
     type: 'email',
     autoComplete: 'email',
     empty: 'Enter your email',
+  }),
+  /** The link, where it is asked for (`urlRequired`). Its label is the set's `urlLabel`. */
+  url: (label: string): FieldSpec => ({
+    key: 'url',
+    label,
+    name: 'url',
+    type: 'url',
+    autoComplete: 'url',
+    empty: 'Add a link',
   }),
   company: {
     key: 'company',
@@ -591,6 +609,35 @@ export function EnquiryForm(props: EnquiryFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* A link elsewhere on the page that names a role (`ENQUIRY_ROLE_ATTRIBUTE`, /careers' open roles):
+     following it picks that chip here, so a reader who found their role does not pick it twice. The
+     link is an ordinary anchor, so it scrolls to the form with or without this; the pick is the
+     enhancement. Only a card with a role group listens. */
+  const hasRoleGroup =
+    (props.variant === undefined || props.variant === 'enquiry') &&
+    props.dress?.kind === 'card' &&
+    props.dress.role !== undefined;
+  useEffect(() => {
+    if (!hasRoleGroup) return;
+    function pick(event: MouseEvent) {
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest(`a[${ENQUIRY_ROLE_ATTRIBUTE}]`);
+      const value = link?.getAttribute(ENQUIRY_ROLE_ATTRIBUTE);
+      const form = formRef.current;
+      if (!value || !form) return;
+      const chip = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="role"]')).find(
+        (input) => input.value === value,
+      );
+      if (!chip) return;
+      chip.checked = true;
+      saveDraft(form);
+    }
+    document.addEventListener('click', pick);
+    return () => document.removeEventListener('click', pick);
+    // saveDraft reads only the form and the fixed draft key.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasRoleGroup]);
+
   function saveDraft(form: HTMLFormElement) {
     const draft: Record<string, string[]> = {};
     for (const control of Array.from(form.elements)) {
@@ -650,6 +697,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const control = form.elements.namedItem(spec.name);
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
+      if (spec.type === 'url') control.value = normaliseUrl(control.value);
       next[spec.key] = messageFor(spec, control);
       if (next[spec.key] && !firstInvalid) firstInvalid = control;
     }
@@ -691,6 +739,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
     (props.variant === undefined || props.variant === 'enquiry') &&
     props.workLabel === null
   );
+  /* The link asked for rather than offered (`urlRequired`): a validating field like the email. */
+  const urlRequired =
+    (props.variant === undefined || props.variant === 'enquiry') && props.urlRequired === true;
+  const urlField = FIELD.url(urlLabel);
   type Row = readonly FieldSpec[] | 'url';
   const rows: Row[] =
     variant === 'contact'
@@ -718,7 +770,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       ? [FIELD.name('name'), FIELD.email('email'), work]
       : dress?.kind === 'message'
         ? [work, FIELD.name('name'), FIELD.email('email')]
-        : rows.flatMap((row) => (row === 'url' ? [] : row));
+        : rows.flatMap((row) => (row === 'url' ? (urlRequired ? [urlField] : []) : row));
 
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(
@@ -774,6 +826,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <Input
             {...shared}
             type={spec.type ?? 'text'}
+            {...(spec.type === 'url'
+              ? {
+                  inputMode: 'url' as const,
+                  onBlur: (event: FocusEvent<HTMLInputElement>) => {
+                    event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+                  },
+                }
+              : {})}
             onInput={(event) => clearIfFixed(event.currentTarget)}
           />
         )}
@@ -876,6 +936,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   }
 
   function renderRow(row: Row) {
+    if (row === 'url' && urlRequired) return renderField(urlField);
     if (row === 'url') {
       return (
         <FieldGroup key="url" id={urlId} label={urlLabel} optional>
@@ -1298,7 +1359,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
               {asksWork
                 ? renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })
                 : null}
-              {renderDressedUrl('fill', true)}
+              {urlRequired
+                ? renderField(urlField, { visibleLabel: true, placeholder: null, look: 'fill' })
+                : renderDressedUrl('fill', true)}
             </Layout>
             <div className={styles.dressFoot}>
               <Layout rowGap="text">

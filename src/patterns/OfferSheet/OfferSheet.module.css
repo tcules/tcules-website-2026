@@ -153,3 +153,21 @@
   color: var(--ofs-mark-ink);
   line-height: 0;
 }
+
+/* `facts`: the body role as one wrapping line of facts. Each fact is kept whole, so a narrow track
+   breaks between facts and never at a hyphen inside one; each but the last carries its middle dot
+   at its own end, inside its own box (the Cluster owns the distance to the next), so a wrapped line
+   never opens on a dot. EngagementOptions' fact list, duplicated on purpose. */
+.facts {
+  font: var(--ofs-body-text);
+  color: var(--ofs-body-ink);
+}
+
+.facts > li {
+  white-space: nowrap;
+}
+
+.facts > li:not(:last-child)::after {
+  content: '·';
+  padding-inline-start: var(--gap-tight);
+}

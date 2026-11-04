@@ -55,12 +55,13 @@ export type CollageProps = {
 
 /* What each tile renders at, from Section's 1240 column and 32 gutter: the lead is the [5, 7] split's
    wider track less the section beat, a lower third is a third less two text seams, a small frame half
-   of that. Below 768 the lower row stacks to the column (the viewport less the 32 gutter each side),
-   the small frames halved less half a seam. */
+   of that. Below 768 the lower row is two tracks: the start frame and the middle pair take half the
+   column each, the end frame the whole column (the viewport less the 32 gutter each side), so the
+   ends are sized for the column and the small frames for a quarter of it. */
 const SIZES = {
   lead: '(min-width: 1024px) min(52vw, 667px), calc(100vw - 64px)',
   third: '(min-width: 768px) min(32vw, 403px), calc(100vw - 64px)',
-  small: '(min-width: 768px) min(16vw, 194px), calc(50vw - 40px)',
+  small: '(min-width: 768px) min(16vw, 194px), calc(25vw - 24px)',
 } as const;
 
 function Tile({
@@ -119,7 +120,9 @@ export function Collage({
         </Layout>
         <Tile photo={photos.lead} shape="lead" sizes={SIZES.lead} />
       </Layout>
-      <Layout columns={{ base: 1, md: 3 }} colGap="text" rowGap="text">
+      {/* Below 768 the lower row stays a collage (critic, 4 Nov 2026: one photo a row ran ~1,150
+          of phone): the start frame beside the middle pair, the end frame across under them. */}
+      <Layout columns={{ base: 2, md: 3 }} colGap="text" rowGap="text" trail="until-md">
         <Tile photo={photos.start} shape="tall" sizes={SIZES.third} />
         <Layout rowGap="text">
           <Tile photo={photos.middle} shape="wide" sizes={SIZES.third} />

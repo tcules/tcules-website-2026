@@ -241,6 +241,15 @@
   grid-column: 1 / -1;
 }
 
+/* trail="until-md" — below 768 the last child spans every track in a row of its own (`lead` at the
+   other end, phone only): the third of a row that is two tracks on a phone runs across under the
+   pair rather than sitting alone beside a hole. Written on the container, as lead's span is. */
+@media (max-width: 767.98px) {
+  .trail-until-md > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
 /* A horizontal media item takes a whole row (owner, 29 Oct 2026; decisions/2026-10-29-media-rows-
    take-a-whole-row). An item whose picture sits BESIDE its words — BlockCard `horizontal`, a ListCard
    row with a thumbnail, a Teaser row or `beside` with a picture — says so with `data-media-row`, and

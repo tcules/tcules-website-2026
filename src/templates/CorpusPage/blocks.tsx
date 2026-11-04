@@ -1,4 +1,4 @@
-import { Fragment, type ReactElement, type ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import { BrandMark, Cluster, Icon, Layout, Media, RatingBadge, Section } from '@/components';
 import {
@@ -49,6 +49,7 @@ import { corpusImage } from '@/lib/corpus-images';
 import { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { heroNeedsMedia } from '@/lib/hero-media';
 import { placeholderImage } from '@/lib/placeholders';
+import { enquiryChoiceValue } from '@/lib/enquiry-pick';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { isStudioRecord, recordFigures } from '@/lib/studio-record';
 import { heroTrail } from '@/lib/trail';
@@ -761,12 +762,11 @@ type ApplicationForm = {
   /** The submit's words where the band authors no link of its own. Interface wording: owner to confirm. */
   submitLabel?: string;
   /**
-   * `paragraphs`: the band's paragraphs ARE the island's words, up to two, each with its links live
-   * (/careers: "Email hello@tcules.com with the role you want…", then "No matching role? … write
-   * anyway."). Nothing becomes a footnote or a contact cell. Absent, the enquiry's reading: the first
-   * paragraph the lead, a plain line after it the footnote.
+   * The link to the work is asked for, so it is required (/careers: the copy asks for "the role you
+   * want and a link to work that shows your reasoning", and the FAQ says the reasoning is what is
+   * judged). Absent, the link is optional, as on every enquiry. Checked on send only.
    */
-  lede?: 'paragraphs';
+  urlRequired?: true;
 };
 const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
   [`${ROUTES.futureInterfacesLabJoin}#apply`]: {
@@ -785,7 +785,7 @@ const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
     family: 'careers',
     roles: { question: 'The role you want', band: 'open-roles', other: 'No matching role' },
     submitLabel: 'Send application',
-    lede: 'paragraphs',
+    urlRequired: true,
   },
 };
 
@@ -795,20 +795,23 @@ function roleChoices(page: CorpusPage, roles: NonNullable<ApplicationForm['roles
     page.bands
       .find((band) => band.id === roles.band)
       ?.blocks.flatMap((block) => (block.type === 'item' ? [block.headingText] : [])) ?? [];
-  const value = (label: string) =>
-    label
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
   return {
     question: roles.question,
-    options: [...titles, roles.other].map((label) => ({ value: value(label), label })),
+    options: [...titles, roles.other].map((label) => ({
+      value: enquiryChoiceValue(label),
+      label,
+    })),
   } satisfies EnquiryChoiceGroup;
 }
 
 /** The band the page takes its application on, if any (`APPLICATION_FORMS`). */
 function applicationBand(page: CorpusPage): CorpusBand | undefined {
   return page.bands.find((band) => APPLICATION_FORMS[`${page.route}#${band.id}`] !== undefined);
+}
+
+/** The anchor of the band the page takes its application on, if any: where a role's link goes. */
+export function applicationAnchor(page: CorpusPage): string | undefined {
+  return applicationBand(page)?.id;
 }
 
 /** A link that is a line of its own: a `links` row, or a paragraph that is nothing but one link. */
@@ -921,27 +924,22 @@ export function EnquiryBand({
       ? [plain(block.runs)]
       : [],
   );
-  /* An application whose paragraphs are its words (`lede: 'paragraphs'`): the first two, links live. */
-  const ledeParagraphs =
-    application?.lede === 'paragraphs'
-      ? band.blocks
-          .flatMap((block) => (block.type === 'paragraph' ? [block] : []))
-          .slice(0, 2)
-          .map((block, index) => <Fragment key={index}>{renderInline(block.runs)}</Fragment>)
-      : undefined;
-  const footnote = !ledeParagraphs && notes.length > 0 ? notes.join(' ') : undefined;
-  const body = ledeParagraphs
-    ? (ledeParagraphs as unknown as
-        readonly [ReactElement] | readonly [ReactElement, ReactElement])
-    : lead && lead.type === 'paragraph'
-      ? ([plain(lead.runs)] as const)
+  /* The lead as authored: a link in it (/careers' "Email hello@tcules.com with the role you want…")
+     stays live, in the island's link ink, rather than flattening to text. A lead with no link is the
+     plain string, as before. A plain line after it is the footnote under the island
+     (decisions/2026-11-03-close-footnote-under-island), on every enquiry close, applications included. */
+  const footnote = notes.length > 0 ? notes.join(' ') : undefined;
+  const body =
+    lead && lead.type === 'paragraph'
+      ? hasLink(lead.runs)
+        ? ([<Fragment key="lead">{renderInline(lead.runs)}</Fragment>] as const)
+        : ([plain(lead.runs)] as const)
       : undefined;
   const score = band.blocks.flatMap((block) => {
     const found = block === lead ? undefined : ratingOf(block);
     return found ? [found] : [];
   })[0];
   const contact = band.blocks.flatMap((block): CtaContact[] => {
-    if (ledeParagraphs) return [];
     if (block === lead || block.type !== 'paragraph' || ratingOf(block)) return [];
     if (block.runs.length === 1 && block.runs[0]?.type === 'link') return [];
     const link = block.runs.find(
@@ -1062,6 +1060,7 @@ export function corpusEnquiryForm(
       urlLabel={treatment.application?.urlLabel ?? 'Product or company URL'}
       {...(treatment.label ? { label: treatment.label } : {})}
       {...(treatment.application ? { workLabel: treatment.application.workLabel } : {})}
+      {...(treatment.application?.urlRequired ? { urlRequired: true } : {})}
       action={ENDPOINTS.enquiry}
       /* The form is the band's primary object (home round 3): lg fields, the submit across the
          panel, so the one solid on the band is the widest thing in it. */

@@ -2507,12 +2507,30 @@ export function TextBand({
       </ContentSection>
     );
   }
+  /* A short prose band set head beside body (HEAD_BESIDE_PROSE): the head in the leading third, the
+     words in the two-thirds beside it (decisions/2026-09-28-content-section-head-beside-body). */
+  if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
+    return (
+      <ContentSection {...head(band)} data-band="C-text" arrangement="beside" footer={actions}>
+        {text}
+      </ContentSection>
+    );
+  }
   return (
     <ContentSection {...head(band)} data-band="C-text" footer={actions}>
       {text}
     </ContentSection>
   );
 }
+
+/**
+ * Short prose bands set head beside body, by route and band. /careers "Tcules internships, residencies
+ * and Future Interfaces Lab places": one paragraph under its head hung in 60% of the column with the
+ * rest of the band empty, and read as a stray between the roles and the application (critic, 4 Nov
+ * 2026). Beside, the head and its paragraph fill the row as one object and the band's shape differs
+ * from the full-width roles above it. Words unchanged; owner to confirm.
+ */
+const HEAD_BESIDE_PROSE: ReadonlySet<string> = new Set([`${ROUTES.careers}#lab`]);
 
 /**
  * Prose bands whose two paragraphs are peers of one kind, set as two columns under the full-width head

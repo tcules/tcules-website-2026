@@ -398,10 +398,14 @@ export default function EnquiryFormSpecimenPage() {
           <p className={s.specNote}>
             The card asking only what the copy asks for (“the role you want and a link to work that
             shows your reasoning”): a pick-one chip group first (dress `role`, posts `role`: the open
-            roles, then “No matching role”), Email, and urlLabel “Link to the work”; workLabel `null`
-            drops the free-text question. No “or write to” (the band’s own sentence gives the address,
-            live), no reply promise (none is authored). The submit “Send application” is interface
-            wording. With no steps the island keeps its drawing over the words.
+            roles, then “No matching role”), Email, and urlLabel “Link to the work”, required
+            (`urlRequired`: the copy asks for the link, so it carries no “Optional” and a send checks
+            it); workLabel `null` drops the free-text question. No “or write to” (the band’s own
+            sentence gives the address, live), no reply promise (none is authored). The submit “Send
+            application” is interface wording. With no steps the island keeps its drawing over the
+            words; the linkless “No matching role?” line is the footnote under the island
+            (close-footnote-under-island). A link on the page carrying `data-enquiry-role` picks its
+            chip when followed (/design/offer-sheet 8c writes them).
           </p>
         </Layout>
       </Section>
@@ -416,13 +420,15 @@ export default function EnquiryFormSpecimenPage() {
             Email <a href="mailto:hello@tcules.com">hello@tcules.com</a> with the role you want and a
             link to work that shows your reasoning.
           </>,
-          'No matching role? If your work feels unusually relevant, write anyway. We will keep your work in mind and know where to find you when the right role opens.',
         ]}
+        footnote="No matching role? If your work feels unusually relevant, write anyway. We will keep your work in mind and know where to find you when the right role opens."
+        footnoteIcon="info-circle"
         form={
           <EnquiryForm
             action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
             context={{ ...CONTEXT, placement: 'application', family: 'careers' }}
             urlLabel="Link to the work"
+            urlRequired
             workLabel={null}
             submitLabel="Send application"
             dress={{

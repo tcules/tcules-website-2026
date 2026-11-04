@@ -32,6 +32,7 @@ import {
 import { caseStudyLink } from '@/lib/case-links';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
+import { enquiryChoiceValue } from '@/lib/enquiry-pick';
 import type {
   CorpusBand,
   CorpusBlock,
@@ -52,6 +53,7 @@ import { renderInline } from '@/lib/inline-render';
 
 import {
   EnquiryBand,
+  applicationAnchor,
   FaqItems,
   faqFooter,
   GenericBlocks,
@@ -714,8 +716,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
     case 'related': {
       const glyphs = glyphBand(page.route, band.id);
-      if (glyphs?.arrangement === 'role-tiles') {
-        return <RoleTilesBand band={band} icons={glyphs.icons} />;
+      if (glyphs?.arrangement === 'role-rows') {
+        return (
+          <RoleRowsBand band={band} icons={glyphs.icons} apply={applicationAnchor(page)} />
+        );
       }
       return <RelatedBand band={band} />;
     }
@@ -2047,44 +2051,45 @@ function ListBesideBand({
 }
 
 /**
- * How many tiles a row holds for `count` peers, at most `max`: all of them when they fit, else the
- * most that leaves no lone tile on the last row (treatment rules § 2), else `max`.
+ * The roles a reader picks from (glyph-bands.ts `role-rows`; /careers' open roles), the page's job:
+ * OfferSheet `rows`, one role a row across the column, its discipline's glyph inline before the title
+ * (decisions/2026-11-04-sheet-row-glyph-sits-inline), the title a link to the application on the page
+ * with that role's chip picked (`choice`), and the meta line's facts beside it, each kept whole. Four
+ * full-width rows give each title room and an obvious target, where four quarter tiles left the band
+ * the quietest on the page and broke "In-/office" (critic, 4 Nov 2026). Every word as authored; the
+ * link is the page's own `#apply`, so nothing is added. A band with no application on the page keeps
+ * plain titles.
  */
-function peerTracks(count: number, max: number): number {
-  if (count <= max) return Math.max(count, 1);
-  for (let tracks = max; tracks >= 2; tracks -= 1) {
-    if (count % tracks !== 1) return tracks;
-  }
-  return max;
-}
-
-/**
- * Peers a reader picks from (glyph-bands.ts `role-tiles`; /careers' open roles): the glyph-headed offer
- * sheet (the /future-interfaces-lab/join "Why join" grid): the discipline's glyph, then the role as
- * authored, then its meta line verbatim, each on its own row (icon-heads-its-card); no hairline, no
- * mark, no card, no disc. Equal weight, the whole set visible, in one row from 1024 where the count
- * allows. The roles come from the CMS's job list, so the tracks follow the count (`peerTracks`). No
- * link: none is authored.
- */
-function RoleTilesBand({
+function RoleRowsBand({
   band,
   icons,
+  apply,
 }: {
   band: CorpusBand;
   icons: Readonly<Record<string, IconName>>;
+  /** The application band's anchor on this page, if it takes one. */
+  apply?: string;
 }) {
   const roles = band.blocks.flatMap((block) => {
     if (block.type !== 'item') return [];
     const meta = block.blocks.find((inner) => inner.type === 'paragraph');
-    const body = meta?.type === 'paragraph' ? plain(meta.runs) : undefined;
-    const discipline = body?.split('·')[0]?.trim() ?? '';
-    const icon = icons[discipline];
+    const facts =
+      meta?.type === 'paragraph'
+        ? plain(meta.runs)
+            .split('·')
+            .map((fact) => fact.trim())
+            .filter(Boolean)
+        : [];
+    const icon = icons[facts[0] ?? ''];
     return [
       {
         id: block.headingText,
         title: block.headingText,
-        ...(body ? { body } : {}),
+        ...(facts.length > 0 ? { facts } : {}),
         ...(icon ? { icon } : {}),
+        ...(apply
+          ? { href: `#${apply}`, choice: enquiryChoiceValue(block.headingText) }
+          : {}),
       },
     ];
   });
@@ -2094,7 +2099,7 @@ function RoleTilesBand({
       {...head(band)}
       {...(lead?.type === 'paragraph' ? { lead: plain(lead.runs) } : {})}
       items={roles}
-      across={Math.max(2, peerTracks(roles.length, 4)) as 2 | 3 | 4}
+      arrangement="rows"
     />
   );
 }

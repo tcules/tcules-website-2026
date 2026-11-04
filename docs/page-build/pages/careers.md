@@ -32,15 +32,15 @@ Then it asks them to apply on the blue island. Early-career readers get a side p
   ListCard rows (md, sentence measure, full stops kept), each led by a Solar Bold glyph: eye, chat-round-dots,
   compass, checklist, magnifier-bug, flag. The closing line "A design degree helps…" is at body under the list.
   This replaces the blue-marker cells (marker-cell-is-for-figures).
-- `open-roles`: **the glyph-headed offer sheet, four across** (NEW `across={4}` on OfferSheet, glyph-bands.ts
+- `open-roles` (changed after the critic: linked sheet rows, see below): **the glyph-headed offer sheet, four across** (NEW `across={4}` on OfferSheet, glyph-bands.ts
   `role-tiles`). Each role has a discipline glyph (Design ruler-pen, Engineering code-square, Marketing and visual
   communication palette, read from the meta line's first cell), the role as authored, and the meta line verbatim.
   There is no hairline, card, box or link. The track count follows the CMS count (`peerTracks`), so no tile ever
   sits alone on a row. This replaces two columns of ruled rows (a ruled grid). A boxed ListCard tile was tried
   and dropped: its box has no edge (owner, 9 Oct), so it only insets the copy off the heading's edge.
-- `lab`: kind `text`, not `close` (plan.ts). It is prose with its two inline links, on paper. As a close it took
+- `lab` (after the critic: head beside body, see below): kind `text`, not `close` (plan.ts). It is prose with its two inline links, on paper. As a close it took
   the close's automatic tint and fell to the no-link fallback.
-- `apply`: kind `enquiry` for every `apply` band (plan.ts), and order.ts counts an `apply` band as the form band,
+- `apply` (after the critic: the second paragraph is the footnote and the link is required, see below): kind `enquiry` for every `apply` band (plan.ts), and order.ts counts an `apply` band as the form band,
   so it sits before the FAQ. It is the blue island in halves with the sketch-to-shipped drawing over the words:
   an application **without** steps keeps the drawing, and FIL's, with steps, does not. Both paragraphs are the
   island's words, the mailto live in the island's link ink, with no footnote (`lede: 'paragraphs'`). The form is
@@ -84,9 +84,20 @@ tall at 1440 and stacks words over form at 390.
   band. Treatment rules § 2 retires `beside` for heads above items; the bodiless-row ruling (1 Nov) allows it for a
   short list. Also, `what-we-look-for` and `open-roles` are two glyph-led bands in a row. Their shapes differ, but
   if they read as repetitive, drop the six quality glyphs.
-- **New variant: OfferSheet glyph grid four across** (`open-roles`), specimen 8b on /design/offer-sheet. The
-  Engineering meta line breaks at "In-/office" in a 286 track at 1440. Should each role link to `#apply` with its
-  chip picked? That is not in the copy, so it is not built.
+- **New arrangement: the roles as linked sheet rows** (`open-roles`, glyph-bands.ts `role-rows`, specimen 8c on
+  /design/offer-sheet). Replaces the four-across glyph grid (8b stays as a specimen). `what-we-look-for` (glyph
+  rows beside its head) and `open-roles` (full-width glyph rows) are now two ruled, glyph-led lists in a row: if
+  that reads as one shape twice, the cheaper change is dropping the six quality glyphs.
+- **New OfferSheet item fields: `facts` and `choice`.** `facts` sets a meta line as whole facts parted by dots
+  (no other caller yet); `choice` writes `data-enquiry-role` on a title link.
+- **New EnquiryForm variant: a link picks a role chip** (`ENQUIRY_ROLE_ATTRIBUTE`, src/lib/enquiry-pick.ts). A
+  role title links to `#apply` and the form checks that role's chip. Without script the link still scrolls.
+- **New EnquiryForm variant: `urlRequired`** on the careers application. "Link to the work" has no "Optional"
+  and a send checks it ("Add a link" / "Enter a valid link": interface wording, owner to confirm).
+- **New arrangement: Lab band head beside body** (CopyBands `HEAD_BESIDE_PROSE`, 1 : 2 per
+  content-section-head-beside-body). Fallback: plain C-text. A flat Sketch drawing for the Lab was not drawn.
+- **New Layout option: `trail="until-md"`** (the last child spans every track below 768), used by Collage's
+  lower row; specimen on /design/layout. Changes home's "The people behind Tcules" on phone the same way.
 - **New variant: EnquiryForm role application** (`role` chips, `workLabel: null`), specimen on
   /design/enquiry-form. "Send application" is interface wording. "Apply for a role" would say it a third time.
   The link field is optional, as on every card, and there is no Name field: say if an application needs either.
@@ -95,5 +106,35 @@ tall at 1440 and stacks words over form at 390.
   told apart only by the hidden context (family `careers`). Confirm this, or name a careers inbox.
 - The success view says "Thanks. We have your enquiry." No application success words are authored. Content ask.
 - `ai-fluency` ships with the labelled isometric placeholder (drawn by people). It is the page's one placeholder.
+  On a phone the placeholder sits above the band's heading: ContentSection `media` puts the picture first below
+  1024 on every B band (spec amendment 6 Oct, "the photo stays first in the DOM"). Not changed here, because it
+  would move every B band on the site; say if a heading should lead on phones.
 - `kinds:check` and `aria:check` need `next build`, which this run must not execute, so both are unverified here.
 - og/twitter image: `IMAGE_ASSET_REQUIRED` in the copy.
+
+## Fixed after the critic (4 Nov 2026, scored 6/10)
+- "No matching role?" sat inside the blue island as a second lead → `APPLICATION_FORMS` careers set
+  `lede: 'paragraphs'`, a silent exemption from close-footnote-under-island → the option is removed (no other
+  caller); every enquiry close reads its band the same way, so the line is the footnote under the island. A lead
+  with a link now keeps it live (`hasLink` → `renderInline`), so hello@ is still a mailto. Only /careers has a
+  linked enquiry lead (checked across `_pages`).
+- The roles band was the quietest on the page and led nowhere → open-roles rendered as quarter tiles with no
+  action → `role-rows`: OfferSheet `rows`, glyph inline before each title (sheet-row-glyph-sits-inline), each
+  title a link to `#apply` that picks its chip in the form (`choice` → `data-enquiry-role`, read by EnquiryForm).
+  Checked in a browser: following "AI Systems Architect" checks that chip.
+- "Link to the work" was marked Optional though the copy asks for it → the careers config reused the optional URL
+  field → `urlRequired` on `ApplicationForm` and EnquiryForm: the link is a validating field like the email, on
+  send only. Checked: a send with only an email lands on the link with "Add a link".
+- The meta line broke at "In-/office" → one joined string in a narrow track → OfferSheet `facts`: a Cluster of
+  whole facts, dots at each fact's end (EngagementOptions' convention), so a wrap falls between facts.
+- The middle read as one grey idea, and the Lab paragraph hung in 60% of the width → each band took a text-led
+  shape on its own, and the Lab had none → the roles now run full width as linked rows, and the Lab is set head
+  beside body (`HEAD_BESIDE_PROSE`). No tint and no decoration added.
+- The collage ran ~1,150 of photos on a phone → Collage's lower row collapsed to one track below 768 → the lower
+  row stays two tracks (start beside the middle pair, the end frame across under them, Layout `trail`), the small
+  frames 3:4 at every width. About 700 at 390, no photo hidden. Home's people band changes the same way on
+  phones (shot, reads as one collage); 768 and up is unchanged.
+- Skipped: the placeholder above the AI heading on phones (see Open: a site-wide ContentSection arrangement).
+  Skipped nit: the placeholder label size and the "See how we use AI" position (the generator is shared by every
+  placeholder; the media split places actions under the heading on every page by design).
+

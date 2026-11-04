@@ -102,7 +102,7 @@ export const KIND_COMPONENTS: Readonly<
   related: {
     component: ['K', 'service-tile', 'offer-sheet'],
     status: 'to-design',
-    note: 'Ruled link rows (glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles). Peers a reader picks from (glyph-bands.ts `role-tiles`, /careers `open-roles`): the glyph-headed offer sheet, one row of four from 1024 (offer-sheet, `across={4}`; 4 Nov 2026, owner to judge).',
+    note: 'Ruled link rows (glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles). Roles a reader picks from (glyph-bands.ts `role-rows`, /careers `open-roles`): offer-sheet rows, the discipline glyph inline before each title, the title a link to the application on the page with its role chip picked, the facts of the meta line beside it (4 Nov 2026 critic, owner to judge).',
   },
   directory: {
     component: ['tool-tiles'],

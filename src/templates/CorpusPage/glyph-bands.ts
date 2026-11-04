@@ -11,16 +11,17 @@ import { ROUTES } from '@/lib/routes';
  *                each led by its glyph, the band's closing line under the list. A checklist a reader
  *                checks themselves against reads down, one item per row, never a grid.
  *                Keyed by the item's words as authored.
- *   role-tiles   peers to pick from (open roles): boxed ListCard tiles, glyph, title, meta line, each on
- *                its own row (icon-heads-its-card), the whole set in one row from 1024 where the count
- *                allows. Keyed by the discipline, the meta line's first cell, so a role the CMS adds
- *                takes its discipline's glyph without an edit.
+ *   role-rows    the roles a reader picks from (open roles): OfferSheet rows, the discipline's glyph
+ *                inline before the title (sheet-row-glyph-sits-inline), the title a link to the page's
+ *                application with its chip picked, the meta line's facts beside it. Keyed by the
+ *                discipline, the meta line's first cell, so a role the CMS adds takes its
+ *                discipline's glyph without an edit. (Was four quarter tiles; critic, 4 Nov 2026.)
  *
  * docs/page-build/pages/careers.md, 4 Nov 2026; new arrangements, owner to confirm.
  */
 export type GlyphBand =
   | { arrangement: 'list-beside'; icons: Readonly<Record<string, IconName>> }
-  | { arrangement: 'role-tiles'; icons: Readonly<Record<string, IconName>> };
+  | { arrangement: 'role-rows'; icons: Readonly<Record<string, IconName>> };
 
 const GLYPH_BANDS: Readonly<Record<string, GlyphBand>> = {
   [`${ROUTES.careers}#what-we-look-for`]: {
@@ -35,7 +36,7 @@ const GLYPH_BANDS: Readonly<Record<string, GlyphBand>> = {
     },
   },
   [`${ROUTES.careers}#open-roles`]: {
-    arrangement: 'role-tiles',
+    arrangement: 'role-rows',
     icons: {
       Design: 'ruler-pen',
       Engineering: 'code-square',

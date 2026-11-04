@@ -156,6 +156,14 @@ export type LayoutProps = {
    */
   lead?: boolean | 'tall';
   /**
+   * The LAST child spans every track below 768, in a row of its own — `lead` at the other end, and on
+   * a phone only (4 Nov 2026, the studio collage). For a row of three that is two tracks on a phone,
+   * where the third child would otherwise sit alone in the first track beside a hole: the first two
+   * pair, the last runs across under them. From 768 nothing is placed. The span is the container's,
+   * as lead's is. Not in a scroll row.
+   */
+  trail?: 'until-md';
+  /**
    * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
    * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
    * `true` applies from md up (see `Responsive`); `{ lg: true }` from 1024; `{ base: true, lg: false }`
@@ -517,6 +525,7 @@ export function Layout({
   justify,
   equalRows = false,
   lead = false,
+  trail,
   reverse,
   offset,
   pinLast = false,
@@ -573,6 +582,7 @@ export function Layout({
           equalFrom &&
           styles[equalFrom === 'base' ? 'equal-rows' : `equal-rows-${equalFrom}`],
         leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
+        trail && scroll == null && styles['trail-until-md'],
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast === 'lg' ? styles['pin-last-lg'] : pinLast && styles['pin-last'],

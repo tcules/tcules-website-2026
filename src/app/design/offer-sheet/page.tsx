@@ -420,6 +420,47 @@ export default function OfferSheetSpecimen() {
           },
         ]}
       />
+
+      <Variation
+        id="role-rows"
+        title="8c · Rows led by glyphs, titles that link, facts beside"
+        note="`arrangement=&quot;rows&quot;` with `icon`, `href` + `choice` and `facts`: the roles a reader picks from (/careers &ldquo;Tcules jobs open now&rdquo;, critic 4 Nov 2026, owner to confirm). Each title links to the page&rsquo;s application and carries the role chip it picks there (`data-enquiry-role`). The facts are one wrapping line parted by middle dots, each fact kept whole, so a narrow track breaks between facts, never at the hyphen in &ldquo;In-office&rdquo;."
+      />
+      <OfferSheet
+        heading="Tcules jobs open now"
+        headingId="ofs-role-rows"
+        arrangement="rows"
+        items={[
+          {
+            title: 'UX/UI Designer (Generalist)',
+            icon: 'ruler-pen',
+            href: '#role-rows',
+            choice: 'ux-ui-designer-generalist',
+            facts: ['Design', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'Lead Designer (AI Products)',
+            icon: 'ruler-pen',
+            href: '#role-rows',
+            choice: 'lead-designer-ai-products',
+            facts: ['Design', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'AI Systems Architect',
+            icon: 'code-square',
+            href: '#role-rows',
+            choice: 'ai-systems-architect',
+            facts: ['Engineering', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'Visual Designer',
+            icon: 'palette',
+            href: '#role-rows',
+            choice: 'visual-designer',
+            facts: ['Marketing and visual communication', 'Full-time', 'In-office, Ahmedabad'],
+          },
+        ]}
+      />
     </>
   );
 }
