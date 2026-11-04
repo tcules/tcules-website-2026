@@ -577,9 +577,12 @@ function bandTerms(rest: readonly CorpusBlock[]): {
 export function SheetBand({
   band,
   scenes,
+  arrangement,
 }: {
   band: CorpusBand;
   scenes?: (title: string) => OfferSheetItem['scene'];
+  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_ROWS`). */
+  arrangement?: 'grid' | 'rows';
 }) {
   const parts = sheetParts(band);
   const items = parts.items.map((item) => {
@@ -624,6 +627,7 @@ export function SheetBand({
       lead={parts.lead}
       items={items}
       across={acrossFor(items.length)}
+      {...(arrangement ? { arrangement } : {})}
       note={note}
       terms={terms.length > 0 ? terms : undefined}
     />

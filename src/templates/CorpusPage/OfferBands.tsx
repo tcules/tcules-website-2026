@@ -526,6 +526,10 @@ const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
 
+/* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
+   have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+const SHEET_ROWS: ReadonlySet<string> = new Set(['product-responsibility']);
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -577,7 +581,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
-      return <SheetBand band={band} scenes={scenes} />;
+      return (
+        <SheetBand
+          band={band}
+          scenes={scenes}
+          {...(SHEET_ROWS.has(band.id) ? { arrangement: 'rows' as const } : {})}
+        />
+      );
     }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */

@@ -91,6 +91,14 @@ export type OfferSheetProps = {
    * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026).
    */
   across?: 2 | 3;
+  /**
+   * `grid` (default): the promises side by side, as above. `rows`: one promise per row, its title in a
+   * label column and its words beside it from 1024, each row opening on the sheet's ruled mark (the
+   * clients page's "What clients have asked us to do", owner, 4 Nov 2026). For a set whose bodies run
+   * to several sentences and name clients, so the words need a measure, not a third of the column. A
+   * rows sheet takes no aside and no drawings.
+   */
+  arrangement?: 'grid' | 'rows';
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -124,8 +132,10 @@ export function OfferSheet({
   note,
   terms,
   across = 2,
+  arrangement = 'grid',
   surface = 'paper',
 }: OfferSheetProps) {
+  const rows = arrangement === 'rows';
   const shown = items.filter(
     (item) => (item.title ?? item.body ?? item.bodyHtml ?? '').trim().length > 0,
   );
@@ -137,7 +147,7 @@ export function OfferSheet({
   /* Drawn: every promise beside its own drawing, two up at full width, no rule (the drawing opens the
      item). The quote has its own band after the offer (owner, 26 Oct 2026: a quote beside or under
      the set "reads as noise"), so a drawn sheet takes no aside. */
-  const drawn = shown.length > 0 && shown.every((item) => item.scene);
+  const drawn = !rows && shown.length > 0 && shown.every((item) => item.scene);
   if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
     console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
   }
@@ -165,7 +175,28 @@ export function OfferSheet({
      as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
      again. Two across keeps the approved form, the drawing beside its words from 768. */
   const drawnThree = drawn && across === 3;
-  const promises = drawn ? (
+  const promises = rows ? (
+    /* A head beside its body is a split, so the seam is `section` (96). */
+    <Layout as="ul" rowGap="stack">
+      {shown.map((item) => (
+        <li key={keyOf(item)} className={styles.item}>
+          <Layout
+            columns={{ base: 1, lg: [1, 1] }}
+            colGap="section"
+            rowGap="text"
+            align="start"
+          >
+            {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+            {item.bodyHtml ? (
+              <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+            ) : item.body ? (
+              <p className={styles.body}>{item.body}</p>
+            ) : null}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  ) : drawn ? (
     <Layout
       as="ul"
       columns={{ base: 1, lg: drawnThree ? 3 : 2 }}
@@ -217,14 +248,15 @@ export function OfferSheet({
   ) : (
     labelled
   );
-  const side = drawn
-    ? undefined
-    : (aside ??
-      (asideImage ? (
-        <div className={styles.asideFrame}>
-          <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
-        </div>
-      ) : undefined));
+  const side =
+    drawn || rows
+      ? undefined
+      : (aside ??
+        (asideImage ? (
+          <div className={styles.asideFrame}>
+            <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
+          </div>
+        ) : undefined));
 
   /* The band's FOOT (owner, 30 Oct 2026): the terms belong to the whole band, so they leave the set's
      grid. A section beat (96) parts them from the promises, and they take an arrangement of their

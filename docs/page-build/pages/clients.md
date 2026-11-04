@@ -11,7 +11,10 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
 - Client recognition: LogoGrid with real files only (logo-walls-use-real-logos). The four named clients with a
   file lead in the copy's order (Doodle, Eden AI, GT Tools, Knovos); the rest of the approved wall follows.
   No wordmarks, no drawn logos.
-- What clients have asked us to do: the `set` kind (offer sheet), 3 × 2, case links inline as authored.
+- What clients have asked us to do: the offer sheet in its `rows` arrangement (owner, 4 Nov 2026: the client
+  picked direction "Asked A", index rows, without its client-marks column). Each item is one row, its title
+  in the left half and its words in the right from 1024, on the sheet's ruled mark; case links inline as
+  authored. Opted in per band (`SHEET_ROWS`, OfferBands.tsx), so other sheets keep the grid.
 - Client list: stays a table (DataTable, E): it reads across rows, so it is not drawn (l1-drawn-tables). 16 rows
   is past DataTable's designed 12; every row stays visible (no-hidden-cards). Below 768 it scrolls inside its
   frame, as every DataTable does.
@@ -39,7 +42,7 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
 |---|---|---|
 | hero | CorpusHero beside, studio review photo, record figures | |
 | client-recognition | recognition · LogoGrid (H) | 4 of 15 named clients have a file |
-| product-responsibility | set · offer-sheet | kind still `to-design`; ⚠ text-heavy pair with client-list (Q2) |
+| product-responsibility | set · offer-sheet, `rows` | kind still `to-design`; ⚠ text-heavy pair with client-list (Q2) |
 | client-list | table · DataTable (E) | 16 rows |
 | testimonials | quotes · slider (G), stars on every quote, RatingBadge footer | tint |
 | returning-clients | text · C-text | ⚠ text-heavy pair with case-studies (Q1) |
