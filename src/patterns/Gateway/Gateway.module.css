@@ -513,14 +513,15 @@
   flex: none;
 }
 
-/* The set's close (`close`): the line centred at the lead's role, its action under it. */
+/* The set's close (`close`): the line centred at the card titles' role, its action under it. */
 .doorClose {
   text-align: center;
 }
 
 .doorCloseLine {
   font: var(--gwy-door-close-text);
+  letter-spacing: var(--gwy-door-close-tracking);
   text-wrap: balance;
-  color: var(--gwy-body-ink);
+  color: var(--gwy-title-ink);
   max-inline-size: var(--gwy-door-close-measure);
 }
