@@ -75,7 +75,6 @@ render:
   - why-tcules
   - testimonials
   - how-we-work-together
-  - people
   - ai-native-practice
   - expertise
   - insights
@@ -224,11 +223,15 @@ Example: the [review feed we designed for BuildTwin](/case-studies/ai-quality-co
 
 ### Doodle: research that redrew an enterprise MVP
 
+*Doodle · New product*
+
 One interview changed the question, and the MVP design now shows how dependable each free meeting slot is.
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
 ### Benchmark Gensuite: a modern suite that keeps customers' habits
+
+*Benchmark Gensuite · Modernisation*
 
 Specialists run environment, health and safety work on Benchmark Gensuite every day, and they have built fast habits on its interface. We made coded prototypes of shared interface patterns and a three-view scope selector, so Benchmark could judge each modern choice against those habits before wider release.
 
@@ -236,11 +239,15 @@ Specialists run environment, health and safety work on Benchmark Gensuite every 
 
 ### Omny AI: suggestions people check before they accept
 
+*Omny AI · AI trust*
+
 Each AI suggestion now waits for a person's choice before it reaches the listing, and colour shows what the AI wrote and what a person added. Omny AI was acquired by Primelis.
 
 [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
 ### ConnectX: ask a question, get the right energy dashboard
+
+*ConnectX · AI product*
 
 Facilities operators, finance leads and sustainability teams ask ConnectX a question in plain words, and it builds the dashboard each of them needs.
 
@@ -248,11 +255,15 @@ Facilities operators, finance leads and sustainability teams ask ConnectX a ques
 
 ### Eden AI: three ways to start a workflow, one search box
 
+*Eden AI · Developer platform*
+
 Developers can start from a template, from the AI or from a blank canvas. We brought all three into one search box that recognises which they mean.
 
 [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
 ### Phoenix: two trade models, prototyped for testing
+
+*Phoenix · FinTech*
 
 Working within an on-chain exchange's design team, we made both competing trade models as complete clickable prototypes, to the same depth, so testing would compare the models rather than the finish. Then came a design system its engineers could build from.
 
@@ -321,19 +332,15 @@ Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-## Who you'll work with {#people}
+## How our designers use AI {#ai-native-practice}
 
-A senior designer leads your product and does the work, with an account lead beside them. Design engineers and developers join when the work needs them.
+AI does the routine checking, so more of your product gets examined. People make every decision.
 
-In our Ahmedabad studio, work goes up on the wall, gets questioned in reviews and gets better because a designer and an engineer looked at it together. The same people explore new ideas in our Future Interfaces Lab, from AI-assisted design reviews to workflows that run across several AI models.
+1. **AI:** Checks your live product, screen by screen, against its design system
+2. **Designer:** Decides which differences matter to your users
+3. **Designer:** Tries the fix in working code and signs it off
 
-[See the studio →](/about)
-
-## What our designers can now do with AI {#ai-native-practice}
-
-Our designers can have AI check your live product screen by screen and list where it no longer matches its design system. A designer then judges which differences matter, tries the correction in working code and signs it off.
-
-More of your product gets examined, with people making every decision. [See a typical AI-assisted design run](/how-we-work/ai-native-product-design)
+[See a typical AI-assisted design run →](/how-we-work/ai-native-product-design)
 
 ## Industries we know well {#expertise}
 

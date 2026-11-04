@@ -5,15 +5,12 @@ import {
   Cluster,
   isSituationFigureName,
   Layout,
-  Section,
   SituationFigure,
   Sketch,
   type IconName,
 } from '@/components';
 import {
   Banner,
-  Collage,
-  type CollagePhotos,
   Bento,
   BlockCard,
   BlockCardSet,
@@ -24,6 +21,7 @@ import {
   Gateway,
   GatewayPaths,
   OfferSheet,
+  ProcessFlow,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
@@ -56,7 +54,7 @@ import { recordFigures } from '@/lib/studio-record';
 import {
   CorpusHero,
   QuoteGroupBand,
-  RecognitionBand,
+  RecognitionGrid,
   bodyOf,
   head,
   headingIdOf,
@@ -76,7 +74,7 @@ import {
 import { bindingNamed, coverFor, slugOf } from './images';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
-import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd } from './text';
+import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd, trimStart } from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -154,6 +152,9 @@ export function HomePage({
   /* The plan decides every band's kind and surface, and the form sits right before the questions. */
   const units = planOffer(page);
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, reasonFigure };
+  /* The logo wall is the hero's foot row, full width under the split (owner, 4 Nov 2026, homepage
+     pass), so its band renders nothing of its own (Recognition, below). */
+  const recognition = page.bands.find((band) => band.id === 'client-recognition');
   return (
     <>
       <CorpusHero
@@ -167,6 +168,7 @@ export function HomePage({
         }}
         proofLine={false}
         stats={recordStats(page)}
+        foot={recognition ? <RecognitionGrid band={recognition} /> : undefined}
       />
       {units.map((unit) => {
         const b = unit.band;
@@ -240,8 +242,9 @@ export function recordStats(page: CorpusPage): HeroStat[] {
  *
  * NO LINE UNDER THE GRID (owner, home round 2): the badge IS the link to the Clutch profile.
  */
-function Recognition({ b }: BandProps) {
-  return <RecognitionBand band={b} />;
+function Recognition() {
+  /* Drawn inside the hero as its foot row (HomePage). */
+  return null;
 }
 
 /* ── 2 · six situations, the gateway to the services ──────────────────────────────── */
@@ -377,11 +380,18 @@ function Situations({ b, eyebrows }: BandProps) {
      primary solid in the band, as the owner asked (decisions/2026-11-04-where-to-start-doors). */
   if (paths.length > 0 && paths.every((path) => path.eyebrow)) {
     return (
-      <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+      /* On tint, the cards on paper: the set reads as three objects on a ground (owner, 4 Nov 2026:
+         "this needs to be cleaner"). */
+      <ContentSection
+        {...head(b)}
+        eyebrow={eyebrows?.[b.id]}
+        data-band="C-router"
+        surface="tint"
+      >
         <GatewayPaths paths={paths} form="cards" />
         {ask ? (
           <Cluster justify="center">
-            <Button as="a" href={ask.href} size="lg">
+            <Button as="a" href={ask.href} size="md">
               {ask.labelText}
             </Button>
           </Cluster>
@@ -446,58 +456,6 @@ function OneStudio({ b }: BandProps) {
 
 /* ── 2c · the people, and how the designers use AI ─────────────────────────────── */
 
-/**
- * The studio's people (owner, 3 Nov 2026): the band's words in the corner of a collage of the studio
- * itself, six of the November studio photographs round them in an L (mock "Studio collage",
- * Direction A as revised; every tile's photo, focal point and zoom picked by the owner in the collage
- * picker; decisions/2026-11-03-studio-collage). Only the lead says what it shows; the other five are
- * the studio's atmosphere around it and carry the decorative empty alt (ch05 §7). The band's link
- * stays under its words.
- */
-const PEOPLE_COLLAGE: CollagePhotos = {
-  lead: {
-    image: getKitPhoto('studio-team-group-a', {
-      alt: 'The Tcules team together in the Ahmedabad studio',
-    }),
-    focus: { x: 0.3, y: 0.75 },
-    zoom: 1.2,
-  },
-  start: {
-    image: getKitPhoto('studio-desks-plants-b'),
-    focus: { x: 0.19, y: 0.66 },
-    zoom: 1.2,
-  },
-  middle: { image: getKitPhoto('studio-sticky-wall-sorting'), focus: { x: 0.5, y: 0.5 } },
-  middleStart: { image: getKitPhoto('studio-book-showing-c'), focus: { x: 0.8, y: 0.5 } },
-  middleEnd: {
-    image: getKitPhoto('studio-desk-monitor-corner'),
-    focus: { x: 0.5, y: 0.57 },
-    zoom: 1.25,
-  },
-  end: { image: getKitPhoto('studio-desk-analyst-portrait'), focus: { x: 0.5, y: 0.5 } },
-};
-
-function People({ b }: BandProps) {
-  const paras = paragraphRuns(b.blocks);
-  const links = bandLinks(b);
-  return (
-    <Section id={b.id} data-band="B-collage" aria-labelledby={headingIdOf(b)}>
-      <Collage
-        heading={b.headingText}
-        headingId={headingIdOf(b)}
-        photos={PEOPLE_COLLAGE}
-        actions={links.length > 0 ? <LinkActions links={links} pair /> : undefined}
-      >
-        <Layout rowGap="text">
-          {paras.map((runs, index) => (
-            <p key={index}>{plain(runs)}</p>
-          ))}
-        </Layout>
-      </Collage>
-    </Section>
-  );
-}
-
 /* ── 3 · selected work: every case as a horizontal case card ───────────────────────── */
 
 /**
@@ -545,7 +503,12 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
        `home_dealpath_workflow`). */
     const binding = bindingNamed(page, item.headingText.split(':')[0] ?? item.headingText);
     const focus = binding ? COVER_FOCUS[binding.id] : undefined;
-    const paragraphs = paragraphRuns(item.blocks);
+    /* A first paragraph wholly italic ("*Doodle · New product*") is the case's tag: the card's
+       eyebrow (v2.1 copy), not a line of its story. */
+    const all = paragraphRuns(item.blocks);
+    const only = all[0]?.length === 1 ? all[0][0] : undefined;
+    const tag = only?.type === 'em' ? plain(only.children).trim() : undefined;
+    const paragraphs = tag ? all.slice(1) : all;
     const story =
       paragraphs.length === 1 && paragraphs[0]
         ? bodyOf(paragraphs[0])
@@ -553,7 +516,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
     const image = binding
       ? { ...corpusImage(binding), ...(focus ? { focus } : {}) }
       : undefined;
-    return { link, story, image };
+    return { link, story, image, tag };
   };
 
   const card = (item: ItemBlock, index: number) => {
@@ -578,10 +541,13 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
      case studies, so each gets the row. Every other page sets its selected work as the three-across
      BlockCard grid (OfferBands), because there the cases are paths to more content. The cover is the
      page's binding that names the case, else the case's own cover, else its placeholder (coverFor). */
+  /* Below 768 the cases are one swipe row, one card in view and the next peeking (owner, 4 Nov 2026:
+     "on phone, we can keep the case study cards in a horizontal scroll to save space"); every card
+     is a link, so the row is reachable by Tab, and every case is in the page as it loads. */
   const body = (
-    <Layout rowGap="gutter">
+    <Layout rowGap="gutter" colGap="gutter" columns={1} scroll="until-md">
       {cases.map((item, index) => {
-        const { link, story, image } = parts(item, index);
+        const { link, story, image, tag } = parts(item, index);
         /* A case without its link falls back to the plain card. */
         if (!link) return <ul key={item.headingText}>{card(item, index)}</ul>;
         const cover =
@@ -595,6 +561,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
           <CaseCard
             key={item.headingText}
             {...splitClaim(item.headingText)}
+            {...(tag ? { eyebrow: tag } : {})}
             {...story}
             href={link.href}
             ctaLabel={link.labelText}
@@ -610,9 +577,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
       {...head(b)}
       data-band="M"
       actionsAt="end"
-      actions={
-        <CtaRow rule={false} actions={[{ label: closing.labelText, href: closing.href }]} />
-      }
+      actions={<LinkActions links={[closing]} />}
     >
       {body}
     </ContentSection>
@@ -751,6 +716,46 @@ function ClientVoices({ b, ratings, avatars }: BandProps) {
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */
 
 function AiPractice({ page, b }: BandProps) {
+  /* The v2.1 copy (4 Nov 2026): one line, then the run as steps ("1. **AI:** Checks your live
+     product…"), then the link. Each step's bold label is who acts, its words what they do: the
+     flow's stages, in order, under the head; the link the band's action. */
+  const list = b.blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'list' }> =>
+      block.type === 'list' && block.ordered,
+  );
+  const stages = (list?.items ?? []).flatMap((runs) => {
+    const [first, ...rest] = runs;
+    if (first?.type !== 'strong') return [];
+    return [
+      {
+        label: plain(first.children).trim().replace(/[:.]$/, ''),
+        items: [plain(trimStart(rest))],
+      },
+    ];
+  });
+  if (stages.length >= 2) {
+    const intro = paragraphRuns(b.blocks).find(
+      (runs) => !runs.some((run) => run.type === 'link'),
+    );
+    const link = bandLinks(b)[0];
+    return (
+      <ContentSection
+        {...head(b)}
+        data-band="F"
+        lead={intro ? plain(intro) : undefined}
+        footer={
+          link ? (
+            <CtaRow
+              rule={false}
+              actions={[{ label: link.labelText.replace(/\s*→\s*$/, ''), href: link.href }]}
+            />
+          ) : undefined
+        }
+      >
+        <ProcessFlow stages={stages} />
+      </ContentSection>
+    );
+  }
   const [lead, ...rest] = paragraphRuns(b.blocks);
   /* The band's link closes its last paragraph ("… [See a typical AI-assisted design run](…)"): the
      link is the banner's action, and the sentence before it stays, under the lead. */
@@ -894,7 +899,6 @@ const HOME_BANDS: Readonly<
   'product-design': OneStudio,
   'selected-work': SelectedWork,
   testimonials: ClientVoices,
-  people: People,
   'ai-native-practice': AiPractice,
   expertise: Expertise,
   insights: Insights,

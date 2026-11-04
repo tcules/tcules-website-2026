@@ -84,7 +84,8 @@ export function GatewayPaths({
       /* Three cards, one column below 1024 (three ~220 cards at 768 left each title a word a line).
          From 1024 the cards share three rows (subgrid), so the titles, the words and the link rows
          each start on one line across the set whatever their lengths: the head, the words, the ways
-         in. Cards in a set are a `gutter` apart. */
+         in, `text` (16) apart, the card rhythm ListCard and BlockCard share (title to body). Cards
+         in a set are a `gutter` apart. */
       <Layout
         as="ul"
         columns={{ base: 1, lg: 3 }}
@@ -94,7 +95,7 @@ export function GatewayPaths({
         className={cx(styles.root, className)}
       >
         {paths.map((path) => (
-          <Layout as="li" key={path.id} rowGap="block" className={styles.door}>
+          <Layout as="li" key={path.id} rowGap="text" className={styles.door}>
             <Layout rowGap="tight">
               {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
               <Title className={styles.doorTitle}>{path.title}</Title>

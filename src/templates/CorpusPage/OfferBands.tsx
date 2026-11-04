@@ -620,8 +620,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'faq':
       return (
         /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
-           decisions/2026-11-04-faq-beside-its-heading). One FAQ shape on every page. */
-        <ContentSection {...head(band)} data-band="D-faq" arrangement="beside">
+           decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
+           every page. */
+        <ContentSection {...head(band)} data-band="D-faq" arrangement="beside" split="halves">
           <FaqItems band={band} />
         </ContentSection>
       );

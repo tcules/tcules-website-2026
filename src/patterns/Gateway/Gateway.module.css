@@ -409,7 +409,7 @@
 .doorTitle {
   font: var(--gwy-door-title-text);
   letter-spacing: var(--gwy-door-title-tracking);
-  text-wrap: balance;
+  text-wrap: pretty;
   color: var(--gwy-title-ink);
 }
 
@@ -428,13 +428,14 @@
 
 .doorExample a {
   color: var(--gwy-door-link-ink);
-  text-decoration: underline;
-  text-decoration-thickness: var(--gwy-rule-width);
-  text-underline-offset: var(--gwy-door-underline-offset);
+  text-decoration: none;
 }
 
 .doorExample a:hover {
   color: var(--gwy-door-link-ink-hover);
+  text-decoration: underline;
+  text-decoration-thickness: var(--gwy-rule-width);
+  text-underline-offset: var(--gwy-door-underline-offset);
 }
 
 /* A way in: a hairline over each row, the row at least a touch target tall, its words centred in it. */
@@ -447,7 +448,7 @@
   padding-block: var(--gwy-door-row-inset);
   font: var(--gwy-door-link-text);
   letter-spacing: var(--gwy-door-link-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: pretty;
   color: var(--gwy-door-link-ink);
   text-decoration: none;
   border-radius: var(--gwy-ring-radius);

@@ -903,7 +903,7 @@ function CompanyRecord({ page }: { page: CorpusPage }) {
 function Faq({ page }: { page: CorpusPage }) {
   const b = band(page, 'frequently-asked-questions');
   return (
-    <ContentSection {...head(b)} data-band="D-faq" arrangement="beside">
+    <ContentSection {...head(b)} data-band="D-faq" arrangement="beside" split="halves">
       <FaqItems band={b} />
     </ContentSection>
   );

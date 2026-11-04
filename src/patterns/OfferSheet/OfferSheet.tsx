@@ -329,7 +329,7 @@ export function OfferSheet({
     return (
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
         <Layout
-          columns={{ base: 1, lg: [5, 7], xl: [1, 2] }}
+          columns={{ base: 1, lg: [1, 1] }}
           colGap="section"
           rowGap="stack"
           align="start"

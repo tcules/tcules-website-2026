@@ -421,7 +421,6 @@ export const TEMPLATE_BANDS = {
     'product-design',
     'selected-work',
     'testimonials',
-    'people',
     'ai-native-practice',
     'expertise',
     'insights',
