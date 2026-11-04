@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Cluster, Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -541,6 +541,16 @@ const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> =
   },
 };
 
+/**
+ * A close whose ask is the case index, set as the cases it leads to (owner, 4 Nov 2026: /clients' "Case
+ * studies behind the client names"). The copy names no case, so the page picks them here, by the client
+ * name routes.ts files the case under; the cards are the 3-column case grid (treatment rules § 1), the
+ * paragraph is the lead without its link, and the link is the centred action under the cards.
+ */
+const CLOSE_CASES: Readonly<Record<string, readonly string[]>> = {
+  '/clients#case-studies': ['Doodle', 'Benchmark Gensuite', 'Eden AI'],
+};
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -667,8 +677,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     case 'note':
       return <NoteBand band={band} />;
-    case 'close':
-      return <CloseBand page={page} band={band} />;
+    case 'close': {
+      const picks = CLOSE_CASES[`${page.route}#${band.id}`];
+      return picks ? (
+        <CaseLinksBand band={band} ctx={ctx} names={picks} />
+      ) : (
+        <CloseBand page={page} band={band} />
+      );
+    }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
        product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
@@ -1794,5 +1810,64 @@ function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
         <Proof quote={quote} align="center" />
       )}
     </Section>
+  );
+}
+
+/** CLOSE_CASES' band: the picked cases as the 3-column grid, the close's link centred under them. */
+function CaseLinksBand({
+  band,
+  ctx,
+  names,
+}: {
+  band: CorpusBand;
+  ctx: OfferContext;
+  names: readonly string[];
+}) {
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
+  const link = paragraphs
+    .flatMap((block) => block.runs)
+    .find((run): run is Extract<typeof run, { type: 'link' }> => run.type === 'link');
+  const lead = paragraphs
+    .map((block) =>
+      plain(block.runs.filter((run) => run.type !== 'link'))
+        .replace(/\s+/g, ' ')
+        .trim(),
+    )
+    .filter((text) => text.length > 0)
+    .join(' ');
+  const items: BlockCardSetItem[] = names.flatMap((name) => {
+    const found = caseStudyLink(name);
+    if (!found) return [];
+    const ref = ctx.caseRefs[found.href];
+    return [
+      {
+        id: name,
+        title: ref?.title ?? name,
+        media: { type: 'image' as const, image: caseCover(name, ref) },
+        href: found.href,
+      },
+    ];
+  });
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="M"
+      {...(lead ? { lead } : {})}
+      footer={
+        link ? (
+          <Cluster justify="center">
+            <CtaRow
+              rule={false}
+              align="center"
+              actions={[{ label: plain(link.children), href: link.href }]}
+            />
+          </Cluster>
+        ) : undefined
+      }
+    >
+      <BlockCardSet lead="none" scroll="never" cue="title" across={3} size="md" items={items} />
+    </ContentSection>
   );
 }

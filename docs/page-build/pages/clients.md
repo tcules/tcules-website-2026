@@ -49,12 +49,20 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
 | product-responsibility | set · offer-sheet, `rows` | kind still `to-design`; ⚠ text-heavy pair with client-list (Q2) |
 | client-list | table · DataTable (E) | 16 rows |
 | testimonials | quotes · slider (G), stars on every quote, RatingBadge footer | tint |
-| returning-clients | text · C-text | ⚠ text-heavy pair with case-studies (Q1) |
-| case-studies | close · renders C-text today | ⚠ breaks its kind's mapping (Q3) |
+| returning-clients | text · C-text | followed by the case covers, so no text-heavy pair |
+| case-studies | close · case grid (M), link centred under it | Doodle, Benchmark Gensuite, Eden AI (CLOSE_CASES) |
 | enquiry, faq | L, D-faq | |
 
 ## Content mapping
 - No copy changed. The Clutch line under the testimonials renders as the band's RatingBadge.
+
+## Answered 4 Nov 2026 (owner)
+- **Q1 and Q3 → (a).** "Case studies behind the client names" is the 3-column case card grid: Doodle, Benchmark
+  Gensuite and Eden AI (OfferBands `CLOSE_CASES`, by the routes.ts client name; the copy names none). The
+  paragraph is the lead without its link; "Browse the case studies" is the band's one action, the in-band link
+  control (CtaRow), centred under the cards by a Cluster while the head stays at the start. The `close` kind
+  registers M for it (kinds.ts). The covers break the text-heavy pair with returning-clients, and no island
+  touches the enquiry island.
 
 ## Open — BLOCKING (owner)
 - **Q1 · BLOCKING. `returning-clients` → `case-studies` are two text-heavy bands touching**, against the active
