@@ -1602,6 +1602,39 @@ export default function ListCardSpecimenPage() {
         </Specimen>
       </Section>
 
+      {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
+        <Section key={surface} surface={surface}>
+          <Specimen
+            title={`12b · cue="arrow" on ${surface}: the glossary's term rows (owner, 4 Nov 2026). A quiet end arrow at rest that slides and takes the link ink on hover; shortest and longest term, and an external row`}
+          >
+            <Layout as="ul" columns={{ base: 1 }} rowGap="none">
+              <ListCard
+                cue="arrow"
+                titleAs="h3"
+                title="Design intent"
+                body="What the build must keep from the design."
+                href="/glossary/design-intent"
+              />
+              <ListCard
+                cue="arrow"
+                titleAs="h3"
+                title="AI-assisted product development"
+                body="AI tools used in research, design, prototyping, engineering or testing, with people still answerable for what gets released."
+                href="/glossary/ai-assisted-product-development"
+              />
+              <ListCard
+                cue="arrow"
+                titleAs="h3"
+                title="An external source"
+                body="Leaves the site: the arrow points up and out."
+                href="https://example.com"
+                external
+              />
+            </Layout>
+          </Specimen>
+        </Section>
+      ))}
+
       <Section>
         <Layout rowGap="block">
           <h2>13 · What this static page cannot force</h2>

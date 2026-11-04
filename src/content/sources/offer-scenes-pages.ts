@@ -551,4 +551,90 @@ export const PAGE_OFFER_SCENES = {
     },
     stories: {},
   },
+  '/audits/prototype-readiness-review': {
+    items: {
+      'gap-map': by({
+        'What\'s proven, what isn\'t.': 'wyg-prototype-readiness-review-whats-proven-what-isnt',
+        'Fixes customers will notice.': 'wyg-prototype-readiness-review-fixes-customers-will-notice',
+        'Code worth keeping.': 'wyg-prototype-readiness-review-code-worth-keeping',
+        'The work before launch.': 'wyg-prototype-readiness-review-work-before-launch',
+        'Who does the work': 'team-prototype-readiness-review',
+        'Where our part stops': 'stops-prototype-readiness-review',
+      }),
+      method: by({ figure: 'method-prototype-readiness-review' }),
+    },
+    stories: {},
+  },
+  '/audits/ux-product-audit': {
+    items: {
+      'deliverables': by({
+        'Findings ranked by harm.': 'wyg-ux-product-audit-findings-ranked-by-harm',
+        'A next step for each.': 'wyg-ux-product-audit-next-step-each',
+        'What each fix takes.': 'wyg-ux-product-audit-what-each-fix-takes',
+        'A walkthrough with your team.': 'wyg-ux-product-audit-walkthrough-with-team',
+        'Who does the work': 'team-ux-product-audit',
+        'Where our part stops': 'stops-ux-product-audit',
+      }),
+      method: by({ figure: 'method-ux-product-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/ai-product-ux-readiness': {
+    items: {
+      'deliverables': by({
+        'A ranked fix list.': 'wyg-ai-product-ux-readiness-ranked-fix-list',
+        'Fixes users would notice.': 'wyg-ai-product-ux-readiness-fixes-users-would-notice',
+        'Questions for your specialists.': 'wyg-ai-product-ux-readiness-questions-for-specialists',
+        'A walkthrough with your team.': 'wyg-ai-product-ux-readiness-walkthrough-with-team',
+        'Who does the work': 'team-ai-product-ux-readiness',
+        'Where our part stops': 'stops-ai-product-ux-readiness',
+      }),
+      method: by({ figure: 'method-ai-product-ux-readiness' }),
+    },
+    stories: {},
+  },
+  '/audits/design-system-audit': {
+    items: {
+      'deliverables': by({
+        'What to keep.': 'wyg-design-system-audit-what-to-keep',
+        'What to repair first.': 'wyg-design-system-audit-what-to-repair-first',
+        'Where requests stall.': 'wyg-design-system-audit-where-requests-stall',
+        'Early warnings.': 'wyg-design-system-audit-early-warnings',
+        'How widely it\'s used.': 'wyg-design-system-audit-how-widely-used',
+        'Who does the work': 'team-design-system-audit',
+        'Where our part stops': 'stops-design-system-audit',
+      }),
+      method: by({ figure: 'method-design-system-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/design-to-code-audit': {
+    items: {
+      'deliverables': by({
+        'Every gap, side by side.': 'wyg-design-to-code-audit-every-gap-side-by-side',
+        'A fix plan.': 'wyg-design-to-code-audit-fix-plan',
+        'Stop gaps coming back.': 'wyg-design-to-code-audit-stop-gaps-coming-back',
+        'Developer changes worth keeping.': 'wyg-design-to-code-audit-developer-changes-worth-keeping',
+        'Who does the work': 'team-design-to-code-audit',
+        'Where our part stops': 'stops-design-to-code-audit',
+      }),
+      method: by({ figure: 'method-design-to-code-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/product-modernisation-assessment': {
+    items: {
+      'deliverables': by({
+        'Area-by-area answers.': 'wyg-product-modernisation-assessment-area-by-area-answers',
+        'What must survive.': 'wyg-product-modernisation-assessment-what-must-survive',
+        'The order of work.': 'wyg-product-modernisation-assessment-order-of-work',
+        'Questions to answer first.': 'wyg-product-modernisation-assessment-questions-to-answer-first',
+        'Ready for AI features.': 'wyg-product-modernisation-assessment-ready-for-ai-features',
+        'Who does the work': 'team-product-modernisation-assessment',
+        'Where our part stops': 'stops-product-modernisation-assessment',
+      }),
+      method: by({ figure: 'method-product-modernisation-assessment' }),
+    },
+    stories: {},
+  },
 } as unknown as Readonly<Record<string, OfferScenes>>;

@@ -43,6 +43,12 @@ navigation:
     url: /glossary
   - name: Information Architecture
     url: /glossary/information-architecture
+  section_labels:
+    practice: Examples
+    method: How it is worked out
+    comparison: Vs navigation
+    faq: FAQs
+    next: Related terms and help
 render:
   band_order:
   - practice

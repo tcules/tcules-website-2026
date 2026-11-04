@@ -21,18 +21,29 @@ export type BentoItem = {
   /**
    * What the destination gives you, as the tile's second half (owner, 2 Nov 2026, /services, mock A):
    * a tile with a detail is a SPLIT tile, two tracks wide, its drawing, title and body in the first
-   * half and an inset panel in the second holding the label (a router table's header, as authored;
+   * half and a ruled panel in the second holding the label (a router table's header, as authored;
    * the mono label voice sets its case), the text, and the tile's action at the panel's foot. A
    * router table's third column, so a table that becomes tiles drops no column. Every tile or none.
    */
-  detail?: { label: string; text: string; action?: string };
+  detail?: {
+    label: string;
+    text: string;
+    /**
+     * Further labelled fields after the first, in the router table's column order (4 Nov 2026, the
+     * /tools AI tools: "Best for" and "You leave with"): a table with two value columns becomes ONE
+     * panel holding both, each its label over its text, so no column is dropped and no tile carries a
+     * second panel. Absent: the one field.
+     */
+    fields?: readonly { label: string; text: string }[];
+    action?: string;
+  };
   /**
    * The whole tile is the link. Absent, the tile is a still card (owner, 2 Nov 2026, the audits'
    * comparisons): the option the page itself is, or one outside the studio ("your own engineers"),
    * set among the others so no row of the table is dropped. It does not move and carries no action.
    */
   href?: string;
-  /** The destination's own Sketch scene, drawn bare on the tile's texture. Absent, the empty plate. */
+  /** The destination's own Sketch scene, on its plate inside the tile. Absent, the empty plate. */
   scene?: SketchName;
   /**
    * Tracks the tile takes from 1024: 1 (default) or 2. A wide tile puts its drawing beside its words
@@ -64,9 +75,12 @@ export type BentoProps = {
   /**
    * Tracks from 1024. `4` (default): home's two sizes. `3`: a set of PEERS, every tile one size, three
    * a row (owner, 26 Oct 2026, the specialist services: "we can't weigh any 2 items heavier"); spans
-   * are ignored.
+   * are ignored. `2`: a set laid in HALF a row, where two headed groups share one row (4 Nov 2026,
+   * /tools: the redesign worksheet and the prototype checklist, a single tool each, as two headed
+   * halves): a split tile takes the half whole and keeps its two halves side by side, at the width a
+   * split tile has on four tracks, so it never turns into the whole-row (`full`) form.
    */
-  tracks?: 3 | 4;
+  tracks?: 2 | 3 | 4;
   /**
    * A TEXT CELL after the tiles: the band's closing words in the grid's own last row, where the tiles
    * leave a hole (owner, 29 Oct 2026, /services/product-design: seven services on four tracks, 4 + 3,
@@ -89,7 +103,7 @@ export type BentoProps = {
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
 
 /** Each tile's row and first track on the grid, read from the spans in order. */
-function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
+function place(items: readonly BentoItem[], TRACKS: 2 | 3 | 4): Placed[] {
   let row = 0;
   let col = 0;
   return items.map((item) => {
@@ -170,10 +184,13 @@ function TileBox({ href, children }: { href?: string; children: ReactNode }) {
 function TileLink({
   item,
   wide,
+  full = false,
   Title,
 }: {
   item: BentoItem;
   wide: boolean;
+  /** A split tile alone on the set's last row, which it takes whole from 1024 (`full`). */
+  full?: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
   const named = (
@@ -185,17 +202,15 @@ function TileLink({
   const words = named;
   const art = (
     <div className={styles.art}>
-      {/* No drawing yet: the labelled empty plate, since a bare frame draws nothing. */}
-      <Sketch
-        name={item.scene}
-        frame={item.scene ? 'bare' : 'plate'}
-        story={Boolean(item.href)}
-      />
+      {/* The drawing on its plate, the one frame every flat drawing sits in (owner, 3 Nov 2026,
+          decisions/2026-11-03-flat-graphics-on-one-plate). No drawing yet: the empty plate. */}
+      <Sketch name={item.scene} story={Boolean(item.href)} />
     </div>
   );
   if (item.detail) {
-    /* The split tile: the named half (drawing, then title and body) and the result half, an inset
-       panel whose action sits at its foot. Side by side from 768, the panel under the named half
+    /* The split tile: the named half (drawing, then title and body) and the result half, a panel on
+       the band's own ground set off by a hairline, its action at its foot. Side by side from 768, the
+       panel under the named half
        below. */
     return (
       <TileBox href={item.href}>
@@ -203,16 +218,31 @@ function TileLink({
             tiles ends on the same line however long its neighbour's words run. */}
         <Layout
           className={styles.fill}
-          columns={{ base: 1, md: [1, 1] }}
-          colGap="tight"
-          rowGap="tight"
+          columns={full ? { base: 1, md: [1, 1], lg: [2, 1] } : { base: 1, md: [1, 1] }}
+          colGap="text"
+          rowGap="text"
           equalRows
         >
           <div className={styles.named}>
-            <Layout rowGap="block">
-              {art}
-              {named}
-            </Layout>
+            {full ? (
+              /* The whole row: from 1024 the named half sets its words beside its drawing, as the
+                 wide tile does, so the plate keeps a single tile's size and the panel keeps its
+                 third; below, the drawing over the words as every split tile. */
+              <Layout
+                columns={{ base: 1, lg: [1, 1] }}
+                colGap="gutter"
+                rowGap="block"
+                align="center"
+              >
+                {art}
+                {named}
+              </Layout>
+            ) : (
+              <Layout rowGap="block">
+                {art}
+                {named}
+              </Layout>
+            )}
           </div>
           <div className={styles.panel}>
             <Layout
@@ -220,9 +250,16 @@ function TileLink({
               rowGap="block"
               pinLast={Boolean(item.detail.action && item.href)}
             >
-              <Layout rowGap="tight">
-                <p className={styles.eyebrow}>{item.detail.label}</p>
-                <p className={styles.panelText}>{item.detail.text}</p>
+              <Layout rowGap="block">
+                {[
+                  { label: item.detail.label, text: item.detail.text },
+                  ...(item.detail.fields ?? []),
+                ].map((field) => (
+                  <Layout key={field.label} rowGap="tight">
+                    <p className={styles.eyebrow}>{field.label}</p>
+                    <p className={styles.panelText}>{field.text}</p>
+                  </Layout>
+                ))}
               </Layout>
               {item.detail.action && item.href ? (
                 <Cluster>
@@ -275,7 +312,7 @@ export type ServiceTileProps = {
    * sets the case.
    */
   eyebrow?: string;
-  /** The service's own flat Sketch scene, drawn bare on the tile's texture. */
+  /** The service's own flat Sketch scene, on its plate inside the tile. */
   scene?: SketchName;
   /**
    * A picture in the drawing's place, composed by the caller (an expertise's sector photograph, or
@@ -295,16 +332,53 @@ export type ServiceTileProps = {
    * (decisions/2026-10-29-media-rows-take-a-whole-row). The caller's `li` declares `data-media-row`.
    */
   wide?: boolean;
+  /**
+   * With \`wide\`, the side the visual takes from 768: \`end\` (default) or \`start\`. Two whole-row tiles
+   * in consecutive bands alternate, so the page does not repeat one shape down its length (4 Nov
+   * 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start).
+   *
+   * As a CARD (not \`wide\`), \`start\` puts the visual at the head of the card: the drawing, then the
+   * title, body and fields, then the action at the foot (4 Nov 2026, the /tools directory: one tool
+   * tile for all six, the drawing heading each card at every width, as an icon heads its card). The
+   * default card keeps its words over the visual (decisions/2026-10-29-related-destination-is-a-card).
+   */
+  visual?: 'start' | 'end';
+  /**
+   * Labelled lines under the body, each its label in the mono label voice over its text: a router
+   * table's value columns carried by the tile that names the row ("Best for", "You leave with"; 4 Nov
+   * 2026, /tools), so a table that becomes tiles drops no column and no tile needs a second panel.
+   * Plain text, verbatim, in the table's column order. Absent renders nothing.
+   */
+  fields?: readonly { label: string; text: string }[];
+  /**
+   * With `wide`, whether the tile draws its hairline box. `hairline` (default): the card. `none`: a
+   * lone offer on its own band, one item a row, set on the band's ground as a media row (no box, no
+   * inset), so it reads as the band's own offer rather than one more tile of the set above it (critic,
+   * audits run, 4 Nov 2026: /audits' Prototype Readiness Review sat 100 under the chooser's full-row
+   * split tile, two boxed rows in two dialects; one item a row needs no box, no-ruled-cards). The
+   * whole row stays the one anchor and lifts on hover; no edge appears on hover either.
+   */
+  frame?: 'hairline' | 'none';
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
+  /**
+   * One line under the title, in the bento body role: what the destination is, where the copy says it
+   * beside the name (/audits `prototype`: "[Prototype Readiness Review]. A senior designer and an
+   * engineer …"). Plain text, verbatim. Absent renders nothing.
+   *
+   * Several strings are several paragraphs, a \`text\` apart: a WIDE tile carrying the sentences that
+   * lead to it (a glossary term's close, 4 Nov 2026), so its words column holds the argument beside
+   * the drawing rather than a title alone in half a row. Plain text only: the tile is one anchor, so a
+   * sentence with a link of its own stays outside it.
+   */
+  body?: string | readonly string[];
 };
 
 /**
  * ServiceTile — ONE bento tile on its own, for a named destination that sits as a card in another
  * set (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
  * related service or related expertise beside its pieces. The same tile as the bento's (its hairline,
- * texture and hover), with the texture's wave fitted to the tile itself, since it shares no row with
- * other tiles. As a card it reads top to bottom (owner, 29 Oct 2026;
+ * its drawing on the plate, its hover). As a card it reads top to bottom (owner, 29 Oct 2026;
  * decisions/2026-10-29-related-destination-is-a-card): the eyebrow, the title, the visual in the
  * middle of the spare height, the action at the foot. `wide`, the words and action beside the visual.
  * It renders a `div`; the caller's set supplies the `li`. A set of services is a `Bento`, never a row
@@ -318,19 +392,51 @@ export function ServiceTile({
   picture,
   action,
   wide = false,
+  visual: side = 'end',
   titleAs: Title = 'h3',
+  body,
+  fields = [],
+  frame = 'hairline',
 }: ServiceTileProps) {
-  const words = (
+  const paragraphs = (typeof body === 'string' ? [body] : (body ?? [])).filter((p) => p.trim());
+  const named = (
     <Layout rowGap="tight">
       {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
       <Title className={styles.title}>{title}</Title>
+      {paragraphs.length === 1 ? <p className={styles.body}>{paragraphs[0]}</p> : null}
+      {paragraphs.length > 1 ? (
+        <Layout rowGap="text">
+          {paragraphs.map((paragraph, index) => (
+            <p key={index} className={styles.body}>
+              {paragraph}
+            </p>
+          ))}
+        </Layout>
+      ) : null}
     </Layout>
   );
+  /* The fields are a `text` set a `block` under the named words: head to body inside the card. */
+  const words =
+    fields.length > 0 ? (
+      <Layout rowGap="block">
+        {named}
+        <Layout rowGap="text">
+          {fields.map((field) => (
+            <Layout key={field.label} rowGap="inline">
+              <p className={styles.eyebrow}>{field.label}</p>
+              <p className={styles.body}>{field.text}</p>
+            </Layout>
+          ))}
+        </Layout>
+      </Layout>
+    ) : (
+      named
+    );
   const visual = picture ? (
     <div className={styles.picture}>{picture}</div>
   ) : scene ? (
-    <div className={cx(styles.art, styles.artCentred)}>
-      <Sketch name={scene} frame="bare" story />
+    <div className={styles.art}>
+      <Sketch name={scene} story />
     </div>
   ) : null;
   const button = action?.trim() ? (
@@ -342,7 +448,16 @@ export function ServiceTile({
   ) : null;
   return (
     <div className={cx(styles.cell, styles.solo)}>
-      <a href={href} className={cx(styles.tile, wide && styles.tileWide)} data-btn-link-group>
+      <a
+        href={href}
+        className={cx(
+          styles.tile,
+          wide && styles.tileWide,
+          wide && side === 'start' && styles.visualStart,
+          wide && frame === 'none' && styles.tileBare,
+        )}
+        data-btn-link-group
+      >
         {wide ? (
           /* Words, visual, action in reading order, so a phone stacks them as the card does; from
              768 the visual takes the second track across both rows, the words over the action
@@ -356,6 +471,14 @@ export function ServiceTile({
             <div className={styles.wideWords}>{words}</div>
             {visual ? <div className={styles.wideVisual}>{visual}</div> : null}
             {button ? <div className={styles.wideAction}>{button}</div> : null}
+          </Layout>
+        ) : side === 'start' && visual ? (
+          /* The visual heads the card, then the words, then the action pinned to the foot, so the
+             actions of cards sharing a row sit on one line. */
+          <Layout className={styles.fill} rowGap="block" pinLast={Boolean(button)}>
+            {visual}
+            {words}
+            {button}
           </Layout>
         ) : (
           /* Words at the head, then a stack that takes the spare height: the visual centred in it,
@@ -381,12 +504,10 @@ export function ServiceTile({
  * no tile hides behind a scroll or a tab.
  *
  * Every tile shows its hairline edge at rest, so its inset is honest (no ground exists only on
- * hover). Behind the drawings runs one continuous texture per row: the site's pixel grid seen
- * through a feathered wave drawn across the whole row (public/textures/bento-wave-*.svg) and
- * clipped by each tile, so the field reads as one while every seam stays a clean tile edge. Each
- * tile's window onto its row is set from its track (`data-col`), so the grid's cells line up from
- * tile to tile. Neutral at rest; on hover the tile's own texture turns blue, its hairline turns
- * light blue, it lifts and its title takes the accent.
+ * hover). Its drawing sits on the Sketch plate, the dotted frame every flat drawing on the site takes;
+ * the tile carries no texture of its own (owner, 3 Nov 2026,
+ * decisions/2026-11-03-flat-graphics-on-one-plate). On hover the tile lifts, its hairline turns light
+ * blue and its title takes the accent.
  *
  * Every tile's drawing moves on hover or focus: a story scene tells its story, any other makes its one
  * `Move`/`GrowIn` move on the tile's own curve (decisions/2026-10-30-service-tile-drawing-moves-on-hover).
@@ -414,28 +535,31 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   /* The CTA cards follow the tiles one cell each; the LAST card takes every track its row leaves, so
      the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
   const routes = cta?.routes ?? [];
+  /* A split tile alone on the last row of four tracks takes the whole row (4 Nov 2026, the audits'
+     choosers and comparisons: five or three split tiles left the last one beside a hole). Only when
+     nothing follows it in the grid: a CTA card or a note takes the tracks it leaves instead. */
+  const fullAt =
+    tracks === 4 && last?.item.detail && last.col === 0 && routes.length === 0 && !note
+      ? placed.length - 1
+      : -1;
   const ctaAt = used % tracks;
   const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
   const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
   const mdSpan = mdCells % 2 === 1 ? 2 : 1;
 
   return (
-    <Layout
-      as="ul"
-      className={styles.set}
-      data-tracks={tracks}
-      columns={{ base: 1, md: 2, lg: tracks }}
-      colGap="gutter"
-      rowGap="gutter"
-    >
-      {placed.map(({ item, row, col, span }, index) => (
+    <Layout as="ul" columns={{ base: 1, md: 2, lg: tracks }} colGap="gutter" rowGap="gutter">
+      {placed.map(({ item, span }, index) => (
         <li
           key={item.id}
-          className={cx(styles.cell, span === 2 && styles.wide, item.detail && styles.split)}
-          data-row={row % 2 === 0 ? 'a' : 'b'}
-          data-col={col}
+          className={cx(
+            styles.cell,
+            span === 2 && styles.wide,
+            item.detail && styles.split,
+            index === fullAt && styles.full,
+          )}
         >
-          <TileLink item={item} wide={span === 2} Title={Title} />
+          <TileLink item={item} wide={span === 2} full={index === fullAt} Title={Title} />
         </li>
       ))}
       {routes.length > 0 ? (

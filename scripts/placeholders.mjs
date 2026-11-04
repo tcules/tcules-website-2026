@@ -117,7 +117,7 @@ function wrap(s, max) {
   return lines;
 }
 
-function svgFor({ width, height, kind, shows, file }) {
+function svgFor({ key, width, height, kind, shows, file }) {
   const unit = Math.min(width, height);
   /* An illustration slot is contained, never cropped, and its smallest showing is 168 wide (a hard-parts
      claim's drawing, a home reason): its label is sized for that, so it is legible there. Every other
@@ -141,7 +141,10 @@ function svgFor({ width, height, kind, shows, file }) {
      full brief lives in the register. */
   /* The register's FALLBACK row documents itself for the register's reader; its sentence is a note to
      developers and never a visitor's label, so its panel draws the head alone (review 29 Oct). */
-  const brief = /^FALLBACK\b/.test(shows)
+  /* A hero's panel draws the head alone too: beside the title and lede, a sentence in the hero's
+     media slot is read as page copy and repeats the lede (critic, audits run, 4 Nov 2026). The brief
+     stays in the register for whoever draws it. */
+  const brief = /^FALLBACK\b/.test(shows) || /#hero$/.test(key)
     ? ''
     : shows
         /* A parenthetical that names a frontmatter key ("(frontmatter healthtech_asset; …)") is for the

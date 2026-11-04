@@ -331,3 +331,17 @@
   max-inline-size: var(--cta-body-measure);
   font: var(--text-body-sm);
 }
+
+/* The footnote's leading glyph: the accent, sized to the small body's line box so it sits on the
+   first line (a box of the line's height, the glyph centred in it). */
+.footnoteIcon {
+  display: inline-flex;
+  align-items: center;
+  block-size: var(--cta-footnote-line);
+  color: var(--cta-marker-ink);
+}
+
+.footnoteIcon > svg {
+  inline-size: var(--cta-footnote-glyph);
+  block-size: var(--cta-footnote-glyph);
+}

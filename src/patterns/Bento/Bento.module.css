@@ -1,13 +1,7 @@
-/* Bento — every value is a --bnt-* token (tokens/components/bento.css), a gap-scale step or a
-   texture asset. Layout owns the set's tracks and each tile's inner stack or pair; this module
-   supplies the tile's edge, inset and states, the wide tile's span, the drawing's scale and the
-   texture layers. Layout's breakpoints: md 768, lg 1024. */
-
-/* The set is the query container its tiles' textures measure the row against: 100cqi is the row's
-   width, so a tile can place its window onto the row's wave from its own track. Sizing only. */
-.set {
-  container-type: inline-size;
-}
+/* Bento — every value is a --bnt-* token (tokens/components/bento.css) or a gap-scale step. Layout
+   owns the set's tracks and each tile's inner stack or pair; this module supplies the tile's edge,
+   inset and states and the wide tile's span. The drawing is Sketch's plate, filling its track (owner,
+   3 Nov 2026, decisions/2026-11-03-flat-graphics-on-one-plate). Layout's breakpoints: md 768, lg 1024. */
 
 .cell {
   min-inline-size: 0;
@@ -18,6 +12,14 @@
 @media (min-width: 768px) {
   .wide {
     grid-column: span 2;
+  }
+}
+
+/* A split tile alone on the set's last row (`full`, 4 Nov 2026): from 1024 it takes every track, so
+   the set ends on a full row. Placement of this unit's own cell, as `.wide`. */
+@media (min-width: 1024px) {
+  .full {
+    grid-column: 1 / -1;
   }
 }
 
@@ -105,14 +107,10 @@
 }
 
 /* The tile is the link and the frame: its hairline at rest, its inset inside that hairline (a
-   `block` in a single tile, a `gutter` in a wide one), its corners. Positioned and isolated so its
-   two texture layers sit between its ground and its content. `display: block` sizes the anchor to
-   fill the stretched cell; the Layout inside arranges. */
+   `block` in a single tile, a `gutter` in a wide one), its corners. `display: block` sizes the anchor
+   to fill the stretched cell; the Layout inside arranges. */
 .tile {
   display: block;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
   block-size: 100%;
   padding: var(--gap-block);
   border: var(--bnt-rule-width) solid var(--bnt-rule-ink);
@@ -135,105 +133,8 @@
   block-size: 100%;
 }
 
-/* ── The texture ──────────────────────────────────────────────────────────────
-   Two layers, the rest ink and the hover ink, each the pixel grid (public/textures/pixel-grid.svg,
-   the site's one texture) intersected with the row's wave. The wave and the grid are both offset by
-   the tile's distance from the row's start (--bnt-wave-x), so the wave runs on from tile to tile and
-   the grid's cells line up across the seams. Below 1024 a tile no longer shares a row, so it takes
-   its own wave, fitted to itself. */
-.tile::before,
-.tile::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: var(--bnt-tex-ink);
-  opacity: var(--bnt-tex-strength);
-  -webkit-mask-image: var(--bnt-wave), url('/textures/pixel-grid.svg');
-  mask-image: var(--bnt-wave), url('/textures/pixel-grid.svg');
-  -webkit-mask-size: var(--bnt-wave-size), auto;
-  mask-size: var(--bnt-wave-size), auto;
-  -webkit-mask-position:
-    var(--bnt-wave-x) 0,
-    var(--bnt-wave-x) 0;
-  mask-position:
-    var(--bnt-wave-x) 0,
-    var(--bnt-wave-x) 0;
-  -webkit-mask-repeat: no-repeat, repeat;
-  mask-repeat: no-repeat, repeat;
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-  transition: opacity var(--bnt-duration) var(--bnt-easing);
-}
-
-.tile::after {
-  background-color: var(--bnt-tex-ink-hover);
-  opacity: 0;
-}
-
-.set {
-  --bnt-tracks: 4;
-}
-
-/* Three tracks of peers (`tracks={3}`): the same row wave, each tile's window a third of the row. */
-.set[data-tracks='3'] {
-  --bnt-tracks: 3;
-}
-
-.cell {
-  --bnt-wave: url('/textures/bento-wave-tile.svg');
-  --bnt-wave-size: 100% 100%;
-  --bnt-wave-x: 0%;
-}
-
-@media (min-width: 1024px) {
-  /* One wave per row, as wide as the row (100cqi); each tile's window starts at its own track:
-     -(track × (track width + gutter)), less the hairline the layer sits inside. */
-  .cell {
-    --bnt-wave-size: 100cqi 100%;
-    --bnt-wave-x: calc(
-      -1 * var(--bnt-col) *
-        (
-          (100cqi - (var(--bnt-tracks) - 1) * var(--gap-gutter)) / var(--bnt-tracks) +
-            var(--gap-gutter)
-        ) -
-        var(--bnt-rule-width)
-    );
-  }
-
-  .cell[data-row='a'] {
-    --bnt-wave: url('/textures/bento-wave-row-a.svg');
-  }
-
-  .cell[data-row='b'] {
-    --bnt-wave: url('/textures/bento-wave-row-b.svg');
-  }
-
-  .cell[data-col='0'] {
-    --bnt-col: 0;
-  }
-
-  .cell[data-col='1'] {
-    --bnt-col: 1;
-  }
-
-  .cell[data-col='2'] {
-    --bnt-col: 2;
-  }
-
-  .cell[data-col='3'] {
-    --bnt-col: 3;
-  }
-}
-
-/* A lone tile (`ServiceTile`): it shares no row, so at every width its wave is fitted to itself, the
-   form a bento tile takes below 1024. Two classes, so it outranks the row's window from 1024. Sizing. */
+/* A lone tile (`ServiceTile`) fills its cell, so cards sharing a row end on one line. Sizing. */
 .cell.solo {
-  --bnt-wave: url('/textures/bento-wave-tile.svg');
-  --bnt-wave-size: 100% 100%;
-  --bnt-wave-x: 0%;
-
   block-size: 100%;
 }
 
@@ -257,35 +158,16 @@
   font: var(--bnt-body-text);
 }
 
-/* The drawing, at the tile's scale of its own drawing units: the scale is handed to Sketch through
-   --skt-scale, the one value Sketch takes from a parent. A single tile holds the drawing at the
-   words' left edge; a wide tile centres it in its half. */
+/* The drawing on its plate fills the tile's width (a wide tile's half), so every plate in a row is
+   one size of one ground. Sizing only. */
 .art {
-  --skt-scale: var(--bnt-art-scale);
-
-  justify-self: start;
-}
-
-.wide .art {
-  --skt-scale: var(--bnt-art-scale-wide);
-
-  align-self: center;
-  justify-self: center;
-}
-
-@media (max-width: 767.98px) {
-  .art,
-  .wide .art {
-    --skt-scale: var(--bnt-art-scale-m);
-
-    justify-self: start;
-  }
+  min-inline-size: 0;
 }
 
 /* ── The lone tile as a card (ServiceTile) ─────────────────────────────────────
-   Its eyebrow in the mono label voice; the drawing centred in the spare height between the words
-   and the action (self-alignment of the child in its own row); a picture in the drawing's place
-   fills the tile's width at 16:9 with the card crop box's radius. A wide tile takes the wide
+   Its eyebrow in the mono label voice; the plate centred in the spare height between the words and
+   the action (self-alignment of the child in its own row); a picture in the plate's place fills the
+   tile's width at 16:9 with the card crop box's radius. A wide tile takes the wide
    tile's inset. */
 .eyebrow {
   color: var(--bnt-eyebrow-ink);
@@ -294,15 +176,19 @@
   text-transform: var(--text-mono-case);
 }
 
-.artCentred {
-  align-self: center;
-  justify-self: center;
-}
-
 .picture {
   align-self: center;
   overflow: hidden;
   border-radius: var(--bnt-picture-radius);
+}
+
+/* Below 768 a wide tile stacks drawing first, as every split tile and card does: in reading order
+   (words, visual, action) the drawing fell under the copy, the only tile on a phone to put it there
+   (critic, audits run, 4 Nov 2026). The drawing is decorative, so the reading order is unchanged. */
+@media (max-width: 767.98px) {
+  .wideVisual {
+    order: -1;
+  }
 }
 
 @media (min-width: 768px) {
@@ -325,27 +211,43 @@
     align-self: start;
   }
 
+  /* \`visual="start"\`: the visual leads, the words and action beside it on the end side, so two
+     whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools). */
+  .visualStart .wideVisual {
+    grid-column: 1;
+  }
+
+  .visualStart .wideWords,
+  .visualStart .wideAction {
+    grid-column: 2;
+  }
+
   .tileWide .title {
     font: var(--bnt-title-text-wide);
     letter-spacing: var(--bnt-title-tracking-wide);
   }
 }
 
+/* `frame="none"`: a wide tile on the band's own ground, no hairline and no inset, so its words and
+   plate sit on the content column's edges as a media row does. After the wide inset (same
+   specificity, later), and the hover's edge below is cancelled for it there. */
+.tile.tileBare {
+  padding: 0;
+  border-color: transparent;
+}
+
 /* ── States ─────────────────────────────────────────────────────────────────
-   Hover and keyboard focus, one curve both ways: the tile lifts, its hairline and texture turn blue,
-   its title takes the accent. Keyboard gets the ring as well. Only a LINKED tile moves: a tile with no
+   Hover and keyboard focus, one curve both ways: the tile lifts, its hairline turns blue, its title
+   takes the accent and its drawing tells its story. Keyboard gets the ring as well. Only a LINKED tile moves: a tile with no
    destination (the page itself in a comparison, an option outside the studio) is a still card. */
 a.tile:is(:hover, :focus-visible) {
   transform: translateY(calc(-1 * var(--bnt-lift)));
   border-color: var(--bnt-rule-ink-hover);
 }
 
-a.tile:is(:hover, :focus-visible)::before {
-  opacity: 0;
-}
-
-a.tile:is(:hover, :focus-visible)::after {
-  opacity: var(--bnt-tex-strength);
+/* A bare wide tile (`frame="none"`) has no edge to turn blue: it lifts and its title takes the accent. */
+a.tile.tileBare:is(:hover, :focus-visible) {
+  border-color: transparent;
 }
 
 a.tile:is(:hover, :focus-visible) .title {
@@ -367,49 +269,44 @@ a.tile:is(:hover, :focus-visible) .title {
   }
 }
 
-/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A) ─────────────────────────────
-   Two tracks wide, two halves. The tile's own inset drops to `tight` so the result panel sits a hair
-   inside the tile's edge; the named half adds `text` back, so its words start where a single tile's
-   would (8 + 16 = the single tile's 24). The panel is a ground inside the tile, its own `block` inset.
-   The drawing at the split scale, at the start of its half. */
+/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A; panel restyled 4 Nov 2026) ─────
+   Two tracks wide, two halves. The result panel is no box: it stands on the band's own ground, set
+   off by the tile's own hairline on its inline-start edge (from 768) or its top edge (stacked, below
+   768). The tile's `text` inset keeps that rule clear of the frame, 16 from its edges; each half adds
+   `tight` back so its words start where a single tile's would (16 + 8 = the single tile's 24), and the
+   halves' `text` gap plus that `tight` puts the words 24 either side of the rule. */
 .split .tile {
-  padding: var(--gap-tight);
-}
-
-@media (min-width: 768px) {
-  .split .tile {
-    padding: var(--gap-tight);
-  }
+  padding: var(--gap-text);
 }
 
 .named {
-  padding: var(--gap-text);
+  padding: var(--gap-tight);
 }
 
 .panel {
   block-size: 100%;
-  padding: var(--gap-block);
-  border-radius: var(--bnt-panel-radius);
-  background: var(--bnt-panel-ground);
+  padding-block: var(--gap-block) var(--gap-tight);
+  padding-inline: var(--gap-tight);
+  border-block-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  transition: border-color var(--bnt-duration) var(--bnt-easing);
+}
+
+/* The panel's rule is the tile's hairline, so it takes the frame's hover ink with it. */
+a.tile:is(:hover, :focus-visible) .panel {
+  border-color: var(--bnt-rule-ink-hover);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding-block: var(--gap-tight);
+    padding-inline: var(--gap-block) var(--gap-tight);
+    border-block-start: 0;
+    border-inline-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  }
 }
 
 .panelText {
   max-inline-size: var(--bnt-body-measure);
   color: var(--bnt-title-ink);
   font: var(--bnt-body-text);
-}
-
-.split .art {
-  --skt-scale: var(--bnt-art-scale-split);
-
-  justify-self: start;
-}
-
-/* The split tile carries no texture (owner, 2 Nov 2026): its result panel is already the card's
-   second surface, and a drawing with its own hatching (New Product Design's set-aside parts) shimmered
-   against the pixel grid. Its drawing sits on the tile's plain ground; hover keeps the lift, the
-   hairline and the title's accent. */
-.split .tile::before,
-.split .tile::after {
-  content: none;
 }

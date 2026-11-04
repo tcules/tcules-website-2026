@@ -198,6 +198,13 @@ export type ListCardProps = ListCardFormProps & {
    * the row), and beside a 326 phone column it squeezed the copy to ~200px.
    */
   markerPosition?: 'start' | 'end';
+  /**
+   * `arrow` (owner, 4 Nov 2026, the glossary's term rows): a quiet arrow at a linked ROW's inline end,
+   * so a list of words reads as clickable at rest; on hover it slides and takes the link ink with the
+   * title. Opt-in: the 7 Oct ruling (no arrow cue) still holds for every other list. Ignored on a
+   * tile, without a destination, and beside an action, which carries its own arrow.
+   */
+  cue?: 'arrow';
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -339,6 +346,7 @@ export function ListCard({
   external = false,
   ctaLabel,
   markerPosition = 'start',
+  cue,
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -401,9 +409,9 @@ export function ListCard({
      the title's last word, joined by a non-breaking space so it never starts a line alone. Not the
      removed arrow cue — it does not say "this is a link" (the hover does that), it says "this
      leaves the site", which a sighted reader cannot otherwise know before the new tab opens. With
-     an action, the action's own glyph says it instead, so the title carries none. */
+     an action, or an end arrow (`cue`), that glyph says it instead, so the title carries none. */
   const leavesGlyph =
-    leaves && !action ? (
+    leaves && !action && cue !== 'arrow' ? (
       <>
         {'\u00a0'}
         <span className={styles.leaves}>
@@ -514,8 +522,10 @@ export function ListCard({
     marker !== undefined && (marker.type === 'thumbnail' || marker.type === 'sketch');
   const trailing = markerPosition === 'end' && hasPicture;
   const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
+  /* An end arrow stays on the copy's line at every width: wrapped under the copy it would point at
+     nothing. A picture marker keeps the wrap it needs on a phone. */
   const row = (
-    <Cluster colGap="block" rowGap="block" align="start">
+    <Cluster colGap="block" rowGap="block" align="start" nowrap={cue === 'arrow' && !hasPicture}>
       {trailing ? null : markerNode}
       <div className={styles.core}>
         {action ? (
@@ -528,6 +538,11 @@ export function ListCard({
         )}
       </div>
       {trailing ? markerNode : null}
+      {cue === 'arrow' && destination && !action ? (
+        <span className={styles.cue} aria-hidden="true">
+          <Icon name={leaves ? 'arrow-right-up' : 'arrow-right'} size="lg" />
+        </span>
+      ) : null}
     </Cluster>
   );
 

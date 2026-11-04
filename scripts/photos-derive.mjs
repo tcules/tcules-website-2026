@@ -91,7 +91,7 @@ for (const entry of catalogue) {
 }
 
 /* ── The registry ─────────────────────────────────────────────────────────────── */
-const SOURCE = { 'tcules-about': 'studio', unsplash: 'stock', pexels: 'stock' };
+const SOURCE = { 'tcules-about': 'studio', 'tcules-studio': 'studio', unsplash: 'stock', pexels: 'stock' };
 
 const rows = catalogue.map((entry) => {
   const source = SOURCE[entry.source];

@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: User Journey Mapping
     url: /glossary/user-journey-mapping
+  section_labels:
+    practice: How it works
+    template: Template
+    customer-journey: Vs customer journey
+    comparison: Vs workflow design
+    faq: FAQs
+    next: Where to start
 render:
   band_order:
   - practice

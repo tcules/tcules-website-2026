@@ -237,6 +237,15 @@ export type MediaProps = {
   /** Override the record's focal point for this placement only. */
   focus?: MediaFocus;
   /**
+   * Photographs under a crop (`fit="fill"` or `ratio`) only: cut in closer than the cover crop, by
+   * this factor, about the focal point (1 to 2; 1 is the plain cover crop). Placement-owned, like
+   * `focus`, because how tight a crop sits is a decision about one box, never about the asset (the
+   * studio collage, owner's picks, 3 Nov 2026). The PLACEMENT clips: the scaled image overflows
+   * Media's own box, so it is only for a crop box that rounds and clips itself (`edge="placement"`).
+   * Ignored with a development warning anywhere else.
+   */
+  zoom?: number;
+  /**
    * The page's LCP image: eager, and fetched ahead of the document's other images. One per page
    * at most, and only a hero's. Everything else is lazy and decodes off the main thread.
    */
@@ -375,6 +384,7 @@ export function Media({
   priority = false,
   ratio,
   focus,
+  zoom,
   art,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
@@ -417,10 +427,31 @@ export function Media({
      stands — the centre for a ratio crop, --media-fill-position for a fill. A `contain` placement
      reads only a `focus` passed for it, never the record's crop point. */
   const anchor = focus ?? image.focus;
-  const style =
-    anchor && (cropRatio || fit === 'fill' || (fit === 'contain' && focus))
-      ? ({ '--media-focus': `${percent(anchor.x)} ${percent(anchor.y)}` } as CSSProperties)
-      : undefined;
+  const cropped = isPhotograph && (fit === 'fill' || cropRatio !== undefined);
+  if (zoom !== undefined && zoom !== 1 && (!cropped || edge !== 'placement')) {
+    warn('`zoom` scales only a cropped photograph inside a box that clips it. Ignored', image);
+  }
+  const scale =
+    zoom !== undefined && cropped && edge === 'placement'
+      ? Math.round(Math.min(2, Math.max(1, zoom)) * 100) / 100
+      : 1;
+  const style = {
+    ...(anchor && (cropRatio || fit === 'fill' || (fit === 'contain' && focus))
+      ? { '--media-focus': `${percent(anchor.x)} ${percent(anchor.y)}` }
+      : {}),
+    ...(scale > 1 ? { '--media-zoom': String(scale) } : {}),
+  } as CSSProperties;
+  /* A zoomed crop renders wider than its box by the zoom, so the srcset is asked for that much more. */
+  const zoomSizes = (list: string) =>
+    scale > 1
+      ? list
+          .split(/,\s*(?![^()]*\))/)
+          .map((entry) => {
+            const match = /^(\([^)]*\)\s+)?(.+)$/.exec(entry.trim());
+            return match ? `${match[1] ?? ''}calc(${match[2]} * ${scale})` : entry;
+          })
+          .join(', ')
+      : list;
 
   const bare = (
     /* A native image rather than next/image: ruling M1 serves Strapi's own formats as a native
@@ -448,11 +479,14 @@ export function Media({
            shows the same photograph. Renders nothing until --media-photo-grade is set. */
         isPhotograph && styles.grade,
         shadow && styles.shadow,
+        scale > 1 && styles.zoom,
       )}
-      style={style}
+      style={Object.keys(style).length > 0 ? style : undefined}
       src={image.src}
       srcSet={srcSet}
-      sizes={srcSet ? (cropRatio ? cropSizes(sizes, image, cropRatio) : sizes) : undefined}
+      sizes={
+        srcSet ? zoomSizes(cropRatio ? cropSizes(sizes, image, cropRatio) : sizes) : undefined
+      }
       alt={image.alt}
       width={image.width}
       height={image.height}

@@ -177,18 +177,19 @@ pass on another account; a page ships with its placeholders until then.
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-- [~] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+- [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
       storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
+      approved 4 Nov (record docs/page-build/pages/audits.md).
 - [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
       Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
       service tiles (mock A); centred hero, illustration placeholder until art.
 - [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
       services hub (#194).
-- [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
-      relief (lowest score on 29 Oct, 4/10).
+- [x] **2.39** (#213) Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
+      relief (lowest score on 29 Oct, 4/10). approved 4 Nov (record docs/page-build/pages/glossary.md).
 
 *More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
 
@@ -242,9 +243,11 @@ designed well. Everything here is designed before the lock on Wed 4 Nov. Not our
 page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
 the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
 checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
-- [~] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
       plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
       one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
+      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
 - [ ] **2.51** How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
@@ -252,20 +255,20 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
       success and failure copy, and CTA-source analytics come after launch.
-- [ ] **2.53** One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
-- [ ] **2.54** Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+- [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
       (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
 - [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
       Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
       links to `/expertise`.
-- [ ] **2.56** `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+- [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
       "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
       social media, the other ways to reach us, and the studio address.
-- [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
-      the article page, and bring the comparison to the owner.
-- [ ] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+- [x] **2.57** (#213) `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
+      the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
+- [~] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
@@ -275,6 +278,13 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
       copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
       `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
+      The six audit pages: done 4 Nov (#213).
+- [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
+      isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
+      Works alongside 2.59's banners.
+- [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
+      dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
+      plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
@@ -328,6 +338,10 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
+- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
+      at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
+      No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
+      insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
 
 ## Parked (handoff says don't freeze yet)
 

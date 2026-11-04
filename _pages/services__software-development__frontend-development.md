@@ -100,7 +100,7 @@ page_composition:
     role: demonstrate
     supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
-    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built. Check the cover shows the storefront before release; otherwise bind chain_hut_audit.
+    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built.
     source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:

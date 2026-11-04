@@ -54,6 +54,13 @@ const TILE: readonly SketchName[] = [
   'specialist-maintenance',
   'specialist-mobile',
   'specialist-prototype-review',
+  /* The /tools hub's tool tiles (4 Nov 2026): each tool's own scene. */
+  'specialist-ai-readiness-check',
+  'specialist-ai-trust-canvas',
+  'specialist-drift-checker',
+  'specialist-fidelity-checklist',
+  'specialist-rebuild-worksheet',
+  'specialist-prototype-readiness-checklist',
 ];
 /** The article scenes: each drawn for one insight, its cover until a real one exists. */
 const ARTICLE: readonly SketchName[] = [
@@ -64,6 +71,7 @@ const ARTICLE: readonly SketchName[] = [
 /** The kit scenes: EngagementOptions' scopes and TracePlates' stages, in the same grammar. */
 const KIT: readonly SketchName[] = [
   'scope-feature',
+  'scope-pilot',
   'scope-area',
   'scope-embedded',
   'scope-build',

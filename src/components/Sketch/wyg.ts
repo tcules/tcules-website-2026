@@ -34,6 +34,21 @@ import { SCENES as P_PRODUCT_REDESIGN } from './wyg-product-redesign';
 import { SCENES as P_REPLATFORMING_PRODUCT_DESIGN } from './wyg-replatforming-product-design';
 import { SCENES as P_AI_PRODUCT_ENGINEERING } from './wyg-ai-product-engineering';
 import { SCENES as P_BACKEND_API_DEVELOPMENT } from './wyg-backend-api-development';
+import { SCENES as P_GLOSSARY } from './wyg-glossary';
+import { SCENES as P_GLOSSARY_DESTINATIONS } from './wyg-glossary-destinations';
+import { SCENES as P_TOOLS } from './wyg-tools';
+import { SCENES as P_TOOL_AI_READINESS } from './wyg-tool-ai-product-ux-readiness-check';
+import { SCENES as P_TOOL_AI_TRUST } from './wyg-tool-ai-trust-control-canvas';
+import { SCENES as P_TOOL_REBUILD } from './wyg-tool-audit-redesign-modernise-rebuild';
+import { SCENES as P_TOOL_DRIFT } from './wyg-tool-design-system-drift-checker';
+import { SCENES as P_TOOL_FIDELITY } from './wyg-tool-figma-storybook-fidelity-checklist';
+import { SCENES as P_TOOL_PROTOTYPE } from './wyg-tool-prototype-readiness-checklist';
+import { SCENES as P_AUDIT_PROTOTYPE_READINESS_REVIEW } from './wyg-prototype-readiness-review';
+import { SCENES as P_AUDIT_UX_PRODUCT_AUDIT } from './wyg-ux-product-audit';
+import { SCENES as P_AUDIT_AI_PRODUCT_UX_READINESS } from './wyg-ai-product-ux-readiness';
+import { SCENES as P_AUDIT_DESIGN_SYSTEM_AUDIT } from './wyg-design-system-audit';
+import { SCENES as P_AUDIT_DESIGN_TO_CODE_AUDIT } from './wyg-design-to-code-audit';
+import { SCENES as P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT } from './wyg-product-modernisation-assessment';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
@@ -70,4 +85,19 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_REPLATFORMING_PRODUCT_DESIGN,
   ...P_AI_PRODUCT_ENGINEERING,
   ...P_BACKEND_API_DEVELOPMENT,
+  ...P_GLOSSARY,
+  ...P_GLOSSARY_DESTINATIONS,
+  ...P_TOOLS,
+  ...P_TOOL_AI_READINESS,
+  ...P_TOOL_AI_TRUST,
+  ...P_TOOL_REBUILD,
+  ...P_TOOL_DRIFT,
+  ...P_TOOL_FIDELITY,
+  ...P_TOOL_PROTOTYPE,
+  ...P_AUDIT_PROTOTYPE_READINESS_REVIEW,
+  ...P_AUDIT_UX_PRODUCT_AUDIT,
+  ...P_AUDIT_AI_PRODUCT_UX_READINESS,
+  ...P_AUDIT_DESIGN_SYSTEM_AUDIT,
+  ...P_AUDIT_DESIGN_TO_CODE_AUDIT,
+  ...P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT,
 };

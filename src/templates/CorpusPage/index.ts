@@ -6,8 +6,6 @@ export { planOffer, kindOf } from './plan';
 export type { OfferKind, OfferPart, OfferUnit } from './plan';
 export { LongformPage } from './LongformPage';
 export type { LongformFamily, LongformPageProps } from './LongformPage';
-export { ToolPage } from './ToolPage';
-export type { ToolPageProps } from './ToolPage';
 export {
   corpusEnquiryForm,
   ENQUIRY_DESK,
@@ -20,7 +18,12 @@ export type { RatingsById } from './blocks';
 export { coverFor, slugOf } from './images';
 export { AboutPage } from './AboutPage';
 export { ContactPage } from './ContactPage';
-export type { ContactPageProps } from './ContactPage';
+export type {
+  ContactChannel,
+  ContactChannelKind,
+  ContactFollow,
+  ContactPageProps,
+} from './ContactPage';
 export { PlainPage } from './PlainPage';
 export type { PlainPageProps } from './PlainPage';
 export type { AboutPageProps } from './AboutPage';

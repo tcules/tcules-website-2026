@@ -66,6 +66,14 @@
   block-size: var(--rsn-figure-height-lg);
 }
 
+/* The labelled slot of an undrawn figure: the track's full width at the set's ratio, its height
+   following, so the placeholder sits on the grid rather than as a ragged 70% box. After .figureLg,
+   so it wins at equal specificity. */
+.figureSlot {
+  inline-size: 100%;
+  block-size: auto;
+}
+
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────
    The frame draws the outer edge once; inside it a cell rules only an edge it SHARES with a
    neighbour — its block-start under another cell, its inline-start beside one — so no cell ever

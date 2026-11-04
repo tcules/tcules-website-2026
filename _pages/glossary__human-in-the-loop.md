@@ -42,6 +42,11 @@ navigation:
     url: /glossary
   - name: Human in the Loop
     url: /glossary/human-in-the-loop
+  section_labels:
+    practice: Example
+    comparison: Vs human on the loop
+    faq: FAQs
+    next: Related terms and help
 render:
   band_order:
   - practice

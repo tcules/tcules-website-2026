@@ -3,8 +3,6 @@ import { Fragment, type ReactNode } from 'react';
 
 import {
   Button,
-  Cluster,
-  Icon,
   Island,
   Layout,
   Prose,
@@ -53,6 +51,7 @@ import { corpusImage } from '@/lib/corpus-images';
 import { coverFor, slotImage } from './images';
 import styles from './CorpusPage.module.css';
 import { CloseBand, LinkActions } from './CopyBands';
+import { LinksIsland } from './LinksIsland';
 import { recordStats as homeRecordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
@@ -439,47 +438,16 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           </ContentSection>
         );
       })}
-      {studioLinks.length > 0 ? (
-        /* The studio elsewhere (owner, 31 Oct 2026: "a separate cta block with some relevant title"),
-           as a paper island on the paper band, read by its moving light-blue field and its rounding
-           (decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). The title is ours,
-           not the copy's: logged in docs/content-changes.md. */
-        <Section
-          id={`${b.id}-elsewhere`}
-          data-band="C-links"
-          aria-labelledby={`${b.id}-elsewhere-heading`}
-          density="open"
-        >
-          {/* The field across the band, edges blurred wide and rounded; at full strength around the
-              words, faint in the space around them (owner, 31 Oct 2026). */}
-          <TextureFlow flow="turbulent" feather bleed />
-          <Layout
-            rowGap="stack"
-            justifyItems="center"
-            className={styles.centred}
-            data-texture-focus
-          >
-            <h2 id={`${b.id}-elsewhere-heading`}>
-              Follow the studio, read its reviews, join the team
-            </h2>
-            <Cluster colGap="stack" rowGap="block" justify="center">
-              {studioLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  as="a"
-                  href={link.href}
-                  emphasis="link"
-                  tone="primary"
-                  size="md"
-                  icon={<Icon name="arrow-right" />}
-                >
-                  {link.labelText}
-                </Button>
-              ))}
-            </Cluster>
-          </Layout>
-        </Section>
-      ) : null}
+      {/* The studio elsewhere (owner, 31 Oct 2026: "a separate cta block with some relevant title"),
+          as a paper island on the paper band. The title is ours, not the copy's: logged in
+          docs/content-changes.md. */}
+      <LinksIsland
+        id={`${b.id}-elsewhere`}
+        band="C-links"
+        heading="Follow the studio, read its reviews, join the team"
+        links={studioLinks.map((link) => ({ label: link.labelText, href: link.href }))}
+        open
+      />
     </>
   );
 }

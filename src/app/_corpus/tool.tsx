@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getCorpusPage } from '@/content';
 import { corpusMetadata } from '@/lib/corpus-metadata';
-import { ToolPage } from '@/templates';
+import { LongformPage } from '@/templates';
 
 /**
  * The corpus-backed tool routes (`/tools/*`). Only the pages whose band shapes the page-mapping has
@@ -30,8 +30,13 @@ export async function toolMetadata(route: string): Promise<Metadata | null> {
   return page ? corpusMetadata(page) : null;
 }
 
+/**
+ * A tool renders as an article-style page (the tools shape-off, 4 Nov 2026, after the 28 Oct launch
+ * plan: "tools launch as article-style pages"): LongformPage `family="tool"`, the worksheet in one
+ * shell beside its outline. A tool cites no case, so it takes no case refs.
+ */
 export async function ToolRoute({ route }: { route: string }) {
   const page = await getCorpusPage(route);
   if (!page) notFound();
-  return <ToolPage page={page} />;
+  return <LongformPage page={page} family="tool" caseRefs={{}} />;
 }

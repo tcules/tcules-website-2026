@@ -147,6 +147,27 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
   [ROUTES.whyTcules]: ABOUT_WALL,
 };
 
+/**
+ * A band that reuses a studio photograph, by band id and the routes it applies on (page-mapping § 0
+ * rule 5, step 3: a studio photograph the corpus binds elsewhere, where the page's plan names the
+ * reuse). One use a page; the photograph grade is the shared tone layer.
+ *
+ * Empty since 4 Nov 2026: the audits' "After the audit" took the studio review photograph on all six
+ * pages, and the critic found it an addition the copy never asks for (no-bespoke-additions), the same
+ * picture on every audit, and a ~370 photo carrying a band of one sentence. The band is the copy's
+ * sentence and its link, sized to its words.
+ */
+const STUDIO_BAND: readonly {
+  band: string;
+  routes: (route: string) => boolean;
+  photo: CorpusMediaBinding;
+}[] = [];
+
+/** The studio photograph a band reuses on this route, if its plan names one (`STUDIO_BAND`). */
+export function studioBandPhoto(route: string, bandId: string): CorpusMediaBinding | undefined {
+  return STUDIO_BAND.find((entry) => entry.band === bandId && entry.routes(route))?.photo;
+}
+
 /** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */
 export function heroImage(page: CorpusPage): SlotImage {
   const own = page.composition.mediaBindings.find(

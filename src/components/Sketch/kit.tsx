@@ -61,6 +61,34 @@ function ScopeFeature() {
   );
 }
 
+/**
+ * A pilot project: "one flow … at a fixed price agreed up front". The agreement comes first, its price
+ * set and the hand-shake lit (the one focal point), and one route from it into the only thing in scope:
+ * one flow of two screens, held in its own region so nothing else is in it.
+ */
+function ScopePilot() {
+  return (
+    <>
+      <rect className={styles.frame} x="30" y="40" width="76" height="100" rx="8" />
+      <Chip x={40} y={50} glyph="wallet" />
+      <path className={styles.copyQuiet} d="M40,78 L92,78" />
+      <path className={styles.copy} d="M40,90 L80,90" />
+      <Focus x={68} y={116} glyph="hand-shake" size={12} />
+      <Hop x1={106} x2={136} y={90} />
+      <rect className={styles.region} x="136" y="50" width="154" height="80" rx="8" />
+      {[150, 228].map((x, i) => (
+        <g key={x}>
+          <rect className={styles.frame} x={x} y="66" width="48" height="48" rx="8" />
+          <path className={styles.copyQuiet} d={`M${x + 10},${78} L${x + 30},${78}`} />
+          <path className={styles.copy} d={`M${x + 10},${90} L${x + 38},${90}`} />
+          <rect className={styles.tile} x={x + 10} y="98" width={i === 1 ? 28 : 20} height="8" rx="3" />
+        </g>
+      ))}
+      <Hop x1={198} x2={228} y={90} />
+    </>
+  );
+}
+
 /** A product area: the product, its navigation, and the area we take, holding its own flows. */
 function ScopeArea() {
   return (
@@ -387,6 +415,7 @@ function TraceSignoff() {
 
 export const KIT: Record<ScopeSceneName | TraceSceneName, () => ReactNode> = {
   'scope-feature': ScopeFeature,
+  'scope-pilot': ScopePilot,
   'scope-area': ScopeArea,
   'scope-embedded': ScopeEmbedded,
   'scope-build': ScopeBuild,

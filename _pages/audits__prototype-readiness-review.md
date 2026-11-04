@@ -63,11 +63,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Get your prototype reviewed
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -75,12 +75,13 @@ render:
   band_order:
   - gap-map
   - method
-  - compare
+  - worked-example
+  - talk
   - selected-work
   - testimonials
-  - how-we-work-together
   - why-tcules
-  - industries
+  - after-the-audit
+  - compare
   - faq
   - enquiry
 page_composition:
@@ -153,94 +154,61 @@ content_governance:
 
 # Prototype readiness review for AI-built apps heading to real customers
 
-A prototype readiness review is for the moment your engineers need a plan they can defend, your customer calls need a launch date and investors ask what happens when it breaks. Tcules runs it for founders and teams whose prototype, built with AI tools or by hand, is about to meet paying customers.
-
-In about two days, a senior designer and an engineer take one core workflow past the happy path. You get a gap map of what the demo has proved and the work before launch in order, at a fixed price agreed before we start.
+In about two days, at a fixed price, a senior designer and an engineer test one key flow the way real users will, and show you what breaks before launch.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design)*
 
-[Tell us about your prototype](#enquiry)
+[Book a call](#enquiry)
+
+*Already live with customers? See the [UX & Product Audit](/audits/ux-product-audit).*
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get: a gap map and the work before launch {#gap-map}
+## What you get from a prototype readiness review {#gap-map}
 
-The review ends in one report, your MVP readiness plan, written so your engineers can plan from it.
+- **What's proven, what isn't.** Every key part marked proven, assumed or missing, from sign-in to payments.
 
-**What you receive**
+- **Fixes customers will notice.** Where people get stuck in the flow, and what to change.
 
-- **A gap map:** marking every important area of the prototype with one of the five statuses below
+- **Code worth keeping.** If you add a reading of the code, which parts are safe to build on.
 
-- **Experience fixes:** where customers get stuck, and what to change
+- **The work before launch.** In order, so whoever builds it can plan and you can set a date.
 
-- **What to keep, specify, redesign or replace:** part by part, and which code is safe to build on if you share it
+**Who does the work.** A senior designer leads; an engineer checks how the app holds up under real use.
 
-- **An ordered plan:** for the work before launch
+**Where our part stops.** Launch timing is yours; security and compliance sign-off goes to a qualified specialist, yours or hired.
 
-- **Questions for specialists:** each with a named owner
+## How a prototype readiness review runs {#method}
 
-| Status | What it means |
-|---|---|
-| **Proven** | It worked under the conditions we tested |
-| **Assumed** | The team believes it works, but nobody has checked |
-| **Missing** | A real product needs it, and it is absent |
-| **Parked** | A known gap, deliberately left for later |
-| **For a specialist** | Security, infrastructure or compliance questions that need a qualified owner |
+1. **Agree the flow and the price.** One call to pick the flow, such as sign-up to first payment, then a link and test logins.
 
-Here is what one page of a report looks like.
+2. **Use it as each of your users.** We work through the flow as every kind of user.
+
+3. **Try what a demo skips.** Failed payments, double taps, locked-out users, two people editing one record.
+
+4. **Mark every part, order the work.** Each part gets its status, and we walk you through the plan.
+
+## What the report looks like {#worked-example}
+
+<!-- Small label above the heading: Example -->
 
 *Illustration, not client work*
 
-A two-person team has built a booking app for physiotherapy clinics with an AI app builder. Clinic staff book appointments and take a deposit. Three clinics want to start paying next month.
+A two-person team built a booking app for physio clinics with an AI app builder, and three clinics want to pay next month.
 
 | Area | Status | What we found | What happens next |
 |---|---|---|---|
-| Sign-up and sign-in | Proven | Owners and staff signed up, signed in and reset passwords as tested | Keep as built |
-| Staff permissions | Assumed | Every staff login can see every patient's bookings, and nobody has asked whether it should | Agree roles with the clinics |
-| Deposits | Missing | A failed card still confirms the booking, and a double tap charges twice | Fix before launch |
-| Two receptionists, one slot | Missing | Both can book the same slot, and the second booking replaces the first | Fix before launch |
+| Sign-up and sign-in | Proven | Owners and staff signed up and reset passwords | Keep as built |
+| Staff permissions | Assumed | Every staff login sees every patient's bookings | Agree roles with the clinics |
+| Deposits | Missing | A failed card still books; a double tap charges twice | Fix before launch |
 | Alerts after launch | Parked | Nobody hears when bookings stop saving | Add in the first month |
-| Where patient notes are stored | For a specialist | Who can read the notes, and where they live | A security specialist, named in the plan |
+| Patient notes | For a specialist | Who can read them, and where they are stored | A named security specialist |
 
-First in the plan come the double charge and the double booking, because each costs a clinic money or a patient's trust on day one. Staff roles follow once the clinics say who should see what. Alerts can wait until real bookings are flowing.
+The double charge goes first, because it costs a clinic money on day one.
 
-**Who does the work.** A senior designer reviews the experience and is your main contact. An engineer checks how the product will run and, in a wider review, reads the code.
+## Get a report like this for your prototype {#talk}
 
-**What we need from you.** A link to the prototype, or a short screen recording if it is still on a laptop. A test account for each kind of user, if you have them. One person who knows how it was built, and time for one call. Code access only if you want the code read.
-
-**Where our part stops.** Whether and when to launch is yours. So is security and compliance sign-off, by a qualified specialist in your team or brought in for the job. The review hands every such question to a named owner.
-
-## How an AI prototype review runs, step by step {#method}
-
-Prototypes skip things on purpose. This prototype to production assessment finds which of those skips matter before customers do.
-
-**Before we start.** One call with whoever knows how the prototype was built, about who it serves and when customers should be using it. The call fixes the workflow that matters most, such as sign-up through to a first payment, and the price is agreed before any work begins.
-
-**First, the workflow as each of your users meets it.** A senior designer works through the core workflow as each kind of user, from sign-up to the first real result.
-
-Then come the moments a demo skips. A customer is locked out, someone without permission tries the action, a payment fails or goes through twice, two people edit one record, or a connected service fails mid-task.
-
-Products that take payments or hold personal records get the closest look at sign-in, permissions and failures.
-
-**Then, what your team will meet, and the plan.** We try data messier than the sample, and check who hears about it when something breaks after launch. Every important area then gets its status on the gap map, and the work before launch is put in order.
-
-**A wider review.** More workflows, or a reading of the code, take longer. An engineer checks how the code is organised and which libraries it relies on, and marks what is safe to build on. A wider review has its own fixed price, given with the dates once the scope is agreed.
-
-[Is your vibe-coded app ready for production?](/insights/vibe-coded-app-production-ready) covers where AI-built apps break first.
-
-## Readiness review, free checklist or straight to the build? {#compare}
-
-A vibe-coded app audit is one of several ways forward. The right one depends on what the prototype has to prove next.
-
-| Option | What it gives you | Best for |
-|---|---|---|
-| **Prototype Readiness Review** | A gap map, experience fixes and an ordered plan before launch | Working prototypes about to take on paying customers |
-| **[Prototype Readiness Checklist](/tools/prototype-readiness-checklist)** | A record of what one workflow proved and skipped, made by your own team | A free self-check before you talk to anyone |
-| **[Coded prototyping](/services/design-engineering/coded-prototyping)** | A working prototype that tests a tricky interaction or idea | Ideas that still need testing before anyone builds for launch |
-| **[Design-led MVP Development](/services/mvp-development)** | Design and build through to a first release | Teams who already know the prototype needs finishing work |
-| **Your own engineers** | A build that starts straight from the prototype | Teams that have already mapped the gaps themselves |
-
-Reviews for products already in customers' hands sit under [Audits & Assessments](/audits).
+[Book a call](#enquiry)
 
 ## Selected work from prototype to launch {#selected-work}
 
@@ -269,55 +237,52 @@ Eight interviews mapped how six specialist roles add to one industrial quotation
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Why founders and product teams choose Tcules {#why-tcules}
 
-After the review, your engineers can work from the plan alone, or we can carry it into a first release through [Design-led MVP Development](/services/mvp-development).
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+[See why teams choose Tcules →](/why-tcules)
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+## After the review {#after-the-audit}
 
-## Why teams choose Tcules {#why-tcules}
+Whoever builds your product can work from the plan, or we can carry it into a first release through [Design-led MVP Development](/services/mvp-development). [See how we work →](/how-we-work)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+## Other ways to start {#compare}
 
-- **We tell you what is really wrong.** Our audit of Dealpath pointed to one assumption in its workflow, that every listing should become a new deal, and we changed that step while keeping the rest largely as it was. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
-
-- **We work out what the product has to know before we draw it.** At Doodle, one interview showed that people's availability depended on how important a meeting was, and that changed the product question. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
-
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed GT Tools' Shopify store, so the thinking behind the design went all the way into the store buyers use. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
-
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
-
-## Industries we know well {#industries}
-
-The review is new, so no industry has registered review work yet. The related work above comes from [B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software) and [ClimateTech and energy](/expertise/climatetech-energy).
+| Option | Best for | What you get |
+|---|---|---|
+| [Coded prototyping](/services/design-engineering/coded-prototyping) | An idea not yet proven with users | A working prototype that tests one tricky idea |
+| [Audits & Assessments](/audits) | Products already in customers' hands | Reviews of software customers already use |
 
 ## Questions founders ask about a prototype readiness review {#faq}
 
 ### What is a prototype readiness review?
 
-It is a fixed-price review of a working prototype, built with AI tools or by hand, before it takes on paying customers. It shows what the demo has proved, what is still assumed or missing, and the work before launch in order.
+It is a fixed-price review of a working prototype, built with AI tools or by hand, before it takes on paying customers. It shows what the demo has proved, what is still assumed or missing, and the work before launch in order. Some call it an AI prototype review, a vibe-coded app audit or a prototype to production assessment.
 
 ### Is my vibe-coded prototype ready for paying customers?
 
-It is ready when sign-in, permissions, payments and failures hold up under real use, beyond the happy path. Most prototypes have some of those proven and others only assumed. The review marks which is which, so you know the work left before launch.
+It is ready when sign-in, permissions, payments and failures hold up under real use, beyond the happy path. Most prototypes have some of those proven and others only assumed. The review marks which is which, so you know the work left before launch. Our article covers [where vibe-coded apps break first](/insights/vibe-coded-app-production-ready).
 
 ### Can we keep the code our AI tools generated?
 
 Some of it, yes. The review itself can start from a link or a screen recording. Given access to the code, we check how it is organised and which libraries it relies on, then show which parts are safe to build on and which need restructuring.
+
+### Can the review cover more than one flow, or read the code?
+
+Yes. More flows, or a reading of the code, take longer and get their own fixed price, agreed with the dates.
 
 ### Who signs off security and compliance?
 
@@ -327,7 +292,7 @@ Security and compliance sign-off belongs to specialists, in your team or brought
 
 It covers any prototype heading for paying customers. An AI-built app review, of a prototype made in Lovable, Bolt, Replit or a similar tool, runs like one of a hand-coded or low-code prototype. Each has to handle real accounts, data and payments.
 
-The more a prototype already does, the more precisely the gap map shows what is ready and what is still a demo.
+The more a prototype already does, the more precisely the review shows what is ready and what is still a demo.
 
 ### Can you review a new module inside an established product?
 
@@ -337,7 +302,7 @@ Yes. Established companies bring prototypes too, often a new module that has won
 
 Yes. Our designers and engineers can take the plan into a first release, keeping the code that is safe to build on. Your own engineers can work from the same plan just as well.
 
-## Tell us about your prototype {#enquiry}
+## Find the gaps before your customers do {#enquiry}
 
 Share a link or a short screen recording, who it's for and when you'd like customers using it.
 
@@ -347,6 +312,6 @@ Share a link or a short screen recording, who it's for and when you'd like custo
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Get your prototype reviewed
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

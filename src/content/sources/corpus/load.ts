@@ -227,6 +227,11 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const search = dict(data.search_context);
     const structured = dict(data.structured_data);
     const { hero, bands } = liveCaseLinks(parseBody(body));
+    const sectionLabels = dict(nav.section_labels);
+    for (const band of bands) {
+      const label = str(sectionLabels[band.id]);
+      if (label) band.navLabel = label;
+    }
     const comp = composition(data.page_composition);
     assignTestimonialIds(bands, comp.testimonialIds);
     rateQuotes(bands, route);

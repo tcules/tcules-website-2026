@@ -559,3 +559,22 @@ rule 1.
   modernisation spectrum band to 849, past the fold). Top-aligned, a 24 mark sits in the 26 first
   line box and the text keeps its baseline.
 - Specimen: `/design/data-table` loses the ruled row; its intro states the rule.
+
+## Amendment · 4 Nov 2026 — the audits, tools and glossary run (status proposed; owner to judge)
+
+Additive props, each with its `/design/data-table` rows; the default table is unchanged.
+
+- **`appearance="sheet"`**: a record (a key and one value) as a spec sheet: mono key in a narrow track,
+  value beside it, one rule above the set, no frame, fill or inner rules, the head row out of sight but in
+  the accessibility tree. A table with more than one value column stays `boxed`. The audits' report page.
+- **`narrow="read-down"`**: below 768 each row becomes one block in the same box, the key its title and each
+  value under its column head in the mono label voice. From 768 the boxed table. The tools' worksheets and
+  the glossary's comparisons (decisions/2026-11-04-worksheet-tables-read-down-on-a-phone).
+- **`bounded`**: with `read-down`, a table on a ground that already bounds it (a tool's example panel)
+  drops the box's side edges, fill and inline inset below 768.
+- **`keyColumn` optional**: a keyless table, every column a peer under its own head (the glossary's
+  "style guide · component library · design system" comparisons).
+- **`pickColumn`**: the one column the table is about, the row pick turned a quarter: blue ground down its
+  cells, its head in blue, a bar across the head's top edge. At most one; never reorders.
+- Exception, argued in the module: the sheet's hidden head row uses `font-size: 0; line-height: 0` so its
+  words stay readable to a screen reader.

@@ -62,6 +62,15 @@ navigation:
     url: /tools
   - name: AI Product UX Readiness Check
     url: /tools/ai-product-ux-readiness-check
+  section_labels:
+    who-its-for: Who it suits
+    how-to-use-it: How to use it
+    workspace: Six areas
+    example: Worked example
+    marking: Marking checks
+    specialists: What it covers
+    next: After the checklist
+    faq: FAQs
 render:
   band_order:
   - who-its-for

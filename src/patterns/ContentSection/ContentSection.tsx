@@ -793,9 +793,9 @@ export function ContentSection(props: ContentSectionProps) {
  *                           Layout mirrors the template with the children. Visual only: the photo
  *                           stays first in the DOM, which is the phone's order (photo above the
  *                           copy in B, § 3.7), and it carries no meaning against the copy.
- *   align   stretch|center  the copy column stretches to the photo's height when it pins something
+ *   align   stretch|start   the copy column stretches to the photo's height when it pins something
  *                           to the photo's bottom edge (a footer under blocks, or the counterweight),
- *                           and is centred on it otherwise (§ 3.2 rules 1 and 2)
+ *                           and shares its top edge otherwise (pairs top-align, 11 Oct 2026)
  *
  * THE PHOTO'S WEIGHT (final fix round, 6 Oct 2026). At 477 against 667 of copy the text led every
  * band and B read as a document with a picture. `weight="photo"` gives the photograph the 7, at 6:5
@@ -812,7 +812,7 @@ export function ContentSection(props: ContentSectionProps) {
  * (`.photoTrack`) is an inline-size container and the box reads `cqi`.
  *
  * WHY `align-self` ON THE TRACK, and not Layout's `align`. The two tracks want different block
- * placements in one row: the photo fills the row, the copy is centred in it. `align` states one
+ * placements in one row: the photo fills the row, the copy sits at its top. `align` states one
  * placement for every item, so it cannot say both; the photo track is MediaSplit's own element,
  * styled by MediaSplit's own module beside the Layout it renders, so this is the container stating
  * its children's placement, not a child arranging itself. When the copy is pinned the whole row is
@@ -864,7 +864,11 @@ function MediaSplit({
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinned ? 'stretch' : 'center'}
+      /* Unpinned, the copy shares the photograph's TOP edge rather than centring on it: "pairs
+         top-align; vertical centring reads as floating" (decisions/2026-10-11-secondary-anchored-to-primary,
+         which post-dates visual-direction § 3.2 rule 2). Centred, the head of an "After the audit"
+         band floated mid-photo on every audit page (critic, audits run, 4 Nov 2026). */
+      align={pinned ? 'stretch' : 'start'}
     >
       <div className={styles.photoTrack}>
         <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>

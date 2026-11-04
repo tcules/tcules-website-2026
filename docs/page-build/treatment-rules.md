@@ -19,7 +19,7 @@ arrangement holds it → what it must never do.**
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
 | **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
-| **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
+| **A named service** (a set of services, a related service, a path's way in) | the service tile: the bento card with its flat drawing on the plate (no texture) | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, flat-graphics-on-one-plate |
 | **A way onward** (questions answered by links to other services, closing a set) | the CTA card: 2 columns of the last row (3 or 4 tracks chosen so two cells remain; the rest of the row at five; a whole row when the tiles fill theirs), a ground, no hairline or texture, every question and link, the first action outline then links; a linked closing statement with no question takes the title role | a text cell dropped into the grid, a solid tile that reads as one more item, a dashed onward cell | 2026-10-30-set-ends-in-a-cta-card (supersedes onward-cell) |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
@@ -207,3 +207,61 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **/expertise takes the centred hero** with its drawing below, as /services does (`CENTRED_HERO_ROUTES`).
 - **A group head told as "Label: statement"** ("By product type: what your product does") sets the label as the
   group's eyebrow and the statement as its h3, first letter raised. A head with no colon stays one h3.
+
+## Added 4 Nov 2026 (/audits, the 3 Nov outline; proposed until the owner sees the pages)
+
+- **A worked example that carries a table is a page of the report** (kind `example`, ReportBand): the band on
+  tint, one paper page on it holding everything the example is, in order — its italic label in the mono label
+  voice, the scenario, the sheet, the reading. A column of statuses takes its marks; a column whose values a
+  key after the table defines is set in the label voice, and the key is the page's legend under the reading.
+  A trailing case link is the band's head action at the heading's end. A worked example told as bold-led
+  story rows stays `record` (CaseSpread). Below 768 the sheet reads down, each row's key its title.
+- **An option table takes the split tiles from two rows**, and **a split tile left alone on the last row takes
+  the whole row** (its drawing beside its words, the panel the last third). Never a split tile beside a hole.
+- **One named offer on its own under a heading is its wide service tile** (name, the copy's sentence beside
+  it, its drawing, the action for what it opens), never one ruled row beside the head.
+- **A hero line that redirects the wrong reader** ("Already live with customers? See …") keeps its authored
+  place after the ask, in the proof-line voice; it is never suppressed with the "Selected work" line.
+- ~~A text band about who carries the work on reuses a studio photograph~~ (withdrawn the same day by the
+  audits critic: a photo the copy never asks for, the same one on six pages). "After the audit" is its
+  sentence and its links as authored, the closing "→" link a link row under the words.
+- **What you get never sets more than four deliverables a row**: five read 3 + 2 from 1024; below 768 each
+  drawing stacks full width over its words (decisions/2026-11-04-deliverables-never-more-than-four-a-row).
+- Logged as proposed: decisions/2026-11-04-worked-example-table-is-a-report-page,
+  -option-tables-take-split-tiles, -lone-named-offer-on-band-ground, -redirect-hero-line-keeps-its-place,
+  -split-tile-panel-is-ruled, -placeholders-show-their-label-only.
+
+## Added 4 Nov 2026 (/tools and the six tool pages; proposed until the owner sees the pages)
+
+- **A directory of free tools is the /services hub's split tile for every tool** (kind `directory`, `tool-tiles`;
+  tools critic, 4 Nov 2026, proposed: decisions/2026-11-04-one-tool-tile): drawing, name and paragraph in the
+  named half, the router table's value columns as the result panel's fields, "Try the tool" at its foot, two to
+  a row. A table of tools ("Tool | …") with no tools of its own hosts the plain groups after it: its head and
+  lead as the band's, each group's h2 at the h3 scale a `block` over its tiles, groups a `section` apart, two
+  single-tool groups sharing a row as two headed halves (Bento `tracks={2}`); the words after the set go under
+  it at the body measure. No tool is shown twice, so the table is not also drawn as a grid.
+- **A free tool renders as an article-style page** (LongformPage `family="tool"`, the 28 Oct launch plan): the
+  hero's one action to `#workspace`, the worksheet in one shell beside its outline, the FAQ last. In the column:
+  a bold-led numbered method is Steps; the worked example is the tint example panel, its words beside the
+  story drawing from 1440, any table it carries at the panel's full width; a diagram follows the paragraph
+  naming its marks, at the column's width (a marks paragraph with no diagram warns in development); the band sending the reader on stays prose with inline links.
+
+## Added 4 Nov 2026 (/glossary and the term pages; proposed until the owner sees the pages)
+
+- **A Statement holds one short line, never a paragraph** (`isStatementLine`: no link, at most 16 words). A
+  paragraph promoted to a Statement is a wall of near-title serif larger than every h2 on the page, and the
+  Statement drops its links. Anything longer stays prose at body size, its links kept. A term page's drawing
+  stands beside its definition in the hero, so it is in the same place whether or not the page has a statement.
+- **A set of peers gets equal weight in a listing too**: the glossary's terms are each the same vertical drawn
+  card, in rows of three re-tracked to two where the count leaves a pair (`termRows`: 4 = 2 + 2, 5 = 3 + 2), so
+  no row is left two thirds full. A horizontal lead is for a featured item (the insights hub's newest piece),
+  never a term promoted by its place in the list or a horizontal used to fill a row.
+- **A term's comparison table reads down on a phone** (DataTable `narrow="read-down"`, as a tool's worksheet):
+  the term's own column is the table's point and was the one cut behind the scroll fade at 390.
+- **A term page closes in one shape**: the close's sentences as running text with their links, then the
+  destination's wide service tile across the row. Never a per-page choice between sentences inside the tile and
+  prose beside a narrow tile.
+- **A listing rail with one view collapses on a phone** to the section-in-view button that opens the jump list
+  (IndexRail), never a sideways line of group names cut at the edge.
+- Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
+  -term-page-closes-in-one-shape, -comparison-picks-its-term.

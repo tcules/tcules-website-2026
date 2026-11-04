@@ -60,11 +60,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -72,12 +72,13 @@ render:
   band_order:
   - deliverables
   - method
-  - compare
+  - worked-example
+  - talk
   - selected-work
   - testimonials
-  - how-we-work-together
   - why-tcules
-  - industries
+  - after-the-audit
+  - compare
   - faq
   - enquiry
 page_composition:
@@ -159,77 +160,63 @@ method_governance:
 
 # Design system audit: why teams bypass it, and what to repair first
 
-A design system should show up on an ordinary release day, in a feature built from parts the team already has and a demo where every screen belongs to one product. Tcules runs design system audits for SaaS teams whose shared library exists and keeps getting bypassed.
+In about two days, at a fixed price, a senior designer and a design engineer trace one component family to live screens and rank the repairs.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-[Tell us about your design system](#enquiry)
+[Book a call](#enquiry)
+
+*Only a few screens ship unlike the design? See the [Design-to-Code Audit](/audits/design-to-code-audit).*
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get: the system as your teams really use it {#deliverables}
+## What you get from a design system audit {#deliverables}
 
-The audit is a design system health check. It starts with one component family, such as your form fields or data tables, followed from Figma through code to the live product. That takes about two days, at a fixed price agreed before any work starts.
+- **What to keep.** Patterns that work and that teams already use well.
 
-**What you receive**
+- **What to repair first.** Broken behaviour, Figma and code mismatches, and controls some users can't operate.
 
-- **What to protect:** patterns that work and are well used.
+- **Where requests stall.** Who owns the system, how change requests move, and where they stop.
 
-- **What to repair:** wrong behaviour, controls some users can't operate, Figma and code mismatches and confusing options.
+- **Early warnings.** Automatic checks that flag new copies and accessibility slips.
 
-- **How the system is run:** ownership, contribution, exceptions and release notes.
+- **How widely it's used.** Measured from your usage data, or sampled from real screens and code.
 
-- **Checks that catch drift early:** automatic warnings when code strays, plus accessibility checks.
+**Who does the work.** A senior designer leads; a design engineer reads your code beside the Figma files.
 
-- **How far teams use it.** If you track component usage, we measure adoption from that data. If you don't, we sample real screens and code, show how we reached each conclusion and suggest what to start tracking.
+**Where our part stops.** Repairs are separate work, by your team or ours; who owns the system is your decision.
 
-Here is one traced pattern, as it would appear in a report.
+## How a design system audit runs {#method}
+
+1. **Agree the components and the price.** One call to pick the ones you rely on most, then Figma, code and Storybook access.
+
+2. **List every version.** A UI component inventory: the library one, local copies and one-off workarounds.
+
+3. **Trace where each one breaks.** From the product need, through Figma and code, to the live screen.
+
+4. **Ask why teams bypass it, agree fixes.** Short talks with your designers and engineers, then a walkthrough of what to repair first.
+
+## What the report looks like {#worked-example}
+
+<!-- Small label above the heading: Example -->
 
 *Illustration, not client work*
 
-A SaaS product for planning building maintenance has a shared date field. Three product teams use it, and a fourth has built its own.
+A building-maintenance SaaS has a shared date field that three teams use, while a fourth built its own.
 
 | Where we looked | What we found |
 |---|---|
-| The product need | Maintenance visits need a date and a time window, and some repeat every week |
-| Figma | The library field holds a date only, so designers draw the time window by hand each time. **The pattern breaks here first** |
-| Code and Storybook | The coded field matches Figma. Two local copies add a time window, and neither has an error state |
-| The live product | Three versions on screen, with different keyboard behaviour in each |
-| How change happens | A request for a time window has sat in the queue for months, and the fourth team stopped asking |
+| The product need | Visits need a date, a time window, sometimes weekly repeats |
+| Figma | **Breaks here first.** Date only; time windows drawn by hand |
+| Code and Storybook | Matches Figma; two local copies add a time window |
+| The live product | Three versions, each with different keyboard behaviour |
+| Change requests | The request sat for months; the fourth team gave up |
 
-The report would protect the date field, which works wherever it is used. It would add the time window to the Figma field first, then replace both coded copies, and add a check that warns when a new copy appears.
+Fix the Figma field first, then replace both copies and add a warning for new ones.
 
-**Who does the work.** A senior designer leads the audit and is your main contact. A design engineer works alongside, reading your coded components and Storybook next to the Figma files, so the report shows exactly where a pattern breaks.
+## Get a report like this for your design system {#talk}
 
-**What we need from you.** Access to the Figma library, the code and Storybook, usage data if you track it, and short conversations with the designers and engineers who build on the system.
-
-**Where our part stops.** The report stands on its own. Repairs are a separate piece of work, run by your team or by ours, and who owns the system afterwards stays your call.
-
-## How a design system audit runs, from inventory to report {#method}
-
-1. **Choose the patterns.** We pick the components your product leans on most, such as a form field, a data table or a status label, using your usage data where you track it.
-
-2. **Take a UI component inventory.** We list every version of each pattern we can find: the library one, the local copies and the one-off workarounds.
-
-3. **Trace each version through five places.** The product need, Figma, code and Storybook (including keyboard use, loading and errors), the live product, and how a team asks for a change. The place a pattern first breaks is usually where the fix belongs.
-
-4. **Hear why people work around it.** Short conversations with designers and engineers show why they copy, override or skip the shared version.
-
-5. **Report and agree the order.** We walk your team through the findings and agree what to repair first.
-
-Along the way we check the system as a source AI coding tools build from too: clear names, documented states, and colour and spacing values that say what they are for. A library with three versions of a field teaches those tools three versions.
-
-## Do you need a design system audit or a design-to-code audit? {#compare}
-
-Both audits read Figma and code side by side. They start from different problems, and the services beside them pick up where each leaves off.
-
-| Option | Where it starts | Best for |
-|---|---|---|
-| **Design System Audit** | The shared library, and how teams use it across products | Systems that exist and keep getting bypassed |
-| **[Design-to-Code Audit](/audits/design-to-code-audit)** | A few screens or components that ship differently from the design | Specific gaps between approved designs and the live product |
-| **[Design System Drift Checker](/tools/design-system-drift-checker)** | One component, traced by your own team | A free first trace before you bring anyone in |
-| **[Design System Strategy](/services/design-systems/design-system-strategy)** | What the system should share, who owns it and what to build first | Starting a system, or replacing one beyond repair |
-| **[Design System Implementation](/services/design-systems/design-system-implementation)** | Building tokens and components in Figma and code | Teams that already agree what needs building |
+[Book a call](#enquiry)
 
 ## Selected design system work {#selected-work}
 
@@ -261,41 +248,35 @@ Ryzeo's reporting redesign came with documented components and shared rules for 
 > “They gave us honest feedback about the real issues and dealt with them head-on.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Why founders and product teams choose Tcules {#why-tcules}
 
-After the audit, your team can run the repairs from the report, or our [Design Systems](/services/design-systems) team can make them with you and set up [the rules that keep it in use](/services/design-systems/governance-adoption).
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+[See why teams choose Tcules →](/why-tcules)
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+## After the audit {#after-the-audit}
 
-## Why teams choose Tcules {#why-tcules}
+Your team can run the repairs from the report, or our [Design Systems](/services/design-systems) team can make them with you and set up [the rules that keep it in use](/services/design-systems/governance-adoption). [See how we work →](/how-we-work)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+## Other ways to start {#compare}
 
-- **We tell you what is really wrong.** Dealpath's audit traced the friction to one assumption, that every listing should become a new deal, so our redesign changed one step and kept the rest of the workflow largely intact. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
-
-- **We work out what the product has to know before we draw it.** We mapped who does what on an Auxentios quotation, from eight interviews, then shaped its reusable interface system around that map. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
-
-- **We know what to leave alone in a product people rely on.** In Doodle's scheduling MVP, we reused the existing components for standard interactions and designed new ones only for calendar and bookability work. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
-
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
-
-## Industries we know well {#industries}
-
-No audit of this kind has a published case yet. The related design system work above comes from [B2B SaaS](/expertise/b2b-saas-workflow-software), [Data and analytics](/expertise/data-analytics-decision-products), [ClimateTech](/expertise/climatetech-energy), [MarTech](/expertise/martech-salestech) and [Commerce](/expertise/commerce-transactional-products).
+| Option | Best for | What you get |
+|---|---|---|
+| [Design-to-Code Audit](/audits/design-to-code-audit) | Specific screens that keep shipping differently | Why a few screens ship unlike the approved design |
+| [Design System Strategy](/services/design-systems/design-system-strategy) | Starting a system, or replacing a broken one | What to share, who owns it, what to build first |
+| [Design System Implementation](/services/design-systems/design-system-implementation) | Teams that agree what needs building | Shared components built in Figma and code |
 
 ## Design system audit FAQs {#faq}
 
@@ -311,7 +292,11 @@ No. Tcules gives you specific findings instead: which patterns work, which are b
 
 Yes. Tcules reviews the Figma library, the coded components, Storybook and the live product, because drift usually shows up in the gaps between them. A design engineer reads the code beside the Figma files, so each break is traced to where it began.
 
-### Should we choose this or a Design-to-Code Audit?
+### Do you check the system as a source for AI coding tools?
+
+Yes. We look for clear names, documented states, and colour and spacing values that say what they are for. A library with three versions of a field teaches those tools three versions.
+
+### Do we need a design system audit or a design-to-code audit?
 
 Choose a Tcules Design System Audit when the shared system is fragmented across teams or products. Choose a [Design-to-Code Audit](/audits/design-to-code-audit) when a few specific screens or components keep shipping differently from the design.
 
@@ -337,6 +322,6 @@ Send a link to the Figma library or Storybook and point us to the local copies t
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

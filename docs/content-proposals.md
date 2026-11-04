@@ -231,3 +231,14 @@ Append one entry per problem, newest last, numbered from P52.
   `getCaseStages`. The CMS field that retires the file is `stage` on the case record
   (docs/strapi-changes.md § 21). The copy's own bands still collect the cases, but their headings no
   longer appear on the page.
+
+### /tools/* — outline markers and the record builder (4 Nov 2026)
+
+- **Proposed:** short outline markers (two to four words) for every section of the six tool pages, in
+  each page's `navigation.section_labels` ("Who it suits", "Worked example", "Seven parts", "FAQs" …).
+  Navigation only: every heading stays as authored. For the content team to confirm or reword.
+- **Owner decision needed before approval:** the tool pages promise an interactive tool ("Use the
+  checklist", "Download the record", FAQs: "You type your answers into the page and download the result
+  as a brief"; the hub's "Try the tool"), but the page renders the authored table as a static
+  worksheet. Either build the record builder (inputs on the table's rows, then a download), or the
+  content team proposes copy for a static launch here. The copy is not edited until one is chosen.

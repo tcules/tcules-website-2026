@@ -16,6 +16,10 @@ import type { OfferKind } from './plan';
  *              not failed.
  *
  * A kind missing from this list fails the check: register it in the same change that adds it.
+ *
+ * Not a kind: a band's onward line lifted onto its own ink island after the band (tracker 2.53;
+ * `OnwardIsland`, `data-band="onward"`, id `<band>-onward`). It is part of the band it came from, so
+ * the check reads the island's words as that band's and the band keeps its own kind and component.
  */
 export type KindStatus = 'approved' | 'to-design';
 
@@ -84,6 +88,11 @@ export const KIND_COMPONENTS: Readonly<
     status: 'approved',
     note: 'One worked case (CaseSpread).',
   },
+  example: {
+    component: ['report'],
+    status: 'to-design',
+    note: "What the report looks like (the audits' 3 Nov outline): one paper report page on the tint band, the label, scenario, sheet and reading inside it (ReportBand; the 2 Nov one-panel answer). Owner to judge on the six audit pages.",
+  },
   recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
   destinations: {
     component: ['C-image', 'C-icon'],
@@ -91,15 +100,40 @@ export const KIND_COMPONENTS: Readonly<
     note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
   },
   related: {
-    component: ['K'],
+    component: ['K', 'service-tile'],
     status: 'to-design',
-    note: 'Ruled link rows (open roles, glossary groups).',
+    note: 'Ruled link rows (open roles, glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles).',
   },
-  directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  directory: {
+    component: ['tool-tiles'],
+    status: 'to-design',
+    note: "The /tools groups as the /services hub's split tiles (tools critic, 4 Nov 2026): every tool one form, its router table's columns in the result panel; the compare table hosts the groups after it, two single-tool groups share a row as headed halves. Owner to judge on /tools.",
+  },
+  index: {
+    component: ['listing-lead', 'listing-section'],
+    status: 'to-design',
+    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a dictionary of ruled term rows, no drawings (/glossary, owner 4 Nov 2026).',
+  },
   note: { component: ['C-note'], status: 'to-design' },
   close: {
     component: ['L', 'C-text'],
     status: 'to-design',
     note: 'A closing ask: the ink island with its link (L); with no link, prose.',
+  },
+};
+
+/**
+ * Bands the owner moved out of the band loop into another element's state, by route, each with
+ * where its words now live. The template does not draw them as bands; `npm run kinds:check` lists
+ * them instead of failing on the missing `<section>`, so a band only leaves the page by an entry
+ * here, never silently.
+ *
+ *   /contact next-steps  "What happens after you send" merges into the post-send state (tracker
+ *                        2.56, owner, 3 Nov 2026): the steps show in the enquiry form's sent view,
+ *                        word for word, and the record line it ends on is the hero's figures.
+ */
+export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  '/contact': {
+    'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
   },
 };

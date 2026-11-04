@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, type SectionSurface } from '@/components';
+import { Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { CtaRow, Statement } from '@/patterns';
 import { ROUTES } from '@/lib/routes';
 
@@ -174,6 +174,25 @@ export default function StatementSpecimen() {
       </Statement>
       <Statement eyebrow="Our view" id="stmt-ceiling">
         A product slows down where nobody owns the decision its interface is asking for.
+      </Statement>
+
+      <Caption index="J · 5b" title="The figure beside the sentence">
+        <code>figure</code>: the item&rsquo;s own flat drawing on its plate beside the sentence,
+        a <code>section</code> (96) split from 1024, under the sentence below it (the
+        glossary&rsquo;s term pages, 4 Nov 2026). The shortest and the longest sentence a term
+        page lifts.
+      </Caption>
+      <Statement
+        as="p"
+        id="stmt-figure-short"
+        figure={<Sketch name="glossary-ai-native-product-design" />}
+      >
+        The term describes how the practice works, whatever the product, including products with
+        no AI in them.
+      </Statement>
+      <Statement as="p" id="stmt-figure-long" figure={<Sketch name="design-systems" />}>
+        Teams most often need the term when they must work out what is shared and what stays
+        local to one product.
       </Statement>
 
       <Caption index="J · 6" title="Surfaces">

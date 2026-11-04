@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Design Engineering
     url: /glossary/design-engineering
+  section_labels:
+    role: The role
+    practice: Examples
+    comparison: Vs frontend developer
+    related-terms: Related terms
+    faq: FAQs
+    next: Working in code
 render:
   band_order:
   - role
