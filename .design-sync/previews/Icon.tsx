@@ -61,6 +61,7 @@ const NAMES = [
   'calendar',
   'videocamera-record',
   'microphone',
+  'magnifier-bug',
   'letter',
   'hand-shake',
   'share-circle',

@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
 
 import {
+  Cluster,
+  Icon,
   Layout,
   Media,
   Section,
   Sketch,
+  type IconName,
   type MediaImage,
   type SectionSurface,
   type SketchName,
@@ -41,6 +44,11 @@ export type OfferSheetItem = {
    * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
    */
   href?: string;
+  /**
+   * A glyph leading the item, `rows` only: before its title, on the title's first line (owner, 4 Nov
+   * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
+   */
+  icon?: IconName;
 };
 
 /** One of the band's terms: a title and what it says. */
@@ -91,6 +99,15 @@ export type OfferSheetProps = {
    * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026).
    */
   across?: 2 | 3;
+  /**
+   * `grid` (default): the promises side by side, as above. `rows`: one promise per row, its title in a
+   * label column and its words beside it from 1024, each row closed by a hairline under it, ListCard's
+   * row frame, with no blue mark (the
+   * clients page's "What clients have asked us to do", owner, 4 Nov 2026). For a set whose bodies run
+   * to several sentences and name clients, so the words need a measure, not a third of the column. A
+   * rows sheet takes no aside and no drawings.
+   */
+  arrangement?: 'grid' | 'rows';
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -124,8 +141,10 @@ export function OfferSheet({
   note,
   terms,
   across = 2,
+  arrangement = 'grid',
   surface = 'paper',
 }: OfferSheetProps) {
+  const rows = arrangement === 'rows';
   const shown = items.filter(
     (item) => (item.title ?? item.body ?? item.bodyHtml ?? '').trim().length > 0,
   );
@@ -137,7 +156,7 @@ export function OfferSheet({
   /* Drawn: every promise beside its own drawing, two up at full width, no rule (the drawing opens the
      item). The quote has its own band after the offer (owner, 26 Oct 2026: a quote beside or under
      the set "reads as noise"), so a drawn sheet takes no aside. */
-  const drawn = shown.length > 0 && shown.every((item) => item.scene);
+  const drawn = !rows && shown.length > 0 && shown.every((item) => item.scene);
   if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
     console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
   }
@@ -165,7 +184,39 @@ export function OfferSheet({
      as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
      again. Two across keeps the approved form, the drawing beside its words from 768. */
   const drawnThree = drawn && across === 3;
-  const promises = drawn ? (
+  const promises = rows ? (
+    /* A head beside its body is a split, so the seam is `section` (96). */
+    <ul>
+      {shown.map((item) => (
+        <li key={keyOf(item)} className={styles.row}>
+          <Layout
+            columns={{ base: 1, lg: [1, 1] }}
+            colGap="section"
+            rowGap="text"
+            align="start"
+          >
+            {item.icon ? (
+              /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
+                 card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
+              <Cluster colGap="text" align="start" nowrap>
+                <span className={styles.rowIcon}>
+                  <Icon name={item.icon} size="xl" />
+                </span>
+                {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+              </Cluster>
+            ) : item.title ? (
+              <h3 className={styles.title}>{item.title}</h3>
+            ) : null}
+            {item.bodyHtml ? (
+              <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+            ) : item.body ? (
+              <p className={styles.body}>{item.body}</p>
+            ) : null}
+          </Layout>
+        </li>
+      ))}
+    </ul>
+  ) : drawn ? (
     <Layout
       as="ul"
       columns={{ base: 1, lg: drawnThree ? 3 : 2 }}
@@ -217,14 +268,15 @@ export function OfferSheet({
   ) : (
     labelled
   );
-  const side = drawn
-    ? undefined
-    : (aside ??
-      (asideImage ? (
-        <div className={styles.asideFrame}>
-          <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
-        </div>
-      ) : undefined));
+  const side =
+    drawn || rows
+      ? undefined
+      : (aside ??
+        (asideImage ? (
+          <div className={styles.asideFrame}>
+            <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
+          </div>
+        ) : undefined));
 
   /* The band's FOOT (owner, 30 Oct 2026): the terms belong to the whole band, so they leave the set's
      grid. A section beat (96) parts them from the promises, and they take an arrangement of their

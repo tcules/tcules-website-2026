@@ -73,9 +73,9 @@ export const KIND_COMPONENTS: Readonly<
     note: 'A trace read across its columns (design-to-code audit).',
   },
   text: {
-    component: ['C-text', 'B'],
+    component: ['C-text', 'B', 'C-list'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B).',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list).',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
@@ -116,9 +116,9 @@ export const KIND_COMPONENTS: Readonly<
   },
   note: { component: ['C-note'], status: 'to-design' },
   close: {
-    component: ['L', 'C-text'],
+    component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose.',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026).',
   },
 };
 

@@ -531,6 +531,40 @@ const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
 
+/* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
+   have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
+  /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
+     and the set warns as mixed. */
+  'product-responsibility': {
+    'Shape a new product': 'ruler-pen',
+    'Improve software customers already rely on': 'refresh-square',
+    'Design AI into the product': 'stars',
+    'Carry the design into working software': 'code-square',
+    'Work as part of an internal product team': 'users-group-rounded',
+    "Find out what's wrong before fixing it": 'magnifier-bug',
+  },
+};
+
+/**
+ * A close whose ask is the case index, set as the cases it leads to (owner, 4 Nov 2026: /clients' "Case
+ * studies behind the client names"). The copy names no case, so the page picks them here, by the client
+ * name routes.ts files the case under; the cards are the 3-column case grid (treatment rules § 1), the
+ * paragraph is the lead without its link, and the link is the centred action under the cards.
+ */
+/**
+ * A prose band whose sentences are each about one named client, set as list cards beside the head
+ * (owner 4 Nov 2026, /clients). One title per sentence, in order: the client's name, words the
+ * sentence already carries. The sentence is the card's body, verbatim, links kept.
+ */
+const SENTENCE_ROWS: Readonly<Record<string, readonly string[]>> = {
+  '/clients#returning-clients': ['Primelis', 'Benchmark Gensuite'],
+};
+
+const CLOSE_CASES: Readonly<Record<string, readonly string[]>> = {
+  '/clients#case-studies': ['Doodle', 'Benchmark Gensuite', 'Eden AI'],
+};
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -582,7 +616,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
-      return <SheetBand band={band} scenes={scenes} />;
+      return (
+        <SheetBand
+          band={band}
+          scenes={scenes}
+          {...(SHEET_ROWS[band.id]
+            ? { arrangement: 'rows' as const, icons: SHEET_ROWS[band.id] }
+            : {})}
+        />
+      );
     }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */
@@ -640,7 +682,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
-    case 'text':
+    case 'text': {
+      const clients = SENTENCE_ROWS[`${page.route}#${band.id}`];
+      if (clients) return <SentenceRowsBand band={band} titles={clients} />;
       return (
         <TextBand
           page={page}
@@ -649,10 +693,17 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           scenario={sceneFor(ctx, band, 'scenario')}
         />
       );
+    }
     case 'note':
       return <NoteBand band={band} />;
-    case 'close':
-      return <CloseBand page={page} band={band} />;
+    case 'close': {
+      const picks = CLOSE_CASES[`${page.route}#${band.id}`];
+      return picks ? (
+        <CaseLinksBand band={band} ctx={ctx} names={picks} />
+      ) : (
+        <CloseBand page={page} band={band} />
+      );
+    }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
        product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
@@ -1782,5 +1833,88 @@ function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
         <Proof quote={quote} align="center" />
       )}
     </Section>
+  );
+}
+
+/** CLOSE_CASES' band: the picked cases as the 3-column grid, the close's link centred under them. */
+function CaseLinksBand({
+  band,
+  ctx,
+  names,
+}: {
+  band: CorpusBand;
+  ctx: OfferContext;
+  names: readonly string[];
+}) {
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
+  const link = paragraphs
+    .flatMap((block) => block.runs)
+    .find((run): run is Extract<typeof run, { type: 'link' }> => run.type === 'link');
+  const lead = paragraphs
+    .map((block) =>
+      plain(block.runs.filter((run) => run.type !== 'link'))
+        .replace(/\s+/g, ' ')
+        .trim(),
+    )
+    .filter((text) => text.length > 0)
+    .join(' ');
+  const items: BlockCardSetItem[] = names.flatMap((name) => {
+    const found = caseStudyLink(name);
+    if (!found) return [];
+    const ref = ctx.caseRefs[found.href];
+    return [
+      {
+        id: name,
+        title: ref?.title ?? name,
+        media: { type: 'image' as const, image: caseCover(name, ref) },
+        href: found.href,
+      },
+    ];
+  });
+  const set = (
+    <BlockCardSet lead="none" scroll="never" cue="title" across={3} size="md" items={items} />
+  );
+  const leadProp = lead ? { lead } : {};
+  if (!link) {
+    return (
+      <ContentSection {...head(band)} data-band="M" {...leadProp}>
+        {set}
+      </ContentSection>
+    );
+  }
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="M"
+      {...leadProp}
+      actionsAt="end"
+      actions={
+        <CtaRow rule={false} actions={[{ label: plain(link.children), href: link.href }]} />
+      }
+    >
+      {set}
+    </ContentSection>
+  );
+}
+
+function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly string[] }) {
+  const sentences = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? sentencesOf(block.runs) : [],
+  );
+  return (
+    <ContentSection {...head(band)} data-band="C-list" arrangement="beside">
+      <Layout as="ul" rowGap="none">
+        {sentences.map((sentence, index) => (
+          <ListCard
+            key={titles[index] ?? sentence.text}
+            titleAs="h3"
+            title={titles[index] ?? sentence.text}
+            {...bodyOf(sentence.runs)}
+          />
+        ))}
+      </Layout>
+    </ContentSection>
   );
 }

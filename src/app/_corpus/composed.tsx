@@ -42,6 +42,7 @@ export const PASS_1_COMPOSED_ROUTES: ReadonlySet<string> = new Set([
   ROUTES.matterDesignSystem,
   ROUTES.futureInterfacesLab,
   ROUTES.futureInterfacesLabJoin,
+  ROUTES.clients,
 ]);
 
 /** Studio photographs a composed page may reuse, by binding id (page-mapping § 0 rule 5.3). */

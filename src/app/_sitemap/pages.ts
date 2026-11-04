@@ -90,6 +90,7 @@ const FIXED_PAGES: readonly { route: RouteKey; title: string; group: SitemapGrou
   { route: 'matterDesignSystem', title: 'Matter Design System', group: 'company' },
   { route: 'services', title: 'Services', group: 'services' },
   { route: 'caseStudies', title: 'Case studies', group: 'caseStudies' },
+  { route: 'clients', title: 'Clients', group: 'caseStudies' },
   { route: 'insights', title: 'Insights', group: 'insights' },
   { route: 'authors', title: 'Authors', group: 'insights' },
   { route: 'privacy', title: 'Privacy policy', group: 'legal' },

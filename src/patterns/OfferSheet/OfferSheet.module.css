@@ -114,3 +114,34 @@
   max-inline-size: var(--ofs-title-measure);
   text-wrap: balance;
 }
+
+/* `rows`: ListCard's row frame, duplicated on purpose (a pattern does not import a pattern). The
+   hairline CLOSES each row, under it, with no blue mark: the mark is the grid's device, where a rule
+   opens each promise. The rows' seam is the frame's own padding, `gutter` either side of the rule,
+   so the list carries no gap; the first row drops its top inset so its title starts on the line
+   under the heading's stack seam. */
+.row {
+  padding-block: var(--gap-gutter);
+  border-block-end: var(--ofs-rule-width) solid var(--ofs-rule-ink);
+}
+
+.row:first-child {
+  padding-block-start: 0;
+}
+
+/* A row's glyph, before its title: one line of the title's font tall, so the glyph centres on the
+   title's FIRST line however many lines the title runs to; 1em wide, in the accent ink. */
+.rowIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font: var(--ofs-title-text);
+  block-size: 1lh;
+  color: var(--ofs-mark-ink);
+}
+
+.rowIcon > svg {
+  display: block;
+  width: var(--ofs-icon-size);
+  height: var(--ofs-icon-size);
+}

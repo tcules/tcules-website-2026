@@ -647,16 +647,24 @@ function bandTerms(rest: readonly CorpusBlock[]): {
 export function SheetBand({
   band,
   scenes,
+  arrangement,
+  icons,
 }: {
   band: CorpusBand;
   scenes?: (title: string) => OfferSheetItem['scene'];
+  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_ROWS`). */
+  arrangement?: 'grid' | 'rows';
+  /** A rows sheet's glyph per item title (OfferBands `SHEET_ROWS`). */
+  icons?: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
   const items = parts.items.map((item) => {
     /* A statement's scene is filed under its words, or under the words before its colon. */
     const key = item.title ?? item.id ?? '';
     const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);
-    return scene ? { ...item, scene } : item;
+    const icon = item.title ? icons?.[item.title] : undefined;
+    const drawn = scene ? { ...item, scene } : item;
+    return icon ? { ...drawn, icon } : drawn;
   });
   const rest = [...parts.intro, ...parts.after];
   const combined =
@@ -694,6 +702,7 @@ export function SheetBand({
       lead={parts.lead}
       items={items}
       across={acrossFor(items.length)}
+      {...(arrangement ? { arrangement } : {})}
       note={note}
       terms={terms.length > 0 ? terms : undefined}
     />

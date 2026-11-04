@@ -277,7 +277,8 @@ export function testimonialItem(
   /* The speaker's one rating, set at the content seam (one person, one rating); the id table is the
      fallback for a quote the loader did not rate. */
   const rating =
-    block.rating?.value ?? (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
+    block.rating?.value ??
+    (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
   /* The speaker's portrait, when the route passed one for this id (PLACEHOLDER stock portraits
      today, home round 3); without one the card shows no avatar at all. */
   const portrait = block.testimonialId ? avatars?.[block.testimonialId] : undefined;
@@ -351,10 +352,7 @@ export function QuoteGroupBand({
       block.type === 'paragraph' && index < firstQuote && !ratingOf(block),
   );
   const quotes = band.blocks.filter((block): block is QuoteBlock => block.type === 'quote');
-  const ratingBlock = band.blocks.find(
-    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
-      block.type === 'paragraph' && ratingOf(block) !== undefined,
-  );
+  const ratingBlock = band.blocks.find((block) => ratingOf(block) !== undefined);
   const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
   const wall = quotes.length >= WALL_FROM;
   const footer = rating ? (
@@ -413,7 +411,8 @@ function QuoteSlider({
   const withPortraits = portraits.every(Boolean);
   const slides: ProofQuote[] = quotes.map((block, index) => {
     const stars =
-      block.rating?.value ?? (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
+      block.rating?.value ??
+      (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
     const portrait = withPortraits ? portraits[index] : undefined;
     return {
       ...proofQuote(block),
@@ -479,17 +478,36 @@ export function ScoreBadge({ rating }: { rating: ScoreLine }) {
  * (26 Oct copy). The score, the platform, the reviews' link and its words, and the words between the
  * claim and the link ("from 13 reviews.") as `detail`.
  */
+/**
+ * The runs of a line that may carry a score. A score whose bold claim ends on its full stop
+ * ("**4.8 on Clutch.** [Read the reviews](…)", /clients) parses as a `labelled` block, not a
+ * paragraph, because a bold run ending in `.` is a label to the parser. It is the same authored line,
+ * so it is read back as the paragraph it would be: the bold claim, then the rest.
+ */
+function scoreRuns(block: CorpusBlock): InlineRun[] | undefined {
+  if (block.type === 'paragraph') return block.runs;
+  if (block.type === 'labelled') {
+    return [
+      { type: 'strong', children: block.label },
+      { type: 'text', text: ' ' },
+      ...block.body,
+    ];
+  }
+  return undefined;
+}
+
 export function ratingOf(
   block: CorpusBlock,
 ):
   | { score: string; platform: string; href: string; detail?: string; linkLabel?: string }
   | undefined {
-  if (block.type !== 'paragraph') return undefined;
-  const link = block.runs.find((run) => run.type === 'link');
+  const runs = scoreRuns(block);
+  if (!runs) return undefined;
+  const link = runs.find((run) => run.type === 'link');
   if (!link || link.type !== 'link') return undefined;
-  const [first, ...rest] = block.runs;
+  const [first, ...rest] = runs;
   const claim = first?.type === 'strong' ? plain(first.children) : '';
-  const sentence = plain(block.runs.filter((run) => run !== link)).trim();
+  const sentence = plain(runs.filter((run) => run !== link)).trim();
   const match =
     /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+?)\.?$/.exec(claim) ??
     /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+)/.exec(sentence);
@@ -518,7 +536,7 @@ export function RecognitionBand({ band }: { band: CorpusBand }) {
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
   );
   const namesBlock = paragraphsIn.find((block) => !ratingOf(block));
-  const ratingBlock = paragraphsIn.find((block) => ratingOf(block));
+  const ratingBlock = band.blocks.find((block) => ratingOf(block));
   const names = namesBlock ? plain(namesBlock.runs).split(' · ') : [];
   const named = names.flatMap((name) => {
     const mark = clientMark(name);

@@ -38,6 +38,8 @@
      geometry), not a distance between two things, so it reads the ramp, as Stat's does. */
   --ofs-mark-width: var(--border-width-2);
   --ofs-mark-length: var(--space-32);
+  /* A rows sheet's glyph: one em of the title role over which it stands (ListCard's tile marker). */
+  --ofs-icon-size: 1em;
   /* The sheet's lead (component-map C4): the system's lead role at its own measure. */
   --ofs-lead-text: var(--text-lead);
   --ofs-lead-measure: var(--measure-lead);
