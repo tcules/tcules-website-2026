@@ -270,7 +270,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       social media, the other ways to reach us, and the studio address.
 - [x] **2.57** (#213) `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
       the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
-- [~] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+- [x] **2.58** (#218) `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
