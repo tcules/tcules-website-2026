@@ -249,12 +249,12 @@
 }
 
 /* The short bar in the labels' row: the eyebrow's line box, the logo's bar in proportion centred
-   in it, in the statement's ink. Drawn as a background so the row keeps the label's height and the bar needs no box of its
+   in it, in the label ink like the facts' labels beside it (owner, 4 Nov 2026). Drawn as a background so the row keeps the label's height and the bar needs no box of its
    own. */
 .statementRule {
   inline-size: var(--foot-statement-rule-inline);
   block-size: var(--foot-statement-rule-row);
-  background: linear-gradient(var(--foot-statement-ink), var(--foot-statement-ink)) left center /
+  background: linear-gradient(var(--foot-label-ink), var(--foot-label-ink)) left center /
     100% var(--foot-statement-rule-weight) no-repeat;
 }
 
