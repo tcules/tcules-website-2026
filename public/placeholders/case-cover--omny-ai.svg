@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Image to come · product shot">
-<rect width="1600" height="900" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="898" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="27 27"/>
-<text x="458" y="377" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="27" letter-spacing="2.7" fill="#4A5361">IMAGE TO COME · PRODUCT SHOT</text>
-<text x="458" y="452" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="34" fill="#2B323D"><tspan x="458" dy="0">Omny AI: AI suggestions held separate</tspan><tspan x="458" dy="49">from the final listing until a person</tspan><tspan x="458" dy="49">accepts them.</tspan></text>
+<rect width="1600" height="900" fill="#F3F1EA"/>
+<text x="800" y="450" text-anchor="middle" dominant-baseline="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="27" letter-spacing="2.7" fill="#71706A">IMAGE TO COME · PRODUCT SHOT</text>
 </svg>

@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 533" width="1600" height="533" role="img" aria-label="Image to come · studio photo">
-<rect width="1600" height="533" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="531" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="16 16"/>
-<text x="598" y="195" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="16" letter-spacing="1.6" fill="#4A5361">IMAGE TO COME · STUDIO PHOTO</text>
-<text x="598" y="239" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" fill="#2B323D"><tspan x="598" dy="0">Designers and engineers at work</tspan><tspan x="598" dy="29">together in the Ahmedabad studio,</tspan><tspan x="598" dy="29">critiquing one piece of work, framed</tspan><tspan x="598" dy="29">wide enough to read as the whole</tspan><tspan x="598" dy="29">studio.</tspan></text>
+<rect width="1600" height="533" fill="#F3F1EA"/>
+<text x="800" y="267" text-anchor="middle" dominant-baseline="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="16" letter-spacing="1.6" fill="#71706A">IMAGE TO COME · STUDIO PHOTO</text>
 </svg>

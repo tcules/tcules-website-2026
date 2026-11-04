@@ -205,8 +205,10 @@ const ARTEFACT_HERO: Record<string, HeroCutOut> = {
   [ROUTES.matterDesignSystem]: {
     src: '/matter-design-system/matter-collage.webp',
     alt: 'Three frames from the Matter Figma file: accessible colour palettes, the Button component in every size and state, and the Tokens Studio panel of purpose-named tokens.',
-    width: 2000,
-    height: 1111,
+    /* Cropped to the frames' alpha bounds (shadows kept): the master's own margin added to the
+       panel's inset (matter critic, 4 Nov 2026). */
+    width: 1900,
+    height: 1041,
     kind: 'cut-out',
     panel: 'paper-deep',
   },

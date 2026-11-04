@@ -36,7 +36,7 @@ reader who needs more than a file reaches the design-system services and the enq
 |---|---|---|
 | hero | CorpusHero `centred`, cut-out collage on `paper-deep` | eyebrow suppressed under the breadcrumb, as before |
 | contents | set · OfferSheet, drawn, across 3 | three new still drawings |
-| use | text · C-text | no visual, on purpose |
+| use | text · C-text, peer paragraphs | two columns under the full-width head from 1024 (`PEER_PARAGRAPHS`) |
 | beyond-the-file | text · illustrated prose (B), isometric placeholder | side from the plan's alternation |
 | services | services · C-icon service tiles | four hairline cards with their drawings |
 | enquiry | enquiry · L, blue island in halves | before the FAQ |
@@ -66,6 +66,34 @@ tint, no text-heavy pair, registers alternate (cut-out → flat → none → iso
   exported from the file could replace them as per-item cut-outs.
 - `beyond-the-file` ships a labelled isometric placeholder until an illustrator draws it.
 - The four service tiles' titles wrap to one or two lines, so their "when" lines start at different heights:
-  existing C-icon behaviour on every router page, not patched here.
+  existing C-icon behaviour on every router page, not patched here. At 390 each tile is about 300 tall (the
+  plate keeps its desktop ratio). Both are Bento changes that would move every service-tile set: owner to
+  decide (subgrid title rows; a shorter plate below 768).
+- **New arrangement for this route:** `use` set as two peer paragraphs (`PEER_PARAGRAPHS`, as /careers
+  `product-work`). The critic wanted a real Matter frame beside the words; the live site has no single
+  legible frame other than the hero collage, so a frame exported from the Matter Figma file (one component
+  or the token panel, flat) would give this band its picture. Owner to confirm or supply.
+- **Promote the proposed ruling** decisions/2026-11-04-placeholders-show-their-label-only: this run applied
+  it in the generator, so every placeholder site-wide now shows its short label only.
+- **Global, not route-local:** a hero or CtaRow action whose href leaves the site now trails the
+  leaving-the-site arrow (`lib/href.ts` `leavesSite`); the hero's blue solid carries it too. Owner to confirm
+  the solid may carry that one glyph (r7-buttons gave it none).
 - og/twitter image: `IMAGE_ASSET_REQUIRED`. The collage is the obvious source but needs a 1200 × 630 crop on a
   ground: an owner content decision.
+
+## Fixed after the critic (4 Nov 2026, 6.5/10)
+- Placeholder printed its whole brief at ~30px on a cool grey (#EEF0F3) with a clipped dashed edge → the
+  generator (`scripts/placeholders.mjs`) wrote the brief, a non-palette ground and a dashed stroke into every
+  slot → the generator now draws the short label only, centred, in the mono voice on paper-deep (#F3F1EA),
+  warm neutral-600 ink, no stroke (Media draws the hairline); all 70 slots regenerated
+  (decisions/2026-11-04-placeholders-show-their-label-only, proposed).
+- `use` was a thin text stack at ~95 characters a line with the right third empty → the `text` kind set two
+  short paragraphs at full stacked width → the band joins `PEER_PARAGRAPHS` (two columns under the
+  full-width head, `column` apart), as /careers does; flagged in Open.
+- "Open Matter on Figma" looked like an on-site button → PageHero (and CtaRow) never cue an off-site href →
+  `lib/href.ts` `leavesSite()`; PageHero and CtaRow trail `arrow-right-up` for an off-site action, so every
+  page gets it.
+- Nit, hero collage small in its panel → the master carried its own transparent margin → cropped to its
+  alpha bounds (1900 × 1041, shadows kept), dimensions updated in `ARTEFACT_HERO`.
+- Skipped: the services tiles' ragged title rows and their phone height. Both are Bento changes that move
+  every service-tile set on the site; listed in Open for the owner.

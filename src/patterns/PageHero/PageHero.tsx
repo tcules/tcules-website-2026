@@ -24,6 +24,7 @@ import {
   type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import { leavesSite } from '@/lib/href';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import {
   FULL_COLUMN,
@@ -1106,9 +1107,10 @@ export function PageHero({
   /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is the page's one main action, the
      blue solid (r7-buttons, 8 Oct 2026: there is no ink solid) — and carries NO arrow: the label
-     carries the ask. The second is a primary GHOST with
-     the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
-     link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
+     carries the ask. The one glyph it may carry is the leaving-the-site mark, when its href is
+     off-site (lib/href.ts): that says where the click goes, not that it is a link. The second is a
+     primary GHOST with the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner
+     is a ghost, never a link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
      rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
      as the alternative rather than a second ask. Recorded in docs/specs/Button.md § 14a.
      From 768 the pair sits on one line, centred on the cross axis. Below 768 it ALWAYS stacks, the
@@ -1132,7 +1134,15 @@ export function PageHero({
             emphasis={index === 0 ? 'solid' : 'ghost'}
             size="md"
             extendHitArea
-            icon={index === 0 ? undefined : <Icon name="arrow-right" />}
+            icon={
+              /* An action that leaves the site says so, solid or ghost (lib/href.ts): the
+                 leaving mark replaces the ghost's arrow and is the solid's only glyph. */
+              leavesSite(action.href) ? (
+                <Icon name="arrow-right-up" />
+              ) : index === 0 ? undefined : (
+                <Icon name="arrow-right" />
+              )
+            }
           >
             {action.label}
           </Button>

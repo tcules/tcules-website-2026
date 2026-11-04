@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1333" width="1600" height="1333" role="img" aria-label="Illustration to come">
-<rect width="1600" height="1333" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="1331" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="76 76"/>
-<text x="114" y="360" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="76" letter-spacing="7.6" fill="#4A5361">ILLUSTRATION TO COME</text>
-<text x="114" y="549" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="86" fill="#2B323D"><tspan x="114" dy="0">A design system in its second</tspan><tspan x="114" dy="125">year, still owned and still</tspan><tspan x="114" dy="125">changing, with teams drawing</tspan><tspan x="114" dy="125">from it instead of keeping</tspan><tspan x="114" dy="125">local copies.</tspan></text>
+<rect width="1600" height="1333" fill="#F3F1EA"/>
+<text x="800" y="667" text-anchor="middle" dominant-baseline="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="57" letter-spacing="5.7" fill="#71706A">ILLUSTRATION TO COME</text>
 </svg>

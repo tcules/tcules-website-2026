@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Image to come · diagram">
-<rect width="1600" height="900" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="898" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="27 27"/>
-<text x="458" y="328" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="27" letter-spacing="2.7" fill="#4A5361">IMAGE TO COME · DIAGRAM</text>
-<text x="458" y="403" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="34" fill="#2B323D"><tspan x="458" dy="0">Two versions of one quote side by</tspan><tspan x="458" dy="49">side: the lines that changed marked,</tspan><tspan x="458" dy="49">the one change that moved the price</tspan><tspan x="458" dy="49">called out, and which version the</tspan><tspan x="458" dy="49">customer saw.</tspan></text>
+<rect width="1600" height="900" fill="#F3F1EA"/>
+<text x="800" y="450" text-anchor="middle" dominant-baseline="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="27" letter-spacing="2.7" fill="#71706A">IMAGE TO COME · DIAGRAM</text>
 </svg>

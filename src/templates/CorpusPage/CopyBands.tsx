@@ -2496,7 +2496,13 @@ export function TextBand({
  * at the measure it left the right half of the band empty between two picture bands (4 Nov 2026, owner
  * to confirm). Words unchanged.
  */
-const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([`${ROUTES.careers}#product-work`]);
+const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([
+  `${ROUTES.careers}#product-work`,
+  /* /matter-design-system "Duplicate Matter from Figma Community and take it apart": how to use the
+     file, and the terms it comes on. One column ran about 95 characters a line with the band's right
+     third empty (matter critic, 4 Nov 2026, owner to confirm). */
+  `${ROUTES.matterDesignSystem}#use`,
+]);
 
 /** A boundary on the band before it (`confidentiality`): one Callout under its own heading. */
 export function NoteBand({ band }: { band: CorpusBand }) {
