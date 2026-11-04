@@ -22,265 +22,205 @@ import type { Navigation } from '../../types';
 
 /**
  * ── The nav ───────────────────────────────────────────────────────────────────────
- * Six items: three that open the plate, three that navigate. Order is CONTENT, not style — Work
- * sits second because case studies are the strongest proof this studio has and should not be the
- * fifth thing anyone reads.
+ * Five items: Work navigates, four open the plate. Order is CONTENT, not style — Work leads because
+ * case studies are the strongest proof this studio has.
  *
  * Every item carries its children whether or not the nav renders them today, per
- * docs/specs/SiteNav.md §2.1. Work, Lab and About are `form: 'link'` and their `children` go
- * unrendered; the day one of them becomes a menu, that is a change to `form` on one record and
- * nothing else. The same records are what the footer, an in-page section nav and the sitemap are
- * meant to read, so a child that exists in one place and not another is a bug a build can catch.
+ * docs/specs/SiteNav.md §2.1: Work is `form: 'link'` and its `children` go unrendered.
  *
- * `status` IS THE HONEST PART OF THIS FILE. Only three of these destinations have a page behind
- * them — `/` and the audit family, which Strapi answers, and the proving ground, which is not
- * linked from here. Everything else is `planned`: the route is decided, the page is not built. The
- * links render exactly as live ones do, deliberately (§2.1) — a greyed row tells a visitor the
- * company is unfinished, where a thin page tells them the work is in progress. What the flag is
- * FOR was the sitemap, so a holding page is never submitted to a search engine. The sitemap that
- * shipped (src/app/_sitemap/pages.ts) does not read it: it lists the pages that answer — the fixed
- * routes, the corpus and Strapi's entries — and borrows only the labels from these records.
+ * `status` is for the sitemap, not the nav: a planned link renders exactly as a live one. The
+ * sitemap that shipped (src/app/_sitemap/pages.ts) lists the pages that answer and borrows only the
+ * labels from these records.
  *
- * No promises, no row descriptions. The revised IA dropped them — rows are labels, and the group
- * label above them carries the meaning.
+ * Rows MAY carry a description now (round 3): services say which situation each answers, a list of
+ * sectors does not need to.
  */
 
-/** Every href below is `planned` and saying so once beats saying it forty-four times. */
-const soon = (label: string, href: string): SiteNavLink => ({ label, href, status: 'planned' });
+/** A destination with a page behind it. */
+const to = (label: string, href: string, description?: string): SiteNavLink => ({
+  label,
+  href,
+  status: 'live',
+  ...(description ? { description } : {}),
+});
 
-/* ── Services ─────────────────────────────────────────────────────────────────────
-   Two groups of six and the only rail in the nav. The audits are named individually rather than
-   pointing at the index, because "which audit" is the question a visitor arrives with — and they
-   are the one family that has real pages behind it, served by /audits/[slug].
+/* ── The header, round 3 (owner, 4 Nov 2026) ──────────────────────────────────────
+   Content and order from the owner's header-and-footer copy of 3 Nov 2026, with the group labels
+   SHORTENED to two or three words and the notes under them dropped — the "short labels" pick from
+   the header mocks. Every section is an index of groups plus, where it has one, an aside holding
+   the way onward. Labels keep the copy's '&'. */
 
-   The rail is "Working together": How We Work as the image-led primary card, Request Free Audit as
-   the compact secondary row. That order is provisional and it is the first open item in the spec —
-   whichever block has something to say takes the primary card, and until the audit copy exists
-   How We Work does. */
 const SERVICES: SiteNavItem = {
   key: 'services',
   label: 'Services',
   form: 'mega',
-  /* A mega has no href — its trigger opens rather than navigates — so its OWN index goes
-     here beside the paths it owns outside its family. Without `/services` the bar would sit
-     unlit on the page the section is named after. */
-  matchPaths: [ROUTES.services, ROUTES.audits, ROUTES.howWeWork],
-  hub: { label: 'All services', href: ROUTES.services, status: 'planned' },
-  /* The audits carry the long labels — "Product Modernisation Assessment" at 230px against
-     "Product Modernisation" at 148 — so the second column takes the larger share and the two end up
-     with matching slack instead of 145 and 63. Re-measure if a label changes. */
-  columnRatio: [3, 4],
-  panelWidth: 'lg',
   groups: [
     {
-      label: 'Services',
+      label: 'Core practice',
+      links: [to('Product Design', ROUTES.productDesign, 'What to build, before the screens')],
+    },
+    {
+      label: 'Starting new',
       links: [
-        soon('Product Design', ROUTES.productDesign),
-        soon('Product Modernisation', ROUTES.productModernisation),
-        soon('Design Systems', ROUTES.designSystems),
-        soon('AI Product UX', ROUTES.aiProductUx),
-        soon('Design Engineering', ROUTES.designEngineering),
-        soon('Software Development', ROUTES.softwareDevelopment),
+        to('Launch a new product', ROUTES.mvpDevelopment, 'Design-led MVP, from idea or prototype'),
+        to(
+          'Prototype Readiness Review',
+          ROUTES.prototypeReadinessReview,
+          'A pre-launch check for AI-built apps',
+        ),
       ],
     },
     {
-      label: 'Audits and starting points',
+      label: 'Live products',
       links: [
-        /* The one live family in this file — /audits/[slug] ships and Strapi answers it. */
-        { label: 'UX and Product Audit', href: ROUTES.uxProductAudit, status: 'live' },
-        { label: 'Design-System Audit', href: ROUTES.designSystemAudit, status: 'live' },
-        { label: 'Design-to-Code Audit', href: ROUTES.designToCodeAudit, status: 'live' },
-        {
-          label: 'Product Modernisation Assessment',
-          href: ROUTES.productModernisationAssessment,
-          status: 'live',
-        },
-        { label: 'AI Product UX Readiness', href: ROUTES.aiProductUxReadiness, status: 'live' },
-        {
-          label: 'Prototype Readiness Review',
-          href: ROUTES.prototypeReadinessReview,
-          status: 'live',
-        },
+        to('Product Modernisation', ROUTES.productModernisation, 'Keep what customers value'),
+        to('Audits & Assessments', ROUTES.audits, 'Know what to fix first'),
+      ],
+    },
+    {
+      label: 'Design to software',
+      links: [
+        to(
+          'Design Engineering',
+          ROUTES.designEngineering,
+          'Designers who code, prototype to production',
+        ),
+        to('Software Development', ROUTES.softwareDevelopment, 'From the studio that designs it'),
       ],
     },
   ],
-  rail: {
-    label: 'Working together',
-    cards: [
-      /* A PLACEHOLDER, and named so it cannot be mistaken for the real thing: the artwork for this
-         card is still the spec's first open item. It is diagrammatic on purpose — a pod, a track and
-         a phase — so it reads as a stand-in rather than as a photograph nobody chose. Swap the file
-         and the alt together; the ratio and the crop belong to the slot, not to the asset. */
-      {
-        title: 'How We Work',
-        href: ROUTES.howWeWork,
-        status: 'planned',
-        role: 'primary',
-        image: {
-          src: '/nav/how-we-work-placeholder.svg',
-          alt: '',
-          width: 480,
-          height: 210,
-        },
-      },
-      {
-        title: 'Request Free Audit',
-        href: ROUTES.audits,
-        status: 'planned',
-        role: 'secondary',
-      },
-    ],
-  },
+  /* One link and no heading: it needs none. */
+  aside: { links: [to('How we work', ROUTES.howWeWork, 'Start small, scale when ready')] },
+  hub: to('All services', ROUTES.services),
 };
 
-/* ── Expertise ────────────────────────────────────────────────────────────────────
-   Products and platforms, then industries and domains. The split is the point: a product TYPE
-   changes how the work is done, an industry is the context it is done in. Both are plain link
-   groups now — the previous shape made the first a set of promise rows and the second a rail,
-   which is two treatments for one kind of thing.
-
-   No rail, so the plate narrows to 780. Public Sector and Regulated Industries is struck in the
-   content doc and is not here.
-
-   AND NO HUB LINK, unlike Services and Insights. That is a decision rather than an omission: it is
-   the one mega whose index page nobody has asked to send people to. Add `hub` here the day
-   /expertise is worth landing on. */
 const EXPERTISE: SiteNavItem = {
   key: 'expertise',
   label: 'Expertise',
   form: 'mega',
-  matchPaths: [ROUTES.expertise],
-  /* NO columnRatio, and that is a measurement rather than an oversight. Expertise is the one mega
-     whose FIRST group holds the longer labels — "Content, Knowledge and Discovery Platforms" at 293
-     against "PropTech, ConTech and Field Operations" at 259 — so the [3, 4] its siblings use would
-     leave that column 0.1px of clearance and wrap it. Equal tracks already sit at 49 and 83 slack,
-     which is as balanced as this copy gets. */
-  panelWidth: 'md',
   groups: [
     {
-      label: 'Products and platforms',
+      label: 'By software type',
       links: [
-        soon('B2B SaaS and Workflow Software', ROUTES.b2bSaasWorkflow),
-        soon('AI Products and Developer Tools', ROUTES.aiDeveloperTools),
-        soon('Data, Analytics and Decision Products', ROUTES.dataDecisionProducts),
-        soon('Marketplaces and Multi-Sided Platforms', ROUTES.marketplaces),
-        soon('Content, Knowledge and Discovery Platforms', ROUTES.contentDiscovery),
-        soon('Commerce and Transactional Products', ROUTES.commerce),
+        to('B2B SaaS & Workflow Software', ROUTES.b2bSaasWorkflow),
+        to('Developer Tools & AI Platforms', ROUTES.aiDeveloperTools),
+        to('Data, Analytics & Decision Products', ROUTES.dataDecisionProducts),
+        to('Marketplaces & Multi-Sided Platforms', ROUTES.marketplaces),
+        to('Content, Knowledge & Discovery Platforms', ROUTES.contentDiscovery),
+        to('Commerce & Transactional Products', ROUTES.commerce),
       ],
     },
     {
-      label: 'Industries and domains',
+      label: 'By industry',
       links: [
-        soon('FinTech and InsurTech', ROUTES.fintech),
-        soon('HealthTech and Care', ROUTES.healthtech),
-        soon('EdTech and Learning', ROUTES.edtech),
-        soon('MarTech and SalesTech', ROUTES.martech),
-        soon('PropTech, ConTech and Field Operations', ROUTES.proptech),
-        soon('ClimateTech and Energy', ROUTES.climatetech),
+        to('FinTech', ROUTES.fintech),
+        to('HealthTech', ROUTES.healthtech),
+        to('ClimateTech & Energy', ROUTES.climatetech),
+        to('PropTech, ConTech & Field Operations', ROUTES.proptech),
+        to('EdTech & Learning', ROUTES.edtech),
+        to('MarTech & SalesTech', ROUTES.martech),
       ],
     },
   ],
+  aside: {
+    label: 'See the work',
+    links: [
+      to('Case studies', ROUTES.caseStudies),
+      to('How we work', ROUTES.howWeWork, 'Start small, scale when ready'),
+    ],
+  },
+  hub: to('All expertise', ROUTES.expertise),
 };
 
-/* ── Insights ─────────────────────────────────────────────────────────────────────
-   Formats, then the things that are not a format. Four and four, so the plate narrows to 560 — the
-   smallest of the three, and the reason the plate has three widths at all.
-
-   Research and Series are struck, as is the whole third group (Current, Rising Topics, Latest
-   Insights, Future Interfaces Lab) — the Lab is a bar item now, which is most of why. The pane has
-   room for that group as a third column if it comes back. */
-const INSIGHTS: SiteNavItem = {
-  key: 'insights',
-  label: 'Insights',
+const RESOURCES: SiteNavItem = {
+  key: 'resources',
+  label: 'Resources',
   form: 'mega',
-  matchPaths: [ROUTES.insights, ROUTES.glossary, ROUTES.tools],
-  hub: { label: 'All insights', href: ROUTES.insights, status: 'planned' },
-  /* Same shape as Services — "Tools and Resources" against "Podcasts" — so the same ratio. */
-  columnRatio: [3, 4],
-  panelWidth: 'sm',
   groups: [
     {
-      label: 'Formats',
+      label: 'Insights',
       links: [
-        soon('Articles', ROUTES.articles),
-        soon('Podcasts', ROUTES.podcasts),
-        soon('Videos', ROUTES.videos),
-        soon('Events', ROUTES.events),
+        to('Articles', ROUTES.articles),
+        to('Guides', ROUTES.guides),
+        to('Podcasts', ROUTES.podcasts),
       ],
     },
     {
-      label: 'Knowledge and utility',
+      label: 'Free to use',
       links: [
-        soon('Tools and Resources', ROUTES.tools),
-        soon('Guides', ROUTES.guides),
-        soon('Glossary', ROUTES.glossary),
-        soon('Interviews', ROUTES.interviews),
+        to('Checklists and worksheets', ROUTES.tools),
+        to('Matter Design System', ROUTES.matterDesignSystem),
+        to('Glossary', ROUTES.glossary),
+      ],
+    },
+    {
+      label: 'Connect',
+      links: [
+        to('Events', ROUTES.events),
+        to('Future Interfaces Lab', ROUTES.futureInterfacesLab),
+        { ...to('Beyond Interfaces on YouTube', EXTERNAL.youtube), external: true },
+        to('Meet the authors', ROUTES.authors),
+      ],
+    },
+  ],
+  /* The two featured pieces leave Insights for the aside, as plain links. "Featured" is the
+     header's own label, not copy. Paths as the copy gives them (owner, 4 Nov 2026). */
+  aside: {
+    label: 'Featured',
+    links: [
+      to('Choosing a design partner', `${ROUTES.guides}/how-to-choose-a-product-design-agency`),
+      to('Vibe-coded app to production', `${ROUTES.insights}/vibe-coded-app-production-ready`),
+    ],
+  },
+  hub: to('All insights', ROUTES.insights),
+};
+
+/* No aside: three short groups take the whole plate, and the section has no index to send
+   anyone to. */
+const STUDIO: SiteNavItem = {
+  key: 'studio',
+  label: 'Studio',
+  form: 'mega',
+  groups: [
+    {
+      label: 'Who we are',
+      links: [to('About Tcules', ROUTES.about), to('Clients', ROUTES.clients)],
+    },
+    {
+      label: 'Why us',
+      links: [
+        to('Why Tcules', ROUTES.whyTcules),
+        to('How we design with AI', ROUTES.howWeWorkAiNative),
+      ],
+    },
+    {
+      label: 'Get in touch',
+      links: [
+        to('Careers', ROUTES.careers, 'Work with us in Ahmedabad'),
+        to('Contact', ROUTES.contact, 'hello@tcules.com'),
       ],
     },
   ],
 };
 
 /**
- * The three direct links. Each carries its children unrendered — see the header.
- *
- * Lab's children are the five sections of the Lab hub plus the design system, which has no nav
- * route of its own: it lives on the hub and in the footer. That is accepted and worth revisiting
- * if it turns into a lead source.
+ * Work navigates. Its children are carried unrendered — see the header of SiteNav's types.
  */
 const WORK: SiteNavItem = {
   key: 'work',
   label: 'Work',
   form: 'link',
   href: ROUTES.caseStudies,
-  matchPaths: [ROUTES.clients],
-  children: [soon('Case Studies', ROUTES.caseStudies), soon('Clients', ROUTES.clients)],
-};
-
-const LAB: SiteNavItem = {
-  key: 'lab',
-  label: 'Lab',
-  form: 'link',
-  href: ROUTES.futureInterfacesLab,
-  matchPaths: [ROUTES.matterDesignSystem],
-  children: [
-    soon('Experiments', ROUTES.labExperiments),
-    soon('Tools', ROUTES.labTools),
-    soon('Research', ROUTES.labResearch),
-    soon('Datasets', ROUTES.labDatasets),
-    soon('Programmes', ROUTES.labProgrammes),
-    soon('Matter Design System', ROUTES.matterDesignSystem),
-  ],
-};
-
-const ABOUT: SiteNavItem = {
-  key: 'about',
-  label: 'About',
-  form: 'link',
-  href: ROUTES.about,
-  /* Not /contact: the bar's own action, "Start a project", is the way there, so lighting About on
-     the enquiry page said the visitor was somewhere they were not (review 29 Oct). */
-  matchPaths: [ROUTES.team, ROUTES.careers, ROUTES.security],
-  children: [
-    soon('About', ROUTES.about),
-    soon('Team', ROUTES.team),
-    soon('Careers', ROUTES.careers),
-    soon('Security and Confidentiality', ROUTES.security),
-    soon('Contact', ROUTES.contact),
-  ],
+  children: [to('Case studies', ROUTES.caseStudies), to('Clients', ROUTES.clients)],
 };
 
 /**
- * The bar, in order, plus the two actions.
- *
- * `cta` is the offer and shows everywhere. `ctaSecondary` is the lighter way in and shows only in
- * the sheet's foot — a bar with two actions has no offer, it has a choice, which is the same
- * argument that keeps Request Free Audit a compact row in the desktop rail rather than a second
- * card. `/audits` as its destination is the spec's second open item, marked "to confirm".
+ * The bar, in order, and its one offer. "Request audit" left the header (owner, 4 Nov 2026), so
+ * the sheet's foot carries the offer alone.
  */
 const NAV: SiteNavProps = {
-  items: [SERVICES, WORK, EXPERTISE, INSIGHTS, LAB, ABOUT],
-  cta: { label: 'Start a project', href: ROUTES.contact, status: 'planned' },
-  ctaSecondary: { label: 'Request audit', href: ROUTES.audits, status: 'planned' },
+  items: [WORK, SERVICES, EXPERTISE, RESOURCES, STUDIO],
+  cta: { label: 'Start a project', href: ROUTES.contact, status: 'live' },
 };
 
 /* ── Footer ───────────────────────────────────────────────────────────────────────

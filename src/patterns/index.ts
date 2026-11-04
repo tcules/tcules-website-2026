@@ -133,9 +133,7 @@ export type {
   SiteNavItem,
   SiteNavLink,
   SiteNavGroup,
-  SiteNavCard,
-  SiteNavCardImage,
-  SiteNavRail,
+  SiteNavAside,
   SiteNavForm,
   SiteNavStatus,
 } from './SiteNav';
