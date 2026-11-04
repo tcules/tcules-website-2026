@@ -1,4 +1,5 @@
 import { Layout } from '@/components';
+import { cx } from '@/lib/cx';
 
 /* Bound as `Row`: the set's items are ListCard rows. (Also keeps classes:check from reading the
    stylesheet's path below as a member access on the component.) */
@@ -24,6 +25,14 @@ export type StepsProps = {
   steps: readonly Step[];
   /** The step titles' element. Default `h3`; `h4` when the set sits under an h3. */
   titleAs?: ListCardTitleElement;
+  /**
+   * `track` (default): the rules run the whole track, the titles at the title measure and the bodies
+   * at the lead measure (the composed bands). `reading`: the set is a block of an article's reading
+   * column, so it takes the column's one measure (--measure-body) whole: titles and bodies run to it
+   * and the rules end where the text can (4 Nov 2026, the tool pages: a title broke at 32ch and every
+   * rule ran on past a half-empty row).
+   */
+  measure?: 'track' | 'reading';
 };
 
 function warn(message: string) {
@@ -57,12 +66,16 @@ function warn(message: string) {
  *
  *   ROW COUNT. Two to five. The body budget per count is the caller's copy, stated on `Step.body`.
  */
-export function Steps({ steps, titleAs = 'h3' }: StepsProps) {
+export function Steps({ steps, titleAs = 'h3', measure = 'track' }: StepsProps) {
   if (steps.length < 2) warn('fewer than two steps is not a method.');
   if (steps.length > 5) warn(`received ${steps.length} steps; the designed maximum is five.`);
 
   return (
-    <Layout as="ol" rowGap="none" className={styles.steps}>
+    <Layout
+      as="ol"
+      rowGap="none"
+      className={cx(styles.steps, measure === 'reading' && styles.stepsReading)}
+    >
       {steps.map((step, index) => (
         <Row
           key={`${index}-${step.title}`}

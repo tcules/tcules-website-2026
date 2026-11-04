@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -74,12 +74,13 @@ render:
   band_order:
   - deliverables
   - method
-  - compare
+  - worked-example
+  - talk
   - selected-work
   - testimonials
-  - how-we-work-together
   - why-tcules
-  - industries
+  - after-the-audit
+  - compare
   - faq
   - enquiry
 page_composition:
@@ -155,89 +156,73 @@ method_governance:
 
 # Application modernisation assessment before you commit to a rebuild
 
-An application modernisation assessment is for the meeting where product wants a redesign, engineering wants a new platform and the customers who renew every year need Monday's work to carry on. Tcules reviews established software area by area and recommends what to keep, what to change and in what order.
+In about two days, at a fixed price, a senior designer and an engineer review one workflow and tell you what to keep, change or rebuild.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)*
 
-[Tell us which change is on the table](#enquiry)
+[Book a call](#enquiry)
+
+*Only need to know where users struggle? See the [UX & Product Audit](/audits/ux-product-audit).*
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get: a recommendation for every area of the product {#deliverables}
+## What you get from a modernisation assessment {#deliverables}
 
-The assessment starts with one workflow, such as running a report or setting up an account. In roughly two days we recommend what to do with it and name what must survive, and the price is fixed before work begins.
+- **Area-by-area answers.** Each part of the product gets one of five answers, from keep to rebuild.
 
-**What you receive**
+- **What must survive.** The workflows and habits customers rely on every day.
 
-- **A map of the product,** split into areas that could change on their own, each with one of five recommendations, from keeping it as it is to rebuilding or retiring it.
+- **The order of work.** What moves first, and which changes depend on others.
 
-- **What must survive,** such as workflows customers know by heart.
+- **Questions to answer first.** What to find out before you commit budget.
 
-- **The order of work,** including which changes depend on others.
+- **Ready for AI features.** Areas with the clean records and safe actions AI features need.
 
-- **The open questions,** and how to answer them before you commit.
+**Who does the work.** A senior designer leads; an engineer works alongside on the technical side.
 
-- **Which areas are ready for AI.** Where AI features or agents are on your roadmap, the map marks which areas already have the clean records, clear permissions and safe actions they need.
+**Where our part stops.** It's a recommendation; which way to go, and when, stays your decision.
 
-Here is a short extract from an area map.
+## How a modernisation assessment runs {#method}
+
+1. **Agree the workflow and the price.** One call, then analytics, support history, a few users to talk to and engineers' time.
+
+2. **Split the product into areas.** Parts that could change on their own, such as reporting or billing.
+
+3. **Learn what must survive.** What customers rely on, and what code, data and integrations allow.
+
+4. **Give each area its answer, set the order.** One of five answers per area, sequenced by dependency and risk.
+
+## What the report looks like {#worked-example}
+
+<!-- Small label above the heading: Example -->
 
 *Illustration, not client work*
 
-A fleet maintenance product has served depot managers and mechanics for over a decade. Sales says it demos as old. The largest customers have asked that nobody touch their work orders.
+A decade-old fleet-maintenance product demos as old, and its largest customers want their work orders left alone.
 
-| Area | How customers use it today | Recommendation | What must survive |
+| Area | How it's used today | Answer | What must survive |
 |---|---|---|---|
-| Work orders | Mechanics open them all day, mostly by keyboard | Keep | Every shortcut and the order of the fields |
-| Weekly planning | Managers export to spreadsheets to plan the week | Redesign | The printed weekly view managers pin up |
-| Reports | Built on a reporting library that is no longer supported | Move to a new platform | Every figure, matched before the switch |
-| Parts ordering | Repeats a supplier portal most customers now use | Retire | Past orders, still readable |
+| Work orders | Mechanics use them all day, mostly by keyboard | Keep | Every shortcut and the order of fields |
 | Settings | Grown into pages of options | Simplify | Permissions exactly as customers set them |
+| Weekly planning | Managers export to spreadsheets to plan | Redesign | The printed weekly view on the wall |
+| Reports | Built on an unsupported reporting library | New platform | Every figure, matched before the switch |
+| Parts ordering | Old code nobody can safely change | Rebuild or retire | Past orders, still readable |
 
-Reports move first, because the old library holds back every other change, and old and new run side by side until the figures match. Weekly planning follows. The open question for the client: whether the largest customers will take a new planning view in their renewal year.
+Reports move first, because the old library holds back every other change.
 
-**Who does the work.** A senior designer runs the assessment and is your main contact. One of our engineers works alongside for the technical review.
+**Keep.** It works, and customers know it by heart.
 
-**What we need from you.** Your analytics and support history, conversations with people who use the product, and time with your engineers on code limits, integrations and data.
+**Simplify.** Same workflow, fewer steps and clearer screens.
 
-**Where our part stops.** The assessment is a recommendation. Which way to go, and when, is your call, and the cost of the work itself is scoped once you have chosen.
+**Redesign.** The workflow itself changes.
 
-## How the software modernisation assessment runs {#method}
+**New platform.** New foundations underneath; the screens barely change.
 
-Modernisation plans tend to bundle four jobs, each with its own cost, its own risk and its own people who must agree. We pull them apart first.
+**Rebuild or retire.** Replaced in stages, or switched off.
 
-- **A technology upgrade.** New foundations underneath, which customers should barely notice.
+## Get a report like this for your product {#talk}
 
-- **A visual refresh.** The product looks current, and workflows stay as they are.
-
-- **A change to how the product works.** Workflows, navigation and structure change, so customers relearn something.
-
-- **A design system programme.** Shared components and rules, so later changes stay consistent.
-
-We drew this split from modernising Benchmark Gensuite's suite, where telling visual improvements apart from interaction changes set the order of work. Then the legacy application assessment itself:
-
-1. **Map the product into areas.** We split it into parts that could change on their own, such as reporting, account setup or billing.
-
-2. **Learn what customers rely on.** Analytics, support history, existing research and conversations with users show which habits and workflows have to survive.
-
-3. **Review the technical side with your engineers.** One of our engineers works through code limits, integrations and data with yours, and the rules, records, permissions and audit trails each area carries.
-
-4. **Recommend one of five answers for each area.** We weigh what each area does against what changing it would cost customers: relearning, data to migrate, and old and new running side by side.
-
-5. **Set the order of work.** We sequence by dependency and risk, and name the open questions to answer before you commit.
-
-## Redesign or rebuild? The five answers an area can get {#compare}
-
-Every area gets one of five answers. The table shows what each changes for customers and when it fits.
-
-| Answer | What changes for customers | Best for |
-|---|---|---|
-| **Keep** | Nothing | Areas that work and that customers know well |
-| **Simplify** | Fewer steps and clearer screens, with the workflow kept | Areas that work but have collected clutter |
-| **[Redesign](/services/product-modernisation/product-redesign)** | How the workflow runs, its navigation and its structure | Areas where the workflow itself causes the trouble |
-| **[Move to a new platform](/services/product-modernisation/replatforming-product-design)** | Little, if the move is well planned, while the foundations change underneath | Areas where old technology blocks change and the design still works |
-| **[Rebuild or retire](/services/product-modernisation/legacy-software-modernisation)** | Most of that area, replaced in planned stages, or switched off | Areas that fight every change, or no longer do a useful job |
-
-If you only need to know where users struggle, a [UX & Product Audit](/audits/ux-product-audit) is more focused.
+[Book a call](#enquiry)
 
 ## Selected modernisation work {#selected-work}
 
@@ -269,47 +254,46 @@ In Dealpath's deal-management software, research pointed to one listing action o
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Why founders and product teams choose Tcules {#why-tcules}
 
-After the assessment, your team can take the plan forward alone, or our designers and engineers can modernise the first area with you through [Product Modernisation](/services/product-modernisation).
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+[See why teams choose Tcules →](/why-tcules)
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+## After the assessment {#after-the-audit}
 
-## Why teams choose Tcules {#why-tcules}
+Your team can take the plan forward, or our designers and engineers can modernise the first area with you through [Product Modernisation](/services/product-modernisation). [See how we work →](/how-we-work)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+## Other ways to start {#compare}
 
-- **We tell you what is really wrong.** At Omny AI, a trust problem traced back to one default that filled the content area before anyone chose, so our redesign made each suggestion a deliberate click. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
-
-- **We work out what the product has to know before we draw it.** Before changing four of Scissors' staffing workflows, from onboarding to job creation, we mapped how clients, candidates, jobs and talent pools relate to one another. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
-
-- **We know what to leave alone in a product people rely on.** At Gold Image Printing, we watched staff work in the existing production system before proposing changes, and designed the store and that system together to fit what the business already runs. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
-
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
-
-## Industries we know well {#industries}
-
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech)
+| Option | Best for | What you get |
+|---|---|---|
+| [UX & Product Audit](/audits/ux-product-audit) | Users struggle, but the product works | Where customers get stuck, and why |
+| [Product redesign](/services/product-modernisation/product-redesign) | Teams that agree what must change | Workflows redesigned and tested with users |
+| [Move to a new platform](/services/product-modernisation/replatforming-product-design) | Old technology holding back new work | New foundations, with the screens customers know kept |
+| [Legacy software modernisation](/services/product-modernisation/legacy-software-modernisation) | Software that fights every change | The product rebuilt in planned stages |
 
 ## Questions about an application modernisation assessment {#faq}
 
 ### Should we redesign, modernise or rebuild our legacy software?
 
 Usually a mix, chosen area by area. Many products need a redesign in one place, a new platform under another and no change at all in a third. The assessment gives each area its own answer, so the whole product never has to take one.
+
+### What counts as modernisation?
+
+Usually four jobs bundled together: a technology upgrade, a visual refresh, a change to how the product works, and a design system programme. Each has its own cost and risk, so we pull them apart first.
 
 ### Will you recommend a rebuild?
 
@@ -345,6 +329,6 @@ Share the product, what's driving the change and any options already on the tabl
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

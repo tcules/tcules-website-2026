@@ -65,6 +65,16 @@ navigation:
     url: /tools
   - name: Audit, Redesign, Modernise or Rebuild worksheet
     url: /tools/audit-redesign-modernise-rebuild
+  section_labels:
+    how-to-use-it: Four steps
+    pick-one-part: Pick one part
+    example: Worked example
+    workspace: Seven routes
+    cost: Cost of the move
+    reading-your-results: Marking routes
+    who-its-for: Who it suits
+    next: Audit first
+    faq: FAQs
 render:
   band_order:
   - how-to-use-it

@@ -23,6 +23,8 @@
   --lix-section-title-tracking: var(--text-h2-tracking);
   /* The count beside "Show more": the label voice. */
   --lix-count-text: var(--text-eyebrow);
+  /* The lead's words and a section's note: the body measure, as every reading column. */
+  --lix-note-measure: var(--measure-body);
   --lix-count-tracking: var(--text-eyebrow-tracking);
 }
 

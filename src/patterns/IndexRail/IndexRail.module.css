@@ -124,6 +124,22 @@
   cursor: pointer;
 }
 
+/* The phone bar's lead where there is no switch (one view): the rail's label in its mono voice.
+   From 1024 the label stands over the list instead, so this one is not drawn. */
+.barLabel {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .barLabel {
+    display: block;
+    font: var(--irl-label-text);
+    letter-spacing: var(--irl-label-tracking);
+    text-transform: var(--text-mono-case);
+    color: var(--irl-label-ink);
+  }
+}
+
 .toggleLabel {
   overflow: hidden;
   text-align: end;

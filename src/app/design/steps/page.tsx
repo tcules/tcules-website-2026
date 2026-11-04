@@ -70,6 +70,12 @@ export default function StepsSpecimenPage() {
           <Specimen title="stress · a long title, a one-word body, a title alone">
             <Steps steps={STRESS} />
           </Specimen>
+          <Specimen
+            title='measure="reading" · a block of an article reading column (the tool pages)'
+            note="The set takes the column's one measure (--measure-body): titles and bodies run to it, and the rules end where the text can, never past a half-empty row (4 Nov 2026)."
+          >
+            <Steps measure="reading" steps={FIVE} />
+          </Specimen>
         </Layout>
       </Section>
     </>

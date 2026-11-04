@@ -214,6 +214,9 @@
   --lcrd-ring-offset: var(--focus-ring-offset);
   --lcrd-transition-duration: var(--duration-fast);
   --lcrd-transition-easing: var(--easing-standard);
+  /* The row's end arrow (`cue="arrow"`, owner 4 Nov 2026, the glossary's term rows): how far it moves
+     on hover. A hover move, not a layout distance — the ramp, said so here as button.css does. */
+  --lcrd-cue-shift: var(--space-4); /* optical: the hover move */
 }
 
 /* The md correction re-measured at the h4 role's breakpoint steps (final fix round, 6 Oct 2026),
@@ -249,6 +252,7 @@
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.92:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+  --lcrd-cue-ink: var(--color-neutral-600); /* 4.92:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --lcrd-ground-hover: var(--color-paper-deep); /* a boxed linked tile only */
@@ -270,6 +274,7 @@
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.39:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+  --lcrd-cue-ink: var(--color-neutral-600); /* 4.39:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-100);
@@ -293,6 +298,7 @@
   --lcrd-neutral-number-ink: var(--color-neutral-500); /* 5.41:1 */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
+  --lcrd-cue-ink: var(--color-neutral-400); /* 8.05:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-900);
@@ -314,6 +320,7 @@
   --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
+  --lcrd-cue-ink: var(--color-brandeis-100); /* 4.91:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
   --lcrd-thumbnail-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --lcrd-ground-hover: var(--color-brandeis-600);

@@ -134,13 +134,13 @@ export default async function CorpusPageIndex() {
         ) : null}
 
         <Layout rowGap="block">
-          <h2>ToolPage</h2>
+          <h2>LongformPage, tool</h2>
           <Layout as="ul" rowGap="none">
             {tools.map((page) => (
               <ListCard
                 key={page.route}
                 title={page.route}
-                body={`${page.pageType} · ${page.bands.length} bands: the instructions beside the tool's shot, the tool's place, two boxed tables that teach a reader to read its output, a limits note, a close.`}
+                body={`${page.pageType} · ${page.bands.length} bands: the hero with its one action to the worksheet, then every band in one shell beside the outline: the bold-led method as Steps, the worksheet as a boxed table (#workspace), the worked example as the tint example panel with its story drawing beside the words, a diagram plate after the words it explains, the FAQ last.`}
                 titleAs="h3"
                 href={designCorpusPagePath(fileSlug(page.route))}
               />

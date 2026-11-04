@@ -64,7 +64,7 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Request a call
+  submit_label: Get your AI feature designed
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
     heading: Thanks. Your request has reached us.
@@ -333,7 +333,7 @@ No. Tcules adds a confidence score where it is reliable and bears on what the pe
 
 Look for a studio that has designed AI inside real products and can show you the review, override and undo screens as well as the chat. Tcules has designed AI features for ConnectX, BuildTwin, Omny AI, Novus Insights and Eden AI, and each case shows the screens and the choices behind them.
 
-## Tell us what your AI should do for users {#enquiry}
+## Shape the AI before your users rely on it {#enquiry}
 
 Share the task, what the AI does today and where users hesitate.
 
@@ -343,6 +343,6 @@ Share the task, what the AI does today and where users hesitate.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
+**Submit:** Get your AI feature designed
 
 **After sending:** We'll reply within one business day to arrange the call.

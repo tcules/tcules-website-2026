@@ -109,6 +109,14 @@ export type StatementProps = {
    * and action are unchanged inside it.
    */
   island?: IslandSurface;
+  /**
+   * A picture BESIDE the sentence (4 Nov 2026, the glossary's term pages): the item's own flat
+   * drawing on its plate, composed by the caller. With it the band is a split, the sentence in its
+   * column and the figure in the other, a `section` (96) apart from 1024 — two regions of different
+   * kind — and the figure under the sentence below it. Start-aligned only; decorative (aria-hidden),
+   * the sentence carries the meaning. Absent, the band is unchanged.
+   */
+  figure?: ReactNode;
 };
 
 /**
@@ -141,6 +149,7 @@ export function Statement({
   align = 'start',
   graphic,
   island,
+  figure,
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
@@ -169,6 +178,28 @@ export function Statement({
     >
       {children}
     </Tag>
+  );
+
+  /* One column either way. The eyebrow-to-sentence seam is the head rhythm's `block`, the
+     sentence-to-action seam the band's `stack`. Centred, Layout centres each part on the field's
+     axis; start-aligned, every part keeps the start edge. */
+  const words = (
+    <Layout rowGap="stack" justifyItems={centred ? 'center' : undefined}>
+      <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
+        {graphic ? (
+          <div className={styles.graphic} aria-hidden="true">
+            {graphic}
+          </div>
+        ) : null}
+        {eyebrow ? (
+          <p className={styles.eyebrow} data-copy="eyebrow">
+            {eyebrow}
+          </p>
+        ) : null}
+        {sentence}
+      </Layout>
+      {actions ?? null}
+    </Layout>
   );
 
   const content = (
@@ -200,25 +231,22 @@ export function Statement({
       ) : null}
       {cornered ? <TextureCorner /> : null}
       {paired ? <TextureCorner at="bottom-start" /> : null}
-      {/* One column either way. The eyebrow-to-sentence seam is the head rhythm's `block`, the
-          sentence-to-action seam the band's `stack`. Centred, Layout centres each part on the
-          field's axis; start-aligned, every part keeps the start edge. */}
-      <Layout rowGap="stack" justifyItems={centred ? 'center' : undefined}>
-        <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
-          {graphic ? (
-            <div className={styles.graphic} aria-hidden="true">
-              {graphic}
-            </div>
-          ) : null}
-          {eyebrow ? (
-            <p className={styles.eyebrow} data-copy="eyebrow">
-              {eyebrow}
-            </p>
-          ) : null}
-          {sentence}
+      {/* With a figure, the split: the words in one column, the drawing in the other. */}
+      {figure && !centred ? (
+        <Layout
+          columns={{ base: 1, lg: [1, 1] }}
+          colGap="section"
+          rowGap="stack"
+          align="center"
+        >
+          {words}
+          <div className={styles.figure} aria-hidden="true">
+            {figure}
+          </div>
         </Layout>
-        {actions ?? null}
-      </Layout>
+      ) : (
+        words
+      )}
     </>
   );
 

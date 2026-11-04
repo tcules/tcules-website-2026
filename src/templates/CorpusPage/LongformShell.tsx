@@ -1,18 +1,37 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, Prose, Section } from '@/components';
-import { Accordion, DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
+import { Layout, Media, Prose, Section, Sketch } from '@/components';
+import {
+  Accordion,
+  CtaRow,
+  DataTable,
+  ListCard,
+  Steps,
+  TableOfContents,
+  type TocItem,
+} from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
 import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
+import { type SketchName } from '@/lib/sketches';
 
 import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
+import { ExamplePanel, scenarioParts } from './CopyBands';
 import { isFaqBand } from './order';
 import styles from './CorpusPage.module.css';
-import { html, plain, trimStart } from './text';
+import {
+  boldLead,
+  html,
+  labelTitle,
+  labelWithoutArrow,
+  linkLead,
+  plain,
+  trimStart,
+} from './text';
 
 /**
  * The long-form argument: a run of sections in ONE shell, a table-of-contents rail beside a reading
@@ -45,6 +64,37 @@ export function stepsOf(items: readonly InlineRun[][]) {
   });
   return steps.every(Boolean) ? (steps as NonNullable<(typeof steps)[number]>[]) : null;
 }
+
+/**
+ * A numbered list whose items each open on a bold lead ("**Choose one use case.** …"): the lead is the
+ * step's title, the rest its body (a tool's method, 4 Nov 2026). Read only where the shell is asked to
+ * (`tool`), so an article's or a term's bold-led list keeps the flow it has today.
+ */
+export function boldStepsOf(items: readonly InlineRun[][]) {
+  const steps = items.map((runs) => {
+    const lead = boldLead(runs);
+    return lead ? { title: labelTitle(lead.label), ...bodyOf(lead.body) } : null;
+  });
+  return steps.length >= 2 && steps.every(Boolean)
+    ? (steps as NonNullable<(typeof steps)[number]>[])
+    : null;
+}
+
+/**
+ * What a TOOL's argument adds to the shell (LongformPage family "tool", 4 Nov 2026; the tools
+ * shape-off): its bold-led method as Steps, its worked example as the example panel with the story's
+ * drawing beside the words, and a flat diagram after the paragraph that names what it shows. Keyed by
+ * band id; a scene not drawn yet shows its empty plate.
+ */
+export type ToolShell = {
+  /** The worked example's story scene, by the band that holds "Illustration, not client work". */
+  stories: Readonly<Record<string, SketchName>>;
+  /**
+   * A diagram after the first paragraph containing `after`, or after the first table whose head names
+   * it, where a band is its table alone (the trust canvas's reading table).
+   */
+  diagrams: Readonly<Record<string, { after: string; scene: SketchName }>>;
+};
 
 const COUNTS: Readonly<Record<string, number>> = { two: 2, three: 3, four: 4, five: 5 };
 
@@ -84,6 +134,19 @@ function withMethods(blocks: readonly CorpusBlock[]): Item[] {
     }
   }
   return out;
+}
+
+/**
+ * A paragraph that names a tool's marks: it tells the reader to mark each item and quotes three or
+ * more marks ('Mark each item "demonstrated", "simulated", "unknown" or "not applicable"'). The tool
+ * shell's rule is that a diagram follows it (treatment rules, 4 Nov 2026); a tool page whose marks
+ * paragraph has no scene registered warns in development, so a gap shows in the build rather than
+ * passing silently (tools critic, 4 Nov 2026).
+ */
+function namesMarks(text: string): boolean {
+  return (
+    /^(Mark|Give)\b/.test(text.trim()) && (text.match(/["“][^"”]+["”]/g) ?? []).length >= 3
+  );
 }
 
 /* ── Diagram slots ────────────────────────────────────────────────────────────── */
@@ -127,9 +190,12 @@ export function ArticleSection({
   page,
   band,
   seen = new Set([page.route]),
+  tool,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** A tool's additions (`ToolShell`): bold-led steps, the example panel, a diagram plate. */
+  tool?: ToolShell;
   /**
    * The case pages already linked earlier in the argument (and the page's own route), so a case the
    * prose names links at its FIRST mention only (owner, 11 Oct 2026: every case mention links to its
@@ -143,6 +209,47 @@ export function ArticleSection({
   const items = withMethods(band.blocks.filter((block) => block.type !== 'comment'));
   const diagramAt = diagramIndex(page, band, items);
   const isFaq = isFaqBand(band);
+  const toolDiagram = tool?.diagrams[band.id];
+  const toolDiagramAt = toolDiagram
+    ? items.findIndex(
+        (item) =>
+          (item.type === 'paragraph' && plain(item.runs).includes(toolDiagram.after)) ||
+          (item.type === 'table' &&
+            item.header.some((cell) => plain(cell).includes(toolDiagram.after))),
+      )
+    : -1;
+  /* A tool whose marks paragraph has no diagram anywhere on the page: the gap the registry must fill. */
+  if (
+    tool &&
+    !isFaq &&
+    Object.keys(tool.diagrams).length === 0 &&
+    process.env.NODE_ENV !== 'production'
+  ) {
+    const marks = items.find(
+      (item) => item.type === 'paragraph' && namesMarks(plain(item.runs)),
+    );
+    if (marks) {
+      console.warn(
+        `ArticleSection: ${page.route}#${band.id} names its marks ("${plain(
+          (marks as Extract<Item, { type: 'paragraph' }>).runs,
+        ).slice(0, 60)}…") but has no diagram; register its scene in LongformPage TOOL_SCENES.`,
+      );
+    }
+  }
+  if (tool) {
+    const example = scenarioParts(band.blocks.filter((block) => block.type !== 'comment'));
+    if (example.label) {
+      return (
+        <ToolExample
+          band={band}
+          label={example.label}
+          before={example.before}
+          scenario={example.scenario}
+          scene={tool.stories[band.id]}
+        />
+      );
+    }
+  }
 
   let mediaAfter = -1;
   if (binding) {
@@ -154,6 +261,29 @@ export function ArticleSection({
         if (item.type === 'paragraph') mediaAfter = index;
       });
     }
+  }
+
+  const terms = relatedTerms(band);
+  if (terms) {
+    return (
+      <Layout as="section" id={band.id} aria-labelledby={headingIdOf(band)} rowGap="block">
+        <h2 id={headingIdOf(band)}>{band.headingText}</h2>
+        {/* The hub's term row exactly (ListingIndex/glossary.tsx TermRow): the term, then the
+            words for it, one term a row. */}
+        <Layout as="ul" columns={{ base: 1 }} rowGap="none">
+          {terms.map((term) => (
+            <ListCard
+              key={term.href}
+              titleAs="h3"
+              cue="arrow"
+              title={term.title}
+              body={term.body}
+              href={term.href}
+            />
+          ))}
+        </Layout>
+      </Layout>
+    );
   }
 
   const out: ReactNode[] = [];
@@ -173,10 +303,18 @@ export function ArticleSection({
         flow += `<p><strong>${inlineToHtml(item.label)}</strong> ${inlineToHtml(item.body)}</p>`;
         break;
       case 'list': {
-        const steps = item.ordered ? stepsOf(item.items) : null;
+        const steps = item.ordered
+          ? (stepsOf(item.items) ?? (tool ? boldStepsOf(item.items) : null))
+          : null;
         if (steps) {
           flush();
-          out.push(<Steps key={`steps-${out.length}`} steps={steps} />);
+          out.push(
+            <Steps
+              key={`steps-${out.length}`}
+              steps={steps}
+              {...(tool ? { measure: 'reading' as const } : {})}
+            />,
+          );
         } else {
           flow += listHtml(item);
         }
@@ -184,7 +322,13 @@ export function ArticleSection({
       }
       case 'methods':
         flush();
-        out.push(<Steps key={`methods-${out.length}`} steps={item.steps} />);
+        out.push(
+          <Steps
+            key={`methods-${out.length}`}
+            steps={item.steps}
+            {...(tool ? { measure: 'reading' as const } : {})}
+          />,
+        );
         break;
       case 'table':
         flush();
@@ -193,6 +337,14 @@ export function ArticleSection({
             key={`table-${out.length}`}
             table={item}
             labelledBy={headingIdOf(band)}
+            term={page.pageType === 'defined_term' ? page.name : undefined}
+            /* A tool's worksheet reads down on a phone, and so does a TERM's table (glossary critic,
+               4 Nov 2026): its comparison's point is the term's own column, and scrolled it was the
+               one cut, behind a fade at 390. Below 768 each row is one block, every column's value
+               under its head, the term's head in the pick ink. */
+            {...(tool || page.pageType === 'defined_term'
+              ? { narrow: 'read-down' as const }
+              : {})}
           />,
         );
         break;
@@ -210,7 +362,30 @@ export function ArticleSection({
         if (!isFaq)
           flow += `<h${item.level}>${inlineToHtml(item.heading)}</h${item.level}>${blocksHtml(item.blocks)}`;
         break;
-      case 'links':
+      /* A lone link line where the author set it, as the link button with its arrow (4 Nov 2026:
+         "See how we use AI →" was dropped here, so the shortest glossary page lost its one way
+         onward). The copy's own arrow goes; the button draws one. */
+      case 'links': {
+        const [first, second, ...more] = item.links.map((link) => ({
+          label: labelWithoutArrow(link.labelText),
+          href: link.href,
+        }));
+        if (!first) break;
+        if (more.length > 0) {
+          /* A row of three or more links stays words in the flow: a button row holds two. */
+          flow += `<p>${item.links.map((link) => inlineToHtml([{ type: 'link', href: link.href, children: link.label }])).join(' · ')}</p>`;
+          break;
+        }
+        flush();
+        out.push(
+          <CtaRow
+            key={`links-${out.length}`}
+            rule={false}
+            actions={second ? [first, second] : [first]}
+          />,
+        );
+        break;
+      }
       case 'form':
         break;
     }
@@ -228,6 +403,18 @@ export function ArticleSection({
           image={placeholderImage(page.route, band.id)}
           sizes={FULL_COLUMN}
         />,
+      );
+    }
+    /* A tool's diagram: the flat drawing on its plate at the page's one drawing scale (the worked
+       example's plate width, centred in the column from 1440; tools critic, 4 Nov 2026). */
+    if (toolDiagram && index === toolDiagramAt) {
+      flush();
+      out.push(
+        <Layout key={`plate-${out.length}`} className={styles.diagram} justifyItems="center">
+          <div className={styles.diagramPlate}>
+            <Sketch name={toolDiagram.scene} />
+          </div>
+        </Layout>,
       );
     }
   });
@@ -250,12 +437,150 @@ export function ArticleSection({
   );
 }
 
-export function CorpusTable({ table, labelledBy }: { table: TableBlock; labelledBy: string }) {
+/** A tool example's words: paragraphs and lists as Prose at the measure, a table boxed. */
+function exampleFlow(
+  blocks: readonly CorpusBlock[],
+  labelledBy: string,
+  /** Inside the example panel, whose ground bounds a table (CorpusTable `bounded`). */
+  inPanel = false,
+): ReactNode[] {
+  const out: ReactNode[] = [];
+  let flow = '';
+  const flush = () => {
+    if (flow)
+      out.push(<Prose key={`prose-${out.length}`} html={flow} className={styles.reading} />);
+    flow = '';
+  };
+  for (const block of blocks) {
+    if (block.type === 'paragraph') flow += html(block.runs);
+    else if (block.type === 'list') flow += listHtml(block);
+    else if (block.type === 'table') {
+      flush();
+      out.push(
+        <CorpusTable
+          key={`table-${out.length}`}
+          table={block}
+          labelledBy={labelledBy}
+          narrow="read-down"
+          bounded={inPanel}
+        />,
+      );
+    }
+  }
+  flush();
+  return out;
+}
+
+/**
+ * A tool's worked example ("Illustration, not client work") as ONE panel on its own ground (owner,
+ * 2 Nov 2026): any words before the label stay in the column; in the panel, the label and the
+ * scenario's words beside the story's drawing from 1440 (stacked below, where the column is too narrow
+ * for two halves), then any table the example carries at the panel's full width.
+ */
+function ToolExample({
+  band,
+  label,
+  before,
+  scenario,
+  scene,
+}: {
+  band: CorpusBand;
+  label: string;
+  before: readonly CorpusBlock[];
+  scenario: readonly CorpusBlock[];
+  scene?: SketchName;
+}) {
+  const labelledBy = headingIdOf(band);
+  const firstTable = scenario.findIndex((block) => block.type === 'table');
+  const words = firstTable < 0 ? scenario : scenario.slice(0, firstTable);
+  const tail = firstTable < 0 ? [] : scenario.slice(firstTable);
+  return (
+    <Layout as="section" id={band.id} aria-labelledby={labelledBy} rowGap="block">
+      <h2 id={labelledBy}>{band.headingText}</h2>
+      {exampleFlow(before, labelledBy)}
+      <ExamplePanel intro={[]} labelledBy={labelledBy}>
+        <Layout rowGap="stack">
+          <Layout
+            columns={{ base: 1, xl: [1, 1] }}
+            colGap="section"
+            rowGap="stack"
+            align="center"
+          >
+            <Layout rowGap="block">
+              <p className={styles.legend}>{label}</p>
+              {exampleFlow(words, labelledBy, true)}
+            </Layout>
+            <Sketch name={scene} />
+          </Layout>
+          {tail.length > 0 ? (
+            <Layout rowGap="block">{exampleFlow(tail, labelledBy, true)}</Layout>
+          ) : null}
+        </Layout>
+      </ExamplePanel>
+    </Layout>
+  );
+}
+
+/**
+ * The column of a comparison whose head names the page's own term ("Governance" on the governance
+ * page), or -1. Only a table whose first head cell names something can be one: a blank corner is a
+ * keyed table's.
+ */
+function termColumn(table: TableBlock, term: string | undefined): number {
+  if (!term || !plain(table.header[0] ?? []).trim()) return -1;
+  const name = term.toLowerCase();
+  return table.header.findIndex((cell) => {
+    const head = plain(cell).trim().toLowerCase();
+    return head.length > 0 && (head === name || name.endsWith(` ${head}`));
+  });
+}
+
+/**
+ * A corpus table. Read across rows, its first column is the row key (DataTable's key column). A
+ * COMPARISON of the page's term with its neighbours (4 Nov 2026, the glossary: "Style guide ·
+ * Component library · Design system") has no key: its head row is the things compared and its rows
+ * are sentences across them, so every column is a peer and the column naming the page's term is
+ * picked. Keying it set every cell of the first neighbour bold, as if it were the others' headings.
+ */
+export function CorpusTable({
+  table,
+  labelledBy,
+  term,
+  narrow,
+  bounded = false,
+}: {
+  table: TableBlock;
+  labelledBy: string;
+  /** On a ground that already bounds it, the tool's example panel (DataTable `bounded`). */
+  bounded?: boolean;
+  /** DataTable's phone reading: a tool's worksheet reads down (4 Nov 2026); else the table scrolls. */
+  narrow?: 'scroll' | 'read-down';
+  /** The page's defined term, on a glossary page: a table comparing it with its peers is keyless. */
+  term?: string;
+}) {
+  const pick = termColumn(table, term);
+  if (pick >= 0) {
+    return (
+      <DataTable
+        labelledBy={labelledBy}
+        columns={table.header.map((cell) => ({ heading: plain(cell) }))}
+        pickColumn={pick}
+        bounded={bounded}
+        {...(narrow ? { narrow } : {})}
+        rows={table.rows.map((row) => ({
+          header: plain(row[0] ?? []),
+          cellsHtml: table.header.map((_, index) => inlineToHtml(row[index] ?? [])),
+        }))}
+      />
+    );
+  }
   const [key = [], ...columns] = table.header;
   return (
     <DataTable
       labelledBy={labelledBy}
       keyColumn={{ heading: plain(key) }}
+      bounded={bounded}
+      {...(narrow ? { narrow } : {})}
       columns={columns.map((cell) => ({ heading: plain(cell) }))}
       rows={table.rows.map((row) => ({
         header: plain(row[0] ?? []),
@@ -275,15 +600,23 @@ export function CorpusTable({ table, labelledBy }: { table: TableBlock; labelled
 export function ArticleShell({
   page,
   sections,
+  tool,
 }: {
   page: CorpusPage;
   sections: readonly CorpusBand[];
+  /** A tool page's additions to the column (`ToolShell`). Absent: the article's column as it was. */
+  tool?: ToolShell;
 }) {
   /* One set for the whole argument: a case links at its first mention, never on the page's own. */
   const seen = new Set<string>([page.route]);
   const outline: TocItem[] = sections
     .filter((band) => band.headingText !== '')
-    .map((band) => ({ label: band.headingText, href: `#${headingIdOf(band)}` as const }));
+    /* The section's short navigation label where the copy authors one (`navigation.section_labels`),
+       so the rail reads as a list of names rather than wrapped headings; else the heading. */
+    .map((band) => ({
+      label: band.navLabel ?? band.headingText,
+      href: `#${headingIdOf(band)}` as const,
+    }));
   return (
     <div data-fold-exempt="Long-form argument: a document read by scrolling beside its outline (page-mapping M19).">
       <Section as="div" surface="paper" data-band="long-form">
@@ -296,11 +629,36 @@ export function ArticleShell({
           {outline.length >= 2 ? <TableOfContents items={outline} /> : null}
           <Layout as="article" rowGap="stack">
             {sections.map((band) => (
-              <ArticleSection key={band.id} page={page} band={band} seen={seen} />
+              <ArticleSection key={band.id} page={page} band={band} seen={seen} tool={tool} />
             ))}
           </Layout>
         </Layout>
       </Section>
     </div>
   );
+}
+
+/**
+ * A section that is only `[Term](/glossary/…): definition` lines (a term page's "Terms related to
+ * …"): the hub's term rows, each related term titled by its link and told by this section's own
+ * words for it. No drawings: the words carry the meaning (owner, 4 Nov 2026). Null for any other
+ * section.
+ */
+type RelatedTerm = { title: string; body: string; href: string };
+
+function relatedTerms(band: CorpusBand): RelatedTerm[] | null {
+  const live = band.blocks.filter((block) => block.type !== 'comment');
+  if (live.length < 2) return null;
+  const items: RelatedTerm[] = [];
+  for (const block of live) {
+    const lead = linkLead(block);
+    if (!lead || !lead.link.href.startsWith(`${ROUTES.glossary}/`)) return null;
+    const body = plain(lead.body).trim();
+    items.push({
+      title: plain(lead.link.children),
+      body: body.charAt(0).toUpperCase() + body.slice(1),
+      href: lead.link.href,
+    });
+  }
+  return items;
 }

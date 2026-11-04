@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: UX Debt
     url: /glossary/ux-debt
+  section_labels:
+    practice: Examples
+    debt-types: Vs technical debt
+    comparison: Vs inconsistency
+    measure: Measuring it
+    faq: FAQs
+    next: Find the cause
 render:
   band_order:
   - practice

@@ -1,4 +1,4 @@
-import { Icon, Layout, Section, type SectionSurface } from '@/components';
+import { Icon, Island, Layout, Section, type SectionSurface } from '@/components';
 import { auditPath, ROUTES, servicePath } from '@/lib/routes';
 import { DataTable, type DataTableProps, type DataTableRow } from '@/patterns';
 
@@ -444,6 +444,42 @@ const NODE_TABLE: DataTableProps = {
   ],
 };
 
+/* The longest peer comparison the glossary authors (/glossary/design-system), verbatim. */
+const PEERS: DataTableProps = {
+  caption: 'Design system vs component library and style guide',
+  columns: [
+    { heading: 'Style guide' },
+    { heading: 'Component library' },
+    { heading: 'Design system' },
+  ],
+  rows: [
+    {
+      header: 'What it holds',
+      cellsHtml: [
+        'Visual rules such as colour, type, logo use and tone of voice',
+        'Reusable interface components',
+        'Foundations, components, patterns, design files, code, guidance and rules for change',
+      ],
+    },
+    {
+      header: 'What it answers',
+      cellsHtml: [
+        'Answers how the product should look and sound',
+        'Answers how a shared element looks and works',
+        'Also answers what belongs in the shared layer, how it changes and how products adopt it',
+      ],
+    },
+    {
+      header: 'What it needs',
+      cellsHtml: [
+        'Often a document or a page of examples',
+        'Can exist without a way to contribute or migrate',
+        'Needs ownership and a route from change to the products that use it',
+      ],
+    },
+  ],
+};
+
 export default function DataTableSpecimenPage() {
   return (
     <>
@@ -499,6 +535,18 @@ export default function DataTableSpecimenPage() {
             />
           </Specimen>
           <Specimen
+            title="Keyless peers · no keyColumn"
+            note="A comparison whose head row IS the things compared and whose rows are sentences across them (the glossary, 4 Nov 2026): no column is a row label, so every cell is set alike under its own head."
+          >
+            <DataTable {...PEERS} />
+          </Specimen>
+          <Specimen
+            title="Keyless peers, the page's own column picked · pickColumn"
+            note="The row pick turned a quarter: the column naming the page's own term takes the blue ground, its head in blue with a bar across its top. Never reorders the columns."
+          >
+            <DataTable {...PEERS} pickColumn={2} />
+          </Specimen>
+          <Specimen
             title="Named by the heading above it · labelledBy"
             note="A corpus table sits under its band’s own h2, so a visible caption would print the heading twice. labelledBy names the scroll region and the table by that heading’s id, with no caption. Without a caption or labelledBy the region is named by the key column’s head."
           >
@@ -544,6 +592,51 @@ export default function DataTableSpecimenPage() {
                     header: 'What we delivered',
                     cellsHtml: ['Coded prototypes of the shared patterns.'],
                   },
+                ]}
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="A record as a spec sheet · appearance=&quot;sheet&quot;"
+            note="A key and one value read down the rows, drawn as the spec sheet EngagementOptions sets for an option's facts: the key in the mono label voice in a narrow share, the value beside it, one rule above the set, no frame, no fill and no grid. The head row is out of sight, its words still read by a screen reader. The audits' 'What the report looks like' (4 Nov 2026, proposed)."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-sheet">One finding</h3>
+              <DataTable
+                appearance="sheet"
+                labelledBy="dt-sheet"
+                keyColumn={{ heading: 'Field' }}
+                columns={[{ heading: 'The finding' }]}
+                rows={[
+                  { header: 'What happens', cellsHtml: ['A sample button always opens a new record'] },
+                  { header: 'Who it affects', cellsHtml: ['The teams who file the records'] },
+                  { header: 'Why it matters', cellsHtml: ['One item can become two records'] },
+                  { header: 'How sure we are', cellsHtml: ['Confirmed: the button offers no other route'] },
+                  { header: 'What to do next', cellsHtml: ['Find the existing record first'] },
+                ]}
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="A sheet with the row the reading turns on picked · appearance=&quot;sheet&quot; + pick"
+            note="The trace's one point: the row whose value opens on a bold run takes the pick (blue ground, start bar), as /why-tcules marks its row. The pick gains an inset of its own so the ground does not butt the words."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-sheet-pick">One component, traced</h3>
+              <DataTable
+                appearance="sheet"
+                labelledBy="dt-sheet-pick"
+                keyColumn={{ heading: 'Where we looked' }}
+                columns={[{ heading: 'What we found' }]}
+                rows={[
+                  { header: 'The product need', cellsHtml: ['A date, a time window, sometimes repeats'] },
+                  {
+                    header: 'Figma',
+                    cellsHtml: ['<p><strong>Breaks here first.</strong> Date only</p>'],
+                    pick: true,
+                  },
+                  { header: 'Code', cellsHtml: ['Matches Figma; two local copies'] },
+                  { header: 'The live product', cellsHtml: ['Three versions'] },
                 ]}
               />
             </Layout>
@@ -690,6 +783,43 @@ export default function DataTableSpecimenPage() {
                   <DataTable {...NUMERIC} />
                   <DataTable {...MONO_KEY} />
                 </Layout>
+              </div>
+            </Specimen>
+          </Layout>
+          <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+            <Specimen
+              title='Read down below 768 · narrow="read-down" · key + 3 data columns'
+              note="A worksheet a reader works through (the tools, 4 Nov 2026; proposed). Below 768 each row is one block in the same box: the key as its title, each value under its column head in the mono label voice. From 768 it is the boxed table, unchanged. Resize the window below 768 to see it; the 326 track here is the table at 1440."
+            >
+              <div className={s.trackMobile}>
+                <DataTable {...THREE_COLUMNS} narrow="read-down" />
+              </div>
+            </Specimen>
+            <Specimen
+              title="Read down · keyless peers with a picked column, and a picked row"
+              note="Keyless: no title, every column a labelled value. The picked column's label takes the pick ink; a picked row keeps its ground and bar."
+            >
+              <div className={s.trackMobile}>
+                <Layout rowGap="stack">
+                  <DataTable {...PEERS} pickColumn={2} narrow="read-down" />
+                  <DataTable
+                    {...ROUTE_TABLE}
+                    rows={ROUTE_TABLE.rows.map((row, i) =>
+                      i === 1 ? { ...row, pick: true } : row,
+                    )}
+                    narrow="read-down"
+                  />
+                </Layout>
+              </div>
+            </Specimen>
+            <Specimen
+              title="Read down · bounded, inside a tool's example panel"
+              note="`bounded` (4 Nov 2026): the table sits on a ground that already bounds it (the tint example panel), so below 768 its rows drop the box's side edges, fill and inline inset and keep the rules above, between and below, and the answers take the panel's whole measure. From 768 the boxed table."
+            >
+              <div className={s.trackMobile}>
+                <Island surface="tint">
+                  <DataTable {...THREE_COLUMNS} narrow="read-down" bounded />
+                </Island>
               </div>
             </Specimen>
           </Layout>

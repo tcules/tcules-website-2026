@@ -42,6 +42,14 @@ navigation:
     url: /glossary
   - name: AI-Assisted Product Development
     url: /glossary/ai-assisted-product-development
+  section_labels:
+    examples: Example
+    practice: Where AI helps
+    risks: Risks and checks
+    ai-native-comparison: A person on every step
+    related-terms: Related terms
+    faq: FAQs
+    next: Who signs off
 render:
   band_order:
   - examples

@@ -8,6 +8,7 @@ import styles from './EngagementOptions.module.css';
 /**
  * What an option's scope drawing shows. Each draws only what the option's name says:
  *   feature   one workflow: a single line through three screens
+ *   pilot     a pilot project: the fixed price agreed first, then one flow, alone in its region
  *   area      a product area or a whole product: a region holding several workflows
  *   embedded  a designer in your team: one blue node among your team's
  *   build     design and build: a drawn region becoming a built one
@@ -23,6 +24,7 @@ import styles from './EngagementOptions.module.css';
  */
 export type EngagementScope =
   | 'feature'
+  | 'pilot'
   | 'area'
   | 'embedded'
   | 'build'

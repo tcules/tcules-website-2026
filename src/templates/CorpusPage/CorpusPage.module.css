@@ -17,6 +17,26 @@
   max-inline-size: var(--measure-body);
 }
 
+/* A tool's diagram plate in the reading column (LongformShell ToolShell, 4 Nov 2026). Its drawing is
+   at the page's one drawing scale: from 1440, where the worked example sets its story plate in half the
+   panel, the diagram takes that same half of the column, centred, so a tick in the diagram is the tick
+   of the example and the hero beside it (tools critic, 4 Nov: at the column's full width its glyphs drew
+   2.5 times their siblings'). Below 1440 the example plate takes the column, and so does the diagram.
+   Sizing only: the wrapper is a Layout centring its one item (LongformShell). */
+.diagram {
+  min-inline-size: 0;
+}
+
+.diagramPlate {
+  inline-size: 100%;
+}
+
+@media (min-width: 1440px) {
+  .diagramPlate {
+    inline-size: calc((100% - var(--gap-section)) / 2);
+  }
+}
+
 .proofLine {
   font: var(--text-body-sm);
   color: var(--cpg-ink-muted);
@@ -157,12 +177,13 @@
   text-align: center;
 }
 
-/* ── A worked example's key as a legend of marks, and the report page that uses it (2 Nov 2026) ── */
-.statusGlyph {
-  display: inline-flex;
-  color: var(--cpg-mark);
+/* A links island's one quiet line under its links (Contact's studio address): the small body role,
+   the surface's own ink. Type only. */
+.islandNote {
+  font: var(--text-body-sm);
 }
 
+/* ── A worked example's key as a legend of marks, and the report page that uses it (2 Nov 2026) ── */
 .statusName {
   font: var(--text-h6);
   letter-spacing: var(--text-h6-tracking);
@@ -185,4 +206,16 @@
   .sheetTable {
     display: block;
   }
+}
+
+/* A tool group's head under the band that hosts it (CopyBands ToolGroupRows, 4 Nov 2026): the
+   authored h2, set at the h3 scale because it heads a group of the band's tools, not a band of its own
+   (the /expertise group heads are h3). Two groups sharing a row share their head row (Layout
+   `shareRows`), and the head sits at its row's foot, so a two-line head and a three-line one each stand
+   the group's one `block` over their tiles. Alignment only. */
+.groupHeading {
+  align-self: end;
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
 }

@@ -11,7 +11,7 @@ import {
   type BlockCardSetItem,
 } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
-import { ROUTES } from '@/lib/routes';
+import { glossaryPath, ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -896,7 +896,8 @@ export default function BlockCardSpecimenPage() {
                 },
                 {
                   id: 'sketch-2',
-                  title: 'Vibe-coded app security checklist: 25 checks before real users arrive',
+                  title:
+                    'Vibe-coded app security checklist: 25 checks before real users arrive',
                   eyebrow: '15 Sept 2026 · 10 min read',
                   media: { type: 'sketch', name: 'security-checklist' },
                   href: ROUTES.insights,
@@ -907,6 +908,33 @@ export default function BlockCardSpecimenPage() {
                   eyebrow: '28 Aug 2026 · 9 min read',
                   media: { type: 'sketch', name: 'prototype-to-production' },
                   href: ROUTES.insights,
+                },
+              ]}
+            />
+          </Specimen>
+          <Specimen
+            title='media type "sketch" · a glossary term, drawn (4 Nov 2026)'
+            note="A term's own scene is a cover too: drawn for that one term from its definition, shown wherever the term is (the hub's groups, a term page's related terms). Title from the term's link, body its definition. The shortest and the longest definitions the hub authors, three tracks with two pieces taking two of them."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              cue="title"
+              scroll="never"
+              items={[
+                {
+                  id: 'term-1',
+                  title: 'Workflow design',
+                  body: 'How work moves between roles, rules and handoffs, including what happens when the normal path fails.',
+                  media: { type: 'sketch', name: 'glossary-workflow-design' },
+                  href: glossaryPath('workflow-design'),
+                },
+                {
+                  id: 'term-2',
+                  title: 'Design engineering',
+                  body: 'Exploring, refining and building product experiences directly in code, from early prototype to production, so permissions and real content behave as designed.',
+                  media: { type: 'sketch', name: 'glossary-design-engineering' },
+                  href: glossaryPath('design-engineering'),
                 },
               ]}
             />
@@ -1350,14 +1378,103 @@ export default function BlockCardSpecimenPage() {
 
       <Section>
         <Layout rowGap="stack">
+          <BandHead title='8c · The tile · frame="tile"'>
+            Owner, 3 Nov 2026 (/contact, &ldquo;Other ways to reach us&rdquo;). A filled ground
+            at rest, one step off the surface, at the 16 radius: no edge, and no ground that
+            appears only under the pointer. The copy sits a gutter inside. For a short set of
+            destinations, each led by its glyph and closed by its own action: linkScope=cta, so
+            the tile does not answer the pointer and the action does. ctaEmphasis=outline draws
+            that action as a labelled outline; a destination that leaves the site (a mailbox,
+            another origin) takes the up-right arrow, one that stays takes the right arrow.
+          </BandHead>
+          <Specimen
+            title="three routes, each with its own action · the contact page"
+            note="BlockCardSet lead=none across=3 frame=tile linkScope=cta ctaEmphasis=outline."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              frame="tile"
+              linkScope="cta"
+              ctaEmphasis="outline"
+              items={[
+                {
+                  id: 'tl-hello',
+                  icon: 'letter',
+                  title: 'General or press inquiries',
+                  href: 'mailto:hello@tcules.com',
+                  ctaLabel: 'hello@tcules.com',
+                },
+                {
+                  id: 'tl-partners',
+                  icon: 'hand-shake',
+                  title: 'For partnerships or vendors',
+                  href: 'mailto:partners@tcules.com',
+                  ctaLabel: 'partners@tcules.com',
+                },
+                {
+                  id: 'tl-careers',
+                  icon: 'users-group-rounded',
+                  title: 'Looking to work with us?',
+                  href: ROUTES.careers,
+                  ctaLabel: 'Careers',
+                },
+              ]}
+            />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <Specimen
+            title="the tile on tint · its ground steps to paper"
+            note="--bcrd-tile-ground per surface: paper-deep on paper, paper on tint, one step off ink and blue."
+          >
+            <BlockCardSet
+              lead="none"
+              across={3}
+              frame="tile"
+              linkScope="cta"
+              ctaEmphasis="outline"
+              items={[
+                {
+                  id: 'tt-one',
+                  icon: 'letter',
+                  title: 'General or press inquiries',
+                  body: 'A tile with a line of body under its title.',
+                  href: 'mailto:hello@tcules.com',
+                  ctaLabel: 'hello@tcules.com',
+                },
+                {
+                  id: 'tt-two',
+                  icon: 'users-group-rounded',
+                  title: 'Looking to work with us?',
+                  href: ROUTES.careers,
+                  ctaLabel: 'Careers',
+                },
+                {
+                  id: 'tt-three',
+                  icon: 'hand-shake',
+                  title: 'A static tile, no action',
+                  body: 'The ground and the inset, nothing under the pointer.',
+                },
+              ]}
+            />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
           <BandHead title="8c · The icon card · the glyph is the title's em">
             Owner, 7 Oct 2026: size each icon from the card title, from a token; 9 Oct 2026: the
             glyph stands on its own row ABOVE the title, never inline beside it. It is set in
             the title&rsquo;s own role, so --bcrd-icon-size (1em) is 18 over an h5, 22 over an
-            h4 and 34 over the horizontal card&rsquo;s h3, stepping with the roles at
-            1023 and 767. An icon card takes no top hairline (that is the text card&rsquo;s); a
-            router set that must read as separate objects is boxed (band 8b). A set of icon
-            cards is always sm.
+            h4 and 34 over the horizontal card&rsquo;s h3, stepping with the roles at 1023 and
+            767. An icon card takes no top hairline (that is the text card&rsquo;s); a router
+            set that must read as separate objects is boxed (band 8b). A set of icon cards is
+            always sm.
           </BandHead>
           <Specimen
             title="the ladder · one icon card per size step"
@@ -1932,11 +2049,12 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="22 · Size steps with the count (visual-direction § 7.2, 5 Oct)">
             The card does not know its count, so it takes its type step as a component size and
-            the set passes it. <code>lg</code> is the one featured card (h4 over body-lg, and the
-            serif h3 when horizontal); <code>md</code> is two to three cards and every text card
-            (h4 over body); <code>sm</code> is four to six across (h5 over body-sm). Card titles
-            are sans; the horizontal card at lg is the one serif title (owner, 22 Oct 2026). Inside
-            every size the copy is one group at <code>text</code> (16): eyebrow, title, body.
+            the set passes it. <code>lg</code> is the one featured card (h4 over body-lg, and
+            the serif h3 when horizontal); <code>md</code> is two to three cards and every text
+            card (h4 over body); <code>sm</code> is four to six across (h5 over body-sm). Card
+            titles are sans; the horizontal card at lg is the one serif title (owner, 22 Oct
+            2026). Inside every size the copy is one group at <code>text</code> (16): eyebrow,
+            title, body.
           </BandHead>
           <Specimen
             title='size="lg" · md · sm, one record'
@@ -2113,11 +2231,12 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <BandHead title="24 · The panel, the date and the topic tag (the insights finder, 28–29 Oct)">
-            A piece with no picture stands as a panel (<code>frame=&quot;panel&quot;</code>): the paper plate in the
-            cover&rsquo;s place, its hairline the box, its format&rsquo;s glyph and label at its head,
-            the title and standfirst pinned to its foot, so a row of mixed pieces ends level. The date
-            sits at the label line&rsquo;s end (<code>aside</code>) and the topic is a tag under the copy (<code>tag</code>),
-            on a pictured card too. A horizontal lead carries no tag.
+            A piece with no picture stands as a panel (<code>frame=&quot;panel&quot;</code>):
+            the paper plate in the cover&rsquo;s place, its hairline the box, its format&rsquo;s
+            glyph and label at its head, the title and standfirst pinned to its foot, so a row
+            of mixed pieces ends level. The date sits at the label line&rsquo;s end (
+            <code>aside</code>) and the topic is a tag under the copy (<code>tag</code>), on a
+            pictured card too. A horizontal lead carries no tag.
           </BandHead>
           <Specimen
             title="Three tracks · a pictured card beside two panels"

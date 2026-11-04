@@ -111,3 +111,10 @@ terms and keep the old sheet until their deliverable and needs/stops drawings ar
 ## Appendix — self-audit
 
 Tier imports flow one way; no margins; no restated sizes; every surface block complete.
+
+## Amendment · 4 Nov 2026 — two parts, and five deliverables read 3 + 2 (status proposed; owner to judge)
+
+- The terms under the deliverables are two or three: the audits' 3 Nov copy has no "What we need", so two is
+  a built count, not a gap (the development warning accepts two).
+- Never more than four deliverable tracks a row: five read three then two at every width from 1024.
+- Below 768 a deliverable's drawing stacks at full width over its words, not beside them.

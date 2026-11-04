@@ -342,6 +342,18 @@
   background-color: var(--bcrd-box-ground-pressed);
 }
 
+/* ── The tile (`frame="tile"`, owner 3 Nov 2026) ──────────────────────────────────────
+   A filled ground at rest, one step off the surface, at the 16 radius: no edge, and no ground that
+   appears only under the pointer (decisions/2026-10-19-no-hover-only-grounds). The copy sits a
+   `gutter` inside on every side, the frame being the card's one box, so the padding is an inner
+   inset. It fills its row's height; the action row is pinned to its foot (Layout pinLast). */
+.tiled .frame {
+  block-size: 100%;
+  padding: var(--gap-gutter);
+  border-radius: var(--bcrd-tile-radius);
+  background-color: var(--bcrd-tile-ground);
+}
+
 /* ── The panel (`frame="panel"`, owner 28 Oct 2026) ───────────────────────────────────
    A text-only card drawn as an object: the drawn covers' plate (--bcrd-panel-ground, the media
    rule, the media radius) with the copy a `block` inside on every side — an inner inset, the frame

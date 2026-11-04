@@ -13,10 +13,10 @@ import {
 } from '@/components';
 
 import styles from './SiteFooter.module.css';
-import type { SiteFooterProps, SiteFooterSocial } from './types';
+import type { SiteFooterProps } from './types';
 
 /**
- * SiteFooter — the closing band: brand, directory, newsletter, contact, utility.
+ * SiteFooter — the closing band: brand, directory, newsletter, studio, legal.
  *
  * A SERVER component, and worth keeping that way. Nothing here is stateful, nothing reads the URL,
  * and the newsletter posts as a plain form rather than through JavaScript — so the footer ships no
@@ -28,14 +28,17 @@ import type { SiteFooterProps, SiteFooterSocial } from './types';
  * ── Five bands, five shapes ─────────────────────────────────────────────────────────────────────
  * The one decision worth defending. A footer is the easiest place in a site to end up with four
  * identical rectangles of small links, and the rule here is that if you squint it has to read as
- * more than one idea. So:
+ * more than one idea. So (order and content: owner, 3 Nov 2026):
  *
- *   1  BRAND      the mark at 40 and a tagline at lead on one side, the action and the rating
+ *   1  BRAND      the mark at 40 and the tagline at lead on one side, the action and the rating
  *                 badge on the other. Left-weighted and tall; the weight is scale and position.
- *   2  DIRECTORY  six narrow columns of body-sm links. Deliberately the quietest block.
+ *   2  DIRECTORY  six groups in two rows of three — what we do, then who we are and what we
+ *                 publish. Three tracks rather than six because the expertise labels are long:
+ *                 at six they broke over two lines each and the column read as a paragraph.
  *   3  NEWSLETTER two columns — the pitch, and the field. The only form on the page.
- *   4  CONTACT    four mono key/value cells and an address. Dense, small, a different face.
- *   5  UTILITY    one line: the utility links against the legal notice.
+ *   4  STUDIO     one line about the studio at body, the address and email under it in small
+ *                 print, then the profiles as words. A statement, not a grid of cells.
+ *   5  LEGAL      one line: the notice and the legal pages against the icon credit.
  *
  * Bands 2 to 5 are separated by a hairline with air on both sides, and by nothing else — no
  * alternating grounds, because varying the ground behind a block is how a page ends up with five
@@ -43,11 +46,11 @@ import type { SiteFooterProps, SiteFooterSocial } from './types';
  * --opacity-faint, which is ground rather than a sixth band.
  *
  * ── Why the directory is rendered twice ─────────────────────────────────────────────────────────
- * The design is a six-column grid at lg and six collapsed accordions below it. Those are two
- * different DOM shapes, not one shape restyled, and with no JavaScript nothing can turn one into
- * the other at runtime. Forcing a closed `<details>` visually open with `display` DOES NOT WORK in
- * Chrome — the UA hides closed content more strongly than a `display` override undoes, which was
- * verified rather than assumed. So both are rendered and CSS picks one.
+ * The design is a grid at lg and collapsed accordions below it. Those are two different DOM
+ * shapes, not one shape restyled, and with no JavaScript nothing can turn one into the other at
+ * runtime. Forcing a closed `<details>` visually open with `display` DOES NOT WORK in Chrome — the
+ * UA hides closed content more strongly than a `display` override undoes, which was verified
+ * rather than assumed. So both are rendered and CSS picks one.
  *
  * The cost is that the directory's links appear twice in the markup. That is accepted, and the
  * alternative was worse: the audit requires every link to be in the rendered mobile HTML, which
@@ -56,44 +59,13 @@ import type { SiteFooterProps, SiteFooterSocial } from './types';
  */
 export function SiteFooter({
   brand,
-  groups,
   cta,
+  groups,
   newsletter,
-  meta,
-  address,
-  utility,
+  studio,
   legal,
   surface = 'ink',
 }: SiteFooterProps) {
-  /* Rendered at the foot of the last directory column on desktop, and as its own row on mobile.
-     One list, declared once, placed twice — see the note on the directory above. */
-  const socialList = (
-    <Cluster as="ul" className={styles.socialList} rowGap="tight" colGap="text">
-      {brand.social.map((social: SiteFooterSocial) => (
-        <li key={social.label}>
-          {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and neither
-              means anything for another origin. `noreferrer` implies `noopener`, and both are
-              stated because the pair is what reviews look for. */}
-          <a
-            className={styles.socialLink}
-            href={social.href}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <BrandMark name={social.mark} />
-            {social.label}
-            {/* The system draws no diagonal arrow, so the horizontal one is rotated. If ↗ starts
-                recurring elsewhere, that is the point at which it earns a glyph of its own rather
-                than a rotation in every consumer. */}
-            <span className={styles.outboundCue}>
-              <Icon name="arrow-right" size="sm" />
-            </span>
-          </a>
-        </li>
-      ))}
-    </Cluster>
-  );
-
   return (
     <Section as="footer" surface={surface}>
       <Layout rowGap="stack">
@@ -106,8 +78,17 @@ export function SiteFooter({
             rectangle. Two tracks at 2:1 rather than a Cluster, because Cluster's gap scale stops
             at 24 and the two halves are a split (CLAUDE.md § gap scale, rule 2) — the mark and the
             action are different kinds of thing, so they take a section's distance. One track below md, where the right group left-aligns under the tagline. */}
-        <Layout columns={{ base: 1, md: [2, 1] }} colGap="section" rowGap="gutter">
-          <Layout className={styles.brandIdentity} rowGap="block">
+        <Layout
+          columns={{ base: 1, md: [2, 1] }}
+          colGap="section"
+          rowGap="gutter"
+          shareRows={2}
+        >
+          {/* From lg the two halves share their rows (owner, 4 Nov 2026: the right side looked
+              taller). The button and the badge are not the heights of the mark and the tagline, so
+              two independent stacks never met at either end; sharing rows puts the button in the
+              mark's row and the badge in the tagline's, each centred on its partner. */}
+          <Layout className={styles.brandIdentity} rowGap="block" align="center">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
             {/* Mono on every ground, the light ones included: the footer is UI chrome, where ch02
@@ -117,7 +98,7 @@ export function SiteFooter({
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
-          <Layout className={styles.brandAction} rowGap="block">
+          <Layout className={styles.brandAction} rowGap="block" align="center">
             {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
                 lede line makes two things compete for the same job, and the badge under it reads
                 as a caption to a smaller control rather than an equal to a larger one. */}
@@ -138,18 +119,19 @@ export function SiteFooter({
         </Layout>
 
         {/* ── 2 · Directory ───────────────────────────────────────────────────────────
-            Six columns at lg, accordions below it. The link rest state is ink rather than blue:
+            Three tracks at lg, accordions below it. The link rest state is ink rather than blue:
             forty blue links is not forty signals, it is a blue block. */}
-        <div className={styles.band}>
-          {/* Desktop. Six tracks exactly — the group count is the column count, so a seventh group
-              would wrap rather than squeeze, which is the failure worth seeing.
-
-              The breakpoint toggle lives on this wrapper rather than on the Layout, because both
-              would be single-class selectors and which one won `display` would come down to the
-              order the bundler happened to emit them in. */}
+        {/* A band like the others at lg. Below it the hairline is the top edge of the accordion
+            list, with no air under it, so the list reads as ruled and closed at both ends (owner,
+            4 Nov 2026). */}
+        <div className={styles.directoryBand}>
+          {/* Desktop. Three tracks, two rows: Services and the two expertise groups, then Work,
+              Resources and Studio. The breakpoint toggle lives on this wrapper rather than on the
+              Layout, because both would be single-class selectors and which one won `display`
+              would come down to the order the bundler happened to emit them in. */}
           <div className={styles.directoryDesktop}>
-            <Layout columns={6} colGap="gutter" rowGap="stack">
-              {groups.map((group, index) => (
+            <Layout columns={3} colGap="gutter" rowGap="stack">
+              {groups.map((group) => (
                 <Layout key={group.title} rowGap="block">
                   <p className={styles.label}>{group.title}</p>
                   <Layout as="ul" rowGap="tight">
@@ -161,12 +143,6 @@ export function SiteFooter({
                       </li>
                     ))}
                   </Layout>
-                  {/* The socials hang off the last column under a hairline of their own. They are
-                      not a group — no label, and a rule instead — so the column reads as a list
-                      that has ended rather than as a seventh heading. */}
-                  {index === groups.length - 1 ? (
-                    <div className={styles.columnSocial}>{socialList}</div>
-                  ) : null}
                 </Layout>
               ))}
             </Layout>
@@ -194,15 +170,11 @@ export function SiteFooter({
                 </Layout>
               </details>
             ))}
-            {/* Outside the accordions and always visible: a profile link that can only be reached
-                by opening a panel is a profile link nobody reaches. No rule of its own — it sits
-                under the last accordion's, so it reads as the end of the directory. */}
-            <div className={styles.mobileSocial}>{socialList}</div>
           </div>
         </div>
 
         {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
-        <Layout className={styles.band} columns={[1, 1]} colGap="section" rowGap="stack">
+        <Layout className={styles.newsletterBand} columns={[1, 1]} colGap="section" rowGap="stack">
           <Layout rowGap="block">
             {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
                 block makes them read as three unrelated lines rather than an eyebrow on a title
@@ -246,46 +218,85 @@ export function SiteFooter({
           </form>
         </Layout>
 
-        {/* ── 4 · Contact ─────────────────────────────────────────────────────────────
-            A description list of key/value cells rather than a paragraph, because these are four
-            different KINDS of fact and running them together as prose makes the reader work out
-            which is which. `<div>` inside `<dl>` is valid and is what lets each pair be a
-            Layout. */}
-        <Layout className={styles.band} rowGap="stack">
-          <Layout as="dl" columns={{ base: 2, md: 4 }} colGap="gutter" rowGap="gutter">
-            {meta.map((item) => (
-              <Layout key={item.key} rowGap="inline">
-                <dt className={styles.metaKey}>{item.key}</dt>
-                <dd className={styles.metaValue}>
-                  {item.href ? (
-                    <a className={styles.metaLink} href={item.href}>
-                      {item.value}
-                    </a>
-                  ) : (
-                    item.value
-                  )}
-                </dd>
-              </Layout>
-            ))}
+        {/* ── 4 · Studio ──────────────────────────────────────────────────────────────
+            A split: the studio describing itself on one side, the facts on the other (owner,
+            4 Nov 2026: "something better" than one run-on paragraph over a line of small print).
+            The statement and the facts are different kinds of thing, so they take a section's
+            distance. The facts are two peers — where the studio is and how to write to it, and where
+            else it is — each a labelled stack, so the address reads as an address (three short
+            lines) rather than as a sentence. */}
+        <Layout
+          className={styles.band}
+          columns={{ base: 1, lg: [1, 1] }}
+          colGap="section"
+          rowGap="stack"
+        >
+          {/* The rule takes the labels' row, at the labels' distance from what follows, so the
+              statement opens on the facts' first line (owner, 4 Nov 2026). */}
+          <Layout rowGap="text">
+            <span className={styles.statementRule} aria-hidden="true" />
+            <p className={styles.statement}>{studio.statement}</p>
           </Layout>
-          <p className={styles.address}>{address}</p>
+
+          <Layout columns={[1, 1]} colGap="gutter" rowGap="stack">
+            <Layout rowGap="text">
+              <p className={styles.label}>Address</p>
+              <Layout rowGap="tight">
+                <address className={styles.address}>
+                  {studio.address.map((line) => (
+                    <span key={line} className={styles.addressLine}>
+                      {line}
+                    </span>
+                  ))}
+                </address>
+                <a className={styles.email} href={`mailto:${studio.email}`}>
+                  {studio.email}
+                </a>
+              </Layout>
+            </Layout>
+
+            <Layout rowGap="text">
+              <p className={styles.label}>Elsewhere</p>
+              {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and
+                  neither means anything for another origin. `noreferrer` implies `noopener`, and
+                  both are stated because the pair is what reviews look for. */}
+              <Layout as="ul" rowGap="tight">
+                {studio.social.map((social) => (
+                  <li key={social.label}>
+                    <a
+                      className={styles.socialLink}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {social.label}
+                      <Icon name="arrow-right-up" size="sm" />
+                    </a>
+                  </li>
+                ))}
+              </Layout>
+            </Layout>
+          </Layout>
         </Layout>
 
-        {/* ── 5 · Utility ───────────────────────────────────────────────────────────
-            Links lead, the notice closes. The links take the legal treatment rather than the
-            directory's: they are the quietest thing in the footer, and giving them link ink would
-            make four pieces of small print look like a sixth navigation group. */}
-        <Cluster className={styles.band} justify="between" rowGap="text" colGap="text">
-          <Cluster as="ul" rowGap="tight" colGap="text">
-            {utility.map((item) => (
-              <li key={item.label}>
-                <Link href={item.href} className={styles.utilityLink}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+        {/* ── 5 · Legal ───────────────────────────────────────────────────────────────
+            The notice leads and the legal pages follow it on one line, the credit closes at the
+            far end. All of it in the legal treatment: small print in link colour would read as one
+            more navigation group. */}
+        <Cluster className={styles.band} justify="between" align="baseline" rowGap="text" colGap="block">
+          <Cluster align="baseline" rowGap="tight" colGap="text">
+            <p className={styles.legal}>{legal.notice}</p>
+            <Cluster as="ul" rowGap="tight" colGap="text">
+              {legal.links.map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className={styles.smallLink}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </Cluster>
           </Cluster>
-          <p className={styles.legal}>{legal}</p>
+          <p className={styles.legal}>{legal.credit}</p>
         </Cluster>
       </Layout>
 

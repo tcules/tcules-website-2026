@@ -1,0 +1,46 @@
+/* A gap map's status marks (StatusMark.tsx): five forms, one accent. Colour comes from --cpg-*, per
+   surface; the drawing's strokes are in the mark's own 16-unit viewBox, so they scale with it. */
+
+.mark {
+  flex: none;
+  inline-size: var(--icon-size-16);
+  block-size: var(--icon-size-16);
+  color: var(--cpg-ink-label);
+}
+
+/* Missing: the one solid mark, and the only one in the accent. */
+.loud {
+  color: var(--cpg-mark);
+}
+
+.disc {
+  fill: currentColor;
+}
+
+.ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+/* Assumed: the ring broken, not yet checked. */
+.dashed {
+  stroke-dasharray: 2.6 1.9;
+}
+
+.sign {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dot {
+  fill: currentColor;
+}
+
+.name {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+}

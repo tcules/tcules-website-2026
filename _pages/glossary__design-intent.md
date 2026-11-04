@@ -44,6 +44,13 @@ navigation:
     url: /glossary
   - name: Design Intent
     url: /glossary/design-intent
+  section_labels:
+    practice: Examples
+    keeping-intent: Keeping it
+    comparison: Vs requirements
+    related-terms: Related terms
+    faq: FAQs
+    next: When code disagrees
 render:
   band_order:
   - practice

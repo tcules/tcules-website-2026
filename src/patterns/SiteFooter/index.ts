@@ -4,7 +4,8 @@ export type {
   SiteFooterBrand,
   SiteFooterGroup,
   SiteFooterLink,
-  SiteFooterMetaItem,
+  SiteFooterLegal,
   SiteFooterNewsletter,
-  SiteFooterSocial,
+  SiteFooterRating,
+  SiteFooterStudio,
 } from './types';

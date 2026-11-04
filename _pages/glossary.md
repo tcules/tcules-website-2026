@@ -40,6 +40,14 @@ navigation:
     url: /
   - name: Glossary
     url: /glossary
+  section_labels:
+    how-to-use: How to use it
+    ai-in-products: AI in products
+    ai-in-practice: AI in product teams
+    design-and-code: Design and code
+    design-systems: Design systems
+    structure: Structure and change
+    faq: FAQs
 render:
   band_order:
   - how-to-use

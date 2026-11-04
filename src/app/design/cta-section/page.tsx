@@ -437,6 +437,37 @@ export default function CtaSectionSpecimenPage() {
       />
 
       <SpecimenNote
+        title="3b · The onward island (intent=onward)"
+        note="A band's onward line, lifted onto its own ink island mid-page (tracker 2.53): the setup as the heading, the sentence holding the link as the lead, and the link's own words as the one blue LINK with its arrow, never a solid, because it points to reading and the page's one main action belongs to the hero and the close. Three spellings: a link closing the line (no lead), a line with no setup (the sentence is the heading), and the longest label the copy carries."
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Added a confidence score and usage stayed flat?"
+        actions={[{ label: 'Read why a score alone doesn’t earn trust', href: ROUTES.insights }]}
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Is your vibe-coded app ready for production? covers where AI-built apps break first."
+        actions={[{ label: 'Is your vibe-coded app ready for production?', href: ROUTES.insights }]}
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Still weighing it up?"
+        body={[
+          'Our guide, Does my SaaS need a mobile app? A moment-by-moment test, walks through the questions.',
+        ]}
+        actions={[
+          {
+            label: 'Does my SaaS need a mobile app? A moment-by-moment test',
+            href: ROUTES.insights,
+          },
+        ]}
+      />
+
+      <SpecimenNote
         title="4 · Points ladder"
         note="Zero, one, three, and six points in each arrangement, and four and five in offer as well. Zero renders no list; six proves split growth and open's second row without equalRows. An offer that asks with actions runs its points as ruled rows in the 763 body track beside its head (cmp-cta); only an offer with a form keeps the 2-up-from-md, 3-up-from-lg strip, where every second-row point starts under a first-row label. Each numeral holds its own place beside its label at every width, never wrapping above it."
       />

@@ -1315,3 +1315,10 @@ Where earlier sections describe the box, the ground or the 32 tile icon, this am
    `-pressed`, the title's link ink on hover and the focus ring all stay.
 3. **Clickable tiles and rows sit under their head**, full width, never beside a heading or with a
    decorative image. Non-clickable icon tiles beside a photograph (the B band) stay.
+
+## Amendment · 4 Nov 2026 — Steps `measure` (status proposed; owner to judge)
+
+`Steps` takes `measure?: 'track' | 'reading'`. `track` (default) is unchanged: rules run the whole track,
+titles at the title measure, bodies at the lead measure. `reading` is a block of an article's reading
+column: the whole set takes `--measure-body`, so titles and bodies run to it and the rules end with the
+text. Used on the tool pages only (specimen on `/design/steps`).

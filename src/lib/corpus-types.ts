@@ -184,6 +184,12 @@ export type CorpusBand = {
   anchored: boolean;
   heading: InlineRun[];
   headingText: string;
+  /**
+   * The section's short name for navigation (an outline rail, a listing's rail): the frontmatter's
+   * `navigation.section_labels[id]`, verbatim. Navigation, not body copy, so the heading stays as
+   * authored. Absent: the rail shows the heading.
+   */
+  navLabel?: string;
   blocks: CorpusBlock[];
 };
 

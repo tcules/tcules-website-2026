@@ -62,6 +62,10 @@ const NAMES = [
   'videocamera-record',
   'microphone',
   'magnifier-bug',
+  'letter',
+  'hand-shake',
+  'share-circle',
+  'map-point',
 ] as const;
 
 /** Every glyph at the default 16. Every one is solid and filled with currentColor. */

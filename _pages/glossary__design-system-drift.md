@@ -43,6 +43,14 @@ navigation:
     url: /glossary
   - name: Design System Drift
     url: /glossary/design-system-drift
+  section_labels:
+    causes: Causes
+    practice: Spotting it
+    comparison: Vs intentional variation
+    design-vs-code-drift: Design vs code drift
+    related-terms: Related terms
+    faq: FAQs
+    next: Check one family
 render:
   band_order:
   - causes

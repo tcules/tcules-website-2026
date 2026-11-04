@@ -42,7 +42,10 @@ export type OfferPartsProps = {
   deliverablesTitle: string;
   /** Two to seven; built for five. */
   deliverables: readonly OfferPartsDeliverable[];
-  /** Zero to three; built for three. */
+  /**
+   * Two or three: who does the work, what we need, where our part stops. The audits' 3 Nov 2026 copy
+   * has no "What we need", so two is a built count, not a gap.
+   */
   parts: readonly OfferPart[];
   /**
    * What the copy sets between the deliverables and the terms — a worked example, the table a
@@ -57,14 +60,16 @@ export type OfferPartsProps = {
 };
 
 /**
- * Deliverable tracks. From 1024 the deliverables sit in a 3/4 column, so five across only fit at the
- * 1240 cap (xl); below it they read three then two.
+ * Deliverable tracks. Never more than four a row: five across packed ~220 plates under three-line
+ * bodies, the crammed row the owner has turned down before ("fewer, larger items per row",
+ * service-page round 1), so five read three then two at every width from 1024 (critic, audits run,
+ * 4 Nov 2026; the strip rule in treatment-rules § What you get is still proposed).
  */
-const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 | 5 }> = {
+const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 }> = {
   2: { lg: 2, xl: 2 },
   3: { lg: 3, xl: 3 },
   4: { lg: 2, xl: 4 },
-  5: { lg: 3, xl: 5 },
+  5: { lg: 3, xl: 3 },
   6: { lg: 3, xl: 3 },
   /* Seven (most expertise pages): 4 + 3 from 1280. From 1024 to 1279 three tracks leave one alone. */
   7: { lg: 3, xl: 4 },
@@ -114,8 +119,8 @@ export function OfferParts({
     if (deliverables.length < 2 || deliverables.length > 7) {
       console.warn(`OfferParts: ${deliverables.length} deliverables; built for two to seven.`);
     }
-    if (parts.length !== 3) {
-      console.warn(`OfferParts: ${parts.length} parts; built for three.`);
+    if (parts.length < 2 || parts.length > 3) {
+      console.warn(`OfferParts: ${parts.length} parts; built for two or three.`);
     }
     for (const part of [...deliverables, ...parts]) {
       if (!part.scene) {
@@ -139,7 +144,10 @@ export function OfferParts({
         <Layout
           as="li"
           key={item.title}
-          columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
+          /* Below 768 the drawing heads its words at the column's full width, as the method figure
+             and the case cards do: beside them it shrank to a ~100 thumbnail and "Code worth
+             keeping" could not be read (critic, audits run, 4 Nov 2026). */
+          columns={{ base: 1, md: [1, 3], lg: 1 }}
           colGap="gutter"
           rowGap="block"
           align="start"
@@ -176,7 +184,12 @@ export function OfferParts({
             <Layout rowGap="stack">
               {parts.map((part) => (
                 <Row key={part.title} title={part.title}>
-                  <Layout columns={{ base: [2, 3], md: [1, 3] }} colGap="gutter" align="start">
+                  <Layout
+                    columns={{ base: 1, md: [1, 3] }}
+                    colGap="gutter"
+                    rowGap="block"
+                    align="start"
+                  >
                     <Sketch name={part.scene} />
                     {words(part)}
                   </Layout>

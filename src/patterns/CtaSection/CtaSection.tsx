@@ -21,6 +21,9 @@ import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
 
+/** One paragraph of the close's lede: plain words, or a sentence with its authored links. */
+export type CtaParagraph = string | ReactElement;
+
 /**
  * One step in "what happens next". `label` is the step, `detail` an optional clause under it.
  *
@@ -113,8 +116,11 @@ type CtaSectionBaseProps = {
    *
    * A third paragraph does not compile, and that is the point of the tuple: this block asks, it
    * does not explain. Whatever wants a third paragraph belongs in the page above it.
+   *
+   * A paragraph may be rich text (a ReactNode) where its links are part of the sentence as authored
+   * (an audit's "After the audit", 4 Nov 2026); the island's surface inks them.
    */
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -207,6 +213,7 @@ type CtaSplitProps = {
    */
   form: ReactElement;
   actions?: readonly [];
+  intent?: never;
   /**
    * Refused since cmp-cta fix round 1. A close with the FULL form and a proof row ran 880–1104 at
    * 1470 with standard copy — past the 830 fold at every proof kind — so the evidence for the ask is
@@ -280,6 +287,11 @@ type CtaSplitProps = {
    * NDA first?" sits outside the island so the island stays the ask and the form). Island only.
    */
   footnote?: string;
+  /**
+   * A glyph leading the footnote, on its first line, in the accent: what kind of line it is at a
+   * glance (owner, 3 Nov 2026: contact's NDA line takes a shield). Ignored without `footnote`.
+   */
+  footnoteIcon?: IconName;
 };
 
 type CtaOpenProps = {
@@ -290,6 +302,13 @@ type CtaOpenProps = {
    * makes its one main action (r7-buttons, 8 Oct 2026), so this is a solid by position.
    */
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
+  /**
+   * What the actions do (tracker 2.53, 3 Nov 2026). `ask` (default): the page's ask, the blue solid
+   * then its ghost. `onward`: the island points to a piece of reading mid-page (a band's onward line,
+   * set as its own island), so its action is the blue LINK with its arrow, never a solid: the page's
+   * one main action belongs to the hero and the close (r7-buttons, 8 Oct 2026).
+   */
+  intent?: 'ask' | 'onward';
   proof?: ReactNode;
   media?: never;
   contact?: never;
@@ -317,6 +336,7 @@ type CtaOfferWithActionsProps = {
    * CtaRow rule); a second destination is a second band's.
    */
   actions: readonly [CtaAction];
+  intent?: never;
   proof?: never;
   /**
    * The K offer's photograph. With it, the band is [7, 5] — copy in 7 (667 at 1470), the 4:5 photo
@@ -384,7 +404,7 @@ function CtaLede({
   mark?: ReactNode;
   eyebrow?: string;
   heading: string;
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   leadRole?: 'lead' | 'body';
   scale?: CtaHeadingScale;
   centred?: boolean;
@@ -393,7 +413,9 @@ function CtaLede({
      around nothing. The survivors are re-indexed, so an empty body[0] promotes body[1] into the lead
      role rather than rendering an empty lead above a body paragraph. An absent body (cmp-feature:
      the body is optional) renders the head alone. */
-  const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
+  const paragraphs = (body ?? []).filter((paragraph) =>
+    typeof paragraph === 'string' ? paragraph.trim().length > 0 : paragraph != null,
+  );
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
@@ -423,7 +445,7 @@ function CtaLede({
         <Layout rowGap="text" justifyItems={centred ? 'center' : undefined}>
           {paragraphs.map((paragraph, index) => (
             <p
-              key={`${index}-${paragraph}`}
+              key={index}
               className={index === 0 && leadRole === 'lead' ? styles.lead : styles.body}
             >
               {paragraph}
@@ -813,6 +835,7 @@ export function CtaSection(props: CtaSectionProps) {
       </Island>
     );
     const arrangement = 'open-island';
+    const actionKind = props.intent === 'onward' ? 'link' : 'ask';
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in
@@ -838,7 +861,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <div data-texture-calm>{lede({ scale: 'close' })}</div>
                 </Layout>
                 <CtaPoints shape="row" markers={markers} points={points} />
-                <CtaActions actions={props.actions} kind="ask" />
+                <CtaActions actions={props.actions} kind={actionKind} />
               </Layout>
               <div>{props.proof}</div>
             </Layout>,
@@ -878,7 +901,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <CtaPoints shape="centred" markers={markers} points={points} />
                 </Layout>
               ) : null}
-              <CtaActions actions={props.actions} kind="ask" justify="center" />
+              <CtaActions actions={props.actions} kind={actionKind} justify="center" />
             </Layout>
           </div>,
         )}
@@ -1040,6 +1063,7 @@ export function CtaSection(props: CtaSectionProps) {
       <IslandBand
         inBand={props.inBand}
         footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1081,6 +1105,7 @@ export function CtaSection(props: CtaSectionProps) {
       <IslandBand
         inBand={props.inBand}
         footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1115,6 +1140,7 @@ export function CtaSection(props: CtaSectionProps) {
     <IslandBand
       inBand={props.inBand}
       footnote={props.footnote}
+      footnoteIcon={props.footnoteIcon}
       surface={band}
       id={props.id}
       data-band={props['data-band']}
@@ -1152,6 +1178,7 @@ export function CtaSection(props: CtaSectionProps) {
 function IslandBand({
   inBand,
   footnote,
+  footnoteIcon,
   surface,
   id,
   'data-band': dataBand,
@@ -1160,6 +1187,7 @@ function IslandBand({
 }: {
   inBand?: boolean;
   footnote?: string;
+  footnoteIcon?: IconName;
   surface: SectionSurface;
   id?: string;
   'data-band'?: string;
@@ -1170,7 +1198,16 @@ function IslandBand({
   const body = footnote ? (
     <Layout rowGap="block">
       {children}
-      <p className={styles.footnote}>{footnote}</p>
+      {footnoteIcon ? (
+        <Cluster colGap="tight" align="start" nowrap>
+          <span className={styles.footnoteIcon} aria-hidden="true">
+            <Icon name={footnoteIcon} />
+          </span>
+          <p className={styles.footnote}>{footnote}</p>
+        </Cluster>
+      ) : (
+        <p className={styles.footnote}>{footnote}</p>
+      )}
     </Layout>
   ) : (
     children

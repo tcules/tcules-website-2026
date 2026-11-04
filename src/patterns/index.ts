@@ -133,9 +133,7 @@ export type {
   SiteNavItem,
   SiteNavLink,
   SiteNavGroup,
-  SiteNavCard,
-  SiteNavCardImage,
-  SiteNavRail,
+  SiteNavAside,
   SiteNavForm,
   SiteNavStatus,
 } from './SiteNav';
@@ -300,9 +298,10 @@ export type {
   SiteFooterBrand,
   SiteFooterGroup,
   SiteFooterLink,
-  SiteFooterMetaItem,
+  SiteFooterLegal,
   SiteFooterNewsletter,
-  SiteFooterSocial,
+  SiteFooterRating,
+  SiteFooterStudio,
 } from './SiteFooter';
 export { Banner } from './Banner';
 export type {
@@ -511,3 +510,6 @@ export {
   type ClaimSetProps,
   type ClaimExample,
 } from './ClaimSet';
+/* Collage — a band's words in one corner and six studio photographs round them in an L (owner,
+   3 Nov 2026: the About page's "The Ahmedabad studio"). */
+export { Collage, type CollagePhoto, type CollagePhotos, type CollageProps } from './Collage';

@@ -170,8 +170,8 @@
    The photograph keeps its ratio at every copy length (owner, 11 Oct 2026: "the image dynamically
    reshapes based on the section height … we lose control over the image"). It used to stretch with
    a taller copy column up to a ceiling; now the ratio IS the box: 4:3 above the copy, then 4:5 in the
-   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. The row centres the shorter copy on
-   the photo; where the copy is the taller side, the photo holds the top of the row rather than
+   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. The shorter copy shares the photo's
+   top edge (pairs top-align); where the copy is the taller side, the photo holds the top of the row rather than
    growing to it. Sizing, not arrangement. */
 .photoTrack {
   align-self: start;

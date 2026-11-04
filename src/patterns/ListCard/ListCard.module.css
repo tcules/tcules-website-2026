@@ -470,6 +470,18 @@
   max-inline-size: var(--lcrd-stacked-body-measure);
 }
 
+/* `measure="reading"` (4 Nov 2026, the tool pages): the set is a block of an article's reading column,
+   so the whole ladder takes the column's one measure: the rules end at it, and the titles and bodies
+   run to it rather than breaking at 32ch and 56ch beside an empty half. A measure, not a distance. */
+.stepsReading {
+  max-inline-size: var(--measure-body);
+}
+
+.stepsReading .title,
+.stepsReading .body {
+  max-inline-size: none;
+}
+
 /* ── ReadDown: the D set mode (ReadDown.tsx) ─────────────────────────────────────
    No inline inset, as in Steps (and every row since 7 Oct 2026): the glyph sits on the edge the
    band's head and the rows' own rules share. The
@@ -579,5 +591,36 @@
 @media (max-width: 767.98px) {
   .root:not(.tile) .thumbnail {
     inline-size: var(--lcrd-thumbnail-inline-sm);
+  }
+}
+
+/* The row's end arrow (`cue="arrow"`, owner 4 Nov 2026): a quiet mark at the row's inline end that
+   says "this row opens a page" before any pointer arrives — the glossary's term rows, where a
+   dictionary of words otherwise reads as text. Hover is a move: it slides along the reading
+   direction and takes the link ink with the title; only the transform transitions. */
+.cue {
+  flex: none;
+  color: var(--lcrd-cue-ink);
+  transition: transform var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root .link:hover .cue,
+.root .link:focus-visible .cue {
+  color: var(--lcrd-link-ink);
+  transform: translateX(var(--lcrd-cue-shift));
+}
+
+.root .link:active .cue {
+  color: var(--lcrd-link-ink-pressed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue {
+    transition: none;
+  }
+
+  .root .link:hover .cue,
+  .root .link:focus-visible .cue {
+    transform: none;
   }
 }

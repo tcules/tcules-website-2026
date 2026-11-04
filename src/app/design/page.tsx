@@ -273,9 +273,14 @@ const SPECIMENS = [
         note: 'what you get as four rows in a label column — the deliverables as a drawn strip, then who does the work, what we need and where our part stops each a 16:9 drawing beside its words; five, four and six deliverables, two parts, one part, an undrawn part, tint',
       },
       {
+        href: '/design/collage',
+        name: 'Collage',
+        note: "a band's words in one corner and six studio photographs round them in an L — home's people behind Tcules with the owner's crops, one paragraph, four paragraphs (stress), tint",
+      },
+      {
         href: '/design/bento',
         name: 'Bento',
-        note: 'linked tiles of two sizes on four tracks over one continuous texture per row — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
+        note: 'linked tiles of two sizes on four tracks, each its drawing on the plate inside the card — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
       },
       {
         href: '/design/reasons',
@@ -380,7 +385,7 @@ const SPECIMENS = [
       {
         href: '/design/corpus-page',
         name: 'CorpusPage',
-        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, ToolPage for a free tool and the grouped case-study index, each shown with the plan that decided its bands',
+        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, an article, a term or a free tool and the grouped case-study index, each shown with the plan that decided its bands',
       },
     ],
   },

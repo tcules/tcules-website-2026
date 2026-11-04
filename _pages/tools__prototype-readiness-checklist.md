@@ -65,6 +65,14 @@ navigation:
     url: /tools
   - name: Prototype Readiness Checklist
     url: /tools/prototype-readiness-checklist
+  section_labels:
+    example: Worked example
+    who-its-for: Who it suits
+    before-you-start: Before you start
+    workspace: Seven checks
+    brief: Build brief
+    next: Developer handover
+    faq: FAQs
 render:
   band_order:
   - example

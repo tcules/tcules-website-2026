@@ -1,5 +1,6 @@
 import type { CorpusBand, CorpusBlock, CorpusLink } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
+import { ROUTES } from '@/lib/routes';
 
 /**
  * Reading a corpus band's shapes.
@@ -131,6 +132,23 @@ export function linksIn(runs: readonly InlineRun[]): Extract<InlineRun, { type: 
 /** Plain text of runs. */
 export const plain = inlineToText;
 
+/** The most words a Statement's line carries: "Without a named choice to inform, a map becomes wall
+    art." is 11; "Left unchecked, it can turn one shared system back into several parallel ones." 13. */
+const STATEMENT_WORDS = 16;
+
+/**
+ * Whether a paragraph can be a Statement (glossary critic, 4 Nov 2026; treatment rules): ONE short
+ * line the page stands on, with no link of its own. A Statement is set near title scale, so a
+ * paragraph of several sentences promoted to it is a wall of serif bigger than every h2 on the page
+ * (ux-debt ran 10 lines at 1440), and it takes no inline links, so a linked sentence promoted to it
+ * lost its links (agentic-ux). Anything else stays prose at body size, its links kept.
+ */
+export function isStatementLine(runs: readonly InlineRun[]): boolean {
+  if (hasLink(runs)) return false;
+  const words = plain(runs).trim().split(/\s+/).filter(Boolean);
+  return words.length > 0 && words.length <= STATEMENT_WORDS;
+}
+
 export function blocksOf<T extends CorpusBlock['type']>(
   band: CorpusBand,
   type: T,
@@ -188,4 +206,104 @@ export function isExample(runs: readonly InlineRun[]): boolean {
   /* "Example:", and the qualified openings the copy also uses: "Example, for what a result shows:",
      "Example of how each view is set:", "Example, from related work:". */
   return /^example\b[^:.]{0,40}:/i.test(plain(runs).trimStart());
+}
+
+/**
+ * A band's onward line (tracker 2.53, 3 Nov 2026): the band's LAST block is a paragraph of its own,
+ * at most two sentences, whose one link sends the reader to a piece of reading (`/insights/…`):
+ * "[Is your vibe-coded app ready for production?](/insights/…) covers where AI-built apps break
+ * first." Such a line is lifted out of its band and set as an ink island after it (`OnwardIsland`,
+ * CopyBands.tsx), where the plan allows one (plan.ts `placeOnward`).
+ *
+ * Its words are split, never rewritten: the sentence before the one holding the link (the setup) is
+ * the island's heading; the sentence holding the link is its lead, or the heading when there is no
+ * setup; a link that closes the line on its own is the button alone. A title the sentence runs
+ * through keeps its mark as the copy's quotation marks, since the link that marked it is now the
+ * button. The link's own words are the one button, to its href, without the authored arrow (the
+ * control draws one).
+ *
+ * Not an onward line: a link to a case (the case-mention rule links it in place), a service or the
+ * form (an ask), a paragraph that argues and then points (three sentences or more), an "Example:".
+ */
+export type OnwardLine = {
+  /** The block's index in `band.blocks`. */
+  index: number;
+  heading: string;
+  lead?: string;
+  link: { label: string; href: string };
+};
+
+const SENTENCE_END = /[.?!…](?=\s|$)/g;
+
+export function onwardLine(band: CorpusBand): OnwardLine | null {
+  const index = lastIndexWhere(band.blocks, (block) => block.type !== 'comment');
+  const block = band.blocks[index];
+  if (block?.type !== 'paragraph' || isExample(block.runs)) return null;
+  const links = block.runs.filter((run) => run.type === 'link');
+  const link = links[0];
+  if (links.length !== 1 || link?.type !== 'link' || !link.href.startsWith('/insights/'))
+    return null;
+  const at = block.runs.indexOf(link);
+  const before = plain(block.runs.slice(0, at));
+  const after = plain(block.runs.slice(at + 1));
+  const label = plain(link.children).trim();
+  const sentences =
+    (before.match(SENTENCE_END)?.length ?? 0) + (after.match(SENTENCE_END)?.length ?? 0);
+  if (sentences > 2 || !label) return null;
+
+  /* The setup: everything up to the last sentence end before the link. */
+  let cut = -1;
+  for (const match of before.matchAll(SENTENCE_END)) cut = (match.index ?? 0) + 1;
+  const setup = cut > 0 ? before.slice(0, cut).trim() : '';
+  const prefix = cut > 0 ? before.slice(cut) : before;
+  const tail = /^\s*[.]?\s*$/.test(after);
+  /* A title the sentence runs through ("Our guide, Does my SaaS need a mobile app? …, walks through
+     the questions"; "Is your vibe-coded app ready for production? covers …") was marked by its link
+     alone. Plain text drops the link, so the title takes the copy's own quotation marks, or the
+     sentence reads broken where the title ends (critic, 3 Nov 2026). A clause link ("explains why …")
+     opens lower-case and is prose either way. */
+  const embedded = !tail || prefix.trim() !== '';
+  const title =
+    embedded && /^\p{Lu}/u.test(label) && (prefix.trim() !== '' || /[.?!…]/.test(label));
+  const pointer = `${prefix}${title ? `“${label}”` : label}${after}`.trim();
+  const button = { label: label.replace(/\s*[→➝➔⟶]\s*$/u, ''), href: link.href };
+
+  if (tail && !prefix.trim()) {
+    /* "Added a confidence score and usage stayed flat? [Read why … →](…)": the link is the button. */
+    return setup ? { index, heading: setup, link: button } : null;
+  }
+  return setup
+    ? { index, heading: setup, lead: pointer, link: button }
+    : { index, heading: pointer, link: button };
+}
+
+/** The band without its onward line, so the line is said once, on the island. */
+export function withoutBlock(band: CorpusBand, index: number): CorpusBand {
+  return { ...band, blocks: band.blocks.filter((_, at) => at !== index) };
+}
+
+/**
+ * A service tile's action, named for what its link opens: a tool, an audit, the audits hub or a
+ * service (ServiceTile `action`, Bento's split tile `detail.action`). One wording per kind of tile.
+ */
+export function tileActionFor(href: string | undefined): string {
+  const route = href?.split('#')[0];
+  if (route?.startsWith(`${ROUTES.tools}/`)) return 'Try the tool';
+  if (route === ROUTES.audits) return 'See the audits';
+  if (route?.startsWith(`${ROUTES.audits}/`)) return 'See the audit';
+  return 'Explore the service';
+}
+
+/**
+ * A link's words for a control that draws its own arrow (4 Nov 2026): the copy's trailing "→" goes,
+ * or the button reads "SEE DESIGN SYSTEMS → →". Every link set with an arrow icon takes its label
+ * through this; the words before the arrow are unchanged.
+ */
+export function labelWithoutArrow(label: string): string {
+  return label.replace(/\s*(?:→|->)\s*$/, '').trim();
+}
+
+/** A "See …" / "Use the …" link's destination name, as a tile's title ("See Design Systems →" → "Design Systems"). */
+export function destinationName(label: string): string {
+  return labelWithoutArrow(label).replace(/^(?:see|use|explore|try)\s+(?:the\s+)?/i, '');
 }

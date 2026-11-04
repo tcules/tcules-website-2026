@@ -56,9 +56,9 @@ async function bundle(contents, name) {
   return import(pathToFileURL(out).href);
 }
 
-const { kindOf, KIND_COMPONENTS } = await bundle(
+const { kindOf, KIND_COMPONENTS, BANDS_ELSEWHERE } = await bundle(
   `export { kindOf } from './src/templates/CorpusPage/plan.ts';
-   export { KIND_COMPONENTS } from './src/templates/CorpusPage/kinds.ts';`,
+   export { KIND_COMPONENTS, BANDS_ELSEWHERE } from './src/templates/CorpusPage/kinds.ts';`,
   'site',
 );
 
@@ -149,6 +149,7 @@ const pages = readdirSync(join(ROOT, '_pages'))
   .filter((p) => PASS_1_OFFER_ROUTES.has(p.route) || PASS_1_COMPOSED_ROUTES.has(p.route));
 
 const failures = [];
+const moved = [];
 const queue = new Map();
 const matrix = new Map();
 
@@ -160,6 +161,15 @@ for (const page of pages) {
   }
   const html = readFileSync(file, 'utf8');
   for (const band of page.bands) {
+    /* A band the owner moved into another element's state (kinds.ts BANDS_ELSEWHERE): listed, not
+       failed. It must really be gone: a moved band still drawn as a section is a stale entry. */
+    const elsewhere = BANDS_ELSEWHERE[page.route]?.[band.id];
+    if (elsewhere) {
+      if (sectionOf(html, band.id)) {
+        failures.push(`${page.route}#${band.id}: listed in BANDS_ELSEWHERE but still on the page`);
+      } else moved.push(`${page.route}#${band.id} → ${elsewhere}`);
+      continue;
+    }
     const kind = kindOf(band);
     const section = sectionOf(html, band.id);
     const where = `${page.route}#${band.id}`;
@@ -180,8 +190,12 @@ for (const page of pages) {
     } else if (entry.status === 'to-design') {
       queue.set(kind, [...(queue.get(kind) ?? []), page.route]);
     }
+    /* A band's onward line is lifted onto its own ink island after the band (tracker 2.53;
+       CopyBands `OnwardIsland`, id `<band>-onward`): the band's words are the band's and its island's. */
+    const onward = sectionOf(html, `${band.id}-onward`);
+    const words = onward ? `${section.text} ${onward.text}` : section.text;
     for (const s of samplesOf(band.blocks)) {
-      if (!section.text.includes(s)) failures.push(`${where}: copy missing from the page: "…${s}…"`);
+      if (!words.includes(s)) failures.push(`${where}: copy missing from the page: "…${s}…"`);
     }
   }
 }
@@ -192,6 +206,10 @@ if (MATRIX) {
   process.exit(0);
 }
 
+if (moved.length > 0) {
+  console.log('Bands moved out of the band loop (kinds.ts BANDS_ELSEWHERE):');
+  for (const line of moved) console.log(`  ${line}`);
+}
 if (queue.size > 0) {
   console.log('Kinds still to design (rendering, not approved):');
   for (const [kind, routes] of queue)
