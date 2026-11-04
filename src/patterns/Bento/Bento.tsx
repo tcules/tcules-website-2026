@@ -306,10 +306,21 @@ function TileLink({
       </TileBox>
     );
   }
+  /* A single tile's foot action takes the link Button's `sm` (Button: "anything inside a dense
+     grid cell"): at md (13) "See Matter Design System" missed one line in a four-across tile's
+     236 column by under a pixel at 1440 and wrapped at 1100–1280; at 12 it holds one line from
+     1280, and below that the link's balanced wrap is the fallback (critic, 4 Nov 2026,
+     /future-interfaces-lab). A wide tile has the room and keeps md. */
   const action =
     item.href && item.action?.trim() ? (
       <Cluster>
-        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+        <Button
+          as="span"
+          emphasis="link"
+          tone="primary"
+          size={wide ? 'md' : 'sm'}
+          icon={<Icon name="arrow-right" />}
+        >
           {item.action}
         </Button>
       </Cluster>

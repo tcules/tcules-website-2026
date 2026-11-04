@@ -690,15 +690,24 @@ function CtaActions({
   actions,
   kind,
   justify,
+  className,
 }: {
   actions: readonly CtaAction[];
+  /** The paired close's row class (`.pairActions`). */
+  className?: string;
   /** `ask` on a close, `link` on the offer, `partner` a second ask's lone link. See above. */
   kind: 'ask' | 'link' | 'partner';
   /** `center` in the open close's centred column; otherwise the row starts at the copy's edge. */
   justify?: 'center';
 }) {
   return (
-    <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
+    <Cluster
+      className={className}
+      colGap="block"
+      rowGap="block"
+      align="center"
+      justify={justify}
+    >
       {actions.map((action, index) => {
         const solid = kind === 'ask' && index === 0;
         /* A lone partner is a link, not a ghost (critic, 4 Nov 2026): with no solid beside it a ghost's
@@ -896,10 +905,17 @@ export function CtaSection(props: CtaSectionProps) {
           data-arrangement="open-island-pair"
         >
           {field(
-            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
+            /* Stacked, the two routes part at `column` (64), the larger seam: at `stack` they parted
+               at the distance each route's lede already keeps from its own action, so the second
+               read as the first's continuation (critic, 4 Nov 2026). */
+            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="column">
               <Layout rowGap="stack" justifyItems="start" pinLast>
                 <div data-texture-calm>{lede({ scale: 'close' })}</div>
-                <CtaActions actions={props.actions.slice(0, 1)} kind={actionKind} />
+                <CtaActions
+                  actions={props.actions.slice(0, 1)}
+                  kind={actionKind}
+                  className={styles.pairActions}
+                />
               </Layout>
               <Layout rowGap="stack" justifyItems="start" pinLast id={second.id}>
                 <div data-texture-calm>
@@ -910,7 +926,11 @@ export function CtaSection(props: CtaSectionProps) {
                     scale="close"
                   />
                 </div>
-                <CtaActions actions={[second.action]} kind="partner" />
+                <CtaActions
+                  actions={[second.action]}
+                  kind="partner"
+                  className={styles.pairActions}
+                />
               </Layout>
             </Layout>,
           )}

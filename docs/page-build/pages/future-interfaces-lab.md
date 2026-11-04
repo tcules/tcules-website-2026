@@ -135,3 +135,24 @@ Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tin
 - **After the merge of main:** the FAQ renders beside in halves (decisions/2026-11-04-faq-beside-in-halves).
   The page has no Why Tcules, Three ways or industries band, so those rulings do not apply here. Nothing
   from the merge broke the page (shots at 1440 and 390, no overflow, no page errors).
+- **Critic, pass 2 (7.5/10), fixes:**
+  - Matter tile's foot link still wrapped at 1100–1440 (236 label in a 236 column at 1440) → cause: a
+    single tile's foot action was set at the band's link size (md, 13) inside a four-across card column.
+    Fix, at Bento (single, non-wide tile `action` only): the link Button's `sm` (12, Button's "dense grid
+    cell" size); one line, 218 wide, at 1280, 1440 and 390; the balanced wrap stays the fallback at
+    1024–1100. A wide tile keeps md. Only this page authors a tile `action`; CTA cards, split-tile
+    `detail.action` and ServiceTile actions are untouched (no change on the audits, tools or listings
+    pages), checked on /design/bento.
+  - Close island: the solid and the bare link ended on one foot, so the link's label sat 12 under the
+    solid's → cause: the pinned action rows had their controls' own heights. Fix, GLOBAL in CtaSection's
+    paired close (`second`): each action row is one md box tall (`--cta-pair-action-block-size`, 40,
+    duplicated from the button on purpose) with its control centred; both centres now measure equal at
+    1024–1440. Stacked, the two routes part at `column` (64) instead of `stack` (48), so the second
+    reads as its own door. Only /future-interfaces-lab pairs closes today (plan.ts PAIRED_CLOSES);
+    /careers and /future-interfaces-lab/join do not use the pair and are unchanged; /design/cta-section
+    shot clean.
+  - Skipped: labelling the promotion figure's four rows with words (the flat grammar sets no words
+    inside a drawing, and brand imagery carries no type); its hub is the shared `Focus` mark every flat
+    scene uses, so dropping its halo is a grammar question for the owner, not this page. Skipped: one
+    fixed-size placeholder label (scripts/placeholders.mjs renders text in SVG units); that is a
+    site-wide placeholder change, left in Open.

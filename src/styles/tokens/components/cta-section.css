@@ -103,6 +103,10 @@
   /* The halves close's title (owner, 25 Oct 2026): the split keeps its 96, so the title takes a
      two-line measure here instead of the column a 128 gap would have left it. Balanced wrap. */
   --cta-heading-measure-halves: 18ch;
+  /* The paired close's action row (4 Nov 2026, /future-interfaces-lab critic): one box tall, its
+     control centred, so a link in one half and a solid in the other share a centre line instead of
+     a foot. The md button's 40, duplicated on purpose (token rule 6). */
+  --cta-pair-action-block-size: 40px;
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
