@@ -746,6 +746,9 @@ function AiPractice({ page, b }: BandProps) {
       <OfferSheet
         {...head(b)}
         arrangement="list"
+        /* On tint for the page's rhythm (owner, 4 Nov 2026): its neighbours, Three ways and the
+           industries, are paper. */
+        surface="tint"
         lead={intro ? plain(intro) : undefined}
         items={stages.map((stage, index) => ({
           id: `${index}-${stage.label}`,
