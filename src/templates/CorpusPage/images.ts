@@ -38,6 +38,23 @@ export type SlotImage =
 export type HeroCutOut = Omit<CorpusImage, 'kind' | 'sources'> & {
   kind: 'cut-out';
   panel: 'paper-deep';
+  /**
+   * A recomposed cut for a phone (below 768): one frame of the artefact rather than the whole set,
+   * where the set shrunk to a 326 column leaves nothing to read (matter critic, pass 2, 4 Nov 2026:
+   * the three-frame collage rendered 262 × 144). PageHero sets it as the image's art direction.
+   */
+  phone?: { src: string; width: number; height: number };
+};
+
+/**
+ * One item's own picture in a set, cut from the page's artefact (Media kind `cut-out`): a detail of
+ * the real file on the hero's paper-deep panel, with the one crop shadow so its white edge holds on
+ * the panel (decisions/2026-09-24-cut-out-contrast-panel-below-3-1).
+ */
+export type ItemCutOut = Omit<CorpusImage, 'kind' | 'sources'> & {
+  kind: 'cut-out';
+  panel: 'paper-deep';
+  shadow: true;
 };
 
 export const slugOf = (text: string): string =>
@@ -211,6 +228,10 @@ const ARTEFACT_HERO: Record<string, HeroCutOut> = {
     height: 1041,
     kind: 'cut-out',
     panel: 'paper-deep',
+    /* Below 768 the Button frame alone, its top half (the title, resting to pressed, the filled, line
+       and ghost rows), cut from the same master: the three frames at 262 wide read as a grey smudge
+       (matter critic, pass 2, 4 Nov 2026). */
+    phone: { src: '/matter-design-system/matter-hero-phone.webp', width: 698, height: 632 },
   },
 };
 
@@ -227,9 +248,10 @@ export type BandArtefact = { image: CorpusImage; fit: 'crop' | 'own' };
 const ARTEFACT_BAND: Readonly<Record<string, BandArtefact>> = {
   /* /matter-design-system "Duplicate Matter from Figma Community and take it apart": Matter's own
      components exploded off the canvas (Blue 500 and Cyan 500 swatches, the Primary and Secondary
-     buttons, the select, the type styles), the live Matter page's picture beside its token naming.
-     A field of parts bleeding off every edge, so it crops without loss (owner, 4 Nov 2026: "there
-     are some images for MDS on the live website ... use them where necessary"). */
+     buttons, the select, the type styles), the live Matter page's picture beside its token naming
+     (owner, 4 Nov 2026: "there are some images for MDS on the live website ... use them where
+     necessary"). Whole at its own 4 : 3: cropped to the split's photograph it cut labels mid-word
+     ("Drag & drop to u…", "Edit fie…"), which read as an error (matter critic, pass 2). */
   [`${ROUTES.matterDesignSystem}#use`]: {
     image: {
       src: '/matter-design-system/matter-components.webp',
@@ -238,23 +260,13 @@ const ARTEFACT_BAND: Readonly<Record<string, BandArtefact>> = {
       height: 1200,
       kind: 'capture',
     },
-    fit: 'crop',
-  },
-  /* /matter-design-system "What a working design system adds to a Figma file": the live Matter page's
-     picture of a screen beside its front-end code with an assistant's suggestions, which is the band's
-     claim (coded components, and AI tools building screens and code from the system). It replaces the
-     isometric placeholder; a 1.8 : 1 drawing whose two panels a crop would cut, so it keeps its own
-     ratio. */
-  [`${ROUTES.matterDesignSystem}#beyond-the-file`]: {
-    image: {
-      src: '/matter-design-system/matter-component-code.webp',
-      alt: 'A product screen beside its front-end code, with an assistant suggesting parts as a person works on it.',
-      width: 1080,
-      height: 600,
-      kind: 'capture',
-    },
     fit: 'own',
   },
+  /* /matter-design-system `beyond-the-file` took the live page's screen-and-code picture on 4 Nov
+     (pass 2) and gave it back the same day: it is the old site's AI illustration in the retired green,
+     a generic skeleton rather than a frame of the file (matter critic, pass 2). The band argues for
+     what goes BEYOND the file, which no Matter frame shows, so it keeps its illustration slot
+     (plan.ts ILLUSTRATED_PROSE), a labelled placeholder until drawn. */
 };
 
 /** The page's own artefact a prose band shows on this route, if any (`ARTEFACT_BAND`). */
@@ -315,6 +327,55 @@ export function itemCovers(
   bandId: string,
 ): Readonly<Record<string, CorpusImage>> | undefined {
   return ITEM_COVERS[`${route}#${bandId}`];
+}
+
+/**
+ * A set whose items each show a detail of the page's own artefact, by route and band, then by the
+ * item's title as authored: /matter-design-system "What's inside", each property zoomed out of the
+ * hero's collage (the real Matter file) on the hero's paper-deep panel, so the band reads as a closer
+ * look at the hero. Three generic flat drawings stood here; the owner asked for the live site's Matter
+ * images wherever the page needs a picture of the file (owner, 4 Nov 2026; matter critic, pass 2).
+ * Every crop is 8 : 5 (padded clear where its frame is shorter), so the three panels share a height.
+ * Read before the band's drawings: a set takes them only when every item has one.
+ */
+const ITEM_CUT_OUTS: Readonly<Record<string, Readonly<Record<string, ItemCutOut>>>> = {
+  [`${ROUTES.matterDesignSystem}#contents`]: {
+    'Tokens named for their purpose.': {
+      src: '/matter-design-system/matter-tokens-purpose.webp',
+      alt: 'Matter spacing tokens in Tokens Studio, named null, tiny, smallest, smaller, small, base, large, larger, largest, huge and colossal, with small showing its value of 12px, and border radius tokens from sharp to circular.',
+      width: 465,
+      height: 291,
+      kind: 'cut-out',
+      panel: 'paper-deep',
+      shadow: true,
+    },
+    'Components built from smaller parts.': {
+      src: '/matter-design-system/matter-button-states.webp',
+      alt: "Matter's Button assembled from a label and two icons, in filled, line and ghost styles at large, medium and small, across its resting, hovered and focused states.",
+      width: 600,
+      height: 375,
+      kind: 'cut-out',
+      panel: 'paper-deep',
+      shadow: true,
+    },
+    'Naming you can follow.': {
+      src: '/matter-design-system/matter-tokens-library.webp',
+      alt: "Matter's token sets in Tokens Studio, organised as base, semantic tokens, semantic, semantic colours, landing page colours and component tokens, beside the sizing scale from tiny to colossal.",
+      width: 535,
+      height: 334,
+      kind: 'cut-out',
+      panel: 'paper-deep',
+      shadow: true,
+    },
+  },
+};
+
+/** The band's per-item cut-outs, by item title, where its route names them (`ITEM_CUT_OUTS`). */
+export function itemCutOuts(
+  route: string,
+  bandId: string,
+): Readonly<Record<string, ItemCutOut>> | undefined {
+  return ITEM_CUT_OUTS[`${route}#${bandId}`];
 }
 
 /**

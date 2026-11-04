@@ -14,7 +14,7 @@ import {
 } from '@/components';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 import { cx } from '@/lib/cx';
-import { HEAD_TRACK } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, HEAD_TRACK } from '@/lib/image-sizes';
 
 import styles from './OfferSheet.module.css';
 
@@ -47,6 +47,14 @@ export type OfferSheetItem = {
    * sheet is two rows of two, each drawing beside its words.
    */
   scene?: SketchName;
+  /**
+   * Or the promise SHOWN: an image of the real thing in the drawing's place (a detail of the page's
+   * own artefact, a cut-out on its panel; /matter-design-system "What's inside", 4 Nov 2026). It sits
+   * where a scene would, at the same tracks, so a drawn sheet and a shown one share one arrangement.
+   * Set on every item or on none, scenes and images not mixed; the caller crops the set to one ratio
+   * so the items' words start level.
+   */
+  image?: MediaImage;
   /**
    * The page the promise names, when the title is authored as a link (an expertise page's "What we
    * design": "**[Care coordination platforms](/…)** that connect families with carers", component-map
@@ -221,9 +229,15 @@ export function OfferSheet({
   /* Drawn: every promise beside its own drawing, two up at full width, no rule (the drawing opens the
      item). The quote has its own band after the offer (owner, 26 Oct 2026: a quote beside or under
      the set "reads as noise"), so a drawn sheet takes no aside. */
-  const drawn = !rows && shown.length > 0 && shown.every((item) => item.scene);
+  /* Shown: every promise beside an image of its own instead, in the same arrangement. A set is all
+     scenes or all images. */
+  const pictured = !rows && shown.length > 0 && shown.every((item) => item.image);
+  const drawn = pictured || (!rows && shown.length > 0 && shown.every((item) => item.scene));
   if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
     console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
+  }
+  if (process.env.NODE_ENV !== 'production' && !pictured && shown.some((item) => item.image)) {
+    console.warn('OfferSheet: some promises carry an image and some do not; showing none.');
   }
   /* Glyph-headed: every promise led by its glyph, in a grid (4 Nov 2026, /future-interfaces-lab/join
      "Why join"). A set is all-glyph or none; a mixed set draws no glyph and says so. */
@@ -322,7 +336,14 @@ export function OfferSheet({
             rowGap="block"
             align="center"
           >
-            {item.scene ? <Sketch name={item.scene} /> : null}
+            {pictured && item.image ? (
+              <Media
+                image={item.image}
+                sizes={drawnThree ? CARD_THREE_TRACKS : CARD_TWO_TRACKS}
+              />
+            ) : item.scene ? (
+              <Sketch name={item.scene} />
+            ) : null}
             {words(item)}
           </Layout>
         </li>

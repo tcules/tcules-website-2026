@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import type { CorpusPage } from '@/lib/corpus-types';
 import { heroIsCentred, heroIsText } from '@/lib/hero-media';
 import { heroClip } from '@/lib/hero-clips';
-import { heroImage } from './images';
+import { heroImage, type SlotImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { CorpusHero, withApplicationAnchor } from './blocks';
@@ -15,6 +15,16 @@ import { withoutBlock } from './text';
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
 };
+
+/** The hero's image as PageHero media: a phone cut on the record (images.ts `HeroCutOut.phone`)
+ *  becomes the hero's art direction, and the image itself goes to Media without it. */
+function heroMedia(slot: SlotImage) {
+  if ('phone' in slot && slot.phone) {
+    const { phone, ...image } = slot;
+    return { type: 'image', image, phone } as const;
+  }
+  return { type: 'image', image: slot } as const;
+}
 
 /**
  * TIER 3 — the offer page: a service, an audit or an expertise page from the `_pages/` corpus
@@ -80,10 +90,7 @@ export function OfferPage({
           },
           cut: drawing.cut,
         } as const)
-      : ({
-          type: 'image',
-          image: heroImage(page),
-        } as const);
+      : heroMedia(heroImage(page));
 
   return (
     <>

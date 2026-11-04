@@ -2,7 +2,13 @@ import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { ROUTES } from '@/lib/routes';
 
 import { glyphBand } from './glyph-bands';
-import { bandArtefact, photoBeside, studioBandPhoto, studioCollage } from './images';
+import {
+  bandArtefact,
+  itemCutOuts,
+  photoBeside,
+  studioBandPhoto,
+  studioCollage,
+} from './images';
 import { formBeforeFaq } from './order';
 import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
@@ -572,8 +578,11 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
   'working-loop',
   'design-to-release',
   'product-knowledge',
-  /* /matter-design-system `beyond-the-file` left 4 Nov 2026 (pass 2): the live Matter page's own
-     picture of a screen beside its code now stands beside it (images.ts ARTEFACT_BAND). */
+  /* /matter-design-system: "What a working design system adds to a Figma file", what a system needs
+     beyond the file (owners, coded components, docs, releases, a machine reader). No frame of the
+     file shows that, so the isometric placeholder until drawn (matter critic, pass 2, 4 Nov 2026: the
+     old site's green screen-and-code picture that stood here for an hour was removed). */
+  'beyond-the-file',
   /* /future-interfaces-lab: "Where we think software interfaces are heading", the Lab's thesis told in
      three paragraphs; an abstract claim, so one band-scale isometric illustration, and it keeps the
      short `purpose` intro from touching another prose band (docs/page-build/pages/future-interfaces-lab.md). */
@@ -635,6 +644,8 @@ export function registerOf(
     case 'text':
       /* The page's own artefact, a real image of the thing (images.ts ARTEFACT_BAND). */
       if (bandArtefact(page.route, band.id)) return 'photo';
+      /* Each item a detail of the page's own artefact (images.ts ITEM_CUT_OUTS). */
+      if (itemCutOuts(page.route, band.id)) return 'photo';
       if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
       /* The studio collage is six photographs (images.ts STUDIO_COLLAGE). */
       if (studioCollage(page.route, band.id)) return 'photo';

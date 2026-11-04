@@ -657,16 +657,28 @@ export function SheetBand({
   scenes,
   arrangement,
   icons,
+  images,
 }: {
   band: CorpusBand;
   scenes?: (title: string) => OfferSheetItem['scene'];
+  /**
+   * An image per item title, a detail of the page's own artefact (images.ts `ITEM_CUT_OUTS`), shown in
+   * place of the drawings when every item has one.
+   */
+  images?: Readonly<Record<string, NonNullable<OfferSheetItem['image']>>>;
   /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_GLYPHS`). */
   arrangement?: 'grid' | 'rows' | 'list';
   /** A glyph per item title, rows, list or grid (OfferBands `SHEET_GLYPHS`). */
   icons?: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
+  /* An item's image by its title as authored, with or without its full stop. */
+  const imageOf = (title?: string) =>
+    title ? (images?.[title] ?? images?.[title.replace(/\.\s*$/, '')]) : undefined;
+  const shown = images !== undefined && parts.items.every((item) => imageOf(item.title));
   const items = parts.items.map((item) => {
+    const image = shown ? imageOf(item.title) : undefined;
+    if (image) return { ...item, image };
     /* A statement's scene is filed under its words, or under the words before its colon. */
     const key = item.title ?? item.id ?? '';
     const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);

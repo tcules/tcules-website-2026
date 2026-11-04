@@ -78,6 +78,7 @@ import {
   slugOf,
   type SlotImage,
   itemCovers,
+  itemCutOuts,
   photoBeside,
   studioCollage,
 } from './images';
@@ -803,7 +804,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           </ContentSection>
         );
       }
-      return <SheetBand band={band} scenes={scenes} {...(SHEET_GLYPHS[band.id] ?? {})} />;
+      const cutOuts = itemCutOuts(page.route, band.id);
+      return (
+        <SheetBand
+          band={band}
+          scenes={scenes}
+          {...(cutOuts ? { images: cutOuts } : {})}
+          {...(SHEET_GLYPHS[band.id] ?? {})}
+        />
+      );
     }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */

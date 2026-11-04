@@ -155,3 +155,47 @@ cut-out → flat → photo → photo → flat → isometric → none; no tint, n
 - Hero at 390 (carried over): the collage reads as the product, not its detail. Options for the owner: the
   ink panel (passes 3:1, but ink is reserved), a phone-only tighter crop of the Button frame, or accepting it.
 - og/twitter image still `IMAGE_ASSET_REQUIRED` (carried over).
+
+### Fixed after the pass 2 critic (4 Nov 2026, 6.5/10)
+- **beyond-the-file showed the retired green identity** (local) → `ARTEFACT_BAND` had taken every large image
+  on the live Matter page as the page's artefact, and `image_a3154e52ee.webp` is the old site's AI/code
+  illustration (mint ground, green sparkle and code bars, skeleton panels), not a frame of the file → entry
+  removed, `public/matter-design-system/matter-component-code.webp` deleted, the band back in
+  `plan.ts ILLUSTRATED_PROSE`: the labelled isometric placeholder (brief in docs/image-register.md) until drawn.
+  No Matter frame can show what goes beyond the file, so a drawing is the right register here.
+- **Hero at 390 a grey smudge** (component: PageHero; data: one route) → a cut-out keeps the panel inset at
+  every width and shrank the 1.83 : 1 three-frame collage to 262 × 144 → new optional `HeroImage.phone` in
+  PageHero (Media `art`, `(max-width: 767.98px)`), carried on `HeroCutOut.phone` and split off in
+  `OfferPage heroMedia()`. Matter's phone cut is the Button frame's top half (title, resting to pressed,
+  filled / line / ghost), 698 × 632, `matter-hero-phone.webp`, cut from the collage master. Only this route
+  sets it; checked /careers (1440) and /future-interfaces-lab (390) heroes unchanged.
+- **use crop cut labels mid-word** (local) → `fit: 'crop'` forced the split's photograph ratio on a 4 : 3
+  product shot → `fit: 'own'`: whole at 4 : 3 in ContentSection's figure half; "Create new / Edit field /
+  Delete" now whole.
+- **What's inside still generic drawings** (component: OfferSheet; data: one route) → real images had been
+  placed only where a band had none; the drawn sheet could take only Sketch scenes → `OfferSheetItem.image`
+  (a set is all scenes or all images, same arrangement), `SheetBand images`, route data in
+  `images.ts ITEM_CUT_OUTS` (`itemCutOuts()`), register `photo` in `plan.ts`. Each item a detail cut from the
+  hero collage on the hero's paper-deep panel with the one crop shadow, all 8 : 5 (padded clear):
+  - Tokens named for their purpose → `matter-tokens-purpose.webp` (Spacing null…colossal with the
+    "small {space.12px}" tooltip, Border Radius sharp…circular), 465 × 291.
+  - Components built from smaller parts → `matter-button-states.webp` (Button as label + 2 icons, filled /
+    line / ghost × lg / md / sm, resting / hovered / focused), 600 × 375. The label + 2 icons rows rather
+    than the top matrix: they show the parts, and on a phone the hero already shows the top matrix.
+  - Naming you can follow → `matter-tokens-library.webp` (the token-set list base … component-tokens beside
+    Sizing tiny…colossal), 535 × 334.
+  Drawn sheets elsewhere (no `image`) unchanged.
+- Skipped, the og/twitter image nit: it is a site-wide change to `composedMetadata` for every corpus page
+  (many heroes are placeholders, which must never become a share card), and the share card was already listed
+  as an owner content decision (`IMAGE_ASSET_REQUIRED` in the copy). Stays in Open.
+
+Images now on the page: hero collage (desktop) / Button frame (phone); three collage details in What's inside;
+the exploded components in use. Rhythm: cut-out → three cut-out details → photo (start) → isometric
+placeholder (end) → four service cards → blue island → FAQ in halves.
+
+### Open (pass 2 critic)
+- **New variants, owner to confirm:** `HeroImage.phone` (a recomposed phone cut on a hero image) and
+  `OfferSheetItem.image` (a sheet item shown by a real image in the drawing's place).
+- The contents crops are cut from the 1900 collage, so 465–600 source px fill a ~328 CSS px panel: soft on a
+  2× screen. A 2× export of the same three frames from the Figma Community file would sharpen them.
+- The three contents drawings (`wyg-matter-design-system-*`) stay registered but unused on this page.
