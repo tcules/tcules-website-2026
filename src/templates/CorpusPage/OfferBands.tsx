@@ -547,6 +547,15 @@ const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> =
  * name routes.ts files the case under; the cards are the 3-column case grid (treatment rules § 1), the
  * paragraph is the lead without its link, and the link is the centred action under the cards.
  */
+/**
+ * A prose band whose sentences are each about one named client, set as list cards beside the head
+ * (owner 4 Nov 2026, /clients). One title per sentence, in order: the client's name, words the
+ * sentence already carries. The sentence is the card's body, verbatim, links kept.
+ */
+const SENTENCE_ROWS: Readonly<Record<string, readonly string[]>> = {
+  '/clients#returning-clients': ['Primelis', 'Benchmark Gensuite'],
+};
+
 const CLOSE_CASES: Readonly<Record<string, readonly string[]>> = {
   '/clients#case-studies': ['Doodle', 'Benchmark Gensuite', 'Eden AI'],
 };
@@ -666,7 +675,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
-    case 'text':
+    case 'text': {
+      const clients = SENTENCE_ROWS[`${page.route}#${band.id}`];
+      if (clients) return <SentenceRowsBand band={band} titles={clients} />;
       return (
         <TextBand
           page={page}
@@ -675,6 +686,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           scenario={sceneFor(ctx, band, 'scenario')}
         />
       );
+    }
     case 'note':
       return <NoteBand band={band} />;
     case 'close': {
@@ -1872,6 +1884,26 @@ function CaseLinksBand({
       }
     >
       {set}
+    </ContentSection>
+  );
+}
+
+function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly string[] }) {
+  const sentences = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? sentencesOf(block.runs) : [],
+  );
+  return (
+    <ContentSection {...head(band)} data-band="C-list" arrangement="beside">
+      <Layout as="ul" rowGap="none">
+        {sentences.map((sentence, index) => (
+          <ListCard
+            key={titles[index] ?? sentence.text}
+            titleAs="h3"
+            title={titles[index] ?? sentence.text}
+            {...bodyOf(sentence.runs)}
+          />
+        ))}
+      </Layout>
     </ContentSection>
   );
 }

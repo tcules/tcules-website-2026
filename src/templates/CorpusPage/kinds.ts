@@ -69,9 +69,9 @@ export const KIND_COMPONENTS: Readonly<
     note: 'A trace read across its columns (design-to-code audit).',
   },
   text: {
-    component: ['C-text', 'B'],
+    component: ['C-text', 'B', 'C-list'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B).',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list).',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {

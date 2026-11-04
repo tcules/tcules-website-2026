@@ -49,7 +49,7 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
 | product-responsibility | set · offer-sheet, `rows` | kind still `to-design`; ⚠ text-heavy pair with client-list (Q2) |
 | client-list | table · DataTable (E) | 16 rows |
 | testimonials | quotes · slider (G), stars on every quote, RatingBadge footer | tint |
-| returning-clients | text · C-text | followed by the case covers, so no text-heavy pair |
+| returning-clients | text · C-list: heading left, two list cards right, titled Primelis and Benchmark Gensuite (SENTENCE_ROWS; owner 4 Nov 2026) | each card one sentence of the copy, verbatim |
 | case-studies | close · case grid (M), link at the head’s end | Doodle, Benchmark Gensuite, Eden AI (CLOSE_CASES) |
 | enquiry, faq | L, D-faq | |
 
