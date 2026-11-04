@@ -1,3 +1,7 @@
+import { createHash } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
 import {
   getBlogPage,
   getCaseStudyPage,
@@ -22,7 +26,7 @@ import {
 } from '@/lib/routes';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
-import { shareCard, type ShareCard } from './card';
+import { shareCard, type ShareCard, type ShareSource } from './card';
 import type { ShareMedia } from './media';
 
 /**
@@ -91,7 +95,7 @@ function author(path: string) {
  * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
  * read the CMS leaves the card without a picture rather than without an image.
  */
-function drawingFor(path: string) {
+function drawingFor(path: string): { media: ShareMedia; source: ShareSource } | null {
   const [, family, line] = path.split('/');
   const hub =
     family === 'services' && line
@@ -101,27 +105,54 @@ function drawingFor(path: string) {
         : family === 'expertise'
           ? ROUTES.expertise
           : null;
-  return serviceIllustration(path) ?? (hub ? serviceIllustration(hub) : undefined);
+  const own = serviceIllustration(path);
+  const drawing = own ?? (hub ? serviceIllustration(hub) : undefined);
+  if (!drawing) return null;
+  const { src, width, height } = drawing;
+  return { media: { kind: 'illustration', src, width, height }, source: own ? 'own' : 'hub' };
 }
 
-async function mediaFor(path: string): Promise<ShareMedia | null> {
+async function mediaFor(path: string): Promise<{ media: ShareMedia; source: ShareSource } | null> {
   const drawing = drawingFor(path);
-  if (drawing) return { kind: 'illustration', src: drawing.src, width: drawing.width, height: drawing.height };
+  if (drawing) return drawing;
 
   const [, family, slug, ...rest] = path.split('/');
+  const capture = (image: { src: string; width: number; height: number }): ShareMedia => ({
+    kind: 'capture',
+    src: image.src,
+    width: image.width,
+    height: image.height,
+  });
   try {
     if (family === 'case-studies' && slug && rest.length === 0) {
       const image = (await getCaseStudyPage(slug))?.heroImage;
-      if (image) return { kind: 'capture', src: image.src, width: image.width, height: image.height };
+      if (image) return { media: capture(image), source: 'banner' };
     }
     if (family === 'insights' && slug && !['authors', 'events', 'podcasts', 'videos'].includes(slug)) {
       const image = (await getBlogPage([slug, ...rest].join('/')))?.featureImage;
-      if (image) return { kind: 'capture', src: image.src, width: image.width, height: image.height };
+      if (image) return { media: capture(image), source: 'cover' };
     }
   } catch (error) {
     console.error(`share cards: no picture for ${path}`, error);
   }
   return null;
+}
+
+/**
+ * What a picture IS, so the card's URL changes when it does: a drawing file's bytes, or a CMS image's
+ * URL (Cloudinary versions every upload in it). A new drawing tonight is a new URL tomorrow.
+ */
+async function fingerprintOf(media: ShareMedia): Promise<string> {
+  if (/^https?:\/\//.test(media.src)) return media.src;
+  const bytes = await readFile(join(process.cwd(), 'public', media.src));
+  return createHash('sha1').update(bytes).digest('hex');
+}
+
+async function pictureFor(
+  path: string,
+): Promise<{ media: ShareMedia; source: ShareSource; fingerprint: string } | null> {
+  const found = await mediaFor(path);
+  return found ? { ...found, fingerprint: await fingerprintOf(found.media) } : null;
 }
 
 /**
@@ -138,7 +169,7 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
       eyebrow: page.hero.eyebrow ? inlineToText(page.hero.eyebrow) : null,
       name: page.name,
       cut: HERO_CUTS[path],
-      media: await mediaFor(path),
+      ...(await pictureFor(path)),
     });
   }
   const person = await author(path);
@@ -148,8 +179,8 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
   }
   const title = await cmsTitle(path);
   if (title) {
-    const media = await mediaFor(path);
-    return shareCard({ path, title, eyebrow: null, name: title, cut: HERO_CUTS[path], media });
+    const picture = await pictureFor(path);
+    return shareCard({ path, title, eyebrow: null, name: title, cut: HERO_CUTS[path], ...picture });
   }
   if (path !== ROUTES.home) return { ...(await shareCardFor(ROUTES.home)), path };
   return shareCard({ path, title: 'Tcules', eyebrow: null, name: 'Tcules' });

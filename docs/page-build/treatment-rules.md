@@ -150,6 +150,7 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **Hard parts:** three columns, drawing | claim | example as authored; no logo, citation, card or cover (hard-parts-three-columns-as-authored).
 - **Tile set CTA:** one dotted card per question (cta-card-per-question).
 - **Heroes:** the seven L1 service pages, /expertise and /audits carry the owner-approved isometric heroes from the illustration canvas (public/illustrations/heroes/, text flattened to paths, viewBox trimmed to the drawing).
+- **A new hero drawing is registered, not only saved.** Add the file to `public/illustrations/heroes/` AND its route to `HERO_ILLUSTRATIONS` in `src/lib/service-illustrations.ts` (route → src, width, height), in the same change. That table is the one place a page's hero and its share card both read: an unregistered file shows on neither, and the card keeps its family hub's drawing (a service's line, /audits, /expertise). The card picks the drawing up on the next build, under a new URL. Check with `npm run share:census` (needs `npm run dev`): it lists every page still on its hub's drawing or on its title alone.
 - **Standing lesson:** render the copy as authored with existing components; change the arrangement before adding parts; use the full width.
 
 

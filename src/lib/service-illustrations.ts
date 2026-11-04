@@ -11,6 +11,11 @@ import { ROUTES, servicePath } from './routes';
  * Product Design & First Release, and the /expertise and /audits hubs, their text flattened to paths and
  * their viewBox trimmed to the drawing. An illustration is never cropped; every other page's hero is a
  * bound asset or a labelled placeholder.
+ *
+ * Register every new hero drawing HERE, in the same change that adds its file: the page's hero and its
+ * share card (src/app/_og/resolve.ts) both read this table, and a file it does not name is used by
+ * neither. A page with no entry shares its family hub's drawing on its card until it has one;
+ * `npm run share:census` lists those pages.
  */
 const HERO_ILLUSTRATIONS: Readonly<
   Record<string, { src: string; width: number; height: number }>

@@ -22,6 +22,14 @@ function imageUrl(card: ShareCard): string {
   return `${card.path === '/' ? '' : card.path}/opengraph-image/${card.id}`;
 }
 
+const SOURCE_LABEL: Record<ShareCard['source'], string> = {
+  own: 'Own drawing',
+  hub: "Hub's drawing",
+  banner: 'Case banner',
+  cover: 'Article cover',
+  none: 'Title only',
+};
+
 const KIND_ORDER: readonly ShareCard['kind'][] = [
   'home',
   'company',
@@ -68,8 +76,15 @@ export default async function ShareCardsSpecimenPage() {
               </h2>
               <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
                 {set.map((card) => (
-                  <Specimen key={card.path} label="below" title={card.path} note={card.alt}>
-                    <Media
+                  <Specimen
+                    key={card.path}
+                    label="below"
+                    title={card.path}
+                    note={`${SOURCE_LABEL[card.source]} · ${card.alt}`}
+                  >
+                    {/* Read by `npm run share:census`: which page's card carries which picture. */}
+                    <div data-share-path={card.path} data-share-source={card.source} data-share-kind={card.kind}>
+                      <Media
                       image={{
                         src: imageUrl(card),
                         alt: card.alt,
@@ -78,7 +93,8 @@ export default async function ShareCardsSpecimenPage() {
                         kind: 'capture',
                       }}
                       sizes="400px"
-                    />
+                      />
+                    </div>
                   </Specimen>
                 ))}
               </Layout>

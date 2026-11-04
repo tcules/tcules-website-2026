@@ -30,6 +30,8 @@ export type ShareKind =
 
 export type ShareGround = 'paper' | 'paper-deep';
 
+export type ShareSource = 'own' | 'hub' | 'banner' | 'cover' | 'none';
+
 /** A hero rung (A3): 88 holds 40 characters, 72 holds 55. Nothing between, nothing below. */
 export type ShareRung = 88 | 72;
 
@@ -45,6 +47,11 @@ export type ShareCard = {
   action: string | null;
   /** The page's picture — its hero drawing (or its hub's), its banner or its cover — or null. */
   media: ShareMedia | null;
+  /**
+   * Where the picture came from, for `npm run share:census`: the page's own drawing, its family hub's
+   * drawing (until its own lands), a case banner, an article cover, or none (the title alone).
+   */
+  source: ShareSource;
   /** JPEG when the card carries a banner or a cover (over 1 MB as PNG; ch10 C1), else PNG. */
   format: 'png' | 'jpeg';
   /** og:image:alt — what the card says, in a sentence. */
@@ -54,8 +61,8 @@ export type ShareCard = {
 };
 
 /**
- * Bumped on a redesign. Unfurlers cache an image by URL and most never re-fetch (C1), so a changed
- * card must change its URL; the id is the last segment of it.
+ * Bumped on a redesign of the card itself. A change of CONTENT (a new drawing, a new title) changes
+ * the URL on its own through the content hash in the id; this marks a change of the design.
  */
 const VERSION = 'v01';
 
@@ -311,6 +318,21 @@ export function setMeta(
 
 /* ── The card ─────────────────────────────────────────────────────────────────────────────── */
 
+/**
+ * Eight hex characters of FNV-1a over the card's content: its words and its picture. In the id, so a
+ * new drawing, a new banner or an edited title gives the card a new URL — the only way past an
+ * unfurler's cache, which keys by URL and rarely re-fetches (ch10 C1). Pure, so card.ts stays free of
+ * I/O; collisions only matter between two states of one page.
+ */
+function shortHash(text: string): string {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
 /** The page's own slug, without its family (the kind already names it): `/services/a/b` → `a-b`. */
 const slugOf = (path: string) => {
   const segments = path.split('/').filter(Boolean);
@@ -326,6 +348,12 @@ export function shareCard(input: {
   /** An authored cut (`HERO_CUTS`): words of the H1, chosen by hand where the rules read badly. */
   cut?: string;
   media?: ShareMedia | null;
+  source?: ShareSource;
+  /**
+   * What the picture IS — a hash of the drawing file's bytes, or the CMS image URL — so the card's URL
+   * changes when its picture does (see `id`).
+   */
+  fingerprint?: string;
 }): ShareCard {
   const kind = kindOf(input.path);
   const { hero, rung } = setHero(input.cut ?? input.title, kind);
@@ -341,8 +369,11 @@ export function shareCard(input: {
     ground,
     action,
     media: input.media ?? null,
+    source: input.source ?? 'none',
     format: input.media?.kind === 'capture' ? 'jpeg' : 'png',
     alt: `${label}: ${hero}`,
-    id: `tcules-og-${kind}-${slugOf(input.path)}-${VERSION}`,
+    id: `tcules-og-${kind}-${slugOf(input.path)}-${VERSION}-${shortHash(
+      [hero, label, action ?? '', input.fingerprint ?? ''].join('\n'),
+    )}`,
   };
 }
