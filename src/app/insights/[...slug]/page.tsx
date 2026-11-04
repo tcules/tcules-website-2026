@@ -218,7 +218,6 @@ async function pageMetadata(slug: string[]): Promise<Metadata> {
   const title = blog.seo?.title || blog.title;
   const description = blog.seo?.description || blog.description;
   const canonical = blog.seo?.canonical;
-  const image = blog.socialImage;
 
   return {
     title,
@@ -234,22 +233,11 @@ async function pageMetadata(slug: string[]): Promise<Metadata> {
       ...(blog.authors.length > 0
         ? { authors: blog.authors.map((author) => author.name) }
         : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }

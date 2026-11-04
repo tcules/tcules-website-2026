@@ -4,7 +4,7 @@ import { shareCardFor } from './resolve';
 import { renderShareCard, SHARE_SIZE } from './render';
 
 export { shareCardFor } from './resolve';
-export { renderShareCard, SHARE_DIRECTIONS, SHARE_SIZE, type ShareDirection } from './render';
+export { renderShareCard, SHARE_SIZE } from './render';
 export type { ShareCard } from './card';
 
 type Params = Record<string, string | string[] | undefined>;
@@ -26,7 +26,7 @@ export function shareImage(path: string | ((params: Params) => string)) {
   return {
     async generateImageMetadata({ params }: { params?: Params | Promise<Params> }) {
       const card = await shareCardFor(pathOf(await params));
-      return [{ id: card.id, alt: card.alt, size: SHARE_SIZE, contentType: 'image/png' }];
+      return [{ id: card.id, alt: card.alt, size: SHARE_SIZE, contentType: `image/${card.format}` }];
     },
     async Image({ params }: { params?: Promise<Params>; id?: Promise<string | number> }) {
       return renderShareCard(await shareCardFor(pathOf(await params)));
@@ -57,7 +57,7 @@ export async function withShareImage(metadata: Metadata, path: string): Promise<
     url: shareImagePath(path, card.id),
     ...SHARE_SIZE,
     alt: card.alt,
-    type: 'image/png',
+    type: `image/${card.format}`,
   };
   return {
     ...metadata,

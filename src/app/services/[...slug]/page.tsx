@@ -395,13 +395,11 @@ async function pageMetadata(slug: string[]): Promise<Metadata> {
       description,
       type: 'website',
       ...(canonical ? { url: canonical } : {}),
-      images: [],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [],
     },
   };
 }

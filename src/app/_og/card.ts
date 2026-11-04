@@ -43,13 +43,10 @@ export type ShareCard = {
   ground: ShareGround;
   /** The action line, on the four types C4 gives one; null everywhere else. */
   action: string | null;
-  /** The page's own picture — its hero drawing, banner, cover or sector photograph — or null. */
+  /** The page's picture — its hero drawing (or its hub's), its banner or its cover — or null. */
   media: ShareMedia | null;
-  /**
-   * The word a card with no picture sets large on its island: the page's own subject from its
-   * eyebrow (the glossary term, the tool's area), else its kind. Never invented copy.
-   */
-  feature: string;
+  /** JPEG when the card carries a banner or a cover (over 1 MB as PNG; ch10 C1), else PNG. */
+  format: 'png' | 'jpeg';
   /** og:image:alt — what the card says, in a sentence. */
   alt: string;
   /** The versioned id ch10 C1 asks for: `tcules-og-{type}-{slug}-v01`. A redesign bumps VERSION. */
@@ -344,7 +341,7 @@ export function shareCard(input: {
     ground,
     action,
     media: input.media ?? null,
-    feature: meta.fact || meta.kind,
+    format: input.media?.kind === 'capture' ? 'jpeg' : 'png',
     alt: `${label}: ${hero}`,
     id: `tcules-og-${kind}-${slugOf(input.path)}-${VERSION}`,
   };

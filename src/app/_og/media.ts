@@ -8,19 +8,17 @@ import sharp from 'sharp';
  * lands in at export resolution, and handed over as a PNG data URL. Satori decodes neither WebP nor
  * AVIF — the formats the CMS and the kit photo catalogue serve — so every picture passes through here.
  *
- * The fit follows the rulings, not the box: a photograph is cropped to its box about its focal point;
- * a capture (a case banner, an article cover) and an illustration are never cropped (ruling H3,
- * decisions/2026-10-16-drawing-never-cropped-faces-its-form) — they are fitted whole, and the layout
- * sizes the box to them.
+ * An illustration is fitted whole (decisions/2026-10-16-drawing-never-cropped-faces-its-form). A case
+ * banner or an article cover FILLS the card's right half, cropped from the centre: the owner chose
+ * the filled half over a whole banner shown small (4 Nov 2026), an exception to ruling H3 that holds
+ * for the share card only.
  */
 export type ShareMedia = {
-  kind: 'illustration' | 'photo' | 'capture';
+  kind: 'illustration' | 'capture';
   /** A public path (`/kit/…`, `/illustrations/…`) or an absolute CMS URL. */
   src: string;
   width: number;
   height: number;
-  /** A photograph's focal point, 0–1 on each axis. */
-  focus?: { x: number; y: number };
 };
 
 async function bytes(src: string): Promise<Buffer> {
@@ -33,32 +31,22 @@ async function bytes(src: string): Promise<Buffer> {
 }
 
 /**
- * The picture as a data URL at `width` × `height` export pixels. `cover` crops (photographs only);
- * `contain` fits the whole picture inside the box at its own ratio, and returns the size it took.
+ * The picture as a data URL at `width` × `height` export pixels. `cover` fills the box, cropped from
+ * the centre; `contain` fits the whole picture inside it at its own ratio and returns the size it took.
  */
 export async function preparedMedia(
   media: ShareMedia,
   box: { width: number; height: number },
+  fit: 'cover' | 'contain',
 ): Promise<{ src: string; width: number; height: number }> {
   const input = await bytes(media.src);
   const density = media.src.endsWith('.svg') ? 300 : undefined;
   const image = sharp(input, density ? { density } : {});
 
-  if (media.kind === 'photo') {
-    const meta = await image.metadata();
-    const w = meta.width ?? media.width;
-    const h = meta.height ?? media.height;
-    const scale = Math.max(box.width / w, box.height / h);
-    const scaledW = Math.round(w * scale);
-    const scaledH = Math.round(h * scale);
-    const fx = media.focus?.x ?? 0.5;
-    const fy = media.focus?.y ?? 0.5;
-    const left = Math.min(Math.max(Math.round(scaledW * fx - box.width / 2), 0), scaledW - box.width);
-    const top = Math.min(Math.max(Math.round(scaledH * fy - box.height / 2), 0), scaledH - box.height);
+  if (fit === 'cover') {
     const out = await image
-      .resize(scaledW, scaledH)
-      .extract({ left, top, width: box.width, height: box.height })
-      .jpeg({ quality: 85 })
+      .resize(box.width, box.height, { fit: 'cover', position: 'centre' })
+      .jpeg({ quality: 90 })
       .toBuffer();
     return { src: `data:image/jpeg;base64,${out.toString('base64')}`, ...box };
   }
@@ -68,46 +56,4 @@ export async function preparedMedia(
   const height = Math.round(width / ratio);
   const out = await image.resize(width, height, { fit: 'inside' }).png().toBuffer();
   return { src: `data:image/png;base64,${out.toString('base64')}`, width, height };
-}
-
-/* ── The pixel-grid field ─────────────────────────────────────────────────────────────────── */
-
-type Grid = { pitch: number; cells: { x: number; y: number; width: number; height: number; alpha: number }[] };
-
-let grid: Promise<Grid> | undefined;
-
-/**
- * The site's texture (src/styles/textures/pixel-grid.json, the one source the component and the
- * export script read) as a field over a box, fading out from one corner the way the site's feathered
- * field does (TextureFlow `feather`). Drawn by sharp, since Satori has no pattern fill.
- */
-export async function textureField(
-  box: { width: number; height: number },
-  ink: string,
-  scale: number,
-): Promise<string> {
-  grid ??= readFile(join(process.cwd(), 'src/styles/textures/pixel-grid.json'), 'utf8').then(
-    (json) => JSON.parse(json) as Grid,
-  );
-  const { pitch, cells } = await grid;
-  const p = pitch * scale;
-  const rects = cells
-    .map(
-      (c) =>
-        `<rect x="${c.x * scale}" y="${c.y * scale}" width="${c.width * scale}" height="${c.height * scale}" fill="${ink}" fill-opacity="${c.alpha}"/>`,
-    )
-    .join('');
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${box.width}" height="${box.height}">
-    <defs>
-      <pattern id="p" width="${p}" height="${p}" patternUnits="userSpaceOnUse">${rects}</pattern>
-      <radialGradient id="g" cx="0.85" cy="0.9" r="0.95">
-        <stop offset="0" stop-color="#fff"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.75"/>
-        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-      </radialGradient>
-      <mask id="m"><rect width="100%" height="100%" fill="url(#g)"/></mask>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#p)" mask="url(#m)"/>
-  </svg>`;
-  const out = await sharp(Buffer.from(svg)).png().toBuffer();
-  return `data:image/png;base64,${out.toString('base64')}`;
 }

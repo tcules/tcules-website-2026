@@ -7,7 +7,6 @@ import {
   type SitePageFamily,
 } from '@/content';
 import { inlineToText } from '@/lib/inline';
-import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import {
   auditPath,
   authorPath,
@@ -83,23 +82,31 @@ function author(path: string) {
 }
 
 /**
- * The page's own picture, the one its page already shows (owner, 4 Nov 2026: "for case studies the
- * banner; pages with an illustration carry it"). Never a stand-in drawn or picked for the card:
- * - a hero drawing, where the page has one (the service lines, /expertise, /audits);
+ * The page's picture (owner, 4 Nov 2026):
+ * - its own hero drawing, where it has one;
+ * - else its family hub's drawing until its own lands: a service's line, /audits for an audit,
+ *   /expertise for an expertise page (expertise pages take illustrations, never photographs);
  * - a case study's banner from Strapi (its UI cut-outs replace it when Strapi carries them);
- * - an industry's sector photograph, the one its home card shows;
  * - an article's cover from Strapi.
- * A failure to read the CMS leaves the card without a picture rather than without an image.
+ * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
+ * read the CMS leaves the card without a picture rather than without an image.
  */
-async function mediaFor(path: string): Promise<ShareMedia | null> {
-  const drawing = serviceIllustration(path);
-  if (drawing) return { kind: 'illustration', src: drawing.src, width: drawing.width, height: drawing.height };
+function drawingFor(path: string) {
+  const [, family, line] = path.split('/');
+  const hub =
+    family === 'services' && line
+      ? servicePath(line)
+      : family === 'audits'
+        ? ROUTES.audits
+        : family === 'expertise'
+          ? ROUTES.expertise
+          : null;
+  return serviceIllustration(path) ?? (hub ? serviceIllustration(hub) : undefined);
+}
 
-  const photo = HOME_SECTOR_PHOTOS[path];
-  if (photo) {
-    const record = getKitPhoto(photo);
-    return { kind: 'photo', src: record.src, width: record.width, height: record.height, focus: record.focus };
-  }
+async function mediaFor(path: string): Promise<ShareMedia | null> {
+  const drawing = drawingFor(path);
+  if (drawing) return { kind: 'illustration', src: drawing.src, width: drawing.width, height: drawing.height };
 
   const [, family, slug, ...rest] = path.split('/');
   try {

@@ -2,31 +2,30 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import { ImageResponse } from 'next/og';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
+import sharp from 'sharp';
 
 import { BAR_PATH, WORDMARK_PATHS, WORDMARK_VIEWBOX } from '@/components';
 
 import type { ShareCard } from './card';
-import { preparedMedia, textureField } from './media';
+import { preparedMedia } from './media';
 
 /**
  * Draws a share card. Authored at 1280 × 670 and exported at 2x (2560 × 1340, ch10 C1); every figure
  * below is in authored units and goes through `px`.
  *
- * Three directions, for the owner to pick between (4 Nov 2026). Each carries the page's own picture
- * where it has one, and the same parts: the mono meta line, the serif hero, the wordmark. They differ
- * in where the picture sits and how much of the card it takes:
- *   a · split          words left, the picture right — unboxed if it is a drawing
- *   b · island         words on paper, the picture on a textured island; a drawing rises out of it
- *   c · picture first  the picture across the top, the words under it, as the page itself opens
- * A page with no picture gets the island in every direction, holding its own subject word large.
+ * One layout, from the owner's review of three directions (4 Nov 2026): the words in a left column
+ * and the page's picture in the right half — a drawing unboxed on the paper, a banner or a cover
+ * filling the half as a rounded image. No plates, no texture: the picture is the card's interest.
+ * A page with no picture at all sets its title larger across the full width.
+ *
+ * Type is sans, not the site's serif titles: a card is read at about 500px wide, where the serif
+ * thins out (owner, 4 Nov 2026) — the same reason card titles on the site are sans
+ * (decisions/2026-10-22-card-titles-sans-except-horizontal).
  *
  * Satori reads inline styles and no CSS, so this is the one place in the site that styles with
- * objects, and the reason it reads its colours and radii out of the token layer.
+ * objects, and the reason it reads its colours and radius out of the token layer.
  */
-export type ShareDirection = 'a' | 'b' | 'c';
-export const SHARE_DIRECTIONS: readonly ShareDirection[] = ['a', 'b', 'c'];
-
 const SCALE = 2;
 const W = 1280;
 const H = 670;
@@ -51,12 +50,11 @@ function tokens(): Promise<Map<string, string>> {
 
 type Ink = {
   paper: string;
-  island: string;
-  hero: string;
+  title: string;
   meta: string;
   blue: string;
   mark: string;
-  islandRadius: number;
+  tracking: string;
   mediaRadius: number;
 };
 
@@ -69,49 +67,42 @@ async function inks(): Promise<Ink> {
   };
   return {
     paper: get('color-paper'),
-    island: get('color-paper-deep'),
-    hero: get('color-neutral-900'),
+    title: get('color-neutral-900'),
     meta: get('color-neutral-700'),
     blue: get('color-brandeis-500'),
     mark: get('color-neutral-950'),
-    /* --isl-radius and --media-radius, by the primitives they name (island.css, media.css). */
-    islandRadius: Number.parseInt(get('radius-24'), 10),
+    /* The sans title roles' tracking (--text-h4 reads -title-fine; at card size -title holds it). */
+    tracking: get('letter-spacing-title'),
+    /* --media-radius is --radius-8 (media.css; decisions/2026-11-01-every-image-rounded). */
     mediaRadius: Number.parseInt(get('radius-8'), 10),
   };
 }
 
 /* ── Type ─────────────────────────────────────────────────────────────────────────────────── */
 
-let faces: Promise<{ name: string; data: Buffer; weight: 400 | 600; style: 'normal' }[]> | undefined;
+let faces: Promise<{ name: string; data: Buffer; weight: 500 | 600; style: 'normal' }[]> | undefined;
 
-/** Newsreader 400 at optical size 72 and Geist Mono 600, as static TTFs (fonts/README.md). */
+/** Public Sans 500 (the site's sans title weight) and Geist Mono 600, as static TTFs (fonts/README.md). */
 function fonts() {
   const file = (name: string) => readFile(join(process.cwd(), 'src/app/_og/fonts', name));
-  faces ??= Promise.all([file('newsreader-72-400.ttf'), file('geist-mono-600.ttf')]).then(
-    ([serif, mono]) => [
-      { name: 'Newsreader', data: serif, weight: 400, style: 'normal' },
+  faces ??= Promise.all([file('public-sans-500.ttf'), file('geist-mono-600.ttf')]).then(
+    ([sans, mono]) => [
+      { name: 'Public Sans', data: sans, weight: 500, style: 'normal' },
       { name: 'Geist Mono', data: mono, weight: 600, style: 'normal' },
     ],
   );
   return faces;
 }
 
-/* ch10 A3's serif ladder: size, leading, tracking. A split column takes 64 (C3). */
-const SERIF = {
-  88: { leading: 1.06, tracking: '-0.022em' },
-  72: { leading: 1.1, tracking: '-0.02em' },
-  64: { leading: 1.12, tracking: '-0.018em' },
-  52: { leading: 1.16, tracking: '-0.012em' },
-} as const;
-type SerifSize = keyof typeof SERIF;
-
-const serif = (size: SerifSize, color: string): CSSProperties => ({
-  fontFamily: 'Newsreader',
-  fontWeight: 400,
+/* The title: 56 beside a picture (three lines of the 55-character ceiling in the 540 column), 72 across
+   the full width when there is none. */
+const title = (size: 56 | 72, ink: Ink): CSSProperties => ({
+  fontFamily: 'Public Sans',
+  fontWeight: 500,
   fontSize: px(size),
-  lineHeight: SERIF[size].leading,
-  letterSpacing: SERIF[size].tracking,
-  color,
+  lineHeight: size === 72 ? 1.08 : 1.12,
+  letterSpacing: ink.tracking,
+  color: ink.title,
   textWrap: 'balance',
 });
 
@@ -125,252 +116,90 @@ const MONO: CSSProperties = {
   textTransform: 'uppercase',
 };
 
-/* ── Parts ────────────────────────────────────────────────────────────────────────────────── */
+const M = 72; /* the outer margin */
+const COLUMN = 540; /* the words' column beside a picture */
+const SPLIT = 660; /* where the picture's half starts */
 
-function Meta({ card, ink }: { card: ShareCard; ink: Ink }) {
-  return (
-    <div style={{ ...MONO, display: 'flex', flexWrap: 'wrap', columnGap: '0.6em' }}>
-      <span style={{ color: ink.blue }}>{card.meta.kind}</span>
-      {card.meta.fact ? <span style={{ color: ink.meta }}>·</span> : null}
-      {card.meta.fact ? <span style={{ color: ink.meta }}>{card.meta.fact}</span> : null}
-    </div>
-  );
-}
-
-function Mark({ ink, height = 32 }: { ink: Ink; height?: number }) {
-  const h = px(height);
-  return (
-    <svg
-      width={(h * WORDMARK_VIEWBOX.width) / WORDMARK_VIEWBOX.height}
-      height={h}
-      viewBox={`0 0 ${WORDMARK_VIEWBOX.width} ${WORDMARK_VIEWBOX.height}`}
-    >
-      {[...WORDMARK_PATHS, BAR_PATH].map((d) => (
-        <path key={d} d={d} fill={ink.mark} />
-      ))}
-    </svg>
-  );
-}
-
-function Action({ card, ink }: { card: ShareCard; ink: Ink }) {
-  return card.action ? <div style={{ ...MONO, color: ink.blue }}>{card.action}</div> : null;
-}
-
-/** An absolutely placed box, in authored units. */
-const at = (x: number, y: number, w: number, h: number): CSSProperties => ({
-  position: 'absolute',
-  left: px(x),
-  top: px(y),
-  width: px(w),
-  height: px(h),
-  display: 'flex',
-});
-
-type Box = { x: number; y: number; w: number; h: number };
-
-/**
- * The paper-deep island with the site's pixel-grid field, its corners --isl-radius. Holds the picture,
- * or — on a page with none — the page's own subject word, set large in blue.
- */
-async function Island({
-  box,
-  ink,
-  children,
-}: {
-  box: Box;
-  ink: Ink;
-  children?: ReactNode;
-}): Promise<ReactNode> {
-  const field = await textureField({ width: px(box.w), height: px(box.h) }, ink.blue, SCALE * 2);
-  return (
-    <div
-      style={{
-        ...at(box.x, box.y, box.w, box.h),
-        backgroundColor: ink.island,
-        borderRadius: px(ink.islandRadius),
-        overflow: 'hidden',
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
-      <img src={field} width={px(box.w)} height={px(box.h)} style={{ position: 'absolute', left: 0, top: 0 }} alt="" />
-      {children}
-    </div>
-  );
-}
-
-/** The subject word on an island: blue serif, bottom-left, inside the island's own padding. */
-function Feature({ card, ink, size, pad }: { card: ShareCard; ink: Ink; size: SerifSize; pad: number }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: px(pad),
-        right: px(pad),
-        bottom: px(pad - 8),
-        display: 'flex',
-        ...serif(size, ink.blue),
-      }}
-    >
-      {card.feature}
-    </div>
-  );
-}
-
-/**
- * The page's picture inside `box`. A photograph fills it (cropped about its focus, --media-radius);
- * a capture or a drawing is fitted whole and placed by `align` — a drawing unboxed, a capture with
- * the media radius.
- */
-async function Picture({
-  card,
-  box,
-  ink,
-  align = 'center',
-  valign = 'center',
-}: {
-  card: ShareCard;
-  box: Box;
-  ink: Ink;
-  align?: 'start' | 'center' | 'end';
-  valign?: 'start' | 'center' | 'end';
-}): Promise<ReactNode> {
-  const media = card.media;
-  if (!media) return null;
-  const prepared = await preparedMedia(media, { width: px(box.w), height: px(box.h) });
-  const w = prepared.width / SCALE;
-  const h = prepared.height / SCALE;
-  const x = box.x + (align === 'start' ? 0 : align === 'end' ? box.w - w : (box.w - w) / 2);
-  const y = box.y + (valign === 'start' ? 0 : valign === 'end' ? box.h - h : (box.h - h) / 2);
-  const radius = media.kind === 'illustration' ? 0 : px(ink.mediaRadius);
-  return (
-    <div style={{ ...at(x, y, w, h), borderRadius: radius, overflow: 'hidden' }}>
-      {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
-      <img src={prepared.src} width={prepared.width} height={prepared.height} alt="" />
-    </div>
-  );
-}
-
-/* ── The three directions ─────────────────────────────────────────────────────────────────── */
-
-const M = 72; /* the outer margin: the thumbnail's 72 (D1), so a picture can take more of the card */
-
-/** a · split: the words in a 520 column, the picture in the right half. */
-async function Split({ card, ink }: { card: ShareCard; ink: Ink }) {
-  const right: Box = { x: 660, y: M, w: W - 660 - M, h: H - 2 * M };
-  let side: ReactNode;
-  if (!card.media) {
-    side = await Island({ box: right, ink, children: Feature({ card, ink, size: 72, pad: 48 }) });
-  } else if (card.media.kind === 'photo') {
-    side = await Picture({ card, box: right, ink });
-  } else if (card.media.kind === 'capture') {
-    side = await Island({ box: right, ink });
-    side = (
-      <>
-        {side}
-        {await Picture({ card, box: { x: right.x + 32, y: right.y + 32, w: right.w - 64, h: right.h - 64 }, ink })}
-      </>
-    );
-  } else {
-    side = await Picture({ card, box: right, ink, align: 'end', valign: 'center' });
-  }
-  return (
-    <>
-      {side}
-      <div style={{ ...at(M + 8, M, 540, H - 2 * M), flexDirection: 'column', justifyContent: 'space-between' }}>
-        <Meta card={card} ink={ink} />
-        <div style={{ ...serif(64, ink.hero), display: 'flex' }}>{card.hero}</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: px(24) }}>
-          <Action card={card} ink={ink} />
-          <Mark ink={ink} />
-        </div>
-      </div>
-    </>
-  );
-}
-
-/** b · island: the words on paper, the picture on a textured island; a drawing rises out of its top. */
-async function IslandDirection({ card, ink }: { card: ShareCard; ink: Ink }) {
-  const isDrawing = card.media?.kind === 'illustration';
-  const island: Box = isDrawing
-    ? { x: 620, y: 260, w: W - 620 - M, h: H - 260 - M }
-    : { x: 620, y: M, w: W - 620 - M, h: H - 2 * M };
-  let picture: ReactNode = null;
-  if (card.media) {
-    picture = isDrawing
-      ? await Picture({ card, box: { x: island.x + 16, y: M - 24, w: island.w - 32, h: island.y + island.h - 40 - (M - 24) }, ink, valign: 'end' })
-      : await Picture({ card, box: { x: island.x + 40, y: island.y + 40, w: island.w - 80, h: island.h - 80 }, ink });
-  }
-  const ground = await Island({
-    box: island,
-    ink,
-    children: card.media ? null : Feature({ card, ink, size: 72, pad: 48 }),
-  });
-  return (
-    <>
-      {ground}
-      {picture}
-      <div style={{ ...at(M + 8, M, 480, H - 2 * M), flexDirection: 'column', justifyContent: 'space-between' }}>
-        <Meta card={card} ink={ink} />
-        <div style={{ ...serif(64, ink.hero), display: 'flex' }}>{card.hero}</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: px(24) }}>
-          <Action card={card} ink={ink} />
-          <Mark ink={ink} />
-        </div>
-      </div>
-    </>
-  );
-}
-
-/** c · picture first: the picture across the top, the words under it, the mark at the foot's end. */
-async function PictureFirst({ card, ink }: { card: ShareCard; ink: Ink }) {
-  const band: Box = { x: 56, y: 56, w: W - 112, h: 372 };
-  let top: ReactNode;
-  if (!card.media) {
-    top = await Island({ box: band, ink, children: Feature({ card, ink, size: 88, pad: 56 }) });
-  } else if (card.media.kind === 'photo') {
-    top = await Picture({ card, box: band, ink });
-  } else {
-    const inner = card.media.kind === 'capture'
-      ? { x: band.x + 40, y: band.y + 32, w: band.w - 80, h: band.h - 64 }
-      : { x: band.x + 40, y: band.y + 16, w: band.w - 80, h: band.h - 32 };
-    top = (
-      <>
-        {await Island({ box: band, ink })}
-        {await Picture({ card, box: inner, ink, align: card.media.kind === 'illustration' ? 'end' : 'center' })}
-      </>
-    );
-  }
-  return (
-    <>
-      {top}
-      <div style={{ ...at(M + 8, band.y + band.h + 36, W - 2 * M - 16, H - band.y - band.h - 36 - 56), justifyContent: 'space-between', alignItems: 'flex-end', gap: px(48) }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: px(16), maxWidth: px(860) }}>
-          <Meta card={card} ink={ink} />
-          <div style={{ ...serif(52, ink.hero), display: 'flex' }}>{card.hero}</div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: px(16) }}>
-          <Action card={card} ink={ink} />
-          <Mark ink={ink} />
-        </div>
-      </div>
-    </>
-  );
-}
-
-export async function renderShareCard(card: ShareCard, direction: ShareDirection = 'a'): Promise<ImageResponse> {
+export async function renderShareCard(card: ShareCard): Promise<Response> {
   const [ink, fontData] = await Promise.all([inks(), fonts()]);
-  const body =
-    direction === 'b'
-      ? await IslandDirection({ card, ink })
-      : direction === 'c'
-        ? await PictureFirst({ card, ink })
-        : await Split({ card, ink });
-  return new ImageResponse(
+  const media = card.media;
+
+  let picture = null;
+  if (media) {
+    const box = { x: SPLIT, y: M, w: W - SPLIT - M, h: H - 2 * M };
+    const fill = media.kind !== 'illustration';
+    const prepared = await preparedMedia(media, { width: px(box.w), height: px(box.h) }, fill ? 'cover' : 'contain');
+    const w = prepared.width / SCALE;
+    const h = prepared.height / SCALE;
+    /* A drawing sits at the half's far edge, centred on the height, facing the words. */
+    picture = (
+      <div
+        style={{
+          position: 'absolute',
+          left: px(box.x + box.w - w),
+          top: px(box.y + (box.h - h) / 2),
+          width: px(w),
+          height: px(h),
+          display: 'flex',
+          borderRadius: fill ? px(ink.mediaRadius) : 0,
+          overflow: 'hidden',
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
+        <img src={prepared.src} width={prepared.width} height={prepared.height} alt="" />
+      </div>
+    );
+  }
+
+  const response = new ImageResponse(
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', backgroundColor: ink.paper }}>
-        {body}
+        {picture}
+        <div
+          style={{
+            position: 'absolute',
+            left: px(M + 8),
+            top: px(M),
+            width: px(media ? COLUMN : W - 2 * M - 16),
+            height: px(H - 2 * M),
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ ...MONO, display: 'flex', flexWrap: 'wrap', columnGap: '0.6em' }}>
+            <span style={{ color: ink.blue }}>{card.meta.kind}</span>
+            {card.meta.fact ? <span style={{ color: ink.meta }}>·</span> : null}
+            {card.meta.fact ? <span style={{ color: ink.meta }}>{card.meta.fact}</span> : null}
+          </div>
+          <div style={{ ...title(media ? 56 : 72, ink), display: 'flex', maxWidth: px(media ? COLUMN : 980) }}>
+            {card.hero}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: px(24) }}>
+            {card.action ? <div style={{ ...MONO, color: ink.blue }}>{card.action}</div> : null}
+            <svg
+              width={(px(32) * WORDMARK_VIEWBOX.width) / WORDMARK_VIEWBOX.height}
+              height={px(32)}
+              viewBox={`0 0 ${WORDMARK_VIEWBOX.width} ${WORDMARK_VIEWBOX.height}`}
+            >
+              {[...WORDMARK_PATHS, BAR_PATH].map((d) => (
+                <path key={d} d={d} fill={ink.mark} />
+              ))}
+            </svg>
+          </div>
+        </div>
       </div>
     ),
     { ...SHARE_SIZE, fonts: fontData },
   );
+
+  /* A card carrying a banner or a cover goes out as JPEG q85: as PNG it runs past ch10's 1 MB, and
+     C1 allows JPG for a frame with a photograph or a cut-out in it. */
+  if (card.format === 'jpeg') {
+    const jpeg = await sharp(Buffer.from(await response.arrayBuffer())).jpeg({ quality: 85 }).toBuffer();
+    return new Response(new Uint8Array(jpeg), {
+      headers: { 'content-type': 'image/jpeg' },
+    });
+  }
+  return response;
 }
