@@ -278,6 +278,12 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
       `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
 
+- [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
+      isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
+      Works alongside 2.59's banners.
+- [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
+      dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
+      plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
 and CTA-source analytics · a pricing section · taxonomy collection pages.
@@ -330,7 +336,7 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
-- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026): every page gets its own social image, generated
+- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
       at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
       No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
       insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
