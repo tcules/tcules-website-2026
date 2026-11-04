@@ -23,7 +23,20 @@ import {
  */
 
 export type SlotImage =
-  CorpusImage | PlaceholderImage | NonNullable<CorpusCaseRef['thumbnail']>;
+  | CorpusImage
+  | HeroCutOut
+  | PlaceholderImage
+  | NonNullable<CorpusCaseRef['thumbnail']>;
+
+/**
+ * A hero picture that is the page's own artefact cut out of its frame (Media kind `cut-out`): the real
+ * product, rendered whole on a contrast panel where its white edge does not hold against paper
+ * (decisions/2026-09-24-cut-out-contrast-panel-below-3-1). No shadow: the artefact carries its own.
+ */
+export type HeroCutOut = Omit<CorpusImage, 'kind' | 'sources'> & {
+  kind: 'cut-out';
+  panel: 'paper-deep';
+};
 
 export const slugOf = (text: string): string =>
   text
@@ -171,12 +184,35 @@ export function studioBandPhoto(route: string, bandId: string): CorpusMediaBindi
   return STUDIO_BAND.find((entry) => entry.band === bandId && entry.routes(route))?.photo;
 }
 
-/** The hero's picture: the page's own binding, then a named studio reuse, then its placeholder. */
+/**
+ * A hero that shows the page's own artefact, by route: the thing the page is about, where the page
+ * binds no hero asset and the live site holds the real one (the copy's `visual_plan` names it). Read
+ * after the page's own binding and before a studio reuse.
+ */
+const ARTEFACT_HERO: Record<string, HeroCutOut> = {
+  /* visual_plan `real_matter_figma_artefacts`: three real frames of the Matter Figma file, from the
+     live site's Matter page (docs/page-build/pages/matter-design-system.md). */
+  [ROUTES.matterDesignSystem]: {
+    src: '/matter-design-system/matter-collage.webp',
+    alt: 'Three frames from the Matter Figma file: accessible colour palettes, the Button component in every size and state, and the Tokens Studio panel of purpose-named tokens.',
+    width: 2000,
+    height: 1111,
+    kind: 'cut-out',
+    panel: 'paper-deep',
+  },
+};
+
+/**
+ * The hero's picture: the page's own binding, then the page's own artefact, then a named studio reuse,
+ * then its placeholder.
+ */
 export function heroImage(page: CorpusPage): SlotImage {
   const own = page.composition.mediaBindings.find(
     (binding) => binding.bound && binding.supportsSection === 'hero',
   );
   if (own) return corpusImage(own);
+  const artefact = ARTEFACT_HERO[page.route];
+  if (artefact) return artefact;
   const reused = STUDIO_HERO[page.route];
   return reused ? corpusImage(reused) : placeholderImage(page.route, 'hero');
 }

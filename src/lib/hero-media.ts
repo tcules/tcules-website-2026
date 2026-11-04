@@ -38,6 +38,10 @@ export const heroNeedsMedia = (route: string): boolean => HERO_MEDIA_ROUTES.has(
 export const CENTRED_HERO_ROUTES: ReadonlySet<string> = new Set([
   ROUTES.services,
   ROUTES.expertise,
+  /* The hero's picture is the real Matter file, a 1.8:1 collage of three Figma frames: in the beside
+     split's half column it renders about 500 wide and its detail is lost; centred it takes the 860 cap
+     (docs/page-build/pages/matter-design-system.md, 4 Nov 2026). */
+  ROUTES.matterDesignSystem,
 ]);
 
 /** Whether a route's hero is the centred stack with its media below. */

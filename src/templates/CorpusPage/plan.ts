@@ -559,6 +559,10 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
   'working-loop',
   'design-to-release',
   'product-knowledge',
+  /* /matter-design-system: "What a working design system adds to a Figma file", the turn from the free
+     file to a working system; an abstract claim, so an isometric illustration (treatment rules § 1),
+     and it keeps the page's two prose bands apart (docs/page-build/pages/matter-design-system.md). */
+  'beyond-the-file',
 ]);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */

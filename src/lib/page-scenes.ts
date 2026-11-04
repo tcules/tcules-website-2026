@@ -450,6 +450,10 @@ export const PAGE_SCENE_NAMES = [
   'tool-figma-storybook-fidelity-checklist-corrections',
   'tool-prototype-readiness-checklist-example',
   'tool-prototype-readiness-checklist-brief',
+  /* /matter-design-system: "What's inside", the file's three properties (components/Sketch/wyg-matter-design-system.tsx) */
+  'wyg-matter-design-system-tokens-named-purpose',
+  'wyg-matter-design-system-components-built-smaller-parts',
+  'wyg-matter-design-system-naming-you-can-follow',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

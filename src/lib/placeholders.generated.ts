@@ -509,6 +509,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The problems on a screen traced down to the one cause underneath them.',
   },
+  'illustration:what-a-working-design-system-adds-to-a-figma-file': {
+    src: '/placeholders/illustration--what-a-working-design-system-adds-to-a-figma-file.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The Figma file as one sheet in the centre, with the working system built around it: an owner, a coded component, a documentation page and a release, and a machine reader taking from the same names. /matter-design-system `beyond-the-file`.',
+  },
   'illustration:what-customers-do-without-looking': {
     src: '/placeholders/illustration--what-customers-do-without-looking.svg',
     width: 1600,

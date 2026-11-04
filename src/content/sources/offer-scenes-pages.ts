@@ -637,4 +637,15 @@ export const PAGE_OFFER_SCENES = {
     },
     stories: {},
   },
+  /* The lab artefact's "What's inside": the Matter file's three properties, each drawn from its title. */
+  '/matter-design-system': {
+    items: {
+      contents: by({
+        'Tokens named for their purpose.': 'wyg-matter-design-system-tokens-named-purpose',
+        'Components built from smaller parts.': 'wyg-matter-design-system-components-built-smaller-parts',
+        'Naming you can follow.': 'wyg-matter-design-system-naming-you-can-follow',
+      }),
+    },
+    stories: {},
+  },
 } as unknown as Readonly<Record<string, OfferScenes>>;

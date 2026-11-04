@@ -265,3 +265,15 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   (IndexRail), never a sideways line of group names cut at the edge.
 - Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
   -term-page-closes-in-one-shape, -comparison-picks-its-term.
+
+## Added 4 Nov 2026 (/matter-design-system; proposed until the owner sees the page)
+
+- **A page about one artefact shows the artefact itself in its hero**, where the live site holds the real one
+  and the page binds no hero asset: a route-keyed cut-out (`ARTEFACT_HERO`, CorpusPage/images.ts), read after
+  the page's own binding and before a studio reuse. White product frames on paper take the `paper-deep`
+  contrast panel (ink is reserved); an artefact that carries its own shadows takes no Media `shadow`.
+- **A wide artefact (about 1.8:1 or wider) takes the centred hero**, media below (`CENTRED_HERO_ROUTES`): in
+  the beside split's half column it renders about 500 wide and its detail is lost.
+- **Three properties of a product, each a concrete mechanism** ("how tokens are named", "how components are
+  assembled"), are the drawn offer sheet across 3: one still flat drawing per property, heading its title and
+  words. Never the blue-marker ruled cell, which is for figures.
