@@ -173,3 +173,29 @@ shot with no overflow or page errors.
   roles should carry it.
 - A role row's meta line sits on the title's top edge, not its baseline (14 beside 20). Unchanged.
 
+### Critic fixes, pass 2 (blind critic 7/10)
+- **Role rows: the whole-row target shrank on use (must).** Cause: the hover/focus move translated
+  `.titleLink`, and a transformed element becomes the containing block for its own `::after`, so the
+  stretched box fell back from the row (1240x60) to the title words the moment it was hovered or focused,
+  taking the hit area and the focus ring with it. Fix, GLOBAL (OfferSheet): the link stays untransformed and
+  the move is on an inner `.titleText` span. Checked in a browser: at rest, on hover at the row's far end and
+  on Tab focus the box stays 1240x60 on /careers and 392x90 on /design/offer-sheet (8c); focus draws the ring
+  round the row, the title slides 4. No other page renders a linked OfferSheet title.
+- **ai-fluency link after the body, at the component (should).** Cause: the first fix lived in TextBand only;
+  ContentSection's `media` split still placed `actions` between the head and the body. Fix, GLOBAL
+  (ContentSection `MediaSplit`): `actions` render after the body, a `block` (24) under the words they close
+  (a `stack` under the head when there is no body); TextBand's media branches pass the links as `actions`
+  again, and the studio branch uses the same slot, so both paths sit at 24. Logged:
+  decisions/2026-11-04-prose-band-link-follows-its-body (narrows band-links-placed-by-role to card heads).
+  Checked: /careers (link 24 under the last paragraph), /how-we-work ("Read the Doodle case →", "Read the
+  Benchmark Gensuite case →" now follow their bodies) and /design/kit/services-index (its "How we work" row
+  now follows the four tiles; a kit showcase, not a shipped page).
+- **Lab band off the column line (should).** Cause: `HEAD_BESIDE_PROSE` took the default 1:2 head track.
+  Fix, local to the mapping (CopyBands): `split="halves"`, so the body starts at 768 with the lists and the
+  FAQ around it, and the heading takes three lines. Words and both inline links unchanged.
+- Skipped (proposal for the owner): a quiet end arrow on the role rows as the at-rest and phone cue. The
+  ruling it would extend (2026-11-04-term-rows-carry-an-end-arrow) is `proposed` and scoped to term rows;
+  the 7 Oct "no arrow cue" holds elsewhere. Say if the roles should carry it.
+- Skipped nit: the phone order of photo splits (picture above the heading on ai-fluency). Below 1024 every
+  photo split sets the picture first by design (ContentSection `media`); changing it changes every media band
+  on the site, which is the owner's call. Listed in Open already.

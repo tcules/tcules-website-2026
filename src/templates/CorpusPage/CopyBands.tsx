@@ -2471,11 +2471,9 @@ export function TextBand({
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
      plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller").
-     The band's links are its FOOT, under the words they close, beside a picture exactly as without
-     one (owner, 4 Nov 2026, /careers "How AI fits into the job": "cta below the body?"). As the
-     head's `actions` they sat between the heading and the paragraphs, a way on before the argument.
-     Unpinned (`pin: false`): the link follows the last paragraph rather than dropping to the
-     picture's bottom edge. */
+     The band's links follow the words they close, a `block` under the last paragraph: the media
+     split places its `actions` after the body (owner, 4 Nov 2026, /careers "How AI fits into the
+     job": "cta below the body?"; decisions/2026-11-04-prose-band-link-follows-its-body). */
   /* The page's own artefact beside its words (images.ts `ARTEFACT_BAND`), ahead of any illustration
      slot: a real picture of the thing the page is about replaces a placeholder (owner, 4 Nov 2026,
      /matter-design-system). Cropped as the split's photograph, or whole at its own ratio in a half. */
@@ -2495,7 +2493,7 @@ export function TextBand({
                 head: 'lg',
               }
         }
-        footer={actions}
+        actions={actions}
       >
         {text}
       </ContentSection>
@@ -2514,7 +2512,7 @@ export function TextBand({
           head: 'lg',
           pin: false,
         }}
-        footer={actions}
+        actions={actions}
       >
         {text}
       </ContentSection>
@@ -2527,7 +2525,7 @@ export function TextBand({
         data-band="B"
         arrangement="media"
         media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg', pin: false }}
-        footer={actions}
+        actions={actions}
       >
         {text}
       </ContentSection>
@@ -2561,15 +2559,9 @@ export function TextBand({
         data-band="B"
         arrangement="media"
         media={{ image: corpusImage(studio), side, weight: 'photo', head: 'lg' }}
+        actions={all.length > 0 ? <LinkActions links={all} /> : undefined}
       >
-        {all.length > 0 ? (
-          <Layout rowGap="block">
-            <BandBody blocks={words} />
-            <LinkActions links={all} />
-          </Layout>
-        ) : (
-          <BandBody blocks={words} />
-        )}
+        <BandBody blocks={words} />
       </ContentSection>
     );
   }
@@ -2590,11 +2582,20 @@ export function TextBand({
       </ContentSection>
     );
   }
-  /* A short prose band set head beside body (HEAD_BESIDE_PROSE): the head in the leading third, the
-     words in the two-thirds beside it (decisions/2026-09-28-content-section-head-beside-body). */
+  /* A short prose band set head beside body (HEAD_BESIDE_PROSE), in halves: the head in the first
+     half, the words from the column's middle, on the line the page's other beside bands (the lists,
+     the FAQ) share (decisions/2026-09-28-content-section-head-beside-body; 2026-11-04-faq-beside-in-
+     halves). In the narrow head track the heading wrapped to four lines over a three-line paragraph
+     (/careers critic, 4 Nov 2026). */
   if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
     return (
-      <ContentSection {...head(band)} data-band="C-text" arrangement="beside" footer={actions}>
+      <ContentSection
+        {...head(band)}
+        data-band="C-text"
+        arrangement="beside"
+        split="halves"
+        footer={actions}
+      >
         {text}
       </ContentSection>
     );

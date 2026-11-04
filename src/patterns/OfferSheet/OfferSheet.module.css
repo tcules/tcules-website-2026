@@ -80,21 +80,32 @@
    the reading direction, on the site's one curve, there and back. The ring is drawn round the item,
    not the words. */
 .titleLink {
-  display: inline-block;
   color: inherit;
   text-decoration: none;
-  transition: transform var(--ofs-title-link-duration) var(--ofs-title-link-easing);
 }
 
+/* The stretched box. `.titleLink` itself is never transformed: any transform makes it the
+   containing block for this `::after`, which then shrinks from the item to the title's words on
+   hover and focus, taking the target and the ring with it (/careers critic, 4 Nov 2026). The move
+   is on the label inside it (`.titleText`). */
 .titleLink::after {
   content: '';
   position: absolute;
   inset: 0;
 }
 
+.titleText {
+  display: inline-block;
+  transition: transform var(--ofs-title-link-duration) var(--ofs-title-link-easing);
+}
+
 .titleLink:hover,
 .titleLink:focus-visible {
   color: var(--ofs-title-ink-hover);
+}
+
+.titleLink:hover .titleText,
+.titleLink:focus-visible .titleText {
   transform: translateX(var(--ofs-title-link-shift));
 }
 
@@ -113,12 +124,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .titleLink {
+  .titleText {
     transition: none;
   }
 
-  .titleLink:hover,
-  .titleLink:focus-visible {
+  .titleLink:hover .titleText,
+  .titleLink:focus-visible .titleText {
     transform: none;
   }
 }

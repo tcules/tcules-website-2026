@@ -207,7 +207,7 @@ export function OfferSheet({
             className={styles.titleLink}
             {...(item.choice ? { [ENQUIRY_ROLE_ATTRIBUTE]: item.choice } : {})}
           >
-            {item.title}
+            <span className={styles.titleText}>{item.title}</span>
           </a>
         ) : (
           item.title
