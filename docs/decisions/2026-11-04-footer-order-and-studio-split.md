@@ -13,7 +13,7 @@ enforced_by: "structure (SiteFooter's band order; the footer fixture's group ord
 The site footer, on ink, runs in this order: the brand band (logo, the tagline "Code got easy. Good
 products didn't.", Start a project and the small Clutch badge); the six link groups (Services, Software
 Product Expertise, Industries, Work, Resources, Studio, with Studio last); the newsletter; the studio
-split (the one-line statement at 20px in the title ink under a short rule in the labels' row, beside two labelled facts, **Address** with the email, and **Elsewhere**);
+split (the one-line statement at 20px in the title ink under a short bar in the logo's proportion, in the labels' row, beside two labelled facts, **Address** with the email, and **Elsewhere**);
 the legal row (copyright, legal pages, the Solar Icons credit); then the faint watermark flush to the
 foot. Social links are words with an external arrow, never marks. Nothing moves or is textured at the
 foot: "remove the texture from the bottom. we'll keep it simple."

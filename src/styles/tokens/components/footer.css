@@ -69,11 +69,12 @@
      the size and the title ink, and its two lines balance the facts' height. */
   /* The short rule over the statement (owner, 4 Nov 2026): it fills the row the facts' labels sit
      in, so the statement opens on the facts' first line. The row is the eyebrow's line box, read
-     from the same size and ratio as the labels so the two cannot drift; the bar is a 2px stroke,
-     a mark rather than a hairline, 24 long. */
+     from the same size and ratio as the labels so the two cannot drift. The bar is the logo's own
+     bar in proportion (owner: "so it looks like the bar above the u"): 127 by 27 in the mark,
+     about 4.7 to 1, so 28 by 6, square-ended, in the statement's ink as the bar is in the mark's. */
   --foot-statement-rule-row: calc(var(--font-size-eyebrow) * var(--line-height-eyebrow));
-  --foot-statement-rule-inline: var(--space-24);
-  --foot-statement-rule-weight: var(--space-2);
+  --foot-statement-rule-inline: var(--space-28);
+  --foot-statement-rule-weight: var(--space-6);
   --foot-statement-text: var(--text-h5-lg);
   --foot-statement-tracking: var(--text-h5-lg-tracking);
   /* The statement holds its half of the studio split at the lead measure, so it breaks into two or
