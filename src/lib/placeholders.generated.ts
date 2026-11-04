@@ -436,6 +436,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'A design that is tried in code while it is still open: the drawn screen and its coded version side by side, real data and states running through the coded one.',
   },
+  'illustration:how-ai-fits-into-the-job': {
+    src: '/placeholders/illustration--how-ai-fits-into-the-job.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "The split of the job between AI and judgement: on one light base plate, an agent's station turning out a run of drafts that travel along the plate's axis to a designer's desk, where one draft is lifted off the run and held up to be checked; the run is the repetitive work, the desk is where what is good gets decided. Left-facing, an object not a diagram, lines on the iso axes. /careers `ai-fluency`.",
+  },
   'illustration:keeping-teams-on-the-system-after-launch': {
     src: '/placeholders/illustration--keeping-teams-on-the-system-after-launch.svg',
     width: 1600,

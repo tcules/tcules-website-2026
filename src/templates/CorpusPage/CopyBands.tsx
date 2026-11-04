@@ -2465,12 +2465,38 @@ export function TextBand({
       </ContentSection>
     );
   }
+  /* Two paragraphs that are peers, set side by side under the full-width head (PEER_PARAGRAPHS). */
+  const peers = PEER_PARAGRAPHS.has(`${page.route}#${band.id}`)
+    ? (body as readonly CorpusBlock[]).flatMap((block) =>
+        block.type === 'paragraph' ? [block] : [],
+      )
+    : [];
+  if (peers.length === 2 && peers.length === body.length) {
+    return (
+      <ContentSection {...head(band)} data-band="C-text" footer={actions}>
+        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="text">
+          {peers.map((block, index) => (
+            <Prose key={index} html={`<p>${inlineToHtml(block.runs)}</p>`} />
+          ))}
+        </Layout>
+      </ContentSection>
+    );
+  }
   return (
     <ContentSection {...head(band)} data-band="C-text" footer={actions}>
       {text}
     </ContentSection>
   );
 }
+
+/**
+ * Prose bands whose two paragraphs are peers of one kind, set as two columns under the full-width head
+ * from 1024 (`column` apart: two halves of the same kind), by route and band; one column below, the
+ * paragraphs a `text` apart. /careers "The work": what the work is, and how the job grows. As one column
+ * at the measure it left the right half of the band empty between two picture bands (4 Nov 2026, owner
+ * to confirm). Words unchanged.
+ */
+const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([`${ROUTES.careers}#product-work`]);
 
 /** A boundary on the band before it (`confidentiality`): one Callout under its own heading. */
 export function NoteBand({ band }: { band: CorpusBand }) {

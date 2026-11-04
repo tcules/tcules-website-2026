@@ -161,6 +161,12 @@ export type EnquiryDress =
       note?: string;
       /** The promise beside the send, led by a bolt in a disc (speed, not a tick): "We reply in 1 business day". */
       reply?: string;
+      /**
+       * A pick-one chip group set first in the card, posting `role` (4 Nov 2026, /careers' application:
+       * "The role you want", the open roles and "No matching role"). Optional to answer, as every
+       * chip group is. The CALLER's copy.
+       */
+      role?: EnquiryChoiceGroup;
     }
   | {
       kind: 'message';
@@ -202,8 +208,12 @@ export type EnquiryDress =
 type EnquiryVariantProps = SharedProps & {
   variant?: 'enquiry';
   urlLabel?: EnquiryUrlLabel;
-  /** The free-text question's label. Default "What are you working on?". See `EnquiryWorkLabel`. */
-  workLabel?: EnquiryWorkLabel;
+  /**
+   * The free-text question's label. Default "What are you working on?". See `EnquiryWorkLabel`.
+   * `null` drops the question: an application whose copy asks only for the role, an address and a
+   * link to the work (4 Nov 2026, /careers) has no free text to ask for.
+   */
+  workLabel?: EnquiryWorkLabel | null;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: string;
   /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
@@ -670,6 +680,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
     (props.variant === undefined || props.variant === 'enquiry') && props.workLabel
       ? { ...FIELD.work, label: props.workLabel }
       : FIELD.work;
+  /* An application set with no free-text question (`workLabel: null`). */
+  const asksWork = !(
+    (props.variant === undefined || props.variant === 'enquiry') &&
+    props.workLabel === null
+  );
   type Row = readonly FieldSpec[] | 'url';
   const rows: Row[] =
     variant === 'contact'
@@ -680,7 +695,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ]
       : variant === 'compact'
         ? [[FIELD.name('name'), FIELD.email('email')], [work]]
-        : [[FIELD.email('email')], [work], 'url'];
+        : asksWork
+          ? [[FIELD.email('email')], [work], 'url']
+          : [[FIELD.email('email')], 'url'];
 
   /* The dress, when the enquiry set wears one (see EnquiryDress). */
   const dress =
@@ -793,7 +810,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
    */
   function renderChoiceGroup(
     group: EnquiryChoiceGroup,
-    kind: 'needs' | 'stage',
+    kind: 'needs' | 'stage' | 'role',
     { shown = true, describedBy }: { shown?: boolean; describedBy?: string } = {},
   ) {
     const type = kind === 'needs' ? 'checkbox' : 'radio';
@@ -809,6 +826,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             disabled={submitting}
             onChange={(event) => {
               const { checked, value } = event.currentTarget;
+              if (kind === 'role') return;
               if (kind === 'stage') {
                 if (checked) setStageValue(value);
                 return;
@@ -1269,8 +1287,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <form {...formAttrs}>
           <Layout rowGap="block">
             <Layout rowGap="text">
+              {dress.role ? renderChoiceGroup(dress.role, 'role') : null}
               {renderField(email, { visibleLabel: true, placeholder: null, look: 'fill' })}
-              {renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })}
+              {asksWork
+                ? renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })
+                : null}
               {renderDressedUrl('fill', true)}
             </Layout>
             <div className={styles.dressFoot}>

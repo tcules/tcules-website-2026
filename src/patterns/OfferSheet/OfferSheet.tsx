@@ -99,9 +99,11 @@ export type OfferSheetProps = {
   note?: ReactNode;
   /**
    * Promises per row from 1024 when there is no aside: 2 (default) or 3. Five principles set two up
-   * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026).
+   * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026). 4 for
+   * four short glyph-headed peers in one row (4 Nov 2026, /careers' open roles: a title and a meta
+   * line each, which three up would leave one alone on a row).
    */
-  across?: 2 | 3;
+  across?: 2 | 3 | 4;
   /**
    * `grid` (default): the promises side by side, as above. `rows`: one promise per row, its title in a
    * label column and its words beside it from 1024, each row closed by a hairline under it, ListCard's

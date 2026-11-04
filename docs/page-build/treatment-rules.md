@@ -316,3 +316,20 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **A close whose inline links all go to one place** is the ink island, its sentences whole as the lede, the
   first link's words as one LINK action (never a solid when the page's main action is elsewhere). Opt-in by
   route and band (`ISLAND_CLOSES`, plan.ts) until the owner rules it for every such close.
+
+## Added 4 Nov 2026 (/careers; proposed until the owner sees the page)
+
+- **A band that shows the studio itself is the studio collage** on any page (`STUDIO_COLLAGE`, CorpusPage/images.ts;
+  studio-collage), with each tile matched to a sentence of its copy. It takes no side in the media alternation.
+- **A page whose first band is the studio collage takes a words-only centred hero** (`TEXT_HERO_ROUTES`), so two
+  photograph bands never touch at the top of the page. High-traffic routes are never on that list.
+- **Two prose paragraphs that are peers of one kind** (what the work is, how it grows) sit as two columns under
+  the full-width head from 1024, `column` apart (`PEER_PARAGRAPHS`), and never leave a half-empty band.
+- **A checklist a reader checks themselves against** is the head beside glyph-led bodiless rows, one item per
+  row, with the closing line under the list (`list-beside`). Never the blue-marker cells.
+- **Peers a reader picks from (open roles)** are the glyph-headed offer sheet, as many across as keep no tile
+  alone on a row (up to four). The glyph is by discipline, read from the item's meta line. Never ruled rows in
+  two columns.
+- **An application band is always the enquiry island**, placed before the FAQ (order.ts). Its form asks only what
+  the copy asks for: a role chip group read from the page's roles band, the address, the link. Without selection
+  steps it keeps the island's drawing.

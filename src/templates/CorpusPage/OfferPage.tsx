@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import type { CorpusPage } from '@/lib/corpus-types';
-import { heroIsCentred } from '@/lib/hero-media';
+import { heroIsCentred, heroIsText } from '@/lib/hero-media';
 import { heroClip } from '@/lib/hero-clips';
 import { heroImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
@@ -45,10 +45,12 @@ export function OfferPage({
   claimFigure,
 }: OfferPageProps) {
   const drawing = serviceIllustration(page.route);
+  /* A words-only hero (hero-media.ts TEXT_HERO_ROUTES): the band under it is the first picture. */
+  const textHero = heroIsText(page.route);
   const units = planOffer(
     page,
     new Set(Object.keys(scenes?.items ?? {})),
-    drawing ? 'isometric' : 'photo',
+    textHero ? 'none' : drawing ? 'isometric' : 'photo',
   );
   const ctx: OfferContext = {
     page,
@@ -62,7 +64,9 @@ export function OfferPage({
   };
 
   const clip = heroClip(page.route);
-  const media = clip
+  const media = textHero
+    ? undefined
+    : clip
     ? ({ type: 'clip', ...clip } as const)
     : drawing
       ? ({
@@ -90,7 +94,9 @@ export function OfferPage({
       {/* An application taken on the page: the hero's ask lands on it (blocks.ts APPLICATION_FORMS). */}
       <CorpusHero
         page={withApplicationAnchor(page)}
-        arrangement={clip ? 'stacked' : heroIsCentred(page.route) ? 'centred' : 'beside'}
+        arrangement={
+          clip ? 'stacked' : textHero || heroIsCentred(page.route) ? 'centred' : 'beside'
+        }
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />

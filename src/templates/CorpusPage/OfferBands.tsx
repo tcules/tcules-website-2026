@@ -1,12 +1,13 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Layout, Prose, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
   Bento,
   CaseSpread,
   ClaimProof,
+  Collage,
   ContentSection,
   ContentSectionText,
   CtaRow,
@@ -22,6 +23,7 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
+  type CollagePhotos,
   type EngagementFact,
   type EngagementScope,
   type TraceScene,
@@ -56,6 +58,7 @@ import {
   ListTiles,
   bodyOf,
   head,
+  headingIdOf,
   QuoteGroupBand,
   RecognitionBand,
   proofQuote,
@@ -72,6 +75,7 @@ import {
   slugOf,
   type SlotImage,
   itemCovers,
+  studioCollage,
 } from './images';
 import {
   BandBody,
@@ -103,6 +107,7 @@ import {
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { ReportBand } from './ReportBand';
+import { glyphBand } from './glyph-bands';
 import { isWhatYouGet, kindOf, pairedCloseOf, type OfferUnit } from './plan';
 import {
   bandLinks,
@@ -656,6 +661,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'list-beside') {
+        return <ListBesideBand band={band} icons={glyphs.icons} />;
+      }
       return (
         <SheetBand
           band={band}
@@ -705,8 +714,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         />
       );
     }
-    case 'related':
+    case 'related': {
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'role-tiles') {
+        return <RoleTilesBand band={band} icons={glyphs.icons} />;
+      }
       return <RelatedBand band={band} />;
+    }
     case 'example':
       return <ReportBand band={band} surface={unit.surface} />;
     case 'recognition':
@@ -727,6 +741,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'text': {
       const clients = SENTENCE_ROWS[`${page.route}#${band.id}`];
       if (clients) return <SentenceRowsBand band={band} titles={clients} />;
+      const collage = studioCollage(page.route, band.id);
+      if (collage) return <CollageBand band={band} photos={collage} />;
       return (
         <TextBand
           page={page}
@@ -1962,5 +1978,121 @@ function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly
         ))}
       </Layout>
     </ContentSection>
+  );
+}
+
+/**
+ * A band that shows the studio itself, as the studio collage (decisions/2026-11-03-studio-collage):
+ * the heading and paragraphs as authored in the top-left corner, six studio photographs round them in
+ * an L (images.ts STUDIO_COLLAGE). Its links, if any, are the band's way on under the words, as home's.
+ */
+function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos }) {
+  const paragraphs = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
+  const links = band.blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <Section id={band.id} data-band="B-collage" aria-labelledby={headingIdOf(band)}>
+      <Collage
+        heading={band.headingText}
+        headingId={headingIdOf(band)}
+        photos={photos}
+        actions={links.length > 0 ? <LinkActions links={links} /> : undefined}
+      >
+        <Prose html={paragraphs.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')} />
+      </Collage>
+    </Section>
+  );
+}
+
+/**
+ * A checklist a reader checks themselves against, beside its heading (glyph-bands.ts `list-beside`):
+ * the /about "Who uses Tcules" composition (decisions/2026-11-01-bodiless-row-title-two-lines). The head
+ * in the start half, the items as bodiless rows down the end half, each led by its glyph; the band's
+ * closing line under the list at body. Words as authored, full stops kept.
+ */
+function ListBesideBand({
+  band,
+  icons,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const items = band.blocks.flatMap((block) => (block.type === 'list' ? block.items : []));
+  const lines = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
+  return (
+    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside" split="halves">
+      <Layout as="ul" rowGap="none">
+        {items.map((runs, index) => {
+          const title = plain(runs);
+          const icon = icons[title];
+          return (
+            <ListCard
+              key={index}
+              size="md"
+              titleAs="h3"
+              title={title}
+              {...(icon ? { marker: { type: 'icon' as const, name: icon } } : {})}
+            />
+          );
+        })}
+      </Layout>
+      {lines.length > 0 ? (
+        <ContentSectionText>
+          <Prose html={lines.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')} />
+        </ContentSectionText>
+      ) : null}
+    </ContentSection>
+  );
+}
+
+/**
+ * How many tiles a row holds for `count` peers, at most `max`: all of them when they fit, else the
+ * most that leaves no lone tile on the last row (treatment rules § 2), else `max`.
+ */
+function peerTracks(count: number, max: number): number {
+  if (count <= max) return Math.max(count, 1);
+  for (let tracks = max; tracks >= 2; tracks -= 1) {
+    if (count % tracks !== 1) return tracks;
+  }
+  return max;
+}
+
+/**
+ * Peers a reader picks from (glyph-bands.ts `role-tiles`; /careers' open roles): the glyph-headed offer
+ * sheet (the /future-interfaces-lab/join "Why join" grid): the discipline's glyph, then the role as
+ * authored, then its meta line verbatim, each on its own row (icon-heads-its-card); no hairline, no
+ * mark, no card, no disc. Equal weight, the whole set visible, in one row from 1024 where the count
+ * allows. The roles come from the CMS's job list, so the tracks follow the count (`peerTracks`). No
+ * link: none is authored.
+ */
+function RoleTilesBand({
+  band,
+  icons,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const roles = band.blocks.flatMap((block) => {
+    if (block.type !== 'item') return [];
+    const meta = block.blocks.find((inner) => inner.type === 'paragraph');
+    const body = meta?.type === 'paragraph' ? plain(meta.runs) : undefined;
+    const discipline = body?.split('·')[0]?.trim() ?? '';
+    const icon = icons[discipline];
+    return [
+      {
+        id: block.headingText,
+        title: block.headingText,
+        ...(body ? { body } : {}),
+        ...(icon ? { icon } : {}),
+      },
+    ];
+  });
+  const lead = band.blocks.find((block) => block.type === 'paragraph');
+  return (
+    <OfferSheet
+      {...head(band)}
+      {...(lead?.type === 'paragraph' ? { lead: plain(lead.runs) } : {})}
+      items={roles}
+      across={Math.max(2, peerTracks(roles.length, 4)) as 2 | 3 | 4}
+    />
   );
 }

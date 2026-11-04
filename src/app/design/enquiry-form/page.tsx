@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 
 import { Button, Cluster, Layout, Media, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
+import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import {
@@ -385,6 +386,58 @@ export default function EnquiryFormSpecimenPage() {
             submitLabel="Apply to the Lab"
             nextSteps={APPLICATION_STEPS}
             dress={{ kind: 'card', writeTo: 'fil@tcules.com' }}
+            fieldScale="md"
+          />
+        }
+      />
+
+      {/* The role application (4 Nov 2026, /careers, owner to confirm). */}
+      <Section>
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Blue island · dress “card” · role application</p>
+          <p className={s.specNote}>
+            The card asking only what the copy asks for (“the role you want and a link to work that
+            shows your reasoning”): a pick-one chip group first (dress `role`, posts `role`: the open
+            roles, then “No matching role”), Email, and urlLabel “Link to the work”; workLabel `null`
+            drops the free-text question. No “or write to” (the band’s own sentence gives the address,
+            live), no reply promise (none is authored). The submit “Send application” is interface
+            wording. With no steps the island keeps its drawing over the words.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandArrangement="halves"
+        islandTexture="flow"
+        art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
+        heading="Apply for a role"
+        body={[
+          <>
+            Email <a href="mailto:hello@tcules.com">hello@tcules.com</a> with the role you want and a
+            link to work that shows your reasoning.
+          </>,
+          'No matching role? If your work feels unusually relevant, write anyway. We will keep your work in mind and know where to find you when the right role opens.',
+        ]}
+        form={
+          <EnquiryForm
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={{ ...CONTEXT, placement: 'application', family: 'careers' }}
+            urlLabel="Link to the work"
+            workLabel={null}
+            submitLabel="Send application"
+            dress={{
+              kind: 'card',
+              role: {
+                question: 'The role you want',
+                options: [
+                  { value: 'ux-ui-designer-generalist', label: 'UX/UI Designer (Generalist)' },
+                  { value: 'lead-designer-ai-products', label: 'Lead Designer (AI Products)' },
+                  { value: 'ai-systems-architect', label: 'AI Systems Architect' },
+                  { value: 'visual-designer', label: 'Visual Designer' },
+                  { value: 'no-matching-role', label: 'No matching role' },
+                ],
+              },
+            }}
             fieldScale="md"
           />
         }

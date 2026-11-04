@@ -1,3 +1,5 @@
+import type { CollagePhotos } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 import type { CorpusCaseRef, CorpusMediaBinding, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
@@ -263,4 +265,42 @@ export function itemCovers(
   bandId: string,
 ): Readonly<Record<string, CorpusImage>> | undefined {
   return ITEM_COVERS[`${route}#${bandId}`];
+}
+
+/**
+ * A band that shows the studio itself, set as the studio collage (decisions/2026-11-03-studio-collage:
+ * "any band that shows the studio itself"), by route and band: the six real studio photographs round the
+ * band's words, each tile's photo, focus and zoom a placement choice. The lead names what it shows; the
+ * other five are atmosphere (alt ""). Picks are a proposal for the owner's eye, as home's were.
+ *
+ * /careers "Product designer jobs in Ahmedabad": each tile matches a sentence of the copy. The lead is
+ * the team round one table ("the team works together"); the lower row a review over printouts, a
+ * whiteboard walkthrough ("critique happens during the work"), two at one screen ("pull a colleague
+ * into a problem"), two neighbours talking across desks ("someone at the next desk can question a
+ * workflow") and a presenter at the board ("as well as in review"). None is in home's collage, nor
+ * another frame of one of home's moments (docs/page-build/pages/careers.md, 4 Nov 2026).
+ */
+const STUDIO_COLLAGE: Readonly<Record<string, CollagePhotos>> = {
+  [`${ROUTES.careers}#ahmedabad`]: {
+    lead: {
+      image: getKitPhoto('studio-meeting-room-laptops', {
+        alt: 'The Tcules team working round a table in the Ahmedabad studio',
+      }),
+      focus: { x: 0.45, y: 0.55 },
+    },
+    start: {
+      image: getKitPhoto('studio-meeting-table-portrait'),
+      focus: { x: 0.4, y: 0.62 },
+      zoom: 1.15,
+    },
+    middle: { image: getKitPhoto('studio-whiteboard-walkthrough'), focus: { x: 0.62, y: 0.45 } },
+    middleStart: { image: getKitPhoto('studio-pair-at-monitor'), focus: { x: 0.5, y: 0.5 } },
+    middleEnd: { image: getKitPhoto('studio-desk-pairing'), focus: { x: 0.45, y: 0.5 } },
+    end: { image: getKitPhoto('studio-talk-presenter-portrait'), focus: { x: 0.46, y: 0.6 } },
+  },
+};
+
+/** The studio collage a band is set as on this route, if any (`STUDIO_COLLAGE`). */
+export function studioCollage(route: string, bandId: string): CollagePhotos | undefined {
+  return STUDIO_COLLAGE[`${route}#${bandId}`];
 }

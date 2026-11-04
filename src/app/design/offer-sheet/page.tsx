@@ -387,6 +387,39 @@ export default function OfferSheetSpecimen() {
           },
         ]}
       />
+
+      <Variation
+        id="glyph-grid-four"
+        title="8b · Grid headed by glyphs, four across"
+        note="`across={4}`: four short peers in one row from 1024 (two from 768, one below), each a glyph, a title and one meta line. Peers a reader picks from, where three up would leave one alone on a row (/careers &ldquo;Tcules jobs open now&rdquo;, the glyph by discipline, 4 Nov 2026, owner to confirm)."
+      />
+      <OfferSheet
+        heading="Tcules jobs open now"
+        headingId="ofs-glyph-grid-four"
+        across={4}
+        items={[
+          {
+            title: 'UX/UI Designer (Generalist)',
+            icon: 'ruler-pen',
+            body: 'Design · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'Lead Designer (AI Products)',
+            icon: 'ruler-pen',
+            body: 'Design · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'AI Systems Architect',
+            icon: 'code-square',
+            body: 'Engineering · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'Visual Designer',
+            icon: 'palette',
+            body: 'Marketing and visual communication · Full-time · In-office, Ahmedabad',
+          },
+        ]}
+      />
     </>
   );
 }

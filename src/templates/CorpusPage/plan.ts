@@ -1,7 +1,8 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { ROUTES } from '@/lib/routes';
 
-import { studioBandPhoto } from './images';
+import { glyphBand } from './glyph-bands';
+import { studioBandPhoto, studioCollage } from './images';
 import { formBeforeFaq } from './order';
 import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
@@ -381,12 +382,14 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'how-to-use': 'index',
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
-  lab: 'close',
-  /* An application band that tells how selection works in `###` steps takes the application on the
-     page: the enquiry island in its application wording (owner, 4 Nov 2026: "reuse the existing
-     enquiry form"; /future-interfaces-lab/join). One without steps (/careers' email line) stays a
-     close until its page is designed. */
-  apply: (_band, sig) => (/I/.test(sig) ? 'enquiry' : 'close'),
+  /* /careers "Tcules internships, residencies and Future Interfaces Lab places": prose with two inline
+     links, a side path for early-career readers, not the page's ask (apply is). A close here fell to
+     C-text, the no-link fallback, and took the close's automatic tint (4 Nov 2026). */
+  lab: 'text',
+  /* An application band takes the application on the page: the enquiry island in its application
+     wording (owner, 4 Nov 2026: "reuse the existing enquiry form"), with or without selection steps
+     (/future-interfaces-lab/join's `###` steps; /careers' email line). order.ts sets it before the FAQ. */
+  apply: 'enquiry',
   'case-studies': (_band, sig) => (/^P$/.test(sig) ? 'close' : 'text'),
   purpose: 'close',
   promotion: 'close',
@@ -574,6 +577,10 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
      three paragraphs; an abstract claim, so one band-scale isometric illustration, and it keeps the
      short `purpose` intro from touching another prose band (docs/page-build/pages/future-interfaces-lab.md). */
   'direction',
+  /* /careers "How AI fits into the job": what to hand AI and what to check, and where software is going;
+     an abstract claim about the job, so one band-scale isometric illustration
+     (docs/page-build/pages/careers.md). */
+  'ai-fluency',
 ]);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
@@ -626,6 +633,8 @@ export function registerOf(
     case 'method':
     case 'text':
       if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
+      /* The studio collage is six photographs (images.ts STUDIO_COLLAGE). */
+      if (studioCollage(page.route, band.id)) return 'photo';
       return drawn.has(band.id)
         ? 'flat'
         : bound || studioBandPhoto(page.route, band.id)
@@ -703,6 +712,9 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             studioBandPhoto(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
+            /* Six studio photographs, or an icon set (glyph-bands.ts). */
+            studioCollage(page.route, band.id) !== undefined ||
+            glyphBand(page.route, band.id) !== undefined ||
             /* A paired close is an island, and an island is a visual band. */
             (kind === 'close' &&
               (pairedCloseOf(page.route, band.id) !== undefined ||
@@ -805,9 +817,12 @@ export function planOffer(
 
     /* Prose with a photograph of its own is a media split (B) too: without this every one of them
        took the start side, and /how-we-work's three ran image-left down the page (1 Nov 2026). */
+    /* The studio collage is not a split: its big frame always sits at the end, so it takes no side. */
     const carriesMedia =
       (MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b')) ||
-      (draft.kind === 'text' && (draft.register === 'photo' || draft.register === 'isometric'));
+      (draft.kind === 'text' &&
+        studioCollage(page.route, draft.band.id) === undefined &&
+        (draft.register === 'photo' || draft.register === 'isometric'));
     /* Two media splits already in a row: a third would be a third B. A read-down with the
        photograph beside its head says the same thing in a different shape (page-mapping M11). */
     const variant: OfferUnit['variant'] =

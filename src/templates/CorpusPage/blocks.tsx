@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, type ReactElement, type ReactNode } from 'react';
 
 import { BrandMark, Cluster, Icon, Layout, Media, RatingBadge, Section } from '@/components';
 import {
@@ -10,6 +10,7 @@ import {
   ContentSection,
   ContentSectionText,
   EnquiryForm,
+  type EnquiryChoiceGroup,
   type EnquiryDress,
   type EnquiryNextStep,
   type EnquiryUrlLabel,
@@ -745,10 +746,27 @@ export const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
  */
 type ApplicationForm = {
   urlLabel: EnquiryUrlLabel;
-  workLabel: EnquiryWorkLabel;
-  writeTo: string;
+  /** The free-text question; `null` where the copy asks for none (/careers). */
+  workLabel: EnquiryWorkLabel | null;
+  /** "or write to …" under the send. Absent where the band's own words already give the address. */
+  writeTo?: string;
   /** The hidden context's family, so a submission is attributable to the programme. */
   family: string;
+  /**
+   * The role asked for, as a pick-one chip group first in the card: its question, the band whose
+   * `###` items are the roles (so the chips follow the CMS's job list and never disagree with it), and
+   * the copy's own words for the reader no role fits.
+   */
+  roles?: { question: string; band: string; other: string };
+  /** The submit's words where the band authors no link of its own. Interface wording: owner to confirm. */
+  submitLabel?: string;
+  /**
+   * `paragraphs`: the band's paragraphs ARE the island's words, up to two, each with its links live
+   * (/careers: "Email hello@tcules.com with the role you want…", then "No matching role? … write
+   * anyway."). Nothing becomes a footnote or a contact cell. Absent, the enquiry's reading: the first
+   * paragraph the lead, a plain line after it the footnote.
+   */
+  lede?: 'paragraphs';
 };
 const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
   [`${ROUTES.futureInterfacesLabJoin}#apply`]: {
@@ -757,7 +775,36 @@ const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
     writeTo: 'fil@tcules.com',
     family: 'future-interfaces-lab',
   },
+  /* /careers "Apply for a role" (4 Nov 2026): the copy asks for "the role you want and a link to work
+     that shows your reasoning", by email. The form asks exactly that: the role (the open roles, or the
+     copy's "No matching role"), the address, and the link under its existing label. No reply promise:
+     none is authored. The address stays in the band's own sentence, live, so the foot does not repeat it. */
+  [`${ROUTES.careers}#apply`]: {
+    urlLabel: 'Link to the work',
+    workLabel: null,
+    family: 'careers',
+    roles: { question: 'The role you want', band: 'open-roles', other: 'No matching role' },
+    submitLabel: 'Send application',
+    lede: 'paragraphs',
+  },
 };
+
+/** The application's role chips: the page's open roles as authored, then the copy's "no match". */
+function roleChoices(page: CorpusPage, roles: NonNullable<ApplicationForm['roles']>) {
+  const titles =
+    page.bands
+      .find((band) => band.id === roles.band)
+      ?.blocks.flatMap((block) => (block.type === 'item' ? [block.headingText] : [])) ?? [];
+  const value = (label: string) =>
+    label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  return {
+    question: roles.question,
+    options: [...titles, roles.other].map((label) => ({ value: value(label), label })),
+  } satisfies EnquiryChoiceGroup;
+}
 
 /** The band the page takes its application on, if any (`APPLICATION_FORMS`). */
 function applicationBand(page: CorpusPage): CorpusBand | undefined {
@@ -867,13 +914,26 @@ export function EnquiryBand({
       ? [plain(block.runs)]
       : [],
   );
-  const footnote = notes.length > 0 ? notes.join(' ') : undefined;
-  const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
+  /* An application whose paragraphs are its words (`lede: 'paragraphs'`): the first two, links live. */
+  const ledeParagraphs =
+    application?.lede === 'paragraphs'
+      ? band.blocks
+          .flatMap((block) => (block.type === 'paragraph' ? [block] : []))
+          .slice(0, 2)
+          .map((block, index) => <Fragment key={index}>{renderInline(block.runs)}</Fragment>)
+      : undefined;
+  const footnote = !ledeParagraphs && notes.length > 0 ? notes.join(' ') : undefined;
+  const body = ledeParagraphs
+    ? (ledeParagraphs as unknown as readonly [ReactElement] | readonly [ReactElement, ReactElement])
+    : lead && lead.type === 'paragraph'
+      ? ([plain(lead.runs)] as const)
+      : undefined;
   const score = band.blocks.flatMap((block) => {
     const found = block === lead ? undefined : ratingOf(block);
     return found ? [found] : [];
   })[0];
   const contact = band.blocks.flatMap((block): CtaContact[] => {
+    if (ledeParagraphs) return [];
     if (block === lead || block.type !== 'paragraph' || ratingOf(block)) return [];
     if (block.runs.length === 1 && block.runs[0]?.type === 'link') return [];
     const link = block.runs.find(
@@ -893,18 +953,28 @@ export function EnquiryBand({
   const surface = island.surface ?? 'blue';
   /* An application wears the card with its own address and no reply promise (none is authored). */
   const dress: EnquiryDress = application
-    ? { kind: 'card', writeTo: application.writeTo }
+    ? {
+        kind: 'card',
+        ...(application.writeTo ? { writeTo: application.writeTo } : {}),
+        ...(application.roles ? { role: roleChoices(page, application.roles) } : {}),
+      }
     : ENQUIRY_DRESS[island.dress ?? 'card'];
   /* The success view repeats what the island promised would happen next. */
   const treatment = {
     dress,
     nextSteps: island.nextSteps ?? (application && points.length > 0 ? points : undefined),
     ...(application ? { application } : {}),
-    ...(ask ? { submitLabel: ask.labelText } : {}),
+    ...(ask
+      ? { submitLabel: ask.labelText }
+      : application?.submitLabel
+        ? { submitLabel: application.submitLabel }
+        : {}),
   };
-  /* An application island carries no drawing: the sketch-to-shipped pictures a client's enquiry, and
-     the steps fill the start half. */
-  const drawn = application ? false : (island.illustration ?? true);
+  /* An application with selection steps carries no drawing: the steps fill the start half. Without
+     steps (/careers) the start half is the heading and two short paragraphs, and the sketch-to-shipped
+     drawing over them, the work a sketch becomes, keeps the island's two halves level, as on every
+     enquiry (4 Nov 2026). */
+  const drawn = application && points.length > 0 ? false : (island.illustration ?? true);
   /* A footnote's glyph names what kind of line it is: a shield for confidentiality (contact's NDA
      line), the info mark for any other (4 Nov 2026). */
   const footnoteIcon =

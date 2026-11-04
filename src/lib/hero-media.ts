@@ -50,3 +50,17 @@ export const CENTRED_HERO_ROUTES: ReadonlySet<string> = new Set([
 
 /** Whether a route's hero is the centred stack with its media below. */
 export const heroIsCentred = (route: string): boolean => CENTRED_HERO_ROUTES.has(route);
+
+/**
+ * Heroes set as words alone, centred, with no picture of their own: a page whose first picture is the
+ * band directly under the hero (the /contact precedent, contact-hero-centred-form-below). /careers'
+ * first band is the studio collage; a studio photograph in the hero as well would put two photographs
+ * side by side down the page (adjacent-bands-change-visual-register) and stack two "words beside a
+ * photograph" shapes at the top (docs/page-build/pages/careers.md, 4 Nov 2026, owner to confirm).
+ * A route here is never in `HERO_MEDIA_ROUTES`: a high-traffic hero always carries media.
+ */
+export const TEXT_HERO_ROUTES: ReadonlySet<string> = new Set([ROUTES.careers]);
+
+/** Whether a route's hero is the centred text stack with no media (`TEXT_HERO_ROUTES`). */
+export const heroIsText = (route: string): boolean =>
+  TEXT_HERO_ROUTES.has(route) && !HERO_MEDIA_ROUTES.has(route);
