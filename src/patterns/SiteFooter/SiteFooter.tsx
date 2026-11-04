@@ -78,8 +78,17 @@ export function SiteFooter({
             rectangle. Two tracks at 2:1 rather than a Cluster, because Cluster's gap scale stops
             at 24 and the two halves are a split (CLAUDE.md § gap scale, rule 2) — the mark and the
             action are different kinds of thing, so they take a section's distance. One track below md, where the right group left-aligns under the tagline. */}
-        <Layout columns={{ base: 1, md: [2, 1] }} colGap="section" rowGap="gutter">
-          <Layout className={styles.brandIdentity} rowGap="block">
+        <Layout
+          columns={{ base: 1, md: [2, 1] }}
+          colGap="section"
+          rowGap="gutter"
+          shareRows={2}
+        >
+          {/* From lg the two halves share their rows (owner, 4 Nov 2026: the right side looked
+              taller). The button and the badge are not the heights of the mark and the tagline, so
+              two independent stacks never met at either end; sharing rows puts the button in the
+              mark's row and the badge in the tagline's, each centred on its partner. */}
+          <Layout className={styles.brandIdentity} rowGap="block" align="center">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
             {/* Mono on every ground, the light ones included: the footer is UI chrome, where ch02
@@ -89,7 +98,7 @@ export function SiteFooter({
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
-          <Layout className={styles.brandAction} rowGap="block">
+          <Layout className={styles.brandAction} rowGap="block" align="center">
             {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
                 lede line makes two things compete for the same job, and the badge under it reads
                 as a caption to a smaller control rather than an equal to a larger one. */}
