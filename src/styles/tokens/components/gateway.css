@@ -18,6 +18,7 @@
   /* A door's glyph heads its card, at the size the three-ways cards' glyphs take (owner, 4 Nov 2026,
      /how-we-work: "we can add icons in this one"). */
   --gwy-door-glyph-size: var(--icon-size-32);
+  --gwy-door-close-body-text: var(--text-body);
   /* The situation is the reason to click (owner, home round 2), so it is the band's largest
      repeated thing — but two steps under the band's h2 heading, not one: at h3 (34 under 43) the
      six titles competed with the heading (owner, round 8). h4 (28, the sans 22 since 19 Oct 2026) lets the heading lead and the

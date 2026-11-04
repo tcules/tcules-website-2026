@@ -218,8 +218,6 @@ A focused scope, with AI speeding the routine work, brings your launch forward.
 
 Our designers use AI to inspect products, sort research, explore alternatives and check well-defined tasks.
 
-### AI-fluent designers
-
 AI speeds up routine work, so we deliver more or take on bolder ideas.
 
 A senior designer approves, revises or rejects every AI-drafted change, and a senior engineer reviews every code change before you receive it.

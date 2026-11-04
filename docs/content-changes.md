@@ -932,3 +932,12 @@ homepage are the north star"; "anywhere you think something needs to be removed 
 a picture beside its words, a service tile, the beside-in-halves band. The cut lines had no place in them.
 
 **Found in.** Tracker 2.60, owner review 4 Nov 2026.
+
+**Added the same day (second review):**
+- **/how-we-work ai-native-practice: the "AI-fluent designers" heading.** Its three sentences are now
+  three cards, one a line (owner: "3 cards, one for each line"); a lone heading over them would title
+  only the first.
+- **Unbound images:** /how-we-work `how_we_work_coded_prototype` (Benchmark Gensuite) and /why-tcules'
+  ConnectX demo stay in the front matter but are not shown: a section never borrows a case's image
+  (decisions/2026-11-04-no-case-images-in-sections). The /how-we-work studio photo for `your-team` is
+  also unused (the claims are a list). Strapi can drop these bindings.

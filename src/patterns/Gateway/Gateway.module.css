@@ -540,3 +540,10 @@
   color: var(--gwy-title-ink);
   max-inline-size: var(--gwy-door-close-measure);
 }
+
+/* A close that is a sentence of the set's own words, not a line over an ask (/how-we-work, owner
+   4 Nov 2026: "this could just be body text no wrap"): the body role, at the column's width. */
+.doorCloseLineBody {
+  font: var(--gwy-door-close-body-text);
+  color: var(--gwy-body-ink);
+}

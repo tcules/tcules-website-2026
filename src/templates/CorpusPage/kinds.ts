@@ -77,9 +77,9 @@ export const KIND_COMPONENTS: Readonly<
     note: 'A trace read across its columns (design-to-code audit).',
   },
   text: {
-    component: ['C-text', 'B', 'C-list', 'C-router', 'offer-sheet', 'service-tile'],
+    component: ['C-text', 'B', 'C-list', 'C-router', 'offer-sheet', 'service-tile', 'engagement-options'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B). Starting situations, each a bold-led paragraph, as home\'s where-to-start cards (C-router; plan SITUATION_PROSE). Short titled claims as home\'s Why Tcules list (offer-sheet; plan CLAIM_LIST). One claim arguing for one service, closing on its link: that service\'s wide tile (service-tile). /how-we-work and /why-tcules, 4 Nov 2026. A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list).',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). Starting situations, each a bold-led paragraph, as home\'s where-to-start cards (C-router; plan SITUATION_PROSE). Short titled claims as home\'s Why Tcules list (offer-sheet; plan CLAIM_LIST). One claim arguing for one service, closing on its link: that service\'s tile beside the head (service-tile). Claims or lines as the three-ways glyph cards (engagement-options; plan CARD_SETS). /how-we-work and /why-tcules, 4 Nov 2026. A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list).',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {

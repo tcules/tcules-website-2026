@@ -573,6 +573,20 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set<string>([]);
  */
 const CLAIM_LIST: ReadonlySet<string> = new Set(['your-team', 'complex-software']);
 
+/**
+ * Prose bands whose claims or lines are a set of cards under the head, each led by its glyph (owner,
+ * 4 Nov 2026: "stop using project/case study images in sections … make the 2 items cards"; "3 cards,
+ * one for each line"): the three-ways cards (EngagementOptions `cards`).
+ */
+const CARD_SETS: ReadonlySet<string> = new Set([
+  'design-to-release',
+  'design-to-code',
+  'ai-native-practice',
+]);
+
+/** Whether a prose band is a set of cards (`CARD_SETS`). */
+export const isCardSet = (bandId: string): boolean => CARD_SETS.has(bandId);
+
 /** Whether a prose band is a set of short titled claims (`CLAIM_LIST`). */
 export const isClaimList = (bandId: string): boolean => CLAIM_LIST.has(bandId);
 

@@ -64,7 +64,12 @@ export type GatewayPathsProps = {
    * "feels orphaned"): a line and the band's ask, composed by the caller, centred, the line over the
    * action.
    */
-  close?: { line?: string; action?: ReactNode };
+  close?: {
+    line?: string;
+    /** `body`: the line is the set's own sentence, set at the body role across the column. */
+    lineSize?: 'body';
+    action?: ReactNode;
+  };
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
@@ -179,7 +184,15 @@ export function GatewayPaths({
           /* The close, a `stack` under the cards: the line centred, the action under it a `block`
              apart. */
           <Layout rowGap="block" justifyItems="center" className={styles.doorClose}>
-            {close.line ? <p className={styles.doorCloseLine}>{close.line}</p> : null}
+            {close.line ? (
+              <p
+                className={
+                  close.lineSize === 'body' ? styles.doorCloseLineBody : styles.doorCloseLine
+                }
+              >
+                {close.line}
+              </p>
+            ) : null}
             {close.action}
           </Layout>
         ) : null}

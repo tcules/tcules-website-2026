@@ -276,8 +276,11 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   by a glyph; with no ways in the card is its head alone; one sentence after them is the set's close line.
 - **A set of short titled claims** (a sentence or two each) is home's Why Tcules list: heading, lead and link at the
   left, the claims down the right as glyph rows (OfferSheet `list`).
-- **One claim arguing for one service, closing on its link**, is that service's wide tile under the head and lead.
-- **A prose band of a lead, one claim and a link** sits beside its heading in halves, as home's AI band and the FAQ.
+- **One claim arguing for one service, closing on its link**, is that service's tile beside the head and lead, in
+  halves. A heading never takes its own row over a two-column split (decisions/2026-11-04-no-heading-row-over-a-split).
+- **Two to four short titled claims, or a few one-line points**, are the three-ways cards, each led by its glyph
+  (plan `CARD_SETS`); never beside a case study's image (decisions/2026-11-04-no-case-images-in-sections).
+- **A set's closing sentence of its own words** sits under the cards at the body role across the column.
 - **The north star is the home, service and expertise pages** (owner, 4 Nov 2026): a band takes one of their shapes,
   never a merge of two; a run of prose bands is never one alternating image-and-words split each.
 - **A run of four or more destination links inside a claim** stays one line with the copy's dots, never a stack.
