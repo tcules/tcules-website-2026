@@ -7,6 +7,8 @@
  * plus an action line on the types C4 gives one.
  */
 
+import type { ShareMedia } from './media';
+
 /** The page types the site has. ch10 C4 names twelve; the rest map onto the nearest (see KINDS). */
 export type ShareKind =
   | 'home'
@@ -41,6 +43,13 @@ export type ShareCard = {
   ground: ShareGround;
   /** The action line, on the four types C4 gives one; null everywhere else. */
   action: string | null;
+  /** The page's own picture — its hero drawing, banner, cover or sector photograph — or null. */
+  media: ShareMedia | null;
+  /**
+   * The word a card with no picture sets large on its island: the page's own subject from its
+   * eyebrow (the glossary term, the tool's area), else its kind. Never invented copy.
+   */
+  feature: string;
   /** og:image:alt — what the card says, in a sentence. */
   alt: string;
   /** The versioned id ch10 C1 asks for: `tcules-og-{type}-{slug}-v01`. A redesign bumps VERSION. */
@@ -164,6 +173,9 @@ const MIN_HERO = 18;
 /** A question this short still stands as a hero ("What is UX debt?"). */
 const MIN_QUESTION = 8;
 
+/** How far past the ceiling a title with no clean break may run rather than lose its last words. */
+const OVERRUN = 12;
+
 /**
  * Where a long title may be cut, so what is left still reads as a phrase: before a clause or a
  * qualifier, never inside one.
@@ -199,6 +211,9 @@ function cutAtPhrase(text: string, max: number): string {
     }
   }
   if (best !== -1) return text.slice(0, best).replace(/[,;:]$/, '');
+  /* No clean break: dropping the last word or two of a title leaves it mid-phrase ("…in AI-first
+     User"), which reads worse than a line that runs a little long, so a near miss stays whole. */
+  if (text.length <= max + OVERRUN) return text;
   const words = text.slice(0, max + 1).split(' ');
   if (text.length > max) words.pop();
   return words.join(' ');
@@ -313,6 +328,7 @@ export function shareCard(input: {
   name: string;
   /** An authored cut (`HERO_CUTS`): words of the H1, chosen by hand where the rules read badly. */
   cut?: string;
+  media?: ShareMedia | null;
 }): ShareCard {
   const kind = kindOf(input.path);
   const { hero, rung } = setHero(input.cut ?? input.title, kind);
@@ -327,6 +343,8 @@ export function shareCard(input: {
     rung,
     ground,
     action,
+    media: input.media ?? null,
+    feature: meta.fact || meta.kind,
     alt: `${label}: ${hero}`,
     id: `tcules-og-${kind}-${slugOf(input.path)}-${VERSION}`,
   };

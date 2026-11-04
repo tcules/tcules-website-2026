@@ -1,6 +1,6 @@
 import { offerSlugs } from '../../_corpus/offer';
 import { longformSlugs } from '../../_corpus/longform';
-import { renderShareCard, shareCardFor } from '../../_og';
+import { renderShareCard, SHARE_DIRECTIONS, shareCardFor, type ShareDirection } from '../../_og';
 
 /**
  * `/og/<page path>/<card id>` — the share cards for the two catch-all families, `/services/…` and
@@ -23,10 +23,16 @@ export async function generateStaticParams() {
   );
 }
 
-export async function GET(_request: Request, { params }: RouteContext<'/og/[...path]'>) {
+/** Review only, until the owner picks a direction: `?direction=b` draws that direction. */
+function directionOf(request: Request): ShareDirection {
+  const asked = new URL(request.url).searchParams.get('direction');
+  return SHARE_DIRECTIONS.find((one) => one === asked) ?? 'a';
+}
+
+export async function GET(request: Request, { params }: RouteContext<'/og/[...path]'>) {
   const { path } = await params;
   const page = `/${path.slice(0, -1).join('/')}`;
   const card = await shareCardFor(page);
   if (card.id !== path.at(-1)) return new Response('Not found', { status: 404 });
-  return renderShareCard(card);
+  return renderShareCard(card, directionOf(request));
 }

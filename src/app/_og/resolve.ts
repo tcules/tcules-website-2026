@@ -1,5 +1,13 @@
-import { getCorpusPage, listAuthors, listSitePages, type SitePageFamily } from '@/content';
+import {
+  getBlogPage,
+  getCaseStudyPage,
+  getCorpusPage,
+  listAuthors,
+  listSitePages,
+  type SitePageFamily,
+} from '@/content';
 import { inlineToText } from '@/lib/inline';
+import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import {
   auditPath,
   authorPath,
@@ -13,8 +21,10 @@ import {
   servicePath,
   toolPath,
 } from '@/lib/routes';
+import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { shareCard, type ShareCard } from './card';
+import type { ShareMedia } from './media';
 
 /**
  * Authored cuts, where the rules in `card.ts` leave a hero that reads badly (Claude, 4 Nov 2026; the
@@ -73,6 +83,41 @@ function author(path: string) {
 }
 
 /**
+ * The page's own picture, the one its page already shows (owner, 4 Nov 2026: "for case studies the
+ * banner; pages with an illustration carry it"). Never a stand-in drawn or picked for the card:
+ * - a hero drawing, where the page has one (the service lines, /expertise, /audits);
+ * - a case study's banner from Strapi (its UI cut-outs replace it when Strapi carries them);
+ * - an industry's sector photograph, the one its home card shows;
+ * - an article's cover from Strapi.
+ * A failure to read the CMS leaves the card without a picture rather than without an image.
+ */
+async function mediaFor(path: string): Promise<ShareMedia | null> {
+  const drawing = serviceIllustration(path);
+  if (drawing) return { kind: 'illustration', src: drawing.src, width: drawing.width, height: drawing.height };
+
+  const photo = HOME_SECTOR_PHOTOS[path];
+  if (photo) {
+    const record = getKitPhoto(photo);
+    return { kind: 'photo', src: record.src, width: record.width, height: record.height, focus: record.focus };
+  }
+
+  const [, family, slug, ...rest] = path.split('/');
+  try {
+    if (family === 'case-studies' && slug && rest.length === 0) {
+      const image = (await getCaseStudyPage(slug))?.heroImage;
+      if (image) return { kind: 'capture', src: image.src, width: image.width, height: image.height };
+    }
+    if (family === 'insights' && slug && !['authors', 'events', 'podcasts', 'videos'].includes(slug)) {
+      const image = (await getBlogPage([slug, ...rest].join('/')))?.featureImage;
+      if (image) return { kind: 'capture', src: image.src, width: image.width, height: image.height };
+    }
+  } catch (error) {
+    console.error(`share cards: no picture for ${path}`, error);
+  }
+  return null;
+}
+
+/**
  * The share card for a path, from the page's own words: the corpus page's H1 and eyebrow where the
  * copy authors the page, else the CMS entry's title. A path neither knows takes the home card, so no
  * link ever unfurls without an image.
@@ -86,6 +131,7 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
       eyebrow: page.hero.eyebrow ? inlineToText(page.hero.eyebrow) : null,
       name: page.name,
       cut: HERO_CUTS[path],
+      media: await mediaFor(path),
     });
   }
   const person = await author(path);
@@ -94,7 +140,10 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
     return shareCard({ path, title: person.name, eyebrow, name: person.name });
   }
   const title = await cmsTitle(path);
-  if (title) return shareCard({ path, title, eyebrow: null, name: title, cut: HERO_CUTS[path] });
+  if (title) {
+    const media = await mediaFor(path);
+    return shareCard({ path, title, eyebrow: null, name: title, cut: HERO_CUTS[path], media });
+  }
   if (path !== ROUTES.home) return { ...(await shareCardFor(ROUTES.home)), path };
   return shareCard({ path, title: 'Tcules', eyebrow: null, name: 'Tcules' });
 }

@@ -4,7 +4,7 @@ import { shareCardFor } from './resolve';
 import { renderShareCard, SHARE_SIZE } from './render';
 
 export { shareCardFor } from './resolve';
-export { renderShareCard, SHARE_SIZE } from './render';
+export { renderShareCard, SHARE_DIRECTIONS, SHARE_SIZE, type ShareDirection } from './render';
 export type { ShareCard } from './card';
 
 type Params = Record<string, string | string[] | undefined>;
