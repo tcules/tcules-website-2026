@@ -362,3 +362,9 @@
 .pairActions {
   min-block-size: var(--cta-pair-action-block-size);
 }
+
+/* `after`'s heading: h3, a step under the band's heading, in the band's own ink. */
+.afterHeading {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+}

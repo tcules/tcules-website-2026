@@ -156,3 +156,10 @@ Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tin
     scene uses, so dropping its halo is a grammar question for the owner, not this page. Skipped: one
     fixed-size placeholder label (scripts/placeholders.mjs renders text in SVG units); that is a
     site-wide placeholder change, left in Open.
+
+## Pass 3, owner review 4 Nov 2026
+- Alternating grounds (decisions/2026-11-04-lab-pages-alternate-grounds): purpose, design-work, threshold and
+  the FAQ on tint; the closing island on paper. Cause: the band renderers took no ground from the plan, so
+  every band was paper. Fix: plan.ts `ALTERNATE_GROUNDS`, and `surface` threaded through TextBand,
+  CloseBand, CloseFigureBand, DestinationsBand, SheetBand, MethodBand, GlyphTilesBand and the FAQ (global
+  plumbing; only routes in the set change).

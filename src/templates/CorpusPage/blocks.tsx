@@ -18,6 +18,7 @@ import {
   ListCard,
   LogoGrid,
   PageHero,
+  ProcessFlow,
   Proof,
   Slider,
   type AccordionItem,
@@ -1022,6 +1023,25 @@ export function EnquiryBand({
   const footnoteIcon =
     footnote && /\bNDA\b|confidential/i.test(footnote) ? 'shield-check' : 'info-circle';
   const pointProps = points.length > 0 ? { points, markers: 'plain' as const } : {};
+  /* The selection steps, under the form in the same band (owner, 4 Nov 2026: "just under the form is
+     fine. In a section of its own the gap is too much and it feels disconnected"): their heading at
+     h3, the stages across, unruled, arrows between. The band takes no unit of its own (plan.ts
+     STEPS_UNDER_FORM). */
+  const afterProps =
+    stepsBand && points.length === 0 && afterSend.length > 0
+      ? {
+          after: {
+            heading: stepsBand.headingText,
+            content: (
+              <ProcessFlow
+                ruled={false}
+                stageHeading="h4"
+                stages={afterSend.map((step) => ({ label: step.label, items: [step.detail] }))}
+              />
+            ),
+          },
+        }
+      : {};
   if ((island.arrangement ?? 'halves') === 'halves') {
     return (
       <CtaSection
@@ -1038,6 +1058,7 @@ export function EnquiryBand({
         body={body}
         {...pointProps}
         {...contactProps}
+        {...afterProps}
         form={corpusEnquiryForm(page, band, form)}
       />
     );

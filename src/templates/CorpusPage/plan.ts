@@ -689,9 +689,19 @@ export const isIslandClose = (route: string, bandId: string): boolean =>
 export const pairedCloseOf = (route: string, bandId: string): string | undefined =>
   PAIRED_CLOSES[route]?.[bandId];
 
+/**
+ * Steps set under an application's form, in its band, rather than as a band of their own: by route,
+ * the steps band and the form band it goes under (blocks.tsx APPLICATION_FORMS `stepsBand`; owner,
+ * 4 Nov 2026, /future-interfaces-lab/join "How selection works": "just under the form is fine").
+ */
+const STEPS_UNDER_FORM: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  [ROUTES.futureInterfacesLabJoin]: { 'how-selection-works': 'apply' },
+};
+
 /** Whether a band's words live in another close's island on this route, so it takes no unit. */
 const pairedAway = (route: string, bandId: string): boolean =>
-  Object.values(PAIRED_CLOSES[route] ?? {}).includes(bandId);
+  Object.values(PAIRED_CLOSES[route] ?? {}).includes(bandId) ||
+  STEPS_UNDER_FORM[route]?.[bandId] !== undefined;
 
 type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
@@ -803,6 +813,12 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   return units;
 }
 
+/** Routes whose bands alternate tint and paper down the page (owner, 4 Nov 2026). */
+const ALTERNATE_GROUNDS: ReadonlySet<string> = new Set([
+  ROUTES.futureInterfacesLab,
+  ROUTES.futureInterfacesLabJoin,
+]);
+
 /**
  * The page's units, with surfaces, media sides and texture decided from the whole sequence.
  */
@@ -864,6 +880,24 @@ export function planOffer(
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
+
+  /* Alternating grounds, by route (owner, 4 Nov 2026, the Future Interfaces Lab pages: "alternating
+     bands"): the first band under the hero on tint, then paper, tint, down the page. An island close
+     (the enquiry form, a close island) stays on paper, its island the band's colour, and the count
+     runs on through it, so two tints never touch. */
+  if (ALTERNATE_GROUNDS.has(page.route)) {
+    let previous = 'paper' as OfferUnit['surface'];
+    for (const unit of planned) {
+      const island =
+        unit.kind === 'enquiry' ||
+        (unit.kind === 'close' &&
+          (pairedCloseOf(page.route, unit.band.id) !== undefined ||
+            isIslandClose(page.route, unit.band.id) ||
+            unit.band.blocks.some((block) => block.type === 'links')));
+      unit.surface = !island && previous !== 'tint' ? 'tint' : 'paper';
+      previous = unit.surface;
+    }
+  }
 
   placeOnward(planned);
 

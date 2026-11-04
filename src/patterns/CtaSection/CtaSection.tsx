@@ -293,7 +293,18 @@ type CtaSplitProps = {
    * glance (owner, 3 Nov 2026: contact's NDA line takes a shield). Ignored without `footnote`.
    */
   footnoteIcon?: IconName;
+  /**
+   * What follows the island inside the same band, on its ground: its own heading (h3, a step under
+   * the band's) and its content (owner, 4 Nov 2026, /future-interfaces-lab/join: "how selection
+   * works … just under the form is fine. In a section of its own the gap is too much and it feels
+   * disconnected"). A `stack` under the island and its footnote: block to block inside one band.
+   * Island only.
+   */
+  after?: CtaAfter;
 };
+
+/** A follow-on under the island (`after`): a heading and what it heads. */
+export type CtaAfter = { heading: string; content: ReactNode };
 
 /**
  * The open island's second ask (4 Nov 2026, /future-interfaces-lab: the candidate's ask and the
@@ -1206,6 +1217,8 @@ export function CtaSection(props: CtaSectionProps) {
         inBand={props.inBand}
         footnote={props.footnote}
         footnoteIcon={props.footnoteIcon}
+        after={props.after}
+        afterHeadingId={`${baseId}-after-heading`}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1248,6 +1261,8 @@ export function CtaSection(props: CtaSectionProps) {
         inBand={props.inBand}
         footnote={props.footnote}
         footnoteIcon={props.footnoteIcon}
+        after={props.after}
+        afterHeadingId={`${baseId}-after-heading`}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1283,6 +1298,8 @@ export function CtaSection(props: CtaSectionProps) {
       inBand={props.inBand}
       footnote={props.footnote}
       footnoteIcon={props.footnoteIcon}
+      after={props.after}
+      afterHeadingId={`${baseId}-after-heading`}
       surface={band}
       id={props.id}
       data-band={props['data-band']}
@@ -1321,6 +1338,8 @@ function IslandBand({
   inBand,
   footnote,
   footnoteIcon,
+  after,
+  afterHeadingId,
   surface,
   id,
   'data-band': dataBand,
@@ -1330,6 +1349,8 @@ function IslandBand({
   inBand?: boolean;
   footnote?: string;
   footnoteIcon?: IconName;
+  after?: CtaAfter;
+  afterHeadingId?: string;
   surface: SectionSurface;
   id?: string;
   'data-band'?: string;
@@ -1354,9 +1375,24 @@ function IslandBand({
   ) : (
     children
   );
+  const banded = after ? (
+    <Layout rowGap="stack">
+      {body}
+      <section aria-labelledby={afterHeadingId}>
+        <Layout rowGap="block">
+          <h3 id={afterHeadingId} className={styles.afterHeading}>
+            {after.heading}
+          </h3>
+          {after.content}
+        </Layout>
+      </section>
+    </Layout>
+  ) : (
+    body
+  );
   return inBand ? (
     <section id={id} data-band={dataBand} aria-labelledby={labelledBy}>
-      {body}
+      {banded}
     </section>
   ) : (
     <Section
@@ -1366,7 +1402,7 @@ function IslandBand({
       aria-labelledby={labelledBy}
       data-arrangement="split"
     >
-      {body}
+      {banded}
     </Section>
   );
 }

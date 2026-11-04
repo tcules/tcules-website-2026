@@ -141,6 +141,9 @@ export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, st
     'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
   },
   /* plan.ts PAIRED_CLOSES (4 Nov 2026, owner to confirm). */
+  '/future-interfaces-lab/join': {
+    'how-selection-works': 'under the application form, in the apply band (plan.ts STEPS_UNDER_FORM)',
+  },
   '/future-interfaces-lab': {
     talk: "the closing island's end half, beside Apply to work on Lab projects (id `talk` kept on the half)",
   },

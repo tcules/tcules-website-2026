@@ -216,3 +216,11 @@ and no three text-heavy bands run back to back.
   `faqFooter`, every OfferBands FAQ). /careers and /matter-design-system have no closing line, so nothing
   changes there; only this page's FAQ carries one.
 - `npm run kinds:check` still needs a build (not run).
+
+## Pass 3, owner review 4 Nov 2026
+- "How selection works" moves under the form, inside the apply band (owner: "in a section of its own the
+  gap is too much"). CtaSection `after` (new slot: a heading at h3 and its content, a `stack` under the
+  island and its footnote); plan.ts `STEPS_UNDER_FORM` drops the band's own unit; kinds.ts
+  `BANDS_ELSEWHERE` names where it went. The heading split stays as logged in docs/content-changes.md.
+- Alternating grounds (decisions/2026-11-04-lab-pages-alternate-grounds): why-join, what-youll-gain and the
+  FAQ on tint; who-we-look-for and the method on paper; both islands on paper.

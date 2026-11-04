@@ -725,7 +725,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
            decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
            every page. */
-        <ContentSection {...head(band)} data-band="D-faq"
+        <ContentSection
+          {...head(band)}
+          data-band="D-faq"
+          surface={unit.surface}
           arrangement="beside"
           split="halves"
           footer={faqFooter(band)}
@@ -774,7 +777,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         return <ListBesideBand band={band} icons={glyphs.icons} />;
       }
       if (glyphs?.arrangement === 'tiles') {
-        return <GlyphTilesBand band={band} icons={glyphs.icons} />;
+        return <GlyphTilesBand band={band} icons={glyphs.icons} surface={unit.surface} />;
       }
       /* A few peers beside one studio photograph (images.ts PHOTO_BESIDE): the head and the items in
          the copy column as the media split's own tiles (the two-reasons B band's shape), the photograph
@@ -786,6 +789,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           <ContentSection
             {...head(band)}
             data-band="B"
+            surface={unit.surface}
             arrangement="media"
             media={{ image: photo, side: 'end', weight: 'photo', head: 'lg' }}
           >
@@ -808,6 +812,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return (
         <SheetBand
           band={band}
+          surface={unit.surface}
           scenes={scenes}
           {...(cutOuts ? { images: cutOuts } : {})}
           {...(SHEET_GLYPHS[band.id] ?? {})}
@@ -849,6 +854,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return (
         <MethodBand
           band={band}
+          surface={unit.surface}
           scenario={sceneFor(ctx, band, 'scenario')}
           {...(figure ? { figure } : {})}
           {...(METHOD_NOTE_ICON[band.id] ? { noteIcon: METHOD_NOTE_ICON[band.id] } : {})}
@@ -875,6 +881,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       ) : (
         <DestinationsBand
           band={band}
+          surface={unit.surface}
           sceneOf={(title) => sceneFor(ctx, band, title)}
           covers={itemCovers(page.route, band.id)}
         />
@@ -890,6 +897,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         <TextBand
           page={page}
           band={band}
+          surface={unit.surface}
           side={unit.side}
           scenario={sceneFor(ctx, band, 'scenario')}
         />
@@ -906,8 +914,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (pair) return <PairedCloseBand page={page} band={band} second={pair} />;
       /* A close the page draws: its sentence beside its one figure. */
       const figure = sceneFor(ctx, band, 'figure');
-      if (figure) return <CloseFigureBand band={band} scene={figure} />;
-      return <CloseBand page={page} band={band} />;
+      if (figure) return <CloseFigureBand band={band} scene={figure} surface={unit.surface} />;
+      return <CloseBand page={page} band={band} surface={unit.surface} />;
     }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
@@ -2235,9 +2243,12 @@ function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos
  */
 function GlyphTilesBand({
   band,
+  surface,
   icons,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   icons: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
@@ -2253,7 +2264,7 @@ function GlyphTilesBand({
     ...(glyphed && item.title ? { icon: icons[item.title] } : {}),
   }));
   return (
-    <ContentSection {...head(band)} data-band="glyph-tiles" lead={parts.lead}>
+    <ContentSection surface={surface} {...head(band)} data-band="glyph-tiles" lead={parts.lead}>
       <BlockCardSet lead="none" across={items.length >= 4 ? 2 : 3} frame="tile" items={items} />
     </ContentSection>
   );

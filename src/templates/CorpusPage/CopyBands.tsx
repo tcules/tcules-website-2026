@@ -53,9 +53,7 @@ import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import {
   bandArtefact,
-  caseCover,
   slotImage,
-  slugOf,
   studioBandPhoto,
   type SlotImage,
 } from './images';
@@ -654,12 +652,15 @@ function bandTerms(rest: readonly CorpusBlock[]): {
  */
 export function SheetBand({
   band,
+  surface,
   scenes,
   arrangement,
   icons,
   images,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   scenes?: (title: string) => OfferSheetItem['scene'];
   /**
    * An image per item title, a detail of the page's own artefact (images.ts `ITEM_CUT_OUTS`), shown in
@@ -709,7 +710,7 @@ export function SheetBand({
         : { title: item.body ?? item.id ?? '' },
     );
     return (
-      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
+      <ContentSection surface={surface} {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
         <Layout rowGap="block">
           <ReadDown rows={rows} columns={2} />
         </Layout>
@@ -717,7 +718,7 @@ export function SheetBand({
     );
   }
   return (
-    <OfferSheet
+    <OfferSheet surface={surface}
       {...head(band)}
       lead={parts.lead}
       items={items}
@@ -1264,11 +1265,14 @@ const FLOW_METHODS: ReadonlySet<string> = new Set(['how-selection-works']);
  */
 export function MethodBand({
   band,
+  surface,
   scenario,
   figure,
   noteIcon,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   scenario?: SketchName;
   figure?: { sketch: SketchName } | { image: SlotImage };
   /** A glyph that heads the sentences after the steps, which then stand as callouts, not prose. */
@@ -1371,7 +1375,7 @@ export function MethodBand({
       return match ? { title: match[1] ?? text, body: match[2] ?? '' } : { title: text };
     });
     return (
-      <ContentSection {...head(band)} data-band="F">
+      <ContentSection surface={surface} {...head(band)} data-band="F">
         <Steps steps={steps} />
       </ContentSection>
     );
@@ -1389,7 +1393,7 @@ export function MethodBand({
     trailingNotes.length === 0
   ) {
     return (
-      <ContentSection {...head(band)} data-band="process-flow" lead={leadText}>
+      <ContentSection surface={surface} {...head(band)} data-band="process-flow" lead={leadText}>
         <ProcessFlow
           ruled={false}
           stages={steps.map((step) => ({
@@ -1426,7 +1430,7 @@ export function MethodBand({
       </Layout>
     );
   return (
-    <ContentSection {...head(band)} data-band="F" lead={leadText}>
+    <ContentSection surface={surface} {...head(band)} data-band="F" lead={leadText}>
       <Layout rowGap="stack">
         {before.length > 0 ? (
           <BandBody blocks={before} labelledBy={head(band).headingId} />
@@ -1957,10 +1961,13 @@ export function IndustriesBand({ band }: { page?: CorpusPage; band: CorpusBand }
  */
 export function DestinationsBand({
   band,
+  surface,
   sceneOf,
   covers,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   sceneOf?: (title: string) => SketchName | undefined;
   covers?: Readonly<Record<string, CorpusImage>>;
 }) {
@@ -2049,7 +2056,7 @@ export function DestinationsBand({
       <BlockCardSet items={cards} lead="none" across={3} size="sm" cue="title" scroll="never" />
     );
     return (
-      <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
+      <ContentSection surface={surface} {...head(band)} data-band="C-image" lead={leadText}>
         {introNode ? (
           <Layout rowGap="stack">
             {introNode}
@@ -2103,7 +2110,7 @@ export function DestinationsBand({
     );
   }
   return (
-    <ContentSection {...head(band)} data-band="C-icon" lead={leadText}>
+    <ContentSection surface={surface} {...head(band)} data-band="C-icon" lead={leadText}>
       {introNode ? (
         <Layout rowGap="stack">
           {introNode}
@@ -2451,11 +2458,14 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
 export function TextBand({
   page,
   band,
+  surface,
   side = 'start',
   scenario,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   side?: 'start' | 'end';
   scenario?: SketchName;
 }) {
@@ -2492,7 +2502,7 @@ export function TextBand({
   const artefact = bandArtefact(page.route, band.id);
   if (artefact) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2513,7 +2523,7 @@ export function TextBand({
   }
   if (isIllustratedProse(band.id)) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2532,7 +2542,7 @@ export function TextBand({
   }
   if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2566,7 +2576,7 @@ export function TextBand({
       : [];
     const all = [...liftedLinks, ...links];
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2585,7 +2595,7 @@ export function TextBand({
     : [];
   if (peers.length === 2 && peers.length === body.length) {
     return (
-      <ContentSection {...head(band)} data-band="C-text" footer={actions}>
+      <ContentSection surface={surface} {...head(band)} data-band="C-text" footer={actions}>
         <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="text">
           {peers.map((block, index) => (
             <Prose key={index} html={`<p>${inlineToHtml(block.runs)}</p>`} />
@@ -2601,7 +2611,7 @@ export function TextBand({
      (/careers critic, 4 Nov 2026). */
   if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="C-text"
         arrangement="beside"
@@ -2613,7 +2623,7 @@ export function TextBand({
     );
   }
   return (
-    <ContentSection {...head(band)} data-band="C-text" footer={actions}>
+    <ContentSection surface={surface} {...head(band)} data-band="C-text" footer={actions}>
       {text}
     </ContentSection>
   );
@@ -2661,9 +2671,12 @@ export function CloseBand({
   page,
   band,
   island,
+  surface,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** The ground when the close is prose, not an island (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   /** The close's island, ink unless the page closes on blue (About: owner, 31 Oct 2026). */
   island?: 'blue' | 'ink';
 }) {
@@ -2770,7 +2783,7 @@ export function CloseBand({
       />
     );
   }
-  return <TextBand page={page} band={band} />;
+  return <TextBand page={page} band={band} surface={surface} />;
 }
 
 /**
@@ -2782,9 +2795,17 @@ export function CloseBand({
  * so nothing is lifted into an action. It stays prose (C-text): the figure illustrates the sentence,
  * it is not an island. The head keeps the band's h2 step (`lg`): a close is not the page's argument.
  */
-export function CloseFigureBand({ band, scene }: { band: CorpusBand; scene: SketchName }) {
+export function CloseFigureBand({
+  band,
+  scene,
+  surface,
+}: {
+  band: CorpusBand;
+  scene: SketchName;
+  surface?: 'paper' | 'tint';
+}) {
   return (
-    <ContentSection
+    <ContentSection surface={surface}
       {...head(band)}
       data-band="C-text"
       arrangement="media"
