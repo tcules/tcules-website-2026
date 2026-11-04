@@ -277,13 +277,13 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
       copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
       `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
-
 - [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · header and footer · enquiry form autofill, success/failure copy
 and CTA-source analytics · a pricing section · taxonomy collection pages.
