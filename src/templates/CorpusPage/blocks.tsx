@@ -131,7 +131,8 @@ export function CorpusHero({
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
   const actions = hero.actions.slice(0, 2).map((action) => ({
-    label: action.labelText,
+    /* The copy's trailing arrow ("Start small with an optional pilot →") is the control's to draw. */
+    label: action.labelText.replace(/\s*→\s*$/, ''),
     href: action.href,
   })) as unknown as HeroActions;
   const eyebrow = hero.eyebrow ? plain(hero.eyebrow) : undefined;
