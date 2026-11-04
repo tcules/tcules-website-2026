@@ -28,8 +28,6 @@
   /* A picture in the drawing's place (ServiceTile `picture`): the card crop box's radius. */
   --bnt-picture-radius: var(--radius-8);
   --bnt-body-measure: var(--measure-lead);
-  /* The split tile's result panel: the card crop box's radius, one step inside the tile's 16. */
-  --bnt-panel-radius: var(--radius-8);
   /* An optical lift, not a distance between two things: the ramp's 2, so the tile rises off the
      band by a hair rather than travelling. */
   --bnt-lift: var(--space-2);
@@ -54,7 +52,6 @@
   --bnt-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bnt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 */
   --bnt-ring-color: var(--color-brandeis-500); /* 6.17:1 */
-  --bnt-panel-ground: var(--color-paper-deep); /* the result panel: one step off the band's ground */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -67,7 +64,6 @@
   --bnt-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bnt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
   --bnt-ring-color: var(--color-brandeis-500);
-  --bnt-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -80,7 +76,6 @@
   --bnt-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bnt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --bnt-ring-color: var(--color-brandeis-300);
-  --bnt-panel-ground: var(--color-neutral-800);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
@@ -93,5 +88,4 @@
   --bnt-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-eyebrow-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-ring-color: var(--color-white);
-  --bnt-panel-ground: var(--color-brandeis-600);
 }

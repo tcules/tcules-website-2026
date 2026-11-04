@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Coded Prototype
     url: /glossary/coded-prototype
+  section_labels:
+    practice: Examples
+    figma-comparison: Vs Figma prototype
+    comparison: Vs production code
+    related-terms: Related terms
+    faq: FAQs
+    next: When to build one
 render:
   band_order:
   - practice

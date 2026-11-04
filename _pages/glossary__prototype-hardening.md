@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Prototype Hardening
     url: /glossary/prototype-hardening
+  section_labels:
+    practice: Where it starts
+    steps: Steps
+    prototype-vs-production: Vs production code
+    comparison: Vs a readiness review
+    faq: FAQs
+    next: The free checklist
 render:
   band_order:
   - practice

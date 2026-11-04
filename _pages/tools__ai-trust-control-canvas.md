@@ -62,6 +62,15 @@ navigation:
     url: /tools
   - name: AI Trust and Control Canvas
     url: /tools/ai-trust-control-canvas
+  section_labels:
+    example: Worked example
+    who-its-for: Who it suits
+    start: How to use it
+    workspace: Seven parts
+    reading-your-canvas: Reading the canvas
+    test: Testing the controls
+    next: Design brief
+    faq: FAQs
 render:
   band_order:
   - example

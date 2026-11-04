@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Design System Adoption
     url: /glossary/design-system-adoption
+  section_labels:
+    measure: Measuring it
+    practice: Why it fails
+    comparison: Vs component usage
+    related-terms: Related terms
+    faq: FAQs
+    next: Where to look
 render:
   band_order:
   - measure

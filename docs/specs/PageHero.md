@@ -1142,3 +1142,11 @@ LinkedIn on paper and ink).
   to a circle on transparency still reads as the rounded square.
 - **One initials treatment** with ProfileCard: the tint ground and `--hero-portrait-initials-ink`, the
   title's full ink (neutral-900; white on ink and blue). The outlined disc stays the byline's only.
+
+## Amendment · 4 Nov 2026 — `actionsNote` and the sketch media (status proposed; owner to judge)
+
+- **`actionsNote`**: a short line set after the ask, in the actions row's place (specimen 5c). The six audit
+  pages' redirect line ("Already live with customers? See the UX & Product Audit.") keeps its authored
+  place after the ask instead of being dropped.
+- **`media: { type: 'sketch' }`** (`HeroSketch`): a flat Sketch drawing on its plate in the media slot. A
+  tool page's hero carries the same drawing as its hub tile; a hero with none keeps the fade.

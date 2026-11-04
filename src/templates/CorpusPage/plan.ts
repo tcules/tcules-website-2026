@@ -1,5 +1,6 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
+import { studioBandPhoto } from './images';
 import { formBeforeFaq } from './order';
 import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
@@ -59,8 +60,15 @@ export type OfferKind =
   | 'text'
   /** A labelled set of items that is not What you get (31 Oct 2026): the sheet, to design. */
   | 'set'
+  /**
+   * A worked example that carries a table (the audits' 3 Nov 2026 "What the report looks like"): a
+   * sample page of the report (ReportBand). A worked example told as bold-led story rows is `record`.
+   */
+  | 'example'
   | 'note'
   | 'close'
+  /** A listing's term index (4 Nov 2026, /glossary): its lead and its groups, set by ListingIndex. */
+  | 'index'
   /** No rule names this band: it renders every block plainly and warns (a planning gap). */
   | 'generic';
 
@@ -206,7 +214,7 @@ const boldLedList = (band: CorpusBand): boolean =>
 const personaOrChallenges: ShapeRule = (band) =>
   isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'challenges';
 /** A term index (`A` lines) where the copy uses the same id for a tool group (`L` + `P`). */
-const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'related' : 'directory');
+const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'index' : 'directory');
 
 /**
  * THE LOOKUP, SECTION ID FIRST (component-map § A and § B, 29 Oct 2026). The content team's band ids
@@ -232,12 +240,13 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'hard-parts': personaOrChallenges,
   'what-we-design': 'catalog',
   /* A comparison of options to choose between ("Option | …") is the services hub's split tiles
-     (owner, 2 Nov 2026, audits); any other comparison stays a table. */
+     (owner, 2 Nov 2026, audits). A table of the free tools ("Tool | …", /tools) heads the tool groups
+     after it, its columns in their tiles (CopyBands DirectoryBand, tools critic 4 Nov 2026). Any other
+     comparison stays a table. */
   compare: (band) => {
     const table = band.blocks.find((block) => block.type === 'table');
-    return table?.type === 'table' && /^options?$/i.test(plain(table.header[0] ?? []).trim())
-      ? 'router'
-      : 'table';
+    const key = table?.type === 'table' ? plain(table.header[0] ?? []).trim() : '';
+    return /^options?$/i.test(key) ? 'router' : /^tools?$/i.test(key) ? 'directory' : 'table';
   },
   routes: 'table',
   articles: 'related',
@@ -282,8 +291,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   states: 'table',
   platforms: 'table',
   alternatives: 'table',
-  /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
-  choose: 'table',
+  /* ── G12 · hub routers ── */
+  /* /audits' chooser: five named audits, each with who it is for and what you come away with. The
+     /services hub solved the same table on 2 Nov (owner; named-services-are-service-tiles): split
+     tiles, each its own drawing, the third column the tile's labelled panel (4 Nov 2026). */
+  choose: 'router',
   /* /services' chooser: eight named services, so the service tiles, each its own drawing, the table's
      third column kept as a labelled detail (owner, 2 Nov 2026; named-services-are-service-tiles). */
   'service-guide': 'router',
@@ -329,10 +341,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'product-situations': 'destinations',
   /* ── G18 · open roles · G6 term indexes ── */
   'open-roles': 'related',
-  'ai-in-products': 'related',
-  'ai-in-practice': 'related',
-  'design-and-code': 'related',
-  structure: 'related',
+  /* The glossary's term groups: sections of the listing's index, each term a drawn card (4 Nov 2026). */
+  'ai-in-products': 'index',
+  'ai-in-practice': 'index',
+  'design-and-code': 'index',
+  structure: 'index',
   /* ── G23 · tool hub groups, or a term index where the same id names one ── */
   ai: termsOrTools,
   'design-systems': termsOrTools,
@@ -360,9 +373,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
-  /* Three instructions as plain paragraphs: numbered steps (MethodBand), so the glossary opens on a
-     shape before its five term groups (review 29 Oct). */
-  'how-to-use': 'method',
+  /* Three instructions on reading the index: the listing's lead, beside the rail of groups it points
+     at (4 Nov 2026). Not a method: the order is not a sequence (2026-10-11-no-decorative-numbering). */
+  'how-to-use': 'index',
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
   lab: 'close',
@@ -374,12 +387,17 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'artefact-access': 'close',
   'your-rules': 'close',
   talk: 'close',
+  /* The audits' "After the audit": one sentence and its onward link, the page's handover to the
+     work that follows, so it is a closing ask on its ink island (owner, 4 Nov 2026), not a prose band. */
+  'after-the-audit': 'close',
   confidentiality: 'note',
   /* ── G21 · one worked example; and the ids the earlier copy used ── */
   'signature-work': 'record',
   'complex-products': 'cases',
   proof: 'cases',
-  'worked-example': 'record',
+  /* A worked example that carries a table is a page of the report (the audits, 3 Nov 2026 copy); one
+     told as bold-led story rows stays the case spread. */
+  'worked-example': (band) => (band.blocks.some((b) => b.type === 'table') ? 'example' : 'record'),
   engagement: 'tiles',
   approach: 'principles',
   /* ── G24 · home's own bands (HomePage composes them; this is the shared fallback) ── */
@@ -513,6 +531,7 @@ const MEDIA_KINDS: ReadonlySet<OfferKind> = new Set([
 const VISUAL: ReadonlySet<OfferKind> = new Set([
   'symptoms',
   'record',
+  'example',
   'cases',
   'tiles',
   'router',
@@ -586,7 +605,11 @@ export function registerOf(
     case 'method':
     case 'text':
       if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
-      return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
+      return drawn.has(band.id)
+        ? 'flat'
+        : bound || studioBandPhoto(page.route, band.id)
+          ? 'photo'
+          : 'none';
     default:
       return 'none';
   }
@@ -624,6 +647,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            studioBandPhoto(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             band.blocks.some(
@@ -745,7 +769,7 @@ export function planOffer(
   /* A worked example is a story on its own ground: tint, unless a neighbour is already tint (two tints
      never touch). */
   planned.forEach((unit, index) => {
-    if (unit.kind !== 'record' && unit.kind !== 'close') return;
+    if (unit.kind !== 'record' && unit.kind !== 'example' && unit.kind !== 'close') return;
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });

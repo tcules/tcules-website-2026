@@ -1,9 +1,21 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsFixturePage, type InsightsPage } from '@/content';
+import {
+  getCorpusPage,
+  getInsightsFixturePage,
+  type CorpusPage,
+  type InsightsPage,
+} from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { AuthorPieces, ListingClose, ListingIndex, type CaseView } from '@/templates';
+import {
+  AuthorPieces,
+  CorpusBandView,
+  ListingClose,
+  ListingIndex,
+  glossaryIndex,
+  type CaseView,
+} from '@/templates';
 
 import { caseIndexProps } from '../../_corpus/case-index';
 import { closingOf, insightCards, insightsIndexProps } from '../../_insights/hub';
@@ -89,6 +101,12 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
  *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
+ *   ?data=glossary        the glossary hub from its copy (glossaryIndex): the lead beside the rail,
+ *                         each group a dictionary of ruled term rows, a group's note under its rows,
+ *                         the ask as the close, the FAQ after it
+ *   ?data=glossary&state=sparse   one group of one term (the shortest), no lead, no note, no ask
+ *   ?data=glossary&state=sizes    groups of two to six terms (the copy's terms reused): one term a
+ *                         row at every group size
  *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
  *                         pieces, one with many and no covers, one with two and none; then the close
  *                         with its `lead` set, as the authors index sets it
@@ -108,6 +126,40 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
     return <ListingIndex {...props} />;
   }
 
+  if (one(query.data) === 'glossary') {
+    const corpus = await getCorpusPage(ROUTES.glossary);
+    if (!corpus) notFound();
+    const page: CorpusPage =
+      state === 'sparse'
+        ? {
+            ...corpus,
+            bands: corpus.bands
+              .filter((band) => band.id === 'ai-in-practice')
+              .map((band) => ({ ...band, blocks: band.blocks.slice(0, 1) })),
+          }
+        : state === 'sizes'
+          ? { ...corpus, bands: [...termGroupSizes(corpus), ...corpus.bands.slice(-1)] }
+          : corpus;
+    const index = glossaryIndex(page);
+    return (
+      <ListingIndex
+        breadcrumbs={page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }))}
+        hero={index.hero}
+        label="Glossary"
+        railLabel="Browse the glossary"
+        views={[{ id: 'groups', label: 'Groups', sections: index.sections }]}
+        lead={index.lead}
+        empty="No terms are published yet."
+        closing={index.closing}
+        bands={{
+          afterClose: index.after.map((band) => (
+            <CorpusBandView key={band.id} page={page} band={band} />
+          )),
+        }}
+      />
+    );
+  }
+
   const fixture = await getInsightsFixturePage();
 
   if (one(query.data) === 'author') {
@@ -120,9 +172,18 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
     );
     return (
       <>
-        <AuthorPieces heading="17 pieces by Alice" items={insightCards(fixture, mixed.slice(0, 17))} />
-        <AuthorPieces heading="12 pieces by Ben" items={insightCards(fixture, bare.slice(0, 12))} />
-        <AuthorPieces heading="2 pieces by Cleo" items={insightCards(fixture, bare.slice(0, 2))} />
+        <AuthorPieces
+          heading="17 pieces by Alice"
+          items={insightCards(fixture, mixed.slice(0, 17))}
+        />
+        <AuthorPieces
+          heading="12 pieces by Ben"
+          items={insightCards(fixture, bare.slice(0, 12))}
+        />
+        <AuthorPieces
+          heading="2 pieces by Cleo"
+          items={insightCards(fixture, bare.slice(0, 2))}
+        />
         <ListingClose
           closing={closingOf(fixture, PATH, 'design-specimen')}
           lead="If one of these writers works on the problem in your own product, tell us about it."
@@ -136,4 +197,27 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   /* The finder's links and form come back to the specimen, the state kept. */
   const path = state ? `${PATH}?${new URLSearchParams({ state }).toString()}` : PATH;
   return <ListingIndex {...insightsIndexProps(page, query, path)} />;
+}
+
+/** Groups of two to six terms, from the copy's own term lines in order (reused past the last). */
+function termGroupSizes(corpus: CorpusPage): CorpusPage['bands'] {
+  const lines = corpus.bands.flatMap((band) =>
+    band.blocks.filter(
+      (block) =>
+        block.type === 'paragraph' &&
+        block.runs[0]?.type === 'link' &&
+        block.runs[0].href.startsWith('/glossary/'),
+    ),
+  );
+  let at = 0;
+  return [2, 3, 4, 5, 6].map((size) => {
+    const blocks = Array.from({ length: size }, () => lines[at++ % lines.length]!);
+    return {
+      id: `sizes-${size}`,
+      anchored: true,
+      heading: [{ type: 'text' as const, text: `A group of ${size} terms` }],
+      headingText: `A group of ${size} terms`,
+      blocks,
+    };
+  });
 }

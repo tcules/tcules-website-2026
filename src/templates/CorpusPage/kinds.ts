@@ -88,6 +88,11 @@ export const KIND_COMPONENTS: Readonly<
     status: 'approved',
     note: 'One worked case (CaseSpread).',
   },
+  example: {
+    component: ['report'],
+    status: 'to-design',
+    note: "What the report looks like (the audits' 3 Nov outline): one paper report page on the tint band, the label, scenario, sheet and reading inside it (ReportBand; the 2 Nov one-panel answer). Owner to judge on the six audit pages.",
+  },
   recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
   destinations: {
     component: ['C-image', 'C-icon'],
@@ -95,11 +100,20 @@ export const KIND_COMPONENTS: Readonly<
     note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
   },
   related: {
-    component: ['K'],
+    component: ['K', 'service-tile'],
     status: 'to-design',
-    note: 'Ruled link rows (open roles, glossary groups).',
+    note: 'Ruled link rows (open roles, glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles).',
   },
-  directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  directory: {
+    component: ['tool-tiles'],
+    status: 'to-design',
+    note: "The /tools groups as the /services hub's split tiles (tools critic, 4 Nov 2026): every tool one form, its router table's columns in the result panel; the compare table hosts the groups after it, two single-tool groups share a row as headed halves. Owner to judge on /tools.",
+  },
+  index: {
+    component: ['listing-lead', 'listing-section'],
+    status: 'to-design',
+    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a dictionary of ruled term rows, no drawings (/glossary, owner 4 Nov 2026).',
+  },
   note: { component: ['C-note'], status: 'to-design' },
   close: {
     component: ['L', 'C-text'],

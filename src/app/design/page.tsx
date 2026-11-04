@@ -385,7 +385,7 @@ const SPECIMENS = [
       {
         href: '/design/corpus-page',
         name: 'CorpusPage',
-        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, ToolPage for a free tool and the grouped case-study index, each shown with the plan that decided its bands',
+        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, an article, a term or a free tool and the grouped case-study index, each shown with the plan that decided its bands',
       },
     ],
   },

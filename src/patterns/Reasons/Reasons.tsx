@@ -393,7 +393,17 @@ export function Reasons({
     item.proof ? (
       <Proof proof={item.proof} flat={flatProofs} />
     ) : item.figure ? (
-      <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
+      /* A figure that is not a drawing (`kind` other than `illustration`) is the register's labelled
+         slot, standing in until the drawing lands. It fills the track at the set's ratio, so an
+         undrawn set sits on the grid; at the drawing's fixed height it took about 70% of the track
+         and the row read ragged (critic, audits run, 4 Nov 2026). */
+      <div
+        className={cx(
+          styles.figure,
+          figureSize === 'lg' && styles.figureLg,
+          item.figure.kind !== 'illustration' && styles.figureSlot,
+        )}
+      >
         <Media
           image={{ ...item.figure, alt: '' }}
           sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}

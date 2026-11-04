@@ -61,6 +61,14 @@ navigation:
     url: /tools
   - name: Design System Drift Checker
     url: /tools/design-system-drift-checker
+  section_labels:
+    who-its-for: Who it suits
+    how-to-use-it: How to use it
+    workspace: Four places
+    reading-your-results: Worked example
+    wider: A second product
+    next: Who owns fixes
+    faq: FAQs
 render:
   band_order:
   - who-its-for

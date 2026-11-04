@@ -21,6 +21,9 @@ import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
 
+/** One paragraph of the close's lede: plain words, or a sentence with its authored links. */
+export type CtaParagraph = string | ReactElement;
+
 /**
  * One step in "what happens next". `label` is the step, `detail` an optional clause under it.
  *
@@ -113,8 +116,11 @@ type CtaSectionBaseProps = {
    *
    * A third paragraph does not compile, and that is the point of the tuple: this block asks, it
    * does not explain. Whatever wants a third paragraph belongs in the page above it.
+   *
+   * A paragraph may be rich text (a ReactNode) where its links are part of the sentence as authored
+   * (an audit's "After the audit", 4 Nov 2026); the island's surface inks them.
    */
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -398,7 +404,7 @@ function CtaLede({
   mark?: ReactNode;
   eyebrow?: string;
   heading: string;
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   leadRole?: 'lead' | 'body';
   scale?: CtaHeadingScale;
   centred?: boolean;
@@ -407,7 +413,9 @@ function CtaLede({
      around nothing. The survivors are re-indexed, so an empty body[0] promotes body[1] into the lead
      role rather than rendering an empty lead above a body paragraph. An absent body (cmp-feature:
      the body is optional) renders the head alone. */
-  const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
+  const paragraphs = (body ?? []).filter((paragraph) =>
+    typeof paragraph === 'string' ? paragraph.trim().length > 0 : paragraph != null,
+  );
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
@@ -437,7 +445,7 @@ function CtaLede({
         <Layout rowGap="text" justifyItems={centred ? 'center' : undefined}>
           {paragraphs.map((paragraph, index) => (
             <p
-              key={`${index}-${paragraph}`}
+              key={index}
               className={index === 0 && leadRole === 'lead' ? styles.lead : styles.body}
             >
               {paragraph}

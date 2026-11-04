@@ -45,6 +45,13 @@ navigation:
     url: /glossary
   - name: AI-native Product Design
     url: /glossary/ai-native-product-design
+  section_labels:
+    ai-assisted-vs-ai-native-product-design: The design process
+    examples: Examples
+    ai-native-vs-agentic: Where agents fit
+    ai-native-does-not-mean-autonomous-design: Principles
+    related-terms: Related terms
+    faq: FAQs
 conversion: {}
 render:
   band_order:

@@ -15,6 +15,14 @@
   }
 }
 
+/* A split tile alone on the set's last row (`full`, 4 Nov 2026): from 1024 it takes every track, so
+   the set ends on a full row. Placement of this unit's own cell, as `.wide`. */
+@media (min-width: 1024px) {
+  .full {
+    grid-column: 1 / -1;
+  }
+}
+
 /* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
    texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
    where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
@@ -174,6 +182,15 @@
   border-radius: var(--bnt-picture-radius);
 }
 
+/* Below 768 a wide tile stacks drawing first, as every split tile and card does: in reading order
+   (words, visual, action) the drawing fell under the copy, the only tile on a phone to put it there
+   (critic, audits run, 4 Nov 2026). The drawing is decorative, so the reading order is unchanged. */
+@media (max-width: 767.98px) {
+  .wideVisual {
+    order: -1;
+  }
+}
+
 @media (min-width: 768px) {
   .tileWide {
     padding: var(--gap-gutter);
@@ -194,10 +211,29 @@
     align-self: start;
   }
 
+  /* \`visual="start"\`: the visual leads, the words and action beside it on the end side, so two
+     whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools). */
+  .visualStart .wideVisual {
+    grid-column: 1;
+  }
+
+  .visualStart .wideWords,
+  .visualStart .wideAction {
+    grid-column: 2;
+  }
+
   .tileWide .title {
     font: var(--bnt-title-text-wide);
     letter-spacing: var(--bnt-title-tracking-wide);
   }
+}
+
+/* `frame="none"`: a wide tile on the band's own ground, no hairline and no inset, so its words and
+   plate sit on the content column's edges as a media row does. After the wide inset (same
+   specificity, later), and the hover's edge below is cancelled for it there. */
+.tile.tileBare {
+  padding: 0;
+  border-color: transparent;
 }
 
 /* ── States ─────────────────────────────────────────────────────────────────
@@ -207,6 +243,11 @@
 a.tile:is(:hover, :focus-visible) {
   transform: translateY(calc(-1 * var(--bnt-lift)));
   border-color: var(--bnt-rule-ink-hover);
+}
+
+/* A bare wide tile (`frame="none"`) has no edge to turn blue: it lifts and its title takes the accent. */
+a.tile.tileBare:is(:hover, :focus-visible) {
+  border-color: transparent;
 }
 
 a.tile:is(:hover, :focus-visible) .title {
@@ -228,30 +269,40 @@ a.tile:is(:hover, :focus-visible) .title {
   }
 }
 
-/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A) ─────────────────────────────
-   Two tracks wide, two halves. The tile's own inset drops to `tight` so the result panel sits a hair
-   inside the tile's edge; the named half adds `text` back, so its words start where a single tile's
-   would (8 + 16 = the single tile's 24). The panel is a ground inside the tile, its own `block` inset.
-   The drawing at the split scale, at the start of its half. */
+/* ── The split tile (`detail`, owner 2 Nov 2026, /services mock A; panel restyled 4 Nov 2026) ─────
+   Two tracks wide, two halves. The result panel is no box: it stands on the band's own ground, set
+   off by the tile's own hairline on its inline-start edge (from 768) or its top edge (stacked, below
+   768). The tile's `text` inset keeps that rule clear of the frame, 16 from its edges; each half adds
+   `tight` back so its words start where a single tile's would (16 + 8 = the single tile's 24), and the
+   halves' `text` gap plus that `tight` puts the words 24 either side of the rule. */
 .split .tile {
-  padding: var(--gap-tight);
-}
-
-@media (min-width: 768px) {
-  .split .tile {
-    padding: var(--gap-tight);
-  }
+  padding: var(--gap-text);
 }
 
 .named {
-  padding: var(--gap-text);
+  padding: var(--gap-tight);
 }
 
 .panel {
   block-size: 100%;
-  padding: var(--gap-block);
-  border-radius: var(--bnt-panel-radius);
-  background: var(--bnt-panel-ground);
+  padding-block: var(--gap-block) var(--gap-tight);
+  padding-inline: var(--gap-tight);
+  border-block-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  transition: border-color var(--bnt-duration) var(--bnt-easing);
+}
+
+/* The panel's rule is the tile's hairline, so it takes the frame's hover ink with it. */
+a.tile:is(:hover, :focus-visible) .panel {
+  border-color: var(--bnt-rule-ink-hover);
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding-block: var(--gap-tight);
+    padding-inline: var(--gap-block) var(--gap-tight);
+    border-block-start: 0;
+    border-inline-start: var(--bnt-rule-width) solid var(--bnt-rule-ink);
+  }
 }
 
 .panelText {

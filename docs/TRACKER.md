@@ -177,18 +177,19 @@ pass on another account; a page ships with its placeholders until then.
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-- [~] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+- [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
       storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
+      approved 4 Nov (record docs/page-build/pages/audits.md).
 - [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
       Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
       service tiles (mock A); centred hero, illustration placeholder until art.
 - [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
       services hub (#194).
-- [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
-      relief (lowest score on 29 Oct, 4/10).
+- [x] **2.39** (#213) Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
+      relief (lowest score on 29 Oct, 4/10). approved 4 Nov (record docs/page-build/pages/glossary.md).
 
 *More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
 
@@ -265,8 +266,8 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
       "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
       social media, the other ways to reach us, and the studio address.
-- [ ] **2.57** `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
-      the article page, and bring the comparison to the owner.
+- [x] **2.57** (#213) `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
+      the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
 - [~] **2.58** `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
 - [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
@@ -277,6 +278,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
       copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
       `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
+      The six audit pages: done 4 Nov (#213).
 - [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.

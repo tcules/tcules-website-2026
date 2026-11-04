@@ -15,6 +15,13 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* Words in the column that are not pieces: the lead's paragraphs and a section's closing note, at
+   the body measure (Prose declares none; the caller owns the reading column). */
+.note {
+  min-inline-size: 0;
+  max-inline-size: var(--lix-note-measure);
+}
+
 .count {
   color: var(--lix-count-ink);
   font: var(--lix-count-text);

@@ -44,6 +44,12 @@ navigation:
     url: /glossary
   - name: Design System
     url: /glossary/design-system
+  section_labels:
+    components: What it includes
+    practice: Example
+    comparison: Vs component library
+    faq: FAQs
+    next: Where Tcules helps
 render:
   band_order:
   - components

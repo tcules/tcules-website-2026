@@ -61,24 +61,25 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
 render:
   band_order:
   - deliverables
-  - trace
-  - compare
+  - method
+  - worked-example
+  - talk
   - selected-work
   - testimonials
-  - how-we-work-together
   - why-tcules
-  - industries
+  - after-the-audit
+  - compare
   - faq
   - enquiry
 page_composition:
@@ -153,89 +154,61 @@ method_governance:
 
 # Design-to-code audit: why production drifts from Figma, and where to fix it
 
-Design and code meet twice in every release: in the sprint, where developers build each screen, and at sign-off, where someone checks the result against what was approved. Tcules runs design-to-code audits for product teams whose screens pass design review, then ship looking or behaving differently.
+In about two days, at a fixed price, a senior designer and a design engineer find why one screen ships unlike its design.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)*
 
-[Tell us which screens keep drifting](#enquiry)
+[Book a call](#enquiry)
+
+*Still at the prototype stage? See the [Prototype Readiness Review](/audits/prototype-readiness-review).*
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get: every gap, sorted by what caused it {#deliverables}
+## What you get from a design-to-code audit {#deliverables}
 
-The audit starts with one screen or one component that keeps shipping differently, traced from the approved design to what users see. Allow about two days. The price is fixed and agreed before we start.
+- **Every gap, side by side.** Shown against the approved design, with what caused it.
 
-**What you receive**
+- **A fix plan.** Ordered by what users feel most.
 
-- **Every difference we found,** shown against the approved design, with its type and cause.
+- **Stop gaps coming back.** What to change in the handoff, shared components or sign-off.
 
-- **A fix plan,** ordered by what users feel most.
+- **Developer changes worth keeping.** Sensible changes made in the build, recorded so the design can catch up.
 
-- **Changes to stop gaps returning,** to the handoff, the components or the review steps.
+**Who does the work.** A senior designer leads; a design engineer reads your Figma and code side by side.
 
-- **A record of sensible adaptations,** so the design can catch up with the code.
+**Where our part stops.** The audit changes nothing in your code; who fixes it is your decision.
 
-Every gap gets one of five types, because each has its fix in a different place.
+## How a design-to-code audit runs {#method}
 
-| Type of gap | What happened | Where the fix belongs |
-|---|---|---|
-| **Defect** | The design was clear and got lost in the build | The code |
-| **Missing state** | Nobody designed this case, such as an empty list or a failed save | The design |
-| **Sensible adaptation** | Developers changed it for a good reason that was never agreed | Agree it, then update the design |
-| **System gap** | The shared component can't express what the screen needs | The design system |
-| **Sign-off gap** | Nothing checked this before release | The review process |
+1. **Agree the screen and the price.** One call, then its approved design, read access to its code and the live product.
 
-Here is part of a gap list for one screen.
+2. **Check the design and the handoff.** What the design and specs said, and what they left to guesswork.
+
+3. **Check the code and the live screen.** Component settings, colour and spacing, permissions, keyboard use, errors and small screens.
+
+4. **Sort every gap by cause.** Each gap traced to where it began, including how it was signed off.
+
+## What the report looks like {#worked-example}
+
+<!-- Small label above the heading: Example -->
 
 *Illustration, not client work*
 
-An expense tool's approval screen passed design review. Since release, finance managers say some approvals go through twice.
+An expense tool's approval screen passed design review, yet since release finance managers say some approvals go through twice.
 
-| What differs from the approved design | Type of gap | Where the fix belongs |
+| What differs from the design | Why it happened | Where the fix goes |
 |---|---|---|
-| The Approve button stays live while the request saves, so a double click approves twice | Missing state | The design first, then the code |
-| After each approval, keyboard focus jumps to the top of the page | Sign-off gap | The review process |
-| The rejection note is one line, and long reasons are cut off | Defect | The code |
-| On laptops the table drops a column, and the amount disappears | Sensible adaptation | Agree it, keeping the amount in view |
-| "Awaiting second approval" uses a colour of its own | System gap | The design system |
+| Approve stays clickable while saving; double clicks approve twice | Never designed | The design, then the code |
+| After approving, keyboard focus jumps to the page top | Not checked at sign-off | The review step |
+| Long rejection reasons are cut off at one line | Built wrong | The code |
+| On laptops a column drops, and the amount disappears | Sensible change, never agreed | Agree it; keep the amount visible |
+| "Awaiting second approval" has a colour of its own | Shared component falls short | The design system |
 
-The double approval and the lost focus come first, because finance managers meet both on every approval. The rejection note follows. The table and the status colour wait for the next release of the shared components.
+The double approval and the focus jump go first, because finance managers meet both on every approval.
 
-**Who does the work.** A senior designer runs it, answers your questions and is your main contact. With them, a design engineer reads your Figma files and your code side by side, so each gap can be followed back to where it started.
+## Get a report like this for your screens {#talk}
 
-**What we need from you.** The approved designs and specs, read access to the code for the screens in scope, the running product, and a word on how designs are signed off today.
-
-**Where our part stops.** The audit changes nothing in your codebase. Who makes the fixes, your developers alone or our design engineers beside them, is your choice.
-
-## How the design implementation audit runs, from Figma to release {#trace}
-
-We take the screens or components that keep going wrong and follow each one through five checkpoints, from the approved design to what users see.
-
-- **The approved design:** the intended workflow, states and content.
-
-- **The handoff:** what the specs said, and what they left to guesswork.
-
-- **The code:** component options, colour and spacing values, data and permission rules.
-
-- **The running product:** keyboard use, loading, errors, small screens and real data.
-
-- **The sign-off:** how the result was reviewed and accepted.
-
-We question the design as closely as the code. Sometimes the design missed a case and a developer had to solve it alone.
-
-Each finding names the checkpoint that let its gap through. That is the design-to-code gap analysis your designers and developers fix together, at the cause, so each fix lands where the gap began.
-
-## Which audit for Figma-to-production gaps? {#compare}
-
-Several options deal with the gap between design and build. They differ in when they happen and how deep they go.
-
-| Option | What it covers | Best for |
-|---|---|---|
-| **Design-to-Code Audit** | Recurring gaps, each traced to its cause in the design, the code or the review step | Screens that keep shipping differently, release after release |
-| **[Design QA](/services/design-engineering/implementation-qa)** | One release checked against the agreed design, with a list of fixes | A build that is about to go live |
-| **[Design System Audit](/audits/design-system-audit)** | How every team builds on the shared component library | Component systems split across teams and products |
-| **[Figma to Storybook Fidelity Checklist](/tools/figma-storybook-fidelity-checklist)** | One component's states, keyboard paths and repeated actions | A free check your team can run first |
-| **[Design to Code](/services/design-engineering/design-to-code)** | Our design engineers building the fixes with your developers | Teams that want the gaps closed as well as found |
+[Book a call](#enquiry)
 
 ## Selected design-to-code work {#selected-work}
 
@@ -264,41 +237,34 @@ We redesigned how developers start a workflow in Eden AI's builder, down to the 
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Why founders and product teams choose Tcules {#why-tcules}
 
-After the audit, your developers can work through the fix plan alone, or our design engineers can make the changes with them in your codebase through [Design to Code](/services/design-engineering/design-to-code).
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+[See why teams choose Tcules →](/why-tcules)
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+## After the audit {#after-the-audit}
 
-## Why teams choose Tcules {#why-tcules}
+Your developers can work through the fix plan, or our design engineers can make the changes with them through the [Design to Code service](/services/design-engineering/design-to-code). [See how we work →](/how-we-work)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+## Other ways to start {#compare}
 
-- **We tell you what is really wrong.** Our Dealpath audit found that one of four listing actions, Add to pipeline, rested on a faulty assumption, so the redesign changed that path and largely kept the others. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
-
-- **We prove the hard parts in code while they can still change.** ConnectX's AI dashboard ran first as our coded demo on sample data, while the design could still change, and we then carried it into a production-ready module. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
-
-- **One studio can take it into working software, with the designers staying in the build.** We designed The Chain Hut's store mobile first and built it on Magento, keeping Magento's own purchase workflow intact. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
-
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
-
-## Industries we know well {#industries}
-
-No audit of this kind has a published case yet. The related work above includes [B2B SaaS](/expertise/b2b-saas-workflow-software), [AI products](/expertise/ai-products-developer-tools) and [Commerce](/expertise/commerce-transactional-products).
+| Option | Best for | What you get |
+|---|---|---|
+| [Design QA](/services/design-engineering/implementation-qa) | A build about to go live | One release checked against the agreed design |
+| [Design System Audit](/audits/design-system-audit) | Systems split across teams and products | How every team uses the shared components |
 
 ## What teams ask about a design-to-code audit {#faq}
 
@@ -340,6 +306,6 @@ Add a line on what changed and who noticed first.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.
