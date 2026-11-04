@@ -1,5 +1,12 @@
 # /glossary and the 19 term pages — design pass, 4 Nov 2026 (built on design/audits-tools-glossary, awaiting owner approval)
 
+> **Revised the same day (Devagya, 4 Nov 2026):** "the words/phrases are the important pieces; drawings dilute
+> the meaning; needs to be a simpler design." The glossary carries no drawings. The hub's groups and a term
+> page's related terms are ruled term rows (ListCard: the term, its definition beside it, one a row); a term's
+> hero is the term and its definition alone; the close reads on as the last section of the column, its link
+> the onward row. What follows records the drawn pass it replaced. The scene files (Sketch/wyg-glossary*.tsx)
+> are no longer rendered on these pages.
+
 The hub was seven text bands with no visual relief (lowest score on 29 Oct, 4/10; tracker 2.39). It now uses
 the insights listing's structure (listings share one structure, owner 16 Oct); each term page is the article
 shell with the term's own drawing. Every word is the copy's, in its order.

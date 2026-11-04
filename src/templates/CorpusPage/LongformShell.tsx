@@ -3,12 +3,11 @@ import { Fragment, type ReactNode } from 'react';
 import { Layout, Media, Prose, Section, Sketch } from '@/components';
 import {
   Accordion,
-  BlockCardSet,
   CtaRow,
   DataTable,
+  ListCard,
   Steps,
   TableOfContents,
-  type BlockCardSetItem,
   type TocItem,
 } from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
@@ -18,7 +17,7 @@ import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
-import { glossarySceneFor, type SketchName } from '@/lib/sketches';
+import { type SketchName } from '@/lib/sketches';
 
 import { blocksHtml, bodyOf, faqItems, headingIdOf } from './blocks';
 import { ExamplePanel, scenarioParts } from './CopyBands';
@@ -269,18 +268,19 @@ export function ArticleSection({
     return (
       <Layout as="section" id={band.id} aria-labelledby={headingIdOf(band)} rowGap="block">
         <h2 id={headingIdOf(band)}>{band.headingText}</h2>
-        {/* The hub's term card exactly: the small step and an h3 title, so one card is one size
-            on the hub and here (ListingIndex/glossary.tsx TermCard). */}
-        <BlockCardSet
-          items={terms}
-          across={3}
-          lead="none"
-          frame="none"
-          cue="title"
-          scroll="never"
-          size="sm"
-          titleAs="h3"
-        />
+        {/* The hub's term row exactly (ListingIndex/glossary.tsx TermRow): the term, then the
+            words for it, one term a row. */}
+        <Layout as="ul" columns={{ base: 1 }} rowGap="none">
+          {terms.map((term) => (
+            <ListCard
+              key={term.href}
+              titleAs="h3"
+              title={term.title}
+              body={term.body}
+              href={term.href}
+            />
+          ))}
+        </Layout>
       </Layout>
     );
   }
@@ -639,25 +639,24 @@ export function ArticleShell({
 
 /**
  * A section that is only `[Term](/glossary/…): definition` lines (a term page's "Terms related to
- * …"): the same drawn term card as the hub, each related term's own scene on its plate, titled by
- * its link and told by this section's own words for it (4 Nov 2026). They are destinations, so they
- * are cards under the section's head, not run-on body text. Null for any other section.
+ * …"): the hub's term rows, each related term titled by its link and told by this section's own
+ * words for it. No drawings: the words carry the meaning (owner, 4 Nov 2026). Null for any other
+ * section.
  */
-function relatedTerms(band: CorpusBand): BlockCardSetItem[] | null {
+type RelatedTerm = { title: string; body: string; href: string };
+
+function relatedTerms(band: CorpusBand): RelatedTerm[] | null {
   const live = band.blocks.filter((block) => block.type !== 'comment');
   if (live.length < 2) return null;
-  const items: BlockCardSetItem[] = [];
+  const items: RelatedTerm[] = [];
   for (const block of live) {
     const lead = linkLead(block);
     if (!lead || !lead.link.href.startsWith(`${ROUTES.glossary}/`)) return null;
     const body = plain(lead.body).trim();
-    const scene = glossarySceneFor(lead.link.href);
     items.push({
-      id: lead.link.href,
       title: plain(lead.link.children),
       body: body.charAt(0).toUpperCase() + body.slice(1),
       href: lead.link.href,
-      ...(scene ? { media: { type: 'sketch' as const, name: scene } } : {}),
     });
   }
   return items;

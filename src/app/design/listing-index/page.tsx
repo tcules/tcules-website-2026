@@ -102,11 +102,11 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
  *   ?data=glossary        the glossary hub from its copy (glossaryIndex): the lead beside the rail,
- *                         each group a section of drawn term cards, a group's note under its cards,
+ *                         each group a dictionary of ruled term rows, a group's note under its rows,
  *                         the ask as the close, the FAQ after it
  *   ?data=glossary&state=sparse   one group of one term (the shortest), no lead, no note, no ask
- *   ?data=glossary&state=sizes    groups of two to six terms (the copy's terms reused): every row
- *                         full, threes closing on a pair where one would be left short (`termRows`)
+ *   ?data=glossary&state=sizes    groups of two to six terms (the copy's terms reused): one term a
+ *                         row at every group size
  *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
  *                         pieces, one with many and no covers, one with two and none; then the close
  *                         with its `lead` set, as the authors index sets it

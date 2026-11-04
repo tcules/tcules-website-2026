@@ -112,7 +112,7 @@ export const KIND_COMPONENTS: Readonly<
   index: {
     component: ['listing-lead', 'listing-section'],
     status: 'to-design',
-    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a section of drawn term cards (/glossary, 4 Nov 2026).',
+    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a dictionary of ruled term rows, no drawings (/glossary, owner 4 Nov 2026).',
   },
   note: { component: ['C-note'], status: 'to-design' },
   close: {

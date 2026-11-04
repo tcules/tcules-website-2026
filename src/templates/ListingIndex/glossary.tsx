@@ -2,8 +2,7 @@ import { Layout, Prose } from '@/components';
 import type { CorpusBand, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
 import { ROUTES } from '@/lib/routes';
-import { glossarySceneFor } from '@/lib/sketches';
-import { BlockCard } from '@/patterns';
+import { ListCard } from '@/patterns';
 
 import type { ListingClosing, ListingHero, ListingLead, ListingSection } from './ListingIndex';
 
@@ -11,10 +10,9 @@ import type { ListingClosing, ListingHero, ListingLead, ListingSection } from '.
    The glossary is the listing family's term index (cms-templates: glossary_hub beside knowledge_hub
    and tool_hub; decisions/2026-10-22-listings-share-one-structure), so it takes ListingIndex: the
    title across the column, the lede beside it and the texture field, then the rail beside the term
-   groups. What this file adds is the answer to "what goes in a section" for terms: each term a drawn
-   card, its own scene on the plate (`glossarySceneFor`), the term as the title and its one-line
-   definition as the body, every term the same card in full rows (peers, equal weight). Every word
-   is the copy's. */
+   groups. What this file adds is the answer to "what goes in a section" for terms: a dictionary, one
+   term a row, the term as the title and its one-line definition beside it (owner, 4 Nov 2026: the
+   words are the important pieces, so no drawings). Every word is the copy's. */
 
 type Link = Extract<InlineRun, { type: 'link' }>;
 
@@ -77,70 +75,24 @@ const railLabelOf = (heading: string) => {
 
 type TermEntry = { term: Term; card: string };
 
-/** One term as the site's card: its own scene on the plate, the term as the title, the definition as
-    the body. The SAME card at every placement (a term page's related terms set it at this step too). */
-function TermCard({ entry: { term, card }, tracks }: { entry: TermEntry; tracks: 2 | 3 }) {
-  const scene = glossarySceneFor(term.link.href);
-  /* No `compact`: that is the insights card's phone row, which drops the standfirst. A term card's
-     definition IS its content, so on a phone it stacks as plate, title, definition. */
-  return (
-    <BlockCard
-      title={inlineToText(term.link.children)}
-      body={capitalised(card)}
-      href={term.link.href}
-      titleAs="h3"
-      {...(scene ? { media: { type: 'sketch' as const, name: scene } } : {})}
-      size="sm"
-      tracks={tracks}
-      cue="title"
-    />
-  );
-}
-
 /**
- * A group's terms as full rows: threes, closing on a pair where a row would be left short (a group
- * of four is two pairs, of five a three and a pair, of seven a three and two pairs). Every row is
- * filled across the column, so no group ends on a row two thirds full.
- */
-export function termRows<T>(items: readonly T[]): T[][] {
-  const rows: T[][] = [];
-  let at = 0;
-  while (at < items.length) {
-    const left = items.length - at;
-    const size = left === 4 || left === 2 ? 2 : left === 1 ? 1 : 3;
-    rows.push(items.slice(at, at + size));
-    at += size;
-  }
-  return rows;
-}
-
-/**
- * One group (glossary critic, 4 Nov 2026): its terms are PEERS, so every term is the same vertical
- * drawn card, none promoted (service-page-round1: "a set of peers gets equal weight"). The insights
- * hub's featured-then-list shape opened every group on a horizontal lead and closed the five-term
- * groups on a second one as a row filler, so the band's weight went to terms by their place in the
- * list and every group squinted the same. Rows of three, re-tracked to two where the count leaves a
- * pair (`termRows`), so each row fills the column.
+ * One group as a dictionary (owner, 4 Nov 2026: "the words/phrases are the important pieces; drawings
+ * dilute the meaning"): one term a row, the term in the title's voice and its one-line definition
+ * beside it, each row a link to the term. Ruled rows at one item a row
+ * (decisions/2026-10-30 insight cards: a ruled list is fine at one item per row). The same row on a
+ * term page's related terms (LongformShell `relatedTerms`).
  */
 function TermGroup({ terms }: { terms: readonly TermEntry[] }) {
   return (
-    <Layout rowGap="column">
-      {termRows(terms).map((row) => (
-        <Layout
-          key={row[0]?.term.link.href}
-          as="ul"
-          columns={{ md: row.length === 2 ? 2 : 3 }}
-          colGap="gutter"
-          rowGap="column"
-        >
-          {row.map((entry) => (
-            <TermCard
-              key={entry.term.link.href}
-              entry={entry}
-              tracks={row.length === 2 ? 2 : 3}
-            />
-          ))}
-        </Layout>
+    <Layout as="ul" columns={{ base: 1 }} rowGap="none">
+      {terms.map(({ term, card }) => (
+        <ListCard
+          key={term.link.href}
+          titleAs="h3"
+          title={inlineToText(term.link.children)}
+          body={capitalised(card)}
+          href={term.link.href}
+        />
       ))}
     </Layout>
   );

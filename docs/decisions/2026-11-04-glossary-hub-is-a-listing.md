@@ -1,5 +1,5 @@
 ---
-title: "The glossary hub is a listing of equal drawn term cards"
+title: "The glossary hub is a listing of terms as a dictionary"
 date: 2026-11-04
 status: proposed
 area: [layout, cards]
@@ -10,10 +10,10 @@ dbf_status: none
 enforced_by: "kinds:check (kind `index` → listing-lead, listing-section)"
 ---
 
-/glossary renders through ListingIndex, the insights listing's structure: the masthead hero, "how to use" as the listing's `lead` (one prose flow beside the rail, not a numbered method), each term group a ListingSection, the structure ask as the listing's ink-island close, the FAQ after it. Terms are peers: every term is the same vertical BlockCard carrying its own term drawing, its definition shown at every width, in rows of three re-tracked to two where the count leaves a pair (4 = 2 + 2, 5 = 3 + 2). No horizontal lead, no trailing horizontal filler. A single-view rail collapses on a phone to the section-in-view button, as the term pages' "On this page" bar.
+/glossary renders through ListingIndex, the insights listing's structure: the masthead hero, "how to use" as the listing's `lead` (one prose flow beside the rail, not a numbered method), each term group a ListingSection, the structure ask as the listing's ink-island close, the FAQ after it. Terms are peers, set as a dictionary: one term a ruled row (ListCard), the term as its title and its one-line definition beside it, stacking on a phone. No drawings (Devagya, 4 Nov 2026: "the words/phrases are the important pieces; drawings dilute the meaning"). No promoted lead term. A single-view rail collapses on a phone to the section-in-view button, as the term pages' "On this page" bar.
 
 **Why.** Listings share one structure (owner, 16 Oct); a set of peers gets equal weight (service page round 1); rows use the full width.
 
-**The mistake it prevents.** The insights hub's featured-then-list applied to peers; a group of two in three tracks; a sideways rail cut mid-word at 390; compact phone cards that dropped every definition.
+**The mistake it prevents.** The insights hub's featured-then-list applied to peers; drawn term cards that dilute the definitions; a sideways rail cut mid-word at 390; compact phone cards that dropped every definition.
 
-**How to apply.** templates/ListingIndex/glossary.tsx (`termRows`), ListingIndex `lead`, `railLabel`, `note`; IndexRail single-view collapse; plan.ts kind `index`.
+**How to apply.** templates/ListingIndex/glossary.tsx (`TermGroup`), ListingIndex `lead`, `railLabel`, `note`; IndexRail single-view collapse; plan.ts kind `index`.

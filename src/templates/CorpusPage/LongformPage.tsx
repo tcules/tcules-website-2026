@@ -6,14 +6,13 @@ import {
   ContentSection,
   ContentSectionText,
   DataTable,
-  ServiceTile,
   Statement,
   type BlockCardSetItem,
 } from '@/patterns';
 import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
-import { glossarySceneFor, serviceSceneFor } from '@/lib/sketches';
+import { serviceSceneFor } from '@/lib/sketches';
 import { toolPath } from '@/lib/routes';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
@@ -22,7 +21,6 @@ import { coverFor } from './images';
 import { formBeforeFaq } from './order';
 import {
   blocksOf,
-  destinationName,
   hasLink,
   isStatementLine,
   labelWithoutArrow,
@@ -265,10 +263,9 @@ function TermPage({ page }: { page: CorpusPage }) {
   const rest = statement
     ? after
     : [second, ...after].filter((runs): runs is InlineRun[] => Boolean(runs));
-  const { shell, close } = splitClose(formBeforeFaq(page.bands));
-  /* The term's own drawing: the same picture as its hub card and every related-term card, so a
-     reader who clicked one lands on it. */
-  const scene = glossarySceneFor(page.route);
+  /* The close reads on in the column as the last section, its link the onward line: the words carry a
+     glossary page, so it ends in them rather than on a tile or an island (owner, 4 Nov 2026). */
+  const shell = formBeforeFaq(page.bands);
   const continued: CorpusBand | undefined =
     rest.length > 0
       ? {
@@ -282,23 +279,15 @@ function TermPage({ page }: { page: CorpusPage }) {
   const ledes = definition ? [definition] : [];
   return (
     <>
-      {scene ? (
-        <CorpusHero
-          page={page}
-          ledes={ledes}
-          arrangement="beside"
-          media={{ type: 'sketch', name: scene }}
-        />
-      ) : (
-        <CorpusHero page={page} ledes={ledes} texture />
-      )}
+      {/* The words are the page (owner, 4 Nov 2026: "the words/phrases are the important pieces;
+          drawings dilute the meaning"): the term and its definition, no drawing, no field. */}
+      <CorpusHero page={page} ledes={ledes} />
       {statement ? (
         <Statement as="p" align="start" id="definition">
           {plain(statement)}
         </Statement>
       ) : null}
       <ArticleShell page={page} sections={continued ? [continued, ...shell] : shell} />
-      {close ? <TermClose band={close} /> : null}
     </>
   );
 }
@@ -365,55 +354,6 @@ function CloseBand({ band }: { band: CorpusBand }) {
         rule={false}
         actions={[{ label: labelWithoutArrow(link.labelText), href: link.href }]}
       />
-    </ContentSection>
-  );
-}
-
-/**
- * A term's close (4 Nov 2026): where Tcules does this work. The link it ends on is ONE destination,
- * so it is that destination's service tile, its own drawing beside its name
- * (decisions/2026-10-29-named-services-are-service-tiles, -related-destination-is-a-card). Paper: it
- * is a route to a page, not the form's ask, and a tint band here was a plain band at the foot.
- *
- * ONE shape on every term page (glossary critic, 4 Nov 2026): the close's sentences as running text
- * under the head, their inline links kept, then the tile across the whole row (a media row: its name
- * and action beside its drawing). It had been two shapes, picked per page by whether a sentence
- * carried a link: plain sentences inside a wide tile, linked ones as prose at two thirds beside a
- * narrow tile, which left a void under the shorter column; terms side by side in the hub ended
- * differently. The tile is one anchor, so a sentence with links of its own can never sit inside it,
- * and the shape every close can take is the one that keeps them outside.
- */
-function TermClose({ band }: { band: CorpusBand }) {
-  const link = closingLink(band);
-  if (!link) return null;
-  const paragraphs = band.blocks.flatMap((block) =>
-    block.type === 'paragraph' && !loneLink(block.runs) ? [block.runs] : [],
-  );
-  const scene = serviceSceneFor(link.href);
-  return (
-    <ContentSection {...head(band)} data-band="L">
-      <Layout rowGap="stack">
-        {paragraphs.length > 0 ? (
-          <ContentSectionText>
-            <Layout rowGap="text">
-              {paragraphs.map((runs, index) => (
-                <p key={index}>{renderInline(runs)}</p>
-              ))}
-            </Layout>
-          </ContentSectionText>
-        ) : null}
-        <Layout as="ul" rowGap="none">
-          <li data-media-row="">
-            <ServiceTile
-              title={destinationName(link.labelText)}
-              href={link.href}
-              action={labelWithoutArrow(link.labelText)}
-              {...(scene ? { scene } : {})}
-              wide
-            />
-          </li>
-        </Layout>
-      </Layout>
     </ContentSection>
   );
 }
