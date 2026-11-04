@@ -316,6 +316,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The Drift Checker record builder mid-trace: one select field recorded across Figma, Storybook and the shipped product, each finding marked aligned, difference found, unknown or intentional exception (`v11_tool_interface`).',
   },
+  '/tools#hero': {
+    src: '/placeholders/tools--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One product question worked through to a brief: a checklist being filled in, each marked item carried into a short brief the team can act on, the open question closed by the end. Replaces the reused studio review photograph (owner, 4 Nov 2026).',
+  },
   'case-cover:auxentios': {
     src: '/placeholders/case-cover--auxentios.svg',
     width: 1600,

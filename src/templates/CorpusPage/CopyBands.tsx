@@ -41,6 +41,7 @@ import { corpusImage } from '@/lib/corpus-images';
 import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
+import { renderInline } from '@/lib/inline-render';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
@@ -2415,6 +2416,30 @@ export function CloseBand({
   );
   const simple = paras.length <= 2 && paras.every((block) => !hasLink(block.runs));
   const others = blocks.some((block) => block.type !== 'paragraph' && block.type !== 'links');
+  /* A close told as ONE sentence that ends on its onward "→" link (an audit's "After the audit",
+     owner 4 Nov 2026): the island keeps the sentence and its inline links as authored for its body,
+     and the closing "→" link becomes the action, its arrow drawn by the action itself. */
+  const only = links.length === 0 && !others && paras.length === 1 ? paras[0] : undefined;
+  const runs = only ? trimEnd(only.runs) : [];
+  const onward = runs.at(-1);
+  if (onward?.type === 'link' && /[→➝➔⟶]\s*$/u.test(plain(onward.children))) {
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        {...(island ? { island } : {})}
+        heading={band.headingText}
+        body={[<>{renderInline(trimEnd(runs.slice(0, -1)))}</>]}
+        actions={[
+          {
+            label: plain(onward.children).replace(/\s*[→➝➔⟶]\s*$/u, ''),
+            href: onward.href,
+          },
+        ]}
+      />
+    );
+  }
   const [first, second] = links;
   if (first && simple && !others) {
     const body = paras.map((block) => plain(block.runs));

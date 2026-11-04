@@ -387,6 +387,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'artefact-access': 'close',
   'your-rules': 'close',
   talk: 'close',
+  /* The audits' "After the audit": one sentence and its onward link, the page's handover to the
+     work that follows, so it is a closing ask on its ink island (owner, 4 Nov 2026), not a prose band. */
+  'after-the-audit': 'close',
   confidentiality: 'note',
   /* ── G21 · one worked example; and the ids the earlier copy used ── */
   'signature-work': 'record',

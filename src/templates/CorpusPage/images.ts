@@ -145,9 +145,6 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
      `why_work_wall` binding, which its Reasons band no longer carries (reasons take drawings). The team
      photograph stays the studio band's. */
   [ROUTES.whyTcules]: ABOUT_WALL,
-  /* "Free product design checklists that end in a brief": a team reviewing work together, the brief
-     being acted on (4 Nov 2026, the tools hub; until now the unregistered "studio photo" slot). */
-  [ROUTES.tools]: ABOUT_REVIEW,
 };
 
 /**
