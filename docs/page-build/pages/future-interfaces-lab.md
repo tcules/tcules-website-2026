@@ -111,3 +111,27 @@ Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tin
 - Not fixed: the two weak UI renders (no larger originals; owner question in Open); purpose's thin band and the
   phone placement of direction's placeholder (Open).
 
+
+## Pass 2, owner review 4 Nov
+- **"See Matter Design System →" feels broken when wrapping** (Matter tile, four across) → cause: a bare
+  link (`Button emphasis="link"`) wrapped greedily, so the first line filled and "SYSTEM →" hung alone under
+  it, reading as a label that ran out of room. The arrow already stayed with the last word (GluedLabel).
+  Fix, GLOBAL at the component: `.link` takes `text-wrap: var(--text-title-wrap)` (balance), so a wrapped
+  link breaks into near-equal lines ("SEE MATTER / DESIGN SYSTEM →"); one-line links are unchanged. The
+  label is the copy's, not shortened. Checked on `/` at 390 (case cards' "Read the Benchmark Gensuite
+  case", "See a typical AI-assisted design run") and `/about` at 390 ("Rakesh Chitroda on LinkedIn"):
+  all now break into balanced pairs and read as set. `/product-design` and `/careers` have no wrapping
+  link at 1440 or 390.
+- **Promotion: "why isn't the title simply in the left side area with the body?"** → cause: CloseFigureBand
+  put the band head across the top and a halves Layout (words | figure, centred) under it, so the sentence
+  sat alone low-left beside the figure. Fix, GLOBAL for the arrangement: ContentSection's `media` split now
+  takes a flat `drawing` as well as a photograph (`media.drawing`): head AND body in the copy column, the
+  figure in the other half, 96 apart (a split), top edges shared (decisions/2026-10-11-secondary-anchored-to-primary),
+  the figure at its own ratio, never cropped; below 1024 the words come first and the figure follows.
+  CloseFigureBand renders through it (head at the band's h2 step). It is the only close with a figure
+  today (offer-scenes-pages: `promotion.figure`), so no other page changes; every photo media split is
+  untouched (the drawing branch is separate). **New ContentSection option, owner to confirm** (no specimen
+  block yet on /design/content-section).
+- **After the merge of main:** the FAQ renders beside in halves (decisions/2026-11-04-faq-beside-in-halves).
+  The page has no Why Tcules, Three ways or industries band, so those rulings do not apply here. Nothing
+  from the merge broke the page (shots at 1440 and 390, no overflow, no page errors).

@@ -2700,18 +2700,23 @@ export function CloseBand({
 }
 
 /**
- * A close the page draws (4 Nov 2026, /future-interfaces-lab `promotion`): the head above, then from
- * 1024 its words beside ONE flat figure, as MethodBand sets steps beside theirs; the plate under the
- * words below 1024. The sentence keeps every inline link as authored, so nothing is lifted into an
- * action. It stays prose (C-text): the figure illustrates the sentence, it is not an island.
+ * A close the page draws (4 Nov 2026, /future-interfaces-lab `promotion`): its head AND its words in
+ * one column beside ONE flat figure from 1024, the figure after the words below it (ContentSection
+ * `media.drawing`). Owner, 4 Nov 2026: "why isn't the title simply in the left side area with the
+ * body?" The head used to span the band with the sentence and the figure under it, which left the
+ * sentence alone low-left under an empty top-right. The sentence keeps every inline link as authored,
+ * so nothing is lifted into an action. It stays prose (C-text): the figure illustrates the sentence,
+ * it is not an island. The head keeps the band's h2 step (`lg`): a close is not the page's argument.
  */
 export function CloseFigureBand({ band, scene }: { band: CorpusBand; scene: SketchName }) {
   return (
-    <ContentSection {...head(band)} data-band="C-text">
-      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
-        <BandBody blocks={content(band)} labelledBy={head(band).headingId} />
-        <Sketch name={scene} />
-      </Layout>
+    <ContentSection
+      {...head(band)}
+      data-band="C-text"
+      arrangement="media"
+      media={{ drawing: <Sketch name={scene} />, head: 'lg' }}
+    >
+      <BandBody blocks={content(band)} labelledBy={head(band).headingId} />
     </ContentSection>
   );
 }

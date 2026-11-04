@@ -67,10 +67,32 @@ export type ContentSectionMediaSide = 'start' | 'end';
  *
  * A photograph (`kind: 'photograph'`), because only a photograph takes a ratio (Media, H3) and a
  * media split is "a photograph beside copy" (§ 3.2). An illustration beside copy is the hero's job.
+ *
+ * OR A FLAT DRAWING (`drawing`, owner 4 Nov 2026, /future-interfaces-lab promotion: "why isn't the
+ * title simply in the left side area with the body?"). A band whose words stand beside one small flat
+ * figure is the same split: the head AND the body in the copy column, the figure in the other track,
+ * 96 apart. A drawing is a node rather than a record because it has no crop to own: it sits at its own
+ * ratio, never cropped (decisions/2026-10-16-drawing-never-cropped-faces-its-form). The two tracks
+ * are halves, the copy shares the figure's top edge (decisions/2026-10-11-secondary-anchored-to-primary),
+ * and below 1024 the figure FOLLOWS the words it illustrates (the photograph's lead-on-a-phone is its
+ * weight; a figure has none to lead with). `weight`, `height` and `counterweight` are a photograph's
+ * and are ignored beside a drawing.
  */
-export type ContentSectionMedia = {
-  image: MediaImage;
-  /** Default `start` — the photo leads. Consecutive media bands on a page alternate it (§ 3.2 rule 4). */
+export type ContentSectionMedia = (
+  | {
+      image: MediaImage;
+      drawing?: never;
+    }
+  | {
+      /** One flat figure (a `Sketch`), at its own ratio in its own half. */
+      drawing: ReactNode;
+      image?: never;
+    }
+) & {
+  /**
+   * Default `start` — the photo leads. Consecutive media bands on a page alternate it (§ 3.2 rule 4).
+   * A `drawing` defaults to `end`: the words lead and the figure answers them.
+   */
   side?: ContentSectionMediaSide;
   /**
    * Whether a copy column that ends in a footer UNDER BLOCKS stretches to the photo and pins the
@@ -858,6 +880,28 @@ function MediaSplit({
     ) : (
       (blocks ?? footer)
     );
+  const image = media.image;
+  if (image === undefined) {
+    /* A flat figure beside the words (see ContentSectionMedia): halves, the copy column first in the
+       DOM so a phone reads the words before the figure; `side="start"` mirrors it from 1024. Top
+       edges shared, nothing pinned: the figure has no height the copy should stretch to. */
+    return (
+      <Layout
+        columns={{ lg: [1, 1] }}
+        colGap="section"
+        rowGap="stack"
+        reverse={media.side === 'start' ? { lg: true } : undefined}
+        align="start"
+      >
+        <Layout rowGap="stack">
+          {headText}
+          {actions}
+          {body}
+        </Layout>
+        {media.drawing}
+      </Layout>
+    );
+  }
   return (
     <Layout
       columns={photoLeads ? { lg: [7, 5] } : { lg: [4, 8], xl: [5, 7] }}
@@ -873,9 +917,9 @@ function MediaSplit({
       <div className={styles.photoTrack}>
         <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
           <Media
-            image={media.image}
+            image={image}
             fit="fill"
-            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', media.image)}
+            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', image)}
           />
         </div>
       </div>
