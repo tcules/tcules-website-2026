@@ -96,9 +96,16 @@
   }
 }
 
-/* A mark in a citation line: the same arithmetic on the small step, which holds at every width. */
+/* The compact client wall: the same arithmetic on the sm step (its phone step is the token's). */
 .sm {
   --cmark-target-side: var(--cmark-target-side-sm);
   --cmark-height-max: var(--cmark-height-max-sm);
   --cmark-width-max: var(--cmark-width-max-sm);
+}
+
+/* A mark in a citation line: the same arithmetic on the smallest step, which holds at every width. */
+.xs {
+  --cmark-target-side: var(--cmark-target-side-xs);
+  --cmark-height-max: var(--cmark-height-max-xs);
+  --cmark-width-max: var(--cmark-width-max-xs);
 }

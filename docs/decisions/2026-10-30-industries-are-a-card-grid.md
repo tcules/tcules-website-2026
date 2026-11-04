@@ -1,7 +1,7 @@
 ---
 title: "Industries take the standard card grid"
 date: 2026-10-30
-status: active
+status: superseded
 area: [cards]
 source: "Owner, 30 Oct 2026, product design review (mockups: https://claude.ai/artifact/6utQc5E3PUiZdZB9N5HiRd)"
 supersedes: []

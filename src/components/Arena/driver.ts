@@ -2,7 +2,9 @@
  * The Arena's timeline, ported from the owner's "Tcules Hero Arena" artifact (2 Nov 2026,
  * https://claude.ai/artifact/Y1uVUykZLj9Bdi1XNhFRYQ). Every number below is the drawing's: the
  * coordinates are in the SVG's own user space (viewBox 1024 × 720), and the times are milliseconds
- * into the 10.3-second loop. They are not layout values and do not belong in the token layer.
+ * into the 11.8-second loop. v11 (4 Nov 2026, https://claude.ai/artifact/ENhFK86hDXngbWxzgTVof9):
+ * the lid lifts with a little give, the stations rise into place, the work arcs between them, and
+ * the finished task pops out, resolves and catches the light. They are not layout values and do not belong in the token layer.
  *
  * Scoped to one SVG: every element is looked up inside it by its `arena-` prefixed id, never on the
  * document, so the drawing cannot reach anything else on the page.
@@ -89,10 +91,16 @@ const J = {
 const XA = 66;
 const XB = 880;
 const RISE = 70;
-const LOOP = 10300;
+const LOOP = 11800;
 
 const ease = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
 const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+/* Overshoots past 1 and settles back: the lid's give, the pop. */
+const backOut = (p: number) => {
+  const c1 = 1.3;
+  const c3 = c1 + 1;
+  return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2);
+};
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const fade = (c: number, t0: number, d = 220) => clamp((c - t0) / d);
 const win = (c: number, a: number, b: number, f = 160) =>
@@ -190,7 +198,10 @@ export function startArena(
     );
   const token = (xy: XY | null, a: number) => {
     if (!xy) return op('token', 0);
-    tok.setAttribute('transform', `translate(${xy[0].toFixed(1)} ${xy[1].toFixed(1)}) scale(1)`);
+    tok.setAttribute(
+      'transform',
+      `translate(${xy[0].toFixed(1)} ${xy[1].toFixed(1)}) scale(1)`,
+    );
     op('token', a);
   };
   const place = (id: string, xy: XY | null, a: number) => {
@@ -222,18 +233,27 @@ export function startArena(
     o.b.setAttribute('x', (o.x0 + p * (o.w + 3.2)).toFixed(2));
     o.b.setAttribute('opacity', '1');
   };
+  /* A speech bubble pops in (a small overshoot in scale) rather than fading. */
   const bub = (who: Head, kind: string, c: number, a: number, b: number) => {
     const h = J.heads[who];
-    place(
-      `b-${who}-${kind}`,
-      [h[0] + (who === 'des' ? -38 : 16), h[1] + 4 - 6 * ease(clamp((c - a) / 220))],
-      win(c, a, b),
+    const e = $(`b-${who}-${kind}`);
+    if (!e) return;
+    const w = win(c, a, b);
+    if (w <= 0) return e.setAttribute('opacity', '0');
+    const p = clamp((c - a) / 260);
+    const k = 0.6 + 0.4 * backOut(p);
+    e.setAttribute(
+      'transform',
+      `translate(${h[0] + (who === 'des' ? -38 : 16)} ${(h[1] + 4 - 6 * ease(p)).toFixed(1)}) scale(${k.toFixed(3)})`,
     );
+    e.setAttribute('opacity', w.toFixed(2));
   };
   const agentH = (id: string, key: Station, c: number, a: number, b: number, h: number) => {
     const L = J.ag[key];
     if (c < a - 150 || c > h) return place(id, null, 0);
-    place(id, pathAt(L, ease(clamp((c - a) / (b - a - 150)))), win(c, a - 150, h));
+    /* The agent hovers: lifted 5 and bobbing as it works. */
+    const q = pathAt(L, ease(clamp((c - a) / (b - a - 150))));
+    place(id, [q[0], q[1] - 5 + Math.sin(c / 230) * 2.2], win(c, a - 150, h));
   };
 
   /* The studio floor, as a function of time in the loop. */
@@ -283,6 +303,60 @@ export function startArena(
     op('stR', on('R'));
     op('stD', on('D'));
     op('stB', on('B'));
+    /* Each station rises 9 into place as it switches on. */
+    (['R', 'D', 'B'] as const).forEach((k) => {
+      const e = ease(clamp((c - ST[k]) / 650));
+      $(`st${k}`)?.setAttribute(
+        'transform',
+        `translate(0 ${(c >= 7300 ? 0 : 9 * (1 - e)).toFixed(1)})`,
+      );
+    });
+  }
+
+  /* A ring spreads under each hand-off as the work lands at the next station. */
+  const RIP = (
+    [
+      [2600, 'note'],
+      [3700, 'opt'],
+      [4950, 'slot'],
+      [5600, 'built'],
+    ] as const
+  ).map(([t, k], i) => ({ t, k, e: $(`rip${i}`) }));
+  function ripples(c: number) {
+    RIP.forEach((r) => {
+      if (!r.e) return;
+      const p = (c - r.t) / 650;
+      if (p < 0 || p > 1) return r.e.setAttribute('opacity', '0');
+      const q = P[r.k];
+      const R = 6 + 26 * ease(p);
+      r.e.setAttribute('cx', String(q[0]));
+      r.e.setAttribute('cy', String(q[1]));
+      r.e.setAttribute('rx', R.toFixed(1));
+      r.e.setAttribute('ry', (R * 0.55).toFixed(1));
+      r.e.setAttribute('opacity', (0.8 * (1 - p)).toFixed(2));
+    });
+  }
+
+  /* Nine sparks burst from the finished card as it resolves. */
+  const SPK = Array.from({ length: 9 }, (_, i) => ({
+    g: $(`spark${i}`),
+    a: -Math.PI / 2 + (i - 4) * 0.36 + (i % 2 ? 0.12 : -0.08),
+    d: 46 + (i % 4) * 14,
+  }));
+  function sparks(c: number, t0: number) {
+    const p = (c - t0) / 900;
+    const b = onLid('card');
+    SPK.forEach((s) => {
+      if (!s.g) return;
+      if (p < 0 || p > 1) return s.g.setAttribute('opacity', '0');
+      const e = 1 - Math.pow(1 - p, 3);
+      const r = 8 + s.d * e;
+      s.g.setAttribute(
+        'transform',
+        `translate(${(b[0] + Math.cos(s.a) * r * 1.25).toFixed(1)} ${(b[1] - 14 + Math.sin(s.a) * r).toFixed(1)}) rotate(${(p * 90).toFixed(0)}) scale(${(0.6 + 0.7 * Math.sin(Math.PI * Math.min(1, p * 1.3))).toFixed(2)})`,
+      );
+      s.g.setAttribute('opacity', (1 - Math.pow(p, 2)).toFixed(2));
+    });
   }
 
   /* Camera stops, measured once the drawing is in the page. */
@@ -317,9 +391,11 @@ export function startArena(
     if (c < 900) {
       /* held */
     } else if (c < 1900) {
-      const e = ease((c - 900) / 1000);
+      /* The lid lifts a little past open and settles back (backOut): its give. */
+      const p = (c - 900) / 1000;
+      const e = ease(p);
       x = lerp(XA, XB, e);
-      o = e;
+      o = backOut(ease(Math.min(1, p * 1.05)));
     } else if (c < 7400) {
       x = XB;
       o = 1;
@@ -333,12 +409,15 @@ export function startArena(
     LASTO = o;
     floor(c);
     if (LIVE) {
-      const q = ease(o);
+      const q = ease(Math.min(1, o));
       setCam(lerp(W1.cx, W2.cx, q), lerp(W1.cy, W2.cy, q), lerp(W1.k, W2.k, q));
     }
     op('rowPulse', c > 1700 && c < 2300 ? 0.55 + 0.45 * Math.sin((c - 1700) / 85) : 0);
+    /* The work arcs between stations: lifted 14 at the middle of each hop. */
     const T = (keys: Pt[], a: number, b: number) => {
-      tk = along(keys, ease(clamp((c - a) / (b - a))));
+      const p = ease(clamp((c - a) / (b - a)));
+      const xy = along(keys, p);
+      tk = [xy[0], xy[1] - Math.sin(Math.PI * p) * 14];
       ta = win(c, a - 100, b + 60, 100);
     };
     if (c >= 1950 && c < 2150) {
@@ -357,7 +436,7 @@ export function startArena(
     if (c >= 5550 && c < 6150) mv('achip', ['note', 'c1a', 'c1b', 'slot'], 5650, 6050);
     else if (c >= 6550 && c < 7100) mv('achip', ['slot', 'c2a', 'c2b', 'built'], 6650, 7000);
     else place('achip', null, 0);
-    if (c >= 7400 && c < 8800) {
+    if (c >= 7400 && c < 8600) {
       const e = ease(clamp((c - 7400) / 1200));
       const a = P.built;
       const b = onLid('card');
@@ -368,11 +447,45 @@ export function startArena(
         'transform',
         `translate(${cx.toFixed(1)} ${cy.toFixed(1)}) scale(${k.toFixed(3)}) translate(${-P.card[0]} ${-P.card[1]})`,
       );
-      op('fly', fade(c, 7400, 150) * (1 - fade(c, 8550, 150)));
-    } else op('fly', 0);
+      op('fly', fade(c, 7400, 150));
+      op('flyTick', 0);
+      op('flyDone', 0);
+      op('popShadow', 0);
+    } else if (c >= 8600 && c < 10150) {
+      /* Landed, the card pops out of its slot (lifted 18, scaled 7%, a shadow under it), its tick
+         draws on and its Done button appears; then it settles back. */
+      const b = onLid('card');
+      const l1 = clamp((c - 8650) / 420);
+      const l2 = clamp((c - 9650) / 480);
+      const lift = (l1 < 1 ? backOut(l1) : 1) * (1 - ease(l2));
+      fly.setAttribute(
+        'transform',
+        `translate(${b[0].toFixed(1)} ${(b[1] - lift * 18).toFixed(1)}) scale(${(1 + 0.07 * lift).toFixed(3)}) translate(${-P.card[0]} ${-P.card[1]})`,
+      );
+      op('fly', c < 10050 ? 1 : 1 - fade(c, 10050, 100));
+      op('popShadow', Math.max(0, lift) * 0.32);
+      op('flyTick', fade(c, 8900, 140));
+      $('flyTickP')?.setAttribute(
+        'stroke-dashoffset',
+        (30 * (1 - ease(clamp((c - 8930) / 320)))).toFixed(1),
+      );
+      op('flyDone', fade(c, 9150, 180));
+    } else {
+      op('fly', 0);
+      op('popShadow', 0);
+    }
+    sparks(c, 9150);
+    /* Then a band of light sweeps across the app: it catches the light. */
+    {
+      const p = clamp((c - 9250) / 950);
+      $('sweepLight')?.setAttribute('x', (-320 + 1500 * ease(p)).toFixed(0));
+      op('sweepLight', p > 0 && p < 1 ? 1 : 0);
+    }
     op('emptySlot', c < 1900 ? 0 : c >= 8600 ? 1 - fade(c, 8600, 60) : 1);
-    op('landFlash', c > 8600 && c < 9350 ? Math.max(0, Math.sin((Math.PI * (c - 8600)) / 750)) : 0);
-    op('matched', c >= 8700 ? fade(c, 8700, 220) : 0);
+    op('landFlash', 0);
+    op('matched', c >= 10050 ? 1 : 0);
+    op('doneBtn', c >= 10050 ? 1 : 0);
+    ripples(c);
   }
 
   function render(t: number) {
@@ -386,7 +499,7 @@ export function startArena(
       const p = ease(clamp((t - 550) / 950));
       hero.setAttribute('transform', `translate(0 ${(-RISE * p).toFixed(1)})`);
       loop(t >= 900 ? t : 0);
-      const q = ease(LASTO);
+      const q = ease(Math.min(1, LASTO));
       const tx = lerp(W1.cx, W2.cx, q);
       const ty = lerp(W1.cy, W2.cy, q);
       const tk = lerp(W1.k, W2.k, q);

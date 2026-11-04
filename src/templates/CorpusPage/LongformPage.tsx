@@ -19,14 +19,7 @@ import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from 
 import { ArticleShell, type ToolShell } from './LongformShell';
 import { coverFor } from './images';
 import { formBeforeFaq } from './order';
-import {
-  blocksOf,
-  hasLink,
-  isStatementLine,
-  labelWithoutArrow,
-  loneLink,
-  plain,
-} from './text';
+import { blocksOf, hasLink, isStatementLine, labelWithoutArrow, loneLink, plain } from './text';
 
 export type LongformFamily = 'case' | 'article' | 'term' | 'tool';
 
@@ -193,7 +186,10 @@ const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
   [toolPath('design-system-drift-checker')]: {
     stories: { 'reading-your-results': 'tool-design-system-drift-checker-example' },
     diagrams: {
-      workspace: { after: 'intentional exception', scene: 'tool-design-system-drift-checker-marks' },
+      workspace: {
+        after: 'intentional exception',
+        scene: 'tool-design-system-drift-checker-marks',
+      },
     },
   },
   [toolPath('figma-storybook-fidelity-checklist')]: {

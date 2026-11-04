@@ -49,9 +49,11 @@ import { SCENES as P_AUDIT_AI_PRODUCT_UX_READINESS } from './wyg-ai-product-ux-r
 import { SCENES as P_AUDIT_DESIGN_SYSTEM_AUDIT } from './wyg-design-system-audit';
 import { SCENES as P_AUDIT_DESIGN_TO_CODE_AUDIT } from './wyg-design-to-code-audit';
 import { SCENES as P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT } from './wyg-product-modernisation-assessment';
+import { SCENES as P_HOME } from './wyg-home';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
+  ...P_HOME,
   ...P_AI_PRODUCTS_DEVELOPER_TOOLS,
   ...P_B2B_SAAS_WORKFLOW_SOFTWARE,
   ...P_CLIMATETECH_ENERGY,

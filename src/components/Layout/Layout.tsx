@@ -220,6 +220,14 @@ export type LayoutProps = {
    */
   shareRows?: 2 | 3 | 4;
   /**
+   * From lg (1024), THIS Layout spans this many rows of its parent's grid and takes them as its own
+   * (CSS subgrid), the other half of `shareRows` one level down: for an item that shares its
+   * parent's rows and holds a box round only some of them (home's door cards, 4 Nov 2026: the card
+   * spans the first two shared rows, its example the third, outside the box). Its own rowGap sets
+   * the seam between the rows it spans. Below lg nothing changes.
+   */
+  spanRows?: 2 | 3;
+  /**
    * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
    * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
    * grow into the space rather than leave it empty under the copy: the spotlight's lead at 1024,
@@ -521,6 +529,7 @@ export function Layout({
   offset,
   pinLast = false,
   shareRows,
+  spanRows,
   fillFirst = false,
   fillLast = false,
   stagger = false,
@@ -577,6 +586,7 @@ export function Layout({
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast === 'lg' ? styles['pin-last-lg'] : pinLast && styles['pin-last'],
         shareRows && styles[`share-rows-${shareRows}`],
+        spanRows && styles[`span-rows-${spanRows}`],
         fillFirst && styles['fill-first'],
         fillLast && styles['fill-last'],
         stagger && scroll !== 'always' && styles.stagger,

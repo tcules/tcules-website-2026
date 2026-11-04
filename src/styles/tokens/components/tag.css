@@ -86,6 +86,9 @@
    decides it: a label that must stay sentence case is not a mono label.               */
 :root {
   --tag-size-md: 24px; /* the minimum in BOTH axes; see above */
+  /* `link`, the destination pill (owner, 4 Nov 2026): the touch target's height, round ends. */
+  --tag-size-lg: 44px;
+  --tag-link-radius: var(--radius-full);
   --tag-radius: var(--radius-4);
   --tag-edge-width: var(--border-width-hairline);
   /* The held chip's close, the plain chrome cross at 12 (owner, 28 Oct 2026: "'x' can be made
@@ -140,6 +143,8 @@
    the 950 fill at 17.10:1, and the ring itself stays 6.17:1 against that gap.           */
 :root,
 [data-surface='paper'] {
+  --tag-link-ink: var(--color-neutral-900); /* 14.62:1 */
+  --tag-link-edge: var(--color-neutral-300); /* decoration; the label is the target's name */
   --tag-mark-ink: var(--color-neutral-700); /*  7.27:1 on its own ground */
   --tag-mark-bg: var(--color-paper-deep); /*  1.12:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  8.14:1 */
@@ -171,6 +176,8 @@
    paper-deep, which separates it from the fill at 15.27:1. The blue of hover is as legible
    on a tint one step down as on paper and is restated rather than re-decided.         */
 [data-surface='tint'] {
+  --tag-link-ink: var(--color-neutral-900);
+  --tag-link-edge: var(--color-neutral-400); /* decoration */
   --tag-mark-ink: var(--color-neutral-700); /*  6.11:1 on its own ground */
   --tag-mark-bg: var(--color-neutral-200); /*  1.19:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  7.27:1 */
@@ -204,6 +211,8 @@
    section, which a dark ground needs in order to be seen at all. It is the second-loudest
    of the four mark grounds and that is the surface's doing, not drift.                */
 [data-surface='ink'] {
+  --tag-link-ink: var(--color-white);
+  --tag-link-edge: var(--color-neutral-700); /* decoration */
   --tag-mark-ink: var(--color-neutral-400); /*  5.55:1 on its own ground */
   --tag-mark-bg: var(--color-neutral-800); /*  1.45:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-200); /* 12.83:1 */
@@ -246,6 +255,8 @@
    reserved surface colour and branded surfaces are a route this system may take; the day
    one exists, the chip on it is already correct and measured.                          */
 [data-surface='blue'] {
+  --tag-link-ink: var(--color-white);
+  --tag-link-edge: var(--color-brandeis-300); /* decoration */
   --tag-mark-ink: var(--color-brandeis-100); /*  8.01:1 on its own ground */
   --tag-mark-bg: var(--color-brandeis-700); /*  1.63:1 vs the section — decoration */
   --tag-filter-ink: var(--color-brandeis-100); /*  4.91:1 — the tightest text cell */

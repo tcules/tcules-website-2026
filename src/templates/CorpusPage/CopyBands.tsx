@@ -10,6 +10,7 @@ import {
   Media,
   Prose,
   Sketch,
+  Tag,
 } from '@/components';
 import {
   Bento,
@@ -42,15 +43,14 @@ import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
-import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
+import { placeholderIllustration } from '@/lib/placeholders';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head, headingIdOf } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
-import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
+import { caseCover, slotImage, studioBandPhoto, type SlotImage } from './images';
 import { isIllustratedProse, isWhatYouGet, signature } from './plan';
 import {
   boldLead,
@@ -1805,9 +1805,9 @@ function sectorLinks(band: CorpusBand): { href: string; title: string }[] {
  * placeholder and its name, the whole card a link. A sentence of links (`P`) is the lead; a paragraph
  * after the links is the footer.
  */
-export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+export function IndustriesBand({ band }: { page?: CorpusPage; band: CorpusBand }) {
   /* A link to the industries hub ("See all industries →", 3 Nov 2026 copy) is not a sector: it is the
-     band's action, in the head (owner, 3 Nov 2026), never a card with a placeholder photograph. */
+     band's action, in the head (owner, 3 Nov 2026). */
   const all = sectorLinks(band);
   const links = all.filter((link) => link.href !== ROUTES.expertise);
   const onward: CorpusLink[] = all
@@ -1826,26 +1826,39 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
       : undefined;
   const trailing = blocks.filter((block, index) => index > 0 && block.type === 'paragraph');
   const footer = trailing.length > 0 ? <BandBody blocks={trailing} /> : undefined;
-  const image = (href: string, title: string) => {
-    const photo = HOME_SECTOR_PHOTOS[href];
-    return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
-  };
-  const cards: BlockCardSetItem[] = links.map((link) => ({
-    id: link.href,
-    title: link.title,
-    href: link.href,
-    media: { type: 'image', image: image(link.href, link.title) },
-  }));
-  return (
+  /* A short band (owner, 4 Nov 2026, homepage pass, carried to every page with the band): the sectors
+     as destination pills under the head, one wrapping row. A list of places to go needs no picture
+     each; photo cards made it a fold of its own. */
+  const pills = (
+    <Cluster as="ul" colGap="tight" rowGap="tight">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Tag variant="link" href={link.href}>
+            {link.title}
+          </Tag>
+        </li>
+      ))}
+    </Cluster>
+  );
+  return onward.length > 0 ? (
     <ContentSection
       {...head(band)}
-      data-band="C-image"
+      data-band="C-pills"
       footer={footer}
       actionsAt="end"
-      actions={onward.length > 0 ? <LinkActions links={onward} /> : undefined}
+      actions={<LinkActions links={onward} />}
       {...(sentence ? { lead: plain(sentence.runs) } : {})}
     >
-      <BlockCardSet items={cards} lead="none" across={3} cue="title" phone="pair" />
+      {pills}
+    </ContentSection>
+  ) : (
+    <ContentSection
+      {...head(band)}
+      data-band="C-pills"
+      footer={footer}
+      {...(sentence ? { lead: plain(sentence.runs) } : {})}
+    >
+      {pills}
     </ContentSection>
   );
 }
@@ -2043,7 +2056,11 @@ function hostedRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[]
   const table = content(band).find((block): block is TableBlock => block.type === 'table');
   if (!table) return [];
   const run: CorpusBand[] = [];
-  for (let next = at + 1; next < bands.length && isPlainToolGroup(bands[next] as CorpusBand); next++)
+  for (
+    let next = at + 1;
+    next < bands.length && isPlainToolGroup(bands[next] as CorpusBand);
+    next++
+  )
     run.push(bands[next] as CorpusBand);
   const tools = run.flatMap((other) => toolGroup(other).tools);
   const names = table.rows.map((row) => plain(row[0] ?? []).trim());
@@ -2211,7 +2228,9 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
     const rest = blocks.filter((block) => block !== table);
     const [leadBlock, ...more] = rest;
     const leadText =
-      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs) ? plain(leadBlock.runs) : undefined;
+      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs)
+        ? plain(leadBlock.runs)
+        : undefined;
     const intro = leadText ? more : rest;
     return (
       <ContentSection

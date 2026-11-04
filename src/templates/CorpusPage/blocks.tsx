@@ -93,6 +93,8 @@ export type CorpusHeroProps = {
   texture?: boolean;
   /** A composed object in the media's place (PageHero `panel`): the contact hero's enquiry island. */
   panel?: ReactNode;
+  /** A full-width row under the split (PageHero `foot`): home's logo wall. */
+  foot?: ReactNode;
 };
 
 /**
@@ -112,6 +114,7 @@ export function CorpusHero({
   stats,
   texture,
   panel,
+  foot,
 }: CorpusHeroProps) {
   const { hero } = page;
   /* A high-traffic page's hero always carries an illustration or an image (owner, 29 Oct 2026;
@@ -131,7 +134,8 @@ export function CorpusHero({
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
   const actions = hero.actions.slice(0, 2).map((action) => ({
-    label: action.labelText,
+    /* The copy's trailing arrow ("Start small with an optional pilot →") is the control's to draw. */
+    label: action.labelText.replace(/\s*→\s*$/, ''),
     href: action.href,
   })) as unknown as HeroActions;
   const eyebrow = hero.eyebrow ? plain(hero.eyebrow) : undefined;
@@ -168,6 +172,7 @@ export function CorpusHero({
       panel={panel}
       tags={tags}
       stats={figures && figures.length > 0 ? figures : undefined}
+      foot={foot}
       texture={texture}
       credits={byline?.credits}
       dates={byline?.dates}
@@ -532,6 +537,18 @@ export function ratingOf(
  * Shared by home and the hubs (component-map § A `client-recognition`).
  */
 export function RecognitionBand({ band }: { band: CorpusBand }) {
+  return (
+    <Section id={band.id} data-band="H" aria-labelledby={headingIdOf(band)}>
+      <RecognitionGrid band={band} />
+    </Section>
+  );
+}
+
+/**
+ * The band's wall alone, with no band of its own: for home, where it is the hero's foot row (owner,
+ * 4 Nov 2026, homepage pass). Its context line stays the band's h2, so the clients keep their name.
+ */
+export function RecognitionGrid({ band }: { band: CorpusBand }) {
   const paragraphsIn = band.blocks.filter(
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
   );
@@ -549,17 +566,15 @@ export function RecognitionBand({ band }: { band: CorpusBand }) {
   const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
   const id = headingIdOf(band);
   return (
-    <Section id={band.id} data-band="H" aria-labelledby={id}>
-      <LogoGrid
-        marks={marks}
-        badge={rating ? <ScoreBadge rating={rating} /> : undefined}
-        context={band.headingText}
-        contextAs="h2"
-        headingId={id}
-        align="center"
-        edges="closed"
-      />
-    </Section>
+    <LogoGrid
+      marks={marks}
+      badge={rating ? <ScoreBadge rating={rating} /> : undefined}
+      context={band.headingText}
+      contextAs="h2"
+      headingId={id}
+      edges="closed"
+      density="compact"
+    />
   );
 }
 
