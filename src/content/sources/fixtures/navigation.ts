@@ -341,16 +341,6 @@ const FOOTER: SiteFooterProps = {
       ],
     },
     {
-      title: 'Studio',
-      links: [
-        { label: 'About Tcules', href: ROUTES.about },
-        { label: 'Why Tcules', href: ROUTES.whyTcules },
-        { label: 'How we design with AI', href: ROUTES.howWeWorkAiNative },
-        { label: 'Careers', href: ROUTES.careers },
-        { label: 'Contact', href: ROUTES.contact },
-      ],
-    },
-    {
       title: 'Resources',
       links: [
         { label: 'Insights', href: ROUTES.insights },
@@ -358,6 +348,16 @@ const FOOTER: SiteFooterProps = {
         { label: 'Checklists and worksheets', href: ROUTES.tools },
         { label: 'Glossary', href: ROUTES.glossary },
         { label: 'Future Interfaces Lab', href: ROUTES.futureInterfacesLab },
+      ],
+    },
+    {
+      title: 'Studio',
+      links: [
+        { label: 'About Tcules', href: ROUTES.about },
+        { label: 'Why Tcules', href: ROUTES.whyTcules },
+        { label: 'How we design with AI', href: ROUTES.howWeWorkAiNative },
+        { label: 'Careers', href: ROUTES.careers },
+        { label: 'Contact', href: ROUTES.contact },
       ],
     },
   ],

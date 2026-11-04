@@ -117,7 +117,7 @@ export function SiteFooter({
             4 Nov 2026). */}
         <div className={styles.directoryBand}>
           {/* Desktop. Three tracks, two rows: Services and the two expertise groups, then Work,
-              Studio and Resources. The breakpoint toggle lives on this wrapper rather than on the
+              Resources and Studio. The breakpoint toggle lives on this wrapper rather than on the
               Layout, because both would be single-class selectors and which one won `display`
               would come down to the order the bundler happened to emit them in. */}
           <div className={styles.directoryDesktop}>
