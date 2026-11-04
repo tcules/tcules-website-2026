@@ -547,11 +547,12 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
  *
  *   rows  one item per row, title beside its words, the glyph inline before the title
  *         (decisions/2026-11-04-sheet-row-glyph-sits-inline): /clients' "What clients have asked us
- *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026); /join's
- *         "What you leave the fellowship with", two short payoffs, the page's quietest set.
+ *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026).
  *   grid  the glyph heads each item, over its title and words, no hairline or mark (4 Nov 2026,
  *         /future-interfaces-lab/join "Why join": five abstract qualities, so an icon is the honest
- *         visual; the marker cell is for figures). Owner to confirm.
+ *         visual; the marker cell is for figures; and "What you leave the fellowship with", two
+ *         payoffs at two tracks, after the critic found it reading as one ruled list with the method
+ *         under it). Owner to confirm.
  */
 const SHEET_GLYPHS: Readonly<
   Record<string, { arrangement: 'grid' | 'rows'; icons: Readonly<Record<string, IconName>> }>
@@ -577,11 +578,14 @@ const SHEET_GLYPHS: Readonly<
       'Product-level thinking': 'layers',
     },
   },
+  /* Two payoffs, the page's reward: a glyph-headed pair at two tracks, no hairline, so the band no
+     longer repeats the method's ruled steps under it (critic, 4 Nov 2026). Judgement takes the
+     compass, a filled glyph of the code square's mass, so the peers weigh the same. */
   'what-youll-gain': {
-    arrangement: 'rows',
+    arrangement: 'grid',
     icons: {
       'Shipped proof-of-work': 'code-square',
-      'Stronger product judgement': 'checklist',
+      'Stronger product judgement': 'compass',
     },
   },
 };
@@ -665,13 +669,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (glyphs?.arrangement === 'list-beside') {
         return <ListBesideBand band={band} icons={glyphs.icons} />;
       }
-      return (
-        <SheetBand
-          band={band}
-          scenes={scenes}
-          {...(SHEET_GLYPHS[band.id] ?? {})}
-        />
-      );
+      return <SheetBand band={band} scenes={scenes} {...(SHEET_GLYPHS[band.id] ?? {})} />;
     }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */
@@ -1987,7 +1985,9 @@ function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly
  * an L (images.ts STUDIO_COLLAGE). Its links, if any, are the band's way on under the words, as home's.
  */
 function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos }) {
-  const paragraphs = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
   const links = band.blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
   return (
     <Section id={band.id} data-band="B-collage" aria-labelledby={headingIdOf(band)}>
@@ -1997,7 +1997,9 @@ function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos
         photos={photos}
         actions={links.length > 0 ? <LinkActions links={links} /> : undefined}
       >
-        <Prose html={paragraphs.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')} />
+        <Prose
+          html={paragraphs.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')}
+        />
       </Collage>
     </Section>
   );

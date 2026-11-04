@@ -26,8 +26,7 @@ export type EnquiryUrlLabel =
  * union, as the link's label is, so a page cannot pass free words.
  */
 export type EnquiryWorkLabel =
-  | 'What are you working on?'
-  | 'Your background and why you want to build in FIL';
+  'What are you working on?' | 'Your background and why you want to build in FIL';
 
 export type AuditUrlLabel = 'Site to audit';
 
@@ -71,6 +70,13 @@ type SharedProps = {
    * variant's own label. The caller's copy wins: the form never rewrites an authored ask.
    */
   submitLabel?: string;
+  /**
+   * The form's accessible name, where the caller's form is not what its variant is called (an
+   * application on the enquiry card: "Apply to the Lab"). Absent, the variant's own name ("Send an
+   * enquiry", "Request a free audit", "Contact Tcules"), so a screen reader never hears an enquiry
+   * where the page asks for an application.
+   */
+  label?: string;
   /**
    * What happens after a send, shown in the success view as numbered steps. The CALLER's copy,
    * never the pattern's: on a close it is the same list the band's points promise (pass
@@ -1107,7 +1113,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       action: props.action,
       method: 'post',
       noValidate: true,
-      'aria-label': 'Send an enquiry',
+      'aria-label': props.label ?? 'Send an enquiry',
       'aria-busy': submitting || undefined,
       onSubmit: handleSubmit,
       onInput: (event: FormEvent<HTMLFormElement>) => saveDraft(event.currentTarget),
@@ -1345,8 +1351,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             <div className={styles.composerMain}>
               {renderField(work, {
                 placeholder:
-                  pickedPrompt ??
-                  (dress.prompt ? `${work.label} ${dress.prompt}` : work.label),
+                  pickedPrompt ?? (dress.prompt ? `${work.label} ${dress.prompt}` : work.label),
                 look: 'bare',
               })}
             </div>
@@ -1400,11 +1405,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
       method="post"
       noValidate
       aria-label={
-        variant === 'audit'
+        props.label ??
+        (variant === 'audit'
           ? 'Request a free audit'
           : variant === 'contact'
             ? 'Contact Tcules'
-            : 'Send an enquiry'
+            : 'Send an enquiry')
       }
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}

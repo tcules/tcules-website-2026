@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment, type ReactElement, type ReactNode } from 'react';
 
 import {
   Button,
@@ -1929,7 +1929,9 @@ export function DestinationsBand({
               ? arrow
               : undefined;
           const bodyRuns = paras.map((inner, index) =>
-            trailing && index === paras.length - 1 ? trimEnd(lastRuns.slice(0, -1)) : inner.runs,
+            trailing && index === paras.length - 1
+              ? trimEnd(lastRuns.slice(0, -1))
+              : inner.runs,
           );
           return [
             {
@@ -1937,9 +1939,7 @@ export function DestinationsBand({
               href: link?.href ?? trailing?.href,
               ctaLabel:
                 link?.labelText ??
-                (trailing
-                  ? plain(trailing.children).replace(/\s*[→➝➔⟶]\s*$/u, '')
-                  : undefined),
+                (trailing ? plain(trailing.children).replace(/\s*[→➝➔⟶]\s*$/u, '') : undefined),
               /* The trailing link's words, which the body no longer carries: printed as the tile's
                  foot action, so the copy reaches the page whole (critic, 4 Nov 2026). */
               action: trailing
@@ -2154,7 +2154,11 @@ function hostedRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[]
   const table = content(band).find((block): block is TableBlock => block.type === 'table');
   if (!table) return [];
   const run: CorpusBand[] = [];
-  for (let next = at + 1; next < bands.length && isPlainToolGroup(bands[next] as CorpusBand); next++)
+  for (
+    let next = at + 1;
+    next < bands.length && isPlainToolGroup(bands[next] as CorpusBand);
+    next++
+  )
     run.push(bands[next] as CorpusBand);
   const tools = run.flatMap((other) => toolGroup(other).tools);
   const names = table.rows.map((row) => plain(row[0] ?? []).trim());
@@ -2322,7 +2326,9 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
     const rest = blocks.filter((block) => block !== table);
     const [leadBlock, ...more] = rest;
     const leadText =
-      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs) ? plain(leadBlock.runs) : undefined;
+      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs)
+        ? plain(leadBlock.runs)
+        : undefined;
     const intro = leadText ? more : rest;
     return (
       <ContentSection
@@ -2594,8 +2600,9 @@ export function CloseBand({
   }
   /* A close whose inline links all go to ONE place (4 Nov 2026, /future-interfaces-lab/join "Ask to
      see work from an experiment": "the contact page … contact Tcules", both /contact): the ink island,
-     its words kept whole as the lede and that place its one action, labelled with the first link's
-     own words. A LINK action, never a solid: a side door for another reader, and the page's one main
+     its words kept whole as the lede, links live (a later link serves a different reader, "For
+     anything else, contact Tcules", and lost its link when the lede was plain; critic, 4 Nov 2026),
+     and that place its one action, labelled with the first link's own words. A LINK action, never a solid: a side door for another reader, and the page's one main
      action is elsewhere. Opted in per band (plan.ts `ISLAND_CLOSES`) until the owner rules it for every such
      close, because it would also turn /how-we-work/ai-native-product-design's "your rules", the
      /insights hubs' "talk" bands and /careers' "apply" into islands. */
@@ -2621,7 +2628,11 @@ export function CloseBand({
         intent="onward"
         {...(island ? { island } : {})}
         heading={band.headingText}
-        body={paras.map((block) => plain(block.runs)) as [string] | [string, string]}
+        body={
+          paras.map((block, index) => (
+            <Fragment key={index}>{renderInline(block.runs)}</Fragment>
+          )) as unknown as [ReactElement] | [ReactElement, ReactElement]
+        }
         actions={[{ label: words.charAt(0).toUpperCase() + words.slice(1), href: lead.href }]}
       />
     );
@@ -2669,7 +2680,9 @@ export function CloseFigureBand({ band, scene }: { band: CorpusBand; scene: Sket
 }
 
 /** A one-sentence close split for its island: the sentence as the lede (its link's words kept as words) and the link as the action. */
-function closeAsk(band: CorpusBand): { lede: string; action: { label: string; href: string } } | null {
+function closeAsk(
+  band: CorpusBand,
+): { lede: string; action: { label: string; href: string } } | null {
   const paras = content(band).filter(
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
   );

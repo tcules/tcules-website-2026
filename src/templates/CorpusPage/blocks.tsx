@@ -816,7 +816,11 @@ function loneLinks(blocks: readonly CorpusBlock[]): { href: string; labelText: s
   return blocks.flatMap((block) => {
     if (block.type === 'links') return block.links;
     if (block.type === 'item') return loneLinks(block.blocks);
-    if (block.type === 'paragraph' && block.runs.length === 1 && block.runs[0]?.type === 'link') {
+    if (
+      block.type === 'paragraph' &&
+      block.runs.length === 1 &&
+      block.runs[0]?.type === 'link'
+    ) {
       const link = block.runs[0];
       return [{ href: link.href, labelText: plain(link.children) }];
     }
@@ -885,9 +889,12 @@ export function EnquiryBand({
 }) {
   const application = APPLICATION_FORMS[`${page.route}#${band.id}`];
   const lead = band.blocks.find((block) => block.type === 'paragraph');
-  /* How selection works, authored as `###` steps: the island's numbered points, each step's heading
-     its label and its sentences the detail (4 Nov 2026, /future-interfaces-lab/join). A link that is a
-     line of its own inside a step is the form's submit, not more of the step. */
+  /* How selection works, authored as `###` steps: the island's points, each step's heading its label
+     and its sentences the detail (4 Nov 2026, /future-interfaces-lab/join). Unnumbered (`plain`): an
+     island's points follow the page's method, and numerals here restarted 01 a screen after the
+     method's 01–05, two "first steps" of two processes (critic, 4 Nov 2026). The page's numbered
+     sequence is the method's. A link that is a line of its own inside a step is the form's submit,
+     not more of the step. */
   const points = band.blocks.flatMap((block) =>
     block.type === 'item'
       ? [
@@ -924,7 +931,8 @@ export function EnquiryBand({
       : undefined;
   const footnote = !ledeParagraphs && notes.length > 0 ? notes.join(' ') : undefined;
   const body = ledeParagraphs
-    ? (ledeParagraphs as unknown as readonly [ReactElement] | readonly [ReactElement, ReactElement])
+    ? (ledeParagraphs as unknown as
+        readonly [ReactElement] | readonly [ReactElement, ReactElement])
     : lead && lead.type === 'paragraph'
       ? ([plain(lead.runs)] as const)
       : undefined;
@@ -970,6 +978,10 @@ export function EnquiryBand({
         ? { submitLabel: application.submitLabel }
         : {}),
   };
+  /* An application is named by its own ask ("Apply to the Lab"), never "Send an enquiry". */
+  const form = application
+    ? { ...treatment, label: treatment.submitLabel ?? band.headingText }
+    : treatment;
   /* An application with selection steps carries no drawing: the steps fill the start half. Without
      steps (/careers) the start half is the heading and two short paragraphs, and the sketch-to-shipped
      drawing over them, the work a sketch becomes, keeps the island's two halves level, as on every
@@ -979,7 +991,7 @@ export function EnquiryBand({
      line), the info mark for any other (4 Nov 2026). */
   const footnoteIcon =
     footnote && /\bNDA\b|confidential/i.test(footnote) ? 'shield-check' : 'info-circle';
-  const pointProps = points.length > 0 ? { points } : {};
+  const pointProps = points.length > 0 ? { points, markers: 'plain' as const } : {};
   if ((island.arrangement ?? 'halves') === 'halves') {
     return (
       <CtaSection
@@ -996,7 +1008,7 @@ export function EnquiryBand({
         body={body}
         {...pointProps}
         {...contactProps}
-        form={corpusEnquiryForm(page, band, treatment)}
+        form={corpusEnquiryForm(page, band, form)}
       />
     );
   }
@@ -1012,7 +1024,7 @@ export function EnquiryBand({
       heading={band.headingText}
       body={body}
       {...pointProps}
-      form={corpusEnquiryForm(page, band, treatment)}
+      form={corpusEnquiryForm(page, band, form)}
     />
   );
 }
@@ -1033,6 +1045,8 @@ export function corpusEnquiryForm(
     application?: ApplicationForm;
     /** The band's own ask, where the page's conversion authors no submit label. */
     submitLabel?: string;
+    /** The form's accessible name, where it is not an enquiry (an application). */
+    label?: string;
   } = {},
 ) {
   const conversion = page.conversion;
@@ -1046,6 +1060,7 @@ export function corpusEnquiryForm(
     <EnquiryForm
       variant="enquiry"
       urlLabel={treatment.application?.urlLabel ?? 'Product or company URL'}
+      {...(treatment.label ? { label: treatment.label } : {})}
       {...(treatment.application ? { workLabel: treatment.application.workLabel } : {})}
       action={ENDPOINTS.enquiry}
       /* The form is the band's primary object (home round 3): lg fields, the submit across the

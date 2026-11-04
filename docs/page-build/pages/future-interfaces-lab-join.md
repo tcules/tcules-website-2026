@@ -23,8 +23,8 @@ is the page's one main action; "see work from an experiment" is a quiet side doo
   chain from a data store through an agent (lit) to the running tool; product experience designers, one
   interface in three states, the sheet rising, the last state lit; growth and brand operators, one product
   routed out to three channels, the growing one lit.
-- `what-youll-gain`: the offer sheet's `rows` (the /clients arrangement), glyph inline before each title
-  (sheet-row-glyph-sits-inline): code-square, checklist. The page's quietest band, between two drawn bands.
+- `what-youll-gain`: the offer sheet's glyph-headed grid at two tracks, no hairline (was `rows`; see "Fixed
+  after the critic"): code-square, compass. Two equal peers between the drawn roles and the ruled method.
 - `what-youll-do`: kind `method` (was `outcomes`), MethodBand (F): five numbered steps beside ONE new flat
   figure, a pod of three marks (design, engineering, go-to-market) joined on one build, the build shipped (lit)
   and a review loop back under it. MethodBand now reads `###` steps (cause fix, below).
@@ -60,15 +60,15 @@ is the page's one main action; "see work from an experiment" is a quiet side doo
 | hero | CorpusHero centred, ABOUT_REVIEW | ask → `#apply` |
 | why-join | set · offer-sheet, glyph grid (NEW) | 3 + 2 |
 | who-we-are-looking-for | set · offer-sheet, drawn across 3 | three new drawings |
-| what-youll-gain | set · offer-sheet, `rows` with glyphs | |
+| what-youll-gain | set · offer-sheet, glyph grid at 2 | critic fix |
 | what-youll-do | method · F, steps beside one flat figure | new drawing |
 | apply | enquiry · L, blue island halves, application wording (NEW) | before the FAQ |
 | frequently-asked-questions | faq · D-faq, closing line under it | |
 | artefact-access | close · L, ink island, link action (NEW opt-in) | |
 
 Rhythm at a squint: a centred title over one wide studio photograph; five glyph-headed items, 3 + 2; three
-dotted plates in a row; two hairline rows; numbered steps beside a plate; the blue island with the form; the
-centred accordion; the dark island. Registers: photo, none (icons), flat, none, flat, island, none, island. No
+dotted plates in a row; two glyph-headed peers; numbered steps beside a plate; the blue island with the form; the
+centred accordion; the dark island. Registers: photo, none (icons), flat, none (icons), flat, island, none, island. No
 tint, no text-heavy pair; blue and ink islands do not touch.
 
 ## Content mapping
@@ -77,15 +77,19 @@ tint, no text-heavy pair; blue and ink islands do not touch.
   from the page (owner, 4 Nov 2026: apply on the page).
 - The textarea label joins two phrases of the copy's own sentence ("your background … and why you want to build
   in FIL"). The strict alternative is "Why you want to build in FIL".
-- The artefact island's action label is "contact page" with its first letter raised.
+- The artefact island's action label is "contact page" with its first letter raised; both of the lede's links
+  stay live as authored.
 
 ## Open
 - **New variant: OfferSheet glyph-headed grid** (`why-join`), specimen 8 on /design/offer-sheet. Owner to confirm.
+- **New arrangement: the glyph-headed grid at two tracks** (`what-youll-gain`, critic fix). Owner to confirm.
+- **New arrangement: unnumbered island points** (CtaSection `markers="plain"` for an enquiry island's steps). Owner
+  to confirm.
 - **New variant: EnquiryForm application wording** (`EnquiryWorkLabel`, the "Links to your proof-of-work" URL
   label, `APPLICATION_FORMS`), specimen on /design/enquiry-form. Owner to confirm; also the textarea wording
   above. The card has no Name field (the enquiry card never had one) and the proof-of-work link is optional, as
   the card's link always is: owner to say if an application needs a name or a required link. The form's
-  accessible name is still "Send an enquiry".
+  accessible name is now its ask, "Apply to the Lab" (fixed after the critic).
 - **New arrangement: a close whose links share one destination as the ink island** (`ISLAND_CLOSES`, opt-in).
   Ruled for every such close it would also turn /how-we-work/ai-native-product-design's `your-rules`, the
   /insights hubs' `talk` bands and /careers' `apply` into islands: owner to decide.
@@ -105,3 +109,31 @@ tint, no text-heavy pair; blue and ink islands do not touch.
   capped; nothing in the component distinguishes the two). It reads well at 860; owner to say.
 - ABOUT_REVIEW is also the hero of /clients and /how-we-work/ai-transparency; /careers should not take it too.
 - og/twitter image: the copy points at the generic company card.
+
+## Fixed after the critic (7/10, 4 Nov 2026)
+- **"What you leave the fellowship with" and the method read as one long ruled list** → the kind mapping sent
+  the two payoffs to OfferSheet `rows`, the same hairline register as the method's steps under it → `SHEET_GLYPHS`
+  (OfferBands) now sets them as the glyph-headed `grid` at two tracks, no hairlines (acrossFor(2) = 2). Keyed by
+  band id, which only this page carries, so /clients' rows are unchanged. **New arrangement for the owner:** the
+  glyph grid at two (Open).
+- **Mismatched glyph weight** → `checklist` is nearly all stroke even in its Bold cut → "Stronger product
+  judgement" takes `compass` (a filled disc, the code square's mass; the idea is direction, deciding).
+- **The island's steps restarted 01 a screen after the method's 01–05** → EnquiryBand passed the band's `###`
+  steps to CtaSection with the default numeric markers → an enquiry island's points are now `markers="plain"`
+  (bold label, detail under it), leaving the page's numbered sequence to the method. Only this island carries
+  points (census), so no other page changes. The success view still lists them as what happens next.
+- **The form's accessible name was "Send an enquiry"** → EnquiryForm hard-coded its aria-label → EnquiryForm
+  takes `label`, and `corpusEnquiryForm` passes an application's own ask (the submit words, else the band
+  heading). /join: "Apply to the Lab"; /careers: "Send application" (checked; right for it too); every enquiry
+  form keeps "Send an enquiry" (/, /contact checked).
+- **Nit, "contact Tcules" lost its link** → the single-destination island close set its lede as plain text →
+  the lede now renders its runs, both authored links live; the action stays "Contact page →". Only this close
+  is opted in (`ISLAND_CLOSES`).
+- **Not taken:** the critic's "titles a step up" for the pair. decisions/2026-10-11-item-titles-two-steps-under-heading
+  holds item titles at h4 under an h2; the pair stays h4. Its weight comes from the two-track grid and the glyphs.
+- **Not taken (nit):** align the method figure to the top of the steps. MethodBand centring a flat figure beside its
+  steps is the approved method form (owner, 30 Oct 2026) on every method page; changing the default changes all of
+  them. Owner to say if the figure should top-align.
+- **Not taken (nit):** centre the crumb trail at 390 and carry the separator with the next crumb. PageHero already
+  centres the trail's row; the left-aligned wrap and the divider after each crumb are Breadcrumbs' spec
+  (docs/specs/Breadcrumbs.md). A spec change for the owner, across every centred hero.
