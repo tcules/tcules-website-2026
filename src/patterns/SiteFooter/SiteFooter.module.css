@@ -237,15 +237,13 @@
 }
 
 /* ── 4 · Studio ───────────────────────────────────────────────────────────────
-   The statement heads the band: a title role in the title ink, its top on the facts' label line,
-   so it reads as the studio describing itself rather than as an unlabelled third column of small
-   print (owner, 4 Nov 2026). */
+   The statement at body in the body ink, under a short bar in the facts' label row, so it opens on
+   the facts' first line (owner, 4 Nov 2026). */
 .statement {
   max-inline-size: var(--foot-statement-measure);
-  color: var(--foot-statement-ink);
+  color: var(--foot-body-ink);
   font: var(--foot-statement-text);
-  letter-spacing: var(--foot-statement-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: var(--text-running-wrap);
 }
 
 /* The short bar in the labels' row: the eyebrow's line box, the logo's bar in proportion centred
