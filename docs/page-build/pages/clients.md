@@ -13,7 +13,8 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
   No wordmarks, no drawn logos.
 - What clients have asked us to do: the offer sheet in its `rows` arrangement (owner, 4 Nov 2026: the client
   picked direction "Asked A", index rows, without its client-marks column). Each item is one row, its title
-  in the left half and its words in the right from 1024, on the sheet's ruled mark; case links inline as
+  in the left half and its words in the right from 1024, a hairline under each row (ListCard's row frame,
+  no blue mark); case links inline as
   authored. Opted in per band (`SHEET_ROWS`, OfferBands.tsx), so other sheets keep the grid.
 - Client list: stays a table (DataTable, E): it reads across rows, so it is not drawn (l1-drawn-tables). 16 rows
   is past DataTable's designed 12; every row stays visible (no-hidden-cards). Below 768 it scrolls inside its

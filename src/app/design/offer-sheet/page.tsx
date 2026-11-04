@@ -323,7 +323,7 @@ export default function OfferSheetSpecimen() {
       <Variation
         id="rows"
         title="7 · Rows: each title beside its words"
-        note='`arrangement="rows"`: one promise per row, its title in the label column and its words beside it from 1024, each row on the ruled mark. For bodies of several sentences (/clients, owner 4 Nov 2026). No aside, no drawings.'
+        note='`arrangement="rows"`: one promise per row, its title in the label column and its words beside it from 1024, a hairline under each row (no blue mark). For bodies of several sentences (/clients, owner 4 Nov 2026). No aside, no drawings.'
       />
       <OfferSheet
         heading="What clients have asked us to do"

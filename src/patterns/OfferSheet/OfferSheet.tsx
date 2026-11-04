@@ -93,7 +93,8 @@ export type OfferSheetProps = {
   across?: 2 | 3;
   /**
    * `grid` (default): the promises side by side, as above. `rows`: one promise per row, its title in a
-   * label column and its words beside it from 1024, each row opening on the sheet's ruled mark (the
+   * label column and its words beside it from 1024, each row closed by a hairline under it, ListCard's
+   * row frame, with no blue mark (the
    * clients page's "What clients have asked us to do", owner, 4 Nov 2026). For a set whose bodies run
    * to several sentences and name clients, so the words need a measure, not a third of the column. A
    * rows sheet takes no aside and no drawings.
@@ -177,9 +178,9 @@ export function OfferSheet({
   const drawnThree = drawn && across === 3;
   const promises = rows ? (
     /* A head beside its body is a split, so the seam is `section` (96). */
-    <Layout as="ul" rowGap="stack">
+    <ul>
       {shown.map((item) => (
-        <li key={keyOf(item)} className={styles.item}>
+        <li key={keyOf(item)} className={styles.row}>
           <Layout
             columns={{ base: 1, lg: [1, 1] }}
             colGap="section"
@@ -195,7 +196,7 @@ export function OfferSheet({
           </Layout>
         </li>
       ))}
-    </Layout>
+    </ul>
   ) : drawn ? (
     <Layout
       as="ul"
