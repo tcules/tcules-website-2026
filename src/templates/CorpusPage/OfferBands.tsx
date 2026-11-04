@@ -96,6 +96,8 @@ import {
   AskIsland,
   askLinkIn,
   isAskLink,
+  ItemBody,
+  SupportQuote,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { ReportBand } from './ReportBand';
@@ -465,6 +467,12 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
   'who decides, and who owns the work': 'own',
+  /* The 3 Nov copy's terms (2.60): the decision is yours (options meet at you), no minimum term is the
+     notice drawing, the handover is agreed in the proposal before the work starts. "What we make is
+     yours" has no scene yet: its empty plate until the flat graphics pass (2.62) draws it. */
+  'you keep the product decisions': 'own',
+  'no minimum term': 'commercial',
+  'handover agreed before work begins': 'getting-started',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -781,7 +789,23 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       /* The 26 Oct copy: a lead paragraph, three `###` cases, and on some pages a closing link line
          after the last case ("See all case studies"), which is the band's action (component-map C3). */
       const caseLead = leadText(band);
-      const closing = closingCaseLinks(band);
+      /* A claim the cases prove, authored as the set's first item with a client's words and no case
+         ("Craft people notice", /why-tcules 3 Nov copy): never a card. It leads the set, its words at
+         the start and the quote that supports it beside them, the cases under it as its evidence. */
+      const claims = band.blocks.filter(isClaimItem);
+      const cases = claims.length > 0 ? { ...band, blocks: band.blocks.filter((b) => !isClaimItem(b)) } : band;
+      const closing = closingCaseLinks(cases);
+      const set =
+        claims.length > 0 ? (
+          <Layout rowGap="stack">
+            {claims.map((claim) => (
+              <ClaimLead key={claim.headingText} item={claim} />
+            ))}
+            <CaseSet ctx={ctx} band={cases} />
+          </Layout>
+        ) : (
+          <CaseSet ctx={ctx} band={cases} />
+        );
       return closing.length > 0 ? (
         <ContentSection
           {...head(band)}
@@ -790,11 +814,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           actionsAt="end"
           actions={<LinkActions links={closing} />}
         >
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       ) : (
         <ContentSection {...head(band)} data-band="M" lead={caseLead}>
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       );
     }
@@ -1023,6 +1047,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             .join(' ');
           return { bodyHtml, example: claimExample(example.runs) };
         };
+        /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
+        const quoteOf = (title: string) =>
+          authored.get(title)?.find(
+            (block): block is Extract<CorpusBlock, { type: 'quote' }> => block.type === 'quote',
+          );
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
@@ -1042,7 +1071,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   ) : (
                     (item.body ?? '')
                   ),
-                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
+                  ...(parted
+                    ? { example: <ClaimProof example={parted.example} /> }
+                    : quoteOf(item.title!)
+                      ? { example: <SupportQuote block={quoteOf(item.title!)!} /> }
+                      : {}),
                   figure: drawn
                     ? { ...drawn, alt: '', kind: 'illustration' as const }
                     : { ...placeholderIllustration(item.title!), alt: '' },
@@ -1716,6 +1749,39 @@ function quotedGroup(groups: readonly CaseGroup[], company: string): number {
  * the set ends on follows it as a band of its own (`voice`, owner 26 Oct 2026), linking to the case
  * its client is from. Four or more linked cases run in the kit Slider; fewer sit as one grid.
  */
+type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
+
+/** An `###` item that is a claim carried by a client's words, with no case of its own to link. */
+function isClaimItem(block: CorpusBlock): block is ItemBlock {
+  return (
+    block.type === 'item' &&
+    block.blocks.some((b) => b.type === 'quote') &&
+    !block.blocks.some((b) =>
+      (b.type === 'links'
+        ? b.links.map((l) => l.href)
+        : b.type === 'paragraph'
+          ? linksIn(b.runs).map((l) => l.href)
+          : []
+      ).some((href) => href.startsWith('/case-studies/')),
+    )
+  );
+}
+
+/** A claim leading a set: its title and sentence at the start, its client's words beside them (a split). */
+function ClaimLead({ item }: { item: ItemBlock }) {
+  const words = item.blocks.filter((b) => b.type !== 'quote');
+  const quotes = item.blocks.filter((b) => b.type === 'quote');
+  return (
+    <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="block" align="center">
+      <Layout rowGap="block">
+        <h3>{item.headingText}</h3>
+        <BandBody blocks={words} />
+      </Layout>
+      <ItemBody blocks={quotes} />
+    </Layout>
+  );
+}
+
 function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
   const groups = caseGroups(band);
   /* Every case links to its case page (owner, 11 Oct 2026). An authored "Read the case" line keeps

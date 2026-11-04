@@ -373,6 +373,12 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
+  /* /why-tcules, the 3 Nov copy (2.60): claims carried by clients' words. Complex software and design
+     to code are prose beside the photograph the copy binds to each (the team; ConnectX's coded demo);
+     "Building an AI product?" argues for one service, its drawing beside the words (TextBand). */
+  'complex-software': 'text',
+  'design-to-code': 'text',
+  'ai-products': 'text',
   /* Three instructions on reading the index: the listing's lead, beside the rail of groups it points
      at (4 Nov 2026). Not a method: the order is not a sequence (2026-10-11-no-decorative-numbering). */
   'how-to-use': 'index',
@@ -556,9 +562,11 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  */
 const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
   'your-team',
-  'working-loop',
   'design-to-release',
   'product-knowledge',
+  /* The 3 Nov copy cut "You see the thinking" and added how we use AI in our own work: one more part
+     of the same story, so it takes the same register (2.60, 4 Nov 2026). Home composes its own. */
+  'ai-native-practice',
 ]);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */

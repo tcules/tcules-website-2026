@@ -35,6 +35,7 @@ import {
   type ReadDownRow,
   type Step,
   ServiceTile,
+  TestimonialCard,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage } from '@/lib/corpus-images';
@@ -44,10 +45,10 @@ import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
-import { MEDIA_SPLIT } from '@/lib/image-sizes';
+import { FULL_COLUMN, MEDIA_SPLIT } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
-import { ListTiles, head, headingIdOf } from './blocks';
+import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
@@ -394,7 +395,7 @@ function groupNode(
         block.type === 'item' ? (
           <Layout key={index} rowGap="block">
             <h3>{block.headingText}</h3>
-            <BandBody blocks={block.blocks} labelledBy={labelledBy} />
+            <ItemBody blocks={block.blocks} labelledBy={labelledBy} />
           </Layout>
         ) : null,
       );
@@ -403,6 +404,76 @@ function groupNode(
     default:
       return null;
   }
+}
+
+/**
+ * A client's words quoted under a claim (the 3 Nov copy): the claim leads, the quote supports it, one
+ * step quieter (decisions/2026-10-10-claim-leads-proof-supports): the small testimonial card straight on
+ * the ground, its speaker's one rating with it.
+ */
+export function SupportQuote({ block }: { block: Extract<CorpusBlock, { type: 'quote' }> }) {
+  return <TestimonialCard item={testimonialItem(block)} size="sm" frame="none" />;
+}
+
+/**
+ * An `###` item's blocks in authored order: its words through BandBody, and each quote it carries as the
+ * supporting quote in its place (BandBody itself draws no quote: a band's quotes are its own units).
+ * An example sentence ("**Doodle** asked…", or "Example: …") is the ClaimProof panel
+ * (decisions/2026-11-02-examples-are-one-pattern).
+ */
+export function ItemBody({
+  blocks,
+  labelledBy,
+}: {
+  blocks: readonly CorpusBlock[];
+  labelledBy?: string;
+}): ReactNode {
+  if (
+    !blocks.some(
+      (block) =>
+        block.type === 'quote' ||
+        isExampleParagraph(block) ||
+        (block.type === 'links' && block.links.length >= 4),
+    )
+  ) {
+    return <BandBody blocks={blocks} labelledBy={labelledBy} />;
+  }
+  const runs: ReactNode[] = [];
+  let words: CorpusBlock[] = [];
+  const flush = () => {
+    if (words.length === 0) return;
+    runs.push(<BandBody key={runs.length} blocks={words} labelledBy={labelledBy} />);
+    words = [];
+  };
+  for (const block of blocks) {
+    if (block.type === 'quote') {
+      flush();
+      runs.push(<SupportQuote key={runs.length} block={block} />);
+    } else if (isExampleParagraph(block)) {
+      flush();
+      runs.push(<ClaimProof key={runs.length} example={claimExample(block.runs)} />);
+    } else if (block.type === 'links' && block.links.length >= 4) {
+      /* A run of destinations inside a claim (the twelve sectors under "Industries we know well"):
+         one line, as the copy sets it with its dots, never a stack of twelve link controls. */
+      flush();
+      runs.push(
+        <ContentSectionText key={runs.length}>
+          <Prose
+            html={`<p>${inlineToHtml(
+              block.links.flatMap((link, index): InlineRun[] => [
+                ...(index > 0 ? [{ type: 'text' as const, text: ' · ' }] : []),
+                { type: 'link' as const, href: link.href, children: link.label },
+              ]),
+            )}</p>`}
+          />
+        </ContentSectionText>,
+      );
+    } else {
+      words.push(block);
+    }
+  }
+  flush();
+  return <Layout rowGap="block">{runs}</Layout>;
 }
 
 const rowBody = (runs: readonly InlineRun[]) =>
@@ -1147,7 +1218,20 @@ export function isExampleParagraph(
 ): block is Extract<CorpusBlock, { type: 'paragraph' }> {
   if (block.type !== 'paragraph') return false;
   const first = block.runs[0];
-  return first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text);
+  if (first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text)) return true;
+  /* The 3 Nov copy dropped the "Example:" label and kept the shape: the client in bold running into
+     its sentence, the case linked at the end ("**Doodle** asked for scheduling automation. … [Read the
+     Doodle case](/case-studies/…)"). A bold label that ends in a stop ("**Our role:** …") is not one. */
+  const second = block.runs[1];
+  const last = trimEnd(block.runs).at(-1);
+  return (
+    first?.type === 'strong' &&
+    !/[.:?]\s*$/.test(plain(first.children)) &&
+    second?.type === 'text' &&
+    /^\s+[a-z]/.test(second.text) &&
+    last?.type === 'link' &&
+    last.href.startsWith(`${ROUTES.caseStudies}/`)
+  );
 }
 
 /** One hard part: its title, its words in order (a table included), and its example if it has one. */
@@ -2292,10 +2376,9 @@ export function TextBand({
       <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
     </Layout>
   ) : examplePanels.length > 0 ? (
-    <Layout rowGap="block">
-      <BandBody blocks={body} />
-      {examplePanels}
-    </Layout>
+    /* Each example where the copy sets it: under the claim it proves, never gathered at the band's
+       foot, where the last claim would seem to own it (/how-we-work design-to-release, 4 Nov 2026). */
+    <ItemBody blocks={blocks.filter((block) => block.type !== 'links')} />
   ) : (
     <BandBody blocks={body} />
   );
@@ -2320,7 +2403,39 @@ export function TextBand({
       </ContentSection>
     );
   }
-  if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
+  const bound = page.composition.mediaBindings.some(
+    (b) => b.bound && b.supportsSection === band.id,
+  );
+  /* Three or more titled claims carried by clients' words, with the photograph the copy binds
+     ("Experienced in complex, specialist software", /why-tcules 3 Nov copy): the claims are the band's
+     object, so they take the full width two by two, and the photograph is the I banner under the head
+     (3:1). Beside them, one long column of claims ran far past a 4:5 photo (2.60, 4 Nov 2026). */
+  const claimItems = body.filter(
+    (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
+  );
+  if (bound && claimItems.length >= 3 && claimItems.length === body.length) {
+    return (
+      <ContentSection {...head(band)} data-band="B" actions={actions}>
+        <Layout rowGap="stack">
+          {/* The copy binds a photograph of the people here (the team); only a photograph is cropped. */}
+          <Media
+            image={{ ...slotImage(page, band.id), kind: 'photograph' }}
+            ratio="3/1"
+            sizes={FULL_COLUMN}
+          />
+          <Layout columns={{ base: 1, md: 2 }} colGap="column" rowGap="stack">
+            {claimItems.map((item) => (
+              <Layout key={item.headingText} rowGap="block">
+                <h3>{item.headingText}</h3>
+                <ItemBody blocks={item.blocks} />
+              </Layout>
+            ))}
+          </Layout>
+        </Layout>
+      </ContentSection>
+    );
+  }
+  if (bound) {
     return (
       <ContentSection
         {...head(band)}
@@ -2370,6 +2485,36 @@ export function TextBand({
         ) : (
           <BandBody blocks={words} />
         )}
+      </ContentSection>
+    );
+  }
+  /* A band that argues for one named service and ends on its link ("Building an AI product?" … "See
+     AI Product UX →", /why-tcules 3 Nov copy): the service's own flat drawing on its plate beside the
+     words, the link the band's action under them. A split, as a scenario beside its drawing; never a
+     service card beside the head (clickable cards sit under their head). */
+  const nested = blocks.flatMap((block) =>
+    block.type === 'item'
+      ? block.blocks.flatMap((b) => (b.type === 'links' ? b.links : []))
+      : [],
+  );
+  const onward = [...links, ...nested];
+  const serviceScene =
+    onward.length === 1 && onward[0] ? serviceSceneFor(onward[0].href) : undefined;
+  if (serviceScene) {
+    const words = body.map((block) =>
+      block.type === 'item'
+        ? { ...block, blocks: block.blocks.filter((b) => b.type !== 'links') }
+        : block,
+    );
+    return (
+      <ContentSection {...head(band)} data-band="B">
+        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+          <Layout rowGap="stack">
+            <BandBody blocks={words} />
+            <LinkActions links={onward} />
+          </Layout>
+          <Sketch name={serviceScene} />
+        </Layout>
       </ContentSection>
     );
   }

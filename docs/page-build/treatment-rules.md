@@ -265,3 +265,19 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   (IndexRail), never a sideways line of group names cut at the edge.
 - Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
   -term-page-closes-in-one-shape, -comparison-picks-its-term.
+
+## Added 4 Nov 2026 (/why-tcules and /how-we-work, the 3 Nov copy; proposed until the owner sees the pages)
+
+- **A claim carried by a client's words** (the copy's `“…”  ⏎ Name, Role, Company` under a claim) is the claim,
+  then the quote under its words as the small testimonial on the ground (TestimonialCard `sm`, `frame="none"`),
+  the speaker's one rating with it. One step quieter than the claim (claim-leads-proof-supports); never a band of
+  its own, never body text. The parser reads it as a quote; BandBody's items and Reasons' example slot draw it.
+- **An example without its "Example:" label** ("**Doodle** asked … [Read the Doodle case]") is still the ClaimProof
+  panel, and every example stays where the copy sets it, never gathered at the band's foot.
+- **A claim that leads a case set** (an item with a quote and no case) is never a card: it heads the set, its words
+  at the start and its quote beside them, the cases under it.
+- **Three or more titled claims with the photograph the copy binds** take the full width two by two, the photograph
+  the 3:1 banner under the head. One column of claims beside a 4:5 photo ran far past it.
+- **A band that argues for one named service and ends on its link** sets the service's own flat drawing beside the
+  words, the link the action under them (a split, never a service card beside the head).
+- **A run of four or more destination links inside a claim** stays one line with the copy's dots, never a stack.

@@ -44,7 +44,15 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   across, then each fact as one ruled row, its key over the three values aligned under their option. Rows was
   shown beside it and set aside; rows stand in below 1024.
 
-## Band → component (/how-we-work)
+## The 3 Nov copy (2.60, 4 Nov 2026, local branch design/2-60-why-how, awaiting owner review)
+Reordered: product knowledge first, engagement shapes, who you work with, design to working software, how we use
+AI (new), the terms. `working-loop` cut. Engagement shapes lost their eyebrows and facts, so they render as the
+three plated options. `ai-native-practice` joins the illustrated set (image end). Quotes sit under their claims;
+the Doodle and Benchmark Gensuite examples are ClaimProof panels where the copy sets them. The terms' new titles
+map to drawn scenes (decisions → `own`, no minimum term → `commercial`, handover → `getting-started`); "What we
+make is yours" is an empty plate until 2.62 draws it.
+
+## Band → component (/how-we-work, 2 Nov)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |
