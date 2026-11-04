@@ -1,7 +1,7 @@
 ---
 title: The footer runs brand, directory, newsletter, studio, legal, then the watermark, with no texture
 date: 2026-11-04
-status: proposed
+status: active
 area: [components, layout]
 source: "Owner, 4 Nov 2026, footer review rounds on design/nav-footer-v2 (\"the footer is 95% there\")"
 supersedes: []
@@ -26,5 +26,5 @@ the letters) built on this branch and removed; a second "Studio" label beside th
 credit moved out of the footer; brand marks for the social links.
 
 **How to apply.** SiteFooter and its fixture in `src/content/sources/fixtures/navigation.ts`. A new group
-or fact joins the band it belongs to rather than adding a band. Promote to `active` when the owner
-approves the finished footer.
+or fact joins the band it belongs to rather than adding a band.
+
