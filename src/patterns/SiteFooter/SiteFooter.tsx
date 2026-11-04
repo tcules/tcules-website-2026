@@ -231,7 +231,12 @@ export function SiteFooter({
           colGap="section"
           rowGap="stack"
         >
-          <p className={styles.statement}>{studio.statement}</p>
+          {/* The rule takes the labels' row, at the labels' distance from what follows, so the
+              statement opens on the facts' first line (owner, 4 Nov 2026). */}
+          <Layout rowGap="text">
+            <span className={styles.statementRule} aria-hidden="true" />
+            <p className={styles.statement}>{studio.statement}</p>
+          </Layout>
 
           <Layout columns={[1, 1]} colGap="gutter" rowGap="stack">
             <Layout rowGap="text">
