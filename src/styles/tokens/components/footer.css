@@ -1,13 +1,13 @@
 /* ══ Component layer — footer ════════════════════════════════════════════════════
-   Tier 3. The site footer: the brand block, the newsletter, the directory of links, the
-   contact strip and the utility row.
+   Tier 3. The site footer: the brand block, the directory of links, the newsletter, the studio
+   block (statement, address, socials) and the legal row.
 
    Naming: --foot-{part}-{modifier}-{state}.
      tagline   the line under the wordmark
      label     a group's name and the newsletter eyebrow — mono, uppercase, not a link
      link      a directory or utility link
-     meta      the contact strip: a key in mono, a value in sans
-     legal     the copyright line
+     statement the one line about the studio, above its address
+     legal     the address, the copyright line and the legal links
 
    Like nav.css, this is a layer for a PATTERN, and for the same reason: a footer has chrome
    of its own — hairlines between bands, directory-link states, and the ink a copyright line
@@ -64,9 +64,22 @@
   --foot-link-text: var(--text-body-sm);
   --foot-social-text: var(--text-ui-sm);
   --foot-social-tracking: var(--text-ui-sm-tracking);
-  --foot-meta-key-text: var(--text-micro);
-  --foot-meta-key-tracking: var(--text-micro-tracking);
-  --foot-meta-value-text: var(--text-body-sm);
+  /* The statement at body-sm, 14, in the body ink (owner, 4 Nov 2026): the bar above it, in the labels'
+     row, is what gives it its place beside the labelled facts. */
+  --foot-statement-text: var(--text-body-sm);
+  /* The short rule over the statement (owner, 4 Nov 2026): it fills the row the facts' labels sit
+     in, so the statement opens on the facts' first line. The row is the eyebrow's line box, read
+     from the same size and ratio as the labels so the two cannot drift. The bar is the logo's own
+     bar in proportion (owner: "so it looks like the bar above the u"): 127 by 27 in the mark,
+     about 4.7 to 1, so 28 by 6, square-ended, in the label ink (owner, 4 Nov 2026). */
+  --foot-statement-rule-row: calc(var(--font-size-eyebrow) * var(--line-height-eyebrow));
+  --foot-statement-rule-inline: var(--space-28);
+  --foot-statement-rule-weight: var(--space-6);
+  /* Half strength (owner, 4 Nov 2026): at the label's full ink the bar outweighs the labels beside it. */
+  --foot-statement-rule-opacity: 0.5;
+  /* The statement holds its half of the studio split at the lead measure, so it breaks into two or
+     three lines rather than running the whole half. */
+  --foot-statement-measure: var(--measure-lead);
   --foot-legal-text: var(--text-caption);
 }
 
@@ -86,8 +99,6 @@
   --foot-label-ink: var(--color-neutral-700);
   --foot-link-ink: var(--color-neutral-700);
   --foot-link-ink-hover: var(--color-brandeis-500);
-  --foot-meta-key-ink: var(--color-neutral-500); /*  3.42:1 — a mono key beside its own value */
-  --foot-meta-value-ink: var(--color-neutral-900);
   --foot-legal-ink: var(--color-neutral-600);
   --foot-ring-color: var(--color-brandeis-500);
   --foot-ring-gap-color: var(--color-paper);
@@ -106,8 +117,6 @@
   --foot-label-ink: var(--color-neutral-800); /* 10.54:1 — stepped to stay clear of body */
   --foot-link-ink: var(--color-neutral-800);
   --foot-link-ink-hover: var(--color-brandeis-500);
-  --foot-meta-key-ink: var(--color-neutral-600);
-  --foot-meta-value-ink: var(--color-neutral-900);
   --foot-legal-ink: var(--color-neutral-700);
   --foot-ring-color: var(--color-brandeis-500);
   --foot-ring-gap-color: var(--color-paper-deep);
@@ -130,8 +139,6 @@
   --foot-label-ink: var(--color-neutral-500);
   --foot-link-ink: var(--color-neutral-300);
   --foot-link-ink-hover: var(--color-brandeis-300); /*  7.32:1 */
-  --foot-meta-key-ink: var(--color-neutral-500);
-  --foot-meta-value-ink: var(--color-white);
   --foot-legal-ink: var(--color-neutral-500);
   --foot-ring-color: var(--color-brandeis-300);
   --foot-ring-gap-color: var(--color-neutral-950);
@@ -140,8 +147,7 @@
 /* ── Surface: blue ────────────────────────────────────────────────────────────
    A footer on the pivot. Only the light end of the ramp clears AA on brandeis-500 — white
    6.23:1, 50 at 5.57:1, 100 at 4.91:1, 200 already 3.78:1 — so every ink here is white, 50 or
-   100, and the mono meta key at 200 is the one value treated as a graphic rather than a
-   passage of text.
+   100.
 
    (The field's fill and its white focus rule were described here and are now input.css's, under
    the quiet emphasis. The reasoning moved with the tokens.)                            */
@@ -153,8 +159,6 @@
   --foot-label-ink: var(--color-brandeis-100);
   --foot-link-ink: var(--color-brandeis-50); /*  5.57:1 */
   --foot-link-ink-hover: var(--color-white);
-  --foot-meta-key-ink: var(--color-brandeis-200); /*  3.78:1 — a mono key, read as a graphic */
-  --foot-meta-value-ink: var(--color-white);
   --foot-legal-ink: var(--color-brandeis-100);
   --foot-ring-color: var(--color-white);
   --foot-ring-gap-color: var(--color-brandeis-500);

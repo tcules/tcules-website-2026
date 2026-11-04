@@ -133,9 +133,7 @@ export type {
   SiteNavItem,
   SiteNavLink,
   SiteNavGroup,
-  SiteNavCard,
-  SiteNavCardImage,
-  SiteNavRail,
+  SiteNavAside,
   SiteNavForm,
   SiteNavStatus,
 } from './SiteNav';
@@ -300,9 +298,10 @@ export type {
   SiteFooterBrand,
   SiteFooterGroup,
   SiteFooterLink,
-  SiteFooterMetaItem,
+  SiteFooterLegal,
   SiteFooterNewsletter,
-  SiteFooterSocial,
+  SiteFooterRating,
+  SiteFooterStudio,
 } from './SiteFooter';
 export { Banner } from './Banner';
 export type {

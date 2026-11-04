@@ -27,6 +27,31 @@
   padding-block-start: var(--foot-band-inset);
 }
 
+/* The directory and the newsletter change places with the rule across the breakpoint (owner,
+   4 Nov 2026).
+
+   Below lg the directory is a ruled list: a hairline on top, one under every group, the last one
+   included, so the list is closed at both ends with each row's own padding as its only air. The
+   newsletter then follows a stack below that last rule and carries none of its own — a second rule
+   48 under the list's closing one read as an empty band.
+
+   At lg both are ordinary bands: a hairline with air on both sides, as every band below the brand
+   one. */
+.directoryBand {
+  border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+}
+
+@media (min-width: 1024px) {
+  .directoryBand {
+    padding-block-start: var(--foot-band-inset);
+  }
+
+  .newsletterBand {
+    border-block-start: var(--foot-rule-width) solid var(--foot-rule);
+    padding-block-start: var(--foot-band-inset);
+  }
+}
+
 /* ── 1 · Brand ─────────────────────────────────────────────────────────────────
    Two groups opposed across the band, as grid tracks rather than flex children. That is
    deliberate: a flex BASIS is a width in a row and a HEIGHT the moment the row wraps to a column,
@@ -139,27 +164,8 @@
   padding-block-end: var(--gap-text);
 }
 
-/* The socials at the foot of the last desktop column: a rule and air above them, no label. A
-   label would make them a seventh group; the rule says the column has ended. */
-.columnSocial {
-  margin-block-start: var(--gap-tight);
-  padding-block-start: var(--gap-tight);
-  border-block-start: var(--foot-rule-width) solid var(--foot-rule);
-}
-
-/* On mobile they sit under the last accordion's rule and carry none of their own, so they read as
-   the end of the directory block rather than as a band. */
-.mobileSocial {
-  padding-block-start: var(--gap-block);
-}
-
-.socialList {
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-/* Mono and uppercase, so a profile link reads as chrome rather than as the start of another
-   directory column. */
+/* Mono and uppercase, so a profile reads as chrome rather than as another directory link. The
+   arrow says it leaves the site; it is the system's own off-site glyph, as ListCard's cue. */
 .socialLink {
   display: inline-flex;
   gap: var(--gap-tight);
@@ -175,13 +181,6 @@
 .socialLink:hover,
 .socialLink:focus-visible {
   color: var(--foot-link-ink-hover);
-}
-
-/* The system draws no diagonal arrow. Rotating the horizontal one is the documented workaround,
-   and the rotation lives here rather than in the glyph so the glyph stays one shape. */
-.outboundCue {
-  display: inline-flex;
-  transform: rotate(-45deg);
 }
 
 /* ── 3 · Newsletter ────────────────────────────────────────────────────────────
@@ -237,52 +236,63 @@
   border: 0;
 }
 
-/* ── 4 · Contact ───────────────────────────────────────────────────────────────
-   Mono micro for the key, sans for the value: the face is what tells you which half you are
-   reading, and it is why this band does not look like the directory above it despite both being
-   small text in columns. */
-.metaKey {
-  color: var(--foot-meta-key-ink);
-  font: var(--foot-meta-key-text);
-  letter-spacing: var(--foot-meta-key-tracking);
-  text-transform: var(--text-mono-case);
+/* ── 4 · Studio ───────────────────────────────────────────────────────────────
+   The statement at body-sm in the body ink, under a short bar in the facts' label row, so it opens on
+   the facts' first line (owner, 4 Nov 2026). */
+.statement {
+  max-inline-size: var(--foot-statement-measure);
+  color: var(--foot-body-ink);
+  font: var(--foot-statement-text);
+  text-wrap: var(--text-running-wrap);
 }
 
-/* The reset zeroes dd's margin; nothing here needs to restate it. */
-.metaValue {
-  color: var(--foot-meta-value-ink);
-  font: var(--foot-meta-value-text);
+/* The short bar in the labels' row: the eyebrow's line box, the logo's bar in proportion centred
+   in it, in the label ink like the facts' labels beside it (owner, 4 Nov 2026). Drawn as a background so the row keeps the label's height and the bar needs no box of its
+   own. */
+.statementRule {
+  inline-size: var(--foot-statement-rule-inline);
+  block-size: var(--foot-statement-rule-row);
+  background: linear-gradient(var(--foot-label-ink), var(--foot-label-ink)) left center /
+    100% var(--foot-statement-rule-weight) no-repeat;
+  opacity: var(--foot-statement-rule-opacity);
 }
 
-/* A reachable value keeps the value's ink rather than taking the directory's — it is the same fact
-   either way, and only its hover says it is clickable. */
-.metaLink {
-  color: var(--foot-meta-value-ink);
+/* The address in the body ink, a line per authored line. `font-style: normal` because <address>
+   is italic by default, and the address is a fact here rather than a voice. */
+.address {
+  color: var(--foot-body-ink);
+  font: var(--foot-body-text);
+  font-style: normal;
+}
+
+.addressLine {
+  display: block;
+}
+
+/* The email reads as a link — it is the one way to write to the studio — so it takes the
+   directory's link treatment rather than the legal line's. */
+.email {
+  color: var(--foot-link-ink);
+  font: var(--foot-link-text);
   text-decoration: none;
   transition: color var(--foot-transition-duration) var(--foot-transition-easing);
 }
 
-.metaLink:hover,
-.metaLink:focus-visible {
+.email:hover,
+.email:focus-visible {
   color: var(--foot-link-ink-hover);
 }
 
-.address {
-  max-inline-size: var(--foot-body-measure);
-  color: var(--foot-legal-ink);
-  font: var(--foot-legal-text);
-}
-
-/* ── 5 · Utility ───────────────────────────────────────────────────────────────
-   The quietest line on the page, and the only one at caption size. The links take the legal ink
-   rather than the directory's link ink: four pieces of small print in link colour would read as a
-   sixth navigation group. */
+/* ── 5 · Legal ─────────────────────────────────────────────────────────────────
+   The quietest line on the page, and the only one at caption size with the address. Its links
+   (and the email above) take the legal ink rather than the directory's link ink: small print in
+   link colour would read as a sixth navigation group. */
 .legal {
   color: var(--foot-legal-ink);
   font: var(--foot-legal-text);
 }
 
-.utilityLink {
+.smallLink {
   display: inline-block;
   color: var(--foot-legal-ink);
   font: var(--foot-legal-text);
@@ -290,8 +300,8 @@
   transition: color var(--foot-transition-duration) var(--foot-transition-easing);
 }
 
-.utilityLink:hover,
-.utilityLink:focus-visible {
+.smallLink:hover,
+.smallLink:focus-visible {
   color: var(--foot-link-ink-hover);
 }
 
@@ -345,17 +355,17 @@
    ring reads against the ground it is drawn on. Both halves are surface tokens, which is why the
    ink footer and a blue one need no rule of their own here. */
 .link:focus,
+.email:focus,
 .socialLink:focus,
-.metaLink:focus,
-.utilityLink:focus,
+.smallLink:focus,
 .accordionSummary:focus {
   outline: none;
 }
 
 .link:focus-visible,
+.email:focus-visible,
 .socialLink:focus-visible,
-.metaLink:focus-visible,
-.utilityLink:focus-visible,
+.smallLink:focus-visible,
 .accordionSummary:focus-visible {
   outline: none;
   box-shadow:
@@ -365,9 +375,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .link,
+  .email,
   .socialLink,
-  .metaLink,
-  .utilityLink,
+  .smallLink,
   .accordionChevron {
     transition-duration: var(--duration-instant);
   }

@@ -21,6 +21,7 @@ export const ROUTES = {
   /* Services — the six offers, plus the two ways an engagement starts. */
   services: '/services',
   productDesign: '/services/product-design',
+  mvpDevelopment: '/services/mvp-development',
   productModernisation: '/services/product-modernisation',
   designSystems: '/services/design-systems',
   aiProductUx: '/services/ai-product-ux',
