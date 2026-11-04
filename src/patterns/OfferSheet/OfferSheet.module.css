@@ -156,3 +156,20 @@
 .listRow:first-child {
   padding-block-start: 0;
 }
+
+/* A run-in row (`list`, an untitled item opening on its bold lead): the sentence at the lead role, its
+   bold lead in the title's ink and weight, so the lead reads as the row's name without being split
+   from its sentence; the glyph one line of that role tall. */
+.runIn {
+  font: var(--ofs-lead-text);
+  color: var(--ofs-body-ink);
+}
+
+.runIn strong {
+  font-weight: var(--ofs-run-in-weight);
+  color: var(--ofs-title-ink);
+}
+
+.rowIconRunIn {
+  font: var(--ofs-lead-text);
+}

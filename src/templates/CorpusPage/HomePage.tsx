@@ -24,6 +24,7 @@ import {
   Gateway,
   GatewayPaths,
   OfferSheet,
+  Proof,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
@@ -35,6 +36,7 @@ import {
   type ReasonsItem,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
+import type { InlineRun } from '@/lib/inline';
 import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -54,8 +56,12 @@ import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { recordFigures } from '@/lib/studio-record';
 
 import {
+  ClientWall,
   CorpusHero,
+  GenericBlocks,
+  QuoteCompact,
   QuoteGroupBand,
+  proofQuote,
   RecognitionBand,
   bodyOf,
   head,
@@ -76,7 +82,16 @@ import {
 import { bindingNamed, coverFor, slugOf } from './images';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
-import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd } from './text';
+import {
+  bandLinks,
+  inline,
+  labelTitle,
+  lastIndexWhere,
+  leadOf,
+  plain,
+  trimEnd,
+  trimStart,
+} from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -168,6 +183,7 @@ export function HomePage({
         proofLine={false}
         stats={recordStats(page)}
       />
+      <HeroClientWall page={page} />
       {units.map((unit) => {
         const b = unit.band;
         /* Why Tcules on home renders as on every other page: the plan's Reasons, one illustration
@@ -545,7 +561,11 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
        `home_dealpath_workflow`). */
     const binding = bindingNamed(page, item.headingText.split(':')[0] ?? item.headingText);
     const focus = binding ? COVER_FOCUS[binding.id] : undefined;
-    const paragraphs = paragraphRuns(item.blocks);
+    /* An italic bracketed line ("*[Use the Dealpath workflow artefact.]*") is the content team's note
+       to us about the cover, never words for the card. */
+    const paragraphs = paragraphRuns(item.blocks).filter(
+      (runs) => !/^\s*\[[^\]]*\]\s*$/.test(plain(runs)),
+    );
     const story =
       paragraphs.length === 1 && paragraphs[0]
         ? bodyOf(paragraphs[0])
@@ -696,52 +716,6 @@ export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   );
 }
 
-/**
- * Each reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each title gets an
- * inline icon"). A title the copy renames drops the glyphs from the whole set, so a stale map never
- * shows a set with holes.
- */
-const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
-  'Fluent in SaaS': 'layers',
-  'Idea to launch': 'flag',
-  'Craft people notice': 'eye',
-  'Evidence before screens': 'clipboard-check',
-  'Seen your problem before': 'users-group-rounded',
-  'Start small': 'hand-shake',
-};
-
-/**
- * Why Tcules on home: the heading at the left with its way deeper under it, the six reasons down the
- * right, one ruled row each, its glyph inline before its title and its sentence under it (owner,
- * 4 Nov 2026, homepage pass: "simplify and bring it back to the heading left list right structure";
- * decisions/2026-11-04-home-why-is-a-list, superseding the proposed 2026-11-03 illustrations). Home
- * only: the offer pages keep the plan's Reasons. A reason whose title has no glyph sets the whole
- * list without glyphs, so nothing is dropped and the set never mixes.
- */
-function WhyTcules({ b }: BandProps) {
-  const parts = sheetParts(b);
-  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
-  const titled = parts.items.map((item) => ({
-    ...item,
-    title: item.title?.replace(/\.$/, ''),
-  }));
-  /* A set is all-glyph or all-text (OfferSheet): one title the map does not know drops every glyph. */
-  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
-  const items = titled.map((item) =>
-    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
-  );
-  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
-  return (
-    <OfferSheet
-      {...head(b)}
-      arrangement="list"
-      lead={parts.lead}
-      items={items}
-      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
-    />
-  );
-}
-
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
 
 function ClientVoices({ b, ratings, avatars }: BandProps) {
@@ -882,6 +856,179 @@ function Insights({ b, insightRefs = {} }: BandProps) {
   );
 }
 
+/* ── 4 Nov 2026 copy: the hero's client line, the two situations, the decision model ─ */
+
+/**
+ * The logo wall after the hero (owner, 4 Nov 2026, homepage pass: compact, the label at the start),
+ * from the hero's own proof line: the 4 Nov copy names its clients there ("*Selected client work:
+ * Doodle · Dealpath · …*") and asks for a `client_logo_strip` after the hero, with no band of its
+ * own. The label before the colon is the wall's eyebrow-size name; the names lead the wall where the
+ * studio holds their file. A page with no such line shows no wall.
+ */
+function HeroClientWall({ page }: { page: CorpusPage }) {
+  const line = page.hero.proofLines
+    .map((runs) => plain(runs).trim())
+    .find((text) => /^[^·:]+:\s*\S/.test(text) && text.includes(' · '));
+  if (!line) return null;
+  const [label = '', list = ''] = line.split(/:\s*/, 2);
+  return (
+    <ClientWall
+      id="client-recognition"
+      headingId="client-recognition-heading"
+      context={label}
+      names={list.split(' · ').map((name) => name.trim())}
+    />
+  );
+}
+
+/**
+ * The two situations ("Some products need a better next chapter. Others are still becoming
+ * products.") as door cards (owner, 4 Nov 2026, homepage pass: "a classic card layout"): each `###`
+ * situation a card, its paragraphs as authored (emphasis kept), and its closing sentence ("That is the
+ * territory of …"), which names the services inline, at the card's foot with its links. The words
+ * are never rewritten into link rows.
+ */
+function SituationDoors({ b, eyebrows }: BandProps) {
+  const paths: GatewayPath[] = items(b).map((item) => {
+    const paras = paragraphRuns(item.blocks);
+    const footAt = lastIndexWhere(paras, (runs) => runs.some((run) => run.type === 'link'));
+    const words = paras.filter((_, index) => index !== footAt);
+    const foot = footAt >= 0 ? paras[footAt] : undefined;
+    return {
+      id: slugOf(item.headingText),
+      title: item.headingText,
+      body: words.map((runs, index) => (
+        <span key={index} dangerouslySetInnerHTML={{ __html: inline(runs) }} />
+      )),
+      links: [],
+      ...(foot ? { foot: <span dangerouslySetInnerHTML={{ __html: inline(foot) }} /> } : {}),
+    };
+  });
+  const ask = askLinkIn(b);
+  return (
+    <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+      <GatewayPaths paths={paths} form="cards" />
+      {ask ? (
+        <Cluster justify="center">
+          <Button as="a" href={ask.href} size="lg">
+            {ask.labelText}
+          </Button>
+        </Cluster>
+      ) : null}
+    </ContentSection>
+  );
+}
+
+/** Each stage's glyph, by its bold lead as authored (the decision model's six stages). */
+const STAGE_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Product reality': 'eye',
+  'The product model': 'layers',
+  'The interaction': 'monitor',
+  'The shared system': 'widget',
+  'Working software': 'code-square',
+  'Real use': 'graph-up',
+};
+
+/**
+ * "A good product decision has to survive the whole product" in the Why Tcules shape the owner asked
+ * for (4 Nov 2026, homepage pass: "heading left list right, each title gets an inline icon"): the
+ * heading and its two opening sentences at the left, the six stages down the right, one ruled row
+ * each, its glyph inline before the stage's sentence, the bold lead opening it as authored
+ * ("**Product reality** asks what is actually true…"), never split from its verb. The closing line ("That is why Product Design at Tcules is not a
+ * handoff stage.") ends the list in its column. A stage the map does not know drops every glyph.
+ */
+function DecisionModel({ b }: BandProps) {
+  const paras = paragraphRuns(b.blocks);
+  const stages = paras.flatMap((runs) => {
+    const [first, ...rest] = runs;
+    if (first?.type !== 'strong') return [];
+    /* The whole sentence, its bold lead kept: the lead is the stage's name and the start of its sentence. */
+    return [{ id: plain(first.children).trim(), bodyHtml: inline(runs) }];
+  });
+  if (stages.length < 2)
+    return (
+      <ContentSection {...head(b)}>
+        <GenericBlocks band={b} />
+      </ContentSection>
+    );
+  const firstStage = paras.findIndex((runs) => runs[0]?.type === 'strong');
+  const lastStage = lastIndexWhere(paras, (runs) => runs[0]?.type === 'strong');
+  const opening = paras.slice(0, firstStage).map((runs) => plain(runs));
+  const closing = paras.slice(lastStage + 1);
+  const glyphs = stages.every((stage) => STAGE_GLYPHS[stage.id]);
+  return (
+    <OfferSheet
+      {...head(b)}
+      arrangement="list"
+      lead={opening.length > 0 ? opening : undefined}
+      items={stages.map((stage) =>
+        glyphs ? { ...stage, icon: STAGE_GLYPHS[stage.id] } : stage,
+      )}
+      note={
+        closing.length > 0 ? (
+          <ContentSectionText>
+            {closing.map((runs, index) => (
+              <p key={index} dangerouslySetInnerHTML={{ __html: inline(runs) }} />
+            ))}
+          </ContentSectionText>
+        ) : undefined
+      }
+    />
+  );
+}
+
+/**
+ * "Tcules can work inside the product organisation you already have": a split. The heading at the
+ * left; at the right the argument as authored, then the two clients who say it as a pair of compact
+ * quotes (claim leads, proof supports, owner 15 Oct 2026), then the closing sentence about how an
+ * engagement starts. Words only in a full-width column ran every line past 150 characters.
+ */
+function WorkingModel({ b }: BandProps) {
+  const firstQuote = b.blocks.findIndex((block) => block.type === 'quote');
+  const lastQuote = lastIndexWhere(b.blocks, (block) => block.type === 'quote');
+  if (firstQuote < 0)
+    return (
+      <ContentSection {...head(b)}>
+        <GenericBlocks band={b} />
+      </ContentSection>
+    );
+  const before = paragraphRuns(b.blocks.slice(0, firstQuote));
+  const after = paragraphRuns(b.blocks.slice(lastQuote + 1));
+  const quotes = b.blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'quote' }> => block.type === 'quote',
+  );
+  /* Two or three voices are peers (Proof `group`); any other count stacks. */
+  const voices = quotes.length <= 3 ? quotes.map(proofQuote) : [];
+  const prose = (paras: InlineRun[][]) =>
+    paras.length > 0 ? (
+      <ContentSectionText>
+        <Layout rowGap="text">
+          {paras.map((runs, index) => (
+            <p key={index} dangerouslySetInnerHTML={{ __html: inline(runs) }} />
+          ))}
+        </Layout>
+      </ContentSectionText>
+    ) : null;
+  return (
+    <ContentSection {...head(b)} arrangement="beside" data-band="C-text">
+      {prose(before)}
+      {voices[0] && voices[1] ? (
+        <Proof
+          arrangement="group"
+          quotes={voices[2] ? [voices[0], voices[1], voices[2]] : [voices[0], voices[1]]}
+        />
+      ) : (
+        <Layout rowGap="stack">
+          {quotes.map((block, index) => (
+            <QuoteCompact key={index} block={block} />
+          ))}
+        </Layout>
+      )}
+      {prose(after)}
+    </ContentSection>
+  );
+}
+
 /* ── The band table: the content team's ids, each to its renderer ─────────────────── */
 
 /** Home's own bands (plan.ts `TEMPLATE_BANDS['/']`); every other band renders as the plan names it. */
@@ -889,7 +1036,12 @@ const HOME_BANDS: Readonly<
   Record<(typeof TEMPLATE_BANDS)['/'][number], ComponentType<BandProps>>
 > = {
   'client-recognition': Recognition,
-  'why-tcules': WhyTcules,
+  /* The 4 Nov 2026 copy's ids. */
+  recognition: SituationDoors,
+  'product-decision-model': DecisionModel,
+  'flagship-work': SelectedWork,
+  'social-proof': ClientVoices,
+  'working-model': WorkingModel,
   'product-situations': Situations,
   'product-design': OneStudio,
   'selected-work': SelectedWork,

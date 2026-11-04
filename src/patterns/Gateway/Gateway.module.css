@@ -496,3 +496,25 @@
 .doorArrow {
   flex: none;
 }
+
+/* A door's closing sentence (`foot`): the words' size, its service links in the link ink, the
+   `block` step under its hairline. */
+.doorFoot {
+  padding-block-start: var(--gap-block);
+  font: var(--gwy-path-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--gwy-body-ink);
+}
+
+.doorFoot a {
+  font-weight: var(--font-weight-semibold);
+  color: var(--gwy-door-link-ink);
+  text-decoration: none;
+}
+
+.doorFoot a:hover {
+  color: var(--gwy-door-link-ink-hover);
+  text-decoration: underline;
+  text-decoration-thickness: var(--gwy-rule-width);
+  text-underline-offset: var(--gwy-door-underline-offset);
+}

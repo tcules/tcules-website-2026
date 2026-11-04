@@ -416,7 +416,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
 export const TEMPLATE_BANDS = {
   '/': [
     'client-recognition',
-    'why-tcules',
+    'recognition',
+    'product-decision-model',
+    'flagship-work',
+    'social-proof',
+    'working-model',
     'product-situations',
     'product-design',
     'selected-work',

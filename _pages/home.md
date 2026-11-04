@@ -4,29 +4,39 @@ slug: home
 page_name: Homepage
 page_type: page
 seo:
-  title: 'Product Design Studio for SaaS & Complex Software | Tcules'
-  description: 'A product design studio for SaaS, creating ambitious new software, making established products better and designing AI features people can trust.'
+  title: Product Design Studio for SaaS & Complex Software | Tcules
+  description: Tcules is a digital product design studio for teams creating new software, modernising established products and designing complex or AI-enabled experiences.
   canonical: https://www.tcules.com/
   robots: index,follow
 social:
-  og_title: 'Product Design Studio for SaaS & Complex Software | Tcules'
-  og_description: 'A product design studio for SaaS, creating ambitious new software, making established products better and designing AI features people can trust.'
-  og_image: IMAGE_ASSET_REQUIRED
-  og_image_alt: Tcules, a digital product design studio for SaaS and complex software.
+  og_title: Product Design Studio for SaaS & Complex Software | Tcules
+  og_description: Tcules is a digital product design studio for teams creating new software, modernising established products and designing complex or AI-enabled experiences.
+  og_image: null
+  og_image_alt: null
   og_type: website
   og_url: https://www.tcules.com/
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Product Design Studio for SaaS & Complex Software | Tcules'
-  twitter_description: 'A product design studio for SaaS, creating ambitious new software, making established products better and designing AI features people can trust.'
-  twitter_image: IMAGE_ASSET_REQUIRED
+  twitter_title: Product Design Studio for SaaS & Complex Software | Tcules
+  twitter_description: Product Design for new and established software, with AI Product UX, Design Systems, Design Engineering and Software Development when the product needs them.
+  twitter_image: null
 search_context:
   primary_intent: product design studio for SaaS and complex software
   primary_buyer_question: Can Tcules help us make a consequential product move and carry the right decisions far enough to become real?
   supporting_questions:
+  - When should a product team bring in Tcules?
   - Is Tcules a UI/UX design agency?
-  - Do you only work with SaaS companies?
+  - Does Tcules only work with SaaS companies?
+  - Can Tcules work alongside our existing product, design or engineering team?
+  - Can an engagement start with one workflow or product problem?
+  - Does Tcules only design software, or can it build it too?
+  - What is the difference between Product Design and Product Modernisation?
+  - What does Tcules mean by AI-native Product Design?
+  - How is AI-native Product Design different from AI Product UX?
+  - What if we do not know which service we need?
+  - Can Tcules modernise an established product without redesigning everything?
+  - How does Tcules work with teams outside India?
   key_entities:
   - Tcules
   - Product Design
@@ -37,15 +47,7 @@ search_context:
   - AI Product UX
   - Design Engineering
   - Software Development
-  primary_query: 'product design studio for SaaS'
-  h1_mode: brand
-  secondary_queries:
-  - 'digital product design studio'
-  - 'product design studio'
-  - 'is Tcules a UI/UX design agency'
-  - 'do you only work with SaaS companies'
-  - 'who can design and build a complex SaaS product end to end'
-  - 'what should a SaaS company look for in a product design partner'
+  primary_query: product design studio for SaaS
 navigation:
   breadcrumb:
   - name: Home
@@ -56,105 +58,92 @@ conversion:
   visible_fields:
   - Email
   - What are you working on?
-  - Product or company URL
+  - Product/company URL (optional)
   optional_fields:
-  - Product or company URL
-  submit_label: Request a call
+  - Product/company URL (optional)
+  submit_label: Send enquiry
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Thanks. Your request has reached us.
-    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
+    heading: Your enquiry has reached us.
+    body: A practitioner will reply within one business day.
     retain_entered_data: true
-    post_submit_scheduling: optional_only_if_runtime_supports
+    post_submit_scheduling: disabled
   processor: cms_record_and_notify
 render:
   band_order:
-  - client-recognition
-  - product-situations
-  - product-design
-  - selected-work
-  - why-tcules
-  - testimonials
-  - how-we-work-together
-  - people
-  - ai-native-practice
-  - insights
-  - expertise
+  - recognition
+  - product-decision-model
+  - product-design-territory
+  - ai-now
+  - flagship-work
+  - working-model
+  - social-proof
+  - public-practice
   - faq
   - enquiry
 page_composition:
   client_recognition:
     component_type: client_logo_strip
     placement: after_hero
-    clients: &id001
+    clients:
     - Doodle
-    - Ringier
-    - JoVE
-    - Benchmark Gensuite
     - Dealpath
-    - Primelis
+    - Benchmark Gensuite
     - Eden AI
-    - Knovos
-    - DataBahn
-    - Chestnut
-    - ConnectX
-    - CuramCare
+    - Omny AI
+    - Primelis
     asset_policy: Use approved client logo assets; render names as fallback; never invent a logo asset.
-  visual_plan: thesis_hero_two_doors_one_practice_three_case_artefacts_why_voices_ways_to_start_studio_people_ai_thinking_enquiry
+  visual_plan: product_decision_survival_model_plus_inspectable_case_artifacts
   media_bindings:
   - id: home_doodle_object_model
     role: proof
-    supports_section: selected-work
+    supports_section: flagship-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
     source: current public Tcules case media
     alt_intent: Doodle product model connecting meeting priority, availability and scheduling behaviour
     status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: home_team
-    role: people
-    supports_section: people
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186423/Image_3_ef562c4bc0.webp
-    source: Tcules studio media (also on About)
-    alt_intent: Tcules team together outside the Ahmedabad studio
-    status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: home_studio_review
-    role: people
-    supports_section: people
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186528/Image_2_6b09ca7e30.webp
-    source: Tcules studio media (also on About)
-    alt_intent: Tcules designers and engineers in an in-studio review session
+  - id: home_dealpath_workflow
+    role: proof
+    supports_section: flagship-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    source: current public Tcules case media
+    alt_intent: Dealpath workflow redesign that searches existing deals before creating a new record
     status: BOUND_EXISTING_PUBLIC_ASSET
   - id: home_benchmark_scope_selector
     role: proof
-    supports_section: selected-work
+    supports_section: flagship-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
     source: current public Tcules case media
-    alt_intent: Redesigned Benchmark Gensuite scope selector separating Browse, Recents and Favourites, and Nearby
+    alt_intent: Benchmark Gensuite scope selector separating different ways of finding and defining scope
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: home_eden_unified_search
+    role: proof
+    supports_section: flagship-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
+    source: current public Tcules case media
+    alt_intent: Eden AI workflow builder showing unified search and AI-assisted creation
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - DRAFT-DOODLE-RESEARCH
-  - DRAFT-CONNECTX-SCENARIOS
-  - DRAFT-PRIMELIS-TEAM
-  - DRAFT-EDENAI-SPECS
-  - DRAFT-CURAMCARE-RESEARCH-BUILD
-  - CLUTCH-RINGIER-SAILER
-  logo_client_ids: *id001
-  trust_module_policy: required_commercial_relation_module
-  external_review:
-    source: Clutch
-    rating: '4.8'
-    review_count: 13
-    checked: '2026-10-08'
-    reverify: on launch day
+  - CL-VIDEOPLASTY-DECISIONS
+  - UW-JOVE-INTEGRATION
+  - FP-DOODLE-MVP
+  - FP-EDEN-DEVELOPERS
+  - UW-SRC-P02
+  logo_client_ids:
+  - Doodle
+  - Dealpath
+  - Benchmark Gensuite
+  - Eden AI
+  trust_module_policy: optional_permission_gated_dedupe_body
 structured_data:
   types:
-  - Organization
+  - Organisation
   - WebSite
   - WebPage
-  - FAQPage
   organization_id: https://www.tcules.com/#organization
   website_id: https://www.tcules.com/#website
 release:
-  content_state: PILOT_DRAFT_V2_2026-10-08
+  content_state: VNEXT_WORKING
   site_release_state: SITE_RELEASE_HOLD
   composition: NOT_COMPOSITION_VALIDATED
   production: NOT_PRODUCTION_VALIDATED
@@ -165,231 +154,235 @@ release:
   - IMAGE_ASSET_REQUIRED
 content_governance:
   language: en-GB
-  direct_quote_policy: preserve_verbatim_source_checked_2026-10-08
-  governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: source-pages-1-oct (1 Oct 2026) with Phase 3 candidate (8 Oct 2026) for Home; owner-review draft 12 Oct 2026 (C18b, two doors)
+  direct_quote_policy: preserve_verbatim
+  governing_rules: VNext Phase 1 operating system and proof curation
+  reconstruction_phase: VNext Phase 2A
 ---
 
-*Product design studio for SaaS*
+*Digital product design studio*
 
-# Design for what software is becoming
+# Product design for SaaS and complex software
 
-Tcules is a digital product design studio for SaaS and other ambitious software. As AI-built products look more alike, we help founders and product teams stand apart.
+Tcules is a digital product design studio for teams making ambitious software moves: creating new products, modernising established ones and bringing AI into useful product work. SaaS and complex software are familiar terrain.
 
-[A new product or an AI-built prototype](/services/mvp-development) · [An established product customers find hard](/services/product-modernisation) · [AI features people don't rely on yet](/services/ai-product-ux)
+Product Design sits at the centre. We help work out what the product should become, make difficult workflows and systems clearer, and carry important decisions into working software when the engagement calls for it.
 
-[Book a call](#enquiry)
+When the product needs it, Design Systems, AI Product UX, Design Engineering and Software Development extend that responsibility.
 
-**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+[Start a conversation](#enquiry)
 
-## Some of the teams we've worked with {#client-recognition}
+**More than 90 projects · 19 countries · Founded 2017 in Ahmedabad**
 
-[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Ringier](/case-studies/news-app-ux-shared-design-media-group-ringier) · JoVE · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · Primelis · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · Knovos · DataBahn · Chestnut · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · CuramCare
+*Selected client work: Doodle · Dealpath · Benchmark Gensuite · Eden AI · Omny AI · Primelis*
 
-## Where is your product today? {#product-situations}
+## Some products need a better next chapter. Others are still becoming products. {#recognition}
 
-### An idea, or a prototype built with AI
+### An established product has more history than the next screen can solve
 
-*New product*
+Customers have learned its habits. Teams have built workarounds around it. New modules sit beside old ones. A Design System may cover components without carrying enough of the product logic. AI may be entering a workflow designed for people making every decision themselves.
 
-You may have a deck, or a prototype built over a weekend. We keep what works and design a first release customers choose.
+The useful first question is rarely *what should the new UI look like?*
 
-Example: [Doodle's enterprise MVP](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), reshaped by research.
+It is what should stay, what has become limiting, and what the product needs to make possible next.
 
-- [Design and launch your MVP](/services/mvp-development)
-- [Check whether your prototype is ready for customers](/audits/prototype-readiness-review)
+That is the territory of [Product Modernisation](/services/product-modernisation), [Design Systems](/services/design-systems), [AI Product UX](/services/ai-product-ux) and focused Product Design work.
 
-### A product customers rely on, ready for its next step
+### A new product starts with an opportunity, not a specification
 
-*Established product*
+A founder may arrive with an idea, a business problem or a manual workflow. A team may bring a specification, a Figma prototype, a working prototype or an AI-generated application. None of these starting points has to be a complete product brief. The work is to find the product model, the critical workflow and the evidence needed for a first serious release.
 
-We find what holds it back and redesign it in stages, so customers keep their bearings.
+The job is to turn that uncertainty into a product people can understand, test and build, with a first release that is deliberate enough to learn from rather than simply small.
 
-Example: [Benchmark Gensuite's modern patterns](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), tried in working prototypes first.
+That is the territory of [New Product Design & First Release](/services/mvp-development) and [Product Design](/services/product-design).
 
-- [Redesign how your product works](/services/product-design)
-- [Modernise a product customers rely on](/services/product-modernisation)
+## A good product decision has to survive the whole product {#product-decision-model}
 
-### AI that works, but people hesitate to use it
+A useful product decision rarely lives in one screen.
 
-*AI features*
+It begins in the reality of the work and has to remain coherent as it becomes a product model, an interaction, a shared system and working software.
 
-We design how people check, correct and override what the AI does, so they can rely on it.
+**Product reality** asks what is actually true: how people work, which constraints matter, what the existing product already teaches, and where the uncertainty sits.
 
-Example: the [review feed we designed for BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), where the engineer who signs off can trace and overrule each AI check.
+**The product model** decides what the software needs to represent: roles, objects, relationships, rules, states, permissions and workflow.
 
-- [Design AI features people trust](/services/ai-product-ux)
-- [Audit an AI feature before more people rely on it](/audits/ai-product-ux-readiness)
+**The interaction** decides what a person should see, understand, choose, review, change or recover from.
 
-[Book a call](#enquiry)
+**The shared system** decides which recurring product choices should become common semantics, patterns and components instead of being reinvented locally.
 
-## One studio, from the first question to working software {#product-design}
+**Working software** tests whether those decisions still hold with real components, data, responsive behaviour and technical constraints.
 
-Product Design is the centre of everything we do: research, product thinking, interaction design and visual craft, applied to the people and systems behind the screens.
+**Real use** supplies the next evidence. A prototype can contradict the model. Code can expose an interaction assumption. Users can reveal that the variable a team thought it was optimising was not the one that mattered.
 
-Around it sit design systems that keep a growing product coherent, design engineers who explore the hardest interactions in code, and developers who build what the design promises. Each makes the others better, because nobody has to hand the thinking over to a stranger.
+That is why Product Design at Tcules is not a handoff stage.
 
-[Product Design](/services/product-design) · [Design Systems](/services/design-systems) · [Design Engineering](/services/design-engineering) · [Software Development](/services/software-development)
 
-## Selected work: new products, AI features and a modernised suite {#selected-work}
+## How the work changes with the question {#product-design-territory}
 
-### Doodle: research that redrew an enterprise MVP
+Tcules does not run every product through the same sequence of activities.
 
-Research changed the MVP: it now shows how dependable each free meeting slot is.
+If the reality of the work is unclear, research may be the highest-value move.
+
+If roles, records, rules or relationships are unclear, product modelling and workflow design may matter more than polished screens.
+
+If behaviour is difficult to reason about, a prototype can make the choice testable.
+
+If the same decisions keep being remade, a Design System can turn them into shared product infrastructure.
+
+If the question only becomes visible with real components, data or browser behaviour, Design Engineering can move the design work into code.
+
+The method changes because the product question changes.
+
+[Explore Product Design](/services/product-design)
+
+## AI in our practice and in your product {#ai-now}
+
+AI is increasing how much material a capable product team can inspect, explore and produce.
+
+At Tcules, structured product context, AI-assisted research, agents and workflow automation help with bounded parts of inspection, synthesis and exploration. Prototypes, design-system intelligence, code-adjacent design, software development, evaluation and QA bring those decisions closer to working products.
+
+That does not make every generated output more valuable.
+
+It makes context and evaluation more important. AI expands what the practice can produce and examine. Human judgement remains accountable for important product decisions and accepted work.
+
+**AI-native Product Design** describes how Tcules is changing its own practice.
+
+**AI Product UX** is a different problem: how AI inside the client's product should recommend, generate or act; what evidence it should show; what authority it should have; where a person reviews the result; and what happens when it is wrong.
+
+[Read about AI-native Product Design](/how-we-work/ai-native-product-design) and [AI Product UX](/services/ai-product-ux).
+
+## Four pieces of work show four different kinds of Product Design {#flagship-work}
+
+### Doodle: research changed what “available” meant
+
+The original scheduling problem could be framed as finding free calendar slots.
+
+Research showed that meeting type, priority and tentative availability affected whether a time was actually dependable. The product needed a richer model before the interface could responsibly compare possible meeting times.
+
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-### ConnectX: ask a question, get the right energy dashboard
+### Dealpath: one interface action exposed a deeper product assumption
 
-Facilities operators, finance leads and sustainability teams ask ConnectX a question in plain words, and it builds the dashboard each of them needs.
+A listings workspace let acquisitions teams assess opportunities, but *Add to pipeline* assumed the listing should become a new deal.
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+Tcules changed the sequence so a person could search for an existing deal before creating another record. The visible change was a workflow. The underlying change was the assumption the product made about the object.
 
-### Benchmark Gensuite: a modern suite that keeps customers' habits
+*[Use the Dealpath workflow artefact.]*
 
-Specialists run environment, health and safety work on Benchmark Gensuite every day, and they have built fast habits on its interface. We made coded prototypes of shared interface patterns and a three-view scope selector, so Benchmark could judge each modern choice against those habits before wider release.
+[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+### Benchmark Gensuite: modernisation had to respect learned behaviour
+
+A mature enterprise suite needed more current patterns without treating the product as a blank slate.
+
+Tcules worked through shared frontend patterns and scope-selection behaviour, using coded prototypes where the browser could reveal implementation questions while the product decision was still open.
+
+*[Use the Benchmark scope-selector or coded-prototype artefact.]*
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Eden AI: three ways to start a workflow, one search box
+### Eden AI: three valid ways to start became one coherent product task
 
-Developers can start from a template, from the AI or from a blank canvas. We brought all three into one search box that recognises which they mean.
+Eden AI's workflow builder supported template discovery, AI-assisted creation and a blank start.
+
+Tcules connected those modes through one adaptive entry surface while keeping search and AI assistance distinct. Discovery, preview, documentation, configuration and testing could remain part of one task instead of becoming separate product paths.
+
+*[Use the Eden AI unified-search artefact.]*
 
 [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-### Omny AI: suggestions people check before they accept
+## Tcules can work inside the product organisation you already have {#working-model}
 
-The content area now starts empty, each AI suggestion waits for a person's click, and colour shows what the AI wrote and what a person added. Omny AI was acquired by Primelis.
+A client does not need to create a separate agency environment around Tcules.
 
-[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+A main practitioner can work inside the existing product tools, Design System, codebase and review rhythm. Specialist capability joins where the product genuinely needs it.
 
-### Phoenix: two trade models, prototyped for testing
+That matters because consequential product decisions appear continuously: in user evidence, edge cases, support history, components, engineering constraints and the running product.
 
-Working within the design team of an on-chain crypto exchange, we made two complete clickable prototypes of competing trade models for testing, then a design system its engineers could build from.
+> “The thought process behind every single decision they make. The team was skilled and knowledgeable in the workflow.”  
+> **Eduard Stinga, Founder, VideoPlasty**
 
-[Read the Phoenix case](/case-studies/fintech-ux-design-crypto-exchange-phoenix)
+> “The Tcules team integrated well with our internal PMs and designers, contributing meaningfully to high-fidelity design deliverables that most often met our product standards.”  
+> **Dhanur Aashray Majety, Director, Product Management, JoVE**
 
-[See all case studies →](/case-studies)
+An engagement can begin with one consequential workflow, an audit, a new-product question or a broader Product Design responsibility. It should become larger only when the product gives a reason for it to become larger.
 
-## Why founders and product teams choose Tcules {#why-tcules}
+## What clients notice {#social-proof}
 
-- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
-
-- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
-
-- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
-
-- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
-
-- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
-
-- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
-
-[See why teams choose Tcules →](/why-tcules)
-
-## What clients say {#testimonials}
-
-> “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
+> “Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
 > **Stephanie Leue, Doodle**
 
-> “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
-> **Pratik Ghoshal, CEO, ConnectX**
-
-> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
-> **Clément Contamine, CPO, Primelis**
-
-> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> “Our developers enjoyed working on the platform with the right UI/UX specs.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
-> **Jody O'Neill, CEO & Co-founder, CuramCare**
+> “Our aim was to build a consumer-grade UI / UX for our enterprise application. They helped us design what we were looking for. We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
+> **Ashok Mohanty, Founder, Auxentios**
 
-> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
-> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-## Three ways to work with us {#how-we-work-together}
 
-*Optional first step*
+## The practice should leave useful evidence in public {#public-practice}
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+A studio should be easier to evaluate than a sales page.
 
-*A known goal*
+Tcules publishes [case studies](/case-studies), practical [tools](/tools), product-design [guides and insights](/insights) and work from the [Future Interfaces Lab](/future-interfaces-lab).
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+Those surfaces matter only when they contain something inspectable or useful in their own right. They are not substitutes for client work; they are additional evidence of how the practice thinks and makes.
 
-*A roadmap that keeps moving*
+## Frequently asked questions {#faq}
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+### When should a product team bring in Tcules?
 
-*Yours:* You keep the product decisions, and what we make is yours once it's paid for.
+Bring in Tcules when the product still needs consequential decisions, not simply more screen production. That may be an established product that needs to modernise, simplify or add AI without losing what still works, or a new product whose model, workflow and first-release boundary are still unsettled.
 
-*Working hours:* We overlap four to five hours with US working days, and extend that whenever the work needs it.
+### What kind of product teams does Tcules work best with?
 
-Not sure which suits you? Tell us about the product, and we'll suggest one.
-
-[Book a call](#enquiry) · [See how we work →](/how-we-work)
-
-## The people behind Tcules {#people}
-
-Tcules is a studio of product designers, design engineers and developers working side by side in Ahmedabad, a city with a long tradition of design. Since 2022 the whole team has worked from one studio. Work goes up on the wall, gets questioned in reviews and gets better because a designer and an engineer looked at it together.
-
-The same people explore new ideas in our Future Interfaces Lab, from AI-assisted design reviews to workflows that run across several AI models.
-
-[See the studio →](/about)
-
-## What our designers can now do with AI {#ai-native-practice}
-
-Our designers can have AI check your live product screen by screen and list where it no longer matches its design system. A designer then judges which differences matter, tries the correction in working code and signs it off.
-
-More of your product gets examined, with people making every decision. [See a typical AI-assisted design run](/how-we-work/ai-native-product-design)
-
-## Selected thinking from the studio {#insights}
-
-Pieces that show how we think, written from our own work.
-
-- **[AI confidence scores in UX: design the review step people control](/insights/confidence-scores-dont-fix-trust-when-review-step-never).** Why a number on an AI answer earns little trust, and the review step that does, drawn from three AI products we designed.
-
-- **[CPQ UX design: quoting software sales reps choose over spreadsheets](/insights/cpq-ux-design).** How to design quoting software around the quote itself, from research with six specialist roles.
-
-- **[When to hire a design system consultant, and how to judge one](/insights/when-to-hire-a-design-system-consultant).** The signs a design system needs outside help, and what good help should deliver.
-
-- **[Eden AI's Samy Melaine on building AI products for users: podcast](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo).** A client's founder on building AI around the work users need done.
-
-## Industries we know well {#expertise}
-
-[B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software) · [AI products and developer tools](/expertise/ai-products-developer-tools) · [Data and analytics products](/expertise/data-analytics-decision-products) · [Commerce and transactional products](/expertise/commerce-transactional-products) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [MarTech and SalesTech](/expertise/martech-salestech) · [See all industries →](/expertise)
-
-## Questions SaaS teams ask before hiring a product design studio {#faq}
-
-### How do we start, and what does it cost?
-
-Send a few lines and we'll reply to arrange a call. You can start small, with an audit or a pilot on one flow at a fixed price agreed up front. Defined projects are priced on their scope, and ongoing work has no minimum term.
-
-### Can you work with our own designers and engineers?
-
-Yes. Our designers work inside your files, design system and review rhythm, so your team sees the work as it happens. Your engineers can build from our designs, or our developers can build alongside them.
+Tcules tends to fit growth-stage and post-PMF SaaS teams, established software companies making a consequential product change, and founders or product teams creating new software. The stronger predictor of fit is product complexity and the importance of the decision, not a particular company size.
 
 ### Is Tcules a UI/UX design agency?
 
-Tcules is a digital product design studio in Ahmedabad, India, founded in 2017. We do UI and UX design, visual design included, plus the research, product thinking and engineering around it, for SaaS and other ambitious software.
+Tcules does UX and UI design, but describes itself as a digital product design studio because the work often begins before interface production and can continue after it. Research, product modelling, workflow design, interaction, UI, Design Systems and Design Engineering can all sit inside one Product Design responsibility.
 
-### Do you only work with SaaS companies?
+### Does Tcules only work with SaaS products?
 
-SaaS is our particular focus, and we also design business applications, data-rich interfaces, consumer products and AI products, at any stage from new idea to established platform.
+No. SaaS is an important part of Tcules' work, but the studio has also worked on marketplaces, operational software, commerce products, AI products and other digital platforms. The common thread is software with meaningful workflows, roles, rules, data, systems or AI behaviour.
 
-### Can Tcules design and build a SaaS product end to end?
+### Can Tcules work alongside our existing product, design or engineering team?
 
-Yes. Product Design shapes what the product does, Design Engineering takes it into code, and Software Development carries it through frontend, backend, integrations, testing and release. You choose where our part stops: designs for your engineers, a finished interface or launch-ready software.
+Yes. Tcules can own a defined product problem or add experienced Product Design capability inside an existing team. The work can happen within the client's tools, Design System, codebase and review rhythm rather than through a separate agency process.
 
-### Does Tcules design AI features people trust?
+### Can an engagement start with one workflow or product problem?
 
-Yes. Through AI Product UX we design copilots, agents, AI search and the review steps people use to check and correct AI work. Recent examples include BuildTwin's workspace for reviewing AI quality checks and Eden AI's search, which makes clear whether people are searching or asking the AI.
+Yes. A bounded product problem is often enough to begin. The engagement can resolve that area and stop, or expose dependencies that justify a wider scope. Tcules does not require a broad redesign before it can be useful.
 
-## Tell us what you're building {#enquiry}
+### Does Tcules only design software, or can it build it too?
 
-An idea, a prototype or a product with years behind it. One line is enough to start.
+Product Design is the organising discipline. Some engagements end with research, a product model, a prototype or implementation-ready design. When the agreed scope calls for working software, Tcules can own Design Engineering and Software Development through a first serious release or a defined part of an established product. The client retains its commercial, legal, regulatory and final business decisions.
 
-**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+### What is the difference between Product Design and Product Modernisation at Tcules?
+
+Product Design is the core practice used to understand, shape and resolve software-product decisions. Product Modernisation applies that practice to established software where existing user habits, product rules, technical constraints and accumulated decisions affect what can safely change.
+
+### What does Tcules mean by AI-native Product Design?
+
+AI-native Product Design describes how Tcules is changing its own practice as agents, automation and purpose-built AI can carry more bounded parts of inspection, synthesis, exploration, prototyping, code and verification. The practitioner remains responsible for product context, evaluation and the decision that moves forward.
+
+### How is AI-native Product Design different from AI Product UX?
+
+AI-native Product Design is about **how Tcules works**. AI Product UX is about **how AI behaves inside the client's product**. AI Product UX deals with authority, evidence, uncertainty, review, correction, recovery and the relationship between machine action and human responsibility.
+
+### What if we know the product has a problem but do not know which Tcules service we need?
+
+You do not need to diagnose the service before contacting Tcules. Describe the product, the symptom, what the team already knows and where the decision has become difficult. Tcules can determine whether the useful starting point is Product Design, modernisation, a system problem, an AI interaction problem, engineering continuity or an assessment.
+
+### How does Tcules work with teams outside India?
+
+Tcules works from its Ahmedabad studio with clients across markets and time zones. Working hours are agreed for useful overlap with the people making product decisions on the client side while the day-to-day studio practice remains together in Ahmedabad.
+
+## Tell us what is changing {#enquiry}
+
+You do not need a finished brief or the correct service name.
+
+Tell us what the product is trying to become, what already exists and where the decision has become difficult.
 
 **Enquiry form**
 
@@ -397,6 +390,4 @@ An idea, a prototype or a product with years behind it. One line is enough to st
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Request a call
-
-**After sending:** We'll reply within one business day to arrange the call.
+**Submit:** Send enquiry

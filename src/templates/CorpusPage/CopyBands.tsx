@@ -2043,7 +2043,11 @@ function hostedRun(page: CorpusPage | undefined, band: CorpusBand): CorpusBand[]
   const table = content(band).find((block): block is TableBlock => block.type === 'table');
   if (!table) return [];
   const run: CorpusBand[] = [];
-  for (let next = at + 1; next < bands.length && isPlainToolGroup(bands[next] as CorpusBand); next++)
+  for (
+    let next = at + 1;
+    next < bands.length && isPlainToolGroup(bands[next] as CorpusBand);
+    next++
+  )
     run.push(bands[next] as CorpusBand);
   const tools = run.flatMap((other) => toolGroup(other).tools);
   const names = table.rows.map((row) => plain(row[0] ?? []).trim());
@@ -2211,7 +2215,9 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
     const rest = blocks.filter((block) => block !== table);
     const [leadBlock, ...more] = rest;
     const leadText =
-      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs) ? plain(leadBlock.runs) : undefined;
+      leadBlock?.type === 'paragraph' && !hasLink(leadBlock.runs)
+        ? plain(leadBlock.runs)
+        : undefined;
     const intro = leadText ? more : rest;
     return (
       <ContentSection

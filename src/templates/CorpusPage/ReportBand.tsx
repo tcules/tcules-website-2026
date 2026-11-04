@@ -62,7 +62,8 @@ function trailingCaseLink(
 ): { link: LinkRun; rest: InlineRun[] } | undefined {
   const trimmed = trimEnd(runs);
   const last = trimmed.at(-1);
-  if (last?.type !== 'link' || !last.href.startsWith(`${ROUTES.caseStudies}/`)) return undefined;
+  if (last?.type !== 'link' || !last.href.startsWith(`${ROUTES.caseStudies}/`))
+    return undefined;
   return { link: last, rest: trimEnd(trimmed.slice(0, -1)) };
 }
 
