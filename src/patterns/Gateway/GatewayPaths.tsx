@@ -56,6 +56,12 @@ export type GatewayPathsProps = {
   paths: readonly GatewayPath[];
   /** Default `graphic`. See `GatewayPathsForm`. */
   form?: GatewayPathsForm;
+  /**
+   * `cards` only: the set's close, a `stack` (48) under the cards (owner, 4 Nov 2026: the lone button
+   * "feels orphaned"): a line for whoever is between the doors and the band's ask, composed by the
+   * caller, as one centred row from 768, the line then the action; stacked and centred below it.
+   */
+  close?: { line?: string; action: ReactNode };
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
@@ -80,71 +86,87 @@ export type GatewayPathsProps = {
 export function GatewayPaths({
   paths,
   form = 'graphic',
+  close,
   titleAs = 'h3',
   className,
 }: GatewayPathsProps) {
   const Title = titleAs;
   if (form === 'cards') {
     return (
-      /* Three items, one column below 1024 (three ~220 cards at 768 left each title a word a line).
-         Each item is its card and, outside the card's box, its example (owner, 4 Nov 2026, variant
-         G): from 1024 the items share three rows (subgrid) and each card spans the first two, so
-         the heads, the ways in and the examples each start on one line across the set whatever
-         their lengths. In the card the head and the ways in are a `stack` (48) apart, open air under
-         the words; the example sits a `text` (16) under its card, on the card's outer edge. Items in
-         a set are a `gutter` apart, and a `stack` when they stack, so an example never reads as the
-         next card's. */
-      <Layout
-        as="ul"
-        columns={{ base: 1, lg: 3 }}
-        colGap="gutter"
-        /* Stacked items a `stack` apart when an example sits under each card, so it never reads as
+      <Layout rowGap="stack" className={className}>
+        {/* Three items, one column below 1024 (three ~220 cards at 768 left each title a word a
+        line). Each item is its card and, outside the card's box, its example (owner, 4 Nov
+        2026, variant G): from 1024 the items share three rows (subgrid) and each card spans the
+        first two, so the heads, the ways in and the examples each start on one line across the
+        set whatever their lengths. In the card the head and the ways in are a `stack` (48)
+        apart, open air under the words; the example sits a `text` (16) under its card, on the
+        card's outer edge. Items in a set are a `gutter` apart, and a `stack` when they stack,
+        so an example never reads as the next card's. */}
+        <Layout
+          as="ul"
+          columns={{ base: 1, lg: 3 }}
+          colGap="gutter"
+          /* Stacked items a `stack` apart when an example sits under each card, so it never reads as
            the next card's; otherwise the card set's own `gutter`. */
-        rowGap={paths.some((path) => path.example) ? 'stack' : 'gutter'}
-        /* A third shared row only when an example sits under a card; without one it would leave its
+          rowGap={paths.some((path) => path.example) ? 'stack' : 'gutter'}
+          /* A third shared row only when an example sits under a card; without one it would leave its
            track and seam under every card. */
-        shareRows={paths.some((path) => path.example) ? 3 : 2}
-        className={cx(styles.root, className)}
-      >
-        {paths.map((path) => (
-          <Layout as="li" key={path.id} rowGap="text">
-            <Layout spanRows={2} rowGap="stack" className={styles.door}>
-              <Layout rowGap="text">
-                {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
-                <Title className={styles.doorTitle}>{path.title}</Title>
-                {path.body.map((paragraph, index) => (
-                  <p key={index} className={styles.doorBody}>
-                    {paragraph}
-                  </p>
-                ))}
-              </Layout>
-              {/* The ways in: one ruled row each, the whole row the link, its arrow at the row's
+          shareRows={paths.some((path) => path.example) ? 3 : 2}
+          className={styles.root}
+        >
+          {paths.map((path) => (
+            <Layout as="li" key={path.id} rowGap="text">
+              <Layout spanRows={2} rowGap="stack" className={styles.door}>
+                <Layout rowGap="text">
+                  {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
+                  <Title className={styles.doorTitle}>{path.title}</Title>
+                  {path.body.map((paragraph, index) => (
+                    <p key={index} className={styles.doorBody}>
+                      {paragraph}
+                    </p>
+                  ))}
+                </Layout>
+                {/* The ways in: one ruled row each, the whole row the link, its arrow at the row's
                   end. The rows close the card, so the card needs no action of its own. */}
-              <ul>
-                {path.links.map((link) => (
-                  <li key={link.href} className={styles.doorRow}>
-                    <a href={link.href} className={styles.doorLink}>
-                      <Cluster colGap="text" justify="between" align="center" nowrap>
-                        <span>{link.label}</span>
-                        <span className={styles.doorArrow} aria-hidden="true">
-                          <Icon name="arrow-right" />
-                        </span>
-                      </Cluster>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </Layout>
-            {path.example ? (
-              <Layout rowGap="tight">
-                {path.exampleLabel ? (
-                  <p className={styles.doorExampleLabel}>{path.exampleLabel}</p>
-                ) : null}
-                <p className={styles.doorExample}>{path.example}</p>
+                <ul>
+                  {path.links.map((link) => (
+                    <li key={link.href} className={styles.doorRow}>
+                      <a href={link.href} className={styles.doorLink}>
+                        <Cluster colGap="text" justify="between" align="center" nowrap>
+                          <span>{link.label}</span>
+                          <span className={styles.doorArrow} aria-hidden="true">
+                            <Icon name="arrow-right" />
+                          </span>
+                        </Cluster>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </Layout>
-            ) : null}
-          </Layout>
-        ))}
+              {path.example ? (
+                <Layout rowGap="tight">
+                  {path.exampleLabel ? (
+                    <p className={styles.doorExampleLabel}>{path.exampleLabel}</p>
+                  ) : null}
+                  <p className={styles.doorExample}>{path.example}</p>
+                </Layout>
+              ) : null}
+            </Layout>
+          ))}
+        </Layout>
+        {close ? (
+          <Cluster
+            justify="center"
+            align="center"
+            colGap="block"
+            rowGap="block"
+            stackUntil="md"
+            className={styles.doorClose}
+          >
+            {close.line ? <p className={styles.doorCloseLine}>{close.line}</p> : null}
+            {close.action}
+          </Cluster>
+        ) : null}
       </Layout>
     );
   }

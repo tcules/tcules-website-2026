@@ -86,6 +86,8 @@
      one-line row clears the 44 touch target (an inset inside the row, not a distance between two
      things); the underline sits 2 under the example's baseline, an optical offset. */
   --gwy-door-radius: var(--radius-16);
+  /* The set's closing line before its ask: the lead role (owner, 4 Nov 2026). */
+  --gwy-door-close-text: var(--text-lead);
   --gwy-door-title-text: var(--text-h4);
   --gwy-door-title-tracking: var(--text-h4-tracking);
   --gwy-door-example-text: var(--text-caption);

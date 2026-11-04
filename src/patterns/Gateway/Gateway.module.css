@@ -512,3 +512,15 @@
 .doorArrow {
   flex: none;
 }
+
+/* The set's close (`close`): the line centred, at the lead's role in the words' ink, its action after
+   it on the row from 768. */
+.doorClose {
+  text-align: center;
+}
+
+.doorCloseLine {
+  font: var(--gwy-door-close-text);
+  text-wrap: balance;
+  color: var(--gwy-body-ink);
+}
