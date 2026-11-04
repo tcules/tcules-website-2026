@@ -571,18 +571,23 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set<string>([]);
  * heading at the left, the claims down the right, one ruled row each led by its glyph (owner, 4 Nov
  * 2026: "the service page, expertise page, homepage are the north star").
  */
-const CLAIM_LIST: ReadonlySet<string> = new Set(['your-team', 'complex-software']);
+const CLAIM_LIST: ReadonlySet<string> = new Set([
+  'your-team',
+  /* Swapped with complex-software (owner, 4 Nov 2026: "swap the layouts … keeping the same position"). */
+  'design-to-code',
+  /* Untitled lines as list rows, each led by its glyph (owner, 4 Nov 2026: "this is list card"). */
+  'ai-native-practice',
+]);
 
 /**
  * Prose bands whose claims or lines are a set of cards under the head, each led by its glyph (owner,
  * 4 Nov 2026: "stop using project/case study images in sections … make the 2 items cards"; "3 cards,
  * one for each line"): the three-ways cards (EngagementOptions `cards`).
  */
-const CARD_SETS: ReadonlySet<string> = new Set([
-  'design-to-release',
-  'design-to-code',
-  'ai-native-practice',
-]);
+const CARD_SETS: ReadonlySet<string> = new Set(['design-to-release', 'complex-software']);
+
+/** Routes whose bands alternate tint and paper down to the quotes band (planOffer). */
+const ALTERNATING: ReadonlySet<string> = new Set(['/how-we-work']);
 
 /** Whether a prose band is a set of cards (`CARD_SETS`). */
 export const isCardSet = (bandId: string): boolean => CARD_SETS.has(bandId);
@@ -814,6 +819,20 @@ export function planOffer(
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
+
+  /* A page whose bands alternate grounds for rhythm (owner, 4 Nov 2026, /how-we-work: "lets use
+     alternating tint bands"): from the first band after the client marks to the quotes band, tint and
+     paper in turn, so two tints never touch; the form and the FAQ stay paper. */
+  if (ALTERNATING.has(page.route)) {
+    const from = planned.findIndex((unit) => unit.kind === 'recognition') + 1;
+    const to = planned.findIndex((unit) => unit.kind === 'quotes');
+    if (to > from) {
+      for (let index = from; index <= to; index += 1) {
+        const unit = planned[index];
+        if (unit) unit.surface = (to - index) % 2 === 0 ? 'tint' : 'paper';
+      }
+    }
+  }
 
   placeOnward(planned);
 

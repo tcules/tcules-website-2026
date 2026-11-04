@@ -2395,11 +2395,14 @@ export function TextBand({
   band,
   side = 'start',
   scenario,
+  surface,
 }: {
   page: CorpusPage;
   band: CorpusBand;
   side?: 'start' | 'end';
   scenario?: SketchName;
+  /** The ground the plan gives the band, for the shapes that take one (claim lists, card sets, situations). */
+  surface?: 'paper' | 'tint';
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
@@ -2424,9 +2427,9 @@ export function TextBand({
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
      plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
-  if (isSituationProse(band.id)) return <SituationsBand band={band} />;
-  if (isClaimList(band.id)) return <ClaimListBand band={band} />;
-  if (isCardSet(band.id)) return <CardSetBand band={band} />;
+  if (isSituationProse(band.id)) return <SituationsBand band={band} surface={surface} />;
+  if (isClaimList(band.id)) return <ClaimListBand band={band} surface={surface} />;
+  if (isCardSet(band.id)) return <CardSetBand band={band} surface={surface} />;
   if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
@@ -2611,7 +2614,7 @@ export function TextBand({
  * one paper card a situation, its title and sentence. The copy links none, so no card has ways in.
  * The words after them sit as one row under the cards, the paragraph beside the example.
  */
-function SituationsBand({ band }: { band: CorpusBand }) {
+function SituationsBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
   const blocks = content(band).filter((block) => block.type !== 'links');
   /* The parser files "**A new product.** We find…" as a labelled block: the bold label, its words. */
   const situations = blocks.flatMap((block) =>
@@ -2653,7 +2656,7 @@ function SituationsBand({ band }: { band: CorpusBand }) {
       {...head(band)}
       lead={lead}
       data-band="C-router"
-      surface="tint"
+      surface={surface ?? 'tint'}
       align="center"
     >
       <Layout rowGap="column">
@@ -2684,6 +2687,8 @@ const CLAIM_GLYPHS: Readonly<Record<string, IconName>> = {
   'Complex made clear': 'widget',
   'Industries we know well': 'map-point',
   'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Ready for your engineers': 'code-square',
 };
 
 /**
@@ -2691,35 +2696,51 @@ const CLAIM_GLYPHS: Readonly<Record<string, IconName>> = {
  * heading, its lead and the band's onward link at the left, the claims down the right, one ruled row
  * each, its glyph inline before its title and its words under it.
  */
-function ClaimListBand({ band }: { band: CorpusBand }) {
+function ClaimListBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
   const blocks = content(band);
   const claims = blocks.filter(
     (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
   );
-  const leadBlocks = blocks.filter((block) => block.type === 'paragraph');
-  const lead =
-    leadBlocks.length === 1 && leadBlocks[0]?.type === 'paragraph'
-      ? plain(leadBlocks[0].runs)
-      : undefined;
+  const paragraphs = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const [first] = paragraphs;
+  const lead = first && !hasLink(first.runs) ? plain(first.runs) : undefined;
   const links = [
     ...blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
     ...claims.flatMap((claim) =>
       claim.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
     ),
   ];
-  const glyphs = claims.every((claim) => CLAIM_GLYPHS[claim.headingText]);
-  const items: OfferSheetItem[] = claims.map((claim) => ({
-    title: claim.headingText,
-    body: claim.blocks
-      .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
-      .join(' '),
-    ...(glyphs ? { icon: CLAIM_GLYPHS[claim.headingText] } : {}),
-  }));
+  /* Titled claims are rows with their titles; a band of untitled lines ("How we use AI in our own
+     work") is a row a line, its glyph before its words. */
+  const lines = claims.length > 0 ? [] : lead ? paragraphs.slice(1) : paragraphs;
+  const keys =
+    claims.length > 0
+      ? claims.map((claim) => claim.headingText)
+      : lines.map((block) => plain(block.runs));
+  const glyphs = keys.map((key) => CLAIM_GLYPHS[key] ?? glyphFor(key));
+  const iconed = glyphs.every(Boolean);
+  const items: OfferSheetItem[] =
+    claims.length > 0
+      ? claims.map((claim, index) => ({
+          title: claim.headingText,
+          body: claim.blocks
+            .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
+            .join(' '),
+          ...(iconed ? { icon: glyphs[index]! } : {}),
+        }))
+      : lines.map((block, index) => ({
+          id: plain(block.runs),
+          bodyHtml: inlineToHtml(block.runs),
+          ...(iconed ? { icon: glyphs[index]! } : {}),
+        }));
   return (
     <OfferSheet
       {...head(band)}
       arrangement="list"
-      lead={lead}
+      surface={surface}
+      lead={claims.length > 0 && paragraphs.length !== 1 ? undefined : lead}
       items={items}
       note={links.length > 0 ? <LinkActions links={links} /> : undefined}
     />
@@ -2730,7 +2751,10 @@ function ClaimListBand({ band }: { band: CorpusBand }) {
 const CARD_GLYPHS: Readonly<Record<string, IconName>> = {
   'Ready for your engineers': 'code-square',
   'Faster to first release': 'graph-up',
-  'Idea to launch': 'flag',
+  'Complex made clear': 'widget',
+  'Industries we know well': 'map-point',
+  'Fluent in SaaS': 'layers',
+  'Seen your problem before': 'users-group-rounded',
   'AI speeds up routine work': 'bolt-circle',
   'A senior designer approves': 'shield-check',
   'If your organisation has': 'lock',
@@ -2747,12 +2771,19 @@ const glyphFor = (key: string): IconName | undefined =>
  * onward link the head's end action. No picture: a section never borrows a case's image (owner, 4 Nov
  * 2026).
  */
-function CardSetBand({ band }: { band: CorpusBand }) {
+function CardSetBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
   const blocks = content(band);
-  const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
   const claims = blocks.filter(
     (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
   );
+  /* The band's onward link, wherever the copy files it: after the set, or under its last claim
+     ("See all industries →", /why-tcules). */
+  const links = [
+    ...blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
+    ...claims.flatMap((claim) =>
+      claim.blocks.flatMap((block) => (block.type === 'links' ? block.links : [])),
+    ),
+  ];
   const paragraphs = blocks.filter(
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
   );
@@ -2785,9 +2816,7 @@ function CardSetBand({ band }: { band: CorpusBand }) {
     <EngagementOptions
       {...head(band)}
       arrangement="cards"
-      /* Untitled lines read as a list beside the head (owner, 4 Nov 2026: "list cards on the right");
-         titled claims stand side by side under it. */
-      beside={claims.length === 0}
+      {...(surface ? { surface } : {})}
       lead={lead}
       options={iconed}
       action={links.length > 0 ? <LinkActions links={links} /> : undefined}

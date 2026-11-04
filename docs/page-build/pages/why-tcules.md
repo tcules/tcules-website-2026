@@ -40,3 +40,9 @@ Every claim carries a client's quote (treatment rules, "Added 4 Nov 2026 (/why-t
 
 ## Open
 - The craft reason's illustration (register row). Client marks for Dealpath, Benchmark Gensuite, ConnectX, JoVE, Ringier.
+
+## Owner review, 4 Nov 2026 (2.60)
+- complex-software → the four claims as three-ways glyph cards (plan `CARD_SETS`), "See all industries →" the head's
+  end action; design-to-code → the Why Tcules list (plan `CLAIM_LIST`). Swapped at the owner's word, positions kept.
+- ai-products → the ink CTA island. Claim quotes, "Craft people notice", the twelve industry links, the Start small /
+  OctiFi lines and the AI band's sub-heading cut (docs/content-changes.md).

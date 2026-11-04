@@ -146,12 +146,6 @@ export type EngagementOptionsProps = {
   surface?: SectionSurface;
   /** Default `grid`. See `EngagementArrangement`. */
   arrangement?: EngagementArrangement;
-  /**
-   * `cards` only: the head beside the cards, in halves (owner, 4 Nov 2026, /how-we-work "How we use
-   * AI": "list cards on the right"). The heading, lead and action down the first half from 1024; the
-   * cards one under another down the second, a `gutter` apart. Below 1024 the head over the cards.
-   */
-  beside?: boolean;
 };
 
 /** The scope's drawing: a kit scene, on its plate, in the grammar every flat drawing shares. */
@@ -186,7 +180,6 @@ export function EngagementOptions({
   action,
   surface = 'paper',
   arrangement = 'grid',
-  beside = false,
 }: EngagementOptionsProps) {
   /* An option with no name is dropped, except as a card: a card may be its glyph and words alone, as
      a set of one-line points (/how-we-work "How we use AI", owner 4 Nov 2026: "3 cards, one for each
@@ -213,47 +206,6 @@ export function EngagementOptions({
       : three
         ? ({ base: 1, md: 3 } as const)
         : ({ base: 1, md: 2, lg: 4 } as const);
-  if (arrangement === 'cards' && beside) {
-    return (
-      <Section
-        id={id}
-        surface={surface}
-        aria-labelledby={headingId}
-        data-band="engagement-options"
-      >
-        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-          <Layout rowGap="block">
-            <h2 id={headingId} className={styles.heading}>
-              {heading}
-            </h2>
-            {leads.map((paragraph, index) => (
-              <p key={index} className={styles.lead}>
-                {paragraph}
-              </p>
-            ))}
-            {action ? <div>{action}</div> : null}
-          </Layout>
-          <Layout as="ul" rowGap="gutter">
-            {shown.map((option, index) => (
-              <li key={option.title || index} className={styles.card}>
-                <Layout rowGap="block">
-                  {option.icon ? (
-                    <span className={styles.cellIcon} aria-hidden="true">
-                      {option.icon}
-                    </span>
-                  ) : null}
-                  <Layout rowGap="text">
-                    <OptionHead option={option} className={styles.title} />
-                    <OptionBody option={option} className={styles.body} />
-                  </Layout>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        </Layout>
-      </Section>
-    );
-  }
   return (
     <Section
       id={id}

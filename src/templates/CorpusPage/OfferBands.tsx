@@ -801,6 +801,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           band={band}
           side={unit.side}
           scenario={sceneFor(ctx, band, 'scenario')}
+          surface={unit.surface}
         />
       );
     }
