@@ -161,6 +161,10 @@ const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
   /* "Who we've worked with and what each asked for": the studio presenting work in review, the nearest
      of the three to client work; the page binds no hero of its own (docs/page-build/pages/clients.md). */
   [ROUTES.clients]: ABOUT_REVIEW,
+  /* "Experiments in how AI changes software": the working wall, hands placing notes on a discovery
+     wall, work in progress; not one experiment's capture, because an image about one item belongs to
+     that item (docs/page-build/pages/future-interfaces-lab.md). */
+  [ROUTES.futureInterfacesLab]: ABOUT_WALL,
 };
 
 /**
@@ -215,4 +219,44 @@ export function heroImage(page: CorpusPage): SlotImage {
   if (artefact) return artefact;
   const reused = STUDIO_HERO[page.route];
   return reused ? corpusImage(reused) : placeholderImage(page.route, 'hero');
+}
+
+/**
+ * A band of items each shown by its OWN image, by route and band, then by the item's title as authored:
+ * the Lab's AI interface experiments, each its real artefact from the live site (copied to
+ * `public/future-interfaces-lab/`). A set takes covers only when every item has one (DestinationsBand),
+ * so one missing image never leaves a hole in the row. 4 Nov 2026.
+ */
+const ITEM_COVERS: Readonly<Record<string, Readonly<Record<string, CorpusImage>>>> = {
+  [`${ROUTES.futureInterfacesLab}#ai-interfaces`]: {
+    'Open Canvas Workflow Builder': {
+      src: '/future-interfaces-lab/open-canvas-workflow-builder.webp',
+      alt: 'Open Canvas Workflow Builder, a Future Interfaces Lab workflow experiment',
+      width: 698,
+      height: 481,
+      kind: 'capture',
+    },
+    'Gujarati Voice AI Math Tutor': {
+      src: '/future-interfaces-lab/gujarati-voice-ai-math-tutor.webp',
+      alt: 'Two students using the Gujarati Voice AI Math Tutor on a tablet',
+      width: 698,
+      height: 481,
+      kind: 'photograph',
+    },
+    'Shopping Assistant Programme': {
+      src: '/future-interfaces-lab/shopping-assistant-programme.webp',
+      alt: 'Shopping assistant concept screens from the Future Interfaces Lab',
+      width: 698,
+      height: 481,
+      kind: 'capture',
+    },
+  },
+};
+
+/** The band's per-item images, by item title, where its route names them (`ITEM_COVERS`). */
+export function itemCovers(
+  route: string,
+  bandId: string,
+): Readonly<Record<string, CorpusImage>> | undefined {
+  return ITEM_COVERS[`${route}#${bandId}`];
 }

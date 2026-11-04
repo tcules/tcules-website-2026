@@ -277,3 +277,20 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **Three properties of a product, each a concrete mechanism** ("how tokens are named", "how components are
   assembled"), are the drawn offer sheet across 3: one still flat drawing per property, heading its title and
   words. Never the blue-marker ruled cell, which is for figures.
+
+## Added 4 Nov 2026 (/future-interfaces-lab; proposed until the owner sees the page)
+
+- **A set of experiments or artefacts takes each item's real image as its cover when every item has one**
+  (route-keyed `ITEM_COVERS`, CorpusPage/images.ts): vertical covered cards, three across, linked only where
+  the item links. Where any item lacks a usable image, the whole set is drawn instead (one still flat drawing
+  per item on Bento's plates, a tile linked only where the item has a page). Never a set of captures mixed
+  with plates: one register per band.
+- **An item whose paragraph ends on its own "→" link is a destination**: the link becomes the tile's or
+  card's href, the sentence before it its words (DestinationsBand).
+- **A close that is one sentence with several inline links** (a mechanism, not an ask) stays prose and, where
+  the page draws it (`figure` scene), sits beside one flat figure from 1024 (`CloseFigureBand`), as a method
+  sits beside its graphic. Its links stay inline; nothing is lifted into an action.
+- **Two closing asks for two readers, each one sentence with one link, share one ink island in two peer
+  halves** (`PAIRED_CLOSES` in plan.ts, CtaSection `second`): two islands would touch, and as prose they make
+  a run of text bands after the FAQ. The first ask keeps the solid, the second the outline partner; the
+  moved band is listed in `BANDS_ELSEWHERE`.

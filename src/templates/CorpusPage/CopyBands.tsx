@@ -37,7 +37,7 @@ import {
   ServiceTile,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
-import { corpusImage } from '@/lib/corpus-images';
+import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
 import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
@@ -1856,8 +1856,22 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
  * Items that each lead to a page: `###` items with a link line, or a link row alone. Where every
  * destination has its service scene, the approved Bento (four tracks for four or eight, else three);
  * otherwise one icon card each, under the full-width head (component-map G16).
+ *
+ * Two variants a page opts into (4 Nov 2026, /future-interfaces-lab; owner to judge):
+ *   - `covers`: every item's own image, by title (images.ts `ITEM_COVERS`). The set is vertical covered
+ *     cards, three across, linked only where the item links (C-image).
+ *   - `sceneOf`: every item drawn by the page (offer-scenes `items[band]`). Bento's drawn tiles, still
+ *     where an item has no page; an item's closing "→" link is its tile's destination (C-icon).
  */
-export function DestinationsBand({ band }: { band: CorpusBand }) {
+export function DestinationsBand({
+  band,
+  sceneOf,
+  covers,
+}: {
+  band: CorpusBand;
+  sceneOf?: (title: string) => SketchName | undefined;
+  covers?: Readonly<Record<string, CorpusImage>>;
+}) {
   const blocks = content(band);
   const items = blocks.filter((block): block is ItemBlock => block.type === 'item');
   const firstOther = blocks.findIndex((block) => block.type !== 'paragraph');
@@ -1874,15 +1888,32 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
           const link = item.blocks.flatMap((inner) =>
             inner.type === 'links' ? inner.links : [],
           )[0];
-          const paras = item.blocks.filter((inner) => inner.type === 'paragraph');
+          const paras = item.blocks.filter(
+            (inner): inner is Extract<CorpusBlock, { type: 'paragraph' }> =>
+              inner.type === 'paragraph',
+          );
+          /* An item paragraph that ends on its "→" link (/future-interfaces-lab's Matter): the link is
+             the item's destination, the sentence before it its words. */
+          const lastRuns = paras.length > 0 ? trimEnd(paras[paras.length - 1]!.runs) : [];
+          const arrow = lastRuns.at(-1);
+          const trailing =
+            !link && arrow?.type === 'link' && /[→➝➔⟶]\s*$/u.test(plain(arrow.children))
+              ? arrow
+              : undefined;
+          const bodyRuns = paras.map((inner, index) =>
+            trailing && index === paras.length - 1 ? trimEnd(lastRuns.slice(0, -1)) : inner.runs,
+          );
           return [
             {
               title: item.headingText,
-              href: link?.href,
-              ctaLabel: link?.labelText,
-              bodyHtml: paras.map((inner) =>
-                inner.type === 'paragraph' ? inlineToHtml(inner.runs) : '',
-              ),
+              href: link?.href ?? trailing?.href,
+              ctaLabel:
+                link?.labelText ??
+                (trailing
+                  ? plain(trailing.children).replace(/\s*[→➝➔⟶]\s*$/u, '')
+                  : undefined),
+              bodyHtml: bodyRuns.map((runs) => inlineToHtml(runs)),
+              bodyText: bodyRuns.map((runs) => plain(runs).trim()).join(' '),
             },
           ];
         })
@@ -1890,22 +1921,55 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
           .flatMap((block) => (block.type === 'links' ? block.links : []))
           .map((link) => ({
             title: link.labelText,
-            href: link.href,
-            ctaLabel: undefined,
+            href: link.href as string | undefined,
+            ctaLabel: undefined as string | undefined,
             bodyHtml: [] as string[],
+            bodyText: '',
           }));
-  const scenes = dest.map((d) => (d.href ? serviceSceneFor(d.href) : undefined));
   const introNode = intro.length > 0 ? <BandBody blocks={intro} /> : null;
+  const covered = covers && dest.length > 0 && dest.every((d) => covers[d.title]);
+  const drawn = sceneOf && dest.length >= 3 ? dest.map((d) => sceneOf(d.title)) : undefined;
+  const scenes = drawn?.every(Boolean)
+    ? drawn
+    : dest.map((d) => (d.href ? serviceSceneFor(d.href) : undefined));
   let set: ReactNode;
-  if (dest.length >= 3 && scenes.every(Boolean) && dest.every((d) => d.href)) {
-    const tiles: BentoItem[] = dest.map((d, index) => ({
-      id: d.href as string,
+  if (covered) {
+    /* Each item shown by its own artefact: the vertical covered card, three across, the whole set
+       visible at every width (scroll never: a phone stacks them). */
+    const cards: BlockCardSetItem[] = dest.map((d) => ({
+      id: d.title,
       title: d.title,
-      href: d.href as string,
+      media: { type: 'image', image: covers[d.title] as CorpusImage },
+      ...(d.bodyHtml.length > 0 ? { bodyHtml: d.bodyHtml } : {}),
+      ...(d.href ? { href: d.href } : {}),
+    }));
+    const node = (
+      <BlockCardSet items={cards} lead="none" across={3} cue="title" scroll="never" />
+    );
+    return (
+      <ContentSection {...head(band)} data-band="C-image" lead={leadText}>
+        {introNode ? (
+          <Layout rowGap="stack">
+            {introNode}
+            {node}
+          </Layout>
+        ) : (
+          node
+        )}
+      </ContentSection>
+    );
+  }
+  if (
+    dest.length >= 3 &&
+    scenes.every(Boolean) &&
+    (drawn?.every(Boolean) || dest.every((d) => d.href))
+  ) {
+    const tiles: BentoItem[] = dest.map((d, index) => ({
+      id: d.href ?? d.title,
+      title: d.title,
+      ...(d.href ? { href: d.href } : {}),
       scene: scenes[index]!,
-      ...(d.bodyHtml.length > 0
-        ? { body: d.bodyHtml.map((h) => h.replace(/<[^>]+>/g, '')).join(' ') }
-        : {}),
+      ...(d.bodyText ? { body: d.bodyText } : {}),
     }));
     set = <Bento items={tiles} tracks={dest.length % 4 === 0 ? 4 : 3} />;
   } else {
@@ -2472,6 +2536,75 @@ export function CloseBand({
     );
   }
   return <TextBand page={page} band={band} />;
+}
+
+/**
+ * A close the page draws (4 Nov 2026, /future-interfaces-lab `promotion`): the head above, then from
+ * 1024 its words beside ONE flat figure, as MethodBand sets steps beside theirs; the plate under the
+ * words below 1024. The sentence keeps every inline link as authored, so nothing is lifted into an
+ * action. It stays prose (C-text): the figure illustrates the sentence, it is not an island.
+ */
+export function CloseFigureBand({ band, scene }: { band: CorpusBand; scene: SketchName }) {
+  return (
+    <ContentSection {...head(band)} data-band="C-text">
+      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <BandBody blocks={content(band)} labelledBy={head(band).headingId} />
+        <Sketch name={scene} />
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/** A one-sentence close split for its island: the sentence as the lede (its link's words kept as words) and the link as the action. */
+function closeAsk(band: CorpusBand): { lede: string; action: { label: string; href: string } } | null {
+  const paras = content(band).filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const links = paras.flatMap((block) =>
+    block.runs.flatMap((run) => (run.type === 'link' ? [run] : [])),
+  );
+  const [link] = links;
+  if (paras.length !== 1 || links.length !== 1 || !link) return null;
+  return {
+    lede: plain(paras[0]!.runs).trim(),
+    action: { label: plain(link.children), href: link.href },
+  };
+}
+
+/**
+ * Two closes a route pairs on ONE ink island (plan.ts `PAIRED_CLOSES`, 4 Nov 2026): each a heading,
+ * its one sentence as the lede, word for word, and that sentence's link as the action, never
+ * rewritten. The first keeps the page's solid; the second takes the outline partner and keeps its own
+ * anchor on its half. Falls back to the first close alone where either is not one sentence and one link.
+ */
+export function PairedCloseBand({
+  page,
+  band,
+  second,
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  second: CorpusBand;
+}) {
+  const first = closeAsk(band);
+  const next = closeAsk(second);
+  if (!first || !next) return <CloseBand page={page} band={band} />;
+  return (
+    <CtaSection
+      id={band.id}
+      data-band="L"
+      arrangement="open"
+      heading={band.headingText}
+      body={[first.lede]}
+      actions={[first.action]}
+      second={{
+        id: second.id,
+        heading: second.headingText,
+        body: [next.lede],
+        action: next.action,
+      }}
+    />
+  );
 }
 
 /* ── The ask: a band's link to the page's enquiry form, as its own ink island ───── */

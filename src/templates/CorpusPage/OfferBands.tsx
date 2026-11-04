@@ -70,6 +70,7 @@ import {
   slotImage,
   slugOf,
   type SlotImage,
+  itemCovers,
 } from './images';
 import {
   BandBody,
@@ -79,7 +80,9 @@ import {
   claimsOf,
   isExampleParagraph,
   CloseBand,
+  CloseFigureBand,
   DestinationsBand,
+  PairedCloseBand,
   DirectoryBand,
   DrawnTableBand,
   IndustriesBand,
@@ -99,7 +102,7 @@ import {
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { ReportBand } from './ReportBand';
-import { isWhatYouGet, kindOf, type OfferUnit } from './plan';
+import { isWhatYouGet, kindOf, pairedCloseOf, type OfferUnit } from './plan';
 import {
   bandLinks,
   blocksOf,
@@ -678,7 +681,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return hasDestinationGroups(band) ? (
         <DestinationGroupsBand page={page} band={band} />
       ) : (
-        <DestinationsBand band={band} />
+        <DestinationsBand
+          band={band}
+          sceneOf={(title) => sceneFor(ctx, band, title)}
+          covers={itemCovers(page.route, band.id)}
+        />
       );
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
@@ -698,11 +705,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return <NoteBand band={band} />;
     case 'close': {
       const picks = CLOSE_CASES[`${page.route}#${band.id}`];
-      return picks ? (
-        <CaseLinksBand band={band} ctx={ctx} names={picks} />
-      ) : (
-        <CloseBand page={page} band={band} />
-      );
+      if (picks) return <CaseLinksBand band={band} ctx={ctx} names={picks} />;
+      /* Two closes on one island (plan.ts PAIRED_CLOSES): this band's ask, then its partner's. */
+      const pairId = pairedCloseOf(page.route, band.id);
+      const pair = pairId ? page.bands.find((other) => other.id === pairId) : undefined;
+      if (pair) return <PairedCloseBand page={page} band={band} second={pair} />;
+      /* A close the page draws: its sentence beside its one figure. */
+      const figure = sceneFor(ctx, band, 'figure');
+      if (figure) return <CloseFigureBand band={band} scene={figure} />;
+      return <CloseBand page={page} band={band} />;
     }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;

@@ -206,6 +206,7 @@ export type CtaFormIsland = Extract<IslandSurface, 'blue' | 'ink'>;
 
 type CtaSplitProps = {
   arrangement?: 'split';
+  second?: never;
   /**
    * The full EnquiryForm. A `ReactElement`, not a `ReactNode`, so `form={null}` (or `false`) does
    * not compile: a split close with nothing in its 7-track reserved the track and its 96 seam for
@@ -294,9 +295,30 @@ type CtaSplitProps = {
   footnoteIcon?: IconName;
 };
 
+/**
+ * The open island's second ask (4 Nov 2026, /future-interfaces-lab: the candidate's ask and the
+ * product owner's). Its own heading, one lede sentence and ONE action, which is the outline partner:
+ * the island's first ask keeps the page's one blue solid.
+ */
+export type CtaSecondAsk = {
+  /** The half's own anchor, where the copy filed this ask as a band of its own. */
+  id?: string;
+  heading: string;
+  body?: readonly [CtaParagraph];
+  action: CtaAction;
+};
+
 type CtaOpenProps = {
   arrangement: 'open';
   form?: never;
+  /**
+   * A second ask on the same island (4 Nov 2026): the island splits into two peer halves from 1024,
+   * the first ask (heading, body, its one solid) in the start half and this one (its outline action)
+   * in the end half, each its heading, lede and action, the actions on one line. Below 1024 they stack, `stack`
+   * apart. For two closing asks of one page aimed at two readers, which as two islands would touch.
+   * With it, `actions` takes one action and `proof` and `points` are not rendered.
+   */
+  second?: CtaSecondAsk;
   /**
    * The close's ask: the blue solid, then at most its blue ghost partner. A close is where the page
    * makes its one main action (r7-buttons, 8 Oct 2026), so this is a solid by position.
@@ -327,6 +349,7 @@ type CtaOpenProps = {
 
 type CtaOfferWithActionsProps = {
   arrangement: 'offer';
+  second?: never;
   form?: never;
   /**
    * ONE action, rendered as the blue LINK button with its arrow — never a solid (r7-buttons, owner
@@ -656,8 +679,8 @@ function CtaActions({
   justify,
 }: {
   actions: readonly CtaAction[];
-  /** `ask` on a close, `link` on the offer. See above. */
-  kind: 'ask' | 'link';
+  /** `ask` on a close, `link` on the offer, `partner` a second ask's lone ghost. See above. */
+  kind: 'ask' | 'link' | 'partner';
   /** `center` in the open close's centred column; otherwise the row starts at the copy's edge. */
   justify?: 'center';
 }) {
@@ -665,12 +688,13 @@ function CtaActions({
     <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
       {actions.map((action, index) => {
         const solid = kind === 'ask' && index === 0;
+        const emphasis = solid ? 'solid' : kind === 'link' ? 'link' : 'ghost';
         return (
           <Button
             key={`${index}-${action.href}-${action.label}`}
             as="a"
             href={action.href}
-            emphasis={solid ? 'solid' : kind === 'ask' ? 'ghost' : 'link'}
+            emphasis={emphasis}
             size="md"
             extendHitArea
             icon={solid ? undefined : <Icon name="arrow-right" />}
@@ -795,7 +819,9 @@ export function CtaSection(props: CtaSectionProps) {
   /* The heading owns the region's name. `useId` rather than a caller-supplied id, because two
      instances on one route would otherwise have to be told apart by hand — and the id is only ever
      pointed at the `h2`, which is always rendered, so the idref can never dangle. */
-  const headingId = `${useId()}-heading`;
+  const baseId = useId();
+  const headingId = `${baseId}-heading`;
+  const secondHeadingId = `${baseId}-second-heading`;
   const points = props.points ?? [];
   const markers: CtaPointMarker = props.markers ?? 'number';
   const hasPoints = points.some((point) => point.label.trim().length > 0);
@@ -836,6 +862,45 @@ export function CtaSection(props: CtaSectionProps) {
     );
     const arrangement = 'open-island';
     const actionKind = props.intent === 'onward' ? 'link' : 'ask';
+
+    /* ── Open, two asks in halves (4 Nov 2026) ─────────────────────────────────────────────────
+       Two peer halves at `section` (96), the gap of two regions sharing a row: each its heading at
+       the close step, its lede and its action pinned to the half's foot, so the two headings share
+       a line and so do the two actions, however the headings wrap. The
+       first ask keeps the solid; the second takes the outline partner. Below 1024, stacked. The
+       field stays calm behind both ledes. */
+    const second = props.second;
+    if (second) {
+      return (
+        <Section
+          surface={band}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={`${headingId} ${secondHeadingId}`}
+          data-arrangement="open-island-pair"
+        >
+          {field(
+            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
+              <Layout rowGap="stack" justifyItems="start" pinLast>
+                <div data-texture-calm>{lede({ scale: 'close' })}</div>
+                <CtaActions actions={props.actions.slice(0, 1)} kind={actionKind} />
+              </Layout>
+              <Layout rowGap="stack" justifyItems="start" pinLast id={second.id}>
+                <div data-texture-calm>
+                  <CtaLede
+                    headingId={secondHeadingId}
+                    heading={second.heading}
+                    body={second.body}
+                    scale="close"
+                  />
+                </div>
+                <CtaActions actions={[second.action]} kind="partner" />
+              </Layout>
+            </Layout>,
+          )}
+        </Section>
+      );
+    }
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in

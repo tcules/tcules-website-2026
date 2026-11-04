@@ -97,7 +97,7 @@ export const KIND_COMPONENTS: Readonly<
   destinations: {
     component: ['C-image', 'C-icon'],
     status: 'to-design',
-    note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
+    note: "Hub destinations: grouped with images (C-image) or a plain set (C-icon). A set the page draws item by item is Bento's drawn tiles, still where an item has no page (C-icon); a set whose route names every item's own image is covered cards (C-image), /future-interfaces-lab (4 Nov 2026, owner to judge).",
   },
   related: {
     component: ['K', 'service-tile'],
@@ -118,7 +118,7 @@ export const KIND_COMPONENTS: Readonly<
   close: {
     component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026).',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026). A close the page draws (its `figure` scene): the sentence beside its one flat figure (C-text). Two closes a route pairs (plan.ts PAIRED_CLOSES): one ink island in two peer halves (L), /future-interfaces-lab (4 Nov 2026, owner to judge).',
   },
 };
 
@@ -135,5 +135,9 @@ export const KIND_COMPONENTS: Readonly<
 export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, string>>>> = {
   '/contact': {
     'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
+  },
+  /* plan.ts PAIRED_CLOSES (4 Nov 2026, owner to confirm). */
+  '/future-interfaces-lab': {
+    talk: "the closing island's end half, beside Apply to work on Lab projects (id `talk` kept on the half)",
   },
 };

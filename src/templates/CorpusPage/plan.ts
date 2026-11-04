@@ -563,6 +563,10 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
      file to a working system; an abstract claim, so an isometric illustration (treatment rules § 1),
      and it keeps the page's two prose bands apart (docs/page-build/pages/matter-design-system.md). */
   'beyond-the-file',
+  /* /future-interfaces-lab: "Where we think software interfaces are heading", the Lab's thesis told in
+     three paragraphs; an abstract claim, so one band-scale isometric illustration, and it keeps the
+     short `purpose` intro from touching another prose band (docs/page-build/pages/future-interfaces-lab.md). */
+  'direction',
 ]);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
@@ -597,8 +601,14 @@ export function registerOf(
     case 'enquiry':
       return 'isometric';
     case 'industries':
-    case 'destinations':
       return 'photo';
+    /* A set of destinations the page draws item by item is flat; otherwise its images are photographs
+       or captures (/future-interfaces-lab: the drawn tools, then the captured experiments). */
+    case 'destinations':
+      return drawn.has(band.id) ? 'flat' : 'photo';
+    /* A close drawn beside its one figure (/future-interfaces-lab `promotion`). */
+    case 'close':
+      return drawn.has(band.id) ? 'flat' : 'none';
     case 'deliverables':
       return bound ? 'photo' : 'none';
     case 'outcomes':
@@ -618,6 +628,25 @@ export function registerOf(
       return 'none';
   }
 }
+
+/**
+ * Two closes that share ONE ink island, by route: the first band's unit renders the island in two peer
+ * halves, the second band's words in its end half, and the second band takes no unit of its own
+ * (kinds.ts `BANDS_ELSEWHERE` names where its words went). /future-interfaces-lab: the candidate's ask
+ * (`join`) and the product owner's (`talk`), each one sentence with one link; two islands would touch,
+ * and as prose they made three text bands in a row after the FAQ (4 Nov 2026, owner to confirm).
+ */
+export const PAIRED_CLOSES: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  '/future-interfaces-lab': { join: 'talk' },
+};
+
+/** The band a close shares its island with on this route, if any (`PAIRED_CLOSES`). */
+export const pairedCloseOf = (route: string, bandId: string): string | undefined =>
+  PAIRED_CLOSES[route]?.[bandId];
+
+/** Whether a band's words live in another close's island on this route, so it takes no unit. */
+const pairedAway = (route: string, bandId: string): boolean =>
+  Object.values(PAIRED_CLOSES[route] ?? {}).includes(bandId);
 
 type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
@@ -654,6 +683,8 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             studioBandPhoto(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
             drawn.has(band.id) ||
+            /* A paired close is an island, and an island is a visual band. */
+            (kind === 'close' && pairedCloseOf(page.route, band.id) !== undefined) ||
             band.blocks.some(
               (block) =>
                 block.type === 'paragraph' &&
@@ -678,6 +709,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   };
 
   for (const band of formBeforeFaq(page.bands)) {
+    if (pairedAway(page.route, band.id)) continue;
     const kind = kindOf(band);
     const quoted = band.blocks.some((block) => block.type === 'quote');
     switch (kind) {

@@ -533,6 +533,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The first move chosen underneath the product: the change that what customers use most depends on.',
   },
+  'illustration:where-we-think-software-interfaces-are-heading': {
+    src: '/placeholders/illustration--where-we-think-software-interfaces-are-heading.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'Three shifts on one interface: software that acts across tools while a person approves and can undo, a voice and a local language speaking to it, and a machine reading the same design description a person does. /future-interfaces-lab `direction`.',
+  },
   'illustration:work-that-happens-outside-the-product': {
     src: '/placeholders/illustration--work-that-happens-outside-the-product.svg',
     width: 1600,

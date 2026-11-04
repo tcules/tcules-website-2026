@@ -648,4 +648,18 @@ export const PAGE_OFFER_SCENES = {
     },
     stories: {},
   },
+  /* The Lab's four internal tools for design work (drawn Bento tiles) and the promotion figure beside
+     its sentence; docs/page-build/pages/future-interfaces-lab.md. */
+  '/future-interfaces-lab': {
+    items: {
+      'design-work': by({
+        'Matter Design System': 'wyg-future-interfaces-lab-matter-design-system',
+        'AI Design Audit Agent': 'wyg-future-interfaces-lab-ai-design-audit-agent',
+        'UI Pattern Vision Labelling Tool': 'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
+        'Landing Page Audit Programme': 'wyg-future-interfaces-lab-landing-page-audit-programme',
+      }),
+      promotion: { figure: 'wyg-future-interfaces-lab-promotion' },
+    },
+    stories: {},
+  },
 } as unknown as Readonly<Record<string, OfferScenes>>;

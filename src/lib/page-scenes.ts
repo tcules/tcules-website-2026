@@ -454,6 +454,12 @@ export const PAGE_SCENE_NAMES = [
   'wyg-matter-design-system-tokens-named-purpose',
   'wyg-matter-design-system-components-built-smaller-parts',
   'wyg-matter-design-system-naming-you-can-follow',
+  /* /future-interfaces-lab: the four design-work tiles and the promotion figure (components/Sketch/wyg-future-interfaces-lab.tsx) */
+  'wyg-future-interfaces-lab-matter-design-system',
+  'wyg-future-interfaces-lab-ai-design-audit-agent',
+  'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
+  'wyg-future-interfaces-lab-landing-page-audit-programme',
+  'wyg-future-interfaces-lab-promotion',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];
