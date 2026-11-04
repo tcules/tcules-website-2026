@@ -287,8 +287,9 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
-- [ ] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
-      what is left of 2.55.
+- [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
+      what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
+      the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
       The studio collage leaves home for /about (owner, 4 Nov 2026): its photo picks, focal points and zoom
       are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
 - [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);

@@ -7,7 +7,6 @@ import {
   Layout,
   SituationFigure,
   Sketch,
-  Tag,
   type IconName,
 } from '@/components';
 import {
@@ -45,7 +44,6 @@ import type {
   ProposedEyebrows,
 } from '@/lib/corpus-types';
 import { placeholderImage } from '@/lib/placeholders';
-import { ROUTES } from '@/lib/routes';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { recordFigures } from '@/lib/studio-record';
 
@@ -61,6 +59,7 @@ import {
 } from './blocks';
 import {
   AskIsland,
+  IndustriesBand,
   LinkActions,
   RelatedBand,
   askLinkIn,
@@ -70,7 +69,7 @@ import {
   sheetParts,
 } from './CopyBands';
 import { bindingNamed, coverFor, slugOf } from './images';
-import { UnitView, type OfferContext } from './OfferBands';
+import { UnitView, WhyTculesBand, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
 import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd, trimStart } from './text';
 
@@ -677,50 +676,9 @@ export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   );
 }
 
-/**
- * Each reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each title gets an
- * inline icon"). A title the copy renames drops the glyphs from the whole set, so a stale map never
- * shows a set with holes.
- */
-const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
-  'Fluent in SaaS': 'layers',
-  'Idea to launch': 'flag',
-  'Craft people notice': 'eye',
-  'Evidence before screens': 'clipboard-check',
-  'Seen your problem before': 'users-group-rounded',
-  'Start small': 'hand-shake',
-};
-
-/**
- * Why Tcules on home: the heading at the left with its way deeper under it, the six reasons down the
- * right, one ruled row each, its glyph inline before its title and its sentence under it (owner,
- * 4 Nov 2026, homepage pass: "simplify and bring it back to the heading left list right structure";
- * decisions/2026-11-04-home-why-is-a-list, superseding the proposed 2026-11-03 illustrations). Home
- * only: the offer pages keep the plan's Reasons. A reason whose title has no glyph sets the whole
- * list without glyphs, so nothing is dropped and the set never mixes.
- */
+/* Why Tcules renders as on every page that repeats it: WhyTculesBand (OfferBands). */
 function WhyTcules({ b }: BandProps) {
-  const parts = sheetParts(b);
-  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
-  const titled = parts.items.map((item) => ({
-    ...item,
-    title: item.title?.replace(/\.$/, ''),
-  }));
-  /* A set is all-glyph or all-text (OfferSheet): one title the map does not know drops every glyph. */
-  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
-  const items = titled.map((item) =>
-    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
-  );
-  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
-  return (
-    <OfferSheet
-      {...head(b)}
-      arrangement="list"
-      lead={parts.lead}
-      items={items}
-      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
-    />
-  );
+  return <WhyTculesBand band={b} />;
 }
 
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
@@ -821,37 +779,9 @@ function AiPractice({ page, b }: BandProps) {
  * its sector's stock photograph (owner, 26 Oct 2026: the main part of the sector's activity, close,
  * no faces), else its register slot.
  */
-function Expertise({ b }: BandProps) {
-  /* A short band (owner, 4 Nov 2026, homepage pass: "short band like so"): the heading with "See all
-     industries" at its end, the sectors as destination pills under it, one wrapping row. A list of
-     places to go needs no picture each; eight photo cards made the band a fold of its own. */
-  const onward = bandLinks(b).filter((link) => link.href === ROUTES.expertise);
-  const sectors = bandLinks(b).filter((link) => link.href !== ROUTES.expertise);
-  const pills = (
-    <Cluster as="ul" colGap="tight" rowGap="tight">
-      {sectors.map((link) => (
-        <li key={link.href}>
-          <Tag variant="link" href={link.href}>
-            {link.labelText}
-          </Tag>
-        </li>
-      ))}
-    </Cluster>
-  );
-  return onward.length > 0 ? (
-    <ContentSection
-      {...head(b)}
-      data-band="C-pills"
-      actionsAt="end"
-      actions={<LinkActions links={onward} />}
-    >
-      {pills}
-    </ContentSection>
-  ) : (
-    <ContentSection {...head(b)} data-band="C-pills">
-      {pills}
-    </ContentSection>
-  );
+function Expertise({ page, b }: BandProps) {
+  /* The industries band as on every page that carries it: the pill band (IndustriesBand). */
+  return <IndustriesBand page={page} band={b} />;
 }
 
 /* ── 7 · selected thinking: a resource listing, one piece per row ────────────────────── */

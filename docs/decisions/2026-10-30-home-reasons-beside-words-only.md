@@ -1,7 +1,7 @@
 ---
 title: "Home's Why Tcules is Reasons beside, words only: the head beside three claims, no visual pulled from the sentences"
 date: 2026-10-30
-status: active
+status: superseded
 area: [components, layout, proof]
 source: "Owner (Devagya), 30 Oct 2026, home round-6 mocks (https://claude.ai/artifact/4f1ghRa3vzg21ycaxLaXDd, credibility 6b), asked to build"
 supersedes: [2026-10-29-home-reasons-show-their-proof, 2026-10-30-home-proof-on-one-plate, 2026-10-29-set-reasons-head-above-drawing-above]

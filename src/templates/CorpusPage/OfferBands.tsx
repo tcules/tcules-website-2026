@@ -578,6 +578,56 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
 
 /* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
    have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+/**
+ * Each Why Tcules reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each
+ * title gets an inline icon"). The same six reasons on every page that carries the band.
+ */
+const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Craft people notice': 'eye',
+  'Evidence before screens': 'clipboard-check',
+  'Seen your problem before': 'users-group-rounded',
+  'Start small': 'hand-shake',
+};
+
+/**
+ * "Why founders and product teams choose Tcules", on every page that repeats it (owner, 4 Nov 2026:
+ * the homepage's design carries across): the heading at the left with its way deeper under it, the
+ * six reasons down the right in halves, one ruled row each, its glyph inline before its title and its
+ * sentence under it (OfferSheet `list`). A reason whose title has no glyph sets the whole list
+ * without glyphs, so nothing is dropped and the set never mixes.
+ */
+export function WhyTculesBand({
+  band,
+  surface,
+}: {
+  band: CorpusBand;
+  surface?: 'paper' | 'tint';
+}) {
+  const parts = sheetParts(band);
+  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
+  const titled = parts.items.map((item) => ({
+    ...item,
+    title: item.title?.replace(/\.$/, ''),
+  }));
+  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
+  const items = titled.map((item) =>
+    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
+  );
+  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <OfferSheet
+      {...head(band)}
+      arrangement="list"
+      surface={surface}
+      lead={parts.lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
 /** A carded option's glyph, by its name as authored (owner, 4 Nov 2026: "icons or small graphics"). */
 const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
   'A pilot project': 'flag',
@@ -906,10 +956,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
       /* Options that each name their kind in a label line and are told in one sentence are cards
          (owner, 4 Nov 2026, homepage pass: "cards that look like cards"); no drawing. */
+      /* And the repeated "Three ways to work with us" band, wherever it appears (owner, 4 Nov 2026:
+         the homepage's cards carry across), with or without the label lines. */
       const carded =
         !rich &&
         options.length > 0 &&
-        options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow));
+        (band.id === 'how-we-work-together' ||
+          options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow)));
       const compactAsk =
         askWords && ask ? (
           <CtaSection
@@ -1102,6 +1155,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
+      /* The repeated Why Tcules band takes the homepage's list (owner, 4 Nov 2026). */
+      if (band.id === 'why-tcules') {
+        return (
+          <WhyTculesBand band={band} surface={unit.surface === 'tint' ? 'tint' : 'paper'} />
+        );
+      }
       /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
          closing links. One isometric illustration per reason, band scale (`figureSize="lg"`), never
          a case cover or a figure panel (decisions/2026-10-30-reasons-take-illustrations): the case
