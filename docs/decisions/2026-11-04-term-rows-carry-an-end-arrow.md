@@ -2,7 +2,7 @@
 title: "Glossary term rows carry a quiet end arrow"
 date: 2026-11-04
 status: proposed
-area: [cards, interaction]
+area: [cards, motion]
 source: "Devagya, 4 Nov 2026, on /glossary: \"some indication that the glossary items are clickable?\"; picked the quiet end arrow over link-blue terms, a per-row action label and an underlined term"
 supersedes: []
 dbf: []
