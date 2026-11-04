@@ -106,15 +106,6 @@ export type SiteNavItem = {
   form: SiteNavForm;
   /** Where the item goes when `form` is `'link'`. Ignored by a mega. */
   href?: string;
-  /**
-   * Paths this item owns that do not sit under its own href — Services also owns `/audits` and
-   * `/how-we-work`, About also owns `/team` and `/careers`. Without these, those pages leave the
-   * whole bar unlit, which reads as "you are nowhere".
-   *
-   * Not in the spec's type. It is here because the spec still asks the bar item to carry `active`
-   * (§3), and an item can only know it is current if it is told which paths it covers.
-   */
-  matchPaths?: readonly string[];
   /** The plate's columns, one per group. `mega` only. */
   groups?: readonly SiteNavGroup[];
   /** The plate's aside, at its right edge. Omit and the groups take the whole plate (Studio). */

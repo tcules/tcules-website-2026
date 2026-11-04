@@ -6,7 +6,6 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
 
 import { Button, Cluster, Icon, Layout, Logo, Section } from '@/components';
-import { isActivePath } from '@/lib/activePath';
 import { cx } from '@/lib/cx';
 import { ROUTES } from '@/lib/routes';
 
@@ -568,15 +567,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           <Cluster as="ul" className={styles.items} colGap="inline" nowrap>
             {items.map((item) => {
               const isOpen = plateKey === item.key;
-              /* An empty candidate is not "no candidate": `isActivePath` treats a bare '' as a
-                 prefix, and every path in the site starts with '/', so a mega — which has no href
-                 at all, because its trigger opens rather than navigates — would light up on every
-                 route. Filtering first is what makes the three menu items answer to `matchPaths`
-                 alone, which is where a section's own family is named. */
-              const covers = [item.href, ...(item.matchPaths ?? [])].filter(
-                (path): path is string => Boolean(path),
-              );
-              const active = covers.some((path) => isActivePath(pathname, path));
+              /* No item is lit for the page you are on (owner, 4 Nov 2026: "looks weird"). The
+                 open menu's trigger is the one held state; aria-current still marks Work's exact
+                 page for a screen reader. */
 
               return (
                 <li
@@ -593,7 +586,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                       tone="neutral"
                       size="sm"
                       icon={<Icon name="alt-arrow-down" />}
-                      active={active || isOpen}
+                      active={isOpen}
                       aria-expanded={isOpen}
                       /* aria-controls only while the pane is the open one. Pointing it at a pane
                          that is inert is a reference to something a reader cannot reach. */
@@ -615,9 +608,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                       emphasis="ghost"
                       tone="neutral"
                       size="sm"
-                      active={active}
-                      /* aria-current is EXACT. `active` is a family match so the bar stays lit
-                         inside a section, but announcing five pages as "current page" is a lie. */
+                      /* aria-current only: no item is lit for the page you are on. */
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
                       {item.label}

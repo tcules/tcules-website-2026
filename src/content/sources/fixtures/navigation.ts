@@ -1,5 +1,5 @@
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
-import { ENDPOINTS, EXTERNAL, ROUTES, UNRESOLVED_ROUTE, articlePath } from '@/lib/routes';
+import { ENDPOINTS, EXTERNAL, ROUTES } from '@/lib/routes';
 
 import { CLUTCH_RATING } from './ratings';
 
@@ -54,9 +54,6 @@ const SERVICES: SiteNavItem = {
   key: 'services',
   label: 'Services',
   form: 'mega',
-  /* A mega has no href — its trigger opens rather than navigates — so its OWN index goes here
-     beside the paths it owns outside its family. */
-  matchPaths: [ROUTES.services, ROUTES.audits, ROUTES.howWeWork],
   groups: [
     {
       label: 'Core practice',
@@ -101,7 +98,6 @@ const EXPERTISE: SiteNavItem = {
   key: 'expertise',
   label: 'Expertise',
   form: 'mega',
-  matchPaths: [ROUTES.expertise],
   groups: [
     {
       label: 'By software type',
@@ -140,13 +136,6 @@ const RESOURCES: SiteNavItem = {
   key: 'resources',
   label: 'Resources',
   form: 'mega',
-  matchPaths: [
-    ROUTES.insights,
-    ROUTES.tools,
-    ROUTES.glossary,
-    ROUTES.futureInterfacesLab,
-    ROUTES.matterDesignSystem,
-  ],
   groups: [
     {
       label: 'Insights',
@@ -175,13 +164,12 @@ const RESOURCES: SiteNavItem = {
     },
   ],
   /* The two featured pieces leave Insights for the aside, as plain links. "Featured" is the
-     header's own label, not copy. The design-partner piece has no page yet: UNRESOLVED_ROUTE until
-     its slug exists. */
+     header's own label, not copy. Paths as the copy gives them (owner, 4 Nov 2026). */
   aside: {
     label: 'Featured',
     links: [
-      { label: 'Choosing a design partner', href: UNRESOLVED_ROUTE, status: 'planned' },
-      to('Vibe-coded app to production', articlePath('vibe-coded-app-production-ready')),
+      to('Choosing a design partner', `${ROUTES.guides}/how-to-choose-a-product-design-agency`),
+      to('Vibe-coded app to production', `${ROUTES.insights}/vibe-coded-app-production-ready`),
     ],
   },
   hub: to('All insights', ROUTES.insights),
@@ -193,7 +181,6 @@ const STUDIO: SiteNavItem = {
   key: 'studio',
   label: 'Studio',
   form: 'mega',
-  matchPaths: [ROUTES.about, ROUTES.clients, ROUTES.whyTcules, ROUTES.careers],
   groups: [
     {
       label: 'Who we are',
