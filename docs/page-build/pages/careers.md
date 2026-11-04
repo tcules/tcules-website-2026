@@ -25,8 +25,8 @@ Then it asks them to apply on the blue island. Early-career readers get a side p
   quiet words band between two picture bands.
 - `ai-fluency`: illustrated prose (`ILLUSTRATED_PROSE`), with the isometric placeholder on the start side. It
   uses the register row "How AI fits into the job" (agent station → drafts → a designer's desk where one is held
-  up to be checked). "See how we use AI" is the band's link action. The component places it under the heading,
-  as on every media split, and the authored "→" is dropped.
+  up to be checked). "See how we use AI" is the band's link, under the paragraphs it closes (pass 2, owner
+  4 Nov), and the authored "→" is dropped.
 - `what-we-look-for`: **the /about "Who uses" composition** (NEW for the composer, glyph-bands.ts `list-beside`,
   data-band `list-beside`). The head is in the start half (`split="halves"`). The six qualities are bodiless
   ListCard rows (md, sentence measure, full stops kept), each led by a Solar Bold glyph: eye, chat-round-dots,
@@ -102,8 +102,8 @@ tall at 1440 and stacks words over form at 390.
   /design/enquiry-form. "Send application" is interface wording. "Apply for a role" would say it a third time.
   The link field is optional, as on every card, and there is no Name field: say if an application needs either.
   The form's accessible name is still "Send an enquiry".
-- **BLOCKING for launch (owner/ops):** applications post to `ENDPOINTS.enquiry` and land with sales enquiries,
-  told apart only by the hidden context (family `careers`). Confirm this, or name a careers inbox.
+- Applications post to `ENDPOINTS.enquiry`, told apart by the hidden context (family `careers`): fine for
+  launch (owner, 4 Nov 2026).
 - The success view says "Thanks. We have your enquiry." No application success words are authored. Content ask.
 - `ai-fluency` ships with the labelled isometric placeholder (drawn by people). It is the page's one placeholder.
   On a phone the placeholder sits above the band's heading: ContentSection `media` puts the picture first below
@@ -137,4 +137,39 @@ tall at 1440 and stacks words over form at 390.
 - Skipped: the placeholder above the AI heading on phones (see Open: a site-wide ContentSection arrangement).
   Skipped nit: the placeholder label size and the "See how we use AI" position (the generator is shared by every
   placeholder; the media split places actions under the heading on every page by design).
+
+## Pass 2, owner review 4 Nov 2026
+main (home pass #219 and its 4 Nov rulings) was merged in first. Of those rulings only FAQ beside in halves
+touches this page, and it renders (head in the start half, the accordion in the end half). Why Tcules, Three
+ways and the industries pills are not bands on /careers. Nothing from the merge broke the page; 1440 and 390
+shot with no overflow or page errors.
+
+- **"Tcules jobs open now": "no underlines here please".** Cause: OfferSheet's linked title (`href`) was
+  underlined at rest in the accent ink, so a row read as text holding an inline link, which is what the
+  linked-card ruling (2026-10-16) forbids for a title. Fix, GLOBAL (OfferSheet, `.titleLink` + `.linked`,
+  tokens `--ofs-title-link-shift/-duration/-easing`; `--ofs-title-link-rule/-offset` removed on every
+  surface): no underline; the link's box is stretched over its whole item, so the glyph, meta line and row
+  air are the target; hover and keyboard focus are one move (2026-10-19-hover-is-a-move): the title takes the
+  accent ink and slides 4 along the reading direction on the owner's curve (360, ease), with no motion
+  under reduced motion; the focus ring is drawn round the row. Link semantics and the role pick are
+  unchanged. Checked in a browser: a click at the row's far end lands on the link and checks "AI Systems
+  Architect"; hover ends at translateX(4); focus draws a 2 ring round the row. Other pages: no other
+  corpus page renders an OfferSheet title link (every `_pages` route scanned). /clients' rows carry no
+  link and are unchanged (shot). /design/offer-sheet's linked specimens (8c) take the same treatment.
+- **"How AI fits into the job": "cta below the body?"** Cause: TextBand's two media branches (illustrated
+  prose and a bound photo) passed the band's links as ContentSection's head `actions`, which a media split
+  places under the heading, before the paragraphs; every other prose shape already set them as the band's
+  `footer`. Fix, GLOBAL at the band mapping (CopyBands `TextBand`): a media prose band's links are its
+  footer, after the body, unpinned (`pin: false`) so the link follows the last paragraph rather than
+  dropping to the picture's bottom edge. ContentSection is unchanged: its head `actions` stay right for a
+  head over tiles. Other pages: every `_pages` route scanned for a B band with a link; /careers' ai-fluency
+  was the only one with its link before the body. The studio-photo prose bands (audits) already set the
+  link after the words.
+
+### Open (owner)
+- The role rows have no rest cue now beyond the glyph and the section's sense; on a phone nothing says a
+  row picks the role in the form below. The glossary's quiet end arrow (2026-11-04-term-rows-carry-an-end-
+  arrow) is scoped to term rows and the 7 Oct "no arrow cue" holds elsewhere, so none was added. Say if the
+  roles should carry it.
+- A role row's meta line sits on the title's top edge, not its baseline (14 beside 20). Unchanged.
 

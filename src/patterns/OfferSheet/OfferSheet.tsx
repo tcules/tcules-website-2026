@@ -50,7 +50,8 @@ export type OfferSheetItem = {
   /**
    * The page the promise names, when the title is authored as a link (an expertise page's "What we
    * design": "**[Care coordination platforms](/…)** that connect families with carers", component-map
-   * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
+   * C7). The title becomes that link, with no underline, and its box covers the whole item, so the
+   * item is the target; on hover and focus only the title moves (owner, 4 Nov 2026, /careers).
    */
   href?: string;
   /**
@@ -277,7 +278,10 @@ export function OfferSheet({
     /* A head beside its body is a split, so the seam is `section` (96). */
     <ul>
       {shown.map((item) => (
-        <li key={keyOf(item)} className={cx(styles.row, list && styles.listRow)}>
+        <li
+          key={keyOf(item)}
+          className={cx(styles.row, list && styles.listRow, item.href && styles.linked)}
+        >
           {/* `list`: the words under the title in the narrow body track. `rows`: from 1024 the title
               in a label column beside its words, a split, so the seam is `section` (96). */}
           <Layout
@@ -311,7 +315,7 @@ export function OfferSheet({
       rowGap="stack"
     >
       {shown.map((item) => (
-        <li key={keyOf(item)}>
+        <li key={keyOf(item)} className={item.href ? styles.linked : undefined}>
           <Layout
             columns={drawnThree ? { base: 1, md: [5, 6], lg: 1 } : { base: 1, md: [5, 6] }}
             colGap="gutter"
@@ -330,7 +334,7 @@ export function OfferSheet({
        are a borderless set's seam, `column` (the gap scale's row seam of a borderless set, 29 Sep 2026). */
     <Layout as="ul" columns={{ base: 1, md: 2, lg: across }} colGap="gutter" rowGap="column">
       {shown.map((item) => (
-        <li key={keyOf(item)}>
+        <li key={keyOf(item)} className={item.href ? styles.linked : undefined}>
           <Layout rowGap="block">
             <span className={styles.headIcon}>
               {item.icon ? <Icon name={item.icon} size="xl" /> : null}
@@ -348,7 +352,7 @@ export function OfferSheet({
       rowGap="stack"
     >
       {shown.map((item) => (
-        <li key={keyOf(item)} className={styles.item}>
+        <li key={keyOf(item)} className={cx(styles.item, item.href && styles.linked)}>
           {words(item)}
         </li>
       ))}

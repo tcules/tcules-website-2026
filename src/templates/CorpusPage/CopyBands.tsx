@@ -2431,7 +2431,12 @@ export function TextBand({
   );
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
-     plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
+     plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller").
+     The band's links are its FOOT, under the words they close, beside a picture exactly as without
+     one (owner, 4 Nov 2026, /careers "How AI fits into the job": "cta below the body?"). As the
+     head's `actions` they sat between the heading and the paragraphs, a way on before the argument.
+     Unpinned (`pin: false`): the link follows the last paragraph rather than dropping to the
+     picture's bottom edge. */
   if (isIllustratedProse(band.id)) {
     return (
       <ContentSection
@@ -2443,8 +2448,9 @@ export function TextBand({
           side,
           weight: 'photo',
           head: 'lg',
+          pin: false,
         }}
-        actions={actions}
+        footer={actions}
       >
         {text}
       </ContentSection>
@@ -2456,8 +2462,8 @@ export function TextBand({
         {...head(band)}
         data-band="B"
         arrangement="media"
-        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg' }}
-        actions={actions}
+        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg', pin: false }}
+        footer={actions}
       >
         {text}
       </ContentSection>
