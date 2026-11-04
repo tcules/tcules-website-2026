@@ -98,8 +98,12 @@ export function GatewayPaths({
         as="ul"
         columns={{ base: 1, lg: 3 }}
         colGap="gutter"
-        rowGap="stack"
-        shareRows={3}
+        /* Stacked items a `stack` apart when an example sits under each card, so it never reads as
+           the next card's; otherwise the card set's own `gutter`. */
+        rowGap={paths.some((path) => path.example) ? 'stack' : 'gutter'}
+        /* A third shared row only when an example sits under a card; without one it would leave its
+           track and seam under every card. */
+        shareRows={paths.some((path) => path.example) ? 3 : 2}
         className={cx(styles.root, className)}
       >
         {paths.map((path) => (
