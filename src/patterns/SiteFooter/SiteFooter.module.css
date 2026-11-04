@@ -237,7 +237,7 @@
 }
 
 /* ── 4 · Studio ───────────────────────────────────────────────────────────────
-   The statement at body in the body ink, under a short bar in the facts' label row, so it opens on
+   The statement at body-sm in the body ink, under a short bar in the facts' label row, so it opens on
    the facts' first line (owner, 4 Nov 2026). */
 .statement {
   max-inline-size: var(--foot-statement-measure);

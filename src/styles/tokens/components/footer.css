@@ -64,9 +64,9 @@
   --foot-link-text: var(--text-body-sm);
   --foot-social-text: var(--text-ui-sm);
   --foot-social-tracking: var(--text-ui-sm-tracking);
-  /* The statement at body, in the body ink (owner, 4 Nov 2026): the bar above it, in the labels'
+  /* The statement at body-sm, 14, in the body ink (owner, 4 Nov 2026): the bar above it, in the labels'
      row, is what gives it its place beside the labelled facts. */
-  --foot-statement-text: var(--text-body);
+  --foot-statement-text: var(--text-body-sm);
   /* The short rule over the statement (owner, 4 Nov 2026): it fills the row the facts' labels sit
      in, so the statement opens on the facts' first line. The row is the eyebrow's line box, read
      from the same size and ratio as the labels so the two cannot drift. The bar is the logo's own
