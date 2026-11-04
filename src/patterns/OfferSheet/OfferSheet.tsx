@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
 
 import {
+  Cluster,
+  Icon,
   Layout,
   Media,
   Section,
   Sketch,
+  type IconName,
   type MediaImage,
   type SectionSurface,
   type SketchName,
@@ -41,6 +44,11 @@ export type OfferSheetItem = {
    * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
    */
   href?: string;
+  /**
+   * A glyph leading the item, `rows` only: before its title, on the title's first line (owner, 4 Nov
+   * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
+   */
+  icon?: IconName;
 };
 
 /** One of the band's terms: a title and what it says. */
@@ -187,7 +195,18 @@ export function OfferSheet({
             rowGap="text"
             align="start"
           >
-            {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+            {item.icon ? (
+              /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
+                 card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
+              <Cluster colGap="text" align="start" nowrap>
+                <span className={styles.rowIcon}>
+                  <Icon name={item.icon} size="xl" />
+                </span>
+                {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+              </Cluster>
+            ) : item.title ? (
+              <h3 className={styles.title}>{item.title}</h3>
+            ) : null}
             {item.bodyHtml ? (
               <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
             ) : item.body ? (

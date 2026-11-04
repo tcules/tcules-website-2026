@@ -128,3 +128,20 @@
 .row:first-child {
   padding-block-start: 0;
 }
+
+/* A row's glyph, before its title: one line of the title's font tall, so the glyph centres on the
+   title's FIRST line however many lines the title runs to; 1em wide, in the accent ink. */
+.rowIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font: var(--ofs-title-text);
+  block-size: 1lh;
+  color: var(--ofs-mark-ink);
+}
+
+.rowIcon > svg {
+  display: block;
+  width: var(--ofs-icon-size);
+  height: var(--ofs-icon-size);
+}

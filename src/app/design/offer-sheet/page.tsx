@@ -323,7 +323,7 @@ export default function OfferSheetSpecimen() {
       <Variation
         id="rows"
         title="7 · Rows: each title beside its words"
-        note='`arrangement="rows"`: one promise per row, its title in the label column and its words beside it from 1024, a hairline under each row (no blue mark). For bodies of several sentences (/clients, owner 4 Nov 2026). No aside, no drawings.'
+        note='`arrangement="rows"`: one promise per row, its title in the label column and its words beside it from 1024, a hairline under each row (no blue mark), each title led inline by its glyph. For bodies of several sentences (/clients, owner 4 Nov 2026). No aside, no drawings.'
       />
       <OfferSheet
         heading="What clients have asked us to do"
@@ -332,15 +332,18 @@ export default function OfferSheetSpecimen() {
         items={[
           {
             title: 'Shape a new product',
+            icon: 'ruler-pen',
             bodyHtml:
               'For <a href="#a">a logistics client</a>, we designed one quoting product for six specialist roles. At <a href="#b">a scheduling company</a>, our research changed the model behind an enterprise MVP.',
           },
           {
             title: 'Improve software customers already rely on',
+            icon: 'refresh-square',
             body: 'We built new interface patterns as working prototypes in code, so the engineers could check them against how experienced users already work before a wider rollout. For a second client we audited the product and redesigned how a listing joins the pipeline.',
           },
           {
             title: 'Work as part of an internal product team',
+            icon: 'users-group-rounded',
             body: 'A publisher brought us into its product team for six months.',
           },
         ]}

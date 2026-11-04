@@ -528,7 +528,18 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
 
 /* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
    have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
-const SHEET_ROWS: ReadonlySet<string> = new Set(['product-responsibility']);
+const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
+  /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
+     and the set warns as mixed. */
+  'product-responsibility': {
+    'Shape a new product': 'ruler-pen',
+    'Improve software customers already rely on': 'refresh-square',
+    'Design AI into the product': 'stars',
+    'Carry the design into working software': 'code-square',
+    'Work as part of an internal product team': 'users-group-rounded',
+    "Find out what's wrong before fixing it": 'magnifier-bug',
+  },
+};
 
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
@@ -585,7 +596,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         <SheetBand
           band={band}
           scenes={scenes}
-          {...(SHEET_ROWS.has(band.id) ? { arrangement: 'rows' as const } : {})}
+          {...(SHEET_ROWS[band.id]
+            ? { arrangement: 'rows' as const, icons: SHEET_ROWS[band.id] }
+            : {})}
         />
       );
     }
