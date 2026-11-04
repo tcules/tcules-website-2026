@@ -92,3 +92,16 @@
   text-transform: var(--text-mono-case);
   color: var(--flow-lane-label-ink);
 }
+
+/* `ruled={false}`: no opening rule on a stage and no closing rule under an item; the item reads at
+   the body size, as the stage's one line. */
+.open {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.openItem {
+  padding-block: 0;
+  border-block-end: 0;
+  font: var(--text-body);
+}

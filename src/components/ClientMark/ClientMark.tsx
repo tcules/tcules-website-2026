@@ -60,10 +60,12 @@ export type ClientMarkProps = {
    */
   density?: number;
   /**
-   * `md` (default) is the set's size: a logo strip or client wall. `sm` is a mark in a citation
-   * line (a case's title beside it): the same ink rules at 24 tall at most, one value at every width.
+   * `md` (default) is the set's size: a logo strip or client wall. `sm` is the compact client wall
+   * (LogoGrid `density="compact"`, owner 4 Nov 2026): the same ink rules at about four fifths of md,
+   * 32 tall at most, with its own phone step. `xs` is a mark in a citation line (a case's title
+   * beside it): 24 tall at most, one value at every width.
    */
-  size?: 'md' | 'sm';
+  size?: 'md' | 'sm' | 'xs';
   className?: string;
 };
 
@@ -164,6 +166,6 @@ export function ClientMark({
     /* role="img" + aria-label: the element has no content, so the label is its entire accessible
        text, and the role makes a screen reader announce it as an image ("Northwind, image")
        rather than skip an empty span. */
-    <span role="img" aria-label={name} className={cx(styles.mark, size === 'sm' && styles.sm, className)} style={vars} />
+    <span role="img" aria-label={name} className={cx(styles.mark, size === 'sm' && styles.sm, size === 'xs' && styles.xs, className)} style={vars} />
   );
 }

@@ -344,7 +344,19 @@ type CtaOpenProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
-  inBand?: never;
+  /**
+   * `compact` (owner, 4 Nov 2026, homepage pass: "a CTA island variant that's compact and has
+   * buttons on the right"): the heading and its line at the start, the actions at the inline end
+   * from 1024, centred on the words, at the island's own inset. For a short ask that closes the band
+   * it follows ("Not sure which suits you?"), not the page: it never takes the display scale.
+   */
+  density?: 'compact';
+  /**
+   * `compact` only: the island set inside the band it closes rather than as a band of its own (a
+   * labelled `<section>`, no Section), so it sits a step under that band's set instead of a band's
+   * air away from it. See the split close's `inBand`.
+   */
+  inBand?: boolean;
 };
 
 type CtaOfferWithActionsProps = {
@@ -404,13 +416,14 @@ function present(node: ReactNode): boolean {
  * `open` display (the centred open close), `halves` the offer step at a two-line measure (the halves
  * close, 25 Oct 2026). The element is an `h2` in all four.
  */
-type CtaHeadingScale = 'offer' | 'close' | 'open' | 'halves';
+type CtaHeadingScale = 'offer' | 'close' | 'open' | 'halves' | 'compact';
 
 const HEADING_CLASS: Record<CtaHeadingScale, string | undefined> = {
   offer: styles.heading,
   close: styles.headingClose,
   open: styles.headingOpen,
   halves: styles.headingHalves,
+  compact: styles.headingCompact,
 };
 
 function CtaLede({
@@ -901,6 +914,47 @@ export function CtaSection(props: CtaSectionProps) {
               </Layout>
             </Layout>,
           )}
+        </Section>
+      );
+    }
+
+    /* ── Open, compact ───────────────────────────────────────────────────────────────────────
+       The words at the start and the actions at the end of one row from 1024, centred on each
+       other: a split, so `section` (96) between them. The heading takes h3, a step under a band's h2, and the line
+       under it the body role: a short ask, not the page's close. Below 1024 the actions sit a
+       `block` under the words. */
+    if (props.density === 'compact') {
+      const content = field(
+        <Layout
+          columns={{ base: 1, lg: [1, 'auto'] }}
+          colGap="section"
+          rowGap="block"
+          align="center"
+        >
+          <Layout justifyItems="start">
+            <div data-texture-calm>{lede({ scale: 'compact', leadRole: 'body' })}</div>
+          </Layout>
+          <CtaActions actions={props.actions} kind={actionKind} />
+        </Layout>,
+      );
+      return props.inBand ? (
+        <section
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement={arrangement}
+        >
+          {content}
+        </section>
+      ) : (
+        <Section
+          surface={band}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement={arrangement}
+        >
+          {content}
         </Section>
       );
     }

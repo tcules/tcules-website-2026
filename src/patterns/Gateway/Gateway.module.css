@@ -387,3 +387,128 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* ── cards (GatewayPaths `form="cards"`, home, 4 Nov 2026) ─────────────────────
+   Each path one card: a hairline round it at the card radius, on the card's own ground, the copy a
+   `gutter` inside. The rows inside are the Layout's; nothing here arranges anything. */
+.door {
+  padding: var(--gap-gutter);
+  border: var(--gwy-rule-width) solid var(--gwy-door-rule-ink);
+  border-radius: var(--gwy-door-radius);
+  background: var(--gwy-door-ground);
+}
+
+/* The kind of product: the label voice, so mono and uppercase in presentation only. */
+.doorEyebrow {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--gwy-door-eyebrow-ink);
+}
+
+.doorTitle {
+  font: var(--gwy-door-title-text);
+  letter-spacing: var(--gwy-door-title-tracking);
+  text-wrap: pretty;
+  color: var(--gwy-title-ink);
+}
+
+.doorBody {
+  font: var(--gwy-path-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--gwy-body-ink);
+}
+
+/* The example's label, under the card: the label voice, muted. */
+.doorExampleLabel {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--gwy-door-example-ink);
+}
+
+/* The example: a step quieter than the words, its case link in the link ink. Its first letter is set
+   in CSS, so a sentence the copy began after "Example:" ("the review feed…") opens as one. */
+.doorExample::first-letter {
+  text-transform: uppercase;
+}
+
+.doorExample {
+  font: var(--gwy-door-example-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--gwy-door-example-ink);
+}
+
+.doorExample a {
+  color: var(--gwy-door-link-ink);
+  text-decoration: none;
+}
+
+.doorExample a:hover {
+  color: var(--gwy-door-link-ink-hover);
+  text-decoration: underline;
+  text-decoration-thickness: var(--gwy-rule-width);
+  text-underline-offset: var(--gwy-door-underline-offset);
+}
+
+/* A way in: a hairline over each row, the row at least a touch target tall, its words centred in it. */
+.doorRow {
+  border-block-start: var(--gwy-rule-width) solid var(--gwy-door-rule-ink);
+}
+
+.doorLink {
+  display: block;
+  padding-block: var(--gwy-door-row-inset);
+  font: var(--gwy-door-link-text);
+  letter-spacing: var(--gwy-door-link-tracking);
+  text-wrap: pretty;
+  color: var(--gwy-door-row-ink);
+  text-decoration: none;
+  border-radius: var(--gwy-ring-radius);
+}
+
+.doorLink:hover {
+  color: var(--gwy-door-row-ink-hover);
+  text-decoration: none;
+}
+
+.doorLink:focus {
+  outline: none;
+}
+
+.doorLink:focus-visible {
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+}
+
+/* The arrow moves toward its destination on hover and back, on transform only
+   (decisions/2026-10-19-hover-is-a-move). */
+.doorArrow {
+  display: block;
+  color: var(--gwy-door-arrow-ink);
+  inline-size: var(--gwy-door-arrow-size);
+  block-size: var(--gwy-door-arrow-size);
+  transition: transform var(--gwy-quick-duration) var(--gwy-easing);
+}
+
+.doorArrow > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.doorLink:hover .doorArrow,
+.doorLink:focus-visible .doorArrow {
+  color: var(--gwy-door-row-ink-hover);
+  transform: translateX(var(--gwy-service-arrow-shift));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doorArrow {
+    transition-duration: var(--duration-instant);
+  }
+}
+
+/* The arrow keeps its size beside a label that wraps. */
+.doorArrow {
+  flex: none;
+}

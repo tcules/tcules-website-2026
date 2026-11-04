@@ -23,6 +23,12 @@
 :root {
   --lgrid-cell-height: 128px;
   --lgrid-cell-height-m: 88px;
+  /* The compact wall (owner, 4 Nov 2026): the sm mark's 32 cap with 32 of air above and below, the
+     same open proportion as the default cell at four fifths of its mark; 72 on a phone, the sm
+     phone mark's 26 cap with 23 of air. Two rows of 96 are 192, so the wall sits under the hero
+     without taking a fold of its own. */
+  --lgrid-cell-height-compact: 96px;
+  --lgrid-cell-height-compact-m: 72px;
   --lgrid-rule-width: var(--border-width-hairline);
   /* The closed frame's corners: the photograph radius, so the grid matches the images round it
      (owner, 9 Oct 2026). Only the frame's outer corners; the cells inside stay square. */
@@ -32,6 +38,7 @@
 @media (max-width: 767px) {
   :root {
     --lgrid-cell-height: var(--lgrid-cell-height-m);
+    --lgrid-cell-height-compact: var(--lgrid-cell-height-compact-m);
   }
 }
 

@@ -1,4 +1,4 @@
-import { ContentSection, ContentSectionText } from '@/patterns';
+import { ContentSection } from '@/patterns';
 import type { CorpusPage } from '@/lib/corpus-types';
 
 import { CorpusHero, EnquiryBand, FaqItems, GenericBlocks, head } from './blocks';
@@ -36,10 +36,14 @@ export function PlainPage({ page }: PlainPageProps) {
           );
         if (kind === 'faq')
           return (
-            <ContentSection key={band.id} {...head(band)} align="center">
-              <ContentSectionText>
-                <FaqItems band={band} />
-              </ContentSectionText>
+            <ContentSection
+              key={band.id}
+              {...head(band)}
+              data-band="D-faq"
+              arrangement="beside"
+              split="halves"
+            >
+              <FaqItems band={band} />
             </ContentSection>
           );
         return (

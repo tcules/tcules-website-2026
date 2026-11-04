@@ -13,6 +13,7 @@ import {
   type SketchName,
 } from '@/components';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
+import { cx } from '@/lib/cx';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 
 import styles from './OfferSheet.module.css';
@@ -66,6 +67,11 @@ export type OfferSheetItem = {
    * drawings. Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
+  /**
+   * `list` only: a label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer":
+   * who acts at that step). Set on every item or on none.
+   */
+  eyebrow?: string;
 };
 
 /** One of the band's terms: a title and what it says. */
@@ -125,8 +131,15 @@ export type OfferSheetProps = {
    * clients page's "What clients have asked us to do", owner, 4 Nov 2026). For a set whose bodies run
    * to several sentences and name clients, so the words need a measure, not a third of the column. A
    * rows sheet takes no aside and no drawings.
+   *
+   * `list` (owner, 4 Nov 2026, home's Why Tcules: "heading left, list right, each title gets an inline
+   * icon"): a split. The heading, its lead and the `note` (the band's way deeper) in the head track
+   * from 1024; the promises down the body track, one a row, each its glyph inline before its title
+   * and its words UNDER the title (the track is too narrow for a label column), each row closed by a
+   * hairline. For a set of short promises, a title and one sentence each, that would leave a grid
+   * of six as six thin columns. Takes no aside, no drawings and no terms.
    */
-  arrangement?: 'grid' | 'rows';
+  arrangement?: 'grid' | 'rows' | 'list';
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -163,7 +176,8 @@ export function OfferSheet({
   arrangement = 'grid',
   surface = 'paper',
 }: OfferSheetProps) {
-  const rows = arrangement === 'rows';
+  const list = arrangement === 'list';
+  const rows = arrangement === 'rows' || list;
   const shown = items.filter(
     (item) =>
       (item.title ?? item.body ?? item.bodyHtml ?? item.facts?.join('') ?? '').trim().length > 0,
@@ -232,14 +246,43 @@ export function OfferSheet({
      as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
      again. Two across keeps the approved form, the drawing beside its words from 768. */
   const drawnThree = drawn && across === 3;
-  const promises = rows ? (
+  /* `list` with a drawing on every item (owner, 4 Nov 2026, home's AI run, direction A): each row its
+     plate beside its words, a sequence, so an <ol>; no rules, the rows parted by their own air. */
+  const listDrawn = list && shown.length > 0 && shown.every((item) => item.scene);
+  const promises = listDrawn ? (
+    <Layout as="ol" rowGap="stack">
+      {shown.map((item) => (
+        <li key={keyOf(item)}>
+          {/* The plate in 2 of [2, 3], beside the words and centred on them at every width (direction
+              A's phone cut too), `text` (16) apart: a small figure and its caption, one item. */}
+          <Layout columns={{ base: [2, 3] }} colGap="text" rowGap="block" align="center">
+            {item.scene ? <Sketch name={item.scene} /> : null}
+            <Layout rowGap="tight">
+              {item.eyebrow ? <p className={styles.listLabel}>{item.eyebrow}</p> : null}
+              {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
+              {item.bodyHtml ? (
+                <p
+                  className={styles.body}
+                  dangerouslySetInnerHTML={{ __html: item.bodyHtml }}
+                />
+              ) : item.body ? (
+                <p className={styles.body}>{item.body}</p>
+              ) : null}
+            </Layout>
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  ) : rows ? (
     /* A head beside its body is a split, so the seam is `section` (96). */
     <ul>
       {shown.map((item) => (
-        <li key={keyOf(item)} className={styles.row}>
+        <li key={keyOf(item)} className={cx(styles.row, list && styles.listRow)}>
+          {/* `list`: the words under the title in the narrow body track. `rows`: from 1024 the title
+              in a label column beside its words, a split, so the seam is `section` (96). */}
           <Layout
-            columns={{ base: 1, lg: [1, 1] }}
-            colGap="section"
+            columns={list ? undefined : { base: 1, lg: [1, 1] }}
+            colGap={list ? undefined : 'section'}
             rowGap="text"
             align="start"
           >
@@ -359,22 +402,44 @@ export function OfferSheet({
     </Layout>
   ) : null;
 
+  const headText = lead ? (
+    <Layout rowGap="block">
+      <h2 id={headingId} className={styles.heading}>
+        {heading}
+      </h2>
+      <p className={styles.lead}>{lead}</p>
+    </Layout>
+  ) : (
+    <h2 id={headingId} className={styles.heading}>
+      {heading}
+    </h2>
+  );
+
+  if (list) {
+    /* A head beside its body is a split: `section` (96) between them, on the beside head tracks every
+       split band takes (5 : 7, then 1 : 2 from 1440). The head's way deeper sits a `stack` under it. */
+    return (
+      <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
+        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="start">
+          {note ? (
+            <Layout rowGap="stack">
+              {headText}
+              {note}
+            </Layout>
+          ) : (
+            headText
+          )}
+          {promises}
+        </Layout>
+      </Section>
+    );
+  }
+
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
       <Layout rowGap="section">
         <Layout rowGap="stack">
-          {lead ? (
-            <Layout rowGap="block">
-              <h2 id={headingId} className={styles.heading}>
-                {heading}
-              </h2>
-              <p className={styles.lead}>{lead}</p>
-            </Layout>
-          ) : (
-            <h2 id={headingId} className={styles.heading}>
-              {heading}
-            </h2>
-          )}
+          {headText}
           {side ? (
             <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
               {sheet}

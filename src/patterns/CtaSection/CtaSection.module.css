@@ -133,6 +133,16 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* The compact island's heading (owner, 4 Nov 2026): h3, a step under the band it closes, so the short
+   ask never outweighs that band's own heading. */
+.headingCompact {
+  max-inline-size: var(--cta-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-compact-heading-text);
+  letter-spacing: var(--cta-compact-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
 /* The closes' heading (cmp-cta fix round 1): the same part one and two steps up the ladder, so the
    page's last ask outweighs every mid-page head. Split takes h1 at the title measure; open takes
    display at the display measure, centred by its column. Separate rules rather than modifiers on

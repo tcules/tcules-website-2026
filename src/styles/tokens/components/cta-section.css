@@ -41,6 +41,9 @@
      open pair stays its own so the centred close can move without the split one. The K offer stays
      h2: it interrupts, it does not end. The element is an `h2` in every case. */
   --cta-close-heading-text: var(--text-h1);
+  /* The compact island (owner, 4 Nov 2026): h3, a short ask under the band it closes. */
+  --cta-compact-heading-text: var(--text-h3);
+  --cta-compact-heading-tracking: var(--text-h3-tracking);
   --cta-close-heading-tracking: var(--text-h1-tracking);
   --cta-open-heading-text: var(--text-h1);
   --cta-open-heading-tracking: var(--text-h1-tracking);

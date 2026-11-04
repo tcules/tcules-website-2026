@@ -171,3 +171,14 @@
   content: '·';
   padding-inline-start: var(--gap-tight);
 }
+
+/* `list`: the same closing hairline, the row's air the `block` step either side of it: a title and one
+   sentence need less than the rows arrangement's paragraphs. The first row keeps its top inset at 0,
+   so its title starts level with the heading beside it. */
+.listRow {
+  padding-block: var(--gap-block);
+}
+
+.listRow:first-child {
+  padding-block-start: 0;
+}

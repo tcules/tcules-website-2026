@@ -465,6 +465,10 @@ export const PAGE_SCENE_NAMES = [
   'wyg-future-interfaces-lab-join-product-experience-designers',
   'wyg-future-interfaces-lab-join-growth-brand-operators',
   'wyg-future-interfaces-lab-join-method',
+  /* Home, "How our designers use AI" (owner, 4 Nov 2026, direction A): one plate per step. */
+  'home-ai-check',
+  'home-ai-decide',
+  'home-ai-fix',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

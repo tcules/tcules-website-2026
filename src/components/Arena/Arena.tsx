@@ -29,7 +29,8 @@ const PHONE_QUERY = '(max-width: 639px)';
  *
  * A field of similar grey apps; one rises and opens, and underneath a client, a researcher, a
  * designer and an engineer work with agents until the finished card flies up into the app. It
- * loops every 10.3 seconds.
+ * loops every 11.8 seconds (v11, 4 Nov 2026: the lid gives, the stations rise, the work arcs, and the
+ * finished card pops, resolves and catches the light).
  *
  * ── The contract ─────────────────────────────────────────────────────────────────
  *   The drawing is FETCHED after the page paints (46 KB gzipped, 480 KB raw), never inlined into
@@ -65,17 +66,22 @@ export function Arena({ src, label, glyphs, className }: ArenaProps) {
         const svg = art.querySelector('svg');
         if (!svg) return;
         const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        driver.current = startArena(stage, svg, { still, phone: matchMedia(PHONE_QUERY).matches });
+        driver.current = startArena(stage, svg, {
+          still,
+          phone: matchMedia(PHONE_QUERY).matches,
+        });
         setPlaying(!still);
         setReady(true);
         io = new IntersectionObserver(
-          ([entry]) => (entry?.isIntersecting ? driver.current?.resume() : driver.current?.suspend()),
+          ([entry]) =>
+            entry?.isIntersecting ? driver.current?.resume() : driver.current?.suspend(),
           { threshold: 0 },
         );
         io.observe(stage);
       })
       .catch((error: unknown) => {
-        if (process.env.NODE_ENV !== 'production') console.warn(`Arena: ${src} did not load`, error);
+        if (process.env.NODE_ENV !== 'production')
+          console.warn(`Arena: ${src} did not load`, error);
       });
 
     return () => {
