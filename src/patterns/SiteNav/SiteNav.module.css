@@ -11,7 +11,7 @@
    primitive cannot express: a sticky bar's position, an overlay's escape from the flow, and a box
    whose width and height are animated.
 
-   The exceptions are the CONTROLS — .row, .card, .sheetControl, .sheetHead — which are flex boxes
+   The exceptions are the CONTROLS — .row, .sheetControl, .sheetHead — which are flex boxes
    holding their own label and glyph. That is a control laying out its own inside, exactly as
    Button.module.css does, and it is not the "hand-rolled grid for arrangement" the layout rule
    prohibits. Two of them (.track, .sheet) are the animation machinery described above.
@@ -232,24 +232,13 @@
     block-size var(--nav-plate-morph) var(--nav-transition-easing);
 }
 
-/* One width per section, shared by the plate and by the pane that fills it, and clamped against
-   the STAGE rather than against each other — `100cqi` is the stage's content width, so a pane is
-   the width it will be rendered at whether or not it is the one showing. Between 1024 and 1184 the
-   widest plate is wider than the viewport it has to sit in, and this is what handles that without
-   making one pane's measurement depend on another pane's turn. */
-.plate[data-width='lg'],
-.pane[data-width='lg'] {
-  inline-size: min(var(--nav-plate-width-lg), 100cqi);
-}
-
-.plate[data-width='md'],
-.pane[data-width='md'] {
-  inline-size: min(var(--nav-plate-width-md), 100cqi);
-}
-
-.plate[data-width='sm'],
-.pane[data-width='sm'] {
-  inline-size: min(var(--nav-plate-width-sm), 100cqi);
+/* ONE WIDTH for every section: the content column (owner, 4 Nov 2026), so the plate's edges sit on
+   the logo and the CTA above it. Shared by the plate and its panes, and clamped against the STAGE —
+   `100cqi` is the stage's content width, which is the column wherever the viewport is narrower
+   than 1240 plus its gutters. */
+.plate,
+.pane {
+  inline-size: min(var(--nav-plate-width), 100cqi);
 }
 
 /* A PANE. Absolutely positioned so all three can be mounted at once — which is what lets their
@@ -258,7 +247,7 @@
    the right and enters from there. Direction falls out of item order with nothing to compute.
 
    The cap and the scroll are here rather than on the plate, because the plate clips: Services
-   carries twelve rows and a rail, and on a short laptop viewport the last of them has to be
+   carries four groups and an aside, and on a short laptop viewport the last of them has to be
    reachable. Capping the pane also caps what the plate is ever told to be, which is what QA §10.4
    checks. */
 .pane {
@@ -273,7 +262,6 @@
      the last 2px of the last row at exactly the viewport height where the cap starts to bite. */
   max-block-size: calc(var(--nav-panel-max-block) - 2 * var(--nav-rule-width));
   overflow-y: auto;
-  padding: var(--gap-stack) var(--gap-gutter) var(--gap-gutter);
   opacity: 0;
   transform: translateX(calc(var(--nav-pane-shift) * 100%));
   /* The fade is unconditional — it IS the open — while the slide is gated with the plate's size
@@ -301,49 +289,59 @@
   color: var(--nav-label-ink);
 }
 
-/* A ROW. Direction B: a brandeis fill at the row radius, with the label and the arrow both taking
-   the blue. The whole row is the target — a row whose label is clickable and whose empty right
-   half is not is a row people click on and nothing happens.
+/* A ROW: the label and its arrow on one line, the description under them. The whole row is the
+   target — a row whose label is clickable and whose empty right half is not is a row people click
+   on and nothing happens.
 
-   The negative inset is the one margin on a container in this file and it is not spacing: it pulls
-   the row's own padding back out so the LABEL still aligns with its column's edge while the hover
-   fill extends past it. Without it the plate's first column sits 16px in from the group label
-   above it. */
+   NO HOVER GROUND (decisions 2026-10-19-no-hover-only-grounds): the label takes the blue and the
+   arrow moves in. With no fill to make room for, the row needs no padding pulled back out with a
+   negative inset, and its label sits on its column's edge by construction. */
 .row {
   display: flex;
-  align-items: start;
-  justify-content: space-between;
-  gap: var(--gap-text);
-  padding: var(--nav-row-padding-block) var(--nav-row-padding-inline);
-  margin-inline: calc(-1 * var(--nav-row-padding-inline));
-  border-radius: var(--nav-row-radius);
+  flex-direction: column;
+  gap: var(--gap-inline);
   color: var(--nav-row-label-ink);
   text-decoration: none;
-  transition:
-    background var(--nav-transition-duration) var(--nav-transition-easing),
-    color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
 .row:hover,
 .row:focus-visible {
-  background: var(--nav-row-bg-hover);
   color: var(--nav-row-label-ink-hover);
+}
+
+.rowHead {
+  display: flex;
+  align-items: start;
+  gap: var(--nav-row-head-gap);
 }
 
 .rowLabel {
   font: var(--nav-row-text);
+  font-weight: var(--nav-row-label-weight);
+}
+
+.rowDescription {
+  font: var(--nav-row-description-text);
+  color: var(--nav-row-description-ink);
+}
+
+/* The external cue is always there, unlike the arrow: it says where the link goes, not that the
+   pointer is on it. Same first-line correction as the arrow below. */
+.rowExternal {
+  flex: none;
+  margin-block-start: calc((var(--nav-row-line) - var(--nav-row-arrow-size)) / 2);
+  inline-size: var(--nav-row-arrow-size);
+  block-size: var(--nav-row-arrow-size);
+  color: var(--nav-row-description-ink);
 }
 
 /* The arrow slides in from -4px on hover rather than being always present: an arrow on every one
-   of eighteen rows is eighteen arrows, and none of them is pointing at anything.
+   of twenty rows is twenty arrows, and none of them is pointing at anything.
 
-   The margin is an OPTICAL CORRECTION, not spacing — it centres a 14px glyph on the row's first
-   line so a label long enough to wrap keeps its arrow beside the line it starts on (§8.5), rather
-   than drifting to the middle of two. Computed from the row's own line box, so it follows the type
-   role and holds no distance of its own. */
+   The margin is an OPTICAL CORRECTION, not spacing — it centres a 14px glyph on the label's first
+   line so a label long enough to wrap keeps its arrow beside the line it starts on (§8.5). */
 .rowArrow {
   flex: none;
-  align-self: start;
   margin-block-start: calc((var(--nav-row-line) - var(--nav-row-arrow-size)) / 2);
   inline-size: var(--nav-row-arrow-size);
   block-size: var(--nav-row-arrow-size);
@@ -356,113 +354,29 @@
 }
 
 .row:hover .rowArrow,
-.row:focus-visible .rowArrow,
-.card:hover .rowArrow,
-.card:focus-visible .rowArrow,
-.card:hover .cardArrow,
-.card:focus-visible .cardArrow {
+.row:focus-visible .rowArrow {
   opacity: 1;
   transform: none;
 }
 
-/* The way through to the section's index, at the foot of the plate. The rule is what makes it read
-   as the end of the pane rather than as a nineteenth destination; the air under the rule is the
-   bar's own padding, and the beat above it belongs to the Layout that holds both. */
+/* ── The two halves ────────────────────────────────────────────────────────────
+   The INDEX is the groups; the ASIDE is the way onward on its own deeper ground, full height at the
+   plate's right edge. Each pads itself — the pane has no padding, so the aside's ground reaches
+   the plate's edges — and both pad by `gutter`, the plate's one inset. */
+.index {
+  padding: var(--gap-gutter);
+}
+
+.aside {
+  padding: var(--gap-gutter);
+  background: var(--nav-aside-ground);
+}
+
+/* A hub with no aside sits under the groups, ruled off as the end of the pane. No section uses it
+   today; it is the fallback the type promises. */
 .hubBar {
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
-  padding-block-start: var(--gap-text);
-}
-
-/* ── The rail ──────────────────────────────────────────────────────────────────
-   Its hairline is what makes two halves read as two halves. This inset is the air between that rule
-   and the rail's own content, and it is HALF of one seam rather than a seam of its own: the Layout
-   above contributes `gutter` on the other side, so 32 + rule + 32 reads as a single 64 break with
-   the rule in its middle. Both sides have to move together — at `column` here and `column` there
-   the seam was 129px and the rail floated a quarter of the plate away from the columns.
-
-   No token for the 32. It would only rename --gap-gutter, which is the --sec-gap mistake the token
-   rules already made once; the reasoning belongs in a comment, not in a second name. */
-.rail {
-  border-inline-start: var(--nav-rule-width) solid var(--nav-rule);
-  padding-inline-start: var(--gap-gutter);
-}
-
-/* A rail card: an image slot, a title, an arrow. Edged rather than filled — a filled card in a
-   panel that is already a floating box is a box inside a box. */
-.card {
-  display: block;
-  padding: var(--nav-card-padding);
-  border: var(--nav-rule-width) solid var(--nav-card-edge);
-  border-radius: var(--nav-card-radius);
-  color: var(--nav-title-ink);
-  text-decoration: none;
-  transition: border-color var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-/* The edge is the whole affordance — the title does not move with it, and now needs no declaration
-   to stay put. It used to: the shell's old `a:hover` outranked `.card`'s ink and turned the title
-   Section's link blue while the border went brandeis-500, two hover languages on one object and
-   neither of them chosen. Fixed at the source in globals.css. */
-.card:hover,
-.card:focus-visible {
-  border-color: var(--nav-card-edge-hover);
-}
-
-/* The slot holds its ratio whatever it is given, and paints a ground under it so a transparent or
-   still-loading image does not punch a hole in the card. It renders only when an image is passed —
-   see the note on SiteNavCard. */
-.cardImage {
-  display: block;
-  aspect-ratio: var(--nav-card-image-ratio);
-  /* `text`, matching the card's own padding. At `tight` the title sat 8px under a hard-edged filled
-     block inside a card padded 16 all round, so the interior read as two different rhythms and the
-     title looked crowded against the image rather than captioning it. */
-  margin-block-end: var(--gap-text);
-  border-radius: var(--nav-card-image-radius);
-  background: var(--nav-card-image-ground);
-  overflow: hidden;
-}
-
-.cardImage > * {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
-
-.cardTitle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-text);
-  font: var(--nav-rail-title-text);
-  letter-spacing: var(--nav-rail-title-tracking);
-  text-wrap: var(--text-title-wrap);
-}
-
-.cardArrow {
-  flex: none;
-  inline-size: var(--nav-card-arrow-size);
-  block-size: var(--nav-card-arrow-size);
-  color: var(--nav-row-arrow-ink);
-  opacity: 0;
-  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
-  transition:
-    opacity var(--nav-transition-duration) var(--nav-transition-easing),
-    transform var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-/* The rail's SECONDARY card is a compact row, not a second card, and the reason is structural: a
-   full card makes the rail taller than the two columns beside it, and then the plate's height is
-   set by the offer instead of by the content.
-
-   THIS IS THE SEAM, NOT THE CONTROL. The control inside it is a `Button emphasis="link"`, which
-   owns its own type, case, ink, focus ring and pressed state — so all that is left here is the rule
-   that separates the offer from the card above it and the air under that rule. Everything this used
-   to declare was a restatement of something Button had already decided. */
-.railAction {
-  padding-block-start: var(--gap-text);
-  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+  padding: var(--gap-text) var(--gap-gutter) var(--gap-gutter);
 }
 
 /* ── The sheet ─────────────────────────────────────────────────────────────────
@@ -726,8 +640,8 @@
 
    `border` and `padding` rather than a margin: the beat above the rule is the parent Layout's
    `block` step, and the beat below it is this element's own padding — so the seam is 24, rule, 24
-   and no child sets its own outer spacing. It applies to the rail's block as well as the link
-   groups, because "Working together" is a group boundary too. */
+   and no child sets its own outer spacing. It applies to the aside's links as well as the
+   groups, because the way onward is a group boundary too. */
 .sheetGroup + .sheetGroup {
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
   padding-block-start: var(--gap-block);
@@ -790,7 +704,6 @@
    the ink header takes an ink gap and a lighter ring with no rule of its own here. */
 .brand:focus,
 .row:focus,
-.card:focus,
 .sheetControl:focus,
 .sheetLink:focus {
   outline: none;
@@ -798,7 +711,6 @@
 
 .brand:focus-visible,
 .row:focus-visible,
-.card:focus-visible,
 .sheetControl:focus-visible,
 .sheetLink:focus-visible {
   outline: none;
@@ -850,8 +762,6 @@
   .pane,
   .row,
   .rowArrow,
-  .card,
-  .cardArrow,
   .sheetScrim,
   .sheet,
   .track,

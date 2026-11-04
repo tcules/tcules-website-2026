@@ -10,11 +10,11 @@ import type { SectionSurface } from '@/components';
  * which is the direction the seam runs.
  *
  * ── The load-bearing decision: EVERY item carries its children ──────────────────────────────────
- * Work, Lab and About render as plain links today. Their children are in the data anyway, on
- * `children`, unrendered. Two reasons, both from docs/specs/SiteNav.md §2.1.
+ Work renders as a plain link today. Its children are in the data anyway, on `children`,
+ * unrendered. Two reasons, both from docs/specs/SiteNav.md §2.1.
  *
- * First, switching Lab to a menu later is a change to ONE FIELD on one record — `form: 'link'`
- * becomes `form: 'compact'` and the groups are already written — rather than a content migration
+ * First, switching a link to a menu later is a change to ONE FIELD on one record — `form: 'link'`
+ * becomes `form: 'mega'` and the groups are already written — rather than a content migration
  * done under time pressure by whoever is on the ticket.
  *
  * Second, these same records are meant to feed the footer, the in-page section navigation and the
@@ -24,7 +24,7 @@ import type { SectionSurface } from '@/components';
  * ── Why this replaced a list of blocks ──────────────────────────────────────────────────────────
  * The previous shape was a `SiteNavBlock[]` per item — rows, rail, bar — which let a panel be
  * anything and therefore made every panel a separate design. The revised IA is narrower on
- * purpose: a mega is GROUPS of links, plus at most one rail. Two shapes instead of an open set,
+ * purpose: a mega is GROUPS of links, plus at most one aside. Two shapes instead of an open set,
  * which is what lets one plate morph between three sections rather than three panels blink in and
  * out of existence.
  */
@@ -41,16 +41,13 @@ export type SiteNavStatus = 'live' | 'planned';
 /**
  * How a bar item behaves.
  *
- *   mega     opens the plate: two groups side by side, optionally a rail
- *   compact  opens the plate at its narrow width — one or two short groups, never a rail
+ *   mega     opens the plate: its groups side by side, optionally an aside
  *   link     navigates. `children` is carried and not rendered
  *
- * `compact` is in the union because §2.1 promises that switching Lab or About to a menu is a
- * one-field edit, and a union member nothing can be set to is not a promise. NO ITEM USES IT
- * TODAY. It renders as a mega held to `--nav-plate-width-sm`, which is what "compact menu" means
- * in this design language — not as a special case with rules of its own.
+ * `compact` (a mega at a narrow width) went with the plate's three widths: the plate now spans the
+ * content column for every section (owner, 4 Nov 2026), so there is no narrow width to hold it to.
  */
-export type SiteNavForm = 'mega' | 'compact' | 'link';
+export type SiteNavForm = 'mega' | 'link';
 
 /**
  * A destination and its label. The atom every group is built out of.
@@ -63,6 +60,15 @@ export type SiteNavLink = {
   label: string;
   href: string;
   status: SiteNavStatus;
+  /**
+   * One line under the label, in the plate only (the sheet shows labels alone). Optional: a group
+   * of plain names (twelve sectors) reads as a list, a group of services needs the line that says
+   * which situation each one answers. A list whose links carry one opens its row seam a step, so
+   * each label and its line read as one item.
+   */
+  description?: string;
+  /** Off-site. Opens in a new tab and carries the external cue beside its label. */
+  external?: boolean;
 };
 
 /** A named list of links — one column of a plate, one block of a sheet pane. */
@@ -72,43 +78,16 @@ export type SiteNavGroup = {
 };
 
 /**
- * A rail card. The primary one leads with an image; the secondary is a compact row under it.
+ * The plate's aside: the way onward from a section, on its own deeper ground at the plate's right.
  *
- * The secondary is NOT a second card, and that is structural rather than aesthetic: a full card
- * makes the rail taller than the two columns beside it, and then the plate's height is set by the
- * offer instead of by the content — which is the one thing the morph must not depend on.
- *
- * `image` is a RECORD, not a slot, and that changed on purpose. It was a `ReactNode` so the caller
- * could decide what filled it — which read well until the caller turned out to be the content seam,
- * and content is a `.ts` module that cannot hold JSX. The image then had nowhere to live except a
- * component, which is where a nav's artwork least belongs.
- *
- * `{ src, alt, width, height }` is also simply the house contract: `Figure` established it,
- * `PageHero` follows it, and both render a native `<img>`. Being the one pattern with a different
- * image shape was never a virtue.
- *
- * Still optional. Without one the card renders title-only rather than showing an empty frame: an
- * unfilled grey rectangle in a live header reads as a broken image, not as a placeholder.
+ * It replaced the image-led rail (owner, 4 Nov 2026, header round 3). What it holds is per section
+ * and is content: Services keeps How we work, Expertise the work, Resources its featured pieces.
+ * `label` is optional because Services' aside is one link that needs no heading; where there is
+ * one it is the same mono label every group carries. The item's `hub` closes the aside.
  */
-export type SiteNavCardImage = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
-
-export type SiteNavCard = {
-  title: string;
-  href: string;
-  status: SiteNavStatus;
-  role: 'primary' | 'secondary';
-  image?: SiteNavCardImage;
-};
-
-/** The plate's third column. Services alone has one. */
-export type SiteNavRail = {
-  label: string;
-  cards: readonly SiteNavCard[];
+export type SiteNavAside = {
+  label?: string;
+  links: readonly SiteNavLink[];
 };
 
 /**
@@ -136,47 +115,15 @@ export type SiteNavItem = {
    * (§3), and an item can only know it is current if it is told which paths it covers.
    */
   matchPaths?: readonly string[];
-  /** The plate's columns. `mega` and `compact`. */
+  /** The plate's columns, one per group. `mega` only. */
   groups?: readonly SiteNavGroup[];
-  /** The plate's third column. `mega` only, and only where there is something to put in it. */
-  rail?: SiteNavRail;
+  /** The plate's aside, at its right edge. Omit and the groups take the whole plate (Studio). */
+  aside?: SiteNavAside;
   /**
-   * The way through to the section's own index — "All services" at the foot of the plate.
-   *
-   * OPTIONAL, and it is not an oversight where it is missing. A mega's trigger opens rather than
-   * navigates, so without one of these a section with an index page has no route to it; but not
-   * every section HAS an index worth sending anyone to, and a bar that promises one and lands on a
-   * thin page is worse than no promise. Services and Insights carry one today; Expertise does not.
+   * The way through to the section's own index ("All services"). It closes the aside, pinned to
+   * its foot; a section with a hub and no aside carries it under its groups instead.
    */
   hub?: SiteNavLink;
-  /**
-   * How the plate's two link columns divide the space between them. Omit for equal tracks.
-   *
-   * DECLARED, for the same reason `panelWidth` is: a pattern cannot count words. And here the
-   * direction of the need is not even consistent between sections, which is what rules out one
-   * shared ratio. Measured at the shipping copy — Services runs 148 against 230, so its second
-   * column wants the larger share; Expertise runs 293 against 259 and wants the OPPOSITE; Insights
-   * runs 60 against 133 and matches Services. A single `[3, 4]` left Expertise's first column with
-   * 0.1px of clearance on "Content, Knowledge and Discovery Platforms" — a wrap waiting for a font
-   * to render a hair wider.
-   *
-   * So: state it where the copy asks for it, leave it off where equal is right, and re-measure when
-   * a label changes. Two numbers, not two pixel widths, so the ratio survives the plate resizing.
-   */
-  columnRatio?: readonly [number, number];
-  /**
-   * How wide the plate opens for this item.
-   *
-   * The plate shrinks to its content — 1056 for Services, 780 for Expertise, 560 for Insights —
-   * because a plate held at the full content width beside four short rows shows 500px of empty
-   * ground, and that reads as a mistake rather than as restraint.
-   *
-   * It is DECLARED rather than derived. A pattern cannot count words: deriving the width from
-   * link counts would silently re-lay out the plate the day a group gains a seventh item, and the
-   * cause would be invisible in both the data and the markup. Defaults to `lg` with a rail and
-   * `md` without.
-   */
-  panelWidth?: 'sm' | 'md' | 'lg';
   /**
    * The children of a `link` item — carried, not rendered. See the header.
    *
@@ -196,14 +143,13 @@ export type SiteNavProps = {
    */
   cta: SiteNavLink;
   /**
-   * The lighter way in — "Request audit". Ghost neutral, and MOBILE ONLY.
+   * An optional lighter way in, ghost neutral, MOBILE ONLY — beside the offer in the sheet's foot.
    *
-   * It has no place in the bar: a bar with two actions has no offer, it has a choice, and the
-   * whole reason the desktop rail carries "Request Free Audit" as a compact row is that the same
-   * offer twice in one view is one offer too many. The sheet is the opposite case — its foot is
-   * the only chrome a thumb can reach without scrolling, so both ways in belong there.
+   * It has no place in the bar: a bar with two actions has no offer, it has a choice. Omit it and
+   * the offer takes the whole foot, which is what the site does since "Request audit" left the
+   * header (owner, 4 Nov 2026).
    */
-  ctaSecondary: SiteNavLink;
+  ctaSecondary?: SiteNavLink;
   /**
    * The ground the bar, the plate and the sheet paint. Defaults to `paper`.
    *
