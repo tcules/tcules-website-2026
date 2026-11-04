@@ -61,7 +61,7 @@ docs/content-changes.md ("cut for the design").
 - engagement-shapes → the three-ways glyph cards (EngagementOptions `cards`), as every other page.
 - your-team → home's Why Tcules list (OfferSheet `list`, glyph rows; plan `CLAIM_LIST`). No photo.
 - design-to-release → the two claims as three-ways glyph cards (plan `CARD_SETS`). No case image. Example cut.
-- ai-native-practice → three glyph cards, one a line, "See how we use AI" the head's end action. Its h3 cut.
+- ai-native-practice → three glyph cards, one a line, listed down the right half; heading, lead and "See how we use AI" in the left. Its h3 cut.
 - The close line under the where-to-start cards is body text across the column.
 - Quotes under claims cut; the testimonials band is unchanged.
 

@@ -1496,7 +1496,13 @@ export function TableBand({
    */
   agreement?: SketchName;
 }) {
-  const blocks = content(band);
+  const all = content(band);
+  /* The band's closing link line ("See how we work →", /why-tcules alternatives) is the head's end
+     action, on the heading's row (owner, 4 Nov 2026; decisions/2026-10-29-head-end-action-centred-on-
+     heading), never a stray link under the notes. */
+  const tail = all.at(-1);
+  const onward = tail?.type === 'links' ? tail.links : [];
+  const blocks = onward.length > 0 ? all.slice(0, -1) : all;
   const [first] = blocks;
   const leadText =
     first?.type === 'paragraph' && !leadOf(first) && !hasLink(first.runs)
@@ -1552,7 +1558,17 @@ export function TableBand({
   ) : (
     <BandBody blocks={parts.before} labelledBy={head(band).headingId} narrow={narrow} />
   );
-  return (
+  return onward.length > 0 ? (
+    <ContentSection
+      {...head(band)}
+      data-band="E"
+      lead={leadText}
+      actions={<LinkActions links={onward} />}
+      actionsAt="end"
+    >
+      {body}
+    </ContentSection>
+  ) : (
     <ContentSection {...head(band)} data-band="E" lead={leadText}>
       {body}
     </ContentSection>
@@ -2548,40 +2564,37 @@ export function TextBand({
   const onward = [...links, ...nested];
   const serviceScene =
     onward.length === 1 && onward[0] ? serviceSceneFor(onward[0].href) : undefined;
-  /* One claim that is one named service's argument, closing on its link: that service's tile beside
-     the head and lead, in halves (one named offer is its service tile; owner, 4 Nov 2026, /why-tcules
-     "Building an AI product?": a heading on its own row over a split is never used). The claim is the
-     tile's title and sentence. */
-  const soleClaim = claimItems.length === 1 ? claimItems[0] : undefined;
-  if (serviceScene && soleClaim && onward[0]) {
-    const leadWords = words.filter((block) => block.type !== 'item');
-    const leadLine =
-      leadWords.length === 1 && leadWords[0]?.type === 'paragraph'
-        ? plain(leadWords[0].runs)
-        : undefined;
-    const sentence = soleClaim.blocks
-      .flatMap((block) => (block.type === 'paragraph' ? [plain(block.runs)] : []))
-      .join(' ');
+  /* One claim that is one named service's argument, closing on its link ("Building an AI
+     product?", /why-tcules): a CTA block, the ink island, its heading, the band's words and the
+     service as its action (owner, 4 Nov 2026: "CTA block not this card"). */
+  const said = [
+    ...words.filter((block) => block.type !== 'item'),
+    ...claimItems.flatMap((item) => item.blocks),
+  ];
+  const sentences = said.flatMap((block) =>
+    block.type === 'paragraph' && !hasLink(block.runs) ? [plain(block.runs)] : [],
+  );
+  const onlyWords =
+    sentences.length > 0 &&
+    sentences.length <= 2 &&
+    claimItems.length <= 1 &&
+    said.every((block) => block.type === 'paragraph' || block.type === 'links');
+  if (serviceScene && onlyWords && onward[0]) {
+    const [one, two] = sentences;
     return (
-      <ContentSection
-        {...head(band)}
-        lead={leadLine}
-        data-band="service-tile"
-        arrangement="beside"
-        split="halves"
-      >
-        <Layout as="ul" rowGap="none">
-          <li>
-            <ServiceTile
-              title={soleClaim.headingText}
-              body={sentence}
-              href={onward[0].href}
-              scene={serviceScene}
-              action={plain(onward[0].label).replace(/\s*→\s*$/, '')}
-            />
-          </li>
-        </Layout>
-      </ContentSection>
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        heading={band.headingText}
+        body={one ? (two ? [one, two] : [one]) : undefined}
+        actions={[
+          {
+            label: plain(onward[0].label).replace(/\s*→\s*$/, ''),
+            href: onward[0].href,
+          },
+        ]}
+      />
     );
   }
   return (
@@ -2772,6 +2785,9 @@ function CardSetBand({ band }: { band: CorpusBand }) {
     <EngagementOptions
       {...head(band)}
       arrangement="cards"
+      /* Untitled lines read as a list beside the head (owner, 4 Nov 2026: "list cards on the right");
+         titled claims stand side by side under it. */
+      beside={claims.length === 0}
       lead={lead}
       options={iconed}
       action={links.length > 0 ? <LinkActions links={links} /> : undefined}

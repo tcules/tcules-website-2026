@@ -941,3 +941,6 @@ a picture beside its words, a service tile, the beside-in-halves band. The cut l
   ConnectX demo stay in the front matter but are not shown: a section never borrows a case's image
   (decisions/2026-11-04-no-case-images-in-sections). The /how-we-work studio photo for `your-team` is
   also unused (the claims are a list). Strapi can drop these bindings.
+- **/why-tcules ai-products: the "Shorter AI learning curve" heading.** The band is now a CTA block (the ink
+  island: heading, its two sentences, "See AI Product UX"); a sub-heading inside it would be a second head
+  (owner: "CTA block not this card").

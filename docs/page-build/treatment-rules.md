@@ -276,8 +276,11 @@ citation; only a band whose subject is the evidence (home's proof band, selected
   by a glyph; with no ways in the card is its head alone; one sentence after them is the set's close line.
 - **A set of short titled claims** (a sentence or two each) is home's Why Tcules list: heading, lead and link at the
   left, the claims down the right as glyph rows (OfferSheet `list`).
-- **One claim arguing for one service, closing on its link**, is that service's tile beside the head and lead, in
-  halves. A heading never takes its own row over a two-column split (decisions/2026-11-04-no-heading-row-over-a-split).
+- **A short band arguing for one service, closing on its link** ("Building an AI product?") is a CTA block, the
+  ink island: heading, its sentences, the service as the action. Never a service card beside the head.
+- **A few one-line points with no titles** are cards listed down the right half, the heading, lead and link in
+  the left (EngagementOptions `cards` `beside`).
+- **A table band's closing link line** is the head's end action, on the heading's row. A heading never takes its own row over a two-column split (decisions/2026-11-04-no-heading-row-over-a-split).
 - **Two to four short titled claims, or a few one-line points**, are the three-ways cards, each led by its glyph
   (plan `CARD_SETS`); never beside a case study's image (decisions/2026-11-04-no-case-images-in-sections).
 - **A set's closing sentence of its own words** sits under the cards at the body role across the column.

@@ -237,8 +237,6 @@ Designs proven in working code, so your engineers build exactly what was designe
 
 When an AI acts for your users, they need to see what it did and overrule it. We design for that.
 
-### Shorter AI learning curve
-
 We've designed AI products people check and trust, so you skip the costly lessons.
 
 [See AI Product UX →](/services/ai-product-ux)
