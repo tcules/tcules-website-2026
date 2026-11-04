@@ -593,3 +593,34 @@
     inline-size: var(--lcrd-thumbnail-inline-sm);
   }
 }
+
+/* The row's end arrow (`cue="arrow"`, owner 4 Nov 2026): a quiet mark at the row's inline end that
+   says "this row opens a page" before any pointer arrives — the glossary's term rows, where a
+   dictionary of words otherwise reads as text. Hover is a move: it slides along the reading
+   direction and takes the link ink with the title; only the transform transitions. */
+.cue {
+  flex: none;
+  color: var(--lcrd-cue-ink);
+  transition: transform var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+.root .link:hover .cue,
+.root .link:focus-visible .cue {
+  color: var(--lcrd-link-ink);
+  transform: translateX(var(--lcrd-cue-shift));
+}
+
+.root .link:active .cue {
+  color: var(--lcrd-link-ink-pressed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue {
+    transition: none;
+  }
+
+  .root .link:hover .cue,
+  .root .link:focus-visible .cue {
+    transform: none;
+  }
+}

@@ -89,6 +89,7 @@ function TermGroup({ terms }: { terms: readonly TermEntry[] }) {
         <ListCard
           key={term.link.href}
           titleAs="h3"
+          cue="arrow"
           title={inlineToText(term.link.children)}
           body={capitalised(card)}
           href={term.link.href}

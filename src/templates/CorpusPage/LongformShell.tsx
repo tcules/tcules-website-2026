@@ -275,6 +275,7 @@ export function ArticleSection({
             <ListCard
               key={term.href}
               titleAs="h3"
+              cue="arrow"
               title={term.title}
               body={term.body}
               href={term.href}
