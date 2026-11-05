@@ -170,7 +170,6 @@ export async function generateMetadata({
   const title = caseStudy.seo?.title || caseStudy.title;
   const description = caseStudy.seo?.description || caseStudy.description;
   const canonical = caseStudy.seo?.canonical;
-  const image = caseStudy.socialImage;
 
   return {
     title,
@@ -184,22 +183,11 @@ export async function generateMetadata({
       ...(canonical ? { url: canonical } : {}),
       ...(caseStudy.publishedAt ? { publishedTime: caseStudy.publishedAt } : {}),
       ...(caseStudy.updatedAt ? { modifiedTime: caseStudy.updatedAt } : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }

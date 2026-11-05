@@ -192,7 +192,6 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   const title = event.seo?.title || event.title;
   const description = event.seo?.description || event.description;
   const canonical = event.seo?.canonical;
-  const image = event.socialImage;
 
   return {
     title,
@@ -205,22 +204,11 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
       ...(event.publishedAt ? { publishedTime: event.publishedAt } : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }

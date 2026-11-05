@@ -387,6 +387,11 @@ const SPECIMENS = [
         name: 'CorpusPage',
         note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, an article, a term or a free tool and the grouped case-study index, each shown with the plan that decided its bands',
       },
+      {
+        href: '/design/share-cards',
+        name: 'Share cards',
+        note: "every page's Open Graph image at feed size, generated from its H1 and eyebrow (ch10 Part C layout T), grouped by kind — the hero cuts are reviewed here",
+      },
     ],
   },
   {

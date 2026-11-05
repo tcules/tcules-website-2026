@@ -292,13 +292,11 @@ export async function generateMetadata({ params }: GlossaryPageProps): Promise<M
       description,
       type: 'website',
       ...(canonical ? { url: canonical } : {}),
-      images: [],
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: [],
     },
   };
 }

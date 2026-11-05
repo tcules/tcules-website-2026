@@ -12,6 +12,11 @@ import { expertisePath, ROUTES, servicePath } from './routes';
  * their viewBox trimmed to the drawing. The 5 Nov 2026 run adds the /services, /tools and Lab heroes and
  * the twelve industry heroes. An illustration is never cropped; every other page's hero is a bound asset
  * or a labelled placeholder.
+ *
+ * Register every new hero drawing HERE, in the same change that adds its file: the page's hero and its
+ * share card (src/app/_og/resolve.ts) both read this table, and a file it does not name is used by
+ * neither. A page with no entry shares its family hub's drawing on its card until it has one;
+ * `npm run share:census` lists those pages.
  */
 const HERO_ILLUSTRATIONS: Readonly<
   Record<string, { src: string; width: number; height: number }>

@@ -220,7 +220,7 @@ choice (2.34).
       terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
-- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
+- [-] **2.46** Moved to phase 2 (owner, 4 Nov 2026). Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
       that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
       designed no-visual state.
 - [x] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap). All seven
@@ -258,7 +258,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
 - [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
-      success and failure copy, and CTA-source analytics come after launch.
+      success and failure copy, and CTA-source analytics come after launch. May move to phase 2 (owner, 4 Nov 2026).
 - [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
       apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
       adjacent, never beside the close.
@@ -377,10 +377,12 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
-- [ ] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
+- [x] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
       at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
       No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
       insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
+      Done 5 Nov 2026 (`feat/og-images`): all 253 sitemap pages, reviewed on /design/share-cards
+      (decisions/2026-11-05-share-cards-words-left-picture-right); `npm run share:census` lists each card's picture.
 
 ## Parked (handoff says don't freeze yet)
 
@@ -389,6 +391,8 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 ## Phase 2 — after the 6 Nov launch
 
 - [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
+- [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (was 2.46;
+      owner, 4 Nov 2026).
 - [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
 - [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).

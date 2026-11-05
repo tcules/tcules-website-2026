@@ -29,6 +29,8 @@ import { InsightResources } from '@/templates';
 
 import { resourceItems } from '../../_insights/resources';
 
+import { withShareImage } from '../../_og';
+
 type BlogPageProps = { params: Promise<{ slug: string[] }> };
 
 function requestedSlug(slug: readonly string[]): string {
@@ -191,8 +193,17 @@ export function generateStaticParams() {
   return longformSlugs('/insights').map((slug) => ({ slug: slug.split('/') }));
 }
 
+/**
+ * The page's metadata with its share card attached. A catch-all segment cannot hold an
+ * `opengraph-image` file (Turbopack refuses one after `[...slug]`), so this family's cards are
+ * served by `/og/[...path]` and named here instead (`_og/index.ts`).
+ */
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
+  return withShareImage(await pageMetadata(slug), `/insights/${requestedSlug(slug)}`);
+}
+
+async function pageMetadata(slug: string[]): Promise<Metadata> {
   const corpus = await longformMetadata(`/insights/${requestedSlug(slug)}`);
   if (corpus) return corpus;
   const blog = await getBlogPage(requestedSlug(slug));
@@ -207,7 +218,6 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   const title = blog.seo?.title || blog.title;
   const description = blog.seo?.description || blog.description;
   const canonical = blog.seo?.canonical;
-  const image = blog.socialImage;
 
   return {
     title,
@@ -223,22 +233,11 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       ...(blog.authors.length > 0
         ? { authors: blog.authors.map((author) => author.name) }
         : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }
