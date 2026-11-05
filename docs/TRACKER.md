@@ -256,7 +256,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
       real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
       engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
-- [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
+- [-] **2.52** Deferred to phase 2 (owner, 5 Nov 2026). CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
       on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
       success and failure copy, and CTA-source analytics come after launch. May move to phase 2 (owner, 4 Nov 2026).
 - [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
@@ -264,7 +264,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       adjacent, never beside the close.
 - [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
       (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
-- [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
+- [-] **2.55** Gone: covered by 2.63 (owner, 5 Nov 2026). Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
       Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
       links to `/expertise`.
 - [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
@@ -274,7 +274,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
 - [x] **2.58** (#218) `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
       decisions and records them in `docs/page-build/pages/clients.md`.
-- [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
+- [x] **2.59** Done (owner, 5 Nov 2026). Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
       illustrations instead.
 - [x] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
       `/why-tcules` (two new bands, `design-to-code` and `ai-products`, match no kind), the six audit pages (new
@@ -286,7 +286,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       (design/2-60-why-how), every band on a home/service/expertise shape, claim quotes and stray lines cut
       (content-changes), studio-at-work heroes, alternating grounds; rulings 2026-11-04-claims-carry-no-quotes,
       -studio-pages-alternate-grounds, -studio-heroes-show-people-at-work, -no-heading-row-over-a-split,
-      -no-case-images-in-sections. The article URL scheme is set aside by the owner (4 Nov), still open.
+      -no-case-images-in-sections. The article URL scheme was set aside by the owner (4 Nov) and closed 5 Nov 2026.
 - [x] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.
@@ -299,14 +299,14 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       Done 5 Nov 2026 (design/illustration-run): the twelve industry heroes, the /services, /tools and Lab heroes,
       the /why-tcules band as one drawing, the ten approved heroes brought to the figure rules; rulings
       2026-11-05-*. Left: where the redrawn designer's desk goes (docs/illustrations/run-2026-11-05/designer-desk/,
-      owner to place: /careers or the Lab), and the audit heroes (2.66).
-- [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
+      owner to place: /careers or the Lab), and the audit heroes (2.66). Closed 5 Nov 2026 (owner).
+- [x] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
       No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
       84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
       drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
-      layout (owner, 5 Nov). Still open: auditing existing tile drawings against the four patterns.
+      layout (owner, 5 Nov). Tile audit against the four patterns: done 5 Nov 2026 (owner).
 - [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
       what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
       the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
@@ -314,7 +314,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
 - [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
       the header still needs work. Done 4 Nov 2026 (#215, #216, #217).
-- [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
+- [x] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
 - [x] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
       wire them in as they land.
       The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
@@ -397,6 +397,7 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
       owner, 4 Nov 2026).
 - [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
 - [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
+- [ ] CTA modal (was 2.52; owner, 5 Nov 2026): the enquiry form in a dialog on desktop, a bottom sheet on mobile.
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs

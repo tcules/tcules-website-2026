@@ -17,4 +17,4 @@ No body or lede text above 16px anywhere on the site. Only the PageHero lead and
 
 **The mistake it prevents.** A 20px lead, or a hero `leadSize` opt-in, reintroduced by a new component or variant.
 
-**How to apply.** Never point a new component's body or lead token above 16 unless it is the hero lead or a testimonial quote. ch03 §2 still lists `--text-lead` at 20 and `--text-body-lg` at 18.
+**How to apply.** Never point a new component's body or lead token above 16 unless it is the hero lead or a testimonial quote. ch03 §2 still lists `--text-lead` at 20 and `--text-body-lg` at 18. One exception since 2 Nov 2026: an insight's summary paragraph, `--text-summary` (22, phone 18), in Callout tone="summary" only (decisions/2026-11-02-insight-summary-is-a-blue-topped-panel).
