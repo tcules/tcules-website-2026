@@ -9,6 +9,9 @@
  */
 export {
   getPage,
+  getHomePage,
+  getPublishedAboutPage,
+  getPageSeo,
   listPages,
   getNavigation,
   getAboutPage,
@@ -17,10 +20,12 @@ export {
   getAuthorPage,
   getBlogPage,
   getCareerPage,
+  getCaseStudyIndex,
   getCaseStudyListingPage,
   getIdealServiceStory,
   idealServiceSlugs,
   getCaseStudyPage,
+  getCaseStudyDetail,
   getCaseStory,
   getIdealAboutPage,
   getContactPage,

@@ -77,7 +77,7 @@ type SharedProps = {
    * CALLER's copy, as `success` is. Absent, the form's own line. The status of a send replaces it in
    * the same live region.
    */
-  caption?: string;
+  caption?: string | null;
   /**
    * The fields' size step, passed to every Input (`scale`). `md` (default); `lg` (48, the value at
    * the lead role) where the form is the band's primary object — the enquiry close (home round 3).
@@ -989,18 +989,21 @@ export function EnquiryForm(props: EnquiryFormProps) {
      promise about time — and the danger triangle when the line has become an error. The
      paragraph is the live region, so the status is announced where the reassurance sat. */
   const error = lifecycle === 'error' || (lifecycle === 'invalid' && invalidCount > 0);
+  const caption = props.caption === null ? '' : props.caption?.trim() || CAPTION;
   const captionLine = (
     <Cluster nowrap colGap="tight" align="start" className={styles.note}>
-      <span className={cx(styles.noteMark, error && styles.statusError)}>
-        <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
-      </span>
+      {status || caption ? (
+        <span className={cx(styles.noteMark, error && styles.statusError)}>
+          <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
+        </span>
+      ) : null}
       <p
         className={cx(styles.noteText, error && styles.statusError)}
         id={statusId}
         role="status"
         aria-live="polite"
       >
-        {status || (props.caption?.trim() ? props.caption : CAPTION)}
+        {status || caption}
       </p>
     </Cluster>
   );

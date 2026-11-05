@@ -18,6 +18,9 @@ export type BentoItem = {
    * none, so the set reads as one.
    */
   body?: string;
+  supportingCopy?: string;
+  action?: string;
+  picture?: ReactNode;
   /**
    * What the destination gives you, as the tile's second half (owner, 2 Nov 2026, /services, mock A):
    * a tile with a detail is a SPLIT tile, two tracks wide, its drawing, title and body in the first
@@ -197,6 +200,12 @@ function TileLink({
     <Layout rowGap="tight">
       <Title className={styles.title}>{item.title}</Title>
       {item.body ? <p className={styles.body}>{item.body}</p> : null}
+      {item.supportingCopy ? <p className={styles.body}>{item.supportingCopy}</p> : null}
+      {item.action && item.href && !item.detail ? (
+        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+          {item.action}
+        </Button>
+      ) : null}
     </Layout>
   );
   const words = named;
@@ -204,7 +213,7 @@ function TileLink({
     <div className={styles.art}>
       {/* The drawing on its plate, the one frame every flat drawing sits in (owner, 3 Nov 2026,
           decisions/2026-11-03-flat-graphics-on-one-plate). No drawing yet: the empty plate. */}
-      <Sketch name={item.scene} story={Boolean(item.href)} />
+      {item.picture ?? <Sketch name={item.scene} story={Boolean(item.href)} />}
     </div>
   );
   if (item.detail) {

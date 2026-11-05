@@ -125,8 +125,8 @@ export function ClientMark({
     );
     return null;
   }
-  if (!/\.svg($|[?#])/i.test(src)) {
-    warn(`"${name}" is not an SVG (${src}). ch05 §10 takes client marks as SVG only.`);
+  if (!/^data:image\/svg\+xml[;,]|\.svg($|[?#])/i.test(src)) {
+    warn(`"${name}" is not an SVG. ch05 §10 takes client marks as SVG only.`);
   }
 
   let k = Number.isFinite(correction) ? correction : 0;

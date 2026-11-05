@@ -23,7 +23,7 @@ export type CaseCardProps = {
    * "Read the Doodle case". Button sets the label's case, so pass ordinary capitalisation. The
    * card's cue, not a second link: the whole card is the one anchor.
    */
-  ctaLabel: string;
+  ctaLabel?: string;
   /** The evidence, framed at the card ratio (16:9) and cropped at its `focus`. */
   image: MediaImage;
   /**
@@ -104,33 +104,35 @@ export function CaseCard({
         <Layout rowGap="text">
           {filled(eyebrow) ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
           <Title id={titleId} className={styles.title}>
-            {title}
+            {ownLinks && !ctaLabel ? <a href={href}>{title}</a> : title}
           </Title>
           {story}
         </Layout>
-        <Cluster>
-          {ownLinks ? (
-            <Button
-              as="a"
-              href={href}
-              emphasis="link"
-              tone="primary"
-              icon={<Icon name="arrow-right" />}
-            >
-              {ctaLabel}
-            </Button>
-          ) : (
-            <Button
-              as="span"
-              id={cueId}
-              emphasis="link"
-              tone="primary"
-              icon={<Icon name="arrow-right" />}
-            >
-              {ctaLabel}
-            </Button>
-          )}
-        </Cluster>
+        {ctaLabel ? (
+          <Cluster>
+            {ownLinks ? (
+              <Button
+                as="a"
+                href={href}
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                {ctaLabel}
+              </Button>
+            ) : (
+              <Button
+                as="span"
+                id={cueId}
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                {ctaLabel}
+              </Button>
+            )}
+          </Cluster>
+        ) : null}
       </Layout>
     </Layout>
   );
@@ -142,7 +144,7 @@ export function CaseCard({
         <a
           className={cx(styles.card, styles.linked)}
           href={href}
-          aria-labelledby={`${titleId} ${cueId}`}
+          aria-labelledby={ctaLabel ? `${titleId} ${cueId}` : titleId}
           data-btn-link-group
         >
           {content}

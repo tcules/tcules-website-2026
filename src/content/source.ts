@@ -20,6 +20,7 @@ import { aboutSource } from './sources/strapi/about';
 import { authorsSource } from './sources/strapi/authors';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
+import { getPublishedCaseIndex } from './sources/strapi/case-index';
 import { caseStudySource } from './sources/strapi/case-study';
 import { contactSource } from './sources/strapi/contact';
 import { eventSource } from './sources/strapi/event';
@@ -37,6 +38,10 @@ import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import { sitePageSource } from './sources/strapi/site-pages';
+import { getPublishedAbout } from './sources/strapi/published-about';
+import { getPublishedCaseStudy } from './sources/strapi/published-case';
+import { getPublishedHome } from './sources/strapi/home';
+import { getPublishedPageSeo } from './sources/strapi/page-seo';
 import type {
   CaseStory,
   IdealAboutPage,
@@ -111,6 +116,10 @@ const sitePagesSource: SitePagesContentSource = sitePageSource;
 /** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
 const corpusPagesSource: CorpusContentSource = corpusSource;
 
+export const getPublishedAboutPage = getPublishedAbout;
+export const getHomePage = getPublishedHome;
+export const getPageSeo = getPublishedPageSeo;
+
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
 export const getNavigation = source.getNavigation.bind(source);
@@ -120,8 +129,10 @@ export const listAuthors = authorPagesSource.listAuthors.bind(authorPagesSource)
 export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSource);
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
+export const getCaseStudyIndex = getPublishedCaseIndex;
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
+export const getCaseStudyDetail = getPublishedCaseStudy;
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
 
 /* The cases that have an ideal local copy, structured as a story (fixtures/ideal/case-studies). */

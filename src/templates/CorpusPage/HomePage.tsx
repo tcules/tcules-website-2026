@@ -30,6 +30,7 @@ import {
   type ReasonsItem,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
+import { HOME_ARENA, HOME_AI_SCENES } from '@/lib/home-illustrations';
 import type { InlineRun } from '@/lib/inline';
 import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
@@ -157,12 +158,7 @@ export function HomePage({
       <CorpusHero
         page={page}
         arrangement="beside"
-        media={{
-          type: 'scene',
-          scene: 'arena',
-          title:
-            'A field of similar grey apps, each made by one person at a prompt. One app stands out, rises and opens: underneath, a client and a researcher talk while an AI agent sorts what they say; a designer chooses one of several options the agent proposes; an engineer and an agent build it, with questions passing back and forth. The finished card flies up into the app, which now shows a clear new screen in place of a cluttered old one.',
-        }}
+        media={HOME_ARENA}
         proofLine={false}
         stats={recordStats(page)}
         foot={recognition ? <RecognitionGrid band={recognition} /> : undefined}
@@ -721,9 +717,6 @@ function ClientVoices({ b, ratings, avatars }: BandProps) {
 
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */
 
-/** The AI run's drawings, one per step in order (components/Sketch/wyg-home.tsx). */
-const AI_RUN_SCENES = ['home-ai-check', 'home-ai-decide', 'home-ai-fix'] as const;
-
 function AiPractice({ page, b }: BandProps) {
   /* The v2.1 copy (4 Nov 2026): one line, then the run as steps ("1. **AI:** Checks your live
      product…"), then the link. Each step's bold label is who acts, its words what they do: the
@@ -750,7 +743,7 @@ function AiPractice({ page, b }: BandProps) {
     /* Direction A (owner, 4 Nov 2026): the head at the left with its link, the run down the right,
        each step its drawing beside who acts and what they do. The drawings are the steps' own, by
        position: the AI's check, the designer's choice, the fix signed off. */
-    const scenes = AI_RUN_SCENES.length === stages.length ? AI_RUN_SCENES : undefined;
+    const scenes = HOME_AI_SCENES.length === stages.length ? HOME_AI_SCENES : undefined;
     return (
       <OfferSheet
         {...head(b)}

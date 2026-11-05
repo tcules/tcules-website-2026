@@ -3,46 +3,67 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
+import { getCaseStudyDetail } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
+import { BlockCard, Figure, Proof, Statement, TableOfContents, type TocItem } from '@/patterns';
 import {
-  getCaseStory,
-  getCaseStudyPage,
-  type CaseStudyBlock,
-  type CaseStudyImage,
-} from '@/content';
-import { caseStudyPath, ROUTES } from '@/lib/routes';
-import { heroTrail } from '@/lib/trail';
-import {
-  BlockCard,
-  Breadcrumbs,
-  CtaSection,
-  Figure,
-  PageHero,
-  Proof,
-  TableOfContents,
-  type TocItem,
-} from '@/patterns';
-import { CaseStory } from '@/templates';
+  CaseStoryChapter,
+  CaseStoryClosing,
+  CaseStoryProse,
+  CaseStoryQuote,
+  CaseStoryStatements,
+  CaseStorySteps,
+  type CaseStoryPartProps,
+} from '@/templates/CaseStory/CaseStory';
+import { PublishedHero, PublishedSection } from '@/templates/CorpusPage/PublishedHome';
 
-function figureImage(image: CaseStudyImage) {
-  return {
-    src: image.src,
-    alt: image.alt,
-    width: image.width,
-    height: image.height,
-    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
-       a srcset and draw the edge by kind; `mime` is the one field left behind. */
-    sources: image.sources,
-    kind: image.kind,
-    panel: image.panel,
-    shadow: image.shadow,
-  };
+type CaseStudy = NonNullable<Awaited<ReturnType<typeof getCaseStudyDetail>>>;
+type Block = CaseStudy['blocks'][number];
+type Heading = Extract<Block, { type: 'heading' }>;
+type Standalone = Extract<Block, { type: 'statement' | 'cta' }>;
+type BodyBlock = Exclude<Block, Standalone>;
+type BodyRun =
+  | { type: 'article'; key: string; blocks: BodyBlock[] }
+  | { type: 'chapter' | 'closing'; key: string; heading: Heading; blocks: BodyBlock[] }
+  | Standalone;
+
+function groupBody(blocks: readonly Block[]): BodyRun[] {
+  const runs: BodyRun[] = [];
+  for (const block of blocks) {
+    if (block.type === 'statement' || block.type === 'cta') {
+      runs.push(block);
+      continue;
+    }
+    if (block.type === 'heading' && block.presentation !== 'section') {
+      runs.push({ type: block.presentation, key: block.key, heading: block, blocks: [] });
+      continue;
+    }
+    const last = runs.at(-1);
+    if (last?.type === 'article' || (last && 'blocks' in last && block.type !== 'heading')) {
+      last.blocks.push(block);
+    } else {
+      runs.push({ type: 'article', key: block.key, blocks: [block] });
+    }
+  }
+  return runs;
 }
 
-function renderCaseStudyBlock(block: CaseStudyBlock) {
+function renderBlock(block: BodyBlock) {
   switch (block.type) {
+    case 'heading':
+      return (
+        <Prose>
+          <h2 id={block.id}>{block.heading}</h2>
+        </Prose>
+      );
     case 'prose':
       return <Prose html={block.html} />;
-
+    case 'separator':
+      return (
+        <Prose>
+          <hr />
+        </Prose>
+      );
     case 'figures':
       return (
         <Layout
@@ -50,59 +71,62 @@ function renderCaseStudyBlock(block: CaseStudyBlock) {
           colGap={block.figures.length > 1 ? 'gutter' : undefined}
           rowGap="gutter"
         >
-          {block.figures.map((figure, index) => (
-            <Figure
-              key={`${block.id}-${figure.image.src}-${index}`}
-              image={figureImage(figure.image)}
-              caption={figure.caption}
-            />
+          {block.figures.map((figure) => (
+            <Layout key={figure.id} id={figure.id} rowGap="text">
+              <Figure image={figure.image} caption={figure.caption} note={figure.note} />
+              {figure.label || figure.notes.length ? (
+                <Prose>
+                  {figure.label ? <p>{figure.label}</p> : null}
+                  {figure.notes.length ? (
+                    <ol>
+                      {figure.notes.map((note, index) => (
+                        <li key={index}>{note}</li>
+                      ))}
+                    </ol>
+                  ) : null}
+                </Prose>
+              ) : null}
+            </Layout>
           ))}
         </Layout>
       );
-
+    case 'steps':
+      return <CaseStorySteps part={block} />;
+    case 'quote':
+      return <CaseStoryQuote quote={block.quote} attribution={block.attribution} />;
+    case 'testimonial':
+      return <Proof arrangement="compact" quote={block.quote} />;
     case 'video':
       return (
         <Layout rowGap="block">
-          {block.title || block.description ? (
-            <Layout rowGap="tight">
-              {block.title ? <h2>{block.title}</h2> : null}
-              {block.description ? <p>{block.description}</p> : null}
-            </Layout>
-          ) : null}
-          {block.video ? (
+          {block.description ? <p>{block.description}</p> : null}
+          {'video' in block && block.video ? (
             <video
               controls
               autoPlay={block.video.autoplay}
               muted={block.video.autoplay}
               loop={block.video.loop}
               playsInline
-              poster={block.video.poster}
+              poster={block.poster?.src}
               width={block.video.width}
               height={block.video.height}
               preload="metadata"
             >
               <source src={block.video.src} type={block.video.mime} />
             </video>
-          ) : block.thumbnail ? (
-            <Figure
-              image={figureImage(block.thumbnail)}
-              caption={block.title || block.description || 'Case-study video'}
-            />
+          ) : block.poster ? (
+            <Figure image={block.poster} caption={block.poster.alt} />
           ) : null}
         </Layout>
       );
-
     case 'embed':
       return (
         <Layout rowGap="block">
-          <Layout rowGap="tight">
-            <h2>{block.title}</h2>
-            {block.description ? <p>{block.description}</p> : null}
-          </Layout>
+          {block.description ? <p>{block.description}</p> : null}
           {block.url ? (
             <iframe
               src={block.url}
-              title={block.title}
+              title={block.description ?? new URL(block.url).hostname}
               width="100%"
               height={block.height ?? 720}
               loading="lazy"
@@ -110,35 +134,25 @@ function renderCaseStudyBlock(block: CaseStudyBlock) {
               referrerPolicy="strict-origin-when-cross-origin"
             />
           ) : block.thumbnail ? (
-            <Figure image={figureImage(block.thumbnail)} caption={block.title} />
+            <Figure image={block.thumbnail} caption={block.thumbnail.alt} />
           ) : null}
         </Layout>
       );
-
-    case 'code':
-      return <Prose html={block.html} />;
-
-    case 'separator':
-      return <Prose html={block.html} />;
-
-    case 'quote':
-      return <Proof arrangement="compact" quote={block.quote} />;
-
     case 'link':
       return (
         <Layout rowGap="tight">
-          {block.description ? <p>{block.description}</p> : null}
+          {block.link.description ? <p>{block.link.description}</p> : null}
           <Cluster>
             <Button
               as="a"
-              href={block.action.href}
+              href={block.link.href}
               emphasis="link"
               tone="primary"
               size="md"
               extendHitArea
-              icon={<Icon name="arrow-right" />}
+              icon={<Icon name={block.link.icon ?? 'arrow-right'} />}
             >
-              {block.action.label}
+              {block.link.label}
             </Button>
           </Cluster>
         </Layout>
@@ -146,202 +160,160 @@ function renderCaseStudyBlock(block: CaseStudyBlock) {
   }
 }
 
-function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
-  return JSON.stringify(data).replaceAll('<', '\\u003c');
+function chapterPart(block: BodyBlock): CaseStoryPartProps {
+  if (
+    block.type === 'prose' ||
+    block.type === 'quote' ||
+    block.type === 'steps' ||
+    block.type === 'figures'
+  )
+    return block;
+  return { type: 'content', node: renderBlock(block) };
 }
 
-function dateOnly(date: string | undefined): string | undefined {
-  return date?.slice(0, 10);
+function CaseArticle({ blocks }: { blocks: readonly BodyBlock[] }) {
+  const outline = blocks.flatMap<TocItem>((block) =>
+    block.type === 'heading'
+      ? [{ label: block.label, href: `#${block.id}` }]
+      : block.type === 'prose'
+        ? block.headings.map(({ label, anchorId }) => ({ label, href: `#${anchorId}` }))
+        : [],
+  );
+  const hasOutline = outline.length >= 2;
+  return (
+    <Section as="div" surface="paper">
+      <Layout
+        columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
+        colGap="column"
+        rowGap="stack"
+        align="start"
+      >
+        {hasOutline ? <TableOfContents items={outline} /> : null}
+        <Layout as="article" rowGap="stack">
+          {blocks.map((block) => (
+            <Fragment key={block.key}>{renderBlock(block)}</Fragment>
+          ))}
+        </Layout>
+      </Layout>
+    </Section>
+  );
 }
+
+function CaseBody({ caseStudy }: { caseStudy: CaseStudy }) {
+  let chapter = 0;
+  return groupBody(caseStudy.blocks).map((run) => {
+    switch (run.type) {
+      case 'article':
+        return <CaseArticle key={run.key} blocks={run.blocks} />;
+      case 'chapter':
+        chapter += 1;
+        return (
+          <CaseStoryChapter
+            key={run.key}
+            chapter={{
+              id: run.heading.id,
+              number: String(chapter).padStart(2, '0'),
+              label: run.heading.chapterLabel,
+              heading: run.heading.heading,
+              parts: run.blocks.map(chapterPart),
+            }}
+          />
+        );
+      case 'closing':
+        return (
+          <CaseStoryClosing
+            key={run.key}
+            id={run.heading.id}
+            label={run.heading.chapterLabel}
+            heading={run.heading.heading}
+          >
+            {run.blocks.map((block) => (
+              <Fragment key={block.key}>
+                {block.type === 'prose' ? (
+                  <CaseStoryProse html={block.html} closing />
+                ) : (
+                  renderBlock(block)
+                )}
+              </Fragment>
+            ))}
+          </CaseStoryClosing>
+        );
+      case 'statement':
+        return (
+          <Statement key={run.key} as="p" align="start" eyebrow={run.label} surface="tint">
+            {run.body}
+          </Statement>
+        );
+      case 'cta':
+        return <PublishedSection key={run.key} section={run.section} route={caseStudy.path} />;
+    }
+  });
+}
+
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
 }: PageProps<'/case-studies/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const caseStudy = await getCaseStudyPage(slug);
-
-  if (!caseStudy) {
+  let caseStudy: CaseStudy | null;
+  try {
+    caseStudy = await getCaseStudyDetail(slug);
+  } catch {
     return {
-      title: 'Case study not found | Tcules',
+      title: 'Case study temporarily unavailable | Tcules',
+      description: null,
       robots: { index: false, follow: false },
     };
   }
-
-  const title = caseStudy.seo?.title || caseStudy.title;
-  const description = caseStudy.seo?.description || caseStudy.description;
-  const canonical = caseStudy.seo?.canonical;
-  const image = caseStudy.socialImage;
-
-  return {
-    title,
-    description,
-    ...(canonical ? { alternates: { canonical } } : {}),
-    ...(caseStudy.seo?.robots ? { robots: caseStudy.seo.robots } : {}),
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      ...(canonical ? { url: canonical } : {}),
-      ...(caseStudy.publishedAt ? { publishedTime: caseStudy.publishedAt } : {}),
-      ...(caseStudy.updatedAt ? { modifiedTime: caseStudy.updatedAt } : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
-    },
-    twitter: {
-      card: image ? 'summary_large_image' : 'summary',
-      title,
-      description,
-      images: image ? [image.src] : [],
-    },
-  };
+  return (
+    caseStudy?.seo.metadata ?? {
+      title: 'Case study not found | Tcules',
+      description: null,
+      robots: { index: false, follow: false },
+    }
+  );
 }
 
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
-
-  /* A case with an ideal local copy renders as a designed story (fixtures/ideal/case-studies); every
-     other case renders the CMS body as it stands. */
-  const story = await getCaseStory(slug);
-  if (story) {
-    return (
-      <CaseStory
-        story={story}
-        trail={heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: 'Case studies', href: ROUTES.caseStudies },
-            { label: story.title, href: caseStudyPath(story.slug) },
-          ],
-          story.title,
-          (t) => (
-            <Breadcrumbs {...t} />
-          ),
-        )}
-      />
-    );
-  }
-
-  const caseStudy = await getCaseStudyPage(slug);
+  const caseStudy = await getCaseStudyDetail(slug);
   if (!caseStudy) notFound();
-
-  /* The outline the seam derived from this body's level-2 headings, mapped to what the component
-     takes. A case study is a long-form document, which is what earns it a rail —
-     page type decides, not heading count (docs/specs/TableOfContents.md § 1).
-
-     The anchors are opaque and already on the rendered headings; see
-     docs/guides/long-form-outline.md. */
-  const outline: TocItem[] = caseStudy.outline.map((entry) => ({
-    label: entry.label,
-    href: `#${entry.anchorId}` as const,
-  }));
-
-  /* The component's own floor is two. Below it there is no rail AND no reserved track — a [1, 4]
-     grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
-  const hasOutline = outline.length >= 2;
-
-  const published = dateOnly(caseStudy.publishedAt);
-  const updated = dateOnly(caseStudy.updatedAt);
-  const heroMedia = caseStudy.heroImage
-    ? { type: 'image' as const, image: caseStudy.heroImage }
-    : undefined;
+  const { hero, details, seo, statements } = caseStudy;
+  const hasChapters = caseStudy.blocks.some(
+    (block) => block.type === 'heading' && block.presentation === 'chapter',
+  );
 
   return (
     <>
-      {caseStudy.seo?.structuredData ? (
+      {seo.structuredData ? (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(caseStudy.seo.structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(seo.structuredData) }}
         />
       ) : null}
-
-      <PageHero
-        trail={heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: 'Case studies', href: ROUTES.caseStudies },
-            { label: caseStudy.title, href: caseStudyPath(caseStudy.slug) },
-          ],
-          caseStudy.title,
-          (t) => (
-            <Breadcrumbs {...t} />
-          ),
-        )}
-        title={caseStudy.title}
-        body={[caseStudy.description]}
-        dates={
-          published
-            ? { published, ...(updated !== published && updated ? { modified: updated } : {}) }
-            : undefined
-        }
-        media={heroMedia}
-        surface="paper"
-        facts={caseStudy.profile.map((item) => ({
-          id: item.id,
-          label: item.label,
-          value: item.value,
-        }))}
-        labels={[...caseStudy.categories, ...caseStudy.tags]}
-      />
-
-      {caseStudy.statements.length > 0 ? (
+      <PublishedHero hero={hero} details={details} />
+      {hasChapters ? (
+        <CaseStoryStatements statements={statements} />
+      ) : statements.length ? (
         <Section surface="tint" aria-labelledby="case-study-statements-heading">
           <Layout rowGap="stack">
             <h2 id="case-study-statements-heading">Problem and solution</h2>
             <Layout
               as="ul"
-              columns={caseStudy.statements.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
+              columns={statements.length > 1 ? { base: 1, md: 2 } : { base: 1 }}
               colGap="gutter"
               rowGap="column"
               equalRows
             >
-              {caseStudy.statements.map((statement) => (
+              {statements.map((statement) => (
                 <BlockCard key={statement.id} title={statement.title} body={statement.body} />
               ))}
             </Layout>
           </Layout>
         </Section>
       ) : null}
-
-      {caseStudy.blocks.length > 0 ? (
-        <Section as="div" surface="paper">
-          {/* The shell from docs/specs/TableOfContents.md § 10. The rail is a TRACK, not a band, so it
-              sits inside this Section — which is what makes the two arrangements one piece of markup:
-              below 1024 the columns collapse and the first track becomes the first block of the
-              Section, nothing moved in the DOM. `align="start"` is required, not stylistic: a
-              stretched grid item fills the row and has nowhere to stick. The <article> stays around
-              the document — the outline is about the article, not part of it. */}
-          <Layout
-            columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
-            colGap="column"
-            rowGap="stack"
-            align="start"
-          >
-            {hasOutline ? <TableOfContents items={outline} /> : null}
-            <Layout as="article" rowGap="stack">
-              {caseStudy.blocks.map((block) => (
-                <Fragment key={block.id}>{renderCaseStudyBlock(block)}</Fragment>
-              ))}
-            </Layout>
-          </Layout>
-        </Section>
-      ) : null}
-
-      {caseStudy.cta ? (
-        <CtaSection
-          arrangement="open"
-          heading={caseStudy.cta.heading}
-          body={caseStudy.cta.body}
-          actions={caseStudy.cta.actions}
-        />
-      ) : null}
+      <CaseBody caseStudy={caseStudy} />
     </>
   );
 }

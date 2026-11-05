@@ -28,6 +28,8 @@ export type OfferPart = {
   scene?: SketchName;
 };
 
+type OrderedOfferCard = OfferPart & { id?: string; variant?: 'column' | 'row' | null };
+
 export type OfferPartsProps = {
   id?: string;
   /** The band's h2 ("What you get from our …"). */
@@ -42,6 +44,9 @@ export type OfferPartsProps = {
   deliverablesTitle: string;
   /** Two to seven; built for five. */
   deliverables: readonly OfferPartsDeliverable[];
+  /** A mixed editorial sequence. Adjacent column cards share a strip and rows keep their positions. */
+  orderedCards?: readonly OrderedOfferCard[];
+  before?: ReactNode;
   /**
    * Two or three: who does the work, what we need, where our part stops. The audits' 3 Nov 2026 copy
    * has no "What we need", so two is a built count, not a gap.
@@ -110,57 +115,78 @@ export function OfferParts({
   lead,
   deliverablesTitle,
   deliverables,
+  orderedCards,
+  before,
   parts,
   example,
   note,
   surface = 'paper',
 }: OfferPartsProps) {
   if (process.env.NODE_ENV !== 'production') {
-    if (deliverables.length < 2 || deliverables.length > 7) {
+    if (!orderedCards && (deliverables.length < 2 || deliverables.length > 7)) {
       console.warn(`OfferParts: ${deliverables.length} deliverables; built for two to seven.`);
     }
-    if (parts.length < 2 || parts.length > 3) {
+    if (!orderedCards && (parts.length < 2 || parts.length > 3)) {
       console.warn(`OfferParts: ${parts.length} parts; built for two or three.`);
     }
-    for (const part of [...deliverables, ...parts]) {
+    for (const part of [...(orderedCards ?? deliverables), ...parts]) {
       if (!part.scene) {
         console.warn(`OfferParts: "${part.title}" has no drawing; the empty plate stands.`);
       }
     }
   }
-  const t = TRACKS[deliverables.length] ?? { lg: 3, xl: 3 };
   const labelled = deliverablesTitle.trim().length > 0;
   /* Unlabelled, the item titles are the h3s under the band's h2; labelled, they sit under the row's. */
   const ItemTitle = labelled ? 'h4' : 'h3';
-  const set = (
-    <Layout
-      as="ul"
-      columns={{ base: 1, lg: t.lg, xl: t.xl }}
-      colGap="gutter"
-      rowGap="stack"
-      shareRows={2}
-    >
-      {deliverables.map((item) => (
-        <Layout
-          as="li"
-          key={item.title}
-          /* Below 768 the drawing heads its words at the column's full width, as the method figure
+  function columnStrip(items: readonly (OfferPartsDeliverable & { id?: string })[]) {
+    const t = TRACKS[items.length] ?? { lg: 3, xl: 3 };
+    return (
+      <Layout
+        as="ul"
+        columns={{ base: 1, lg: t.lg, xl: t.xl }}
+        colGap="gutter"
+        rowGap="stack"
+        shareRows={2}
+      >
+        {items.map((item) => (
+          <Layout
+            as="li"
+            key={item.id ?? item.title}
+            /* Below 768 the drawing heads its words at the column's full width, as the method figure
              and the case cards do: beside them it shrank to a ~100 thumbnail and "Code worth
              keeping" could not be read (critic, audits run, 4 Nov 2026). */
-          columns={{ base: 1, md: [1, 3], lg: 1 }}
-          colGap="gutter"
-          rowGap="block"
-          align="start"
-        >
-          <Sketch name={item.scene} />
-          <Layout rowGap="text">
-            <ItemTitle className={styles.itemTitle}>{item.title}</ItemTitle>
-            {words(item)}
+            columns={{ base: 1, md: [1, 3], lg: 1 }}
+            colGap="gutter"
+            rowGap="block"
+            align="start"
+          >
+            <Sketch name={item.scene} />
+            <Layout rowGap="text">
+              <ItemTitle className={styles.itemTitle}>{item.title}</ItemTitle>
+              {words(item)}
+            </Layout>
           </Layout>
-        </Layout>
-      ))}
-    </Layout>
+        ))}
+      </Layout>
+    );
+  }
+  const row = (part: OfferPart & { id?: string }) => (
+    <Row key={part.id ?? part.title} title={part.title}>
+      <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="block" align="start">
+        <Sketch name={part.scene} />
+        {words(part)}
+      </Layout>
+    </Row>
   );
+  const groups: OrderedOfferCard[][] = [];
+  for (const card of orderedCards ?? []) {
+    const previous = groups.at(-1);
+    if (card.variant !== 'row' && previous && previous[0]?.variant !== 'row') {
+      previous.push(card);
+    } else {
+      groups.push([card]);
+    }
+  }
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-parts">
@@ -178,25 +204,21 @@ export function OfferParts({
           </h2>
         )}
         <Layout rowGap="column">
-          {labelled ? <Row title={deliverablesTitle}>{set}</Row> : set}
+          {before}
+          {orderedCards ? (
+            groups.map((group) => {
+              const first = group[0];
+              if (!first) return null;
+              if (first.variant === 'row') return row(first);
+              return <div key={first.id ?? first.title}>{columnStrip(group)}</div>;
+            })
+          ) : labelled ? (
+            <Row title={deliverablesTitle}>{columnStrip(deliverables)}</Row>
+          ) : (
+            columnStrip(deliverables)
+          )}
           {example}
-          {parts.length > 0 ? (
-            <Layout rowGap="stack">
-              {parts.map((part) => (
-                <Row key={part.title} title={part.title}>
-                  <Layout
-                    columns={{ base: 1, md: [1, 3] }}
-                    colGap="gutter"
-                    rowGap="block"
-                    align="start"
-                  >
-                    <Sketch name={part.scene} />
-                    {words(part)}
-                  </Layout>
-                </Row>
-              ))}
-            </Layout>
-          ) : null}
+          {parts.length > 0 ? <Layout rowGap="stack">{parts.map(row)}</Layout> : null}
           {note}
         </Layout>
       </Layout>

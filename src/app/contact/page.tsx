@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { composedMetadata, isComposedRoute } from '@/app/_corpus/composed';
+import { isComposedRoute } from '@/app/_corpus/composed';
 
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import {
@@ -10,11 +10,13 @@ import {
   getContactFollow,
   getContactPage,
   getCorpusPage,
+  getPageSeo,
   getTestimonialAvatars,
   getTestimonialRatings,
   type ContactAction,
 } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, EnquiryForm, ListCard, PageHero } from '@/patterns';
@@ -26,45 +28,8 @@ function externalAnchorProps(action: ContactAction) {
   return action.external ? { target: '_blank', rel: 'noreferrer' } : {};
 }
 
-function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
-  return JSON.stringify(data).replaceAll('<', '\\u003c');
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  /* The 26 Oct copy, where the composed allowlist names this route (component-map C12). */
-  const composed = await composedMetadata(ROUTES.contact);
-  if (composed) return composed;
-
-  const page = await getContactPage(CONTACT_SLUG);
-
-  if (!page) {
-    return {
-      title: 'Contact page not found | Tcules',
-      robots: { index: false, follow: false },
-    };
-  }
-
-  const title = page.seo?.title || page.heading;
-  const description = page.seo?.description || page.description;
-  const canonical = page.seo?.canonical;
-
-  return {
-    title,
-    description,
-    ...(canonical ? { alternates: { canonical } } : {}),
-    ...(page.seo?.robots ? { robots: page.seo.robots } : {}),
-    openGraph: {
-      title,
-      description,
-      type: 'website',
-      ...(canonical ? { url: canonical } : {}),
-    },
-    twitter: {
-      card: 'summary',
-      title,
-      description,
-    },
-  };
+  return (await getPageSeo(ROUTES.contact)).metadata;
 }
 
 /** The 26 Oct copy through the Contact template (component-map § E /contact). Composition only. */
@@ -91,7 +56,8 @@ async function ContactFromCopy() {
   );
 }
 
-export default async function ContactPage() {
+async function ContactContent() {
+  // Keep the current content source until the new CMS exposes contactPage for public reads.
   if (isComposedRoute(ROUTES.contact)) return <ContactFromCopy />;
 
   const page = await getContactPage(CONTACT_SLUG);
@@ -100,13 +66,6 @@ export default async function ContactPage() {
 
   return (
     <>
-      {page.seo?.structuredData ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(page.seo.structuredData) }}
-        />
-      ) : null}
-
       <PageHero
         trail={heroTrail(
           [
@@ -187,6 +146,21 @@ export default async function ContactPage() {
           </Layout>
         </Section>
       ) : null}
+    </>
+  );
+}
+
+export default async function ContactPage() {
+  const { structuredData } = await getPageSeo(ROUTES.contact);
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <ContactContent />
     </>
   );
 }

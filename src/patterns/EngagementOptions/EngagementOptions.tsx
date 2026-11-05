@@ -76,6 +76,8 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /** Authored artwork for the option. Replaces its registered scope drawing when provided. */
+  art?: ReactNode;
   /**
    * `cards` only: the glyph that heads the option, composed by the caller (a pattern takes its
    * sibling as a node): glyph, then label and name, then words, each on its own row. Set on every
@@ -190,7 +192,7 @@ export function EngagementOptions({
   );
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
-  const anyDrawn = shown.some((option) => option.scope);
+  const anyDrawn = shown.some((option) => option.art || option.scope);
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
   /* The terms sit on the options' own track count from 1024. */
@@ -249,12 +251,13 @@ export function EngagementOptions({
                 {shown.map((option) => {
                   const card = (
                     <Layout rowGap="block">
-                      {option.scope ? (
-                        <Drawing scope={option.scope} />
-                      ) : anyDrawn ? (
-                        /* Not drawn yet, in a set that is: the empty plate holds its place. */
-                        <Sketch />
-                      ) : null}
+                      {option.art ??
+                        (option.scope ? (
+                          <Drawing scope={option.scope} />
+                        ) : anyDrawn ? (
+                          /* Not drawn yet, in a set that is: the empty plate holds its place. */
+                          <Sketch />
+                        ) : null)}
                       <Layout rowGap="text">
                         <OptionHead
                           option={option}
@@ -285,14 +288,16 @@ export function EngagementOptions({
                 {shown.map((option, index) => (
                   <li key={option.title || index} className={styles.card}>
                     <Layout rowGap="block">
-                      {option.icon ? (
-                        <span className={styles.cellIcon} aria-hidden="true">
-                          {option.icon}
-                        </span>
-                      ) : null}
+                      {option.art ??
+                        (option.icon ? (
+                          <span className={styles.cellIcon} aria-hidden="true">
+                            {option.icon}
+                          </span>
+                        ) : null)}
                       <Layout rowGap="text">
                         <OptionHead option={option} className={styles.title} />
                         <OptionBody option={option} className={styles.body} />
+                        {option.facts?.length ? <Facts facts={option.facts} /> : null}
                       </Layout>
                     </Layout>
                   </li>
@@ -395,13 +400,13 @@ function Rows({ shown }: { shown: readonly EngagementOption[] }) {
               by row from 768. Below 768 the drawing heads its words, full width at 2:1:
               beside them, the column gap left both too narrow. */}
           <Layout
-            columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+            columns={option.art || option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
             reverse={{ md: index % 2 === 1 }}
             colGap="column"
             rowGap="block"
             align="center"
           >
-            {option.scope ? <Drawing scope={option.scope} /> : null}
+            {option.art ?? (option.scope ? <Drawing scope={option.scope} /> : null)}
             <Layout rowGap="block">
               <OptionHead option={option} className={styles.title} />
               <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
@@ -431,7 +436,7 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
         {shown.map((option) => (
           <li key={option.title}>
             <Layout rowGap="block">
-              {option.scope ? <Drawing scope={option.scope} /> : <Sketch />}
+              {option.art ?? (option.scope ? <Drawing scope={option.scope} /> : <Sketch />)}
               <Layout rowGap="text">
                 <OptionHead option={option} className={styles.title} />
                 <OptionBody option={option} className={styles.body} />
