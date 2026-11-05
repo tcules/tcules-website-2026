@@ -41,16 +41,21 @@
      below 768 (the Section exception, CLAUDE.md gap-scale rule 4). */
   --isl-inset-band-block: var(--gap-section);
   --isl-inset-band-inline: var(--gap-section);
+  /* `inset="form"` (owner, 5 Nov 2026): the island that holds the enquiry form. The default inset at
+     every width but the phone's sides, where the form panel takes 16 so its fields get the width. */
+  --isl-inset-form-inline: var(--gap-stack);
 }
 
-/* Phone: 24 on every side (owner, 5 Nov 2026, the responsive pass; was 48 above and below and the
-   32 gutter at the sides). The island is a box inside a 16-gutter band, so its own air steps down
-   with it: 48 read as a void at the top of a one-column island, and 32 at the sides left the form
-   inside the close narrow. The `band` inset keeps the band's air, below. */
+/* Phone (owner, 5 Nov 2026, the responsive pass; was 48 above and below and the 32 gutter at the
+   sides): 32 above and below and 24 at the sides, and 16 at the sides of the form's island. The
+   island is a box inside a 16-gutter band, so its own air steps down with it: 48 read as a void at
+   the top of a one-column island, and 32 at the sides left the form narrow. The `band` inset keeps
+   the band's air, below. */
 @media (max-width: 767px) {
   :root {
-    --isl-inset-block: var(--gap-block);
+    --isl-inset-block: var(--gap-gutter);
     --isl-inset-inline: var(--gap-block);
+    --isl-inset-form-inline: var(--gap-text);
     --isl-inset-band-block: var(--gap-column);
     --isl-inset-band-inline: var(--gap-text);
   }

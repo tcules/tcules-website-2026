@@ -28,9 +28,10 @@ export type IslandProps = {
   /**
    * `default`: the island's own inset (48). `band`: the band's own air (96; 64 and 32 below 768), for
    * an island on a `flush` band whose texture runs through that air (owner, 31 Oct 2026, About's
-   * studio links).
+   * studio links). `form`: the default inset, but 16 at the sides below 768, for the island that
+   * holds the enquiry form (owner, 5 Nov 2026).
    */
-  inset?: 'default' | 'band';
+  inset?: 'default' | 'band' | 'form';
   children: ReactNode;
 };
 
@@ -54,7 +55,13 @@ export type IslandProps = {
 export function Island({ surface, inset = 'default', children }: IslandProps) {
   return (
     <div
-      className={inset === 'band' ? `${styles.island} ${styles.insetBand}` : styles.island}
+      className={
+        inset === 'band'
+          ? `${styles.island} ${styles.insetBand}`
+          : inset === 'form'
+            ? `${styles.island} ${styles.insetForm}`
+            : styles.island
+      }
       data-surface={surface}
     >
       {children}
