@@ -456,14 +456,14 @@ function ServiceBento({
       tracks={tracks}
       cta={cta}
       items={section.tiles.map((tile) => {
-        /* The CMS drawing wins; else the drawing the frontend files under the destination. */
+        /* Use CMS art first, then the band's drawing, then the destination's general scene. */
         const scene =
           tile.art?.scene ??
           (tile.art?.image
             ? undefined
-            : tile.href
-              ? (sceneFor(ctx, section.id, tile.href) ?? serviceSceneFor(tile.href))
-              : sceneFor(ctx, section.id, tile.title));
+            : ((tile.href ? sceneFor(ctx, section.id, tile.href) : undefined) ??
+              sceneFor(ctx, section.id, tile.title) ??
+              (tile.href ? serviceSceneFor(tile.href) : undefined)));
         return {
           id: tile.id,
           title: tile.title,
