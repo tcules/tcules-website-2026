@@ -121,6 +121,24 @@ const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`
 /* The churn is slow (a loop reshapes over tens of seconds), so 30 frames a second is plenty. */
 const FRAME_MS = 1000 / 30;
 
+/* The frame budget. A machine that cannot keep it holds the field still rather than spend its main
+   thread on decoration: SLOW_FRAMES ticks in a row each SLOW_FRAME_MS or more apart (three times the
+   frame interval) stop the motion for the life of the context. Without a GPU, WebGL rasterises on
+   the CPU — about 140 ms a frame on PageSpeed's mobile run, 20 s of blocking on /contact (performance
+   pass, 6 Nov 2026) — so a software renderer holds from the first frame without waiting to measure. */
+const SLOW_FRAME_MS = 100;
+const SLOW_FRAMES = 3;
+const SOFTWARE_GL = /swiftshader|llvmpipe|software|softpipe|basic render/i;
+
+/** Whether this context draws on the CPU: no GPU, a blocklisted driver, a virtual machine. */
+const isSoftwareGL = (gl: WebGLRenderingContext) => {
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const renderer = String(
+    gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER) ?? '',
+  );
+  return SOFTWARE_GL.test(renderer);
+};
+
 /* How far beyond the viewport a field holds its WebGL context: one screen above and below, so it is
    drawn before it scrolls in. Past that it hands the context back, because browsers cap live
    contexts (Chrome at 16) and evict the oldest — a page carrying many fields lost the ones at its
@@ -140,7 +158,8 @@ const LIVE_MARGIN = '100% 0px';
  * (--tex-flow-faint) everywhere else (owner, 31 Oct 2026, About's studio links).
  *
  * Decorative: hidden from assistive tech, no pointer events. Motion only while on screen and the
- * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
+ * tab is visible; under prefers-reduced-motion, or where the machine cannot keep the frame budget
+ * (SLOW_FRAME_MS, a software renderer at once), it is drawn once and holds. Without WebGL it draws
  * nothing and the ground stands plain.
  *
  * A WebGL context is held only while the field is within a screen of the viewport (LIVE_MARGIN), so
@@ -167,7 +186,9 @@ export function TextureFlow({
     const watch = new IntersectionObserver(
       ([entry]) => {
         const next = entry?.isIntersecting ?? true;
-        setLife((was) => (was.near === next ? was : { near: next, generation: was.generation + 1 }));
+        setLife((was) =>
+          was.near === next ? was : { near: next, generation: was.generation + 1 },
+        );
       },
       { rootMargin: LIVE_MARGIN },
     );
@@ -240,7 +261,11 @@ export function TextureFlow({
       start = performance.now(),
       raf = 0,
       last = 0,
-      visible = true;
+      visible = true,
+      /* The frame budget (SLOW_FRAME_MS): the previous tick, and how many slow ticks in a row. */
+      prevTick = 0,
+      slowTicks = 0,
+      stalled = isSoftwareGL(gl);
 
     const measure = () => {
       /* The canvas's own box: the host's, or taller where the field bleeds past it. */
@@ -304,6 +329,13 @@ export function TextureFlow({
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
     const tick = (now: number) => {
+      slowTicks = prevTick && now - prevTick >= SLOW_FRAME_MS ? slowTicks + 1 : 0;
+      prevTick = now;
+      if (slowTicks >= SLOW_FRAMES) {
+        stalled = true;
+        run();
+        return;
+      }
       if (now - last >= FRAME_MS) {
         last = now;
         draw(T0 + (now - start) / 1000);
@@ -312,7 +344,10 @@ export function TextureFlow({
     };
     const run = () => {
       cancelAnimationFrame(raf);
-      if (!reduce.matches && visible && !document.hidden) {
+      /* A paused loop restarts its budget count: the gap while it was off screen is not a slow frame. */
+      prevTick = 0;
+      slowTicks = 0;
+      if (!reduce.matches && !stalled && visible && !document.hidden) {
         start = performance.now() - (held - T0) * 1000;
         raf = requestAnimationFrame(tick);
       } else {
