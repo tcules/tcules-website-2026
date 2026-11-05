@@ -399,6 +399,7 @@ export const EXTERNAL = {
 
 /** Same-origin form submission endpoints. */
 export const ENDPOINTS = {
+  clientContact: '/api/client-contact',
   newsletter: '/api/newsletter',
   contact: '/api/contact',
   enquiry: '/api/enquiry',

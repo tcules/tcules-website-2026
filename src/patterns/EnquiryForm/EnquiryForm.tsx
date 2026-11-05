@@ -4,10 +4,12 @@ import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
+import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 
 import styles from './EnquiryForm.module.css';
+import { TurnstileWidget, type TurnstileWidgetHandle } from './TurnstileWidget';
 
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */
@@ -544,6 +546,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const successRef = useRef<HTMLDivElement>(null);
   const submittedCallbackFired = useRef(false);
   const submissionInFlight = useRef(false);
+  const turnstile = useRef<TurnstileWidgetHandle>(null);
+  const [verificationError, setVerificationError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
@@ -714,13 +718,24 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const body = new FormData(form);
     body.set('destination_page', window.location.pathname);
     submissionInFlight.current = true;
+    setVerificationError('');
     setLifecycle('submitting');
 
     try {
-      const response = await fetch(props.action, {
-        method: 'POST',
-        body,
+      const token = await turnstile.current?.requestToken().catch((error: Error) => {
+        setVerificationError(error.message);
+        return undefined;
       });
+      if (!token) {
+        setLifecycle('error');
+        return;
+      }
+      const response = await submitProtectedForm(
+        body,
+        variant === 'contact' ? 'contact' : 'enquiry',
+        token,
+      );
+      if (response.verificationError) setVerificationError(response.verificationError);
       setLifecycle(response.ok ? 'success' : 'error');
     } catch {
       setLifecycle('error');
@@ -1060,7 +1075,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? 'Sending your message.'
         : 'Sending your enquiry.'
       : lifecycle === 'error'
-        ? 'That did not send. Your answers are still here — try again.'
+        ? verificationError || 'That did not send. Your answers are still here — try again.'
         : lifecycle === 'invalid' && invalidCount > 0
           ? invalidCount === 1
             ? 'One answer needs a look before this can send'
@@ -1331,6 +1346,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
               </Layout>
             </div>
           </Layout>
+          <TurnstileWidget ref={turnstile} />
           {hiddenContext}
         </form>
       );
@@ -1383,6 +1399,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
               </Layout>
             </div>
           </Layout>
+          <TurnstileWidget ref={turnstile} />
           {hiddenContext}
         </form>
       );
@@ -1465,6 +1482,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             </div>
           </div>
         </Layout>
+        <TurnstileWidget ref={turnstile} />
         {hiddenContext}
       </form>
     );
@@ -1498,6 +1516,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         {actions}
       </Layout>
 
+      <TurnstileWidget ref={turnstile} />
       {hiddenContext}
     </form>
   );

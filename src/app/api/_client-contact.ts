@@ -1,6 +1,8 @@
 import { createClientContact, type ContactFormSubmission } from '@/content';
 import { ROUTES } from '@/lib/routes';
 
+import { verifyTurnstile } from './_turnstile';
+
 type FormKind = 'contact' | 'enquiry' | 'newsletter';
 
 function text(value: FormDataEntryValue | null): string {
@@ -38,7 +40,7 @@ function error(message: string, status = 400) {
   );
 }
 
-export async function submitClientContact(request: Request, kind: FormKind) {
+export async function submitClientContact(request: Request, endpointKind?: FormKind) {
   let form: FormData;
   try {
     form = await request.formData();
@@ -47,6 +49,10 @@ export async function submitClientContact(request: Request, kind: FormKind) {
   }
 
   const get = (name: string) => text(form.get(name));
+  const postedKind = get('formKind');
+  const kind =
+    endpointKind ?? (postedKind === 'contact' || postedKind === 'enquiry' ? postedKind : undefined);
+  if (!kind) return error('Unknown form.');
   const contact = kind === 'contact';
   const clientEmail = get(contact ? 'clientEmail' : 'email');
   if (
@@ -114,6 +120,23 @@ export async function submitClientContact(request: Request, kind: FormKind) {
       clientWebsite: clientWebsite || undefined,
       services: needs.join(', ') || serviceContext || undefined,
     };
+  }
+
+  if (kind !== 'newsletter') {
+    const verification = await verifyTurnstile(get('turnstileToken'));
+    if (verification !== 'verified') {
+      const unavailable = verification === 'unavailable';
+      return Response.json(
+        {
+          ok: false,
+          code: 'turnstile',
+          error: unavailable
+            ? 'Verification is unavailable. Please try again later.'
+            : 'Verification failed. Please try again.',
+        },
+        { status: unavailable ? 503 : 400, headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
   }
 
   try {
