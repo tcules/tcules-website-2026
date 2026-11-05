@@ -37,6 +37,7 @@ import {
   TestimonialWall,
   TEASER_FORMAT_ICON,
   type HeroMedia,
+  type EnquiryContextBase,
   type PageHeroProps,
   type TeaserFormat,
 } from '@/patterns';
@@ -360,9 +361,11 @@ function Engagement({ section }: { section: Extract<Section, { type: 'engagement
 function Cta({
   section,
   route,
+  enquiryContext,
 }: {
   section: Extract<Section, { type: 'cta' }>;
   route: string;
+  enquiryContext?: EnquiryContextBase;
 }) {
   const { id, heading, eyebrow, surface, island, points, form, lead, leadHtml, rating } =
     section;
@@ -415,7 +418,7 @@ function Cta({
   const art = section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK);
   const formProps = {
     action: ENDPOINTS.enquiry,
-    context: {
+    context: enquiryContext ?? {
       originRoute: route,
       placement: id ?? '',
       family: 'page',
@@ -460,9 +463,11 @@ function Cta({
 export function PublishedSection({
   section,
   route = ROUTES.home,
+  enquiryContext,
 }: {
   section: Section;
   route?: string;
+  enquiryContext?: EnquiryContextBase;
 }) {
   const { id, heading, headingId, surface } = section;
   const head = { id, heading, headingId, surface };
@@ -561,7 +566,7 @@ export function PublishedSection({
       );
     }
     case 'cta':
-      return <Cta section={section} route={route} />;
+      return <Cta section={section} route={route} enquiryContext={enquiryContext} />;
     case 'faq':
       return (
         <ContentSection

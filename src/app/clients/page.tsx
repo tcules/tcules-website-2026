@@ -1,16 +1,29 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedClientMasterPage } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
+import { PublishedClientMaster } from '@/templates/CorpusPage/PublishedClientMaster';
 
-/**
- * `/clients` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only. Treatment record: docs/page-build/pages/clients.md.
- */
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.clients)) ?? { title: 'Tcules' };
+  return (await getPageSeo(ROUTES.clients)).metadata;
 }
-
-export default function ClientsPage() {
-  return <ComposedRoute route={ROUTES.clients} />;
+export default async function ClientsPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedClientMasterPage(),
+    getPageSeo(ROUTES.clients),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedClientMaster page={page} />
+    </>
+  );
 }

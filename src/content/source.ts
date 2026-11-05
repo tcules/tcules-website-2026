@@ -1,3 +1,4 @@
+import { getPublishedClientMaster } from './sources/strapi/published-client-master';
 import { getPublishedAuthorMaster } from './sources/strapi/published-author-master';
 import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
@@ -509,3 +510,6 @@ export async function getIdealAboutPage(): Promise<IdealAboutPage> {
 
 /** The published Authors Master and its ordered native author relations. */
 export const getPublishedAuthorMasterPage = getPublishedAuthorMaster;
+
+/** The /clients page and its ordered native Client relationships. */
+export const getPublishedClientMasterPage = getPublishedClientMaster;

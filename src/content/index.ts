@@ -10,6 +10,7 @@
 export {
   getPage,
   getHomePage,
+  getPublishedClientMasterPage,
   getPublishedAuthorMasterPage,
   getPublishedServicesMasterPage,
   getGlossaryMasterPage,
