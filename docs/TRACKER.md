@@ -313,8 +313,8 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
       (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
       `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
-- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
-      only, its path added to `src/lib/routes.ts`.
+- [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
+      Its unused path is removed from `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · enquiry form autofill, success/failure copy
