@@ -27,6 +27,7 @@ const SOURCE_LABEL: Record<ShareCard['source'], string> = {
   hub: "Hub's drawing",
   banner: 'Case banner',
   cover: 'Article cover',
+  video: 'Video thumbnail',
   none: 'Title only',
 };
 

@@ -125,7 +125,10 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
   let picture = null;
   if (media) {
     const box = { x: SPLIT, y: M, w: W - SPLIT - M, h: H - 2 * M };
-    const fill = media.kind !== 'illustration';
+    /* A banner or a cover fills the half, cropped. A video's thumbnail is shown whole at its own 16:9:
+       YouTube frames carry their own words, and a crop cuts them mid-word (5 Nov 2026). */
+    const rounded = media.kind !== 'illustration';
+    const fill = rounded && card.source !== 'video';
     const prepared = await preparedMedia(media, { width: px(box.w), height: px(box.h) }, fill ? 'cover' : 'contain');
     const w = prepared.width / SCALE;
     const h = prepared.height / SCALE;
@@ -139,7 +142,7 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
           width: px(w),
           height: px(h),
           display: 'flex',
-          borderRadius: fill ? px(ink.mediaRadius) : 0,
+          borderRadius: rounded ? px(ink.mediaRadius) : 0,
           overflow: 'hidden',
         }}
       >

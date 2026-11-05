@@ -30,7 +30,7 @@ export type ShareKind =
 
 export type ShareGround = 'paper' | 'paper-deep';
 
-export type ShareSource = 'own' | 'hub' | 'banner' | 'cover' | 'none';
+export type ShareSource = 'own' | 'hub' | 'banner' | 'cover' | 'video' | 'none';
 
 /** A hero rung (A3): 88 holds 40 characters, 72 holds 55. Nothing between, nothing below. */
 export type ShareRung = 88 | 72;

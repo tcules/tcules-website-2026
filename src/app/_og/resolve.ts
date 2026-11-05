@@ -118,6 +118,7 @@ function caseCover(slug: string) {
  * - else its family hub's drawing until its own lands: a service's line, /audits for an audit,
  *   /expertise for an expertise page (expertise pages take illustrations, never photographs);
  * - a case study's V1 cover (owner, 5 Nov 2026), else its banner from Strapi;
+ * - a video's YouTube thumbnail, else its cover from Strapi;
  * - an article's cover from Strapi.
  * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
  * read the CMS leaves the card without a picture rather than without an image.
@@ -139,6 +140,22 @@ function drawingFor(path: string): { media: ShareMedia; source: ShareSource } | 
   return { media: { kind: 'illustration', src, width, height }, source: own ? 'own' : 'hub' };
 }
 
+/**
+ * A video's own thumbnail, as YouTube serves it (owner, 5 Nov 2026: a video's card carries its
+ * thumbnail). Only the 1280 × 720 frame is taken: YouTube's smaller sizes are 4:3 with the video
+ * letterboxed inside, and a video uploaded without an HD frame has none, so its card falls back to
+ * the Strapi cover.
+ */
+async function youtubeThumbnail(id: string): Promise<{ src: string; width: number; height: number } | null> {
+  const src = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/maxresdefault.jpg`;
+  try {
+    const response = await fetch(src, { method: 'HEAD' });
+    return response.ok ? { src, width: 1280, height: 720 } : null;
+  } catch {
+    return null;
+  }
+}
+
 async function mediaFor(path: string): Promise<{ media: ShareMedia; source: ShareSource } | null> {
   const drawing = drawingFor(path);
   if (drawing) return drawing;
@@ -154,6 +171,12 @@ async function mediaFor(path: string): Promise<{ media: ShareMedia; source: Shar
     if (family === 'case-studies' && slug && rest.length === 0) {
       const image = (await caseCover(slug)) ?? (await getCaseStudyPage(slug))?.heroImage;
       if (image) return { media: capture(image), source: 'banner' };
+    }
+    if (family === 'insights' && slug === 'videos' && rest.length > 0) {
+      const blog = await getBlogPage([slug, ...rest].join('/'));
+      const thumbnail = blog?.heroVideo ? await youtubeThumbnail(blog.heroVideo.id) : null;
+      if (thumbnail) return { media: capture(thumbnail), source: 'video' };
+      if (blog?.featureImage) return { media: capture(blog.featureImage), source: 'cover' };
     }
     if (family === 'insights' && slug && !['authors', 'events', 'podcasts', 'videos'].includes(slug)) {
       const image = (await getBlogPage([slug, ...rest].join('/')))?.featureImage;
