@@ -398,11 +398,14 @@ export function startArena(
     cy: J.heroClosed.cy - RISE - 26,
     k: phone ? 0.95 : Math.min((1024 * 0.74) / 577, (720 * 0.62) / 300),
   };
+  /* The phone cut holds on the studio floor. The box is square, so the slice shows 720 of the
+     drawing's 1024 units across: the zoom fits the crews into THAT width (owner, 5 Nov 2026: fitted
+     to 1024, the end crew ran off the column and the floor read off-centre). */
   const W2 = phone
     ? {
         cx: cb.x + cb.width / 2,
         cy: cb.y + cb.height / 2 - RISE - 60,
-        k: Math.min(1024 / (cb.width + 200), 720 / (cb.height + 170)),
+        k: Math.min(720 / (cb.width + 120), 720 / (cb.height + 170)),
       }
     : {
         cx: bb.x + bb.width / 2 + 6,

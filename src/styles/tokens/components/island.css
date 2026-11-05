@@ -43,14 +43,14 @@
   --isl-inset-band-inline: var(--gap-section);
 }
 
-/* Phone: 48 above and below, as from 768, and the container `gutter` (32) at the sides, because 48
-   there left the island close's form under its floor in the 326 phone column. */
+/* Phone: 48 above and below, as from 768, and 16 at the sides (owner, 5 Nov 2026; was the 32
+   gutter): the band's own gutter on a phone, so the form inside the close gets its width back. */
 @media (max-width: 767px) {
   :root {
     --isl-inset-block: var(--gap-stack);
-    --isl-inset-inline: var(--gap-gutter);
+    --isl-inset-inline: var(--gap-text);
     --isl-inset-band-block: var(--gap-column);
-    --isl-inset-band-inline: var(--gap-gutter);
+    --isl-inset-band-inline: var(--gap-text);
   }
 }
 

@@ -571,6 +571,9 @@ export function RecognitionGrid({ band }: { band: CorpusBand }) {
       headingId={id}
       edges="closed"
       density="compact"
+      /* Centred over the centred marks (owner, 5 Nov 2026): a start-aligned eyebrow over a wall whose
+         every mark is centred in its cell read as belonging to something else. */
+      align="center"
     />
   );
 }

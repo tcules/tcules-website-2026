@@ -303,9 +303,14 @@ export function LogoGrid({
     named
   );
 
+  /* A head that is only its eyebrow (and a badge above it) is a label for the wall, so it sits a head
+     to body step from it, 24 (owner, 5 Nov 2026: at 48 the line floated free of the grid). A head
+     with a heading or an action is a block of its own and keeps the block-to-block 48. */
+  const labelOnly = !heading && !action;
+
   return (
     <Layout
-      rowGap="stack"
+      rowGap={labelOnly && !beside ? 'block' : 'stack'}
       colGap={beside ? 'column' : undefined}
       columns={beside ? BESIDE_COLUMNS : undefined}
       align={beside ? 'center' : undefined}
