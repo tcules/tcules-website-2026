@@ -308,21 +308,40 @@ Working within an on-chain exchange's design team, we made both competing trade 
 
 ## Three ways to work with us {#how-we-work-together}
 
+<!-- The checklist items and the three button labels are placeholders (owner, 5 Nov 2026), drawn from the earlier copy; final words to come. -->
+
 *Optional first step*
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+**Pilot project.**
+
+- One flow or one hard question
+- Or an audit of what you have
+- A fixed price, agreed up front
+- A low-risk way to start
+
+[Start with a pilot](#enquiry)
 
 *A known goal*
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+**Defined project.**
+
+- A first release
+- A redesign
+- A design system
+- Scoped and priced before we start
+
+[Scope a project](#enquiry)
 
 *A roadmap that keeps moving*
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+**Ongoing partnership.**
 
-*Yours:* You keep the product decisions, and what we make is yours once it's paid for.
+- A senior designer leads
+- Specialists join as the work needs
+- Change the team on two weeks' notice
+- No minimum term
 
-*Working hours:* We overlap four to five hours with US working days, and extend that whenever the work needs it.
+[Plan a partnership](#enquiry)
 
 Not sure which suits you? Tell us about the product, and we'll suggest one.
 

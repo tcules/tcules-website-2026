@@ -1,7 +1,7 @@
 ---
 title: "Three ways to work with us: separate cards led by a glyph, the terms under them, the ask a section below"
 date: 2026-11-04
-status: active
+status: superseded
 area: [cards, layout]
 source: "Owner (Devagya), homepage pass 2.63, 4 Nov 2026 (design/home-pass), reviewed on the built page"
 supersedes: []
@@ -19,3 +19,5 @@ at the start, actions at the end. No scope drawings in this band.
 boxes disjointed"; "remove the hairline … so the hierarchy is clear".
 **The mistake it prevents.** Borderless drawn tiles that read as a gallery, or a panel of joined cells.
 **How to apply.** OfferBands `tiles`, `OPTION_GLYPHS`; CtaSection compact.
+
+Superseded 5 Nov 2026 by 2026-11-05-three-ways-are-plan-cards.
