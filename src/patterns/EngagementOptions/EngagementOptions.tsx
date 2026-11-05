@@ -112,7 +112,7 @@ export type EngagementOption = {
  *         1440).
  */
 /*   plans  each option a plan card, a pricing table without prices (owner, 5 Nov 2026, the "Three ways
- *         to work with us" band): eyebrow and name over a hairline, the checklist behind one shared
+ *         to work with us" band): its name and the line under it over a hairline, the checklist behind one shared
  *         tick, the option's action at the foot. Three across from 1024 on shared rows, so the names,
  *         the lists and the actions each start on one line; one column below. Peers: every action
  *         takes the same emphasis, so no plan is featured.
@@ -507,9 +507,12 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
            space above the button"); the head and list keep their `block` inside their group. */
         <Layout as="li" key={option.title || index} rowGap="stack" className={styles.plan}>
           <Layout rowGap="block">
-            <div className={styles.planHead}>
+            {/* The name, then the one line that says what the plan is for, a `tight` step under it
+                (owner, 5 Nov 2026, final copy), both over the head's hairline. */}
+            <Layout rowGap="tight" className={styles.planHead}>
               <OptionHead option={option} className={styles.planTitle} />
-            </div>
+              {option.body != null ? <p className={styles.planBody}>{option.body}</p> : null}
+            </Layout>
             {option.checklist && option.checklist.length > 0 ? (
               <Layout as="ul" rowGap="text">
                 {option.checklist.map((item, i) => (

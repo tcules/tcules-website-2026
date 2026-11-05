@@ -299,40 +299,29 @@ One misread dashboard may need only [dashboard design](/services/product-design/
 
 ## Three ways to work with us {#how-we-work-together}
 
-<!-- The checklist items and the three button labels are placeholders (owner, 5 Nov 2026), drawn from the earlier copy; final words to come. -->
+**Pilot project.** Try us on one real problem
 
-*Optional first step*
-
-**Pilot project.**
-
-- One flow or one hard question
-- Or an audit of what you have
-- A fixed price, agreed up front
-- A low-risk way to start
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
 [Start with a pilot](#enquiry)
 
-*A known goal*
+**Defined project.** One goal, one scope, one price
 
-**Defined project.**
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-- A first release
-- A redesign
-- A design system
-- Scoped and priced before we start
+[Get your project scoped](#enquiry)
 
-[Scope a project](#enquiry)
+**Ongoing partnership.** A design team without the hiring
 
-*A roadmap that keeps moving*
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-**Ongoing partnership.**
-
-- A senior designer leads
-- Specialists join as the work needs
-- Change the team on two weeks' notice
-- No minimum term
-
-[Plan a partnership](#enquiry)
+[Get your design team](#enquiry)
 
 Not sure which suits you? Tell us about the product, and we'll suggest one.
 

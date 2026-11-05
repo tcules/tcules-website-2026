@@ -661,6 +661,8 @@ function planOptions(band: CorpusBand): {
   plans: {
     eyebrow?: string;
     title: string;
+    /* The words after the bold name ("Try us on one real problem"), one line under it. */
+    body?: readonly InlineRun[];
     checklist: ReactNode[];
     link?: { labelText: string; href: string };
   }[];
@@ -682,6 +684,7 @@ function planOptions(band: CorpusBand): {
       plans.push({
         ...(eyebrow ? { eyebrow } : {}),
         title: labelTitle(lead.label).replace(/\.$/, ''),
+        ...(inlineToText(lead.body).trim() ? { body: lead.body } : {}),
         checklist: [],
       });
       eyebrow = undefined;
@@ -1097,7 +1100,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             options={planned.plans.map((plan) => ({
               ...(plan.eyebrow ? { eyebrow: plan.eyebrow } : {}),
               title: plan.title,
-              body: null,
+              body: plan.body ? renderInline(plan.body) : null,
               checklist: plan.checklist,
               action: plan.link ? (
                 <Button

@@ -168,6 +168,13 @@
   color: var(--eop-title-ink);
 }
 
+/* The line under a plan's name: what the plan is for, at the card body size. */
+.planBody {
+  font: var(--eop-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--eop-body-ink);
+}
+
 .planItem {
   font: var(--eop-body-text);
   text-wrap: var(--text-running-wrap);
