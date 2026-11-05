@@ -51,6 +51,7 @@ type CmsSection = {
     isActive: boolean;
     publishedAt: Text;
   }>;
+  isEnabled?: boolean;
   ctaType: Text;
   disclaimer: Text;
   island?: 'blue' | 'ink';
@@ -110,172 +111,176 @@ export function mapLabPage(
   if (page.routePath && page.routePath !== route) throw Error('New CMS Lab: route mismatch');
   const hero = mapHero(page.hero);
   if (!hero) throw Error('New CMS Lab: missing hero');
-  const sections: LabSection[] = rows(page.content).map((section) => {
-    const key = section.__typename + '-' + section.id,
-      id = text(section.anchorId);
-    const head = {
-      key,
-      id,
-      heading: required(section.heading, key),
-      headingId: `${id ?? key}-heading`,
-      surface:
-        section.editorialSurface ??
-        section.sheetSurface ??
-        section.cardSurface ??
-        section.stageSurface ??
-        section.faqSurface ??
-        section.ctaSurface,
-    };
-    switch (section.__typename) {
-      case 'ComponentSharedEditorialSection': {
-        const presentation = variant(section.editorialPresentation);
-        if (presentation !== 'text' && presentation !== 'media' && presentation !== 'drawing')
-          throw Error('New CMS Lab: unsupported editorial');
-        return {
-          ...head,
-          type: 'editorial',
-          presentation,
-          media: image(section.media),
-          side: section.editorialMediaSide,
-          art: illustration(section.illustration),
-          blocks: rows(section.blocks).map((block) => {
-            if (block.kind === 'prose') return { html: html(block.prose?.body) };
-            if (block.kind === 'labelled')
-              return {
-                title: required(block.labelled?.title, key),
-                html: markdownInlineToHtml(block.labelled?.body),
-              };
-            throw Error('New CMS Lab: unsupported flow block ' + block.kind);
-          }),
-        };
-      }
-      case 'ComponentSharedOfferSheetSection':
-        if (variant(section.sheetPresentation) !== 'split-list')
-          throw Error('New CMS Lab: unsupported offer sheet');
-        return {
-          ...head,
-          type: 'split-list',
-          lead: text(section.description),
-          items: rows(section.listEntries).map((item) => ({
-            title: text(item.title),
-            bodyHtml: markdownInlineToHtml(item.body),
-            icon: icon(item.icon),
-          })),
-        };
-      case 'ComponentSharedIllustratedSection': {
-        const presentation = variant(section.cardPresentation);
-        if (
-          presentation !== 'drawn-tiles' &&
-          presentation !== 'covered-cards' &&
-          presentation !== 'glyph-tiles'
-        )
-          throw Error('New CMS Lab: unsupported cards');
-        return {
-          ...head,
-          type: 'cards',
-          presentation,
-          lead: text(section.description),
-          entries: rows(section.entries).map((entry, index) => ({
-            id: `${key}-${index}`,
-            title: required(entry.title, key),
-            html: markdownInlineToHtml(entry.body),
-            body: entry.body ?? '',
-            href: text(entry.href),
-            action: text(entry.actionLabel),
-            icon: icon(entry.icon),
-            art: illustration(entry.illustration),
-          })),
-        };
-      }
-      case 'ComponentSharedStageSection':
-        return {
-          ...head,
-          type: 'stages',
-          lead: text(section.description),
-          art: illustration(section.illustration),
-          stages: rows(section.stages).map((stage) => ({
-            title: required(stage.title, key),
-            body: stage.description ?? '',
-          })),
-        };
-      case 'ComponentSharedFaqSection':
-        return {
-          ...head,
-          type: 'faq',
-          footerHtml: text(section.footer) ? html(section.footer) : undefined,
-          items: rows(section.faqs)
-            .filter((faq) => faq.isActive && faq.publishedAt)
-            .map((faq) => ({
-              id: faq.documentId,
-              question: required(faq.question, key),
-              answerHtml: richTextToHtml(faq.answer, 'Lab FAQ'),
+  const sections: LabSection[] = rows(page.content)
+    .filter(
+      (section) => section.__typename !== 'ComponentSharedCta' || section.isEnabled !== false,
+    )
+    .map((section) => {
+      const key = section.__typename + '-' + section.id,
+        id = text(section.anchorId);
+      const head = {
+        key,
+        id,
+        heading: required(section.heading, key),
+        headingId: `${id ?? key}-heading`,
+        surface:
+          section.editorialSurface ??
+          section.sheetSurface ??
+          section.cardSurface ??
+          section.stageSurface ??
+          section.faqSurface ??
+          section.ctaSurface,
+      };
+      switch (section.__typename) {
+        case 'ComponentSharedEditorialSection': {
+          const presentation = variant(section.editorialPresentation);
+          if (presentation !== 'text' && presentation !== 'media' && presentation !== 'drawing')
+            throw Error('New CMS Lab: unsupported editorial');
+          return {
+            ...head,
+            type: 'editorial',
+            presentation,
+            media: image(section.media),
+            side: section.editorialMediaSide,
+            art: illustration(section.illustration),
+            blocks: rows(section.blocks).map((block) => {
+              if (block.kind === 'prose') return { html: html(block.prose?.body) };
+              if (block.kind === 'labelled')
+                return {
+                  title: required(block.labelled?.title, key),
+                  html: markdownInlineToHtml(block.labelled?.body),
+                };
+              throw Error('New CMS Lab: unsupported flow block ' + block.kind);
+            }),
+          };
+        }
+        case 'ComponentSharedOfferSheetSection':
+          if (variant(section.sheetPresentation) !== 'split-list')
+            throw Error('New CMS Lab: unsupported offer sheet');
+          return {
+            ...head,
+            type: 'split-list',
+            lead: text(section.description),
+            items: rows(section.listEntries).map((item) => ({
+              title: text(item.title),
+              bodyHtml: markdownInlineToHtml(item.body),
+              icon: icon(item.icon),
             })),
-        };
-      case 'ComponentSharedCta': {
-        const presentation = variant(section.ctaPresentation),
-          form = section.form;
-        if (
-          presentation !== 'paired-island' &&
-          presentation !== 'button-island' &&
-          presentation !== 'form-island'
-        )
-          throw Error('New CMS Lab: unsupported CTA');
-        if (
-          presentation === 'form-island' &&
-          (!form || form.variant !== 'enquiry' || form.purpose !== 'application')
-        )
-          throw Error('New CMS Lab: invalid application form');
-        const secondAction = action(section.second?.button);
-        const urlLabel =
-          form?.urlLabel === 'Links_to_your_proof_of_work'
-            ? 'Links to your proof-of-work'
-            : form?.urlLabel;
-        if (urlLabel && urlLabel !== 'Links to your proof-of-work')
-          throw Error('New CMS Lab: unsupported URL label');
-        return {
-          ...head,
-          type: 'cta',
-          presentation,
-          body: paragraphs(section.description),
-          button: action(section.button),
-          media: image(section.media),
-          footnote: text(section.disclaimer),
-          island: section.island,
-          second:
-            section.second && secondAction
+          };
+        case 'ComponentSharedIllustratedSection': {
+          const presentation = variant(section.cardPresentation);
+          if (
+            presentation !== 'drawn-tiles' &&
+            presentation !== 'covered-cards' &&
+            presentation !== 'glyph-tiles'
+          )
+            throw Error('New CMS Lab: unsupported cards');
+          return {
+            ...head,
+            type: 'cards',
+            presentation,
+            lead: text(section.description),
+            entries: rows(section.entries).map((entry, index) => ({
+              id: `${key}-${index}`,
+              title: required(entry.title, key),
+              html: markdownInlineToHtml(entry.body),
+              body: entry.body ?? '',
+              href: text(entry.href),
+              action: text(entry.actionLabel),
+              icon: icon(entry.icon),
+              art: illustration(entry.illustration),
+            })),
+          };
+        }
+        case 'ComponentSharedStageSection':
+          return {
+            ...head,
+            type: 'stages',
+            lead: text(section.description),
+            art: illustration(section.illustration),
+            stages: rows(section.stages).map((stage) => ({
+              title: required(stage.title, key),
+              body: stage.description ?? '',
+            })),
+          };
+        case 'ComponentSharedFaqSection':
+          return {
+            ...head,
+            type: 'faq',
+            footerHtml: text(section.footer) ? html(section.footer) : undefined,
+            items: rows(section.faqs)
+              .filter((faq) => faq.isActive && faq.publishedAt)
+              .map((faq) => ({
+                id: faq.documentId,
+                question: required(faq.question, key),
+                answerHtml: richTextToHtml(faq.answer, 'Lab FAQ'),
+              })),
+          };
+        case 'ComponentSharedCta': {
+          const presentation = variant(section.ctaPresentation),
+            form = section.form;
+          if (
+            presentation !== 'paired-island' &&
+            presentation !== 'button-island' &&
+            presentation !== 'form-island'
+          )
+            throw Error('New CMS Lab: unsupported CTA');
+          if (
+            presentation === 'form-island' &&
+            (!form || form.variant !== 'enquiry' || form.purpose !== 'application')
+          )
+            throw Error('New CMS Lab: invalid application form');
+          const secondAction = action(section.second?.button);
+          const urlLabel =
+            form?.urlLabel === 'Links_to_your_proof_of_work'
+              ? 'Links to your proof-of-work'
+              : form?.urlLabel;
+          if (urlLabel && urlLabel !== 'Links to your proof-of-work')
+            throw Error('New CMS Lab: unsupported URL label');
+          return {
+            ...head,
+            type: 'cta',
+            presentation,
+            body: paragraphs(section.description),
+            button: action(section.button),
+            media: image(section.media),
+            footnote: text(section.disclaimer),
+            island: section.island,
+            second:
+              section.second && secondAction
+                ? {
+                    id: text(section.second.anchorId),
+                    heading: required(section.second.heading, key),
+                    body: secondParagraph(section.second.description),
+                    action: secondAction,
+                  }
+                : undefined,
+            form: form
               ? {
-                  id: text(section.second.anchorId),
-                  heading: required(section.second.heading, key),
-                  body: secondParagraph(section.second.description),
-                  action: secondAction,
+                  label: text(form.formLabel),
+                  workLabel: workLabel(form.workLabel),
+                  urlLabel: urlLabel ? 'Links to your proof-of-work' : undefined,
+                  urlRequired: form.urlRequired,
+                  writeTo: text(form.writeTo),
+                  submitLabel: text(form.submitLabel),
+                  caption: text(form.caption),
+                  success:
+                    form.successHeading && form.successBody
+                      ? { heading: form.successHeading, body: form.successBody }
+                      : undefined,
+                  nextStepsHeading: text(form.nextStepsHeading),
+                  nextSteps: rows(form.nextSteps).map((step) => ({
+                    label: required(step.title, key),
+                    detail: step.description ?? '',
+                  })),
                 }
               : undefined,
-          form: form
-            ? {
-                label: text(form.formLabel),
-                workLabel: workLabel(form.workLabel),
-                urlLabel: urlLabel ? 'Links to your proof-of-work' : undefined,
-                urlRequired: form.urlRequired,
-                writeTo: text(form.writeTo),
-                submitLabel: text(form.submitLabel),
-                caption: text(form.caption),
-                success:
-                  form.successHeading && form.successBody
-                    ? { heading: form.successHeading, body: form.successBody }
-                    : undefined,
-                nextStepsHeading: text(form.nextStepsHeading),
-                nextSteps: rows(form.nextSteps).map((step) => ({
-                  label: required(step.title, key),
-                  detail: step.description ?? '',
-                })),
-              }
-            : undefined,
-        };
+          };
+        }
+        default:
+          throw Error('New CMS Lab: unsupported section ' + section.__typename);
       }
-      default:
-        throw Error('New CMS Lab: unsupported section ' + section.__typename);
-    }
-  });
+    });
   return { route, hero, sections };
 }
 export const getPublishedLab = cache(async () =>

@@ -58,7 +58,7 @@ fragment LabFaq on ComponentSharedFaqSection {
 fragment LabCta on ComponentSharedCta {
   id
   heading description eyebrow disclaimer anchorId ctaSurface: surface ctaMediaSide: mediaSide
-  ctaType ctaPresentation: presentation island
+  isEnabled ctaType ctaPresentation: presentation island
   media { ...LabImage }
   button { ...LabAction }
   second { heading description anchorId button { ...LabAction } }
