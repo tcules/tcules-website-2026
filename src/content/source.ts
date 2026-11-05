@@ -177,7 +177,7 @@ export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSou
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
 export const getCaseStudyIndex = getPublishedCaseIndex;
-/* A case's V1 cover (fixtures/case-covers.ts) wins over its Strapi thumbnail; Strapi's alt stays. */
+/* A reference cover fills a missing Strapi thumbnail for the same case. */
 export async function getCaseStudyListingPage(slug: string) {
   const listing = await caseStudiesSource.getCaseStudyListingPage(slug);
   if (!listing) return listing;
@@ -185,8 +185,8 @@ export async function getCaseStudyListingPage(slug: string) {
     ...listing,
     items: listing.items.map((item) => {
       const cover = CASE_COVERS[item.slug];
-      return cover
-        ? { ...item, thumbnail: { ...cover, alt: item.thumbnail?.alt ?? item.title } }
+      return cover && !item.thumbnail
+        ? { ...item, thumbnail: { ...cover, alt: item.title } }
         : item;
     }),
   };

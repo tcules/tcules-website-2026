@@ -46,7 +46,7 @@ import {
   scenarioParts,
   type Claim,
 } from './CopyBands';
-import { LEDGER_BANDS } from './OfferBands';
+import { LEDGER_BANDS, WHY_GLYPHS } from './OfferBands';
 import { PublishedHero, PublishedSection } from './PublishedHome';
 import type { HomeAction } from './published-home-model';
 import type {
@@ -528,6 +528,18 @@ function Stages({ section, ctx }: { section: Of<'stages'>; ctx: Ctx }) {
  * upload takes the frontend's drawing for that reason, else the labelled illustration slot.
  */
 function Why({ section, ctx }: { section: Of<'why'>; ctx: Ctx }) {
+  const cards = section.cards.map((card) => ({ ...card, title: card.title.replace(/\.$/, '') }));
+  if (cards.length && cards.every((card) => !card.image && WHY_GLYPHS[card.title])) {
+    return (
+      <OfferSheet
+        {...head(section)}
+        surface={section.surface}
+        arrangement="list"
+        items={cards.map((card) => ({ ...card, icon: WHY_GLYPHS[card.title] }))}
+        note={actionsOf(section.action)}
+      />
+    );
+  }
   const on = ground(section.surface);
   return (
     <Reasons
@@ -535,9 +547,8 @@ function Why({ section, ctx }: { section: Of<'why'>; ctx: Ctx }) {
       surface={section.surface === 'tint' ? 'tint' : 'paper'}
       figureSize="lg"
       action={actionsOf(section.action)}
-      items={section.cards.map((card) => {
-        /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
-        const title = card.title.replace(/\.$/, '');
+      items={cards.map((card) => {
+        const { title } = card;
         if (card.variant === 'media') {
           return card.image
             ? { title, body: card.body, proof: { kind: 'cover' as const, image: card.image } }

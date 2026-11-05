@@ -1,4 +1,4 @@
-import { ENDPOINTS } from '@/lib/routes';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { placeholderIllustration } from '@/lib/placeholders';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { Layout, Media, Prose, Section, type MediaImage } from '@/components';
@@ -14,6 +14,7 @@ import {
   Reasons,
 } from '@/patterns';
 import { PublishedHero, PublishedSection } from './PublishedHome';
+import { bandIllustration } from './images';
 import type { WhyPageModel, WhySection } from './published-why-model';
 /** The drawing the frontend files for a reason by its title, once its file has landed (the route
     passes `landedReasonFigure`, which reads the disk, so this tier stays free of it). */
@@ -66,20 +67,32 @@ function WhyBand({
       // The band has always sat on tint; the CMS's ground wins when it sets one.
       const surface = s.surface ?? 'tint';
       const ground = surface === 'tint' ? 'paper-deep' : 'paper';
+      const first = s.entries[0]?.figure;
+      const reference = s.id ? bandIllustration(ROUTES.whyTcules, s.id) : undefined;
+      const local = reference && s.entries.every((entry) => !entry.figure) ? reference : undefined;
+      // A shared CMS illustration belongs to the whole band, as in the reference layout.
+      const shared =
+        reference && first && s.entries.length > 1 &&
+        s.entries.every((entry) => entry.figure?.src === first.src)
+          ? first
+          : undefined;
+      const bandFigure = shared ?? (local ? { ...local, alt: '' } : undefined);
       return (
         <Reasons
           {...head}
           surface={surface}
           figureSize="lg"
+          bandFigure={bandFigure}
           items={s.entries.map((e) => {
             // The CMS illustration, else the frontend's own drawing for the reason, else its
             // labelled placeholder — the illustration fallback, and the only one.
-            const landed = e.figure ? undefined : reasonFigure?.(e.title, ground);
-            const figure: MediaImage =
-              e.figure ??
-              (landed
-                ? { ...landed, alt: '', kind: 'illustration' }
-                : { ...placeholderIllustration(e.title), alt: '' });
+            const landed = e.figure || bandFigure ? undefined : reasonFigure?.(e.title, ground);
+            const figure: MediaImage | undefined = bandFigure
+              ? undefined
+              : e.figure ??
+                (landed
+                  ? { ...landed, alt: '', kind: 'illustration' }
+                  : { ...placeholderIllustration(e.title), alt: '' });
             return {
               title: e.title,
               body: <span dangerouslySetInnerHTML={{ __html: e.html }} />,

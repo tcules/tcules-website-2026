@@ -1,5 +1,7 @@
 import { Layout } from '@/components';
 import { placeholderImage } from '@/lib/placeholders';
+import { expertisePath } from '@/lib/routes';
+import { serviceIllustration } from '@/lib/service-illustrations';
 import { BlockCardSet, ContentSection, VoiceLedger, type BlockCardSetItem } from '@/patterns';
 
 import { BandBody } from './CopyBands';
@@ -13,7 +15,7 @@ import type {
  * The grouped Expertise directory as the corpus hub drew it (HubBands `DestinationGroupsBand`, C-image):
  * the band's centred head, then each group a `section` apart, its eyebrow over its h3, one photo card per
  * Expertise record three across, the whole card the link, "Best for" and "How we design for it" its
- * two paragraphs. A record with no image takes the register's labelled placeholder.
+ * two paragraphs. A missing CMS image takes the reference illustration for its Expertise route.
  */
 export function ExpertiseDirectoryBand({
   section,
@@ -44,6 +46,7 @@ export function ExpertiseDirectoryBand({
               type: 'image' as const,
               image:
                 card.image ??
+                (card.slug ? serviceIllustration(expertisePath(card.slug)) : undefined) ??
                 placeholderImage(route, section.id ?? section.key, card.slug ?? card.id),
             },
           }));

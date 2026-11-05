@@ -4,6 +4,7 @@ import { caseStudyPath, ROUTES } from '@/lib/routes';
 import type { LogoGridMark } from '@/patterns';
 import type { CaseGroup, CaseItem } from '@/templates';
 
+import { CASE_COVERS } from '../fixtures/case-covers';
 import { CASE_INDEX_QUERY } from './case-index-query';
 import { image, mapBand, mapHero, rows, text } from './home';
 import type { CmsHero, CmsHomeSection, CmsImage, Entries } from './home-types';
@@ -173,7 +174,11 @@ function relatedCard(
     warn(`case ${record.documentId} is missing a title or slug`);
     return;
   }
-  const cover = image(placement?.image) ?? image(thumbnail?.image);
+  const fallback = CASE_COVERS[slug];
+  const cover =
+    image(placement?.image) ??
+    image(thumbnail?.image) ??
+    (fallback ? { ...fallback, alt: title } : undefined);
   if (!cover) warn(`case ${slug} is missing a usable cover`);
   const rich = markdownInlineToHtml(placement?.descriptionRich);
   const description = text(placement?.description) ?? text(thumbnail?.description) ?? '';

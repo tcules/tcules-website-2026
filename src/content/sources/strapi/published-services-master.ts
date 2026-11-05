@@ -1,7 +1,6 @@
 import { cache } from 'react';
 import type { LogoGridMark } from '@/patterns';
 
-import { placeholderIllustration } from '@/lib/placeholders';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { sketchForRoute } from '@/lib/sketches';
 import type {
@@ -236,9 +235,7 @@ function mapSection(
           const title = text(card.title);
           if (!title) return [];
           const upload = card.variant === 'illustration' ? card.illustration : card.media;
-          const image =
-            mapUploadImage(upload, publicGraphqlUrl()) ??
-            (card.variant === 'illustration' ? placeholderIllustration(title) : undefined);
+          const image = mapUploadImage(upload, publicGraphqlUrl());
           return [
             {
               id: card.id,

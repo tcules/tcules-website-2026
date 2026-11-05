@@ -2,18 +2,18 @@ import type { CaseStudyListingImage } from '../../types.ts';
 
 /**
  * The V1 case covers (owner, 3 Nov 2026: the product's UI cut out over its own full dashboard at
- * 13%, on paper, one shadow), keyed by the case's LIVE slug. Each wins over the case's Strapi
- * thumbnail in `getCaseStudyListingPage` (source.ts), so every place that shows a case's cover (the
- * /case-studies index, home, a service page citing the case) shows this one.
+ * 13%, on paper, one shadow), keyed by the case's live slug. These fill missing CMS covers.
  *
  * Delivered as "Casestudy Images design (4).zip" (5 Nov 2026), drawn from its @2x masters into
  * `public/case-covers/` at 2560, 1600 and 960 wide. Two live cases have no entry and keep their
  * Strapi thumbnail: Kirana store payments (owner, 5 Nov 2026: it stays as the live site has it) and
  * Ringier (not in the delivery).
  *
- * The alt stays Strapi's: the record's own words for the picture.
+ * The caller supplies the case's accessible label for the fallback.
  */
-const cover = (file: string): Omit<CaseStudyListingImage, 'alt'> => ({
+type Cover = Omit<CaseStudyListingImage, 'alt'> & { width: number; height: number };
+
+const cover = (file: string): Cover => ({
   src: `/case-covers/${file}.webp`,
   width: 2560,
   height: 1440,
@@ -24,7 +24,7 @@ const cover = (file: string): Omit<CaseStudyListingImage, 'alt'> => ({
   ],
 });
 
-export const CASE_COVERS: Readonly<Record<string, Omit<CaseStudyListingImage, 'alt'>>> = {
+export const CASE_COVERS: Readonly<Record<string, Cover>> = {
   'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software':
     cover('auxentious'),
   'legacy-saas-modernisation-information-architecture': cover('benchmark'),

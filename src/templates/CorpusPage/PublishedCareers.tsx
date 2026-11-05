@@ -9,15 +9,22 @@ import {
   EnquiryForm,
   ListCard,
   OfferSheet,
+  type HeroMedia,
 } from '@/patterns';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS } from '@/lib/routes';
 import type { CareersPageModel } from './published-careers-model';
 import { PublishedHero } from './PublishedHome';
-export function PublishedCareers({ page }: { page: CareersPageModel }) {
+export function PublishedCareers({
+  page,
+  fallbackMedia,
+}: {
+  page: CareersPageModel;
+  fallbackMedia?: HeroMedia;
+}) {
   return (
     <>
-      <PublishedHero hero={page.hero} />
+      <PublishedHero hero={page.hero} fallbackMedia={fallbackMedia} />
       {page.sections.map((section) => {
         const head = {
           id: section.anchorId,

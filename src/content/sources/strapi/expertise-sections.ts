@@ -146,8 +146,12 @@ export function mapExpertiseDirectory(
               actionHref(record.routePath) ??
               (slug ? expertisePath(slug) : undefined);
             if (!href) warn(`${key} card "${title}" has no route`);
-            const cover =
-              image(destination.image) ?? image(resolved?.image) ?? image(record.previewImage);
+            // Imported "Image to come" uploads mark empty slots, so continue to the next source.
+            const cover = [
+              image(destination.image),
+              image(resolved?.image),
+              image(record.previewImage),
+            ].find((candidate) => candidate && !/^Image to come:/i.test(candidate.alt));
             if (!cover) warn(`${key} card "${title}" has no image`);
             const bodyHtml = [paragraph(card.bestFor), paragraph(card.approach)].filter(
               (html): html is string => Boolean(html),

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { heroFallback } from '@/app/_corpus/hero-fallback';
 import { getPageSeo, getPublishedCareersPage } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
@@ -22,7 +23,10 @@ export default async function CareersPage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
         />
       ) : null}
-      <PublishedCareers page={page} />
+      <PublishedCareers
+        page={page}
+        fallbackMedia={page.hero.media ? undefined : heroFallback(ROUTES.careers)}
+      />
     </>
   );
 }

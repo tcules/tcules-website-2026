@@ -1,10 +1,18 @@
 import { Layout, Media, Prose, Section } from '@/components';
-import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
 import { labelWithoutArrow } from './text';
-import { Bento, BlockCardSet, ContentSection, CtaRow, LogoGrid, OfferSheet } from '@/patterns';
+import {
+  Bento,
+  BlockCardSet,
+  ContentSection,
+  CtaRow,
+  LogoGrid,
+  OfferSheet,
+  type HeroMedia,
+} from '@/patterns';
 
 import { PublishedHero, PublishedSection } from './PublishedHome';
+import { WHY_GLYPHS } from './OfferBands';
 import type {
   ServicesMasterPage,
   ServicesMasterSection,
@@ -59,6 +67,7 @@ function ServicesSection({ section }: { section: ServicesMasterSection }) {
           items={section.items.map(({ image, ...item }) => ({
             ...item,
             iconArt: image ? <Media image={image} sizes="24px" /> : undefined,
+            icon: image ? undefined : WHY_GLYPHS[item.title],
           }))}
           note={
             section.action ? (
@@ -110,13 +119,16 @@ function ServicesSection({ section }: { section: ServicesMasterSection }) {
   }
 }
 
-export function PublishedServicesMaster({ page }: { page: ServicesMasterPage }) {
+export function PublishedServicesMaster({
+  page,
+  fallbackMedia,
+}: {
+  page: ServicesMasterPage;
+  fallbackMedia?: HeroMedia;
+}) {
   return (
     <>
-      <PublishedHero
-        hero={page.hero}
-        fallbackMedia={{ type: 'image', image: placeholderImage(ROUTES.services, 'hero') }}
-      />
+      <PublishedHero hero={page.hero} fallbackMedia={fallbackMedia} />
       {page.sections.map((section) => (
         <ServicesSection key={section.key} section={section} />
       ))}
