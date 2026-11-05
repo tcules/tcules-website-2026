@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import {
-  getCaseStory,
   getCaseStudyPage,
   type CaseStudyBlock,
   type CaseStudyImage,
@@ -21,7 +20,6 @@ import {
   TableOfContents,
   type TocItem,
 } from '@/patterns';
-import { CaseStory } from '@/templates';
 
 function figureImage(image: CaseStudyImage) {
   return {
@@ -195,28 +193,9 @@ export async function generateMetadata({
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
 
-  /* A case with an ideal local copy renders as a designed story (fixtures/ideal/case-studies); every
-     other case renders the CMS body as it stands. */
-  const story = await getCaseStory(slug);
-  if (story) {
-    return (
-      <CaseStory
-        story={story}
-        trail={heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: 'Case studies', href: ROUTES.caseStudies },
-            { label: story.title, href: caseStudyPath(story.slug) },
-          ],
-          story.title,
-          (t) => (
-            <Breadcrumbs {...t} />
-          ),
-        )}
-      />
-    );
-  }
-
+  /* Every case renders the CMS body as it stands (owner, 5 Nov 2026: the one case with an ideal local
+     copy rendered as a designed story, unlike every other case; how a case reads is the CMS's to
+     carry, not a local override's). The CaseStory template stays on /design/case-story. */
   const caseStudy = await getCaseStudyPage(slug);
   if (!caseStudy) notFound();
 
