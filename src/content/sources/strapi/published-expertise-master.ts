@@ -44,7 +44,11 @@ export const getPublishedExpertiseMaster = cache(
   async (): Promise<ExpertiseMasterPage | null> => {
     const { expertiseMaster } = await publicGraphql<{
       expertiseMaster: CmsExpertiseMaster | null;
-    }>(PUBLISHED_EXPERTISE_MASTER_QUERY, 'PublishedExpertiseMaster');
+    }>(PUBLISHED_EXPERTISE_MASTER_QUERY, 'PublishedExpertiseMaster', undefined, {
+      optionalImagePaths: [
+        'expertiseMaster.content.*.groups.*.cards.*.destination.expertise.previewImage.file',
+      ],
+    });
     if (!expertiseMaster) return null;
     if (expertiseMaster.routePath !== ROUTES.expertise) {
       throw new Error(

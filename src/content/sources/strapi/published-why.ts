@@ -323,6 +323,12 @@ export function mapWhy(page: WhyRecord | null): WhyPageModel | null {
   return { hero, sections };
 }
 
-export const getPublishedWhy = cache(async () =>
-  mapWhy((await publicGraphql<{ page: WhyRecord | null }>(WHY_QUERY, 'PublishedWhy')).page),
-);
+export const getPublishedWhy = cache(async () => {
+  const { page } = await publicGraphql<{ page: WhyRecord | null }>(
+    WHY_QUERY,
+    'PublishedWhy',
+    undefined,
+    { optionalImagePaths: ['page.content.*.cards.*.image.file'] },
+  );
+  return mapWhy(page);
+});
