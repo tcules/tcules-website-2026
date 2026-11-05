@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { ArrowLeft, ArrowRight, Copy, Cursor, Hop, Lens, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched, TraceIn } from './scenes';
+import { Chip, Focus, Glide, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -292,6 +292,205 @@ function Stops() {
   );
 }
 
+/* ── What we design in ────────────────────────────────────────────────────────── */
+
+/** Specialist Shopify stores (MOVING): the part checked against the buyer's own machine before they buy.
+ *  Rest: the product and the buyer's spec apart, nothing answered. Hover: the route draws from the
+ *  product's basket to the buyer's spec, and the tick that says "it fits" grows. */
+function KindShopifyFit() {
+  return (
+    <>
+      <Rect x={30} y={40} w={80} h={100} rx={8} className={styles.frame} />
+      <Rect x={42} y={52} w={56} h={36} className={styles.tile} />
+      <Copy x={42} y={100} w={44} />
+      <Copy x={42} y={112} w={28} quiet />
+      <Rect x={42} y={122} w={36} h={12} rx={6} className={styles.tile} />
+      <circle className={styles.node} cx="110" cy="130" r="2.5" />
+      <TraceIn d="M110,130 L144,130 A6,6 0 0 0 150,124 L150,96 A6,6 0 0 1 156,90 L183,90" />
+      <GrowIn>
+        <ArrowRight x={190} y={90} />
+      </GrowIn>
+      {/* The buyer and the machine they measured. */}
+      <Rect x={190} y={40} w={100} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={208} cy={58} size={14} className={styles.glyph} />
+      <Copy x={222} y={58} w={40} quiet />
+      <Rect x={204} y={80} w={38} h={20} className={styles.tile} />
+      <Glyph name="ruler-pen" cx={216} cy={90} size={12} className={styles.glyph} />
+      <Copy x={226} y={90} w={8} quiet />
+      <Copy x={204} y={120} w={56} quiet />
+      <GrowIn>
+        <Focus x={266} y={90} glyph="check-circle" size={12} />
+      </GrowIn>
+    </>
+  );
+}
+
+/** Web-to-print (MOVING): the customer's own artwork placed on the made-to-order product.
+ *  Rest: the file beside the order, its print area an empty dashed slot. Hover: the route carries the
+ *  file across and the print area fills with it (the Audits highlight). */
+function KindWebToPrint() {
+  return (
+    <>
+      <Rect x={30} y={50} w={60} h={80} rx={8} className={styles.frame} />
+      <Glyph name="document-text" cx={60} cy={80} size={24} className={styles.glyph} />
+      <Copy x={46} y={112} w={28} quiet />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      <TraceIn d="M90,90 L183,90" />
+      <GrowIn>
+        <ArrowRight x={190} y={90} />
+      </GrowIn>
+      {/* The made-to-order product: its print area, then its size and quantity options. */}
+      <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      <Rect x={204} y={44} w={72} h={52} className={styles.trailFrame} />
+      <GrowIn>
+        <Rect x={198} y={38} w={84} h={64} rx={10} className={styles.halo} />
+        <Rect x={204} y={44} w={72} h={52} className={styles.solid} />
+        <Glyph name="document-text" cx={240} cy={70} size={20} className={styles.glyphOn} />
+      </GrowIn>
+      <Rect x={204} y={110} w={32} h={14} className={styles.tile} />
+      <Rect x={244} y={110} w={32} h={14} className={styles.tile} />
+      <Copy x={204} y={136} w={48} quiet />
+    </>
+  );
+}
+
+/** Production and fulfilment (STILL): behind the store, the queue the print floor works from; each order
+ *  a job, one done, the next in production (lit), the last waiting. */
+function KindFulfilment() {
+  return (
+    <>
+      <Rect x={30} y={50} w={60} h={80} rx={8} className={styles.frame} />
+      <Glyph name="cart" cx={46} cy={66} size={12} className={styles.glyph} />
+      <Copy x={58} y={66} w={20} quiet />
+      <Rect x={42} y={78} w={36} h={20} className={styles.tile} />
+      <Rect x={42} y={108} w={28} h={12} rx={6} className={styles.tile} />
+      <Hop x1={90} x2={130} y={90} />
+      <Rect x={130} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      {/* Done. */}
+      <Rect x={142} y={40} w={136} h={20} className={styles.tile} />
+      <Glyph name="document-text" cx={154} cy={50} size={10} className={styles.glyph} />
+      <Copy x={166} y={50} w={56} quiet />
+      <Glyph name="check-circle" cx={266} cy={50} size={10} className={styles.glyph} />
+      {/* In production. */}
+      <Rect x={136} y={74} w={148} h={32} rx={10} className={styles.halo} />
+      <Rect x={142} y={80} w={136} h={20} className={styles.solid} />
+      <Glyph name="layers" cx={154} cy={90} size={10} className={styles.glyphOn} />
+      <path className={styles.tick} d="M166,90 L222,90" />
+      {/* Waiting. */}
+      <Rect x={142} y={120} w={136} h={20} className={styles.tile} />
+      <Glyph name="document-text" cx={154} cy={130} size={10} className={styles.glyphQuiet} />
+      <Copy x={166} y={130} w={44} quiet />
+      <Glyph name="clock-circle" cx={266} cy={130} size={10} className={styles.glyphQuiet} />
+    </>
+  );
+}
+
+/** Listing-content tools for Amazon sellers (MOVING): the AI drafts the listing, the seller approves it,
+ *  and only then does it go to the marketplace. Rest: the draft, the cursor hovering undecided. Hover:
+ *  the cursor goes to Approve (it fills) and the route carries the listing out to the store. */
+function KindListingTool() {
+  return (
+    <>
+      <Rect x={30} y={30} w={150} h={120} rx={8} className={styles.frame} />
+      <Glyph name="stars" cx={48} cy={46} size={12} className={styles.glyph} />
+      <Copy x={60} y={46} w={40} quiet />
+      <Rect x={44} y={58} w={36} h={32} className={styles.tile} />
+      <Copy x={92} y={62} w={72} />
+      <Copy x={92} y={74} w={56} quiet />
+      <Copy x={92} y={86} w={64} quiet />
+      <Rect x={44} y={102} w={56} h={16} rx={8} className={styles.frameQuiet} />
+      <Rect x={110} y={102} w={56} h={16} rx={8} className={styles.press} />
+      <circle className={styles.node} cx="180" cy="110" r="2.5" />
+      <TraceIn d="M180,110 L204,110 A6,6 0 0 0 210,104 L210,76 A6,6 0 0 1 216,70 L233,70" />
+      <GrowIn>
+        <ArrowRight x={240} y={70} />
+      </GrowIn>
+      {/* The marketplace the listing goes live on. */}
+      <Rect x={240} y={40} w={50} h={60} rx={8} className={styles.frame} />
+      <Glyph name="cart" cx={265} cy={60} size={16} className={styles.glyph} />
+      <Copy x={253} y={80} w={24} quiet />
+      <Copy x={253} y={88} w={16} quiet />
+      <Glide x={-80} y={0}>
+        <Cursor x={140} y={112} />
+      </Glide>
+    </>
+  );
+}
+
+/** B2B ordering (STILL): last month's order, reordered in one step, approved at the hub, landing on the
+ *  trade account at the account's own price (the lit row, its price at the end). The route runs along
+ *  the one reordered row, y 100, from the left panel's edge to the right panel's edge. */
+function KindReorder() {
+  const rows = [
+    { y: 80, w: 40 },
+    { y: 100, w: 32 },
+    { y: 120, w: 44 },
+  ];
+  return (
+    <>
+      {/* Last month's order, its reorder mark heading it. */}
+      <Rect x={30} y={40} w={90} h={100} rx={8} className={styles.frameQuiet} />
+      <Glyph name="refresh" cx={48} cy={56} size={14} className={styles.glyph} />
+      <Copy x={62} y={56} w={32} quiet />
+      {rows.map(({ y, w }) => (
+        <g key={y}>
+          <Copy x={42} y={y} w={w} quiet />
+          <Rect x={92} y={y - 6} w={16} h={12} rx={3} className={styles.tile} />
+        </g>
+      ))}
+      <path className={styles.line} d="M120,100 L193,100" />
+      <circle className={styles.node} cx="120" cy="100" r="2.5" />
+      <Focus x={160} y={100} glyph="chrome-check" size={12} />
+      <ArrowRight x={200} y={100} />
+      {/* The trade account: the company, and its own prices. */}
+      <Rect x={200} y={40} w={90} h={100} rx={8} className={styles.frame} />
+      <Glyph name="users-group-rounded" cx={218} cy={56} size={14} className={styles.glyph} />
+      <Copy x={232} y={56} w={36} quiet />
+      {rows.map(({ y, w }) =>
+        y === 100 ? (
+          /* The account price: this row lit, its price at the pill's right end. */
+          <g key={y}>
+            <Rect x={206} y={y - 8} w={78} h={16} rx={8} className={styles.block} />
+            <Copy x={216} y={y} w={w} />
+            <Glyph name="wallet" cx={272} cy={y} size={14} className={styles.glyphOn} />
+          </g>
+        ) : (
+          <g key={y}>
+            <Copy x={212} y={y} w={w} />
+            <Rect x={262} y={y - 6} w={16} h={12} rx={3} className={styles.tile} />
+          </g>
+        ),
+      )}
+    </>
+  );
+}
+
+/** Subscriptions (STILL): the customer skips the next delivery themselves; the route steps over it to
+ *  the one after, which is now the next (lit). */
+function KindSubscription() {
+  return (
+    <>
+      <Rect x={30} y={30} w={260} h={120} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={50} cy={50} size={14} className={styles.glyph} />
+      <Copy x={64} y={50} w={40} quiet />
+      <path className={styles.trail} d="M84,110 L116,110 M144,110 L172,110" />
+      <path className={styles.rule} d="M208,110 L236,110" />
+      <Rect x={56} y={96} w={28} h={28} rx={6} className={styles.frame} />
+      <Glyph name="calendar" cx={70} cy={110} size={14} className={styles.glyph} />
+      <Rect x={116} y={96} w={28} h={28} rx={6} className={styles.trailFrame} />
+      <Rect x={236} y={96} w={28} h={28} rx={6} className={styles.frame} />
+      <Glyph name="calendar" cx={250} cy={110} size={14} className={styles.glyph} />
+      <path
+        className={styles.line}
+        d="M70,96 L70,76 A6,6 0 0 1 76,70 L184,70 A6,6 0 0 1 190,76 L190,85"
+      />
+      <circle className={styles.node} cx="70" cy="96" r="2.5" />
+      <Focus x={190} y={110} glyph="calendar" size={12} />
+      <path className={styles.solid} d="M190,92 L186,85 L194,85 Z" />
+    </>
+  );
+}
+
 /**
  * /expertise/commerce-transactional-products · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -317,4 +516,19 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-commerce-transactional-products': Needs,
   /* Where our part stops: Ads, email campaigns and testing programmes stay with your performance marketing specialists. Consumer rules and payment authentication stay */
   'stops-commerce-transactional-products': Stops,
+  /* MOVING: this tile links to /case-studies/redesigning-for-a-shopify-website-ux-design, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Specialist Shopify stores where buyers check fit before buying: GT Tools */
+  'kind-commerce-transactional-products-specialist-shopify-stores-buyers': KindShopifyFit,
+  /* MOVING: this tile links to /case-studies/boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Web-to-print and made-to-order ordering: Gold Image Printing */
+  'kind-commerce-transactional-products-web-print-made-order': KindWebToPrint,
+  /* What we design in, tile: Production and fulfilment systems behind the store: Gold Image Printing */
+  'kind-commerce-transactional-products-production-fulfilment-systems-behind': KindFulfilment,
+  /* MOVING: this tile links to /case-studies/designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Listing-content tools for Amazon sellers: Omny AI */
+  'kind-commerce-transactional-products-listing-content-tools-amazon': KindListingTool,
+  /* What we design in, tile: B2B ordering and trade portals: Reorders, account prices and approvals made quick */
+  'kind-commerce-transactional-products-b2b-ordering-trade-portals': KindReorder,
+  /* What we design in, tile: Subscriptions and repeat ordering: Skips, swaps and renewals customers manage themselves */
+  'kind-commerce-transactional-products-subscriptions-repeat-ordering': KindSubscription,
 };

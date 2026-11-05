@@ -307,3 +307,4 @@ export function labelWithoutArrow(label: string): string {
 export function destinationName(label: string): string {
   return labelWithoutArrow(label).replace(/^(?:see|use|explore|try)\s+(?:the\s+)?/i, '');
 }
+

@@ -1,12 +1,13 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Icon, Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, Prose, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
   Bento,
   CaseSpread,
   ClaimProof,
+  Collage,
   ContentSection,
   ContentSectionText,
   CtaRow,
@@ -23,6 +24,7 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
+  type CollagePhotos,
   type EngagementFact,
   type EngagementScope,
   type TraceScene,
@@ -31,6 +33,7 @@ import {
 import { caseStudyLink } from '@/lib/case-links';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
+import { enquiryChoiceValue } from '@/lib/enquiry-pick';
 import type {
   CorpusBand,
   CorpusBlock,
@@ -51,11 +54,14 @@ import { renderInline } from '@/lib/inline-render';
 
 import {
   EnquiryBand,
+  applicationAnchor,
   FaqItems,
+  faqFooter,
   GenericBlocks,
   ListTiles,
   bodyOf,
   head,
+  headingIdOf,
   QuoteGroupBand,
   RecognitionBand,
   proofQuote,
@@ -64,6 +70,7 @@ import {
   type RatingsById,
 } from './blocks';
 import {
+  bandIllustration,
   bindingNamed,
   caseCover,
   coverFor,
@@ -71,6 +78,10 @@ import {
   slotImage,
   slugOf,
   type SlotImage,
+  itemCovers,
+  itemCutOuts,
+  photoBeside,
+  studioCollage,
 } from './images';
 import {
   BandBody,
@@ -80,7 +91,9 @@ import {
   claimsOf,
   isExampleParagraph,
   CloseBand,
+  CloseFigureBand,
   DestinationsBand,
+  PairedCloseBand,
   DirectoryBand,
   DrawnTableBand,
   IndustriesBand,
@@ -97,10 +110,12 @@ import {
   AskIsland,
   askLinkIn,
   isAskLink,
+  SupportQuote,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { ReportBand } from './ReportBand';
-import { isWhatYouGet, kindOf, type OfferUnit } from './plan';
+import { glyphBand } from './glyph-bands';
+import { isWhatYouGet, kindOf, pairedCloseOf, type OfferUnit } from './plan';
 import {
   bandLinks,
   blocksOf,
@@ -510,6 +525,14 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
   'who decides, and who owns the work': 'own',
+  /* The 3 Nov copy's terms (2.60): the decision is yours (options meet at you), no minimum term is the
+     notice drawing, the handover is agreed in the proposal before the work starts. "What we make is
+     yours" is `scope-yours` (components/Sketch/wyg-how-we-work.tsx): its empty plate until the flat
+     graphics pass (2.62) draws it. */
+  'you keep the product decisions': 'own',
+  'no minimum term': 'commercial',
+  'handover agreed before work begins': 'getting-started',
+  'what we make is yours': 'yours',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -635,16 +658,49 @@ const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
   'An ongoing partnership': 'refresh',
 };
 
-const SHEET_ROWS: Readonly<Record<string, Readonly<Record<string, IconName>>>> = {
-  /* Each glyph by the item's title, as authored; a title the copy renames falls back to no glyph
-     and the set warns as mixed. */
+/**
+ * Sheets that carry a glyph per item, by band id, with the arrangement the glyphs sit in. Each glyph by
+ * the item's title, as authored; a title the copy renames falls back to no glyph and the set warns as
+ * mixed. Every other sheet keeps its plain grid.
+ *
+ *   rows  one item per row, title beside its words, the glyph inline before the title
+ *         (decisions/2026-11-04-sheet-row-glyph-sits-inline): /clients' "What clients have asked us
+ *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026).
+ *   list  the Why Tcules list (decisions/2026-11-04-why-tcules-is-a-list): heading and lead in the first
+ *         half, the items down the second, one ruled row each, the glyph inline before the title.
+ *         /future-interfaces-lab/join "Why join" (owner, 4 Nov 2026, pass 2: "why tcules style list").
+ *   grid  the glyph heads each item, over its title and words, no hairline or mark. No band uses it
+ *         since pass 2; the arrangement stays in OfferSheet (specimen 8).
+ */
+const SHEET_GLYPHS: Readonly<
+  Record<
+    string,
+    { arrangement: 'grid' | 'rows' | 'list'; icons: Readonly<Record<string, IconName>> }
+  >
+> = {
   'product-responsibility': {
-    'Shape a new product': 'ruler-pen',
-    'Improve software customers already rely on': 'refresh-square',
-    'Design AI into the product': 'stars',
-    'Carry the design into working software': 'code-square',
-    'Work as part of an internal product team': 'users-group-rounded',
-    "Find out what's wrong before fixing it": 'magnifier-bug',
+    arrangement: 'rows',
+    icons: {
+      'Shape a new product': 'ruler-pen',
+      'Improve software customers already rely on': 'refresh-square',
+      'Design AI into the product': 'stars',
+      'Carry the design into working software': 'code-square',
+      'Work as part of an internal product team': 'users-group-rounded',
+      "Find out what's wrong before fixing it": 'magnifier-bug',
+    },
+  },
+  /* Five reasons to join, set as Why Tcules is (owner, 4 Nov 2026, pass 2: "why tcules style list";
+     decisions/2026-11-04-why-tcules-is-a-list): the heading and its lead in the first half, the
+     reasons down the second, one ruled row each, the glyph inline before the title. */
+  'why-join': {
+    arrangement: 'list',
+    icons: {
+      'Real build pressure': 'clock-circle',
+      'Direct critique': 'chat-round-dots',
+      'Work you can show': 'monitor',
+      'Small serious cohort': 'users-group-rounded',
+      'Product-level thinking': 'layers',
+    },
   },
 };
 
@@ -679,7 +735,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
            decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
            every page. */
-        <ContentSection {...head(band)} data-band="D-faq" arrangement="beside" split="halves">
+        <ContentSection
+          {...head(band)}
+          data-band="D-faq"
+          surface={unit.surface}
+          arrangement="beside"
+          split="halves"
+          footer={faqFooter(band)}
+        >
           <FaqItems band={band} />
         </ContentSection>
       );
@@ -719,13 +782,52 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'list-beside') {
+        return <ListBesideBand band={band} icons={glyphs.icons} />;
+      }
+      if (glyphs?.arrangement === 'tiles') {
+        return <GlyphTilesBand band={band} icons={glyphs.icons} surface={unit.surface} />;
+      }
+      /* A few peers beside one studio photograph (images.ts PHOTO_BESIDE): the head and the items in
+         the copy column as the media split's own tiles (the two-reasons B band's shape), the photograph
+         in the other track. No glyphs: the photograph is the band's picture. */
+      const photo = photoBeside(page.route, band.id);
+      if (photo) {
+        const parts = sheetParts(band);
+        return (
+          <ContentSection
+            {...head(band)}
+            data-band="B"
+            surface={unit.surface}
+            arrangement="media"
+            media={{ image: photo, side: 'end', weight: 'photo', head: 'lg' }}
+          >
+            <ListTiles
+              rows={parts.items.flatMap((item) =>
+                item.title
+                  ? [
+                      {
+                        title: item.title,
+                        ...(item.bodyHtml
+                          ? { bodyHtml: [item.bodyHtml] }
+                          : { body: item.body }),
+                      },
+                    ]
+                  : [],
+              )}
+            />
+          </ContentSection>
+        );
+      }
+      const cutOuts = itemCutOuts(page.route, band.id);
       return (
         <SheetBand
           band={band}
+          surface={unit.surface}
           scenes={scenes}
-          {...(SHEET_ROWS[band.id]
-            ? { arrangement: 'rows' as const, icons: SHEET_ROWS[band.id] }
-            : {})}
+          {...(cutOuts ? { images: cutOuts } : {})}
+          {...(SHEET_GLYPHS[band.id] ?? {})}
         />
       );
     }
@@ -745,7 +847,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'challenges':
       return (
         <ChallengesBand
-          page={page}
           band={band}
           claimFigure={ctx.claimFigure}
           ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
@@ -764,14 +865,22 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return (
         <MethodBand
           band={band}
+          surface={unit.surface}
           scenario={sceneFor(ctx, band, 'scenario')}
           {...(figure ? { figure } : {})}
           {...(METHOD_NOTE_ICON[band.id] ? { noteIcon: METHOD_NOTE_ICON[band.id] } : {})}
         />
       );
     }
-    case 'related':
+    case 'related': {
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'role-rows') {
+        return (
+          <RoleRowsBand band={band} icons={glyphs.icons} apply={applicationAnchor(page)} />
+        );
+      }
       return <RelatedBand band={band} />;
+    }
     case 'example':
       return <ReportBand band={band} surface={unit.surface} />;
     case 'recognition':
@@ -781,17 +890,25 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return hasDestinationGroups(band) ? (
         <DestinationGroupsBand page={page} band={band} />
       ) : (
-        <DestinationsBand band={band} />
+        <DestinationsBand
+          band={band}
+          surface={unit.surface}
+          sceneOf={(title) => sceneFor(ctx, band, title)}
+          covers={itemCovers(page.route, band.id)}
+        />
       );
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
     case 'text': {
       const clients = SENTENCE_ROWS[`${page.route}#${band.id}`];
       if (clients) return <SentenceRowsBand band={band} titles={clients} />;
+      const collage = studioCollage(page.route, band.id);
+      if (collage) return <CollageBand band={band} photos={collage} />;
       return (
         <TextBand
           page={page}
           band={band}
+          surface={unit.surface}
           side={unit.side}
           scenario={sceneFor(ctx, band, 'scenario')}
         />
@@ -801,11 +918,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return <NoteBand band={band} />;
     case 'close': {
       const picks = CLOSE_CASES[`${page.route}#${band.id}`];
-      return picks ? (
-        <CaseLinksBand band={band} ctx={ctx} names={picks} />
-      ) : (
-        <CloseBand page={page} band={band} />
-      );
+      if (picks) return <CaseLinksBand band={band} ctx={ctx} names={picks} />;
+      /* Two closes on one island (plan.ts PAIRED_CLOSES): this band's ask, then its partner's. */
+      const pairId = pairedCloseOf(page.route, band.id);
+      const pair = pairId ? page.bands.find((other) => other.id === pairId) : undefined;
+      if (pair) return <PairedCloseBand page={page} band={band} second={pair} />;
+      /* A close the page draws: its sentence beside its one figure. */
+      const figure = sceneFor(ctx, band, 'figure');
+      if (figure) return <CloseFigureBand band={band} scene={figure} surface={unit.surface} />;
+      return <CloseBand page={page} band={band} surface={unit.surface} />;
     }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
@@ -884,7 +1005,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       /* The 26 Oct copy: a lead paragraph, three `###` cases, and on some pages a closing link line
          after the last case ("See all case studies"), which is the band's action (component-map C3). */
       const caseLead = leadText(band);
-      const closing = closingCaseLinks(band);
+      const cases = band;
+      const closing = closingCaseLinks(cases);
+      const set = <CaseSet ctx={ctx} band={cases} />;
       return closing.length > 0 ? (
         <ContentSection
           {...head(band)}
@@ -893,11 +1016,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           actionsAt="end"
           actions={<LinkActions links={closing} />}
         >
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       ) : (
         <ContentSection {...head(band)} data-band="M" lead={caseLead}>
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       );
     }
@@ -961,7 +1084,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const carded =
         !rich &&
         options.length > 0 &&
+        /* /how-we-work's own "Three ways to work with us" is the same three options
+           (decisions/2026-11-04-three-ways-cards). */
         (band.id === 'how-we-work-together' ||
+          band.id === 'engagement-shapes' ||
           options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow)));
       const compactAsk =
         askWords && ask ? (
@@ -996,7 +1122,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                 ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
                   options.map((option) => {
                     const title = option.title.replace(/\.$/, '');
-                    const glyph = OPTION_GLYPHS[title];
+                    /* "A pilot project, at a fixed price": the option is named before its terms. */
+                    const glyph =
+                      OPTION_GLYPHS[title] ?? OPTION_GLYPHS[title.split(',')[0]?.trim() ?? ''];
                     return {
                       ...option,
                       scope: undefined,
@@ -1197,16 +1325,27 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             .join(' ');
           return { bodyHtml, example: claimExample(example.runs) };
         };
+        /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
+        const quoteOf = (title: string) =>
+          authored
+            .get(title)
+            ?.find(
+              (block): block is Extract<CorpusBlock, { type: 'quote' }> =>
+                block.type === 'quote',
+            );
+        const wide = bandIllustration(page.route, band.id);
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              {...(wide ? { bandFigure: { ...wide, alt: '' } } : {})}
               figureSize="lg"
               lead={parts.lead}
               action={action}
               items={titled.map((item) => {
-                const drawn = ctx.reasonFigure?.(item.title!, ground);
+                /* Under a band figure the reasons are words only: no per-reason drawing. */
+                const drawn = wide ? undefined : ctx.reasonFigure?.(item.title!, ground);
                 const parted = split(item.title!);
                 const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
@@ -1216,10 +1355,18 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   ) : (
                     (item.body ?? '')
                   ),
-                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
-                  figure: drawn
-                    ? { ...drawn, alt: '', kind: 'illustration' as const }
-                    : { ...placeholderIllustration(item.title!), alt: '' },
+                  ...(parted
+                    ? { example: <ClaimProof example={parted.example} /> }
+                    : quoteOf(item.title!)
+                      ? { example: <SupportQuote block={quoteOf(item.title!)!} /> }
+                      : {}),
+                  ...(wide
+                    ? {}
+                    : {
+                        figure: drawn
+                          ? { ...drawn, alt: '', kind: 'illustration' as const }
+                          : { ...placeholderIllustration(item.title!), alt: '' },
+                      }),
                 };
               })}
             />
@@ -2090,5 +2237,159 @@ function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly
         ))}
       </Layout>
     </ContentSection>
+  );
+}
+
+/**
+ * A band that shows the studio itself, as the studio collage (decisions/2026-11-03-studio-collage):
+ * the heading and paragraphs as authored in the top-left corner, six studio photographs round them in
+ * an L (images.ts STUDIO_COLLAGE). Its links, if any, are the band's way on under the words, as home's.
+ */
+function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos }) {
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
+  const links = band.blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <Section id={band.id} data-band="B-collage" aria-labelledby={headingIdOf(band)}>
+      <Collage
+        heading={band.headingText}
+        headingId={headingIdOf(band)}
+        photos={photos}
+        actions={links.length > 0 ? <LinkActions links={links} /> : undefined}
+      >
+        <Prose
+          html={paragraphs.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')}
+        />
+      </Collage>
+    </Section>
+  );
+}
+
+/**
+ * A checklist a reader checks themselves against, beside its heading (glyph-bands.ts `list-beside`):
+ * the /about "Who uses Tcules" composition (decisions/2026-11-01-bodiless-row-title-two-lines). The head
+ * in the start half, the items as bodiless rows down the end half, each led by its glyph; the band's
+ * closing line under the list at body. Words as authored, full stops kept.
+ */
+/**
+ * Peers that are kinds of people, as text cards that look like cards (glyph-bands.ts `tiles`;
+ * /future-interfaces-lab/join "Who we look for", owner 4 Nov 2026): BlockCard `tile`, its glyph on its
+ * own row over the title, the item's words under it, all three at equal weight under the head. Every
+ * word as authored; a title with no glyph sets the whole set without glyphs, so the set never mixes.
+ */
+function GlyphTilesBand({
+  band,
+  surface,
+  icons,
+}: {
+  band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const parts = sheetParts(band);
+  const glyphed = parts.items.every((item) => item.title && icons[item.title]);
+  const items: BlockCardSetItem[] = parts.items.map((item, index) => ({
+    id: item.id ?? item.title ?? String(index),
+    title: item.title ?? item.body ?? '',
+    ...(item.title && item.bodyHtml
+      ? { bodyHtml: [item.bodyHtml] }
+      : item.title && item.body
+        ? { body: item.body }
+        : {}),
+    ...(glyphed && item.title ? { icon: icons[item.title] } : {}),
+  }));
+  return (
+    <ContentSection surface={surface} {...head(band)} data-band="glyph-tiles" lead={parts.lead}>
+      <BlockCardSet lead="none" across={items.length >= 4 ? 2 : 3} frame="tile" items={items} />
+    </ContentSection>
+  );
+}
+
+function ListBesideBand({
+  band,
+  icons,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const items = band.blocks.flatMap((block) => (block.type === 'list' ? block.items : []));
+  const lines = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
+  return (
+    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside" split="halves">
+      <Layout as="ul" rowGap="none">
+        {items.map((runs, index) => {
+          const title = plain(runs);
+          const icon = icons[title];
+          return (
+            <ListCard
+              key={index}
+              size="md"
+              titleAs="h3"
+              title={title}
+              {...(icon ? { marker: { type: 'icon' as const, name: icon } } : {})}
+            />
+          );
+        })}
+      </Layout>
+      {lines.length > 0 ? (
+        <ContentSectionText>
+          <Prose html={lines.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')} />
+        </ContentSectionText>
+      ) : null}
+    </ContentSection>
+  );
+}
+
+/**
+ * The roles a reader picks from (glyph-bands.ts `role-rows`; /careers' open roles), the page's job:
+ * OfferSheet `rows`, one role a row across the column, its discipline's glyph inline before the title
+ * (decisions/2026-11-04-sheet-row-glyph-sits-inline), the title a link to the application on the page
+ * with that role's chip picked (`choice`), and the meta line's facts beside it, each kept whole. Four
+ * full-width rows give each title room and an obvious target, where four quarter tiles left the band
+ * the quietest on the page and broke "In-/office" (critic, 4 Nov 2026). Every word as authored; the
+ * link is the page's own `#apply`, so nothing is added. A band with no application on the page keeps
+ * plain titles.
+ */
+function RoleRowsBand({
+  band,
+  icons,
+  apply,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+  /** The application band's anchor on this page, if it takes one. */
+  apply?: string;
+}) {
+  const roles = band.blocks.flatMap((block) => {
+    if (block.type !== 'item') return [];
+    const meta = block.blocks.find((inner) => inner.type === 'paragraph');
+    const facts =
+      meta?.type === 'paragraph'
+        ? plain(meta.runs)
+            .split('·')
+            .map((fact) => fact.trim())
+            .filter(Boolean)
+        : [];
+    const icon = icons[facts[0] ?? ''];
+    return [
+      {
+        id: block.headingText,
+        title: block.headingText,
+        ...(facts.length > 0 ? { facts } : {}),
+        ...(icon ? { icon } : {}),
+        ...(apply ? { href: `#${apply}`, choice: enquiryChoiceValue(block.headingText) } : {}),
+      },
+    ];
+  });
+  const lead = band.blocks.find((block) => block.type === 'paragraph');
+  return (
+    <OfferSheet
+      {...head(band)}
+      {...(lead?.type === 'paragraph' ? { lead: plain(lead.runs) } : {})}
+      items={roles}
+      arrangement="rows"
+    />
   );
 }

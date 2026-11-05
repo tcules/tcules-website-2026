@@ -61,9 +61,9 @@ export const KIND_COMPONENTS: Readonly<
   faq: { component: ['D-faq'], status: 'approved' },
   router: { component: ['C-icon'], status: 'approved' },
   method: {
-    component: ['F'],
+    component: ['F', 'process-flow'],
     status: 'approved',
-    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026).',
+    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026). A short sequence after a heavy band, opted in by id (CopyBands FLOW_METHODS, /future-interfaces-lab/join "How selection works"): the stages across, unruled, arrows between (process-flow; 4 Nov 2026, owner to judge).',
   },
   deliverables: { component: ['offer-sheet'], status: 'to-design' },
   table: {
@@ -77,15 +77,15 @@ export const KIND_COMPONENTS: Readonly<
     note: 'A trace read across its columns (design-to-code audit).',
   },
   text: {
-    component: ['C-text', 'B', 'C-list'],
+    component: ['C-text', 'B', 'C-list', 'C-router', 'offer-sheet', 'L', 'engagement-options', 'B-collage'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list).',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). Starting situations, each a bold-led paragraph, as home\'s where-to-start cards (C-router; plan SITUATION_PROSE). Short titled claims as home\'s Why Tcules list (offer-sheet; plan CLAIM_LIST). One claim arguing for one service, closing on its link: a CTA block, the ink island (L). Claims or lines as the three-ways glyph cards (engagement-options; plan CARD_SETS). /how-we-work and /why-tcules, 4 Nov 2026. A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A band that shows the studio itself (images.ts STUDIO_COLLAGE, /careers `ahmedabad`): the studio collage, as home\'s people band (B-collage; studio-collage). Two peer paragraphs (CopyBands PEER_PARAGRAPHS, /careers `product-work`): two columns under the head (C-text). 4 Nov 2026, owner to judge on /careers. A band that shows the page\'s own artefact (images.ts ARTEFACT_BAND, /matter-design-system `use`, `beyond-the-file`): the real image beside the words, cropped as the photograph or whole in a half (B). 4 Nov 2026.',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
-    component: ['offer-sheet', 'D'],
+    component: ['offer-sheet', 'D', 'list-beside', 'glyph-tiles', 'B'],
     status: 'to-design',
-    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D).',
+    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge). Peers that are kinds of people (glyph-bands.ts `tiles`, /future-interfaces-lab/join `who-we-are-looking-for`): glyph-headed BlockCard tiles, three across (4 Nov 2026, owner\'s pick). A few peers beside one studio photograph (images.ts PHOTO_BESIDE, /future-interfaces-lab/join `what-youll-gain`): the media split (B), the head and the items as tiles in the copy column (critic, 4 Nov 2026, owner to judge).',
   },
   record: {
     component: ['case-spread'],
@@ -101,12 +101,12 @@ export const KIND_COMPONENTS: Readonly<
   destinations: {
     component: ['C-image', 'C-icon'],
     status: 'to-design',
-    note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
+    note: "Hub destinations: grouped with images (C-image) or a plain set (C-icon). A set the page draws item by item is Bento's drawn tiles, still where an item has no page (C-icon); a set whose route names every item's own image is covered cards (C-image), /future-interfaces-lab (4 Nov 2026, owner to judge).",
   },
   related: {
-    component: ['K', 'service-tile'],
+    component: ['K', 'service-tile', 'offer-sheet'],
     status: 'to-design',
-    note: 'Ruled link rows (open roles, glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles).',
+    note: 'Ruled link rows (glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles). Roles a reader picks from (glyph-bands.ts `role-rows`, /careers `open-roles`): offer-sheet rows, the discipline glyph inline before each title, the title a link to the application on the page with its role chip picked, the facts of the meta line beside it (4 Nov 2026 critic, owner to judge).',
   },
   directory: {
     component: ['tool-tiles'],
@@ -122,7 +122,7 @@ export const KIND_COMPONENTS: Readonly<
   close: {
     component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026).',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026). A close the page draws (its `figure` scene): the sentence beside its one flat figure (C-text). Two closes a route pairs (plan.ts PAIRED_CLOSES): one ink island in two peer halves (L), /future-interfaces-lab (4 Nov 2026, owner to judge). A close whose inline links share one destination, opted in by route (plan.ts ISLAND_CLOSES): the ink island with that destination as one link action (L), /future-interfaces-lab/join (4 Nov 2026, owner to judge).',
   },
 };
 
@@ -139,5 +139,12 @@ export const KIND_COMPONENTS: Readonly<
 export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, string>>>> = {
   '/contact': {
     'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
+  },
+  /* plan.ts PAIRED_CLOSES (4 Nov 2026, owner to confirm). */
+  '/future-interfaces-lab/join': {
+    'how-selection-works': 'under the application form, in the apply band (plan.ts STEPS_UNDER_FORM)',
+  },
+  '/future-interfaces-lab': {
+    talk: "the closing island's end half, beside Apply to work on Lab projects (id `talk` kept on the half)",
   },
 };

@@ -8,12 +8,17 @@ import {
   CtaSection,
   DataTable,
   ContentSection,
+  ContentSectionText,
   EnquiryForm,
+  type EnquiryChoiceGroup,
   type EnquiryDress,
   type EnquiryNextStep,
+  type EnquiryUrlLabel,
+  type EnquiryWorkLabel,
   ListCard,
   LogoGrid,
   PageHero,
+  ProcessFlow,
   Proof,
   Slider,
   type AccordionItem,
@@ -45,7 +50,8 @@ import { corpusImage } from '@/lib/corpus-images';
 import { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { heroNeedsMedia } from '@/lib/hero-media';
 import { placeholderImage } from '@/lib/placeholders';
-import { ENDPOINTS } from '@/lib/routes';
+import { enquiryChoiceValue } from '@/lib/enquiry-pick';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { isStudioRecord, recordFigures } from '@/lib/studio-record';
 import { heroTrail } from '@/lib/trail';
 
@@ -322,7 +328,7 @@ const WALL_FROM = 6;
  * lead when it authors one. Its shape is decided by the count (owner, 29 Oct 2026):
  *
  *   6 or more  the wall of rated testimonial cards (TestimonialWall: three columns of stacks).
- *   fewer      ONE quote at a time: the centred italic quote with its stars, speaker and role
+ *   fewer      ONE quote at a time: the centred italic quote, speaker and role, no stars
  *              (Proof `display`, `align="center"`), in the kit's one-up Slider with its plain bars
  *              (2026-10-09-testimonial-slider-controls). Five, four or three cards made a wall with
  *              holes and a row of equal boxes; one voice at a time is the band's one idea. The owner's
@@ -383,31 +389,26 @@ export function QuoteGroupBand({
           items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
         />
       ) : (
-        <QuoteSlider
-          label={band.headingText}
-          quotes={quotes}
-          ratings={ratings}
-          avatars={avatars}
-        />
+        <QuoteSlider label={band.headingText} quotes={quotes} avatars={avatars} />
       )}
     </ContentSection>
   );
 }
 
 /**
- * The one-up quote slider: each slide the centred Proof with the client's stars. A portrait shows on
+ * The one-up quote slider: each slide the centred Proof, the client's words with no stars (owner,
+ * 5 Nov 2026, launch review: "yahan pe sirf padhna hai", a slide is read, not scored; the band's
+ * independent score stays in its footer). A portrait shows on
  * every slide or on none, the wall's rule (review 29 Oct: some faces and some not read as unevenly
  * finished). One quote is no slider: it stands alone.
  */
 function QuoteSlider({
   label,
   quotes,
-  ratings,
   avatars,
 }: {
   label: string;
   quotes: readonly QuoteBlock[];
-  ratings?: RatingsById;
   avatars?: AvatarsById;
 }) {
   const portraits = quotes.map((block) =>
@@ -415,13 +416,9 @@ function QuoteSlider({
   );
   const withPortraits = portraits.every(Boolean);
   const slides: ProofQuote[] = quotes.map((block, index) => {
-    const stars =
-      block.rating?.value ??
-      (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
     const portrait = withPortraits ? portraits[index] : undefined;
     return {
       ...proofQuote(block),
-      ...(stars !== undefined ? { stars } : {}),
       ...(portrait
         ? {
             portrait: {
@@ -659,12 +656,58 @@ export function AsidePhoto({ image }: { image: Parameters<typeof Media>[0]['imag
 
 /* ── FAQ (M4) ─────────────────────────────────────────────────────────────────── */
 
+/**
+ * The band's closing line, where the copy filed it under the last question (4 Nov 2026,
+ * /future-interfaces-lab/join: "Still got questions? Drop us a note: fil@tcules.com." showed only once
+ * "Is failure viewed negatively…" was opened). The last answer runs to more than one paragraph and
+ * ends on a paragraph whose only link is a `mailto:`: that paragraph speaks to the reader of the whole
+ * set, not to the question, so it closes the band under the accordion.
+ */
+export function faqClosing(
+  band: CorpusBand,
+): { item: CorpusBlock; paragraph: Extract<CorpusBlock, { type: 'paragraph' }> } | undefined {
+  const item = band.blocks.filter((block) => block.type === 'item' && block.level === 3).at(-1);
+  if (item?.type !== 'item') return undefined;
+  const paragraphs = item.blocks.filter((block) => block.type === 'paragraph');
+  const last = item.blocks.at(-1);
+  if (paragraphs.length < 2 || last?.type !== 'paragraph') return undefined;
+  const links = last.runs.filter((run) => run.type === 'link');
+  return links.length === 1 && links[0]?.type === 'link' && links[0].href.startsWith('mailto:')
+    ? { item, paragraph: last }
+    : undefined;
+}
+
 export function faqItems(band: CorpusBand): AccordionItem[] {
+  const closing = faqClosing(band);
   return band.blocks.flatMap((block) =>
     block.type === 'item' && block.level === 3
-      ? [{ question: block.headingText, answerHtml: blocksHtml(block.blocks) }]
+      ? [
+          {
+            question: block.headingText,
+            answerHtml: blocksHtml(
+              block === closing?.item
+                ? block.blocks.filter((inner) => inner !== closing.paragraph)
+                : block.blocks,
+            ),
+          },
+        ]
       : [],
   );
+}
+
+/**
+ * The FAQ band's closing line (`faqClosing`) as its foot, its link kept, start-aligned on the question
+ * list's left edge: the FAQ sits beside its heading in halves (decisions/2026-11-04-faq-beside-in-halves),
+ * and a line centred under a left-aligned list floated in the middle of the end half (critic, 4 Nov
+ * 2026, /future-interfaces-lab/join). Undefined where there is none, so the band reserves no seam for it.
+ */
+export function faqFooter(band: CorpusBand): ReactNode {
+  const closing = faqClosing(band);
+  return closing ? (
+    <ContentSectionText>
+      <p>{renderInline(closing.paragraph.runs)}</p>
+    </ContentSectionText>
+  ) : undefined;
 }
 
 /** M4 — the accordion, closed by default but the first; the question is the h3. Centred head. */
@@ -705,6 +748,127 @@ export const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
 };
 
 /**
+ * An application taken on the page with the enquiry form (owner, 4 Nov 2026: "reuse the existing
+ * enquiry form (blue island), with application wording from the copy"), by route and band. The band's
+ * external form link (the copy's Google Form) becomes the form's submit, and the hero's ask with the
+ * same destination lands on this band instead (`withApplicationAnchor`). Each label is the copy's own
+ * words; `writeTo` is the copy's `enquiry_contact`. No reply promise: none is authored for applications.
+ */
+type ApplicationForm = {
+  urlLabel: EnquiryUrlLabel;
+  /** The free-text question; `null` where the copy asks for none (/careers). */
+  workLabel: EnquiryWorkLabel | null;
+  /** "or write to …" under the send. Absent where the band's own words already give the address. */
+  writeTo?: string;
+  /** The hidden context's family, so a submission is attributable to the programme. */
+  family: string;
+  /**
+   * The role asked for, as a pick-one chip group first in the card: its question, the band whose
+   * `###` items are the roles (so the chips follow the CMS's job list and never disagree with it), and
+   * the copy's own words for the reader no role fits.
+   */
+  roles?: { question: string; band: string; other: string };
+  /** The submit's words where the band authors no link of its own. Interface wording: owner to confirm. */
+  submitLabel?: string;
+  /**
+   * The link to the work is asked for, so it is required (/careers: the copy asks for "the role you
+   * want and a link to work that shows your reasoning", and the FAQ says the reasoning is what is
+   * judged). Absent, the link is optional, as on every enquiry. Checked on send only.
+   */
+  urlRequired?: true;
+  /**
+   * The band whose `###` steps say what happens after a send, where they are a band of their own after
+   * the island rather than its points (/future-interfaces-lab/join "How selection works", owner 4 Nov
+   * 2026): the success view repeats them.
+   */
+  stepsBand?: string;
+};
+const APPLICATION_FORMS: Readonly<Record<string, ApplicationForm>> = {
+  [`${ROUTES.futureInterfacesLabJoin}#apply`]: {
+    urlLabel: 'Links to your proof-of-work',
+    workLabel: 'Your background and why you want to build in FIL',
+    writeTo: 'fil@tcules.com',
+    family: 'future-interfaces-lab',
+    stepsBand: 'how-selection-works',
+  },
+  /* /careers "Apply for a role" (4 Nov 2026): the copy asks for "the role you want and a link to work
+     that shows your reasoning", by email. The form asks exactly that: the role (the open roles, or the
+     copy's "No matching role"), the address, and the link under its existing label. No reply promise:
+     none is authored. The address stays in the band's own sentence, live, so the foot does not repeat it. */
+  [`${ROUTES.careers}#apply`]: {
+    urlLabel: 'Link to the work',
+    workLabel: null,
+    family: 'careers',
+    roles: { question: 'The role you want', band: 'open-roles', other: 'No matching role' },
+    submitLabel: 'Send application',
+    urlRequired: true,
+  },
+};
+
+/** The application's role chips: the page's open roles as authored, then the copy's "no match". */
+function roleChoices(page: CorpusPage, roles: NonNullable<ApplicationForm['roles']>) {
+  const titles =
+    page.bands
+      .find((band) => band.id === roles.band)
+      ?.blocks.flatMap((block) => (block.type === 'item' ? [block.headingText] : [])) ?? [];
+  return {
+    question: roles.question,
+    options: [...titles, roles.other].map((label) => ({
+      value: enquiryChoiceValue(label),
+      label,
+    })),
+  } satisfies EnquiryChoiceGroup;
+}
+
+/** The band the page takes its application on, if any (`APPLICATION_FORMS`). */
+function applicationBand(page: CorpusPage): CorpusBand | undefined {
+  return page.bands.find((band) => APPLICATION_FORMS[`${page.route}#${band.id}`] !== undefined);
+}
+
+/** The anchor of the band the page takes its application on, if any: where a role's link goes. */
+export function applicationAnchor(page: CorpusPage): string | undefined {
+  return applicationBand(page)?.id;
+}
+
+/** A link that is a line of its own: a `links` row, or a paragraph that is nothing but one link. */
+function loneLinks(blocks: readonly CorpusBlock[]): { href: string; labelText: string }[] {
+  return blocks.flatMap((block) => {
+    if (block.type === 'links') return block.links;
+    if (block.type === 'item') return loneLinks(block.blocks);
+    if (
+      block.type === 'paragraph' &&
+      block.runs.length === 1 &&
+      block.runs[0]?.type === 'link'
+    ) {
+      const link = block.runs[0];
+      return [{ href: link.href, labelText: plain(link.children) }];
+    }
+    return [];
+  });
+}
+
+/**
+ * The page with its hero's ask pointed at the application on the page: an action whose destination is
+ * the application band's own external link goes to that band instead (`#apply`), its words kept. Matched
+ * by destination, never by label.
+ */
+export function withApplicationAnchor(page: CorpusPage): CorpusPage {
+  const band = applicationBand(page);
+  if (!band) return page;
+  const external = new Set(loneLinks(band.blocks).map((link) => link.href));
+  if (!page.hero.actions.some((action) => external.has(action.href))) return page;
+  return {
+    ...page,
+    hero: {
+      ...page.hero,
+      actions: page.hero.actions.map((action) =>
+        external.has(action.href) ? { ...action, href: `#${band.id}` } : action,
+      ),
+    },
+  };
+}
+
+/**
  * M2 — the enquiry band: the L close, always on an island (owner, 29 Oct 2026;
  * decisions/2026-10-29-forms-only-on-the-island), `id="enquiry"` so the hero's "#enquiry" lands on
  * it. Fields, submit label and success words come from the page's `conversion` as authored; the
@@ -742,7 +906,37 @@ export function EnquiryBand({
   band: CorpusBand;
   island?: EnquiryIsland;
 }) {
+  const application = APPLICATION_FORMS[`${page.route}#${band.id}`];
   const lead = band.blocks.find((block) => block.type === 'paragraph');
+  /* How selection works, authored as `###` steps: the island's points, each step's heading its label
+     and its sentences the detail (4 Nov 2026, /future-interfaces-lab/join). Unnumbered (`plain`): an
+     island's points follow the page's method, and numerals here restarted 01 a screen after the
+     method's 01–05, two "first steps" of two processes (critic, 4 Nov 2026). The page's numbered
+     sequence is the method's. A link that is a line of its own inside a step is the form's submit,
+     not more of the step. */
+  const stepsOf = (from: CorpusBand) =>
+    from.blocks.flatMap((block) =>
+      block.type === 'item'
+        ? [
+            {
+              label: block.headingText,
+              detail: block.blocks
+                .flatMap((inner) => (inner.type === 'paragraph' ? [plain(inner.runs)] : []))
+                .join(' '),
+            },
+          ]
+        : [],
+    );
+  const points = stepsOf(band);
+  /* Steps set as a band of their own after the island (`stepsBand`): not the island's points, but
+     still what the success view says happens next. */
+  const stepsBand = application?.stepsBand
+    ? page.bands.find((other) => other.id === application.stepsBand)
+    : undefined;
+  const afterSend = points.length > 0 ? points : stepsBand ? stepsOf(stepsBand) : [];
+  /* A link that is a line of its own (the copy's "[Apply to the Lab](…)") is the form's own ask: its
+     words are the submit, never a contact cell. */
+  const [ask] = loneLinks(band.blocks);
   /* A plain line after the lead ("Need an NDA first? Say so…", contact, 3 Nov 2026 copy) has no link
      to become a contact entry and no score to become the badge: it is the island's footnote, under
      the island on the band's ground (owner, 3 Nov 2026), so the island stays the ask and the form. */
@@ -754,14 +948,24 @@ export function EnquiryBand({
       ? [plain(block.runs)]
       : [],
   );
+  /* The lead as authored: a link in it (/careers' "Email hello@tcules.com with the role you want…")
+     stays live, in the island's link ink, rather than flattening to text. A lead with no link is the
+     plain string, as before. A plain line after it is the footnote under the island
+     (decisions/2026-11-03-close-footnote-under-island), on every enquiry close, applications included. */
   const footnote = notes.length > 0 ? notes.join(' ') : undefined;
-  const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
+  const body =
+    lead && lead.type === 'paragraph'
+      ? hasLink(lead.runs)
+        ? ([<Fragment key="lead">{renderInline(lead.runs)}</Fragment>] as const)
+        : ([plain(lead.runs)] as const)
+      : undefined;
   const score = band.blocks.flatMap((block) => {
     const found = block === lead ? undefined : ratingOf(block);
     return found ? [found] : [];
   })[0];
   const contact = band.blocks.flatMap((block): CtaContact[] => {
     if (block === lead || block.type !== 'paragraph' || ratingOf(block)) return [];
+    if (block.runs.length === 1 && block.runs[0]?.type === 'link') return [];
     const link = block.runs.find(
       (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
     );
@@ -777,9 +981,58 @@ export function EnquiryBand({
     ...(score ? { rating: <ScoreBadge rating={score} /> } : {}),
   };
   const surface = island.surface ?? 'blue';
-  const dress = ENQUIRY_DRESS[island.dress ?? 'card'];
-  const treatment = { dress, nextSteps: island.nextSteps };
-  const drawn = island.illustration ?? true;
+  /* An application wears the card with its own address and no reply promise (none is authored). */
+  const dress: EnquiryDress = application
+    ? {
+        kind: 'card',
+        ...(application.writeTo ? { writeTo: application.writeTo } : {}),
+        ...(application.roles ? { role: roleChoices(page, application.roles) } : {}),
+      }
+    : ENQUIRY_DRESS[island.dress ?? 'card'];
+  /* The success view repeats what the island promised would happen next. */
+  const treatment = {
+    dress,
+    nextSteps: island.nextSteps ?? (application && afterSend.length > 0 ? afterSend : undefined),
+    ...(application ? { application } : {}),
+    ...(ask
+      ? { submitLabel: ask.labelText }
+      : application?.submitLabel
+        ? { submitLabel: application.submitLabel }
+        : {}),
+  };
+  /* An application is named by its own ask ("Apply to the Lab"), never "Send an enquiry". */
+  const form = application
+    ? { ...treatment, label: treatment.submitLabel ?? band.headingText }
+    : treatment;
+  /* An application with selection steps carries no drawing: the steps fill the start half. Without
+     steps (/careers) the start half is the heading and two short paragraphs, and the sketch-to-shipped
+     drawing over them, the work a sketch becomes, keeps the island's two halves level, as on every
+     enquiry (4 Nov 2026). */
+  const drawn = application && points.length > 0 ? false : (island.illustration ?? true);
+  /* A footnote's glyph names what kind of line it is: a shield for confidentiality (contact's NDA
+     line), the info mark for any other (4 Nov 2026). */
+  const footnoteIcon =
+    footnote && /\bNDA\b|confidential/i.test(footnote) ? 'shield-check' : 'info-circle';
+  const pointProps = points.length > 0 ? { points, markers: 'plain' as const } : {};
+  /* The selection steps, under the form in the same band (owner, 4 Nov 2026: "just under the form is
+     fine. In a section of its own the gap is too much and it feels disconnected"): their heading at
+     h3, the stages across, unruled, arrows between. The band takes no unit of its own (plan.ts
+     STEPS_UNDER_FORM). */
+  const afterProps =
+    stepsBand && points.length === 0 && afterSend.length > 0
+      ? {
+          after: {
+            heading: stepsBand.headingText,
+            content: (
+              <ProcessFlow
+                ruled={false}
+                stageHeading="h4"
+                stages={afterSend.map((step) => ({ label: step.label, items: [step.detail] }))}
+              />
+            ),
+          },
+        }
+      : {};
   if ((island.arrangement ?? 'halves') === 'halves') {
     return (
       <CtaSection
@@ -789,13 +1042,15 @@ export function EnquiryBand({
         islandArrangement="halves"
         inBand={island.inBand}
         footnote={footnote}
-        footnoteIcon="shield-check"
+        footnoteIcon={footnoteIcon}
         islandTexture="flow"
         art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}
         body={body}
+        {...pointProps}
         {...contactProps}
-        form={corpusEnquiryForm(page, band, treatment)}
+        {...afterProps}
+        form={corpusEnquiryForm(page, band, form)}
       />
     );
   }
@@ -805,12 +1060,13 @@ export function EnquiryBand({
       data-band="L"
       island={surface}
       footnote={footnote}
-      footnoteIcon="shield-check"
+      footnoteIcon={footnoteIcon}
       islandTexture="frame"
       art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}
       body={body}
-      form={corpusEnquiryForm(page, band, treatment)}
+      {...pointProps}
+      form={corpusEnquiryForm(page, band, form)}
     />
   );
 }
@@ -824,7 +1080,16 @@ export function corpusEnquiryForm(
   page: CorpusPage,
   band?: CorpusBand,
   /** The island close's treatment: a dress for the form. Default: lg boxes, the full submit. */
-  treatment: { dress?: EnquiryDress; nextSteps?: readonly EnquiryNextStep[] } = {},
+  treatment: {
+    dress?: EnquiryDress;
+    nextSteps?: readonly EnquiryNextStep[];
+    /** The application wording (`APPLICATION_FORMS`): labels and the context's family. */
+    application?: ApplicationForm;
+    /** The band's own ask, where the page's conversion authors no submit label. */
+    submitLabel?: string;
+    /** The form's accessible name, where it is not an enquiry (an application). */
+    label?: string;
+  } = {},
 ) {
   const conversion = page.conversion;
   /* The band's own "After sending:" line ("We'll reply within one business day.") is the caption
@@ -836,7 +1101,10 @@ export function corpusEnquiryForm(
   return (
     <EnquiryForm
       variant="enquiry"
-      urlLabel="Product or company URL"
+      urlLabel={treatment.application?.urlLabel ?? 'Product or company URL'}
+      {...(treatment.label ? { label: treatment.label } : {})}
+      {...(treatment.application ? { workLabel: treatment.application.workLabel } : {})}
+      {...(treatment.application?.urlRequired ? { urlRequired: true } : {})}
       action={ENDPOINTS.enquiry}
       /* The form is the band's primary object (home round 3): lg fields, the submit across the
          panel, so the one solid on the band is the widest thing in it. */
@@ -844,7 +1112,11 @@ export function corpusEnquiryForm(
       /* A dressed form is compact (owner, 16 Oct 2026: the close fits one laptop screen). */
       fieldScale={treatment.dress ? 'md' : 'lg'}
       submit={treatment.dress ? 'inline' : 'full'}
-      {...(conversion?.submitLabel ? { submitLabel: conversion.submitLabel } : {})}
+      {...(conversion?.submitLabel
+        ? { submitLabel: conversion.submitLabel }
+        : treatment.submitLabel
+          ? { submitLabel: treatment.submitLabel }
+          : {})}
       caption={after}
       nextSteps={treatment.nextSteps}
       success={
@@ -854,8 +1126,8 @@ export function corpusEnquiryForm(
       }
       context={{
         originRoute: page.route,
-        placement: 'corpus-close',
-        family: page.pageType,
+        placement: treatment.application ? 'application' : 'corpus-close',
+        family: treatment.application?.family ?? page.pageType,
         serviceOrAudit: page.slug,
         referrer: '',
         campaign: '',

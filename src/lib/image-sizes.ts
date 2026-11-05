@@ -95,6 +95,15 @@ export const MEDIA_SPLIT =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 5 / 12), ${FLUID_COLUMN}`;
 
 /**
+ * ContentSection `media` with a figure rather than a photograph: the two tracks are halves from 1024
+ * with the 96 split seam, the figure at its own ratio. (1240 − 96) / 2 = 572 at the cap; below 1024
+ * the figure follows the words at the full column.
+ */
+export const MEDIA_SPLIT_HALVES =
+  `(min-width: ${CAP}px) ${(CONTAINER - SPLIT_GAP) / 2}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) / 2), ${FLUID_COLUMN}`;
+
+/**
  * CtaSection's landscape K offer (cmp-cta): the photograph's track, 7 of [5, 7] from 1024 with the
  * 96 split seam — MEDIA_SPLIT's mirror. (1240 − 96) × 7 / 12 ≈ 667 at the cap; below 1024 the photo
  * sits under the copy at the full column.

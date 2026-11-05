@@ -1,5 +1,6 @@
 import type { CorpusCaseRef, CorpusInsightRef, CorpusMediaBinding } from './corpus-types';
 import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS, caseStudyPath } from '@/lib/routes';
+import { CASE_COVERS } from './sources/fixtures/case-covers';
 
 import {
   getCaseStudyListingPage,
@@ -47,11 +48,17 @@ export async function getCaseRefs(
     const alias = planned.get(route);
     const page = (await getCorpusPage(route)) ?? (alias ? await getCorpusPage(alias) : null);
     if (!page) continue;
-    const thumb = (live.get(route) ?? live.get(liveSlug.get(route) ?? ''))?.thumbnail;
+    const record = live.get(route) ?? live.get(liveSlug.get(route) ?? '');
+    const thumb = record?.thumbnail;
     refs[route] = {
       route,
       title: page.hero.titleText,
-      cover: page.composition.mediaBindings.find((b) => b.bound) ?? null,
+      /* A V1 cover (fixtures/case-covers.ts) is the case's cover everywhere it is cited, so the case
+         page's first in-page image no longer stands in for one (owner, 3 Nov 2026). */
+      cover:
+        record && record.slug in CASE_COVERS
+          ? null
+          : (page.composition.mediaBindings.find((b) => b.bound) ?? null),
       thumbnail: thumb?.src
         ? {
             src: thumb.src,

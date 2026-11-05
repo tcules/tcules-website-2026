@@ -34,6 +34,7 @@ export type EngagementScope =
   | 'overlap'
   | 'commercial'
   | 'own'
+  | 'yours'
   | 'who'
   | 'communication'
   | 'response'
@@ -181,7 +182,13 @@ export function EngagementOptions({
   surface = 'paper',
   arrangement = 'grid',
 }: EngagementOptionsProps) {
-  const shown = options.filter((option) => option.title.trim().length > 0);
+  /* An option with no name is dropped, except as a card: a card may be its glyph and words alone, as
+     a set of one-line points (/how-we-work "How we use AI", owner 4 Nov 2026: "3 cards, one for each
+     line"). A set is named throughout or not at all; the caller decides. */
+  const shown = options.filter(
+    (option) =>
+      option.title.trim().length > 0 || (arrangement === 'cards' && option.body != null),
+  );
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
   const anyDrawn = shown.some((option) => option.scope);
@@ -276,8 +283,8 @@ export function EngagementOptions({
                 colGap="gutter"
                 rowGap="gutter"
               >
-                {shown.map((option) => (
-                  <li key={option.title} className={styles.card}>
+                {shown.map((option, index) => (
+                  <li key={option.title || index} className={styles.card}>
                     <Layout rowGap="block">
                       {option.icon ? (
                         <span className={styles.cellIcon} aria-hidden="true">
@@ -463,7 +470,7 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
 
 /** The option's name, with its eyebrow over it a `tight` step when it has one. */
 function OptionHead({ option, className }: { option: EngagementOption; className?: string }) {
-  const title = <h3 className={className}>{option.title}</h3>;
+  const title = option.title ? <h3 className={className}>{option.title}</h3> : null;
   if (!option.eyebrow) return title;
   return (
     <Layout rowGap="tight">

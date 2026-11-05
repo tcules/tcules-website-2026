@@ -348,6 +348,119 @@ export default function OfferSheetSpecimen() {
           },
         ]}
       />
+
+      <Variation
+        id="glyph-grid"
+        title="8 · Grid headed by glyphs"
+        note="`icon` on every item of a grid: the glyph heads the item (24, the accent), then the title, then the words, each on its own row. No hairline, no blue mark (those are for figures), no card, no disc. Three across from 1024 (five read 3 + 2), two from 768, one below. For abstract qualities an icon names honestly (/future-interfaces-lab/join &ldquo;Why join&rdquo;, 4 Nov 2026, owner to confirm)."
+      />
+      <OfferSheet
+        heading="Why join the Future Interfaces Lab"
+        headingId="ofs-glyph-grid"
+        lead="You will contribute directly to the research, design, prototyping and MVP development of products shaped under real constraints."
+        across={3}
+        items={[
+          {
+            title: 'Real build pressure',
+            icon: 'clock-circle',
+            body: 'Work in short build cycles where execution, iteration and clarity matter every week.',
+          },
+          {
+            title: 'Direct critique',
+            icon: 'chat-round-dots',
+            body: 'Get feedback on architecture, trade-offs, product framing and the quality of what you ship.',
+          },
+          {
+            title: 'Work you can show',
+            icon: 'monitor',
+            body: 'Build working prototypes and tools you can demonstrate and explain to your next employer.',
+          },
+          {
+            title: 'Small serious cohort',
+            icon: 'users-group-rounded',
+            body: 'Build alongside a small group of peers who care about ownership, craft and follow-through.',
+          },
+          {
+            title: 'Product-level thinking',
+            icon: 'layers',
+            body: 'Learn to think in systems, constraints, decisions and real-world product trade-offs.',
+          },
+        ]}
+      />
+
+      <Variation
+        id="glyph-grid-four"
+        title="8b · Grid headed by glyphs, four across"
+        note="`across={4}`: four short peers in one row from 1024 (two from 768, one below), each a glyph, a title and one meta line. Peers a reader picks from, where three up would leave one alone on a row (/careers &ldquo;Tcules jobs open now&rdquo;, the glyph by discipline, 4 Nov 2026, owner to confirm)."
+      />
+      <OfferSheet
+        heading="Tcules jobs open now"
+        headingId="ofs-glyph-grid-four"
+        across={4}
+        items={[
+          {
+            title: 'UX/UI Designer (Generalist)',
+            icon: 'ruler-pen',
+            body: 'Design · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'Lead Designer (AI Products)',
+            icon: 'ruler-pen',
+            body: 'Design · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'AI Systems Architect',
+            icon: 'code-square',
+            body: 'Engineering · Full-time · In-office, Ahmedabad',
+          },
+          {
+            title: 'Visual Designer',
+            icon: 'palette',
+            body: 'Marketing and visual communication · Full-time · In-office, Ahmedabad',
+          },
+        ]}
+      />
+
+      <Variation
+        id="role-rows"
+        title="8c · Rows led by glyphs, titles that link, facts beside"
+        note="`arrangement=&quot;rows&quot;` with `icon`, `href` + `choice` and `facts`: the roles a reader picks from (/careers &ldquo;Tcules jobs open now&rdquo;, critic 4 Nov 2026, owner to confirm). Each title links to the page&rsquo;s application and carries the role chip it picks there (`data-enquiry-role`). The facts are one wrapping line parted by middle dots, each fact kept whole, so a narrow track breaks between facts, never at the hyphen in &ldquo;In-office&rdquo;."
+      />
+      <OfferSheet
+        heading="Tcules jobs open now"
+        headingId="ofs-role-rows"
+        arrangement="rows"
+        items={[
+          {
+            title: 'UX/UI Designer (Generalist)',
+            icon: 'ruler-pen',
+            href: '#role-rows',
+            choice: 'ux-ui-designer-generalist',
+            facts: ['Design', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'Lead Designer (AI Products)',
+            icon: 'ruler-pen',
+            href: '#role-rows',
+            choice: 'lead-designer-ai-products',
+            facts: ['Design', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'AI Systems Architect',
+            icon: 'code-square',
+            href: '#role-rows',
+            choice: 'ai-systems-architect',
+            facts: ['Engineering', 'Full-time', 'In-office, Ahmedabad'],
+          },
+          {
+            title: 'Visual Designer',
+            icon: 'palette',
+            href: '#role-rows',
+            choice: 'visual-designer',
+            facts: ['Marketing and visual communication', 'Full-time', 'In-office, Ahmedabad'],
+          },
+        ]}
+      />
     </>
   );
 }

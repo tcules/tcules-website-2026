@@ -41,7 +41,8 @@ One per page.
 | action | optional | slot; in practice a link Button with an arrow |
 | set | required | `ul` of 4 items (3 or 6 accepted) |
 | item | required | `li`: figure + title + body |
-| figure | required | MediaImage, kind `illustration`, decorative |
+| figure | required unless `bandFigure` | MediaImage, kind `illustration`, decorative |
+| band figure | optional | `bandFigure`: one drawing for the whole set at the content width, between the head and the set; the items then draw no figure or proof (owner, 5 Nov 2026; decisions/2026-11-05-why-tcules-principles-one-drawing). `open` and `boxed` only |
 | title | required | h3 |
 | body | required | one sentence, plain text |
 | rule / frame | arrangement | `boxed`: cell rules + rounded frame; `beside`: verticals between columns |
@@ -50,7 +51,9 @@ One per page.
 
 `id?`, `eyebrow?`, `heading`, `headingTail?`, `headingId`,
 `items: { title; body; figure: MediaImage }[]`, `action?: ReactNode`,
-`arrangement?: 'open' | 'boxed' | 'beside'` (default `open`), `surface?: 'paper' | 'tint'` (default `paper`; the type rules out ink and blue).
+`arrangement?: 'open' | 'boxed' | 'beside'` (default `open`), `surface?: 'paper' | 'tint'` (default `paper`; the type rules out ink and blue),
+`figureSize?: 'sm' | 'lg'`, item `proof?` and `example?`, `note?`, `lead?`,
+`bandFigure?: MediaImage` (one drawing for the set; items then words only; warns in development when items also carry figures or proofs, or under `beside`).
 Any count other than 3, 4 or 6 warns in development.
 
 ## 4 · Variants × sizes
@@ -136,6 +139,7 @@ interactive, and motion on a non-control reads as clickable.)
 7. six reasons, beside
 8. boxed with a bare head
 9. tint, open
+10. 14b · `bandFigure`: one drawing for the set (/why-tcules principles), open and boxed, on tint
 10. tint, boxed
 
 ## 16 · New token requests

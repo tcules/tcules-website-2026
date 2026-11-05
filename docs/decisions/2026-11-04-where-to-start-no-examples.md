@@ -1,7 +1,7 @@
 ---
 title: "Where to start: three cards with no examples, the ask centred"
 date: 2026-11-04
-status: active
+status: superseded
 area: [cards, content, layout]
 source: "Word passed to the owner (Devagya), 4 Nov 2026, after PR #219: remove the examples from the where-to-start section completely"
 supersedes: ["2026-11-04-where-to-start-doors"]
@@ -24,3 +24,5 @@ the line read as a footnote between the 22 card titles and the solid; the owner 
 **The mistake it prevents.** Putting a case line back under each door, or a drawn gimmick under the set.
 **How to apply.** The copy (`_pages/home.md`) authors no "Example:" line in the band; GatewayPaths
 `form="cards"` renders no example row when a path has none.
+
+Superseded 5 Nov 2026 by `2026-11-05-where-to-start-doors-are-three-parts`.

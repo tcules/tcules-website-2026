@@ -1,17 +1,33 @@
 'use client';
 
-import type { FormEvent, ReactNode } from 'react';
+import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
 import { cx } from '@/lib/cx';
+import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 
 import styles from './EnquiryForm.module.css';
 
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */
 export type EnquiryUrlLabel =
-  'Website' | 'Link to the work' | 'Where can we see it?' | 'Product or company URL';
+  | 'Website'
+  | 'Link to the work'
+  | 'Where can we see it?'
+  | 'Product or company URL'
+  /* The application wording (4 Nov 2026, /future-interfaces-lab/join): the copy's own words for
+     what an applicant links. */
+  | 'Links to your proof-of-work';
+
+/**
+ * The free-text question's label. The enquiry asks what someone is working on; the application
+ * wording (4 Nov 2026, /future-interfaces-lab/join, owner to confirm) asks for the two things the
+ * copy says an application carries, "your background … and why you want to build in FIL". A typed
+ * union, as the link's label is, so a page cannot pass free words.
+ */
+export type EnquiryWorkLabel =
+  'What are you working on?' | 'Your background and why you want to build in FIL';
 
 export type AuditUrlLabel = 'Site to audit';
 
@@ -55,6 +71,13 @@ type SharedProps = {
    * variant's own label. The caller's copy wins: the form never rewrites an authored ask.
    */
   submitLabel?: string;
+  /**
+   * The form's accessible name, where the caller's form is not what its variant is called (an
+   * application on the enquiry card: "Apply to the Lab"). Absent, the variant's own name ("Send an
+   * enquiry", "Request a free audit", "Contact Tcules"), so a screen reader never hears an enquiry
+   * where the page asks for an application.
+   */
+  label?: string;
   /**
    * What happens after a send, shown in the success view as numbered steps. The CALLER's copy,
    * never the pattern's: on a close it is the same list the band's points promise (pass
@@ -145,6 +168,12 @@ export type EnquiryDress =
       note?: string;
       /** The promise beside the send, led by a bolt in a disc (speed, not a tick): "We reply in 1 business day". */
       reply?: string;
+      /**
+       * A pick-one chip group set first in the card, posting `role` (4 Nov 2026, /careers' application:
+       * "The role you want", the open roles and "No matching role"). Optional to answer, as every
+       * chip group is. The CALLER's copy.
+       */
+      role?: EnquiryChoiceGroup;
     }
   | {
       kind: 'message';
@@ -186,6 +215,18 @@ export type EnquiryDress =
 type EnquiryVariantProps = SharedProps & {
   variant?: 'enquiry';
   urlLabel?: EnquiryUrlLabel;
+  /**
+   * The free-text question's label. Default "What are you working on?". See `EnquiryWorkLabel`.
+   * `null` drops the question: an application whose copy asks only for the role, an address and a
+   * link to the work (4 Nov 2026, /careers) has no free text to ask for.
+   */
+  workLabel?: EnquiryWorkLabel | null;
+  /**
+   * The link field is asked for, not optional: its label loses "Optional" and a send checks it like
+   * the email (4 Nov 2026, /careers' application, whose copy asks for "a link to work that shows your
+   * reasoning"). Errors on send only, as everywhere. The card dress and the plain set honour it.
+   */
+  urlRequired?: boolean;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: string;
   /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
@@ -235,6 +276,7 @@ export type EnquiryFormProps =
 type Lifecycle = 'idle' | 'invalid' | 'submitting' | 'error' | 'success';
 type FieldMessages = {
   email: string;
+  url: string;
   work: string;
   name: string;
   company: string;
@@ -244,6 +286,7 @@ type FieldMessages = {
 
 const EMPTY_MESSAGES: FieldMessages = {
   email: '',
+  url: '',
   work: '',
   name: '',
   company: '',
@@ -385,7 +428,7 @@ function FieldGroup({
 function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
   if (control.value.trim() === '') return spec.empty;
   if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
-    return 'Enter a valid email';
+    return spec.type === 'url' ? 'Enter a valid link' : 'Enter a valid email';
   }
   return '';
 }
@@ -416,7 +459,7 @@ type FieldSpec = {
   key: FieldKey;
   label: string;
   name: string;
-  type?: 'text' | 'email' | 'tel';
+  type?: 'text' | 'email' | 'tel' | 'url';
   as?: 'textarea';
   autoComplete?: string;
   /** The message when a send finds the field empty. */
@@ -438,6 +481,15 @@ const FIELD = {
     type: 'email',
     autoComplete: 'email',
     empty: 'Enter your email',
+  }),
+  /** The link, where it is asked for (`urlRequired`). Its label is the set's `urlLabel`. */
+  url: (label: string): FieldSpec => ({
+    key: 'url',
+    label,
+    name: 'url',
+    type: 'url',
+    autoComplete: 'url',
+    empty: 'Add a link',
   }),
   company: {
     key: 'company',
@@ -557,6 +609,35 @@ export function EnquiryForm(props: EnquiryFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /* A link elsewhere on the page that names a role (`ENQUIRY_ROLE_ATTRIBUTE`, /careers' open roles):
+     following it picks that chip here, so a reader who found their role does not pick it twice. The
+     link is an ordinary anchor, so it scrolls to the form with or without this; the pick is the
+     enhancement. Only a card with a role group listens. */
+  const hasRoleGroup =
+    (props.variant === undefined || props.variant === 'enquiry') &&
+    props.dress?.kind === 'card' &&
+    props.dress.role !== undefined;
+  useEffect(() => {
+    if (!hasRoleGroup) return;
+    function pick(event: MouseEvent) {
+      const target = event.target instanceof Element ? event.target : null;
+      const link = target?.closest(`a[${ENQUIRY_ROLE_ATTRIBUTE}]`);
+      const value = link?.getAttribute(ENQUIRY_ROLE_ATTRIBUTE);
+      const form = formRef.current;
+      if (!value || !form) return;
+      const chip = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="role"]')).find(
+        (input) => input.value === value,
+      );
+      if (!chip) return;
+      chip.checked = true;
+      saveDraft(form);
+    }
+    document.addEventListener('click', pick);
+    return () => document.removeEventListener('click', pick);
+    // saveDraft reads only the form and the fixed draft key.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasRoleGroup]);
+
   function saveDraft(form: HTMLFormElement) {
     const draft: Record<string, string[]> = {};
     for (const control of Array.from(form.elements)) {
@@ -616,6 +697,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const control = form.elements.namedItem(spec.name);
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
+      if (spec.type === 'url') control.value = normaliseUrl(control.value);
       next[spec.key] = messageFor(spec, control);
       if (next[spec.key] && !firstInvalid) firstInvalid = control;
     }
@@ -647,6 +729,20 @@ export function EnquiryForm(props: EnquiryFormProps) {
      the form's own width holds two 192px tracks (`fit`, `xs`) and stacks where it does not, so the
      form decides from its track, not from the viewport. The optional link field is a row of its
      own at the end of the enquiry and audit sets. */
+  /* The free-text question, in the page's wording where the enquiry set names one. */
+  const work: FieldSpec =
+    (props.variant === undefined || props.variant === 'enquiry') && props.workLabel
+      ? { ...FIELD.work, label: props.workLabel }
+      : FIELD.work;
+  /* An application set with no free-text question (`workLabel: null`). */
+  const asksWork = !(
+    (props.variant === undefined || props.variant === 'enquiry') &&
+    props.workLabel === null
+  );
+  /* The link asked for rather than offered (`urlRequired`): a validating field like the email. */
+  const urlRequired =
+    (props.variant === undefined || props.variant === 'enquiry') && props.urlRequired === true;
+  const urlField = FIELD.url(urlLabel);
   type Row = readonly FieldSpec[] | 'url';
   const rows: Row[] =
     variant === 'contact'
@@ -656,8 +752,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
           [FIELD.message],
         ]
       : variant === 'compact'
-        ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
-        : [[FIELD.email('email')], [FIELD.work], 'url'];
+        ? [[FIELD.name('name'), FIELD.email('email')], [work]]
+        : asksWork
+          ? [[FIELD.email('email')], [work], 'url']
+          : [[FIELD.email('email')], 'url'];
 
   /* The dress, when the enquiry set wears one (see EnquiryDress). */
   const dress =
@@ -669,10 +767,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
      message comes before its details. */
   const validated: readonly FieldSpec[] =
     dress?.kind === 'choice'
-      ? [FIELD.name('name'), FIELD.email('email'), FIELD.work]
+      ? [FIELD.name('name'), FIELD.email('email'), work]
       : dress?.kind === 'message'
-        ? [FIELD.work, FIELD.name('name'), FIELD.email('email')]
-        : rows.flatMap((row) => (row === 'url' ? [] : row));
+        ? [work, FIELD.name('name'), FIELD.email('email')]
+        : rows.flatMap((row) => (row === 'url' ? (urlRequired ? [urlField] : []) : row));
 
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(
@@ -728,6 +826,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <Input
             {...shared}
             type={spec.type ?? 'text'}
+            {...(spec.type === 'url'
+              ? {
+                  inputMode: 'url' as const,
+                  onBlur: (event: FocusEvent<HTMLInputElement>) => {
+                    event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+                  },
+                }
+              : {})}
             onInput={(event) => clearIfFixed(event.currentTarget)}
           />
         )}
@@ -770,7 +876,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
    */
   function renderChoiceGroup(
     group: EnquiryChoiceGroup,
-    kind: 'needs' | 'stage',
+    kind: 'needs' | 'stage' | 'role',
     { shown = true, describedBy }: { shown?: boolean; describedBy?: string } = {},
   ) {
     const type = kind === 'needs' ? 'checkbox' : 'radio';
@@ -786,6 +892,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             disabled={submitting}
             onChange={(event) => {
               const { checked, value } = event.currentTarget;
+              if (kind === 'role') return;
               if (kind === 'stage') {
                 if (checked) setStageValue(value);
                 return;
@@ -829,6 +936,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   }
 
   function renderRow(row: Row) {
+    if (row === 'url' && urlRequired) return renderField(urlField);
     if (row === 'url') {
       return (
         <FieldGroup key="url" id={urlId} label={urlLabel} optional>
@@ -1066,7 +1174,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       action: props.action,
       method: 'post',
       noValidate: true,
-      'aria-label': 'Send an enquiry',
+      'aria-label': props.label ?? 'Send an enquiry',
       'aria-busy': submitting || undefined,
       onSubmit: handleSubmit,
       onInput: (event: FormEvent<HTMLFormElement>) => saveDraft(event.currentTarget),
@@ -1177,9 +1285,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
                     look: 'fill',
                   })}
                 </Layout>
-                {renderField(FIELD.work, {
+                {renderField(work, {
                   visibleLabel: true,
-                  placeholder: pickedPrompt ?? dress.prompt ?? FIELD.work.label,
+                  placeholder: pickedPrompt ?? dress.prompt ?? work.label,
                   look: 'fill',
                   fill: true,
                 })}
@@ -1246,9 +1354,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <form {...formAttrs}>
           <Layout rowGap="block">
             <Layout rowGap="text">
+              {dress.role ? renderChoiceGroup(dress.role, 'role') : null}
               {renderField(email, { visibleLabel: true, placeholder: null, look: 'fill' })}
-              {renderField(FIELD.work, { visibleLabel: true, placeholder: null, look: 'fill' })}
-              {renderDressedUrl('fill', true)}
+              {asksWork
+                ? renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })
+                : null}
+              {urlRequired
+                ? renderField(urlField, { visibleLabel: true, placeholder: null, look: 'fill' })
+                : renderDressedUrl('fill', true)}
             </Layout>
             <div className={styles.dressFoot}>
               <Layout rowGap="text">
@@ -1299,10 +1412,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
           ) : null}
           <div className={styles.composer}>
             <div className={styles.composerMain}>
-              {renderField(FIELD.work, {
+              {renderField(work, {
                 placeholder:
-                  pickedPrompt ??
-                  (dress.prompt ? `${FIELD.work.label} ${dress.prompt}` : FIELD.work.label),
+                  pickedPrompt ?? (dress.prompt ? `${work.label} ${dress.prompt}` : work.label),
                 look: 'bare',
               })}
             </div>
@@ -1356,11 +1468,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
       method="post"
       noValidate
       aria-label={
-        variant === 'audit'
+        props.label ??
+        (variant === 'audit'
           ? 'Request a free audit'
           : variant === 'contact'
             ? 'Contact Tcules'
-            : 'Send an enquiry'
+            : 'Send an enquiry')
       }
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}

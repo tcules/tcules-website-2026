@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { ArrowLeft, ArrowUp, Copy, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph } from './scenes';
+import { ArrowLeft, ArrowRight, ArrowUp, Copy, Hop, Rect } from './offer';
+import { Chip, Focus, Glyph, GrowIn, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -261,6 +261,165 @@ function Stops() {
   );
 }
 
+/* ── What we design in ────────────────────────────────────────────────────────── */
+
+/** Care marketplace (moving): the family's request runs past the carers to the one who fits, who lights. */
+function KindCareMatch() {
+  return (
+    <>
+      <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
+      <Glyph name="heart-pulse" cx={46} cy={66} size={12} className={styles.glyphQuiet} />
+      <Glyph name="users-group-rounded" cx={70} cy={88} size={24} className={styles.glyph} />
+      <Copy x={50} y={112} w={40} />
+      <Copy x={50} y={122} w={28} quiet />
+      <circle className={styles.node} cx="110" cy="90" r="2.5" />
+      {[50, 90].map((y) => (
+        <g key={y}>
+          <circle className={styles.tile} cx="230" cy={y} r="11" />
+          <Glyph name="user" cx={230} cy={y} size={12} className={styles.glyphQuiet} />
+          <Copy x={252} y={y} w={y === 50 ? 32 : 24} quiet />
+        </g>
+      ))}
+      <TraceIn d="M110,90 L144,90 A6,6 0 0 1 150,96 L150,124 A6,6 0 0 0 156,130 L205,130" />
+      <GrowIn>
+        <ArrowRight x={212} y={130} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.halo} cx="230" cy="130" r="18" />
+      </GrowIn>
+      <circle className={styles.release} cx="230" cy="130" r="11" />
+      <Glyph name="user" cx={230} cy={130} size={12} className={styles.releaseMark} />
+      <Copy x={252} y={130} w={32} />
+    </>
+  );
+}
+
+/** Separate apps, one platform: each side's phone drops into the one web platform beneath them. */
+function KindSeparateApps() {
+  const phone = (x: number, glyph: IconName) => (
+    <>
+      <Rect x={x} y={30} w={40} h={60} rx={8} className={styles.frame} />
+      <Glyph name={glyph} cx={x + 20} cy={46} size={14} className={styles.glyph} />
+      <Copy x={x + 8} y={64} w={24} quiet />
+      <Rect x={x + 8} y={72} w={24} h={10} rx={5} className={styles.tile} />
+    </>
+  );
+  return (
+    <>
+      {phone(70, 'users-group-rounded')}
+      {phone(210, 'user')}
+      <Rect x={30} y={110} w={260} h={40} rx={8} className={styles.frame} />
+      <Chip x={42} y={122} glyph="monitor" />
+      <path className={styles.line} d="M90,90 L90,110 M230,90 L230,110" />
+      {[90, 230].map((x) => (
+        <g key={x}>
+          <circle className={styles.node} cx={x} cy="90" r="2.5" />
+          <circle className={styles.node} cx={x} cy="110" r="2.5" />
+        </g>
+      ))}
+      <Rect x={70} y={122} w={180} h={16} className={styles.region} />
+      <path className={styles.regionCopy} d="M82,130 L176,130" />
+    </>
+  );
+}
+
+/** Booking and rental: one calendar both sides read, the days it can still be undone marked before the stay. */
+function KindBookingRules() {
+  const cols = [86, 118, 150, 182, 214];
+  return (
+    <>
+      <Glyph name="user" cx={44} cy={90} size={20} className={styles.glyph} />
+      <Glyph name="user" cx={276} cy={90} size={20} className={styles.glyph} />
+      <Rect x={70} y={30} w={180} h={120} rx={8} className={styles.frame} />
+      <Chip x={86} y={42} glyph="calendar" />
+      <Copy x={110} y={50} w={48} quiet />
+      {[70, 118].map((y) =>
+        cols.map((x) => <Rect key={`${x}-${y}`} x={x} y={y} w={20} h={16} className={styles.tile} />),
+      )}
+      <Rect x={86} y={94} w={84} h={16} className={styles.region} />
+      <Glyph name="undo-left" cx={98} cy={102} size={10} className={styles.glyphAccent} />
+      <path className={styles.regionCopy} d="M112,102 L158,102" />
+      <Rect x={182} y={94} w={52} h={16} rx={8} className={styles.solid} />
+    </>
+  );
+}
+
+/** Freelance and talent: the one complete request goes through to the provider; the two thin ones stop short. */
+function KindTalentRequests() {
+  return (
+    <>
+      {/* The thin requests: one stub of copy each, their routes stopped short of the provider. */}
+      {[50, 130].map((y) => (
+        <g key={y}>
+          <Rect x={30} y={y - 14} w={80} h={28} rx={6} className={styles.tile} />
+          <Copy x={44} y={y} w={28} quiet />
+          <path className={styles.trail} d={`M110,${y} L168,${y}`} />
+          <Glyph name="close-circle" cx={178} cy={y} size={12} className={styles.glyphQuiet} />
+        </g>
+      ))}
+      {/* The complete request: budget, scope and dates, checked, routed to the provider. */}
+      <Rect x={30} y={76} w={80} h={28} rx={6} className={styles.frame} />
+      <Glyph name="clipboard-check" cx={44} cy={90} size={14} className={styles.glyphAccent} />
+      <Copy x={58} y={83} w={40} />
+      <Copy x={58} y={90} w={30} />
+      <Copy x={58} y={97} w={36} />
+      <Hop x1={110} x2={190} y={90} />
+      {/* The provider, rated. */}
+      <Rect x={190} y={40} w={100} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={240} cy={72} size={24} className={styles.glyph} />
+      <Copy x={216} y={102} w={48} />
+      <Glyph name="star" cx={226} cy={120} size={10} className={styles.glyph} />
+      <Copy x={236} y={120} w={20} quiet />
+    </>
+  );
+}
+
+/** Local services: the visit's place comes in, the phone holds its arrival time, and the payout goes out. */
+function KindLocalPhone() {
+  return (
+    <>
+      <Glyph name="map-point" cx={70} cy={70} size={20} className={styles.glyph} />
+      <path className={styles.trail} d="M86,70 L130,70" />
+      <Rect x={130} y={30} w={60} h={120} rx={8} className={styles.frame} />
+      <Copy x={146} y={46} w={24} quiet />
+      <Glyph name="clock-circle" cx={148} cy={70} size={12} className={styles.glyph} />
+      <Copy x={160} y={70} w={16} />
+      <Rect x={142} y={102} w={36} h={16} rx={8} className={styles.tile} />
+      <Copy x={146} y={134} w={28} quiet />
+      <Hop x1={190} x2={232} y={110} />
+      <Focus x={250} y={110} glyph="wallet" size={12} />
+    </>
+  );
+}
+
+/** B2B trade: the order's prices held at the contract rate, and one plain approval at its foot. */
+function KindTradePrices() {
+  const rows = [60, 80, 100];
+  return (
+    <>
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      {rows.map((y, i) => (
+        <g key={y}>
+          <Glyph name="cart" cx={72} cy={y} size={12} className={styles.glyphQuiet} />
+          <Copy x={86} y={y} w={[56, 44, 50][i] ?? 48} quiet />
+        </g>
+      ))}
+      <Rect x={186} y={48} w={68} h={64} className={styles.region} />
+      {rows.map((y) => (
+        <g key={y}>
+          <Glyph name="lock" cx={200} cy={y} size={10} className={styles.glyphAccent} />
+          <path className={styles.regionCopy} d={`M212,${y} L242,${y}`} />
+        </g>
+      ))}
+      <path className={styles.rule} d="M50,122 L270,122" />
+      <Glyph name="user" cx={72} cy={136} size={14} className={styles.glyph} />
+      <Copy x={86} y={136} w={40} />
+      <Rect x={186} y={128} w={68} h={16} rx={8} className={styles.tile} />
+      <Glyph name="check-circle" cx={220} cy={136} size={10} className={styles.glyph} />
+    </>
+  );
+}
+
 /**
  * /expertise/marketplaces-multi-sided-platforms · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -284,4 +443,17 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-marketplaces-multi-sided-platforms': Needs,
   /* Where our part stops: Payment providers, fraud policy and seller verification rules stay with your payments, legal and trust specialists; our design turns their r */
   'stops-marketplaces-multi-sided-platforms': Stops,
+  /* MOVING: this tile links to /expertise/healthtech, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Care marketplaces matching families with self-employed carers: CuramCare */
+  'kind-marketplaces-multi-sided-platforms-care-marketplaces-matching-families': KindCareMatch,
+  /* What we design in, tile: Separate apps for each side, joined by one web platform: CuramCare */
+  'kind-marketplaces-multi-sided-platforms-separate-apps-side-joined': KindSeparateApps,
+  /* What we design in, tile: Booking and rental marketplaces: Cancellation rules each side can read */
+  'kind-marketplaces-multi-sided-platforms-booking-rental-marketplaces': KindBookingRules,
+  /* What we design in, tile: Freelance and talent marketplaces: Requests worth a provider's time */
+  'kind-marketplaces-multi-sided-platforms-freelance-talent-marketplaces': KindTalentRequests,
+  /* What we design in, tile: Local service marketplaces for quotes, visits and reviews: Arrival times and payouts run from a phone */
+  'kind-marketplaces-multi-sided-platforms-local-service-marketplaces-quotes': KindLocalPhone,
+  /* What we design in, tile: B2B marketplaces connecting trade buyers with suppliers: Contract prices and approvals kept plain */
+  'kind-marketplaces-multi-sided-platforms-b2b-marketplaces-connecting-trade': KindTradePrices,
 };

@@ -328,16 +328,6 @@ Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-## How our designers use AI {#ai-native-practice}
-
-AI does the routine checking, so more of your product gets examined. People make every decision.
-
-1. **AI:** Checks your live product, screen by screen, against its design system
-2. **Designer:** Decides which differences matter to your users
-3. **Designer:** Tries the fix in working code and signs it off
-
-[See a typical AI-assisted design run →](/how-we-work/ai-native-product-design)
-
 ## Industries we know well {#expertise}
 
 [B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software) · [AI products and developer tools](/expertise/ai-products-developer-tools) · [Data and analytics products](/expertise/data-analytics-decision-products) · [Commerce and transactional products](/expertise/commerce-transactional-products) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [MarTech and SalesTech](/expertise/martech-salestech) · [See all industries →](/expertise)

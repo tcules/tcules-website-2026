@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { Copy, Cursor, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched } from './scenes';
+import { ArrowRight, Copy, Cursor, Hop, Rect } from './offer';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -328,6 +328,243 @@ function StopsMartechSalestech() {
   );
 }
 
+/* ── What we design in ────────────────────────────────────────────────────────── */
+
+/** MOVING. The abandoned cart sets off its reminder email, and the sale it wins back shows in the report. */
+function KindMarketingAutomation() {
+  return (
+    <>
+      {/* The cart left behind, and the email the automation sends. */}
+      <Rect x={30} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="cart" cx={50} cy={90} size={20} className={styles.glyph} />
+      <Rect x={130} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="letter" cx={150} cy={90} size={20} className={styles.glyph} />
+      <circle className={styles.node} cx="70" cy="90" r="2.5" />
+      <TraceIn d="M70,90 L130,90 M170,90 L203,90" />
+      <GrowIn>
+        <ArrowRight x={210} y={90} />
+      </GrowIn>
+      {/* The report: the row for the sale won back lights when the route reaches it. */}
+      <Rect x={210} y={30} w={80} h={120} rx={8} className={styles.frame} />
+      <Copy x={222} y={48} w={32} quiet />
+      <Copy x={222} y={60} w={44} />
+      <GrowIn>
+        <Rect x={216} y={78} w={68} h={24} rx={10} className={styles.halo} />
+      </GrowIn>
+      <Rect x={222} y={84} w={56} h={12} rx={4} className={styles.press} />
+      {[114, 134].map((y) => (
+        <g key={y}>
+          <Rect x={222} y={y - 6} w={56} h={12} rx={4} className={styles.tile} />
+          <Copy x={228} y={y} w={y === 114 ? 24 : 16} quiet />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** MOVING. The ad budget is routed to the listing that sells, and its budget bar fills. */
+function KindBudgetListing() {
+  const listings: [number, number][] = [
+    [90, 12],
+    [130, 20],
+  ];
+  return (
+    <>
+      {/* The budget: the wallet and how much of it is spent. */}
+      <Rect x={30} y={60} w={60} h={60} rx={8} className={styles.frame} />
+      <Glyph name="wallet" cx={60} cy={82} size={22} className={styles.glyph} />
+      <Rect x={42} y={100} w={36} h={8} rx={4} className={styles.tile} />
+      <Rect x={42} y={100} w={20} h={8} rx={4} className={styles.knob} />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      <TraceIn d="M90,90 L124,90 A6,6 0 0 0 130,84 L130,56 A6,6 0 0 1 136,50 L163,50" />
+      <GrowIn>
+        <ArrowRight x={170} y={50} />
+      </GrowIn>
+      {/* The seller's listings, each a picture, its words and its budget. */}
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <GrowIn>
+        <Rect x={176} y={34} w={108} h={32} rx={10} className={styles.halo} />
+      </GrowIn>
+      <Rect x={182} y={40} w={20} h={20} rx={4} className={styles.tile} />
+      <Copy x={210} y={46} w={20} />
+      <Copy x={210} y={54} w={14} quiet />
+      <Rect x={244} y={46} w={32} h={8} rx={4} className={styles.press} />
+      {listings.map(([cy, w]) => (
+        <g key={cy}>
+          <Rect x={182} y={cy - 10} w={20} h={20} rx={4} className={styles.tile} />
+          <Copy x={210} y={cy - 4} w={20} quiet />
+          <Copy x={210} y={cy + 4} w={14} quiet />
+          <Rect x={244} y={cy - 4} w={32} h={8} rx={4} className={styles.tile} />
+          <Rect x={244} y={cy - 4} w={w} h={8} rx={4} className={styles.knob} />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** MOVING. The rep's quote, priced, reaches the pricing expert who shares the tool, and the expert signs it off. */
+function KindQuotingCpq() {
+  return (
+    <>
+      {/* The rep's quote: its lines, then the total and its price, which fills when signed off. */}
+      <Rect x={30} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={50} cy={50} size={14} className={styles.glyph} />
+      <Copy x={64} y={50} w={36} quiet />
+      {[72, 88, 104].map((y) => (
+        <g key={y}>
+          <Copy x={46} y={y} w={36} />
+          <Copy x={96} y={y} w={18} />
+        </g>
+      ))}
+      <path className={styles.rule} d="M46,116 L114,116" />
+      <Copy x={46} y={130} w={18} quiet />
+      <Rect x={74} y={125} w={40} h={10} rx={5} className={styles.press} />
+      <circle className={styles.node} cx="130" cy="130" r="2.5" />
+      <TraceIn d="M130,130 L164,130 A6,6 0 0 0 170,124 L170,96 A6,6 0 0 1 176,90 L190,90" />
+      {/* The tool both use: the rep and the pricing expert, and the expert's sign-off. */}
+      <Rect x={190} y={50} w={100} h={80} rx={8} className={styles.frame} />
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="190" cy="90" r="3" />
+      </GrowIn>
+      <Glyph name="user" cx={220} cy={82} size={24} className={styles.glyph} />
+      <Glyph name="user" cx={250} cy={82} size={24} className={styles.glyph} />
+      <Copy x={210} y={116} w={30} quiet />
+      <GrowIn>
+        <circle className={styles.halo} cx="266" cy="100" r="15" />
+      </GrowIn>
+      <circle className={styles.release} cx="266" cy="100" r="9" />
+      <Glyph name="check-circle" cx={266} cy={100} size={11} className={styles.releaseMark} />
+    </>
+  );
+}
+
+/** A bar that grows from its baseline: an unpainted twin below the baseline puts the GrowIn's centre on it. */
+function RisingBar({ x, base, h, className }: { x: number; base: number; h: number; className: string | undefined }) {
+  return (
+    <GrowIn>
+      <Rect x={x} y={base - h} w={10} h={h} rx={2} className={className} />
+      <rect x={x} y={base} width={10} height={h} fill="none" />
+    </GrowIn>
+  );
+}
+
+/** MOVING. The survey's answers run through the AI to a finding: its bars rise and its spark lights. */
+function KindAiSurvey() {
+  const bars: [number, number, number][] = [
+    [240, 12, 4],
+    [254, 20, 4],
+    [268, 30, 4],
+  ];
+  return (
+    <>
+      {/* The answers: one survey of many, a question and its choices. */}
+      <Rect x={34} y={32} w={90} h={108} rx={8} className={styles.frameQuiet} />
+      <Rect x={40} y={40} w={90} h={108} rx={8} className={styles.frame} />
+      <Copy x={56} y={58} w={50} />
+      {[84, 104, 124].map((y, i) => (
+        <g key={y}>
+          <circle className={i === 0 ? styles.knob : styles.tile} cx={62} cy={y} r={5} />
+          <Copy x={74} y={y} w={[40, 28, 34][i] ?? 28} quiet />
+        </g>
+      ))}
+      <circle className={styles.node} cx="130" cy="90" r="2.5" />
+      <TraceIn d="M130,90 L224,90" />
+      {/* The finding: a result card whose bars rise from the baseline, and the AI's spark on its corner. */}
+      <Rect x={224} y={62} w={56} h={56} rx={8} className={styles.frame} />
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="224" cy="90" r="3" />
+      </GrowIn>
+      <path className={styles.rule} d="M232,106 L274,106" />
+      {bars.map(([x, h, stub], i) => (
+        <g key={x}>
+          <Rect x={x - 5} y={106 - stub} w={10} h={stub} rx={2} className={styles.knob} />
+          <RisingBar x={x - 5} base={106} h={h} className={i === 2 ? styles.solid : styles.knob} />
+        </g>
+      ))}
+      <circle className={styles.release} cx="280" cy="62" r="8" />
+      <Glyph name="stars" cx={280} cy={62} size={10} className={styles.releaseMark} />
+    </>
+  );
+}
+
+/** The deal carries its commission, and the tier of the rule that set it sits beside it. */
+function KindCrmCommission() {
+  const tiers: [number, number][] = [
+    [78, 16],
+    [94, 30],
+    [110, 44],
+  ];
+  return (
+    <>
+      {/* The deal: its name, how far down the pipeline it is, and its commission, lit. */}
+      <Rect x={30} y={40} w={120} h={100} rx={8} className={styles.frame} />
+      <Copy x={46} y={58} w={56} />
+      <Copy x={46} y={70} w={36} quiet />
+      {[46, 70, 94, 118].map((x) => (
+        <Rect
+          key={x}
+          x={x}
+          y={80}
+          w={16}
+          h={6}
+          rx={3}
+          className={x === 118 ? styles.tile : styles.knob}
+        />
+      ))}
+      <Rect x={40} y={94} w={100} h={32} rx={10} className={styles.halo} />
+      <Rect x={46} y={100} w={88} h={20} rx={4} className={styles.solid} />
+      <Glyph name="wallet" cx={60} cy={110} size={12} className={styles.glyphOn} />
+      <path className={styles.tick} d="M74,110 L112,110" />
+      <Hop x1={150} x2={190} y={110} />
+      {/* The rule: the tiers, and the one this deal falls in. */}
+      <Rect x={190} y={40} w={100} h={100} rx={8} className={styles.frame} />
+      <Copy x={206} y={58} w={40} quiet />
+      {tiers.map(([y, w]) => (
+        <g key={y}>
+          <Copy x={206} y={y} w={14} quiet={y === 110} />
+          <Rect
+            x={230}
+            y={y - 4}
+            w={w}
+            h={8}
+            rx={4}
+            className={y === 110 ? styles.soft : styles.tile}
+          />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** The lead's past touches stay quiet; the next action, at the end of its line, is the one lit. */
+function KindLeadNextAction() {
+  const touches: [number, IconName][] = [
+    [140, 'letter'],
+    [180, 'chat-round-dots'],
+  ];
+  return (
+    <>
+      {/* The lead. */}
+      <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={70} cy={78} size={24} className={styles.glyph} />
+      <Copy x={50} y={104} w={40} />
+      <Copy x={50} y={116} w={28} quiet />
+      {/* What has happened: an email, a reply, done and quiet. */}
+      <path className={styles.rule} d="M110,90 L130,90 M150,90 L170,90" />
+      {touches.map(([cx, glyph]) => (
+        <g key={cx}>
+          <Rect x={cx - 10} y={80} w={20} h={20} rx={4} className={styles.tile} />
+          <Glyph name={glyph} cx={cx} cy={90} size={12} className={styles.glyphQuiet} />
+        </g>
+      ))}
+      {/* What to do next, the one thing lit. */}
+      <circle className={styles.node} cx="190" cy="90" r="2.5" />
+      <path className={styles.line} d="M190,90 L259,90" />
+      <Focus x={270} y={90} glyph="calendar" size={13} />
+    </>
+  );
+}
+
 /**
  * /expertise/martech-salestech · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -353,4 +590,20 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-martech-salestech': NeedsMartechSalestech,
   /* Where our part stops: Attribution models, data pipelines and CRM configuration stay with your marketing operations, data or CRM specialists; our design makes thei */
   'stops-martech-salestech': StopsMartechSalestech,
+  /* MOVING: this tile links to /case-studies/ux-revamp-for-a-saas-product-in-marketing-automation-vertical, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Marketing automation and reporting for ecommerce brands: Ryzeo */
+  'kind-martech-salestech-marketing-automation-reporting-ecommerce': KindMarketingAutomation,
+  /* MOVING: this tile links to /case-studies/designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Budget and listing-content tools for Amazon sellers: Omny AI */
+  'kind-martech-salestech-budget-listing-content-tools': KindBudgetListing,
+  /* MOVING: this tile links to /case-studies/consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Quoting (CPQ) tools shared by sales reps and pricing experts: Auxentios */
+  'kind-martech-salestech-quoting-cpq-tools-shared': KindQuotingCpq,
+  /* MOVING: this tile links to /case-studies/saas-ux-ui-case-study-ai-for-market-research-automation, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI-assisted survey and market research products: Novus Insights */
+  'kind-martech-salestech-ai-assisted-survey-market': KindAiSurvey,
+  /* What we design in, tile: CRM, pipeline and commission tools: Commission shown on the deal, with the rule behind it */
+  'kind-martech-salestech-crm-pipeline-commission-tools': KindCrmCommission,
+  /* What we design in, tile: Lead management and sales enablement software: The next action on a lead in one glance */
+  'kind-martech-salestech-lead-management-sales-enablement': KindLeadNextAction,
 };
