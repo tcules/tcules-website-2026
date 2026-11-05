@@ -489,9 +489,9 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
 }
 
 /**
- * The plan cards: each a hairline card on the plan ground, three parts on rows the set shares from
- * 1024 (the head over its rule, the checklist, the action), a `block` apart; the cards a `gutter`
- * apart. The checklist's tick is the accent and the same glyph on every line.
+ * The plan cards: each a hairline card on the plan ground, two parts on rows the set shares from
+ * 1024 (the head over its rule with the checklist a `block` under it, then the action a `stack`
+ * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
  */
 function Plans({ shown }: { shown: readonly EngagementOption[] }) {
   return (
@@ -500,29 +500,31 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
       columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
       colGap="gutter"
       rowGap="gutter"
-      shareRows={3}
+      shareRows={2}
     >
       {shown.map((option, index) => (
-        <Layout as="li" key={option.title || index} rowGap="block" className={styles.plan}>
-          <div className={styles.planHead}>
-            <OptionHead option={option} className={styles.planTitle} />
-          </div>
-          {option.checklist && option.checklist.length > 0 ? (
-            <Layout as="ul" rowGap="text">
-              {option.checklist.map((item, i) => (
-                <li key={i}>
-                  <Cluster colGap="tight" align="start" nowrap>
-                    <span className={styles.tick} aria-hidden="true">
-                      <Icon name="check-circle" size="lg" />
-                    </span>
-                    <span className={styles.planItem}>{item}</span>
-                  </Cluster>
-                </li>
-              ))}
-            </Layout>
-          ) : (
-            <div />
-          )}
+        /* The action stands a `stack` (48) under the list (owner, 5 Nov 2026: "more
+           space above the button"); the head and list keep their `block` inside their group. */
+        <Layout as="li" key={option.title || index} rowGap="stack" className={styles.plan}>
+          <Layout rowGap="block">
+            <div className={styles.planHead}>
+              <OptionHead option={option} className={styles.planTitle} />
+            </div>
+            {option.checklist && option.checklist.length > 0 ? (
+              <Layout as="ul" rowGap="text">
+                {option.checklist.map((item, i) => (
+                  <li key={i}>
+                    <Cluster colGap="tight" align="start" nowrap>
+                      <span className={styles.tick} aria-hidden="true">
+                        <Icon name="check-circle" size="lg" />
+                      </span>
+                      <span className={styles.planItem}>{item}</span>
+                    </Cluster>
+                  </li>
+                ))}
+              </Layout>
+            ) : null}
+          </Layout>
           <Layout>{option.action ?? <div />}</Layout>
         </Layout>
       ))}
