@@ -1,7 +1,7 @@
 ---
 title: "A testimonial band with fewer than six quotes turns them one at a time; six or more keep the wall"
 date: 2026-10-29
-status: active
+status: superseded
 area: [proof, layout, components]
 source: "Owner review of the built 26 Oct copy pages, 29 Oct 2026 (feat/new-copy, round 2; branch feat/r2-proof)"
 supersedes: ["2026-10-10-testimonials-use-a-rated-card"]
@@ -30,3 +30,5 @@ carries the score, so it has one place whatever the count. This is the owner's e
 slide is still a rated, named testimonial (stars, the quote with its marks, the speaker): what the
 superseded 10 Oct entry required of a group's card, kept. A portrait shows on every slide or none, the
 wall's rule. One quote alone is no slider. Home's six keep the wall, so the homepage still hides nothing.
+
+Superseded 5 Nov 2026 by `2026-11-05-testimonial-slides-carry-no-stars`.

@@ -1532,6 +1532,8 @@ export type PodcastImage = CaseStudyImage;
 
 export type PodcastBlock =
   | { id: string; type: 'prose'; html: string }
+  /** The TL;DR: one paragraph under its heading, set as Callout tone="summary". */
+  | { id: string; type: 'summary'; html: string; heading?: string }
   | {
       id: string;
       type: 'figures';
@@ -1667,6 +1669,8 @@ export type BlogAuthor = {
 
 export type BlogBlock =
   | { id: string; type: 'prose'; html: string }
+  /** The TL;DR: one paragraph under its heading, set as Callout tone="summary". */
+  | { id: string; type: 'summary'; html: string; heading?: string }
   | { id: string; type: 'callout'; html: string }
   | { id: string; type: 'separator'; html: string }
   | { id: string; type: 'code'; html: string }

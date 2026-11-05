@@ -308,35 +308,33 @@ Working within an on-chain exchange's design team, we made both competing trade 
 
 ## Three ways to work with us {#how-we-work-together}
 
-*Optional first step*
+**Pilot project.** Try us on one real problem
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-*A known goal*
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+**Defined project.** One goal, one scope, one price
 
-*A roadmap that keeps moving*
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+[Get your project scoped](#enquiry)
 
-*Yours:* You keep the product decisions, and what we make is yours once it's paid for.
+**Ongoing partnership.** A design team without the hiring
 
-*Working hours:* We overlap four to five hours with US working days, and extend that whenever the work needs it.
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
+
+[Get your design team](#enquiry)
 
 Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
-
-## How our designers use AI {#ai-native-practice}
-
-AI does the routine checking, so more of your product gets examined. People make every decision.
-
-1. **AI:** Checks your live product, screen by screen, against its design system
-2. **Designer:** Decides which differences matter to your users
-3. **Designer:** Tries the fix in working code and signs it off
-
-[See a typical AI-assisted design run →](/how-we-work/ai-native-product-design)
 
 ## Industries we know well {#expertise}
 

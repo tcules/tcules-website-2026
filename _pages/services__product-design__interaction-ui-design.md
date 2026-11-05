@@ -279,15 +279,31 @@ Pick by what is going wrong today.
 
 ## Three ways to work with us {#how-we-work-together}
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+**Pilot project.** Try us on one real problem
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+[Start with a pilot](#enquiry)
 
-You keep the product decisions, and what we make is yours once it's paid for.
+**Defined project.** One goal, one scope, one price
 
-We overlap four to five hours with US working days, and extend that whenever the work needs it.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
+
+[Get your project scoped](#enquiry)
+
+**Ongoing partnership.** A design team without the hiring
+
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
+
+[Get your design team](#enquiry)
+
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 

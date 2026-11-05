@@ -15,7 +15,6 @@ import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
 import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
-import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
 import { type SketchName } from '@/lib/sketches';
 
@@ -40,7 +39,7 @@ import {
  * appears.
  *
  * What the column is NOT is a stack of bands. Its flow is Prose, and what breaks it is a numbered
- * method (Steps), a bound artefact or a labelled diagram slot (Media), or a table, so it never runs
+ * method (Steps), a bound artefact (Media), or a table, so it never runs
  * more than two Prose-only sections in a row (§ 3). Every shape is read from the words' structure.
  */
 
@@ -149,30 +148,6 @@ function namesMarks(text: string): boolean {
   );
 }
 
-/* ── Diagram slots ────────────────────────────────────────────────────────────── */
-
-/**
- * Where a band's labelled diagram sits in its flow (the register's rows say what each shows). A slot
- * follows the sentence that names it: the paragraph that mentions the `text`, or the band's last list.
- * A band with no register row has no slot, so nothing here can draw an image the register does not
- * list.
- */
-const DIAGRAM_AFTER: Readonly<Record<string, { text: string } | 'list'>> = {
-  'the-quote-is-the-shared-object': { text: 'responsibility map' },
-  'design-for-the-revision-not-the-first-draft': 'list',
-};
-
-function diagramIndex(page: CorpusPage, band: CorpusBand, items: readonly Item[]): number {
-  const rule = DIAGRAM_AFTER[band.id];
-  if (!rule || !hasPlaceholder(page.route, band.id)) return -1;
-  if (rule === 'list') {
-    return items.reduce((at, item, index) => (item.type === 'list' ? index : at), -1);
-  }
-  return items.findIndex(
-    (item) => item.type === 'paragraph' && plain(item.runs).includes(rule.text),
-  );
-}
-
 /* ── One section ──────────────────────────────────────────────────────────────── */
 
 const listHtml = (block: Extract<CorpusBlock, { type: 'list' }>) => {
@@ -184,7 +159,7 @@ const listHtml = (block: Extract<CorpusBlock, { type: 'list' }>) => {
  * One section of the argument: its h2 (none for a head-less opening), then its blocks in order.
  * Consecutive paragraphs and lists share one Prose flow; a numbered method is Steps; a table is a
  * boxed DataTable; a bound artefact is a Media placed after the section's last list, or else its last
- * paragraph (the block that names it); a diagram slot is the Media its register row reserves.
+ * paragraph (the block that names it).
  */
 export function ArticleSection({
   page,
@@ -207,7 +182,6 @@ export function ArticleSection({
     (b) => b.bound && b.supportsSection === band.id,
   );
   const items = withMethods(band.blocks.filter((block) => block.type !== 'comment'));
-  const diagramAt = diagramIndex(page, band, items);
   const isFaq = isFaqBand(band);
   const toolDiagram = tool?.diagrams[band.id];
   const toolDiagramAt = toolDiagram
@@ -393,16 +367,6 @@ export function ArticleSection({
       flush();
       out.push(
         <Media key={`media-${out.length}`} image={corpusImage(binding)} sizes={FULL_COLUMN} />,
-      );
-    }
-    if (index === diagramAt) {
-      flush();
-      out.push(
-        <Media
-          key={`diagram-${out.length}`}
-          image={placeholderImage(page.route, band.id)}
-          sizes={FULL_COLUMN}
-        />,
       );
     }
     /* A tool's diagram: the flat drawing on its plate at the page's one drawing scale (the worked

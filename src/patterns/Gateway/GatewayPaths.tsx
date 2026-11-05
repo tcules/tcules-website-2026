@@ -180,9 +180,22 @@ export function GatewayPaths({
             </Layout>
           ))}
         </Layout>
-        {close ? (
-          /* The close, a `stack` under the cards: the line centred, the action under it a `block`
-             apart. */
+        {close?.action ? (
+          /* A close with an ask is one row under the cards (owner, 5 Nov 2026, launch review): the
+             line at the cards' title role at the start, the action at the end, both centred on the
+             row's axis. Below 768 the action drops under the line. */
+          <Cluster
+            colGap="gutter"
+            rowGap="block"
+            justify="between"
+            align="center"
+            stackUntil="md"
+          >
+            {close.line ? <p className={styles.doorCloseRowLine}>{close.line}</p> : null}
+            {close.action}
+          </Cluster>
+        ) : close ? (
+          /* A close with no ask is the set's own sentence, centred under the cards. */
           <Layout rowGap="block" justifyItems="center" className={styles.doorClose}>
             {close.line ? (
               <p

@@ -1,7 +1,7 @@
 ---
 title: "Illustrations stay between 0.75 and 1.35 wide"
 date: 2026-09-28
-status: active
+status: superseded
 area: [illustration]
 source: "Owner review, 28 Sep 2026 (service-line illustrations)"
 supersedes: []

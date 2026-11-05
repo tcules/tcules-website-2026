@@ -211,12 +211,6 @@ A prototype is quick to make now. Getting customers to rely on it starts with th
 
 A product with AI at its core adds a sixth: what it may do on its own, and where a person signs off. Our guide to [showing each role why the product is worth using](/insights/guides/saas-onboarding-strategies-to-increase-customer-retention) goes further on the first.
 
-*Illustration, not client work*
-
-A founder wants vet practices to send pet owners a treatment estimate they can approve from their phone. The first release does one job: an owner approves or declines an estimate before treatment starts.
-
-It covers sending, changing, approving and declining one estimate, with prices taken from the practice's existing system and a record the practice can rely on. Deposits, payment plans, insurance claims and reminders wait for later.
-
 ## Which kind of MVP help do you need? {#options}
 
 A demo has to work for the person showing it; a first release has to work for strangers, with their own accounts and money. In its study of apps made with AI app builders, [Escape.tech](https://escape.tech/state-of-security-of-vibe-coded-apps) reported more than 2,000 highly critical vulnerabilities and more than 400 exposed secrets across about 1,400 applications.
@@ -250,15 +244,31 @@ A demo has to work for the person showing it; a first release has to work for st
 
 ## Three ways to work with us {#how-we-work-together}
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+**Pilot project.** Try us on one real problem
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+[Start with a pilot](#enquiry)
 
-You keep the product decisions, and what we make is yours once it's paid for.
+**Defined project.** One goal, one scope, one price
 
-We overlap four to five hours with US working days, and extend that whenever the work needs it.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
+
+[Get your project scoped](#enquiry)
+
+**Ongoing partnership.** A design team without the hiring
+
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
+
+[Get your design team](#enquiry)
+
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 

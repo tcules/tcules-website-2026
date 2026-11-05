@@ -22,6 +22,8 @@ import {
 import { InsightResources } from '@/templates';
 import { PublishedSection } from '@/templates/CorpusPage/PublishedHome';
 
+import { withShareImage } from '@/app/_og';
+
 type Resource = NonNullable<Awaited<ReturnType<typeof getResourceDetail>>>;
 type Block = Resource['blocks'][number];
 type ResourcePageProps = { params: Promise<{ slug: string[] }> };
@@ -98,13 +100,12 @@ export async function generateMetadata({ params }: ResourcePageProps): Promise<M
   const { slug } = await params;
   try {
     const resource = await getResourceDetail(slug.join('/'));
-    return (
-      resource?.seo.metadata ?? {
-        title: 'Resource not found | Tcules',
-        description: null,
-        robots: { index: false, follow: false },
-      }
-    );
+    if (resource) return await withShareImage(resource.seo.metadata, resource.path);
+    return {
+      title: 'Resource not found | Tcules',
+      description: null,
+      robots: { index: false, follow: false },
+    };
   } catch {
     return {
       title: 'Resource temporarily unavailable | Tcules',

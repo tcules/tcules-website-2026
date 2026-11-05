@@ -161,6 +161,9 @@ function renderPodcastBlock(block: PodcastBlock, podcastTitle: string) {
     case 'callout':
       return <Callout html={block.html} />;
 
+    case 'summary':
+      return <Callout tone="summary" label={block.heading} html={block.html} />;
+
     case 'separator':
       return <Prose html={block.html} />;
   }
@@ -201,22 +204,15 @@ export async function generateMetadata({ params }: PodcastPageProps): Promise<Me
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
       ...(podcast.publishedAt ? { publishedTime: podcast.publishedAt } : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
+      ...(image
+        ? { images: [{ url: image.src, width: image.width, height: image.height, alt: image.alt }] }
+        : {}),
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
+      ...(image ? { images: [image.src] } : {}),
     },
   };
 }
@@ -309,10 +305,11 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
       ) : null}
 
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
-          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
+          (owner, 30 Oct 2026). On tint, the last band before the footer (owner, 2 Nov 2026). */}
       <InsightResources
         heading="Explore other resources"
         items={resourceItems(podcast.resources)}
+        surface="tint"
       />
     </>
   );

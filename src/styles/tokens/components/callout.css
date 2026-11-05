@@ -16,6 +16,8 @@
 /* The example tone's start rule (6 Oct 2026): 2px, the accent's mark weight, as a Stat's mark. */
 :root {
   --call-example-rule-width: var(--border-width-2);
+  /* The summary tone's top rule (2 Nov 2026): the same 2px mark weight, across the top edge. */
+  --call-summary-rule-width: var(--border-width-2);
 }
 
 /* ── Surfaces ─────────────────────────────────────────────────────────────────
@@ -31,6 +33,10 @@
   --call-example-rule-ink: var(--color-brandeis-500); /* a mark */
   --call-band-content-ink: var(--color-neutral-900); /* 14.62:1 */
   --call-band-glyph-ink: var(--color-brandeis-500); /* a mark */
+  --call-summary-ground: var(--color-paper-deep);
+  --call-summary-content-ink: var(--color-neutral-900); /* 13.06:1 on the panel */
+  --call-summary-label-ink: var(--color-neutral-700); /* 7.27:1 on the panel */
+  --call-summary-rule-ink: var(--color-brandeis-500); /* a mark */
 }
 
 [data-surface='tint'] {
@@ -41,6 +47,10 @@
   --call-example-rule-ink: var(--color-brandeis-500); /* a mark */
   --call-band-content-ink: var(--color-neutral-900); /* 13.06:1 */
   --call-band-glyph-ink: var(--color-brandeis-500); /* a mark */
+  --call-summary-ground: var(--color-paper); /* the tint band's ground is paper-deep already */
+  --call-summary-content-ink: var(--color-neutral-900); /* 14.62:1 on the panel */
+  --call-summary-label-ink: var(--color-neutral-700); /* 8.14:1 on the panel */
+  --call-summary-rule-ink: var(--color-brandeis-500); /* a mark */
 }
 
 [data-surface='ink'] {
@@ -51,6 +61,10 @@
   --call-example-rule-ink: var(--color-brandeis-300); /* a mark */
   --call-band-content-ink: var(--color-white); /* 17.26:1 */
   --call-band-glyph-ink: var(--color-brandeis-300); /* a mark */
+  --call-summary-ground: var(--color-neutral-800);
+  --call-summary-content-ink: var(--color-white); /* 11.92:1 on the panel */
+  --call-summary-label-ink: var(--color-neutral-300); /* 7.64:1 on the panel */
+  --call-summary-rule-ink: var(--color-brandeis-300); /* a mark */
 }
 
 [data-surface='blue'] {
@@ -61,4 +75,8 @@
   --call-example-rule-ink: var(--color-white); /* a mark */
   --call-band-content-ink: var(--color-white); /* 6.23:1 */
   --call-band-glyph-ink: var(--color-white); /* a mark */
+  --call-summary-ground: var(--color-brandeis-700);
+  --call-summary-content-ink: var(--color-white); /* 10.16:1 on the panel */
+  --call-summary-label-ink: var(--color-brandeis-50); /* 9.09:1 on the panel */
+  --call-summary-rule-ink: var(--color-white); /* a mark */
 }

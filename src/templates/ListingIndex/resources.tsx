@@ -10,7 +10,8 @@ import { CardGrid, type InsightItem } from './compositions';
  * with the format's glyph — never a ruled text card with a "Read insight" line). Each card names its
  * format in the eyebrow, carries its authored date, and is title-cued.
  *
- * Paper by default: the page's close is the tint band, and two tints never meet.
+ * Paper by default. The insight detail pages set it on tint as their last band before the footer
+ * (owner, 2 Nov 2026); a caller that follows it with a tinted close keeps paper, so two tints never meet.
  */
 export function InsightResources({
   heading,

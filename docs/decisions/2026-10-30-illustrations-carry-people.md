@@ -1,7 +1,7 @@
 ---
 title: Illustrations carry people; the rest of the isometric system stands
 date: 2026-10-30
-status: active
+status: superseded
 area: [illustration]
 source: "Devagya, 30 Oct 2026, answering docs/research/illustration-evolution-2026-10-30.md § 5 after the Bhumika and Jatin banner call (Tcules Banner Themes round 3)"
 supersedes: [2026-09-25-illustration-system-isometric-flat-planes]

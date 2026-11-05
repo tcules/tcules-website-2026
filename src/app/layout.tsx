@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 
 import { getNavigation } from '@/content';
+import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
 import './globals.css';
 
 export const metadata: Metadata = {
+  /* Resolves every relative metadata URL — the share cards above all — to the live origin: an
+     og:image must be absolute or the first unfurl renders without it (ch10 C1). */
+  metadataBase: new URL(SITE_ORIGIN),
   title: 'Tcules',
   description: 'Tcules website',
 };

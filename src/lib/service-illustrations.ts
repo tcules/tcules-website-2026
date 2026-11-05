@@ -1,5 +1,5 @@
 import { ILLUSTRATION_LEGENDS } from './illustration-legends';
-import { ROUTES, servicePath } from './routes';
+import { auditPath, expertisePath, ROUTES, servicePath } from './routes';
 
 /**
  * The hero drawings, by route.
@@ -9,8 +9,14 @@ import { ROUTES, servicePath } from './routes';
  * to its own bounds. The owner approved them for the pages the same day. Four more are the owner's
  * approved canvas versions not yet through that polish (owner, 30 Oct 2026): Software Development, New
  * Product Design & First Release, and the /expertise and /audits hubs, their text flattened to paths and
- * their viewBox trimmed to the drawing. An illustration is never cropped; every other page's hero is a
- * bound asset or a labelled placeholder.
+ * their viewBox trimmed to the drawing. The 5 Nov 2026 run adds the /services, /tools and Lab heroes and
+ * the twelve industry heroes. An illustration is never cropped; every other page's hero is a bound asset
+ * or a labelled placeholder.
+ *
+ * Register every new hero drawing HERE, in the same change that adds its file: the page's hero and its
+ * share card (src/app/_og/resolve.ts) both read this table, and a file it does not name is used by
+ * neither. A page with no entry shares its family hub's drawing on its card until it has one;
+ * `npm run share:census` lists those pages.
  */
 const HERO_ILLUSTRATIONS: Readonly<
   Record<string, { src: string; width: number; height: number }>
@@ -57,6 +63,105 @@ const HERO_ILLUSTRATIONS: Readonly<
   },
   [ROUTES.expertise]: { src: '/illustrations/heroes/expertise.svg', width: 820, height: 464 },
   [ROUTES.audits]: { src: '/illustrations/heroes/audits.svg', width: 820, height: 627 },
+  /* The 5 Nov 2026 illustration run (owner-approved the same day; docs/illustrations/run-2026-11-05/):
+     the /services, /tools and Lab heroes, and one hero per industry, each built around its object in
+     the expertise hub drawing. */
+  /* The audit heroes, children of the /audits hub drawing (owner, 5 Nov 2026: no video came, so the
+     illustration pass ran; docs/illustrations/run-2026-11-05/audits/). The prototype review keeps its film. */
+  [auditPath('ux-product-audit')]: {
+    src: '/illustrations/heroes/audits-ux-product-audit.svg',
+    width: 860,
+    height: 582,
+  },
+  [auditPath('design-system-audit')]: {
+    src: '/illustrations/heroes/audits-design-system-audit.svg',
+    width: 862,
+    height: 567,
+  },
+  [auditPath('product-modernisation-assessment')]: {
+    src: '/illustrations/heroes/audits-product-modernisation-assessment.svg',
+    width: 860,
+    height: 511,
+  },
+  [auditPath('design-to-code-audit')]: {
+    src: '/illustrations/heroes/audits-design-to-code-audit.svg',
+    width: 865,
+    height: 556,
+  },
+  [auditPath('ai-product-ux-readiness')]: {
+    src: '/illustrations/heroes/audits-ai-product-ux-readiness.svg',
+    width: 699,
+    height: 469,
+  },
+  [ROUTES.services]: { src: '/illustrations/heroes/services.svg', width: 1210, height: 630 },
+  [ROUTES.tools]: { src: '/illustrations/heroes/tools.svg', width: 860, height: 650 },
+  /* The designer's desk, redrawn in the run's hand (owner, 5 Nov 2026: "put the desk on the careers hero"). */
+  [ROUTES.careers]: { src: '/illustrations/heroes/careers.svg', width: 864, height: 607 },
+  [ROUTES.futureInterfacesLab]: {
+    src: '/illustrations/heroes/future-interfaces-lab.svg',
+    width: 864,
+    height: 578,
+  },
+  [expertisePath('healthtech')]: {
+    src: '/illustrations/heroes/expertise-healthtech.svg',
+    width: 865,
+    height: 651,
+  },
+  [expertisePath('fintech')]: {
+    src: '/illustrations/heroes/expertise-fintech.svg',
+    width: 865,
+    height: 582,
+  },
+  [expertisePath('climatetech-energy')]: {
+    src: '/illustrations/heroes/expertise-climatetech-energy.svg',
+    width: 865,
+    height: 578,
+  },
+  [expertisePath('edtech-learning')]: {
+    src: '/illustrations/heroes/expertise-edtech-learning.svg',
+    width: 860,
+    height: 572,
+  },
+  [expertisePath('proptech-contech-field-operations')]: {
+    src: '/illustrations/heroes/expertise-proptech-contech-field-operations.svg',
+    width: 860,
+    height: 574,
+  },
+  [expertisePath('commerce-transactional-products')]: {
+    src: '/illustrations/heroes/expertise-commerce-transactional-products.svg',
+    width: 865,
+    height: 578,
+  },
+  [expertisePath('b2b-saas-workflow-software')]: {
+    src: '/illustrations/heroes/expertise-b2b-saas-workflow-software.svg',
+    width: 864,
+    height: 522,
+  },
+  [expertisePath('data-analytics-decision-products')]: {
+    src: '/illustrations/heroes/expertise-data-analytics-decision-products.svg',
+    width: 864,
+    height: 576,
+  },
+  [expertisePath('ai-products-developer-tools')]: {
+    src: '/illustrations/heroes/expertise-ai-products-developer-tools.svg',
+    width: 864,
+    height: 459,
+  },
+  [expertisePath('content-knowledge-discovery-platforms')]: {
+    src: '/illustrations/heroes/expertise-content-knowledge-discovery-platforms.svg',
+    width: 865,
+    height: 584,
+  },
+  [expertisePath('marketplaces-multi-sided-platforms')]: {
+    src: '/illustrations/heroes/expertise-marketplaces-multi-sided-platforms.svg',
+    width: 860,
+    height: 630,
+  },
+  [expertisePath('martech-salestech')]: {
+    src: '/illustrations/heroes/expertise-martech-salestech.svg',
+    width: 865,
+    height: 572,
+  },
 };
 
 export type ServiceIllustration = {

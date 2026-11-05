@@ -9,6 +9,7 @@ import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
 import { CASE_STAGES } from './sources/fixtures/case-stages';
+import { CASE_COVERS } from './sources/fixtures/case-covers';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
@@ -176,8 +177,20 @@ export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSou
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
 export const getCaseStudyIndex = getPublishedCaseIndex;
-export const getCaseStudyListingPage =
-  caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
+/* A case's V1 cover (fixtures/case-covers.ts) wins over its Strapi thumbnail; Strapi's alt stays. */
+export async function getCaseStudyListingPage(slug: string) {
+  const listing = await caseStudiesSource.getCaseStudyListingPage(slug);
+  if (!listing) return listing;
+  return {
+    ...listing,
+    items: listing.items.map((item) => {
+      const cover = CASE_COVERS[item.slug];
+      return cover
+        ? { ...item, thumbnail: { ...cover, alt: item.thumbnail?.alt ?? item.title } }
+        : item;
+    }),
+  };
+}
 export const getResourceDetail = getPublishedResource;
 /** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
 export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;

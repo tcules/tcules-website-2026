@@ -9,6 +9,8 @@ import { jsonLdMarkup } from '@/lib/json-ld';
 import { servicePath } from '@/lib/routes';
 import { PublishedService } from '@/templates/CorpusPage/PublishedService';
 
+import { withShareImage } from '@/app/_og';
+
 /**
  * `/services/{slug}`: a Service from the new CMS, by its full relative slug (`product-design`,
  * `product-design/ux-research`). Its words, sections, order and variants are the CMS's; its SEO is the
@@ -47,7 +49,7 @@ export async function generateMetadata({
         robots: { index: false, follow: false },
       };
     }
-    return (await getPageSeo(service.route)).metadata;
+    return await withShareImage((await getPageSeo(service.route)).metadata, service.route);
   } catch {
     return {
       title: 'Service temporarily unavailable | Tcules',
