@@ -336,41 +336,48 @@ Jatin's explicit sign-off on the reduced type size.
 
 ## Stage 3 — Slice 1: `/services/product-design`
 
-- [ ] **3.1** Semantic section view models in `src/content/types.ts`: Situation, Capability set,
+Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
+
+- [-] **3.1** Semantic section view models in `src/content/types.ts`: Situation, Capability set,
       Mechanism, Proof, FAQ, Related, Enquiry. Shape them as the components' content props, not
       after today's Strapi response. Keep the adapter in `sources/strapi/service.ts` as thin as it can be
       while the page still renders. Anything that doesn't map cleanly goes on `docs/strapi-changes.md`
       and isn't solved here.
-- [ ] **3.2** `ServicePage` template in `src/templates/` + the section renderer. Design the no-visual
+- [-] **3.2** `ServicePage` template in `src/templates/` + the section renderer. Design the no-visual
       state first (from the dropped 1.2): it is what most pages ship in.
-- [ ] **3.3** Route down to composition only (~50 lines).
-- [ ] **3.4** SEO/meta helper: unique title and description, canonical, social image, robots. No
+- [-] **3.3** Route down to composition only (~50 lines).
+- [-] **3.4** SEO/meta helper: unique title and description, canonical, social image, robots. No
       FAQPage schema. Analytics hooks at component boundaries (CTA to contact, form start/error/complete,
       case-study clicks). The handoff lists both as "build now", so the first slice ships with them.
-- [ ] **3.5** Handoff acceptance checks + Copy × UI review on the real page. The first two checks
+- [-] **3.5** Handoff acceptance checks + Copy × UI review on the real page. The first two checks
       matter most: changing copy or proof needs no code change, and reordering an allowed section
       needs no schema change.
 
 ## Stage 4 — Slice 2: `/audits/design-to-code-audit`
 
-- [ ] **4.1** Reuse Stage 3. New only where an audit genuinely differs: what's examined, the deliverable, the boundary.
-- [ ] **4.2** Count the new components it needed. More than two means Stage 3's sections were too
+Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
+
+- [-] **4.1** Reuse Stage 3. New only where an audit genuinely differs: what's examined, the deliverable, the boundary.
+- [-] **4.2** Count the new components it needed. More than two means Stage 3's sections were too
       specific: fix them before going on.
 
 ## Stage 5 — Slice 3: ConnectX case study
 
-- [ ] **5.1** Reusable records as view models: Client, Testimonial, Case Study, Proof/Metric, Media.
-- [ ] **5.2** Proof and logo strips reference records instead of copying text.
-- [ ] **5.3** Case-study template: artefacts, outcomes with their evidence state, related work.
+Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
+
+- [-] **5.1** Reusable records as view models: Client, Testimonial, Case Study, Proof/Metric, Media.
+- [-] **5.2** Proof and logo strips reference records instead of copying text.
+- [-] **5.3** Case-study template: artefacts, outcomes with their evidence state, related work.
 
 ## Stage 6 — Rollout and plumbing
 
-- [ ] **6.1** Remaining services, audits and expertise onto the templates.
+- [-] **6.1** Remaining services, audits and expertise onto the templates. Dropped: not relevant (owner, 5 Nov 2026).
 - [-] **6.2** Draft preview, and an empty optional section renders nothing. Dropped: not needed (owner, 4 Nov 2026).
-- [~] **6.3** Ongoing, not a one-off task (owner, 4 Nov 2026). Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
+- [-] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya. Dropped: not relevant (owner, 5 Nov 2026).
 - [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
       launch (owner, 4 Nov 2026).
-- [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
+- [~] **6.5** Responsive check across the site (owner, 31 Oct). How to review it, the widths and the 19 pages
+      that cover every responsive behaviour: `docs/responsive-check.md` (`npm run responsive:census`). Two concerns to test at 1440, 1024, 768
       and 390 before changing anything:
       - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
         most of all at the `-t` / `-m` steps where titles step down. Size and line height change together
