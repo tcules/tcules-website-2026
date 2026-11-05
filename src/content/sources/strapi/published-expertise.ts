@@ -62,6 +62,7 @@ export const getPublishedExpertise = cache(
       PUBLISHED_EXPERTISE_QUERY,
       'PublishedExpertise',
       { slug },
+      { optionalImagePaths: ['expertises.*.hero.media.file'] },
     );
     const expertise = expertises.find((entry) => entry.slug === slug);
     if (!expertise) return null;

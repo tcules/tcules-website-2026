@@ -757,6 +757,7 @@ export const getPublishedService = cache(
       PUBLISHED_SERVICE_QUERY,
       'PublishedService',
       { slug },
+      { optionalImagePaths: ['services.*.hero.media.file'] },
     );
     const service = services.find((entry) => entry.slug === slug);
     if (!service) return null;

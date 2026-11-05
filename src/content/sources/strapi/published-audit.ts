@@ -429,6 +429,7 @@ export const getPublishedAudit = cache(
       PUBLISHED_AUDIT_QUERY,
       'PublishedAudit',
       { slug },
+      { optionalImagePaths: ['audits.*.hero.media.file'] },
     );
     const audit = audits.find((entry) => entry.slug === slug);
     if (!audit) return null;
