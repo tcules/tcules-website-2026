@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getPageSeo, getPublishedAuthorMasterPage } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-import { PublishedAuthorMaster } from '@/templates/ListingIndex/PublishedAuthorMaster';
+import { PublishedAuthorMaster } from '@/templates/CorpusPage/PublishedAuthorMaster';
 
 export const revalidate = 300;
 

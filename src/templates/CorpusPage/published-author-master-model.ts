@@ -1,5 +1,5 @@
 import type { ProfileCardProps } from '@/patterns/ProfileCard/ProfileCard';
-import type { HomeHero, HomeSection } from '@/templates/CorpusPage/published-home-model';
+import type { HomeHero, HomeSection } from './published-home-model';
 
 export type AuthorMasterSection =
   | {

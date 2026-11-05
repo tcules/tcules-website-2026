@@ -4,7 +4,7 @@ import { authorPath, ROUTES } from '@/lib/routes';
 import type {
   AuthorMasterPage,
   AuthorMasterSection,
-} from '@/templates/ListingIndex/published-author-master-model';
+} from '@/templates/CorpusPage/published-author-master-model';
 
 import { mapBand, mapHero, rows, text } from './home';
 import type { CmsHero, CmsHomeSection, Entries } from './home-types';
