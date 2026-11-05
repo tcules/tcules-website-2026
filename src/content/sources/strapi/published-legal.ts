@@ -10,6 +10,8 @@ import { slugify } from '../corpus/parse-body';
 import { rows, text } from './home';
 import type { CmsHero, Entries } from './home-types';
 import {
+  PUBLISHED_COOKIE_POLICY_COMPUTED_SEO_QUERY,
+  PUBLISHED_COOKIE_POLICY_QUERY,
   PUBLISHED_PRIVACY_POLICY_QUERY,
   PUBLISHED_TERMS_OF_USE_QUERY,
 } from './published-legal-query';
@@ -213,4 +215,45 @@ export const getPublishedTermsOfUse = cache(async (): Promise<LegalPage | null> 
     seoSettings: ResourceSeoSettings | null;
   }>(PUBLISHED_TERMS_OF_USE_QUERY, 'PublishedTermsOfUse');
   return termsOfUse ? mapLegal(termsOfUse, seoSettings, ROUTES.terms) : null;
+});
+
+/**
+ * The published Cookie Policy (`/cookie-policy`), or null when none is published. The CMS computes
+ * `seo.robot` and `seo.structuredData` and fails on an entry with no canonical URL, so they are read
+ * on their own: when that read fails the page keeps its document and the rest of its SEO (robots then
+ * come from `seo.technical` under the indexing gate, as `entrySeo` already does), with a warning.
+ */
+export const getPublishedCookiePolicy = cache(async (): Promise<LegalPage | null> => {
+  const [{ cookiePolicy, seoSettings }, computed] = await Promise.all([
+    publicGraphql<{
+      cookiePolicy:
+        | (Omit<CmsLegal, 'seo'> & {
+            seo: Omit<ResourceSeo, 'robot' | 'structuredData'> | null;
+          })
+        | null;
+      seoSettings: ResourceSeoSettings | null;
+    }>(PUBLISHED_COOKIE_POLICY_QUERY, 'PublishedCookiePolicy'),
+    publicGraphql<{
+      cookiePolicy: { seo: Pick<ResourceSeo, 'robot' | 'structuredData'> | null } | null;
+    }>(PUBLISHED_COOKIE_POLICY_COMPUTED_SEO_QUERY, 'PublishedCookiePolicySeo').catch(
+      (error) => {
+        console.warn(
+          `New CMS ${ROUTES.cookiePolicy}: computed SEO (robot, structuredData) unavailable — ${
+            error instanceof Error ? error.message : error
+          }`,
+        );
+        return null;
+      },
+    ),
+  ]);
+  if (!cookiePolicy) return null;
+  const extra = computed?.cookiePolicy?.seo;
+  const seo: ResourceSeo | null = cookiePolicy.seo
+    ? {
+        ...cookiePolicy.seo,
+        robot: extra?.robot ?? null,
+        structuredData: extra?.structuredData ?? null,
+      }
+    : null;
+  return mapLegal({ ...cookiePolicy, seo }, seoSettings, ROUTES.cookiePolicy);
 });

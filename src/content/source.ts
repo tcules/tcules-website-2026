@@ -1,4 +1,4 @@
-import { getPublishedWhy } from './sources/strapi/published-why';
+import{getPublishedWhy}from'./sources/strapi/published-why';
 import { getPublishedMatter } from './sources/strapi/published-matter';
 import { getPublishedCareers } from './sources/strapi/published-careers';
 import { getPublishedLab, getPublishedLabJoin } from './sources/strapi/published-lab';
@@ -52,6 +52,7 @@ import { getPublishedTool, listPublishedToolSlugs } from './sources/strapi/publi
 import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
 import {
+  getPublishedCookiePolicy,
   getPublishedPrivacyPolicy,
   getPublishedTermsOfUse,
 } from './sources/strapi/published-legal';
@@ -180,6 +181,8 @@ export const getResourceDetail = getPublishedResource;
 /** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
 export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;
 export const getTermsOfUseDocument = getPublishedTermsOfUse;
+/** `/cookie-policy`: the Cookie Policy single type on the new CMS, with its SEO. */
+export const getCookiePolicyDocument = getPublishedCookiePolicy;
 export const getAuthorDetail = getPublishedAuthor;
 /** A Glossary record (`/glossary/{slug}`) as the term page's view model, and its CMS SEO. */
 export const getGlossaryDetail = getPublishedGlossary;
@@ -540,4 +543,4 @@ export const getPublishedCareersPage = getPublishedCareers;
 
 export const getPublishedMatterPage = getPublishedMatter;
 
-export const getPublishedWhyPage = getPublishedWhy;
+export const getPublishedWhyPage=getPublishedWhy;

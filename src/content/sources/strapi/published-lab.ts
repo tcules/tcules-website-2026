@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import type { LabPage, LabSection } from '@/templates/CorpusPage/published-lab-model';
-import { action, icon, image, illustration, mapHero, rows, text } from './home';
+import { action, actionHref, icon, image, illustration, mapHero, rows, text } from './home';
 import type { CmsAction, CmsHero, CmsIllustration, CmsImage, Entries } from './home-types';
 import { markdownInlineToHtml, markdownToHtml } from './markdown';
 import { richTextToHtml } from './rich-text';
@@ -53,6 +53,8 @@ type CmsSection = {
   }>;
   isEnabled?: boolean;
   ctaType: Text;
+  eyebrow?: Text;
+  points?: Entries<{ text: Text }>;
   disclaimer: Text;
   island?: 'blue' | 'ink';
   button?: CmsAction;
@@ -67,6 +69,8 @@ type CmsSection = {
     writeTo: Text;
     submitLabel: Text;
     caption: Text;
+    replyLabel: Text;
+    scheduleHref: Text;
     successHeading: Text;
     successBody: Text;
     nextStepsHeading: Text;
@@ -241,7 +245,12 @@ export function mapLabPage(
             ...head,
             type: 'cta',
             presentation,
+            eyebrow: text(section.eyebrow),
             body: paragraphs(section.description),
+            points: rows(section.points).flatMap((point) => {
+              const label = text(point.text);
+              return label ? [{ label }] : [];
+            }),
             button: action(section.button),
             media: image(section.media),
             footnote: text(section.disclaimer),
@@ -264,6 +273,8 @@ export function mapLabPage(
                   writeTo: text(form.writeTo),
                   submitLabel: text(form.submitLabel),
                   caption: text(form.caption),
+                  reply: text(form.replyLabel),
+                  scheduleHref: actionHref(form.scheduleHref),
                   success:
                     form.successHeading && form.successBody
                       ? { heading: form.successHeading, body: form.successBody }

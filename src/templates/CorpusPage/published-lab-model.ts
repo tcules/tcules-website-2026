@@ -49,7 +49,10 @@ export type LabSection = Head &
       }
     | {
         type: 'cta';
+        eyebrow?: string;
         body: [string] | [string, string];
+        /** The CMS's short claims under the ask, in order (CtaSection `points`). */
+        points: { label: string }[];
         presentation: 'paired-island' | 'button-island' | 'form-island';
         button?: HomeAction;
         second?: { id?: string; heading: string; body: [string]; action: HomeAction };
@@ -64,6 +67,9 @@ export type LabSection = Head &
           writeTo?: string;
           submitLabel?: string;
           caption?: string;
+          /** The promise beside the send (the card dress's `reply`). Absent, the form's own line. */
+          reply?: string;
+          scheduleHref?: string;
           success?: { heading: string; body: string };
           nextStepsHeading?: string;
           nextSteps: { label: string; detail: string }[];

@@ -4,8 +4,12 @@ import { PUBLISHED_HERO } from './published-page-fields';
  * The legal pages' fields, the same on each single type: the Hero, the "last updated" date, the
  * Editorial Sections in order (each a run of flow blocks: Markdown prose, tables, lists, callouts),
  * the entry's own SEO, and the site's SEO settings (the public indexing gate, the site's name).
+ *
+ * `computedSeo: false` leaves out `seo.robot` and `seo.structuredData`: the CMS computes both and,
+ * on an entry with no canonical URL, its resolver throws (`Invalid URL`), failing the whole read.
+ * The Cookie Policy reads them in a separate best-effort query instead (5 Nov 2026).
  */
-const LEGAL_FIELDS = `
+const legalFields = (computedSeo = true) => `
     documentId lastUpdated
 ${PUBLISHED_HERO}
     sections {
@@ -15,7 +19,7 @@ ${PUBLISHED_HERO}
       blocks { ...LegalFlow }
     }
     seo {
-      metaTitle metaDescription canonicalURL robot structuredData focusString
+      metaTitle metaDescription canonicalURL${computedSeo ? ' robot structuredData' : ''} focusString
       secondaryKeywords { text }
       openGraph { title description imageAlt type url siteName locale image { url width height alternativeText } }
       twitter { title description imageAlt card siteHandle creatorHandle image { url width height alternativeText } }
@@ -52,7 +56,7 @@ fragment PublishedImage on ComponentContentImage {
 export const PUBLISHED_PRIVACY_POLICY_QUERY = `
 query PublishedPrivacyPolicy {
   privacyPolicy(status: PUBLISHED) {
-${LEGAL_FIELDS}
+${legalFields()}
   }
   seoSettings { ...LegalSeoSettings }
 }
@@ -63,9 +67,29 @@ ${LEGAL_FRAGMENTS}
 export const PUBLISHED_TERMS_OF_USE_QUERY = `
 query PublishedTermsOfUse {
   termsOfUse(status: PUBLISHED) {
-${LEGAL_FIELDS}
+${legalFields()}
   }
   seoSettings { ...LegalSeoSettings }
 }
 ${LEGAL_FRAGMENTS}
+`;
+
+/** The published Cookie Policy (`/cookie-policy`), without the CMS-computed SEO fields. */
+export const PUBLISHED_COOKIE_POLICY_QUERY = `
+query PublishedCookiePolicy {
+  cookiePolicy(status: PUBLISHED) {
+${legalFields(false)}
+  }
+  seoSettings { ...LegalSeoSettings }
+}
+${LEGAL_FRAGMENTS}
+`;
+
+/** The Cookie Policy's CMS-computed robots line and structured data, read on their own. */
+export const PUBLISHED_COOKIE_POLICY_COMPUTED_SEO_QUERY = `
+query PublishedCookiePolicySeo {
+  cookiePolicy(status: PUBLISHED) {
+    seo { robot structuredData }
+  }
+}
 `;

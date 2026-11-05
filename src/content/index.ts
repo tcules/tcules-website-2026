@@ -41,6 +41,7 @@ export {
   getResourceDetail,
   getPrivacyPolicyDocument,
   getTermsOfUseDocument,
+  getCookiePolicyDocument,
   getAuthorDetail,
   getGlossaryDetail,
   getGlossaryDetailSeo,

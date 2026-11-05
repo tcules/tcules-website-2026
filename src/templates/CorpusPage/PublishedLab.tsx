@@ -12,9 +12,27 @@ import {
   ProcessFlow,
   Steps,
 } from '@/patterns';
+import type { HeroMedia } from '@/patterns';
 import { ENDPOINTS } from '@/lib/routes';
+import { offerSceneKey, type OfferScenes, type SketchName } from '@/lib/sketches';
 import { PublishedHero } from './PublishedHome';
 import type { LabArt, LabPage, LabSection } from './published-lab-model';
+
+/**
+ * Drawings: the CMS's illustration wins. Where a section or item has none, the drawing the frontend
+ * already assigns to it (`scenes`, by band id and item title, or the band's one `figure`) stands in.
+ * Illustrations are the only fallback; every word comes from the CMS.
+ */
+function sceneFor(scenes: OfferScenes | undefined, bandId: string | undefined, key: string) {
+  const items = bandId ? scenes?.items[bandId] : undefined;
+  return (items?.[offerSceneKey(key)] ?? items?.[key]) as SketchName | undefined;
+}
+function withFallback(
+  art: LabArt | undefined,
+  scene: SketchName | undefined,
+): LabArt | undefined {
+  return art?.image || art?.scene ? art : scene ? { scene } : art;
+}
 function Art({ art }: { art?: LabArt }) {
   return art?.image ? (
     <Media image={art.image} sizes="(min-width: 1024px) 50vw, 90vw" />
@@ -22,9 +40,18 @@ function Art({ art }: { art?: LabArt }) {
     <Sketch name={art.scene} />
   ) : null;
 }
-function LabBand({ section, route }: { section: LabSection; route: LabPage['route'] }) {
+function LabBand({
+  section,
+  route,
+  scenes,
+}: {
+  section: LabSection;
+  route: LabPage['route'];
+  scenes?: OfferScenes;
+}) {
   const { id, heading, headingId, surface } = section,
     head = { id, heading, headingId, surface };
+  const figure = sceneFor(scenes, id, 'figure');
   switch (section.type) {
     case 'split-list':
       return (
@@ -57,7 +84,7 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
             {...head}
             data-band="C-text"
             arrangement="media"
-            media={{ drawing: <Art art={section.art} />, head: 'lg' }}
+            media={{ drawing: <Art art={withFallback(section.art, figure)} />, head: 'lg' }}
           >
             {blocks}
           </ContentSection>
@@ -103,7 +130,7 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
                 body: entry.body,
                 href: entry.href,
                 action: entry.action,
-                scene: entry.art?.scene,
+                scene: withFallback(entry.art, sceneFor(scenes, id, entry.title))?.scene,
                 picture: entry.art?.image ? <Art art={entry.art} /> : undefined,
               }))}
             />
@@ -140,7 +167,7 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
               align="center"
             >
               <Steps steps={section.stages} />
-              <Art art={section.art} />
+              <Art art={withFallback(section.art, figure)} />
             </Layout>
           </Layout>
         </ContentSection>
@@ -170,7 +197,9 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
           <CtaSection
             {...head}
             data-band="L"
+            eyebrow={section.eyebrow}
             body={section.body}
+            points={section.points.length > 0 ? section.points : undefined}
             island={section.island}
             islandArrangement="halves"
             islandTexture="flow"
@@ -202,10 +231,16 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
                 urlLabel={form.urlLabel}
                 urlRequired={form.urlRequired}
                 action={ENDPOINTS.enquiry}
-                dress={{ kind: 'card', writeTo: form.writeTo }}
+                dress={{
+                  kind: 'card',
+                  writeTo: form.writeTo,
+                  ...(form.reply ? { reply: form.reply } : {}),
+                }}
+                scheduleHref={form.scheduleHref}
                 fieldScale="md"
                 submit="inline"
                 submitLabel={form.submitLabel}
+                {...(form.caption ? { caption: form.caption } : {})}
                 success={form.success}
                 nextSteps={form.nextSteps}
                 context={{
@@ -227,7 +262,9 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
           data-band="L"
           arrangement="open"
           intent={section.presentation === 'button-island' ? 'onward' : undefined}
+          eyebrow={section.eyebrow}
           body={section.body}
+          points={section.points.length > 0 ? section.points : undefined}
           actions={[section.button]}
           second={section.second}
         />
@@ -235,12 +272,22 @@ function LabBand({ section, route }: { section: LabSection; route: LabPage['rout
     }
   }
 }
-export function PublishedLab({ page }: { page: LabPage }) {
+export function PublishedLab({
+  page,
+  scenes,
+  fallbackMedia,
+}: {
+  page: LabPage;
+  /** The drawings the frontend assigns to the route's items, for items the CMS gives none. */
+  scenes?: OfferScenes;
+  /** The route's own hero illustration, for a hero whose CMS entry has no media. */
+  fallbackMedia?: HeroMedia;
+}) {
   return (
     <>
-      <PublishedHero hero={page.hero} />
+      <PublishedHero hero={page.hero} fallbackMedia={fallbackMedia} />
       {page.sections.map((section) => (
-        <LabBand key={section.key} section={section} route={page.route} />
+        <LabBand key={section.key} section={section} route={page.route} scenes={scenes} />
       ))}
     </>
   );

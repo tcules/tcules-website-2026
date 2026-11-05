@@ -11,9 +11,14 @@ fragment LabIllustration on ComponentContentIllustration {
 }
 fragment LabHero on ComponentSharedSharedHeroSection {
   title description secondaryDescription eyebrow arrangement
+  additionalParagraphs { text }
   breadcrumbs { label href }
   actions { ...LabAction }
+  actionsNote tags { text } stats { label body }
   media { ...LabImage }
+  illustration { ...LabIllustration }
+  scene { scene title }
+  clip { title description wide { sources { url mime } poster { url } } tall { sources { url mime } poster { url } } }
 }
 fragment LabEditorial on ComponentSharedEditorialSection {
   id
@@ -59,6 +64,7 @@ fragment LabCta on ComponentSharedCta {
   id
   heading description eyebrow disclaimer anchorId ctaSurface: surface ctaMediaSide: mediaSide
   isEnabled ctaType ctaPresentation: presentation island
+  points { text }
   media { ...LabImage }
   button { ...LabAction }
   second { heading description anchorId button { ...LabAction } }

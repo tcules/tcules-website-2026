@@ -1,42 +1,44 @@
-export const MATTER_QUERY = `query PublishedMatter {
-  page:matterDesignSystem(status: PUBLISHED) {
+import { PUBLISHED_CTA, PUBLISHED_FAQSECTION, PUBLISHED_HERO } from './published-page-fields';
+import { SHARED_SECTION_FRAGMENTS } from './published-service-query';
+
+/**
+ * The published Matter Design System single type (`/matter-design-system`): the shared Hero (with
+ * the phone rendition of its picture, which only this type carries), then every member of its
+ * Dynamic Zone in the editor's order. The Offer Sheet reads its pictures and its list entries, which
+ * the shared Offer Sheet fragment does not; the editorial body is the shared flow so a table, list or
+ * callout an editor adds is read too; the CTA and FAQ are the shared members.
+ */
+export const MATTER_QUERY = `
+query PublishedMatter {
+  page: matterDesignSystem(status: PUBLISHED) {
     documentId routePath
-    hero {
-      title description arrangement
-      breadcrumbs { label href }
-      actions { name href isExternal }
-      media { ...MatterImage }
-      mobileMedia { ...MatterImage }
-    }
+${PUBLISHED_HERO}
+    hero { mobileMedia { ...PublishedImage } }
     content {
       __typename
       ... on ComponentSharedOfferSheetSection {
-        heading description anchorId sheetPresentation: presentation
-        cards { variant title description descriptionRich scene image { ...MatterImage } }
-        listEntries { title body icon }
+        id heading description anchorId offerSurface: surface sheetPresentation: presentation
+        cards { id variant title description descriptionRich scene image { ...PublishedImage } }
+        listEntries { id title body icon }
       }
       ... on ComponentSharedEditorialSection {
-        heading anchorId editorialPresentation: presentation mediaFit
-        media { ...MatterImage }
-        blocks { kind prose { body } }
+        id heading anchorId editorialSurface: surface editorialSide: mediaSide
+        editorialPresentation: presentation mediaFit
+        media { ...PublishedImage }
+        blocks { ...ServiceFlow }
       }
       ... on ComponentSharedServiceCard {
-        heading description anchorId variant
-        singleGridContent { title description href illustration { source scene image { ...MatterImage } } service { documentId name slug publishedAt } }
+        id heading description anchorId variant serviceSurface: surface
+        singleGridContent {
+          id title description href
+          illustration { ...ServiceIllustration }
+          service { documentId name slug }
+        }
       }
-      ... on ComponentSharedCta {
-        media { ...MatterImage }
-        heading description anchorId ctaType ctaPresentation: presentation island
-        form { variant submitLabel caption replyLabel urlLabel successHeading successBody }
-      }
-      ... on ComponentSharedFaqSection {
-        heading anchorId faqs { documentId question answer slug isActive publishedAt }
-      }
+${PUBLISHED_CTA}
+${PUBLISHED_FAQSECTION}
     }
   }
 }
-fragment MatterImage on ComponentContentImage {
-  altText kind panel shadow focusX focusY
-  file { documentId url width height alternativeText formats mime }
-}
+${SHARED_SECTION_FRAGMENTS}
 `;
