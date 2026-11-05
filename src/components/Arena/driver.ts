@@ -139,12 +139,14 @@ export type ArenaOptions = {
   still: boolean;
   /** The square cut: the camera holds on the studio floor rather than the whole app. */
   phone: boolean;
+  /** The hero is stacked (below 1024): no copy beside it, so the wide cut centres on the floor. */
+  stacked: boolean;
 };
 
 export function startArena(
   stage: HTMLElement,
   svg: SVGSVGElement,
-  { still: startStill, phone }: ArenaOptions,
+  { still: startStill, phone, stacked }: ArenaOptions,
 ): ArenaDriver {
   const $ = (id: string) => svg.querySelector<SVGGraphicsElement>(`#arena-${id}`);
   const need = (id: string) => {
@@ -408,7 +410,10 @@ export function startArena(
         k: Math.min(720 / (cb.width + 120), 720 / (cb.height + 170)),
       }
     : {
-        cx: bb.x + bb.width / 2 + 6,
+        /* Beside the copy the app's own centre; stacked, with nothing beside it, the crews' centre,
+           so the floor sits in the middle of the column (owner, 5 Nov 2026: at 768–1023 it read
+           pushed to the end). */
+        cx: stacked ? cb.x + cb.width / 2 : bb.x + bb.width / 2 + 6,
         cy: bb.y + bb.height / 2 - RISE - 8,
         k: Math.min(1024 / (bb.width - 10), 720 / (bb.height - 5)),
       };

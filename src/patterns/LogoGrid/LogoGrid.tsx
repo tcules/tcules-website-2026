@@ -180,8 +180,13 @@ export type LogoGridProps = {
    * short head). Below 1024 it stacks.
    */
   arrangement?: 'stacked' | 'beside';
-  /** The head's alignment in `stacked`. The grid itself always spans its track. Default `start`. */
-  align?: 'start' | 'center';
+  /**
+   * The head's alignment in `stacked`. The grid itself always spans its track. Default `start`.
+   * `center-narrow` (owner, 5 Nov 2026): centred below 1024, where the wall is two or three marks
+   * across and a start-aligned label read as belonging to something else; start from 1024, on the
+   * page's left edge with every other band's head.
+   */
+  align?: 'start' | 'center' | 'center-narrow';
   /** The track the grid sits in when it is not this unit's own `beside`. Default `full`. */
   track?: LogoGridTrack;
   /**
@@ -238,6 +243,7 @@ export function LogoGrid({
   const compact = density === 'compact';
   const beside = arrangement === 'beside';
   const centred = !beside && align === 'center';
+  const centredNarrow = !beside && align === 'center-narrow';
   const hasHead = Boolean(badge || context || heading || action);
 
   const columns = logoGridColumns(marks.length, beside ? 'body' : track, density);
@@ -277,17 +283,32 @@ export function LogoGrid({
 
   const named = (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
-      {badge}
+      {badge && centredNarrow ? (
+        <Cluster justify={{ base: 'center', lg: 'start' }}>{badge}</Cluster>
+      ) : (
+        badge
+      )}
       {context ? (
         <Context
           id={heading ? undefined : headingId}
-          className={cx(styles.context, centred && styles.centred)}
+          className={cx(
+            styles.context,
+            centred && styles.centred,
+            centredNarrow && styles.centredNarrow,
+          )}
         >
           {context}
         </Context>
       ) : null}
       {heading ? (
-        <h2 id={headingId} className={cx(styles.heading, centred && styles.centred)}>
+        <h2
+          id={headingId}
+          className={cx(
+            styles.heading,
+            centred && styles.centred,
+            centredNarrow && styles.centredNarrow,
+          )}
+        >
           {heading}
         </h2>
       ) : null}
