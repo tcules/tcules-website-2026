@@ -68,7 +68,7 @@ export type ShareCard = {
  * Bumped on a redesign of the card itself. A change of CONTENT (a new drawing, a new title) changes
  * the URL on its own through the content hash in the id; this marks a change of the design.
  */
-const VERSION = 'v02';
+const VERSION = 'v03';
 
 /**
  * Per kind: the ground (C4: paper for detail pages and home, paper-deep for the evergreen listings),

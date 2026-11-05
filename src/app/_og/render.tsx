@@ -141,10 +141,13 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
      A drawing takes no frame (below). */
   const person = card.initials !== null || media?.kind === 'portrait';
   const video = card.source === 'video';
-  const FRAME_W = person ? FACE : video ? VIDEO_W : W - SPLIT - M;
+  /* A case cover runs from the words' column (unmoved) off the card's right edge: as large as the
+     card allows without cropping the cover or moving the title (owner, 5 Nov 2026). */
+  const bleed = card.kind === 'case' && media?.kind === 'capture';
+  const FRAME_W = person ? FACE : video ? VIDEO_W : bleed ? W - (M + 8 + COLUMN + SEAM) : W - SPLIT - M;
   const FRAME_H = person ? FACE : Math.round((FRAME_W * 9) / 16);
   const frame = {
-    left: px(W - M - FRAME_W),
+    left: px(bleed ? W - FRAME_W : W - M - FRAME_W),
     top: px((H - FRAME_H) / 2),
     width: px(FRAME_W),
     height: px(FRAME_H),
@@ -154,7 +157,8 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
     position: 'absolute',
     ...frame,
     display: 'flex',
-    borderRadius: px(ink.mediaRadius),
+    /* Rounded where it sits on the paper; square where it leaves the card. */
+    borderRadius: bleed ? `${px(ink.mediaRadius)}px 0 0 ${px(ink.mediaRadius)}px` : px(ink.mediaRadius),
     overflow: 'hidden',
   };
 

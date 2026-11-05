@@ -241,7 +241,14 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
       subtitle: person.role ?? null,
       ...(photo
         ? {
-            media: { kind: 'portrait' as const, ...photo, focus: PORTRAIT_FOCUS },
+            /* Only the picture's own facts: an image record's `kind` must not overwrite the card's. */
+            media: {
+              kind: 'portrait' as const,
+              src: photo.src,
+              width: photo.width,
+              height: photo.height,
+              focus: PORTRAIT_FOCUS,
+            },
             source: 'portrait' as const,
             fingerprint: photo.src,
           }
