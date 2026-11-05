@@ -299,6 +299,10 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+      No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
+      84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
+      drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
+      layout (owner, 5 Nov). Still open: auditing existing tile drawings against the four patterns.
 - [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
       what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
       the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
