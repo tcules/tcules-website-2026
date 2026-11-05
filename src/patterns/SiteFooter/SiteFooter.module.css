@@ -64,19 +64,6 @@
   min-inline-size: 0;
 }
 
-/* Shrink-to-fit and pushed to the end of its own track, so the action is as wide as the button
-   rather than as wide as the space left over. `justify-items` because a Layout is a grid — this
-   aligns the button and the badge within it, and they are different widths. */
-.brandAction {
-  justify-items: start;
-}
-
-@media (min-width: 768px) {
-  .brandAction {
-    justify-items: end;
-  }
-}
-
 /* The tagline is the only line in the footer at --text-lead, and on the ink surface it is the only
    one at full white. That is the band's visual weight, and it is scale and colour rather than a
    box: the lede measure holds it to 40ch so it breaks as a statement rather than running the

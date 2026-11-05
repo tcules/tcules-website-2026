@@ -102,7 +102,9 @@ export function SiteFooter({
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
-          <Layout className={styles.brandAction} rowGap="block" align="center">
+          {/* Shrink-to-fit, so the action is as wide as the button rather than the track: under
+              the tagline at the start on a phone, pushed to the end of its track from md. */}
+          <Layout rowGap="block" align="center" justifyItems={{ base: 'start', md: 'end' }}>
             {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
                 lede line makes two things compete for the same job, and the badge under it reads
                 as a caption to a smaller control rather than an equal to a larger one. */}
