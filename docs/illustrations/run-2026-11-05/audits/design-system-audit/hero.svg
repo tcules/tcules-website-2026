@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-420 -296 862 567" role="img" aria-label="Isometric illustration for a design system audit. Three plates are stacked on a dotted floor: a design file at the bottom, a solid blue code library in the middle and the live product on top. One button sits in the same place on each, joined by a dashed thread. On the live product that place is empty, and beside it the team's own copy of the button, lit in lime, has an extra arrow the library's button lacks. A Tcules person and a client stand beside the stack, the Tcules person pointing up at the copy.">
+<defs><pattern id="dsa-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="#0048FF" fill-opacity="0.38"/></pattern></defs>
+<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->
+<g transform="matrix(0.9 0.45 -0.9 0.45 -53.1 -157.9)"><rect width="545" height="402" fill="url(#dsa-dots)"/><rect width="545" height="402" fill="none" stroke="#0048FF" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="45" y="45" width="455" height="312" fill="#0048FF" fill-opacity="0.07"/></g>
+<!-- The design file: a white plate, the button drawn and selected, with its frame around it -->
+<polygon points="-184.2,32.3 -183.9,30.7 -183.2,29.1 -181.9,27.7 -180.3,26.3 -178.2,25.1 -21.6,-53.2 -19.2,-54.2 -16.4,-55.1 -13.5,-55.7 -10.4,-56.1 -7.2,-56.2 -4,-56.1 -0.9,-55.7 2,-55.1 4.8,-54.2 7.2,-53.2 198,42.2 200.1,43.4 201.8,44.8 203,46.2 203.7,47.8 204,49.4 204,59.4 203.7,61 203,62.5 201.8,64 200.1,65.4 198,66.6 41.4,144.9 39,145.9 36.2,146.8 33.3,147.4 30.2,147.8 27,147.9 23.8,147.8 20.7,147.4 17.8,146.8 15,145.9 12.6,144.9 -178.2,49.5 -180.3,48.3 -181.9,46.9 -183.2,45.5 -183.9,43.9 -184.2,42.3" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-184.2,32.3 -183.9,30.7 -183.2,29.1 -181.9,27.7 -180.3,26.3 -178.2,25.1 41.4,134.9 41.4,144.9 39,145.9 36.2,146.8 33.3,147.4 30.2,147.8 27,147.9 23.8,147.8 20.7,147.4 17.8,146.8 15,145.9 12.6,144.9 -178.2,49.5 -180.3,48.3 -181.9,46.9 -183.2,45.5 -183.9,43.9 -184.2,42.3" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="198,42.2 200.1,43.4 201.7,44.8 203,46.3 203.7,47.8 204,49.4 203.7,51 203,52.5 201.7,54 200.1,55.4 198,56.6 41.4,134.9 39,135.9 36.2,136.8 33.3,137.4 30.2,137.8 27,137.9 23.8,137.8 20.7,137.4 17.8,136.8 15,135.9 12.6,134.9 -178.2,39.5 -180.3,38.3 -181.9,36.9 -183.2,35.4 -183.9,33.9 -184.2,32.3 -183.9,30.7 -183.2,29.2 -181.9,27.7 -180.3,26.3 -178.2,25.1 -21.6,-53.2 -19.2,-54.2 -16.4,-55.1 -13.5,-55.7 -10.4,-56.1 -7.2,-56.2 -4,-56.1 -0.9,-55.7 2,-55.1 4.8,-54.2 7.2,-53.2" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 -7.2 -60.4)">
+<rect x="90" y="104" width="128" height="82" rx="6" fill="#EEF2FF" stroke="#8AA5FF" stroke-width="1.2"/>
+<rect x="102" y="116" width="54" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="114" y="135" width="92" height="30" rx="15" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.4"/>
+<rect x="144" y="146.5" width="32" height="7" rx="3.5" fill="#8AA5FF"/>
+<rect x="108" y="129" width="104" height="42" fill="none" stroke="#0048FF" stroke-width="1"/>
+<rect x="104.5" y="125.5" width="7" height="7" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2"/>
+<rect x="208.5" y="125.5" width="7" height="7" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2"/>
+<rect x="104.5" y="167.5" width="7" height="7" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2"/>
+<rect x="208.5" y="167.5" width="7" height="7" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2"/>
+</g>
+<path d="M-184 32.3 L-184 -75.7" stroke="#8AA5FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<path d="M203.8 49.4 L203.8 -58.6" stroke="#8AA5FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<path d="M1.8 79.1 L1.8 -28.9" stroke="#0048FF" stroke-width="1.6" stroke-dasharray="5 5" stroke-linecap="round"/>
+<circle cx="1.8" cy="79.1" r="3.4" fill="#0048FF"/>
+<!-- The code library: the solid blue plate, the code brackets, and the library button in its place -->
+<polygon points="-184.2,-85.7 -183.9,-87.3 -183.2,-88.8 -181.9,-90.3 -180.3,-91.7 -178.2,-92.9 -21.6,-171.2 -19.2,-172.2 -16.4,-173.1 -13.5,-173.7 -10.4,-174.1 -7.2,-174.2 -4,-174.1 -0.9,-173.7 2,-173.1 4.8,-172.2 7.2,-171.2 198,-75.8 200.1,-74.6 201.8,-73.2 203,-71.8 203.7,-70.2 204,-68.6 204,-58.6 203.7,-57 203,-55.5 201.8,-54 200.1,-52.6 198,-51.4 41.4,26.9 39,27.9 36.2,28.8 33.3,29.4 30.2,29.8 27,29.9 23.8,29.8 20.7,29.4 17.8,28.8 15,27.9 12.6,26.9 -178.2,-68.5 -180.3,-69.7 -181.9,-71.1 -183.2,-72.5 -183.9,-74.1 -184.2,-75.7" fill="#003EE0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-184.2,-85.7 -183.9,-87.3 -183.2,-88.8 -181.9,-90.3 -180.3,-91.7 -178.2,-92.9 41.4,16.9 41.4,26.9 39,27.9 36.2,28.8 33.3,29.4 30.2,29.8 27,29.9 23.8,29.8 20.7,29.4 17.8,28.8 15,27.9 12.6,26.9 -178.2,-68.5 -180.3,-69.7 -181.9,-71.1 -183.2,-72.5 -183.9,-74.1 -184.2,-75.7" fill="#0031B0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="198,-75.8 200.1,-74.6 201.7,-73.2 203,-71.7 203.7,-70.2 204,-68.6 203.7,-67 203,-65.5 201.7,-64 200.1,-62.6 198,-61.4 41.4,16.9 39,17.9 36.2,18.8 33.3,19.4 30.2,19.8 27,19.9 23.8,19.8 20.7,19.4 17.8,18.8 15,17.9 12.6,16.9 -178.2,-78.5 -180.3,-79.7 -181.9,-81.1 -183.2,-82.6 -183.9,-84.1 -184.2,-85.7 -183.9,-87.3 -183.2,-88.8 -181.9,-90.3 -180.3,-91.7 -178.2,-92.9 -21.6,-171.2 -19.2,-172.2 -16.4,-173.1 -13.5,-173.7 -10.4,-174.1 -7.2,-174.2 -4,-174.1 -0.9,-173.7 2,-173.1 4.8,-172.2 7.2,-171.2" fill="#0048FF" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 -7.2 -178.4)">
+<rect x="154" y="58" width="56" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="168" y="72" width="44" height="6" rx="3" fill="#8AA5FF"/>
+<rect x="168" y="86" width="62" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="154" y="100" width="38" height="6" rx="3" fill="#8AA5FF"/>
+<path d="M52 160 L42 172 L52 184 M64 160 L74 172 L64 184" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="114" y="135" width="92" height="30" rx="15" fill="#FFFFFF"/>
+<rect x="144" y="146.5" width="32" height="7" rx="3.5" fill="#0048FF"/>
+</g>
+<path d="M-184 -85.7 L-184 -193.7" stroke="#8AA5FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<path d="M203.8 -68.6 L203.8 -176.6" stroke="#8AA5FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<path d="M1.8 -38.9 L1.8 -146.9" stroke="#0048FF" stroke-width="1.6" stroke-dasharray="5 5" stroke-linecap="round"/>
+<circle cx="1.8" cy="-38.9" r="3.4" fill="#0048FF"/>
+<clipPath id="dsa-blue"><polygon points="198,-75.8 200.1,-74.6 201.7,-73.2 203,-71.7 203.7,-70.2 204,-68.6 203.7,-67 203,-65.5 201.7,-64 200.1,-62.6 198,-61.4 41.4,16.9 39,17.9 36.2,18.8 33.3,19.4 30.2,19.8 27,19.9 23.8,19.8 20.7,19.4 17.8,18.8 15,17.9 12.6,16.9 -178.2,-78.5 -180.3,-79.7 -181.9,-81.1 -183.2,-82.6 -183.9,-84.1 -184.2,-85.7 -183.9,-87.3 -183.2,-88.8 -181.9,-90.3 -180.3,-91.7 -178.2,-92.9 -21.6,-171.2 -19.2,-172.2 -16.4,-173.1 -13.5,-173.7 -10.4,-174.1 -7.2,-174.2 -4,-174.1 -0.9,-173.7 2,-173.1 4.8,-172.2 7.2,-171.2"/></clipPath><path d="M1.8 -53.9 L1.8 -146.9" stroke="#FFFFFF" stroke-width="1.6" stroke-dasharray="5 5" stroke-linecap="round" clip-path="url(#dsa-blue)"/>
+<!-- The live product: a white plate laid out as an app; the button's place is empty and a local copy sits beside it -->
+<polygon points="-184.2,-203.7 -183.9,-205.3 -183.2,-206.8 -181.9,-208.3 -180.3,-209.7 -178.2,-210.9 -21.6,-289.2 -19.2,-290.2 -16.4,-291.1 -13.5,-291.7 -10.4,-292.1 -7.2,-292.2 -4,-292.1 -0.9,-291.7 2,-291.1 4.8,-290.2 7.2,-289.2 198,-193.8 200.1,-192.6 201.8,-191.2 203,-189.8 203.7,-188.2 204,-186.6 204,-176.6 203.7,-175 203,-173.4 201.8,-172 200.1,-170.6 198,-169.4 41.4,-91.1 39,-90.1 36.2,-89.2 33.3,-88.6 30.2,-88.2 27,-88.1 23.8,-88.2 20.7,-88.6 17.8,-89.2 15,-90.1 12.6,-91.1 -178.2,-186.5 -180.3,-187.7 -181.9,-189.1 -183.2,-190.6 -183.9,-192.1 -184.2,-193.7" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-184.2,-203.7 -183.9,-205.3 -183.2,-206.8 -181.9,-208.3 -180.3,-209.7 -178.2,-210.9 41.4,-101.1 41.4,-91.1 39,-90.1 36.2,-89.2 33.3,-88.6 30.2,-88.2 27,-88.1 23.8,-88.2 20.7,-88.6 17.8,-89.2 15,-90.1 12.6,-91.1 -178.2,-186.5 -180.3,-187.7 -181.9,-189.1 -183.2,-190.6 -183.9,-192.1 -184.2,-193.7" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="198,-193.8 200.1,-192.6 201.7,-191.2 203,-189.7 203.7,-188.2 204,-186.6 203.7,-185 203,-183.5 201.7,-182 200.1,-180.6 198,-179.4 41.4,-101.1 39,-100.1 36.2,-99.2 33.3,-98.6 30.2,-98.2 27,-98.1 23.8,-98.2 20.7,-98.6 17.8,-99.2 15,-100.1 12.6,-101.1 -178.2,-196.5 -180.3,-197.7 -181.9,-199.1 -183.2,-200.6 -183.9,-202.1 -184.2,-203.7 -183.9,-205.3 -183.2,-206.8 -181.9,-208.3 -180.3,-209.7 -178.2,-210.9 -21.6,-289.2 -19.2,-290.2 -16.4,-291.1 -13.5,-291.7 -10.4,-292.1 -7.2,-292.2 -4,-292.1 -0.9,-291.7 2,-291.1 4.8,-290.2 7.2,-289.2" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 -7.2 -296.4)">
+<rect x="16" y="16" width="212" height="22" rx="6" fill="#DBE4FF"/>
+<rect x="28" y="24" width="40" height="6" rx="3" fill="#8AA5FF"/>
+<rect x="16" y="50" width="62" height="140" rx="6" fill="#EEF2FF"/>
+<rect x="26" y="64" width="38" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="26" y="80" width="28" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="26" y="96" width="38" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="26" y="112" width="28" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="88" y="52" width="30" height="7" rx="3.5" fill="#B8C8FF"/>
+<rect x="88" y="66" width="22" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="88" y="128" width="30" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="88" y="142" width="24" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="88" y="156" width="28" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="114" y="135" width="92" height="30" rx="15" fill="none" stroke="#0048FF" stroke-width="1.4" stroke-dasharray="4 3"/>
+<circle cx="160" cy="150" r="3.8" fill="#0048FF"/>
+</g>
+<polygon points="35.8,-215.3 36,-216.8 36.7,-218.3 37.9,-219.7 39.5,-221 41.4,-222.1 43.7,-223.1 46.2,-223.9 49,-224.4 51.9,-224.8 54.9,-224.9 57.9,-224.8 60.8,-224.4 63.6,-223.9 66.1,-223.1 68.4,-222.1 124.2,-194.2 126.2,-193.1 127.7,-191.8 128.9,-190.4 129.6,-188.9 129.8,-187.4 129.8,-183.4 129.6,-182 128.9,-180.5 127.7,-179.1 126.2,-177.8 124.2,-176.7 121.9,-175.7 119.4,-174.9 116.6,-174.4 113.7,-174 110.7,-173.9 107.7,-174 104.8,-174.4 102,-174.9 99.5,-175.7 97.2,-176.7 41.4,-204.6 39.5,-205.7 37.9,-207 36.7,-208.4 36,-209.9 35.8,-211.3" fill="#A1B71F" stroke="#A1B71F" stroke-width="1.2" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 -7.2 -300.4)">
+<rect x="114" y="45" width="92" height="30" rx="15" fill="#D7F04A" stroke="#A1B71F" stroke-width="1.2"/>
+<rect x="136" y="56.5" width="32" height="7" rx="3.5" fill="#1B1B18"/>
+<path d="M175 54 L182 60 L175 66" fill="none" stroke="#1B1B18" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path d="M18.9 -165.4 L65.7 -188.8" stroke="#0048FF" stroke-width="1.4" stroke-dasharray="3 4" stroke-linecap="round"/>
+<!-- A Tcules person and a client person at the stack, the Tcules person pointing up at the local copy -->
+<path d="M300.2 105.3 V43.3 A22 22 0 0 1 344.2 43.3 V105.3 A22 9.9 0 0 1 300.2 105.3 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<circle cx="322.2" cy="1.3" r="16" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
+<path d="M244.4 156.6 V94.6 A22 22 0 0 1 288.4 94.6 V156.6 A22 9.9 0 0 1 244.4 156.6 Z" fill="#0048FF" stroke="#FFFFFF" stroke-width="3.4" paint-order="stroke" stroke-linejoin="round"/>
+<circle cx="266.4" cy="52.6" r="16" fill="#0048FF" stroke="#FFFFFF" stroke-width="3.4" paint-order="stroke"/>
+<mask id="dsa-tcules" maskUnits="userSpaceOnUse" x="66.4" y="-103.4" width="400" height="400"><rect x="66.4" y="-103.4" width="400" height="400" fill="#FFFFFF"/><path d="M244.4 156.6 V94.6 A22 22 0 0 1 288.4 94.6 V156.6 A22 9.9 0 0 1 244.4 156.6 Z" fill="#000000"/></mask>
+<g mask="url(#dsa-tcules)"><path d="M258.4 110.6 L227 54.8" stroke="#FFFFFF" stroke-width="14.4" stroke-linecap="round"/><circle cx="227" cy="54.8" r="10.5" fill="#FFFFFF"/></g>
+<path d="M258.4 110.6 L227 54.8" stroke="#0048FF" stroke-width="11" stroke-linecap="round"/><circle cx="227" cy="54.8" r="8.8" fill="#0048FF"/>
+</svg>

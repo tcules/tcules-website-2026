@@ -1,5 +1,5 @@
 import { ILLUSTRATION_LEGENDS } from './illustration-legends';
-import { expertisePath, ROUTES, servicePath } from './routes';
+import { auditPath, expertisePath, ROUTES, servicePath } from './routes';
 
 /**
  * The hero drawings, by route.
@@ -66,6 +66,33 @@ const HERO_ILLUSTRATIONS: Readonly<
   /* The 5 Nov 2026 illustration run (owner-approved the same day; docs/illustrations/run-2026-11-05/):
      the /services, /tools and Lab heroes, and one hero per industry, each built around its object in
      the expertise hub drawing. */
+  /* The audit heroes, children of the /audits hub drawing (owner, 5 Nov 2026: no video came, so the
+     illustration pass ran; docs/illustrations/run-2026-11-05/audits/). The prototype review keeps its film. */
+  [auditPath('ux-product-audit')]: {
+    src: '/illustrations/heroes/audits-ux-product-audit.svg',
+    width: 860,
+    height: 582,
+  },
+  [auditPath('design-system-audit')]: {
+    src: '/illustrations/heroes/audits-design-system-audit.svg',
+    width: 862,
+    height: 567,
+  },
+  [auditPath('product-modernisation-assessment')]: {
+    src: '/illustrations/heroes/audits-product-modernisation-assessment.svg',
+    width: 860,
+    height: 511,
+  },
+  [auditPath('design-to-code-audit')]: {
+    src: '/illustrations/heroes/audits-design-to-code-audit.svg',
+    width: 865,
+    height: 556,
+  },
+  [auditPath('ai-product-ux-readiness')]: {
+    src: '/illustrations/heroes/audits-ai-product-ux-readiness.svg',
+    width: 699,
+    height: 469,
+  },
   [ROUTES.services]: { src: '/illustrations/heroes/services.svg', width: 1210, height: 630 },
   [ROUTES.tools]: { src: '/illustrations/heroes/tools.svg', width: 860, height: 650 },
   /* The designer's desk, redrawn in the run's hand (owner, 5 Nov 2026: "put the desk on the careers hero"). */
