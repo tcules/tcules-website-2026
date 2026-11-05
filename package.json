@@ -40,7 +40,8 @@
     "illustrations:engagement": "node scripts/illustrations/engagement.mjs",
     "illustrations:reasons": "node scripts/illustrations/reasons.mjs",
     "illustrations:claims": "node scripts/illustrations/claims.mjs",
-    "sketch:frames": "node scripts/sketch-frames.mjs"
+    "sketch:frames": "node scripts/sketch-frames.mjs",
+    "responsive:census": "node --no-warnings scripts/responsive-census.mjs"
   },
   "engines": {
     "node": ">=20.11.1"

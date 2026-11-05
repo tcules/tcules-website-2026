@@ -589,11 +589,11 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
      case studies, so each gets the row. Every other page sets its selected work as the three-across
      BlockCard grid (OfferBands), because there the cases are paths to more content. The cover is the
      page's binding that names the case, else the case's own cover, else its placeholder (coverFor). */
-  /* Below 768 the cases are one swipe row, one card in view and the next peeking (owner, 4 Nov 2026:
-     "on phone, we can keep the case study cards in a horizontal scroll to save space"); every card
-     is a link, so the row is reachable by Tab, and every case is in the page as it loads. */
+  /* On a phone the cases stack one after another, as from 768 (owner, 5 Nov 2026; supersedes
+     2026-11-04-home-case-cards-swipe-on-phone: in a swipe row each card was one narrow view wide and
+     read slim and tall). */
   const body = (
-    <Layout rowGap="gutter" colGap="gutter" columns={1} scroll="until-md">
+    <Layout rowGap="gutter" columns={1}>
       {cases.map((item, index) => {
         const { link, story, image, tag } = parts(item, index);
         /* A case without its link falls back to the plain card. */

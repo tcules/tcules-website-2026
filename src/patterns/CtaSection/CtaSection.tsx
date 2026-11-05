@@ -1224,7 +1224,7 @@ export function CtaSection(props: CtaSectionProps) {
         data-band={props['data-band']}
         aria-labelledby={headingId}
       >
-        <Island surface={islandSurface}>
+        <Island surface={islandSurface} inset="form">
           {props.islandTexture === 'flow' ? (
             <TextureFlow fade={art ? 'start' : undefined} />
           ) : null}
@@ -1268,7 +1268,7 @@ export function CtaSection(props: CtaSectionProps) {
         data-band={props['data-band']}
         aria-labelledby={headingId}
       >
-        <Island surface={islandSurface}>
+        <Island surface={islandSurface} inset="form">
           {props.islandTexture === 'frame' ? <TextureFrame panel="foot" /> : null}
           {props.islandTexture === 'flow' ? <TextureFlow /> : null}
           <Layout rowGap="stack">
@@ -1305,7 +1305,7 @@ export function CtaSection(props: CtaSectionProps) {
       data-band={props['data-band']}
       aria-labelledby={headingId}
     >
-      <Island surface={islandSurface}>
+      <Island surface={islandSurface} inset="form">
         {props.islandTexture === 'frame' ? <TextureFrame /> : null}
         {props.islandTexture === 'flow' ? (
           <TextureFlow fade={present(props.art) ? 'start' : undefined} />

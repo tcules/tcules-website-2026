@@ -1341,7 +1341,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        links each to its tool and reads down on a phone (withToolKeyLinks). */
     case 'table': {
       const toolTable = withToolKeyLinks(page, band);
-      if (toolTable) return <TableBand band={toolTable} narrow="read-down" />;
+      if (toolTable) return <TableBand band={toolTable} />;
       return ctx.scenes?.items[band.id] &&
         !sceneFor(ctx, band, 'agree') &&
         blocksOf(band, 'table').length > 0 ? (

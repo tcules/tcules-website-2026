@@ -716,6 +716,7 @@ export function ContentSection(props: ContentSectionProps) {
       <MediaSplit
         media={media}
         headText={headText}
+        headLed={Boolean(leadEl)}
         actions={hasActions ? actions : null}
         blocks={hasBlocks ? <Layout rowGap="stack">{children}</Layout> : null}
         footer={hasFooter ? footer : null}
@@ -747,6 +748,20 @@ export function ContentSection(props: ContentSectionProps) {
 
        The head group is the head text, then the actions or the aside a `stack` beneath it — lead →
        actions and head → aside are both block-to-block seams (§ 1.2). */
+    /* On a phone the head's actions follow the body they lead on from, rather than sitting between
+       the heading and the list (owner, 5 Nov 2026): below 768 in a stacked band, below 1024 in a
+       beside band, which stacks there. Placed twice and displayed once at any width; `display: none`
+       drops the other placement from the a11y tree. A head with no body keeps its actions. */
+    const actionsMove = hasActions && hasBody;
+    const moveFrom = besideSplit ? 'Lg' : 'Md';
+    const actionsInHead = actionsMove ? (
+      <div className={styles[`actionsFrom${moveFrom}`]}>{actions}</div>
+    ) : (
+      actions
+    );
+    const actionsAfterBody = actionsMove ? (
+      <div className={styles[`actionsUntil${moveFrom}`]}>{actions}</div>
+    ) : null;
     const headGroup = actionsAtEnd ? (
       /* Actions at the end (owner, 7 Oct 2026; centred, 29 Oct 2026 —
          decisions/2026-10-29-head-end-action-centred-on-heading): the eyebrow on its own line, then
@@ -758,7 +773,7 @@ export function ContentSection(props: ContentSectionProps) {
         {eyebrowEl}
         <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
           {headingEl}
-          {actions}
+          {actionsInHead}
           {leadEl}
         </Layout>
       </Layout>
@@ -767,7 +782,7 @@ export function ContentSection(props: ContentSectionProps) {
            so it ends where the stretched track ends — on the body's last line. */
       <Layout rowGap="stack" pinLast={asideFill}>
         {headText}
-        {hasActions ? actions : null}
+        {hasActions ? actionsInHead : null}
         {hasAside ? asideFill ? <div className={styles.asideFill}>{aside}</div> : aside : null}
       </Layout>
     ) : (
@@ -784,6 +799,7 @@ export function ContentSection(props: ContentSectionProps) {
       >
         {hasHead ? headGroup : null}
         {body}
+        {actionsAfterBody}
       </Layout>
     );
   }
@@ -860,6 +876,7 @@ export function ContentSection(props: ContentSectionProps) {
 function MediaSplit({
   media,
   headText,
+  headLed,
   actions,
   blocks,
   footer,
@@ -868,6 +885,8 @@ function MediaSplit({
 }: {
   media: ContentSectionMedia;
   headText: ReactNode;
+  /** Whether the head ends in a lead. */
+  headLed: boolean;
   actions: ReactNode;
   blocks: ReactNode;
   footer: ReactNode;
@@ -899,6 +918,22 @@ function MediaSplit({
     ) : (
       (words ?? footer)
     );
+  /* A heading straight over its own words is head to body, a `block` (24) (owner, 5 Nov 2026, /about's
+     "The Ahmedabad studio": at the column's 48 the title floated free of its paragraphs). A head that
+     ends in a lead has already said its piece, so lead → body stays block to block, 48. Not when the
+     body is pinned to the photograph's foot: there the column's stretch is the seam. */
+  const tight = !headLed && Boolean(body) && !pinned;
+  const copy = tight ? (
+    <Layout rowGap="block">
+      {headText}
+      {body}
+    </Layout>
+  ) : (
+    <>
+      {headText}
+      {body}
+    </>
+  );
   const image = media.image;
   if (image === undefined) {
     /* A flat figure beside the words (see ContentSectionMedia): halves, the copy column first in the
@@ -912,10 +947,7 @@ function MediaSplit({
         reverse={media.side === 'start' ? { lg: true } : undefined}
         align="start"
       >
-        <Layout rowGap="stack">
-          {headText}
-          {body}
-        </Layout>
+        <Layout rowGap="stack">{copy}</Layout>
         {media.drawing}
       </Layout>
     );
@@ -942,8 +974,7 @@ function MediaSplit({
         </div>
       </div>
       <Layout rowGap="stack" pinLast={pinned}>
-        {headText}
-        {body}
+        {copy}
         {counterweight ? <TextureCounterweight /> : null}
       </Layout>
     </Layout>

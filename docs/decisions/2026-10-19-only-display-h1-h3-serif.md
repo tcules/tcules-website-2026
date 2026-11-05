@@ -1,7 +1,7 @@
 ---
 title: "Only display and h1–h3 are serif"
 date: 2026-10-19
-status: active
+status: superseded
 area: [type]
 source: "Owner, 19 Oct 2026 (PR #126)"
 supersedes: ["2026-10-16-type-under-28-is-sans"]

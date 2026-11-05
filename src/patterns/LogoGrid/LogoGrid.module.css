@@ -130,3 +130,10 @@
 .centred {
   text-align: center;
 }
+
+/* `align="center-narrow"`: centred while the wall is narrow, start from 1024 (owner, 5 Nov 2026). */
+@media (max-width: 1023.98px) {
+  .centredNarrow {
+    text-align: center;
+  }
+}

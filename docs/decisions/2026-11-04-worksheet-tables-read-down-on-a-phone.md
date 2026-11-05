@@ -1,7 +1,7 @@
 ---
 title: "A worksheet table reads down on a phone (DataTable narrow=\"read-down\")"
 date: 2026-11-04
-status: proposed
+status: superseded
 area: [components, layout]
 source: "Proposed by the tools run, 4 Nov 2026 (tools critic: the worksheet tables unreadable at 390), citing ReportBand's report sheet ('below 768 the sheet reads down, each row's key its title')"
 supersedes: []

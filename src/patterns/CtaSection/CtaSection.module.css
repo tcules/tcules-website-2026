@@ -335,6 +335,22 @@
   max-inline-size: 100%;
 }
 
+/* The drawing leaves once the island is one column (owner, 5 Nov 2026, the responsive pass): stacked
+   over the heading it pushed the form a screen down on a phone. `beside` and `halves` stack below
+   1024; `above` sets its small drawing beside the heading from 768, so it holds to there. */
+@media (max-width: 1023.98px) {
+  .art,
+  .artLarge {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .artSmall {
+    display: none;
+  }
+}
+
 /* The island's footnote (`footnote`): one plain line under the island on the band's ground, in the
    band's own ink, at the body's measure. */
 .footnote {

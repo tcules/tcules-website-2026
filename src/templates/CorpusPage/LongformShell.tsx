@@ -312,13 +312,9 @@ export function ArticleSection({
             table={item}
             labelledBy={headingIdOf(band)}
             term={page.pageType === 'defined_term' ? page.name : undefined}
-            /* A tool's worksheet reads down on a phone, and so does a TERM's table (glossary critic,
-               4 Nov 2026): its comparison's point is the term's own column, and scrolled it was the
-               one cut, behind a fade at 390. Below 768 each row is one block, every column's value
-               under its head, the term's head in the pick ink. */
-            {...(tool || page.pageType === 'defined_term'
-              ? { narrow: 'read-down' as const }
-              : {})}
+            /* A table on a phone is the table, scrolling sideways (owner, 5 Nov 2026: "simple table
+               with scroll"; the term's and the tool's tables read down from 4 Nov, and a comparison
+               turned into stacked label pairs stopped reading as one). */
           />,
         );
         break;
@@ -425,7 +421,6 @@ function exampleFlow(
           key={`table-${out.length}`}
           table={block}
           labelledBy={labelledBy}
-          narrow="read-down"
           bounded={inPanel}
         />,
       );

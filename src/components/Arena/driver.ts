@@ -139,12 +139,14 @@ export type ArenaOptions = {
   still: boolean;
   /** The square cut: the camera holds on the studio floor rather than the whole app. */
   phone: boolean;
+  /** The hero is stacked (below 1024): no copy beside it, so the wide cut centres on the floor. */
+  stacked: boolean;
 };
 
 export function startArena(
   stage: HTMLElement,
   svg: SVGSVGElement,
-  { still: startStill, phone }: ArenaOptions,
+  { still: startStill, phone, stacked }: ArenaOptions,
 ): ArenaDriver {
   const $ = (id: string) => svg.querySelector<SVGGraphicsElement>(`#arena-${id}`);
   const need = (id: string) => {
@@ -386,6 +388,11 @@ export function startArena(
     });
   }
 
+  /* Stacked in the wide cut (768–1023), the band under the hero follows the drawing, and the stage's
+     downward bleed put the floor's foot inside the gap before it. The camera looks this far lower,
+     in user units, so the floor ends higher in the box (owner, 5 Nov 2026). The square phone cut
+     already ends the floor short of its box, so it takes no lift. */
+  const STACKED_LIFT = 40;
   /* Camera stops, measured once the drawing is in the page. */
   setOpen(1);
   const bb = hero.getBBox();
@@ -398,15 +405,21 @@ export function startArena(
     cy: J.heroClosed.cy - RISE - 26,
     k: phone ? 0.95 : Math.min((1024 * 0.74) / 577, (720 * 0.62) / 300),
   };
+  /* The phone cut holds on the studio floor. The box is square, so the slice shows 720 of the
+     drawing's 1024 units across: the zoom fits the crews into THAT width (owner, 5 Nov 2026: fitted
+     to 1024, the end crew ran off the column and the floor read off-centre). */
   const W2 = phone
     ? {
         cx: cb.x + cb.width / 2,
         cy: cb.y + cb.height / 2 - RISE - 60,
-        k: Math.min(1024 / (cb.width + 200), 720 / (cb.height + 170)),
+        k: Math.min(720 / (cb.width + 120), 720 / (cb.height + 170)),
       }
     : {
-        cx: bb.x + bb.width / 2 + 6,
-        cy: bb.y + bb.height / 2 - RISE - 8,
+        /* Beside the copy the app's own centre; stacked, with nothing beside it, the crews' centre,
+           so the floor sits in the middle of the column (owner, 5 Nov 2026: at 768–1023 it read
+           pushed to the end). */
+        cx: stacked ? cb.x + cb.width / 2 : bb.x + bb.width / 2 + 6,
+        cy: bb.y + bb.height / 2 - RISE - 8 + (stacked ? STACKED_LIFT : 0),
         k: Math.min(1024 / (bb.width - 10), 720 / (bb.height - 5)),
       };
 

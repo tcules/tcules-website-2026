@@ -224,3 +224,18 @@
 .listRow:first-child {
   padding-block-start: 0;
 }
+
+/* The list arrangement's way deeper, placed once per width (OfferSheet.tsx, owner 5 Nov 2026): under
+   the heading from 1024, where the head is its own track, and after the list below it, where the two
+   stack. Exactly one is displayed; `display: none` also removes the other from the a11y tree. */
+@media (max-width: 1023.98px) {
+  .fromLg {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .untilLg {
+    display: none;
+  }
+}

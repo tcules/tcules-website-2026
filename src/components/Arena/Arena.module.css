@@ -37,6 +37,22 @@
   mask-image: radial-gradient(ellipse 58% 58% at 50% 50%, var(--arena-mask-solid) 78%, transparent 100%);
 }
 
+/* Stacked (below 1024): the copy sits above, not beside, so there is no gap before it to bleed into.
+   The stage bleeds evenly to the page gutter on both sides and the drawing centres in the column
+   (owner, 5 Nov 2026). The gutter is Section's, restated by value (a component never reads another's
+   tokens): 32, and 16 on a phone. Further would scroll the page sideways. */
+@media (max-width: 1023.98px) {
+  .stage {
+    inset-inline: calc(-1 * var(--gap-gutter));
+  }
+}
+
+@media (max-width: 767.98px) {
+  .stage {
+    inset-inline: calc(-1 * var(--gap-text));
+  }
+}
+
 .art {
   position: absolute;
   inset: 0;

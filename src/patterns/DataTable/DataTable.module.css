@@ -314,35 +314,22 @@
 }
 
 /* ── The split (`split`) ────────────────────────────────────────────────────────────────────────
-   Two halves side by side from 1024 (Layout owns the tracks and the gutter), ONE table below it.
-   Where the halves stack, the second gives up the two things that made it read as a second table:
-   its frame's top edge — the first frame's bottom edge is now the hairline between two rows, as
-   every other row has — and its head row, which would print the column names again halfway down.
-   The head row is collapsed, not removed: its text stays in the accessibility tree (a font size of
-   nothing and no inset draw no box; `display: none` or `visibility` would take the column names away
-   from the second table's cells). A structural change at the arrangement's own breakpoint, not a
+   Two halves side by side from 1024 (Layout owns the tracks and the gutter), ONE whole table below it
+   (owner, 5 Nov 2026, the responsive pass). Until then the halves stacked and joined, the second
+   giving up its top edge and head row, but the two sized their columns separately, so the join read
+   as two tables butted together. Now the whole table is rendered once more for the narrow widths and
+   exactly one view is displayed: `display: none` keeps the other out of the accessibility tree, the
+   toggle the read-down view uses. A structural change at the arrangement's own breakpoint, not a
    swapped distance. Layout's lg is 1024. */
 @media (max-width: 1023.98px) {
-  /* The two halves size their columns separately, so their key columns line up only if neither
-     half's longest key word pushes past its share. A shared floor for the key holds both at one
-     width for every key word up to the floor (the record's share alone is 124 at 390, under
-     "Headquarters"), so the column rule runs straight through the join. Capped on a narrow phone
-     (--dtab-split-key-cap), so the floor gives way before the value column is pushed past the
-     frame. */
-  .split .colHead:first-child,
-  .split .key {
-    min-inline-size: min(var(--dtab-split-key-size), var(--dtab-split-key-cap));
+  .splitView {
+    display: none;
   }
+}
 
-  .joins .frame {
-    border-block-start: 0;
-  }
-
-  .joinHead .colHead {
-    padding-block: 0;
-    border-block-end: 0;
-    font-size: 0;
-    line-height: 0;
+@media (min-width: 1024px) {
+  .wholeView {
+    display: none;
   }
 }
 

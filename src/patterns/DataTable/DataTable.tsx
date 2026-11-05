@@ -310,18 +310,11 @@ export function DataTable({
   const picked = (index: number) => index === pickColumn;
   const breakAt = split ? splitAt(rows) : rows.length;
 
-  /* One boxed frame over `part` of the rows; `inSplit` marks both halves of a split and `joins` the
-     second. The shell holds the frame and draws the scroll fades over its clipped edges. It does
-     not scroll itself, which is what keeps the fades pinned while the table moves beneath them. */
-  const renderFrame = (part: readonly DataTableRow[], joins: boolean, inSplit: boolean) => (
-    <div
-      className={cx(
-        styles.shell,
-        inSplit && styles.split,
-        joins && styles.joins,
-        sheet && styles.sheet,
-      )}
-    >
+  /* One boxed frame over `part` of the rows. The shell holds the frame and draws the scroll fades over
+     its clipped edges. It does not scroll itself, which is what keeps the fades pinned while the
+     table moves beneath them. */
+  const renderFrame = (part: readonly DataTableRow[]) => (
+    <div className={cx(styles.shell, sheet && styles.sheet)}>
       <div
         className={styles.frame}
         role="region"
@@ -348,7 +341,7 @@ export function DataTable({
               : {})}
         >
           {head ? (
-            <thead className={joins ? styles.joinHead : undefined}>
+            <thead>
               <tr>
                 {keyColumn ? (
                   <th
@@ -509,16 +502,21 @@ export function DataTable({
         ) : null}
         {readDown ? renderDown() : null}
         {readDown ? (
-          <div className={styles.acrossView}>{renderFrame(rows, false, false)}</div>
+          <div className={styles.acrossView}>{renderFrame(rows)}</div>
         ) : split && rows.length > 1 ? (
-          /* The halves: side by side from 1024, a `gutter` apart, and ONE table below it — no row
-             gap, and the second frame's top edge and head row give way (DataTable.module.css). */
-          <Layout columns={{ lg: 2 }} colGap="gutter" rowGap="none" align="start">
-            {renderFrame(rows.slice(0, breakAt), false, true)}
-            {renderFrame(rows.slice(breakAt), true, true)}
-          </Layout>
+          /* The halves side by side from 1024, a `gutter` apart; below it the whole table, once
+             (DataTable.module.css § The split). One view is displayed at a time. */
+          <>
+            <div className={styles.splitView}>
+              <Layout columns={2} colGap="gutter" align="start">
+                {renderFrame(rows.slice(0, breakAt))}
+                {renderFrame(rows.slice(breakAt))}
+              </Layout>
+            </div>
+            <div className={styles.wholeView}>{renderFrame(rows)}</div>
+          </>
         ) : (
-          renderFrame(rows, false, false)
+          renderFrame(rows)
         )}
       </Layout>
     </Layout>

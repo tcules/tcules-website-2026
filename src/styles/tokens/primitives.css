@@ -251,10 +251,13 @@
   --font-size-display-m: 43px;
   --font-size-mark-t: 104px;
   --font-size-mark-m: 64px;
-  --font-size-h1-t: 43px;
-  --font-size-h1-m: 34px;
-  --font-size-h2-t: 34px;
-  --font-size-h2-m: 28px;
+  /* h1 and h2 open up at tablet and phone (owner, 5 Nov 2026, the responsive pass: a 28 section
+     title read too small on a phone and sat 3px above the 25 h3, so the two steps read as one).
+     Was h1 43 / 34, h2 34 / 28. h3 holds, so the gap under h2 is what grows. */
+  --font-size-h1-t: 46px;
+  --font-size-h1-m: 38px;
+  --font-size-h2-t: 38px;
+  --font-size-h2-m: 32px;
   --font-size-h3-t: 28px;
   --font-size-h3-m: 25px;
   /* h4's steps are the serif's 25 and 22 at the same optical ratio (22 / 28), and stay one step
@@ -346,9 +349,9 @@
   --line-height-mark-t: 0.98;
   --line-height-mark-m: 1;
   --line-height-h1-t: 1.08;
-  --line-height-h1-m: 1.12;
-  --line-height-h2-t: 1.14;
-  --line-height-h2-m: 1.18;
+  --line-height-h1-m: 1.1;
+  --line-height-h2-t: 1.12;
+  --line-height-h2-m: 1.15;
   --line-height-h3-t: 1.2;
   --line-height-h3-m: 1.22;
   --line-height-h4-t: 1.26;
@@ -499,10 +502,12 @@
      BREAKPOINT STEP, deliberately, as h6 has none: it already IS the phone size, so a phone column
      and a desktop tile, being the same measure, set the same quote. Chosen by measure, never by how
      important the quote is. Italic in the composite like every quote role; no tracking companion,
-     as the 28 reading quote has none. In the SANS italic (owner, 16 Oct 2026: under 28px is Public
-     Sans); the larger quote roles keep the serif. */
+     as the 28 reading quote has none. In the SERIF italic, as the larger quote roles are (owner,
+     5 Nov 2026; the sans from 16 Oct): at 22 it is a display quote, not a card's, and in the sans one
+     quote changed its face between a desktop track and a phone one. The testimonial cards' 18 and 16
+     quotes stay in the sans (testimonial.css). */
   --text-quote-sm: italic var(--font-weight-regular)
-    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-sans);
+    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
   /* The summary paragraph: h4's size and its title-fine tracking, at regular weight, because it is
