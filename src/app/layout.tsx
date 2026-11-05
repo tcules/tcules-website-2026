@@ -6,10 +6,11 @@ import { SiteFooter, SiteNav } from '@/patterns';
 
 import './globals.css';
 
+const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();
+
 export const metadata: Metadata = {
-  /* Resolves every relative metadata URL — the share cards above all — to the live origin: an
-     og:image must be absolute or the first unfurl renders without it (ch10 C1). */
-  metadataBase: new URL(SITE_ORIGIN),
+  /* Generated cards are served by this deployment. Absolute URLs from Strapi keep their origin. */
+  metadataBase: new URL(publicDomain ? `https://${publicDomain}` : SITE_ORIGIN),
   title: 'Tcules',
   description: 'Tcules website',
 };
