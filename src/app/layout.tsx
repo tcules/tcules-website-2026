@@ -6,6 +6,9 @@ import { SiteFooter, SiteNav } from '@/patterns';
 
 import './globals.css';
 
+// Navigation and footer are read from the CMS for every page request.
+export const revalidate = 0;
+
 const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();
 
 export const metadata: Metadata = {

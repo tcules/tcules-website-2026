@@ -8,11 +8,11 @@ import { listSitemapGroups } from './_sitemap/pages';
 
 /**
  * `/sitemap.xml`, from the published Sitemap Master's resolved groups (the same list the `/sitemap`
- * page renders), rebuilt every five minutes so a page published in Strapi appears without a deploy.
+ * page renders), read from Strapi on each request.
  * When the Sitemap Master cannot be read or lists nothing, the generator the site used before
  * (`_sitemap/pages.ts`) answers instead, so the XML is never empty and never an error.
  */
-export const revalidate = 300;
+export const revalidate = 0;
 
 async function entries() {
   try {

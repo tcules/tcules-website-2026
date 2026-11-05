@@ -4,7 +4,6 @@ import { caseStudyPath, ROUTES } from '@/lib/routes';
 import type { LogoGridMark } from '@/patterns';
 import type { CaseGroup, CaseItem } from '@/templates';
 
-import { CMS_MEDIA_TAG, CMS_REVALIDATE_SECONDS } from './cache';
 import { CASE_INDEX_QUERY } from './case-index-query';
 import { image, mapBand, mapHero, rows, text } from './home';
 import type { CmsHero, CmsHomeSection, CmsImage, Entries } from './home-types';
@@ -93,7 +92,7 @@ async function maskSource(src: string): Promise<string | undefined> {
   try {
     const response = await fetch(src, {
       redirect: 'error',
-      next: { revalidate: CMS_REVALIDATE_SECONDS, tags: [CMS_MEDIA_TAG] },
+      cache: 'no-store',
       signal: AbortSignal.timeout(4_000),
     });
     const type = response.headers.get('content-type')?.split(';')[0];
