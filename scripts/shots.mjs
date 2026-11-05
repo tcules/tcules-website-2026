@@ -6,6 +6,7 @@
  *   npm run shots -- page-hero figure    only these
  *   npm run shots -- --base=http://localhost:3000    an explicit server, trusted as given
  *   npm run shots -- --routes=/,/about,/services/product-design    arbitrary SITE routes
+ *   npm run shots -- --widths=1440,1024,768,390    other widths (default 1440 and 390)
  *
  * `--routes=` is the page mode: the listed paths (comma-separated, as the site serves them) are
  * captured full-page at 1440 and 390 with the same overflow and page-error report, written as
@@ -53,10 +54,19 @@ import { createServer } from 'node:net';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 
-const WIDTHS = [1440, 390];
-const OUT = '.shots';
-
 const args = process.argv.slice(2);
+
+// 1440 and 390 by default, the two widths every task's definition of done names. The responsive
+// check (docs/responsive-check.md) adds 1024 and 768: `--widths=1440,1024,768,390`.
+const widthsArg = args.find((a) => a.startsWith('--widths='));
+const WIDTHS = widthsArg
+  ? widthsArg.slice('--widths='.length).split(',').map(Number)
+  : [1440, 390];
+if (WIDTHS.some((w) => !Number.isInteger(w) || w < 320)) {
+  console.error('--widths takes comma-separated pixel widths of 320 or more, e.g. --widths=1440,1024,768,390');
+  process.exit(1);
+}
+const OUT = '.shots';
 const baseArg = args.find((a) => a.startsWith('--base='));
 const only = args.filter((a) => !a.startsWith('--'));
 const routesArg = args.find((a) => a.startsWith('--routes='));
