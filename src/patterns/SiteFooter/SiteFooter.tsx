@@ -1,5 +1,9 @@
 import Link from 'next/link';
 
+/* The chrome's links never prefetch (performance pass, 6 Nov 2026): every page renders on request
+   from the CMS, so each link in view cost a full server render on every page load, competing with
+   the page itself. A click fetches the page then. Revisit once pages are cached again. */
+
 import {
   BrandMark,
   Button,
@@ -147,6 +151,7 @@ export function SiteFooter({
                     {group.links.map((link) => (
                       <li key={`${group.title}-${link.label}`}>
                         <Link
+                          prefetch={false}
                           href={link.href}
                           className={styles.link}
                           {...externalProps(link.external)}
@@ -180,6 +185,7 @@ export function SiteFooter({
                   {group.links.map((link) => (
                     <li key={`${group.title}-${link.label}`}>
                       <Link
+                        prefetch={false}
                         href={link.href}
                         className={styles.link}
                         {...externalProps(link.external)}
@@ -313,6 +319,7 @@ export function SiteFooter({
               {legal.links.map((item) => (
                 <li key={item.label}>
                   <Link
+                    prefetch={false}
                     href={item.href}
                     className={styles.smallLink}
                     {...externalProps(item.external)}

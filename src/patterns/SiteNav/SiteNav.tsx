@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+
+/* The chrome's links never prefetch (performance pass, 6 Nov 2026): every page renders on request
+   from the CMS, so each link in view cost a full server render on every page load, competing with
+   the page itself. A click fetches the page then. Revisit once pages are cached again. */
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
@@ -548,6 +552,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
             that positions anything. The three groups are pushed apart by the distribution. */}
         <Cluster className={styles.barRow} justify="between" colGap="block" nowrap>
           <Link
+            prefetch={false}
             href={ROUTES.home}
             className={styles.brand}
             aria-label="Tcules — home"
@@ -752,6 +757,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                       </button>
                     ) : (
                       <Link
+                        prefetch={false}
                         href={item.href ?? ROUTES.home}
                         className={styles.sheetControl}
                         aria-current={pathname === item.href ? 'page' : undefined}
@@ -939,6 +945,7 @@ function PlateGroup({ label, links }: { label?: string; links: readonly SiteNavL
 function PlateRow({ link }: { link: SiteNavLink }) {
   return (
     <Link
+      prefetch={false}
       href={link.href}
       className={styles.row}
       {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
@@ -1002,6 +1009,7 @@ function SheetPane({ item }: { item: SiteNavItem }) {
                 style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
               >
                 <Link
+                  prefetch={false}
                   href={link.href}
                   className={styles.sheetLink}
                   {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

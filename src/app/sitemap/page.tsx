@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+/* Links never prefetch (performance pass, 6 Nov 2026): every page renders on request from the CMS,
+   so each link in view cost a full server render on every page load. See SiteNav. */
+
 import { Layout, Section } from '@/components';
 import { TableOfContents, type TocItem } from '@/patterns';
 
@@ -44,7 +47,9 @@ function LinkList({ entries }: { entries: SitemapEntry[] }) {
     <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="column" rowGap="text">
       {entries.map((entry) => (
         <li key={entry.path}>
-          <Link href={entry.path}>{entry.title}</Link>
+          <Link href={entry.path} prefetch={false}>
+            {entry.title}
+          </Link>
         </li>
       ))}
     </Layout>

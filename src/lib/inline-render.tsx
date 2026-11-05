@@ -1,4 +1,7 @@
 import Link from 'next/link';
+
+/* Links never prefetch (performance pass, 6 Nov 2026): every page renders on request from the CMS,
+   so each link in view cost a full server render on every page load. See SiteNav. */
 import type { ReactNode } from 'react';
 
 import type { InlineRun } from './inline';
@@ -29,7 +32,7 @@ export function renderInline(runs: readonly InlineRun[]): ReactNode {
         return <br key={i} />;
       case 'link':
         return run.href.startsWith('/') ? (
-          <Link key={i} href={run.href}>
+          <Link key={i} href={run.href} prefetch={false}>
             {renderInline(run.children)}
           </Link>
         ) : (
