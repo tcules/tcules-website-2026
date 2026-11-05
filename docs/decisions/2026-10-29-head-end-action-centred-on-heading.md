@@ -1,7 +1,7 @@
 ---
 title: "A head's end action is vertically centred on the heading; the lead sits under that row"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, components]
 source: "Owner review, 29 Oct 2026 (feat/new-copy, home \"A product design partner for ambitious SaaS teams\" · \"Why teams choose Tcules →\")"
 supersedes: []

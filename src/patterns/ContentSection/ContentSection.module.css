@@ -218,3 +218,31 @@
     aspect-ratio: var(--csec-aside-ratio-phone);
   }
 }
+
+/* The head's actions, placed once per width (ContentSection.tsx `actionsMove`, owner 5 Nov 2026): in
+   the head while it has its own row or track, after the body once the band stacks on a phone (768 for
+   a stacked band, 1024 for a beside one). Exactly one is displayed; `display: none` also removes the
+   other from the a11y tree. */
+@media (max-width: 767.98px) {
+  .actionsFromMd {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .actionsUntilMd {
+    display: none;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .actionsFromLg {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .actionsUntilLg {
+    display: none;
+  }
+}

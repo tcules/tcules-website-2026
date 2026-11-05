@@ -571,6 +571,9 @@ export function RecognitionGrid({ band }: { band: CorpusBand }) {
       headingId={id}
       edges="closed"
       density="compact"
+      /* Centred over the centred marks while the wall is narrow, on the page's left edge from 1024
+         (owner, 5 Nov 2026). */
+      align="center-narrow"
     />
   );
 }

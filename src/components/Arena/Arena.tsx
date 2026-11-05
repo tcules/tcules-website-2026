@@ -23,6 +23,8 @@ export type ArenaProps = {
 
 /** Below this the box is square and the camera holds on the studio floor (the artifact's phone cut). */
 const PHONE_QUERY = '(max-width: 639px)';
+/** Below this the hero stacks: the drawing sits under the words, the column's full width. */
+const STACKED_QUERY = '(max-width: 1023.98px)';
 
 /**
  * Arena — the home hero's animated drawing (owner, 2 Nov 2026, the "Tcules Hero Arena" artifact).
@@ -69,6 +71,7 @@ export function Arena({ src, label, glyphs, className }: ArenaProps) {
         driver.current = startArena(stage, svg, {
           still,
           phone: matchMedia(PHONE_QUERY).matches,
+          stacked: matchMedia(STACKED_QUERY).matches,
         });
         setPlaying(!still);
         setReady(true);

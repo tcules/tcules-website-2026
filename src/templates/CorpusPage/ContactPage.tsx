@@ -189,6 +189,8 @@ function Channels({ channels }: { channels: readonly ContactChannel[] }) {
         frame="tile"
         linkScope="cta"
         ctaEmphasis="outline"
+        /* One tile after another on a phone, never a swipe row (owner, 5 Nov 2026). */
+        scroll="never"
         items={channels.map((channel) => ({
           id: channel.kind,
           title: channel.title,

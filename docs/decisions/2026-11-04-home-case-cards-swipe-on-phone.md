@@ -1,7 +1,7 @@
 ---
 title: "Home's case cards are one swipe row on a phone"
 date: 2026-11-04
-status: active
+status: superseded
 area: [cards, layout]
 source: "Owner (Devagya), homepage pass 2.63, 4 Nov 2026 (design/home-pass), reviewed on the built page"
 supersedes: []

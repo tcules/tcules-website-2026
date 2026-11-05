@@ -241,8 +241,13 @@ export function Button({
      order (see `as`). It takes the disabled look and loses its click, and nothing else changes. */
   const held = rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
   const off = disabled || held;
-  /* A bare link's last word and trailing glyph never part (see GluedLabel). */
-  const glued = emphasis === 'link' && Boolean(icon) && !iconOnly && lastSpace(children) > 0;
+  /* A label's last word and its trailing glyph never part (see GluedLabel). A bare link since
+     29 Oct 2026; every boxed button too since 5 Nov 2026 (owner, the responsive pass: the hero's
+     "Start small with an optional pilot →" wrapped at 360 with its arrow stranded at the box's end). */
+  const glued = Boolean(icon) && !iconOnly && lastSpace(children) > 0;
+  /* In a box the glyph is a flex item beside the label, so it cannot follow the label's last line.
+     A glued boxed button sets it INSIDE the label, inline, where the bare link already has it. */
+  const inlineGlyph = glued && emphasis !== 'link';
 
   return (
     <Tag
@@ -279,8 +284,9 @@ export function Button({
             <span className={styles.labelInk}>
               {glued ? <GluedLabel text={children as string} /> : children}
             </span>
+            {inlineGlyph && icon}
           </span>
-          {icon}
+          {!inlineGlyph && icon}
         </>
       )}
     </Tag>

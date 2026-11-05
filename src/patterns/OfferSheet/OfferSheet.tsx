@@ -462,12 +462,16 @@ export function OfferSheet({
           {note ? (
             <Layout rowGap="stack">
               {headText}
-              {note}
+              <div className={styles.fromLg}>{note}</div>
             </Layout>
           ) : (
             headText
           )}
           {promises}
+          {/* Below 1024 the split stacks, and the way deeper follows the list it leads on to rather
+              than sitting between the heading and the reasons (owner, 5 Nov 2026). One of the two
+              is displayed at any width (`display: none` drops the other from the a11y tree too). */}
+          {note ? <div className={styles.untilLg}>{note}</div> : null}
         </Layout>
       </Section>
     );

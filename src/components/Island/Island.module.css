@@ -35,3 +35,8 @@
   padding-block: var(--isl-inset-band-block);
   padding-inline: var(--isl-inset-band-inline);
 }
+
+/* The form's island (`inset="form"`): the default inset, with the form's own sides on a phone. */
+.insetForm {
+  padding-inline: var(--isl-inset-form-inline);
+}

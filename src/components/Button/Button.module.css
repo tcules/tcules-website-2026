@@ -235,6 +235,41 @@
   margin-inline-end: calc(-1 * var(--btn-text-tracking));
 }
 
+/* A boxed button whose trailing glyph sits inside its label (Button.tsx `inlineGlyph`, 5 Nov 2026).
+   The label flows as inline content so its last word and the glyph wrap as one piece; a wrapped label
+   balances, as a link's does. One line long it renders as the flex row did: the same 8 between the
+   ink and the glyph (the label margin plus the gap, now the ink's own end padding, since inline
+   content has no `gap`), the label's end margin dropped because the glyph now ends the label, and the
+   glyph centred on the capitals as `.link > svg` is. */
+.glued:not(.link) .label {
+  margin-inline-end: 0;
+  text-wrap: var(--text-title-wrap);
+}
+
+.glued:not(.link) .labelInk {
+  display: inline;
+  padding-inline-end: calc(var(--btn-label-margin) + var(--btn-gap));
+}
+
+.glued:not(.link) .label > svg {
+  display: inline-block;
+  vertical-align: calc((1cap - var(--btn-icon-size-md)) / 2);
+}
+
+.glued.sm:not(.link) .label > svg {
+  vertical-align: calc((1cap - var(--btn-icon-size-sm)) / 2);
+}
+
+.glued.lg:not(.link) .label > svg {
+  vertical-align: calc((1cap - var(--btn-icon-size-lg)) / 2);
+}
+
+/* A ghost has no box at rest, so a wrapped label reads as a link's does: its lines take the
+   container's alignment rather than centring inside an invisible box (5 Nov 2026; `.link`, 3 Nov). */
+.ghost {
+  text-align: inherit;
+}
+
 /* ══ State ═══════════════════════════════════════════════════════════════════════
    Seven states, three fills, and every one of them a colour change. Hover and focus take the
    first step; pressed and active take the second and share one value, so pressing a stateful

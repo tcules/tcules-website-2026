@@ -43,6 +43,14 @@
   text-indent: calc(var(--vlg-hang) * -1);
 }
 
+/* …but not on a phone (owner, 5 Nov 2026): at the 16 gutter the hung mark sat in the band's padding,
+   past the start of the rule above it. The mark sets inside the column there, with the words. */
+@media (max-width: 767.98px) {
+  .voice:has(.open) {
+    text-indent: 0;
+  }
+}
+
 /* The reply: plain running text beside its complaint, sharing its first baseline. */
 .reply {
   font: var(--vlg-reply-text);

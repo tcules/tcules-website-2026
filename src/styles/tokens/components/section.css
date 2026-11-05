@@ -71,9 +71,11 @@
 }
 }
 
-/* Phone: every band 64; the first band's top 32. */
+/* Phone: every band 64; the first band's top 32; the gutter 16 (owner, 5 Nov 2026: at 32 a 390 phone
+   lost 64 of its width to the sides and the form and the cards read narrow). */
 @media (max-width: 767px){
 :root{
+--sec-gutter:var(--gap-text);
 --sec-padding-y:var(--gap-column);
 --sec-padding-y-first:var(--gap-gutter);
 --sec-padding-y-open:var(--gap-section);
