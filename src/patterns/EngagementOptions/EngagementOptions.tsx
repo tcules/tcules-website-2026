@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Cluster, Layout, Section, Sketch, type SectionSurface } from '@/components';
+import { Cluster, Icon, Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
@@ -85,6 +85,16 @@ export type EngagementOption = {
   icon?: ReactNode;
   /** The option's terms as labelled blocks under its words, two across from 1024. */
   facts?: readonly EngagementFact[];
+  /**
+   * `plans` only: what the option includes, one short line an entry, each set behind the one shared
+   * tick (owner, 5 Nov 2026: "all icons are the same icon"). Inline content the caller renders.
+   */
+  checklist?: readonly ReactNode[];
+  /**
+   * `plans` only: the option's own way in, composed by the caller (in practice an outline Button),
+   * at the card's foot, the full width of the card.
+   */
+  action?: ReactNode;
 };
 
 /**
@@ -101,7 +111,13 @@ export type EngagementOption = {
  *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
  *         1440).
  */
-export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards';
+/*   plans  each option a plan card, a pricing table without prices (owner, 5 Nov 2026, the "Three ways
+ *         to work with us" band): eyebrow and name over a hairline, the checklist behind one shared
+ *         tick, the option's action at the foot. Three across from 1024 on shared rows, so the names,
+ *         the lists and the actions each start on one line; one column below. Peers: every action
+ *         takes the same emphasis, so no plan is featured.
+ */
+export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards' | 'plans';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -216,7 +232,7 @@ export function EngagementOptions({
     >
       {/* `cards`: the ask closes the band a `section` (96) under the set (owner, 4 Nov 2026: "so the
           hierarchy is clear"); otherwise a `stack`, the head's own seam. */}
-      <Layout rowGap={arrangement === 'cards' ? 'section' : 'stack'}>
+      <Layout rowGap={arrangement === 'cards' || arrangement === 'plans' ? 'section' : 'stack'}>
         <Layout rowGap="stack">
           {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
             `actionsAt="end"`, the one rule for every head's end action), the lead under that row. */}
@@ -240,8 +256,12 @@ export function EngagementOptions({
               </Layout>
             ) : null}
           </Layout>
-          <Layout rowGap={arrangement === 'cards' ? 'gutter' : 'column'}>
-            {arrangement === 'grid' ? (
+          <Layout
+            rowGap={arrangement === 'cards' || arrangement === 'plans' ? 'gutter' : 'column'}
+          >
+            {arrangement === 'plans' ? (
+              <Plans shown={shown} />
+            ) : arrangement === 'grid' ? (
               /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
                column below: a borderless tile each (the drawing's plate is the image, the
                name and its words under it), 32 across and a `column` down the set — the row seam of
@@ -462,6 +482,50 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
               );
             })}
           </Layout>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
+/**
+ * The plan cards: each a hairline card on the plan ground, two parts on rows the set shares from
+ * 1024 (the head over its rule with the checklist a `block` under it, then the action a `stack`
+ * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
+ */
+function Plans({ shown }: { shown: readonly EngagementOption[] }) {
+  return (
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+      colGap="gutter"
+      rowGap="gutter"
+      shareRows={2}
+    >
+      {shown.map((option, index) => (
+        /* The action stands a `stack` (48) under the list (owner, 5 Nov 2026: "more
+           space above the button"); the head and list keep their `block` inside their group. */
+        <Layout as="li" key={option.title || index} rowGap="stack" className={styles.plan}>
+          <Layout rowGap="block">
+            <div className={styles.planHead}>
+              <OptionHead option={option} className={styles.planTitle} />
+            </div>
+            {option.checklist && option.checklist.length > 0 ? (
+              <Layout as="ul" rowGap="text">
+                {option.checklist.map((item, i) => (
+                  <li key={i}>
+                    <Cluster colGap="tight" align="start" nowrap>
+                      <span className={styles.tick} aria-hidden="true">
+                        <Icon name="check-circle" size="lg" />
+                      </span>
+                      <span className={styles.planItem}>{item}</span>
+                    </Cluster>
+                  </li>
+                ))}
+              </Layout>
+            ) : null}
+          </Layout>
+          <Layout>{option.action ?? <div />}</Layout>
         </Layout>
       ))}
     </Layout>

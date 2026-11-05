@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Icon, Layout, Prose, Section, type IconName } from '@/components';
+import { Button, Icon, Layout, Prose, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -651,6 +651,55 @@ export function WhyTculesBand({
   );
 }
 
+/**
+ * The plan shape of "Three ways to work with us" (owner, 5 Nov 2026: "a pricing component without
+ * literal prices"): each option an optional italic label line, its bold name, its checklist and its
+ * own link, in that order; then the set's closing line and its links. Null unless every option has a
+ * checklist, so a band authored the older way keeps its old reading.
+ */
+function planOptions(band: CorpusBand): {
+  plans: {
+    eyebrow?: string;
+    title: string;
+    checklist: ReactNode[];
+    link?: { labelText: string; href: string };
+  }[];
+  close: InlineRun[][];
+  links: { labelText: string; href: string }[];
+} | null {
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  const plans: NonNullable<ReturnType<typeof planOptions>>['plans'] = [];
+  const close: InlineRun[][] = [];
+  const links: { labelText: string; href: string }[] = [];
+  let eyebrow: string | undefined;
+  for (const [index, block] of blocks.entries()) {
+    const current = plans.at(-1);
+    const lead = leadOf(block);
+    const line = italicLine(block);
+    if (line && blocks[index + 1] && leadOf(blocks[index + 1]!)) {
+      eyebrow = line;
+    } else if (lead) {
+      plans.push({
+        ...(eyebrow ? { eyebrow } : {}),
+        title: labelTitle(lead.label).replace(/\.$/, ''),
+        checklist: [],
+      });
+      eyebrow = undefined;
+    } else if (block.type === 'list' && current && current.checklist.length === 0) {
+      current.checklist = block.items.map((runs) => renderInline(runs));
+    } else if (block.type === 'links' && current && !current.link && close.length === 0) {
+      current.link = block.links[0];
+    } else if (block.type === 'paragraph') {
+      close.push(block.runs);
+    } else if (block.type === 'links') {
+      links.push(...block.links);
+    }
+  }
+  return plans.length >= 2 && plans.every((plan) => plan.checklist.length > 0)
+    ? { plans, close, links }
+    : null;
+}
+
 /** A carded option's glyph, by its name as authored (owner, 4 Nov 2026: "icons or small graphics"). */
 const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
   'A pilot project': 'flag',
@@ -1031,6 +1080,64 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        buttons split up and down is horrible design… an island section with that title and a button to
        the contact page"). */
     case 'tiles': {
+      /* The plan cards (owner, 5 Nov 2026): eyebrow, name, checklist and the option's own outline
+         action; the closing line and its links are the compact ink island under the set. */
+      const planned = planOptions(band);
+      if (planned) {
+        const ask = planned.links.find(isAskLink);
+        const others = planned.links.filter((link) => !isAskLink(link));
+        const words = planned.close.length
+          ? splitAsk(planned.close.map((runs) => inlineToText(runs)).join(' '))
+          : undefined;
+        return (
+          <EngagementOptions
+            {...head(band)}
+            surface={unit.surface}
+            arrangement="plans"
+            options={planned.plans.map((plan) => ({
+              ...(plan.eyebrow ? { eyebrow: plan.eyebrow } : {}),
+              title: plan.title,
+              body: null,
+              checklist: plan.checklist,
+              action: plan.link ? (
+                <Button
+                  as="a"
+                  href={plan.link.href}
+                  emphasis="outline"
+                  size="md"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {plan.link.labelText}
+                </Button>
+              ) : undefined,
+            }))}
+            note={
+              words && ask ? (
+                <CtaSection
+                  id={`${band.id}-ask`}
+                  data-band="onward"
+                  arrangement="open"
+                  density="compact"
+                  inBand
+                  heading={words.heading}
+                  body={words.lead ? [words.lead] : undefined}
+                  actions={
+                    others[0]
+                      ? [
+                          { label: ask.labelText, href: ask.href },
+                          {
+                            label: others[0].labelText.replace(/\s*→\s*$/, ''),
+                            href: others[0].href,
+                          },
+                        ]
+                      : [{ label: ask.labelText, href: ask.href }]
+                  }
+                />
+              ) : undefined
+            }
+          />
+        );
+      }
       const opening = leadingParagraphs(band);
       const closing = closingNote(band);
       const trailing = [...closing.rest, ...trailingParagraphs(band)];

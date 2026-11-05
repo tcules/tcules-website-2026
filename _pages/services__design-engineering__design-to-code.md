@@ -245,15 +245,42 @@ This is the checklist we resolve for every screen before your developers start.
 
 ## Three ways to work with us {#how-we-work-together}
 
-**A pilot project.** Optional: one flow, one hard question or an audit, at a fixed price agreed up front.
+<!-- The checklist items and the three button labels are placeholders (owner, 5 Nov 2026), drawn from the earlier copy; final words to come. -->
 
-**A defined project.** A first release, a redesign or a design system, scoped and priced before we start.
+*Optional first step*
 
-**An ongoing partnership.** A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+**Pilot project.**
 
-You keep the product decisions, and what we make is yours once it's paid for.
+- One flow or one hard question
+- Or an audit of what you have
+- A fixed price, agreed up front
+- A low-risk way to start
 
-We overlap four to five hours with US working days, and extend that whenever the work needs it.
+[Start with a pilot](#enquiry)
+
+*A known goal*
+
+**Defined project.**
+
+- A first release
+- A redesign
+- A design system
+- Scoped and priced before we start
+
+[Scope a project](#enquiry)
+
+*A roadmap that keeps moving*
+
+**Ongoing partnership.**
+
+- A senior designer leads
+- Specialists join as the work needs
+- Change the team on two weeks' notice
+- No minimum term
+
+[Plan a partnership](#enquiry)
+
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
 [Book a call](#enquiry) · [See how we work →](/how-we-work)
 
