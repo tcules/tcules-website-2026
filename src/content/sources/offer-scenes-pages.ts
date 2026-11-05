@@ -538,16 +538,18 @@ export const PAGE_OFFER_SCENES = {
   },
   '/services/product-design/interaction-ui-design': {
     items: {
-      /* The band is authored {#what-we-design}, so it renders as the catalog tiles, each titled by its whole sentence. */
-      'what-we-design': by({
-        'Every state. Each important screen in its default, empty, loading, error, partial-data and no-permission versions, tested with long names and large tables.': 'wyg-interaction-ui-design-every-state',
-        'Interaction patterns. What each important action triggers, what people see next and how they undo or recover, including confirmations, mode switches and keyboard use.': 'wyg-interaction-ui-design-interaction-patterns',
-        'Visual design. Type, spacing, colour, layout and hierarchy that put the right action first, in your design system or a new visual direction. A beautiful screen that highlights the wrong button is still a bug.': 'wyg-interaction-ui-design-visual-design',
-        'Small screens. What stays together, what collapses and what moves on a phone, so the task still works.': 'wyg-interaction-ui-design-small-screens',
-        'Accessibility. Labels, keyboard use, reading order, contrast and error messages, designed in from the first screen.': 'wyg-interaction-ui-design-accessibility',
-        'Interface text. The microcopy: labels, buttons, empty states and error messages, written with their screens.': 'wyg-interaction-ui-design-interface-text',
-        'Specifications. Every screen annotated with its states and edge cases, plus rules for each reusable part.': 'wyg-interaction-ui-design-specifications',
-        'Handover and build review. A walkthrough with your engineers, answers while they build, and a check of the built screens against the design.': 'wyg-interaction-ui-design-handover-build-review',
+      'what-you-get': by({
+        'Every state.': 'wyg-interaction-ui-design-every-state',
+        'Interaction patterns.': 'wyg-interaction-ui-design-interaction-patterns',
+        'Visual design.': 'wyg-interaction-ui-design-visual-design',
+        'Small screens.': 'wyg-interaction-ui-design-small-screens',
+        'Accessibility.': 'wyg-interaction-ui-design-accessibility',
+        'Interface text.': 'wyg-interaction-ui-design-interface-text',
+        'Specifications.': 'wyg-interaction-ui-design-specifications',
+        'Handover and build review.': 'wyg-interaction-ui-design-handover-build-review',
+        'Who does the work': 'team-interaction-ui-design',
+        'What we need from you': 'needs-interaction-ui-design',
+        'Where our part stops': 'stops-interaction-ui-design',
       }),
     },
     stories: {},

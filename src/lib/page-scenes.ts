@@ -351,7 +351,7 @@ export const PAGE_SCENE_NAMES = [
   'team-information-architecture-workflow-design',
   'needs-information-architecture-workflow-design',
   'stops-information-architecture-workflow-design',
-  /* /services/product-design/interaction-ui-design (renders as the what-we-design tiles) */
+  /* /services/product-design/interaction-ui-design */
   'wyg-interaction-ui-design-every-state',
   'wyg-interaction-ui-design-interaction-patterns',
   'wyg-interaction-ui-design-visual-design',
@@ -360,6 +360,9 @@ export const PAGE_SCENE_NAMES = [
   'wyg-interaction-ui-design-interface-text',
   'wyg-interaction-ui-design-specifications',
   'wyg-interaction-ui-design-handover-build-review',
+  'team-interaction-ui-design',
+  'needs-interaction-ui-design',
+  'stops-interaction-ui-design',
   /* /services/product-design/prototyping-usability-testing */
   'wyg-prototyping-usability-testing-prototype-question-needs',
   'wyg-prototyping-usability-testing-people-who-match-users',

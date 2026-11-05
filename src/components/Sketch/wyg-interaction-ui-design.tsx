@@ -245,6 +245,96 @@ function HandoverBuildReview() {
   );
 }
 
+/* ── Who does the work ─────────────────────────────────────────────────────────── */
+
+/** The screen's skeleton: a heading line and a table, at (x, y), `w` wide. Shared by the hardest screen
+ *  and the screens its direction is carried to, so they read as one family. */
+function Skeleton({ x, y, w }: { x: number; y: number; w: number }) {
+  return (
+    <>
+      <Copy x={x} y={y} w={Math.round(w * 0.6)} />
+      <Rect x={x} y={y + 12} w={w} h={36} rx={4} className={styles.tile} />
+      <path className={styles.rule} d={`M${x},${y + 24} L${x + w},${y + 24} M${x},${y + 36} L${x + w},${y + 36}`} />
+    </>
+  );
+}
+
+/** The designer starts on the hardest screen, and its direction is carried out to the screens on either side. */
+function TeamInteractionUiDesign() {
+  return (
+    <>
+      {/* The hardest screen, the senior designer on it. */}
+      <Rect x={110} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      <Focus x={146} y={58} glyph="user" size={12} />
+      {/* The account lead, beside the designer and quieter. */}
+      <Glyph name="user" cx={184} cy={58} size={14} className={styles.glyph} />
+      <Copy x={126} y={96} w={40} />
+      <Rect x={126} y={106} w={68} h={28} rx={4} className={styles.tile} />
+      <path className={styles.rule} d="M126,120 L194,120" />
+      {/* Carried across, both ways. */}
+      <Hop x1={110} x2={90} y={90} />
+      <Hop x1={210} x2={230} y={90} />
+      {[30, 230].map((x) => (
+        <g key={x}>
+          <Rect x={x} y={50} w={60} h={80} rx={8} className={styles.frame} />
+          <Skeleton x={x + 10} y={66} w={40} />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/* ── What we need from you ──────────────────────────────────────────────────────── */
+
+/** Real content placed first, a long name, an empty account and a permission rule, the layout still undrawn round it. */
+function NeedsInteractionUiDesign() {
+  return (
+    <>
+      {/* The layout, not drawn yet. */}
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.trailFrame} />
+      {/* The long name: it runs nearly the width, so it sets the layout (lit). */}
+      <Rect x={66} y={38} w={188} h={24} rx={4} className={styles.region} />
+      <Glyph name="user" cx={82} cy={50} size={12} className={styles.glyphAccent} />
+      <path className={styles.regionCopy} d="M98,50 L242,50" />
+      {/* The empty account. */}
+      <Rect x={66} y={78} w={188} h={24} rx={4} className={styles.frame} />
+      <Glyph name="notebook" cx={82} cy={90} size={12} className={styles.glyphQuiet} />
+      <Copy x={98} y={90} w={20} quiet />
+      {/* The permission rule. */}
+      <Rect x={66} y={118} w={188} h={24} rx={4} className={styles.frame} />
+      <Glyph name="key" cx={82} cy={130} size={12} className={styles.glyph} />
+      <Copy x={98} y={130} w={56} />
+      <Copy x={162} y={130} w={36} quiet />
+    </>
+  );
+}
+
+/* ── Where our part stops ───────────────────────────────────────────────────────── */
+
+/** The screen, signed off by you, goes to your developers' code, with your design system on their side. */
+function StopsInteractionUiDesign() {
+  return (
+    <>
+      {/* Our screen, with your sign-off on it. */}
+      <Rect x={30} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={46} y={50} w={40} quiet />
+      <Copy x={46} y={62} w={72} />
+      <Copy x={46} y={74} w={56} quiet />
+      <Rect x={46} y={90} w={48} h={16} rx={8} className={styles.tile} />
+      <Focus x={126} y={126} glyph="check-circle" size={13} />
+      <Hop x1={150} x2={190} y={90} />
+      {/* Theirs: the code your developers write, in your design system. */}
+      <Rect x={190} y={40} w={100} h={100} rx={8} className={styles.tile} />
+      <Chip x={202} y={52} glyph="code" />
+      <Chip x={222} y={52} glyph="layers" />
+      <Copy x={206} y={86} w={40} />
+      <Copy x={218} y={98} w={52} quiet />
+      <Copy x={218} y={110} w={36} quiet />
+      <Copy x={206} y={122} w={24} />
+    </>
+  );
+}
+
 export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   /* Every state.: Each important screen in its default, empty, loading, error, partial-data and no-permission versions, tested with long names and large tables. */
   'wyg-interaction-ui-design-every-state': EveryState,
@@ -262,4 +352,10 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'wyg-interaction-ui-design-specifications': Specifications,
   /* Handover and build review.: A walkthrough with your engineers, answers while they build, and a check of the built screens against the design. */
   'wyg-interaction-ui-design-handover-build-review': HandoverBuildReview,
+  /* Who does the work: A senior product designer leads and does the work, with an account lead keeping it on track. They start with your hardest screen, agree the visual direction there and carry it across. Design engineers join when an interaction needs trying in code. */
+  'team-interaction-ui-design': TeamInteractionUiDesign,
+  /* What we need from you: Access to the product, someone who can make the decisions, and real or realistic content: long names, empty accounts and permission rules, before any layout is drawn. */
+  'needs-interaction-ui-design': NeedsInteractionUiDesign,
+  /* Where our part stops: You sign off each screen, and your design system stays yours. Your developers build, unless you add Design Engineering to take the trickiest interactions into code, or Frontend Development for a working front end. */
+  'stops-interaction-ui-design': StopsInteractionUiDesign,
 };
