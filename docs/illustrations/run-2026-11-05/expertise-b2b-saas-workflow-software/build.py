@@ -2,16 +2,19 @@
 """Writes hero.svg for /expertise/b2b-saas-workflow-software.
 
 One deal file, a tabbed divider for every role, and one record handed from one role to the next.
-A solid blue expanding file (pleated gusset) stands on the floor at hub scale, its dividers tabbed for the
-roles that share it: a person, a person, an AI agent. One sheet, the deal record with a lime tab, has been
-taken out of its slot (a dashed lime tab marks where it stood) and is passed hand to hand, along the floor's
-x axis, from the person who took it out (beside the file) to the next person (further out on the floor).
-The record is the drawing's one screen-like surface: an owner line and a stage stepper.
+A white expanding file (blue outline, pleated gusset, one solid blue label slip) stands at the back of the
+floor at hub scale, its dividers tabbed for the roles that share it: a person, a person, an AI agent. One
+sheet, the deal record with a lime tab, has been taken out of its slot (a dashed outline of its tab marks
+where it stood) and lies on a low table in front of the file, slid along the floor's x axis from the person
+who took it out (at the table's near end, by the file) to the next person (at the far end). Each has a hand
+on it. The record is the drawing's one screen-like surface: an owner line and a stage stepper.
 
-Scale and people follow the healthtech hero (the family standard): same projection, dot pitch, pawn size
-(R 22, H 62, head 16) and arm (11 thick including its 1.6 blue outline, hand 0.8 x arm).
+Scale and people follow the healthtech hero (the family standard): same projection, floor plate
+(545 x 402, viewBox about 865 wide), dot pitch, pawn size (R 22, H 62, head 16) and arm (11 thick including
+its 1.6 blue outline, hand 0.8 x arm).
 Run: python3 build.py  (writes hero.svg beside it)
 """
+import os
 from pathlib import Path
 
 B5, B6, B7 = "#0048FF", "#003EE0", "#0031B0"
@@ -43,6 +46,12 @@ def xz(x0, y, ztop):
     return f'matrix(0.9 0.45 0 1 {tx} {ty})'
 
 
+def xy(x0, y0, z):
+    """Transform for flat content lying in the x-y plane at height z; u along +x, v along +y."""
+    tx, ty = P(x0, y0, z)
+    return f'matrix(0.9 0.45 -0.9 0.45 {tx} {ty})'
+
+
 def tabbed(w, h, a, tw, th, r=8, tr=6):
     """Sheet outline with a tab on its top edge, local coords: top-left at (0,0), tab rising to -th."""
     return (f"M0 {r} A{r} {r} 0 0 1 {r} 0 H{a} V{-th + tr} A{tr} {tr} 0 0 1 {a + tr} {-th} "
@@ -50,11 +59,13 @@ def tabbed(w, h, a, tw, th, r=8, tr=6):
             f"V{h - r} A{r} {r} 0 0 1 {w - r} {h} H{r} A{r} {r} 0 0 1 0 {h - r} Z")
 
 
+env = lambda k, d: float(os.environ.get(k, d))
 out = []
 add = out.append
 
-# ---------------------------------------------------------------- floor (healthtech's plate)
-FX0, FY0, FW, FH = -34, -46, 278, 426
+# ---------------------------------------------------------------- floor (healthtech's plate, 545 x 402)
+FW, FH = 545, 402
+FX0, FY0 = env("FX0", -62), env("FY0", -58)
 fx, fy = P(FX0, FY0)
 add(f'<defs><pattern id="{P_}-dots" width="22" height="22" patternUnits="userSpaceOnUse">'
     f'<circle cx="11" cy="11" r="1.6" fill="{B5}" fill-opacity="0.38"/></pattern></defs>')
@@ -63,7 +74,7 @@ add(f'<g transform="matrix(0.9 0.45 -0.9 0.45 {fx} {fy})"><rect width="{FW}" hei
     f'<rect width="{FW}" height="{FH}" fill="none" stroke="{B5}" stroke-width="1.8" stroke-dasharray="10 8"/>'
     f'<rect x="45" y="45" width="{FW - 90}" height="{FH - 90}" fill="{B5}" fill-opacity="0.07"/></g>')
 
-# ---------------------------------------------------------------- the expanding file, hub scale
+# ---------------------------------------------------------------- the expanding file, hub scale, light
 X0, X1 = 0, 150          # width along x
 YB, YF = 0, 54           # back board, front pocket depth
 HB, HF = 138, 60         # back board height, front pocket height
@@ -71,20 +82,20 @@ T = 6                    # pocket board thickness
 SW = X1 - X0 - 14        # sheet width
 HD = 108                 # divider height
 TW, TH = 30, 22          # tab width, height
-GU = 116                 # centre of the empty slot's tab (and of the handed record's tab)
+GU = 116                 # centre of the empty slot's tab
 
-add('<!-- The deal file: a solid blue expanding file. Back board: one shape, top corners rounded -->')
+add('<!-- The deal file: a white expanding file, blue outline. Back board: one shape, top corners rounded -->')
 add(f'<g transform="{xz(X0, YB, HB)}"><path d="M0 {HB} V11 A11 11 0 0 1 11 0 H{X1 - X0 - 11} '
-    f'A11 11 0 0 1 {X1 - X0} 11 V{HB} Z" fill="{B5}" stroke="{B6}" stroke-width="1.6" stroke-linejoin="round"/></g>')
+    f'A11 11 0 0 1 {X1 - X0} 11 V{HB} Z" fill="{B1}" stroke="{B5}" stroke-width="1.6" stroke-linejoin="round"/></g>')
 
-# the empty slot the record came out of: the dashed lime tab of the missing sheet
+# the empty slot the record came out of: a dashed outline of the missing sheet's tab
 YG = 8
-add('<!-- The slot the record left: a dashed lime outline of its tab, standing empty behind the dividers -->')
+add('<!-- The slot the record left: a dashed outline of its tab, standing empty behind the dividers -->')
 gtr, gth = 6, 20
 ghost = (f"M{GU - TW / 2} 6 V{-gth + gtr} A{gtr} {gtr} 0 0 1 {GU - TW / 2 + gtr} {-gth} "
          f"H{GU + TW / 2 - gtr} A{gtr} {gtr} 0 0 1 {GU + TW / 2} {-gth + gtr} V6")
-add(f'<g transform="{xz(X0 + 7, YG, HD + 6)}"><path d="{ghost}" fill="none" stroke="{LIME}" stroke-width="1.8" '
-    f'stroke-dasharray="4.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></g>')
+add(f'<g transform="{xz(X0 + 7, YG, HD + 6)}"><path d="{ghost}" fill="none" stroke="{B5}" stroke-width="1.6" '
+    f'stroke-dasharray="3.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></g>')
 
 # dividers: one per role, equal tabs evenly spaced so every role shows
 dividers = [(18, 24, "person"), (30, 56, "person"), (42, 88, "ai")]   # depth y, tab centre u, mark
@@ -103,7 +114,7 @@ for (yd, cx, mark) in dividers:
     add("".join(g))
 
 # pleated gusset on the right: an accordion of folds, a V notch at the top of each pleat
-add('<!-- The gusset: an accordion of folds -->')
+add('<!-- The gusset: an accordion of folds, pale side faces -->')
 K, NOTCH = 3, 13
 
 
@@ -120,19 +131,19 @@ for i in range(K):
     if i < K - 1:
         ridges.append(yp)
 edge.append(P(X1, YF, 0))
-add(poly(edge, B6, B7, 1.2))
+add(poly(edge, B2, B5, 1.6))
 for y in valleys:
-    add(f'<path d="M{pts(P(X1, y, top(y) - NOTCH), P(X1, y, 0))}" stroke="{B7}" stroke-width="1.5" stroke-linecap="round"/>')
+    add(f'<path d="M{pts(P(X1, y, top(y) - NOTCH), P(X1, y, 0))}" stroke="{B5}" stroke-width="1.2" stroke-linecap="round"/>')
 for y in ridges:
-    add(f'<path d="M{pts(P(X1, y, top(y) - 1.5), P(X1, y, 0))}" stroke="{B5}" stroke-width="1.3" stroke-linecap="round"/>')
+    add(f'<path d="M{pts(P(X1, y, top(y) - 3.5), P(X1, y, 1.5))}" stroke="{W}" stroke-width="1.6" stroke-linecap="round"/>')
 
-# front pocket: top edge, front face, a plain label slip (not a screen)
-add('<!-- Front pocket with a plain label slip -->')
-add(poly([P(X0 + 9, YF - T, HF), P(X1, YF - T, HF), P(X1, YF, HF), P(X0 + 9, YF, HF)], B7, B7, 1.2))
-add(f'<g transform="{xz(X0, YF, HF)}"><path d="M9 0 H{X1 - X0} V{HF} H9 A9 9 0 0 1 0 {HF - 9} V9 A9 9 0 0 1 9 0 Z" fill="{B5}" '
-    f'stroke="{B6}" stroke-width="1.6" stroke-linejoin="round"/>'
-    f'<rect x="20" y="17" width="64" height="20" rx="5" fill="{W}"/>'
-    f'<rect x="29" y="24" width="36" height="6" rx="3" fill="{B2}"/>'
+# front pocket: top edge, white front face, the one solid blue element: its label slip
+add('<!-- Front pocket, white; its label slip is the file\'s one solid blue part -->')
+add(poly([P(X0 + 9, YF - T, HF), P(X1, YF - T, HF), P(X1, YF, HF), P(X0 + 9, YF, HF)], B2, B5, 1.2))
+add(f'<g transform="{xz(X0, YF, HF)}"><path d="M9 0 H{X1 - X0} V{HF} H9 A9 9 0 0 1 0 {HF - 9} V9 A9 9 0 0 1 9 0 Z" fill="{W}" '
+    f'stroke="{B5}" stroke-width="1.6" stroke-linejoin="round"/>'
+    f'<rect x="18" y="15" width="70" height="24" rx="6" fill="{B5}"/>'
+    f'<rect x="28" y="24" width="38" height="6" rx="3" fill="{W}"/>'
     f'</g>')
 
 
@@ -157,56 +168,52 @@ def client_arm(x, y, ax, ay, hx, hy):
     """A light arm outlined in blue, growing out of the body (its outline masked inside the body)."""
     mid = f"{P_}-arm{mask_n[0]}"
     mask_n[0] += 1
-    return (f'<mask id="{mid}" maskUnits="userSpaceOnUse" x="-500" y="-300" width="1100" height="800">'
-            f'<rect x="-500" y="-300" width="1100" height="800" fill="{W}"/><path d="{body_path(x, y)}" fill="#000000"/></mask>'
+    return (f'<mask id="{mid}" maskUnits="userSpaceOnUse" x="-600" y="-400" width="1400" height="1000">'
+            f'<rect x="-600" y="-400" width="1400" height="1000" fill="{W}"/><path d="{body_path(x, y)}" fill="#000000"/></mask>'
             f'<g mask="url(#{mid})"><path d="M{f(ax)} {f(ay)} L{f(hx)} {f(hy)}" stroke="{B5}" stroke-width="{ARM}" '
             f'stroke-linecap="round"/><circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND)}" fill="{B5}"/></g>'
             f'<path d="M{f(ax)} {f(ay)} L{f(hx)} {f(hy)}" stroke="{W}" stroke-width="{f(ARM - 2 * OUT)}" stroke-linecap="round"/>'
             f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND - OUT)}" fill="{W}"/>')
 
 
-def hand_on_sheet(hx, hy):
-    """A hand drawn over the sheet's edge, so it grips it."""
-    return (f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND)}" fill="{B5}"/>'
-            f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND - OUT)}" fill="{W}"/>')
+# ---------------------------------------------------------------- the table and the record on it
+PW, PH = SW, 74                  # the record: the same sheet as the dividers, cut short
+TX0 = env("TX0", 225)            # table near end (x)
+TY0 = env("TY0", 165)            # table back edge (y)
+TL, TD, TZ, TT = PW + 26, PH + 22, 40, 7   # table length (x), depth (y), top height, top thickness
+LEG = 7
+TX1, TY1 = TX0 + TL, TY0 + TD
+RX0, RY0 = TX0 + 13, TY0 + 14    # the record on the table top
+LU = 74                          # the record's lime tab, past its middle toward the far end (the way it is going)
+GAP = 38                         # pawn centre past the table's end, along x
+PY = TY0 + TD / 2                # the people stand on the table's long axis
 
+gx, gy = P(TX0 - GAP, PY)
+rx, ry = P(TX1 + GAP, PY)
 
-# ---------------------------------------------------------------- the record, passed hand to hand
-PW, PH = SW, 74                  # the same sheet as the dividers, cut short
-SXP, SY1, PZ = 198, 290, 100     # the sheet's plane x, its front end y, top edge height
-LU = 30                          # the record's lime tab, near its front end
-GAP = 44                         # pawn centre to the sheet's end, along y
-ZH = 64                          # hand height
-
-
-def yz(x, y_front, ztop):
-    """Transform for flat content in a y-z plane at x, u running from the front end toward the back (-y)."""
-    tx, ty = P(x, y_front, ztop)
-    return f'matrix(0.9 -0.45 0 1 {tx} {ty})'
-
-
-# the giver stands just past the sheet's back end (near the file), the receiver past its front end
-gx, gy = P(SXP, SY1 - PW - GAP)
-rx, ry = P(SXP, SY1 + GAP)
-gh = P(SXP, SY1 - PW + 3, ZH)
-rh = P(SXP, SY1 - 3, ZH)
-
-add('<!-- The person who drew the record from the file (back) hands it to the next person (front) -->')
+add('<!-- The person who drew the record from the file stands at the table\'s near end -->')
 add(pawn(gx, gy))
-add(client_arm(gx, gy, gx - 8, gy - H + 22, gh[0], gh[1]))
 
-add('<!-- The deal record: the sheet missing from the file, its tab lime -->')
-g = [f'<g transform="{yz(SXP, SY1, PZ)}">',
-     # lime tab on the leading end, toward the person taking it
+add('<!-- A low table: white top, pale sides, four legs -->')
+for (lx, ly) in [(TX0 + 6, TY0 + 6), (TX1 - 6 - LEG, TY0 + 6)]:   # back legs
+    add(poly([P(lx, ly + LEG, 0), P(lx + LEG, ly + LEG, 0), P(lx + LEG, ly + LEG, TZ - TT), P(lx, ly + LEG, TZ - TT)], B2, B5, 1.2))
+    add(poly([P(lx + LEG, ly, 0), P(lx + LEG, ly + LEG, 0), P(lx + LEG, ly + LEG, TZ - TT), P(lx + LEG, ly, TZ - TT)], B1, B5, 1.2))
+for (lx, ly) in [(TX0 + 6, TY1 - 6 - LEG), (TX1 - 6 - LEG, TY1 - 6 - LEG)]:   # front legs
+    add(poly([P(lx, ly + LEG, 0), P(lx + LEG, ly + LEG, 0), P(lx + LEG, ly + LEG, TZ - TT), P(lx, ly + LEG, TZ - TT)], B2, B5, 1.2))
+    add(poly([P(lx + LEG, ly, 0), P(lx + LEG, ly + LEG, 0), P(lx + LEG, ly + LEG, TZ - TT), P(lx + LEG, ly, TZ - TT)], B1, B5, 1.2))
+add(poly([P(TX0, TY1, TZ - TT), P(TX1, TY1, TZ - TT), P(TX1, TY1, TZ), P(TX0, TY1, TZ)], B2, B5, 1.2))
+add(poly([P(TX1, TY0, TZ - TT), P(TX1, TY1, TZ - TT), P(TX1, TY1, TZ), P(TX1, TY0, TZ)], B1, B5, 1.2))
+add(poly([P(TX0, TY0, TZ), P(TX1, TY0, TZ), P(TX1, TY1, TZ), P(TX0, TY1, TZ)], W, B5, 1.6))
+
+add('<!-- The deal record lying on the table: the sheet missing from the file, its tab lime -->')
+g = [f'<g transform="{xy(RX0, RY0, TZ)}">',
      f'<path d="M{LU - TW / 2 - 7} 4 V{-TH + 6} A6 6 0 0 1 {LU - TW / 2 - 1} {-TH} H{LU + TW / 2 + 1} '
      f'A6 6 0 0 1 {LU + TW / 2 + 7} {-TH + 6} V4 Z" fill="{LIME}" stroke="{LIMED}" stroke-width="1.4" stroke-linejoin="round"/>',
      f'<rect x="{LU - 9}" y="{-TH / 2 - 3}" width="18" height="5" rx="2.5" fill="{INK}"/>',
      f'<rect width="{PW}" height="{PH}" rx="8" fill="{W}" stroke="{B5}" stroke-width="1.6"/>',
-     # owner: a small avatar and the deal's title
      f'<circle cx="22" cy="21" r="8.5" fill="{B5}"/><circle cx="22" cy="18.6" r="3" fill="{W}"/>'
      f'<path d="M17 26.4 a5 4.4 0 0 1 10 0 Z" fill="{W}"/>',
      f'<rect x="37" y="15" width="64" height="7.5" rx="3.75" fill="{B5}"/><rect x="37" y="26" width="38" height="6" rx="3" fill="{B2}"/>',
-     # stage stepper: done, done, here, to come
      f'<path d="M24 53 H112" stroke="{B2}" stroke-width="2.2" stroke-linecap="round"/>'
      f'<path d="M24 53 H82.7" stroke="{B5}" stroke-width="2.2" stroke-linecap="round"/>'
      f'<circle cx="24" cy="53" r="5" fill="{B5}"/><circle cx="53.3" cy="53" r="5" fill="{B5}"/>'
@@ -214,21 +221,28 @@ g = [f'<g transform="{yz(SXP, SY1, PZ)}">',
      f'<circle cx="112" cy="53" r="5" fill="{W}" stroke="{B3}" stroke-width="1.4"/>',
      '</g>']
 add("".join(g))
-add(hand_on_sheet(*gh))
 
+# hands rest on the record's two ends, at the table top
+gh = P(RX0 + 4, PY, TZ + 1)
+rh = P(RX0 + PW - 4, PY, TZ + 1)
+add('<!-- The giver\'s hand pushes the record across; the next person\'s hand takes its far end -->')
+add(client_arm(gx, gy, gx + 6, gy - H + 22, gh[0], gh[1]))
+
+add('<!-- The next person, at the far end -->')
 add(pawn(rx, ry))
-add(client_arm(rx, ry, rx + 8, ry - H + 22, rh[0], rh[1]))
+add(client_arm(rx, ry, rx - 6, ry - H + 22, rh[0], rh[1]))
 
 svg = "\n".join(out)
-corners = [P(FX0, FY0), P(FX0 + FW, FY0), P(FX0, FY0 + FH), P(FX0 + FW, FY0 + FH), P(X0, YB, HB)]
+corners = [P(FX0, FY0), P(FX0 + FW, FY0), P(FX0, FY0 + FH), P(FX0 + FW, FY0 + FH), P(X0, YB, HB), P(X1, YB, HB)]
 xs = [c[0] for c in corners]; ys = [c[1] for c in corners]
-pad = 4
+pad = 6
 vb = (min(xs) - pad, min(ys) - pad, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad)
-alt = ("Isometric illustration for B2B SaaS and workflow software design. A solid blue expanding file stands on a "
-       "dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. One "
-       "sheet, the deal record with a lime tab, has been taken out, leaving a dashed outline of its tab in the "
-       "file, and is being handed on: the person beside the file passes it to the next person, both holding its "
-       "edges. The record shows its owner and a row of stages, with the current one ringed.")
+alt = ("Isometric illustration for B2B SaaS and workflow software design. A white expanding file with a blue "
+       "label stands on a dotted floor, its dividers tabbed for the roles that share one deal: two people and one "
+       "marked AI. One sheet, the deal record with a lime tab, has been taken out, leaving a dashed outline of its "
+       "tab in the file, and lies on a low table in front of it: the person who took it out slides it along the "
+       "table to the next person, each with a hand on one end. The record shows its owner and a row of stages, "
+       "with the current one ringed.")
 doc = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{" ".join(str(round(v)) for v in vb)}" role="img" '
        f'aria-label="{alt}">\n{svg}\n</svg>\n')
 Path(__file__).with_name("hero.svg").write_text(doc)

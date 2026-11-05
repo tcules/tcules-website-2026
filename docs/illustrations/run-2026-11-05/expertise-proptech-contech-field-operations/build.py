@@ -153,7 +153,7 @@ HX0, HX1, HY0, HY1 = 302, 446, 180, 304
 HW, HR = 82, 58
 # the two clients, both on the floor
 DX, DY = 124, 38           # deal desk, at the screen's back end
-WX, WY = 122, 252          # on site, at the screen's front end, by the house
+WX, WY = 105, 207          # on site, close at the screen's front corner, beside it (not in front of it)
 
 # ================================================================ floor
 corners = [iso(FX0, FY0), iso(FX0 + FW, FY0), iso(FX0 + FW, FY0 + FH), iso(FX0, FY0 + FH)]
@@ -186,7 +186,7 @@ g.append(f'<rect x="18" y="46" width="{MW-36}" height="54" rx="7" fill="{WHITE}"
          f'<path d="M65 52 c-6.8 0 -10.4 4.8 -10.4 9.8 c0 6.8 10.4 16 10.4 16 s10.4 -9.2 10.4 -16 c0 -5 -3.6 -9.8 -10.4 -9.8 Z" fill="{B500}"/>'
          f'<circle cx="65" cy="62" r="3.8" fill="{WHITE}"/>')
 # the sign-offs, two ticked and the last one still open (by the site worker's hand)
-for i, yy in enumerate((114, 136, 158)):
+for i, yy in enumerate((112, 133, 154)):
     done = i < 2
     tx = 28
     if done:
@@ -256,7 +256,7 @@ HB = hy - 5
 out.append(f'<path d="M{f(cx-17)} {f(HB)} A17 15 0 0 1 {f(cx+17)} {f(HB)} Z" fill="{B100}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>'
            f'<path d="M{f(cx)} {f(HB-15)} V{f(HB)}" stroke="{B500}" stroke-width="1.4"/>'
            f'<rect x="{f(cx-23)}" y="{f(HB-2.4)}" width="46" height="6" rx="3" fill="{B100}" stroke="{B500}" stroke-width="1.6"/>')
-arm("site", body, (cx + 6, cy - BH + 30), iso(MXP + 2, MYF - 12, MZ0 + 30))
+arm("site", body, (cx + 8, cy - BH + 30), iso(MXP + 2, MYF - 19, MZ0 + 21))
 
 # ================================================================ write
 svg_body = "\n".join(out)

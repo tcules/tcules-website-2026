@@ -38,8 +38,9 @@ Buyer's sentence: "They put the deal team and the people on site on one record o
 - **Two clients, on that one record, both fully on the floor** (healthtech's pawn: body 44 wide, head r16; the
   client arm 11 with its blue outline, light core 7.8, hand 8.8 / 7.2):
   - **the deal desk:** a white pawn with a small blue tie at the tablet's back end, a short arm to its far edge;
-  - **on site:** a white pawn in a hard hat (dome, ridge, brim) at the tablet's front end, beside the house and
-    off the tile, a short arm to the open sign-off.
+  - **on site:** a white pawn in a hard hat (dome, ridge, brim) standing close at the tablet's front corner,
+    beside it rather than in front of it, off the tile; a short arm from the shoulder (§5) lays the hand on the
+    open sign-off at chest height, clear of the stand and the bottom bezel.
 - One screen, no connectors, no Tcules figure: the idea is the client's two sides sharing one record.
 - Distinct from every sibling: no phone and no lime pill (healthtech), no flat tablet lying on the floor (commerce,
   data), no monitor fed by objects (climatetech); an upright tablet on a stand facing the hub object across the floor.
@@ -88,3 +89,10 @@ the open sign-off.
    monitor's corner, long arms). Checked at 600 and 360 beside healthtech and the hub; zoom-checked both hands on
    the screen, the hat clear of the tablet's corner and stand, the deal person's feet clear of the ridge, the roof's
    gable overhang, the tablet's foot and neck.
+8. Final polish (one fix). The hard-hat worker stood well in front-left of the tablet and their arm ran long and
+   diagonally across the stand's neck to reach the screen. The worker now stands close at the tablet's front corner
+   (world 105, 207 instead of 122, 252), so the arm is a short stub from the shoulder (§5), like healthtech's, and
+   the hand rests over the open sign-off's ring. The three sign-off rows moved up 2 to 4 units so the open ring and
+   the hand clear the screen's bottom edge. Nothing else changed; box still 860 × 574 (1.50). Checked at 600 and
+   360 beside healthtech (same floor width and pawn scale); zoom-checked the arm leaving the shoulder, the hand on
+   the ring, the hand clear of the bezel, the hat clear of the tablet's side, the pawn clear of the stand's base.

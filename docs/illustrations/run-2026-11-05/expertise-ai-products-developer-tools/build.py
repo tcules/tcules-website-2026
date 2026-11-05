@@ -42,15 +42,22 @@ floor = (
     '<rect x="45" y="45" width="455" height="312" fill="#0048FF" fill-opacity="0.07"/></g>\n'
 )
 
-# ---------------------------------------------------------------- the keyboard (hero object, solid blue, a low wedge)
-KU0, KV0 = ENV("KB", [118, 236])
+# ---------------------------------------------------------------- the desk (white, on four legs)
+DU0, DU1, DV0, DV1 = ENV("DESK", [124, 406, 88, 368])
+DH, TT, LEG, LIN = 40, 7, 11, 9      # top height, top thickness, leg size, leg inset
+desk_legs = ["<!-- The desk: a plain white table on four legs -->"]
+for (lu, lv) in [(DU0 + LIN, DV0 + LIN), (DU0 + LIN, DV1 - LIN - LEG), (DU1 - LIN - LEG, DV0 + LIN), (DU1 - LIN - LEG, DV1 - LIN - LEG)]:
+    desk_legs.append(ibox(lu, lu + LEG, lv, lv + LEG, 0, DH - TT, W, W, B200, B, 1.4))
+desk_top = ibox(DU0, DU1, DV0, DV1, DH - TT, DH, W, W, B200)
+
+# ---------------------------------------------------------------- the keyboard (hero object, solid blue, a low wedge on the desk)
+KU0, KV0 = ENV("KB", [163, 261])
 UNIT = 17                 # one key pitch, in floor units
 GAP = 4                   # gap between keys
-M = 10                    # margin round the key field
+M = 7                     # margin round the key field (slim, so little blue shows round the keys)
 NROWS = 5
-HB, HF = 15, 8            # chassis height at the back and at the front: a low wedge rising toward the back
-KEYH, INS = 6, 1.6        # keycap height and the cap-top inset (a lighter top on a darker skirt)
-# real rows, in key units; "E" marks the Enter key's columns (a tall key over rows 1-2, at the right end)
+HB, HF = 11, 5            # chassis height at the back and at the front: a low wedge rising toward the back
+KEYH, INS = 5, 1.6        # keycap height and the cap-top inset (a lighter top on a darker skirt)
 ROWS = [
     [1] * 11 + [2],                                   # number row, Backspace
     [1.5] + [1] * 9 + ["E2.5"],                      # Tab, letters, Enter (top)
@@ -64,13 +71,13 @@ KV1 = KV0 + 2 * M + NROWS * UNIT - GAP
 u_start, v_start = KU0 + M, KV0 + M
 
 def hs(v):
-    """Height of the chassis top at depth v."""
-    return HB + (HF - HB) * (v - KV0) / (KV1 - KV0)
+    """Height of the chassis top at depth v (above the desk top)."""
+    return DH + HB + (HF - HB) * (v - KV0) / (KV1 - KV0)
 
-kb = ["<!-- The developer's keyboard: the industry's object, a low solid-blue wedge, one lime Enter key -->"]
-kb.append(poly([P(KU0, KV1, 0), P(KU1, KV1, 0), P(KU1, KV1, HF), P(KU0, KV1, HF)], B600, B700, 1.6))
-kb.append(poly([P(KU1, KV0, 0), P(KU1, KV1, 0), P(KU1, KV1, HF), P(KU1, KV0, HB)], B700, B700, 1.6))
-kb.append(poly([P(KU0, KV0, HB), P(KU1, KV0, HB), P(KU1, KV1, HF), P(KU0, KV1, HF)], B, B700, 1.6))
+kb = ["<!-- The developer's keyboard: the industry's object, a low solid-blue wedge with white keys and one lime Enter -->"]
+kb.append(poly([P(KU0, KV1, DH), P(KU1, KV1, DH), P(KU1, KV1, DH + HF), P(KU0, KV1, DH + HF)], B600, B, 1.4))
+kb.append(poly([P(KU1, KV0, DH), P(KU1, KV1, DH), P(KU1, KV1, DH + HF), P(KU1, KV0, DH + HB)], B700, B, 1.4))
+kb.append(poly([P(KU0, KV0, DH + HB), P(KU1, KV0, DH + HB), P(KU1, KV1, DH + HF), P(KU0, KV1, DH + HF)], B, B, 1.4))
 
 def keycap(a0, a1, b0, b1, top, skirt, stroke, sw, press=0):
     k = KEYH - press
@@ -78,8 +85,8 @@ def keycap(a0, a1, b0, b1, top, skirt, stroke, sw, press=0):
     Bf = lambda u, v: P(u, v, hs(v))
     i = INS
     return "".join([
-        poly([Bf(a0, b1), Bf(a1, b1), T(a1 - i, b1 - i), T(a0 + i, b1 - i)], skirt, stroke, sw),   # front skirt
-        poly([Bf(a1, b0), Bf(a1, b1), T(a1 - i, b1 - i), T(a1 - i, b0 + i)], skirt, stroke, sw),   # right skirt
+        poly([Bf(a0, b1), Bf(a1, b1), T(a1 - i, b1 - i), T(a0 + i, b1 - i)], skirt, stroke, sw),
+        poly([Bf(a1, b0), Bf(a1, b1), T(a1 - i, b1 - i), T(a1 - i, b0 + i)], skirt, stroke, sw),
         poly([T(a0 + i, b0 + i), T(a1 - i, b0 + i), T(a1 - i, b1 - i), T(a0 + i, b1 - i)], top, stroke, sw),
     ])
 
@@ -100,31 +107,19 @@ for r, row in enumerate(ROWS):
 eu0, eu1, ev0, ev1 = enter
 keys.append((eu0, eu1, ev0, ev1, "enter"))
 keys.sort(key=lambda k: (k[2] + k[0] * 0.001, k[0]))
-PRESS = 2.5   # the Enter key is pressed down
+PRESS = 2   # the Enter key is pressed down
 for (a0, a1, b0, b1, kind) in keys:
     if kind == "enter":
         kb.append(keycap(a0, a1, b0, b1, LIME, LIME_D, LIME_D, 1.1, PRESS))
     else:
-        kb.append(keycap(a0, a1, b0, b1, W, B200, B700, 0.9))
+        kb.append(keycap(a0, a1, b0, b1, W, B100, B, 0.8))
 
-# ---------------------------------------------------------------- the result card (stands in a low base)
-CU0, CU1, CV = ENV("CARD", [156, 330, 98])
-CT = 9               # card thickness (in v)
-BASEH = 14
-CH = 240             # card height above the base
-# the base in two parts, so the card stands in a slot: the back half before the card, the front lip after it
-base_back = ibox(CU0 - 12, CU1 + 12, CV - CT - 12, CV, 0, BASEH, W, W, B200)
-base_front = ibox(CU0 - 12, CU1 + 12, CV, CV + 14, 0, BASEH, W, W, B200)
-# one right face across both halves, so the base reads as one block with no seam
-base_front += poly([P(CU1 + 12, CV - CT - 12, BASEH), P(CU1 + 12, CV + 14, BASEH), P(CU1 + 12, CV + 14, 0), P(CU1 + 12, CV - CT - 12, 0)], B200)
-base_front += poly([P(CU0 - 12, CV, BASEH), P(CU1 + 12, CV, BASEH), P(CU1 + 12, CV + 14, BASEH), P(CU0 - 12, CV + 14, BASEH)], W)
+# ---------------------------------------------------------------- the result: a white sheet laid flat on the desk
+CU0, CV0 = ENV("CARD", [136, 98])
+CW, CD = 214, 146         # along u, along v
+CTH = 4                   # its thickness
+RX = 12
 
-def card_local_to_screen(x, y):
-    # local (x along u, y down from the card top) on the plane v = CV
-    sx, sy = P(CU0 + x, CV, BASEH + CH - y)
-    return sx, sy
-
-RX = 16
 def rrect_pts(w, h, r, n=8):
     out = []
     for cx, cy, a0 in [(w - r, r, -90), (w - r, h - r, 0), (r, h - r, 90), (r, r, 180)]:
@@ -146,45 +141,35 @@ def hull(points):
         up.append(p)
     return lo[:-1] + up[:-1]
 
-CW = CU1 - CU0
-front = [card_local_to_screen(x, y) for x, y in rrect_pts(CW, CH + RX, RX)]  # sunk RX into the slot
-dx, dy = P(0, -CT)[0] - P(0, 0)[0], P(0, -CT)[1] - P(0, 0)[1]
-back = [(x + dx, y + dy) for x, y in front]
-slab = hull(front + back)
+def on_card(x, y, h=DH + CTH):
+    return P(CU0 + x, CV0 + y, h)
 
-card = ["<!-- The first result: a white card standing in a slot in a low base, marked AI, showing what the model checked -->", base_back]
-card.append(poly(slab, B200, B, 1.6))
-ox, oy = card_local_to_screen(0, 0)
-g = [f'<g transform="matrix(0.9 0.45 0 1 {f(ox)} {f(oy)})">']
-g.append(f'<rect width="{CW}" height="{CH + RX}" rx="{RX}" fill="{W}" stroke="{B}" stroke-width="1.6"/>')
-# AI badge + title bars
-g.append(f'<rect x="18" y="18" width="38" height="24" rx="7" fill="{B}"/>')
-g.append(f'<path d="M24.5 36 L30 23.5 L35.5 36 M26.6 31.4 H33.4 M42 23.5 V36" fill="none" stroke="{W}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>')
-g.append(f'<rect x="68" y="21" width="{CW - 96}" height="8" rx="4" fill="{B}"/><rect x="68" y="34" width="{CW - 128}" height="7" rx="3.5" fill="{B200}"/>')
+rr = rrect_pts(CW, CD, RX)
+slab = hull([on_card(x, y) for x, y in rr] + [on_card(x, y, DH) for x, y in rr])
+card = ["<!-- The first result, laid flat on the desk: marked AI, a line of code, the three checks the model ran, and a sign-off -->"]
+card.append(poly(slab, B200, B, 1.4))
+ox, oy = on_card(0, 0)
+g = [f'<g transform="matrix(0.9 0.45 -0.9 0.45 {f(ox)} {f(oy)})">']
+g.append(f'<rect width="{CW}" height="{CD}" rx="{RX}" fill="{W}" stroke="{B}" stroke-width="1.6"/>')
+# the sign-off, top left, where the reviewer's hand rests: an outlined pill with a tick and a label bar
+g.append(f'<rect x="11" y="10" width="62" height="28" rx="14" fill="{W}" stroke="{B}" stroke-width="1.8"/>')
+g.append(f'<path d="M21 24 l4 4 l7.4 -8" fill="none" stroke="{B}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>')
+g.append(f'<rect x="40" y="20.5" width="24" height="7" rx="3.5" fill="{B}"/>')
+# title bars and the AI badge, top right
+g.append(f'<rect x="84" y="15" width="56" height="7" rx="3.5" fill="{B}"/><rect x="84" y="27" width="40" height="6" rx="3" fill="{B200}"/>')
+g.append(f'<rect x="154" y="10" width="48" height="30" rx="8" fill="{B}"/>')
+g.append(f'<path d="M162.5 33 L170 17 L177.5 33 M165.3 27 H174.7 M187 17 V33" fill="none" stroke="{W}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>')
 # the working first result: code brackets and two lines of output
-g.append(f'<rect x="18" y="56" width="{CW - 36}" height="42" rx="9" fill="{B50}" stroke="{B}" stroke-width="1.2"/>')
-g.append(f'<path d="M37 70 l-7 7 l7 7 M49 70 l7 7 l-7 7" fill="none" stroke="{B}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>')
-g.append(f'<rect x="68" y="68" width="{CW - 104}" height="7" rx="3.5" fill="{B}"/><rect x="68" y="80" width="{CW - 128}" height="7" rx="3.5" fill="{B300}"/>')
-# what the model checked: three short labelled lines, each ticked, ruled apart
-for i, w1 in enumerate([CW - 92, CW - 112, CW - 100]):
-    y = 120 + i * 26
-    if i:
-        g.append(f'<path d="M18 {y - 13} H{CW - 18}" stroke="{B100}" stroke-width="1.2"/>')
-    g.append(f'<circle cx="29" cy="{y}" r="9" fill="{B}"/><path d="M24.5 {y} l3.2 3.2 l6 -6.4" fill="none" stroke="{W}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>')
-    g.append(f'<rect x="48" y="{y - 4}" width="{w1}" height="8" rx="4" fill="{B200}"/>')
-# the sign-off: a clear outlined button at the foot, waiting on the reviewer's hand
-g.append(f'<rect x="14" y="{CH - 54}" width="{CW - 32}" height="32" rx="16" fill="{W}" stroke="{B}" stroke-width="2"/>')
-g.append(f'<path d="M{CW / 2 - 18} {CH - 38} l4 4 l7.5 -8" fill="none" stroke="{B}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>')
-g.append(f'<rect x="{CW / 2}" y="{CH - 41.5}" width="40" height="7" rx="3.5" fill="{B}"/>')
+g.append(f'<rect x="11" y="48" width="{CW - 22}" height="36" rx="8" fill="{B50}" stroke="{B}" stroke-width="1.2"/>')
+g.append(f'<path d="M30 59 l-6.5 7 l6.5 7 M41 59 l6.5 7 l-6.5 7" fill="none" stroke="{B}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>')
+g.append(f'<rect x="58" y="57" width="{CW - 90}" height="6.5" rx="3.25" fill="{B}"/><rect x="58" y="68.5" width="{CW - 120}" height="6.5" rx="3.25" fill="{B300}"/>')
+# what the model checked: three ticked lines
+for i, w1 in enumerate([CW - 84, CW - 104, CW - 94]):
+    y = 101 + i * 18
+    g.append(f'<circle cx="21" cy="{y}" r="8" fill="{B}"/><path d="M17.2 {y} l2.8 2.8 l5.2 -5.6" fill="none" stroke="{W}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>')
+    g.append(f'<rect x="36" y="{y - 3.5}" width="{w1}" height="7" rx="3.5" fill="{B200}"/>')
 g.append("</g>")
-g.append(base_front)
 card += g
-
-# ---------------------------------------------------------------- dashed link: the Enter key's call reaches the card
-LU = (eu0 + eu1) / 2
-link = (f'<!-- Enter sends the call: one dashed line from the keyboard straight back into the result\'s base -->'
-        f'<path d="M{f(P(LU, KV0)[0])} {f(P(LU, KV0)[1])} L{f(P(LU, CV + 14)[0])} {f(P(LU, CV + 14)[1])}" fill="none" '
-        f'stroke="{B}" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round"/>')
 
 # ---------------------------------------------------------------- people (STYLE §5): light client pawns
 R, H, HEAD = 22, 62, 16
@@ -204,45 +189,43 @@ def client_arm(x, y, frm, to):
             f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND)}" fill="{B}"/></g>'
             f'<path d="M{f(ax)} {f(ay)} L{f(hx)} {f(hy)}" stroke="{W}" stroke-width="{f(ARM - 2 * OUT)}" stroke-linecap="round"/>'
             f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND - OUT)}" fill="{W}"/>')
-def pawn(u, v, arm=None, arm_behind=False, badge=None):
+def pawn_body(u, v, badge=None):
     x, y = P(u, v)
-    s = ""
-    if arm and arm_behind:
-        s += client_arm(x, y, *arm)
-    s += f'<path d="{body_path(x, y)}" fill="{W}" stroke="{B}" stroke-width="1.6" stroke-linejoin="round"/>'
+    s = f'<path d="{body_path(x, y)}" fill="{W}" stroke="{B}" stroke-width="1.6" stroke-linejoin="round"/>'
     s += f'<circle cx="{f(x)}" cy="{f(y - H - R - 4 - HEAD)}" r="{HEAD}" fill="{W}" stroke="{B}" stroke-width="1.6"/>'
-    by = y - H * 0.42
+    by = y - H * 0.6
     if badge == "code":
         s += (f'<path d="M{f(x - 5)} {f(by - 8)} l-7 8 l7 8 M{f(x + 5)} {f(by - 8)} l7 8 l-7 8" fill="none" stroke="{B}" '
               f'stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>')
     if badge == "tick":
         s += f'<path d="M{f(x - 10)} {f(by)} l7 7 l13 -14" fill="none" stroke="{B}" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>'
-    if arm and not arm_behind:
-        s += client_arm(x, y, *arm)
     return s
+def arm_to(u, v, side, target):
+    x, y = P(u, v)
+    return client_arm(x, y, (side, SHOULDER), (target[0] - x, target[1] - y))
 
 SHOULDER = -H - 3          # the arm grows from the shoulder, just under the head
-DEV = ENV("DEV", [KU1 + 32, (ev0 + ev1) / 2 + 4])
-REV = ENV("REV", [CU0 - 10, CV + 15])
-dx_, dy_ = P(*DEV)
-hand_target = P((eu0 + eu1) / 2 + 1, (ev0 + ev1) / 2, hs((ev0 + ev1) / 2) + KEYH - PRESS + 4)
-dev_arm = ((-8, SHOULDER), (hand_target[0] - dx_, hand_target[1] - dy_))
-rx_, ry_ = P(*REV)
-btn = card_local_to_screen(30, CH - 38)
-rev_arm = ((8, SHOULDER), (btn[0] - rx_, btn[1] - ry_))
-rev = pawn(*REV, arm=rev_arm, badge="tick")
-dev = pawn(*DEV, arm=dev_arm, badge="code")
+DEV = ENV("DEV", [KU1 + 30, (ev0 + ev1) / 2 + 2])
+REV = ENV("REV", [CU0 + 42, DV0 - 36])
+enter_top = P((eu0 + eu1) / 2 + 1, (ev0 + ev1) / 2, hs((ev0 + ev1) / 2) + KEYH - PRESS + 3)
+pill = on_card(*ENV("PILL", [30, 22]))
+pill = (pill[0], pill[1] - 3)
 
 # ---------------------------------------------------------------- assemble, back to front
-parts = [floor, "\n".join(card), link,
-         "<!-- The reviewer beside the result, marked with a tick: sees what the model checked before signing off -->", rev,
-         "\n".join(kb), "<!-- The developer, marked with code brackets, presses Enter -->", dev]
-# trimmed viewBox: floor corners (with the dash), the card's top, the pawns' heads
+parts = [floor,
+         "<!-- The reviewer, marked with a tick, stands behind the desk at its back corner -->", pawn_body(*REV, badge="tick"),
+         "\n".join(desk_legs), desk_top, "\n".join(card), "\n".join(kb),
+         "<!-- The reviewer's hand rests on the sign-off -->", arm_to(*REV, 6, pill),
+         "<!-- The developer, marked with code brackets, presses Enter -->", pawn_body(*DEV, badge="code"), arm_to(*DEV, -8, enter_top)]
 xs = [P(0, 0)[0], P(545, 0)[0], P(0, 402)[0], P(545, 402)[0]]
-ys = [P(0, 0)[1], P(545, 402)[1], min(y for _, y in slab), P(*REV)[1] - 120, P(*DEV)[1] - 120]
+ys = [P(0, 0)[1], P(545, 402)[1], P(*REV)[1] - 124, P(*DEV)[1] - 124]
 pad = 6
 VB = os.environ.get("VB", f"{f(min(xs) - pad)} {f(min(ys) - pad)} {f(max(xs) - min(xs) + 2 * pad)} {f(max(ys) - min(ys) + 2 * pad)}")
-alt = ("Isometric illustration for AI product and developer tool design. On a dotted floor lies a low blue keyboard with white keys, a long space bar and one tall lime Enter key, pressed by a developer marked with code brackets. A dashed line runs straight back from the keyboard into the low base of a white card standing behind it: the first result, marked AI, with a line of code and three ticked checks the model ran. A reviewer marked with a tick stands at the card's corner with a hand on its sign-off button.")
+alt = ("Isometric illustration for AI product and developer tool design. On a dotted floor stands a white desk. On it lies a low blue "
+       "keyboard with white keys and one lime Enter key, pressed by a developer marked with code brackets who stands at the desk's end. "
+       "Behind the keyboard, laid flat on the desk, is the first result: a white sheet marked AI, with a line of code and three ticked "
+       "checks the model ran. A reviewer marked with a tick stands behind the desk with a hand on the sheet's sign-off button.")
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB}" role="img" aria-label="{alt}">\n'
        + "\n".join(p for p in parts if p) + "\n</svg>\n")
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.environ.get("OUT", "hero.svg")), "w").write(svg)
+print("viewBox", VB, "ratio", round(float(VB.split()[2]) / float(VB.split()[3]), 3))

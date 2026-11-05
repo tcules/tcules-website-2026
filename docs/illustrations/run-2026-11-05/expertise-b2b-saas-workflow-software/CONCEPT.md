@@ -1,7 +1,7 @@
 # B2B SaaS and workflow software: hero
 
 Route `/expertise/b2b-saas-workflow-software`. Also the card cover on `/expertise`. Source: `build.py` writes
-`hero.svg` (viewBox 642 × 427, 1.50:1). Previews: `preview/hero.png`, `preview/hero.at-600.png`,
+`hero.svg` (viewBox 864 × 522, 1.66:1; floor 545 × 402, healthtech's). Previews: `preview/hero.png`, `preview/hero.at-600.png`,
 `preview/hero.at-360.png`.
 
 ## The object
@@ -96,22 +96,45 @@ the lime tab and the lime stage, and the arc back to the empty slot all read.
    ghost tab lies inside the back board; the giver's head stands clear in front of the pocket's corner.
    At 360: the file with its three role tabs, the record between two people, and the lime tab all read.
 
+8. Final polish (5 Nov). Three faults, each fixed at its cause:
+   - **Scale.** The floor was 278 × 426 in a 642-wide box, so at the same rendered width everything drew about
+     35% larger than healthtech. The floor is now healthtech's 545 × 402 in a box about 865 wide (864 × 522):
+     pawns, file and floor render at healthtech's size at 600 and 360. The box is 1.66:1, a little past 3:2,
+     because the file is shorter than healthtech's phone; the floor is not cropped to force it.
+   - **The solid blue file was too heavy at 360.** It is now white with a blue outline: brandeis-100 back board,
+     white dividers and pocket, brandeis-200 gusset with blue valley folds and white ridges. Its one blue part
+     is the label slip on the pocket (solid blue, one white bar). The empty slot's ghost tab is a dashed blue
+     outline, which reads on the pale board where a lime dash did not.
+   - **The record was held up in the air between two people.** It now lies on a low table (white top,
+     brandeis-100/200 sides, four legs) in front of the file. The person who took it out stands at the table's
+     near end and slides it along; the next person stands at the far end; each has a hand resting on one end of
+     the record, at the table top. The lime tab sits on its far edge, past the middle, toward the receiver.
+   - **Arrangement.** The file stands at the back; the table runs along the floor's x axis in front of it and to
+     its right, so the handover reads left to right.
+
+   Zoom-checked at 900px crops: both hands sit on the record's ends at the same size, the arms meet their
+   bodies with no outline seam, the table legs meet the slab, the gusset ridges stop short of the outline, the
+   ghost tab lies inside the back board. At 360 beside healthtech: same pawn size; the file with its role tabs,
+   the table with the record between two people, and the lime tab all read.
+
 ## Parts
 
-- Floor: healthtech's plate, dotted, brandeis-50 inset, dashed brandeis-500 edge.
-- The hero object: a solid brandeis-500 expanding file at hub scale, an accordion gusset in brandeis-600 with
-  brandeis-700 valley folds, a plain white label slip on its pocket.
+- Floor: healthtech's plate (545 × 402), dotted, brandeis-50 inset, dashed brandeis-500 edge.
+- The hero object: a white expanding file at hub scale, blue outline, brandeis-100 back board, a brandeis-200
+  accordion gusset, a white pocket whose label slip is its one solid blue part.
 - Three white dividers with equal tabs: a person, a person, an AI badge.
-- The empty slot: a dashed lime outline of the missing sheet's tab, standing in the file.
-- The record: a white sheet the size of a divider, owner avatar and title, stage stepper (current stop ringed);
-  a lime tab with one ink bar on its leading end.
-- Two clients (white pawns, blue outline, light arms outlined in blue, one arm weight): the one at the file
-  hands the record on, the next one takes it, each hand on one end.
+- The empty slot: a dashed blue outline of the missing sheet's tab, standing in the file.
+- A low table in front of the file: white top, pale sides, four legs.
+- The record, lying on the table: a white sheet the size of a divider, owner avatar and title, stage stepper
+  (current stop ringed); a lime tab with one ink bar on its far edge.
+- Two clients (white pawns, blue outline, light arms outlined in blue, one arm weight), one at each end of the
+  table, each with a hand on the record: the one by the file slides it on, the next one takes it.
 
 ## Alt
 
-Isometric illustration for B2B SaaS and workflow software design. A solid blue expanding file stands on a
-dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. One sheet,
-the deal record with a lime tab, has been taken out, leaving a dashed outline of its tab in the file, and is
-being handed on: the person beside the file passes it to the next person, both holding its edges. The record
-shows its owner and a row of stages, with the current one ringed.
+Isometric illustration for B2B SaaS and workflow software design. A white expanding file with a blue label
+stands on a dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI.
+One sheet, the deal record with a lime tab, has been taken out, leaving a dashed outline of its tab in the
+file, and lies on a low table in front of it: the person who took it out slides it along the table to the next
+person, each with a hand on one end. The record shows its owner and a row of stages, with the current one
+ringed.

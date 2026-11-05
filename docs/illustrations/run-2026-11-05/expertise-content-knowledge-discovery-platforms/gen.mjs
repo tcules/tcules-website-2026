@@ -28,22 +28,22 @@ const add = (s) => out.push(s);
 // ---------------------------------------------------------------- floor (healthtech's plate)
 add(`<defs><pattern id="${ID}-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="${B}" fill-opacity="0.38"/></pattern></defs>`);
 add(`<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->`);
-const [FW, FH] = env("FLOOR", [420, 300]);
+const [FW, FH] = env("FLOOR", [545, 402]);
 add(`<g transform="matrix(0.9 0.45 -0.9 0.45 -144 27)"><rect width="${FW}" height="${FH}" fill="url(#${ID}-dots)"/><rect width="${FW}" height="${FH}" fill="none" stroke="${B}" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="45" y="45" width="${FW - 90}" height="${FH - 90}" fill="${B}" fill-opacity="0.07"/></g>`);
 
 // ---------------------------------------------------------------- the card catalogue (hub object: white, outlined)
-const [U0, U1] = env("CU", [110, 370]);
-const [V0, V1] = env("CV", [50, 150]);
-const LEG = env("LEG", [30])[0], HT = env("HT", [196])[0];   // legs, then the chest of drawers up to HT
-const [COLS, ROWS] = env("GRID", [2, 3]),  M = 12, G = 8, MT = 12, MB = 10;
+const [U0, U1] = env("CU", [180, 480]);
+const [V0, V1] = env("CV", [75, 195]);
+const LEG = env("LEG", [12])[0], HT = env("HT", [262])[0];   // legs, then the chest of drawers up to HT
+const [COLS, ROWS] = env("GRID", [2, 4]),  M = 12, G = 8, MT = 12, MB = 10;
 const DW = (U1 - U0 - 2 * M - (COLS - 1) * G) / COLS;
 const DH = (HT - LEG - MT - MB - (ROWS - 1) * G) / ROWS;
 const drawerAt = (c, r) => ({ u0: U0 + M + c * (DW + G), h0: LEG + MB + r * (DH + G) });
 const [OC, OR] = env("OPEN", [0, 0]);  // the open drawer: column from the left, row from the bottom
-const OUT = env("DOUT", [78])[0];
+const OUT = env("DOUT", [90])[0];
 
 // labels of different lengths: the catalogue is an index of topics, not a wall of lockers
-const LABELS = [[16, 22, 12], [20, 10, 18], [13, 19, 22]]; // [row][col] bar length inside a 26-wide frame
+const LABELS = [[16, 22], [20, 10], [13, 19], [22, 14]]; // [row][col] bar length inside a 26-wide frame
 
 add(`<!-- The card catalogue: a chest of small drawers on short legs -->`);
 const leg = (u, v) => {
@@ -59,7 +59,11 @@ add(poly([P(U0, V1, LEG), P(U1, V1, LEG), P(U1, V1, HT), P(U0, V1, HT)], W));   
 add(poly([P(U0, V0, HT), P(U1, V0, HT), P(U1, V1, HT), P(U0, V1, HT)], W));       // lid
 
 // the search field: the one blue product element, a pill lying flat on the lid, magnifier and query in white
-const PILL = { a0: 22, len: U1 - U0 - 62, wid: 38 };
+const TABX = env("TABX", [18])[0];       // the found card's lime tab, from the card's left edge
+const CARD_U0 = drawerAt(OC, OR).u0 + 7, CARD_W = DW - 14;
+const U_SEARCH = CARD_U0 + TABX + 14;    // the line of the search: magnifier, connector and tab share this u
+const PILL = { a0: U_SEARCH - U0 - 22, wid: 38 };
+PILL.len = U1 - U0 - PILL.a0 - 24;
 PILL.b0 = (V1 - V0 - PILL.wid) / 2;
 {
   const { a0, len, wid, b0 } = PILL, cy = b0 + wid / 2;
@@ -86,6 +90,7 @@ for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) {
 
 // ---------------------------------------------------------------- the open drawer, its cards and the found card
 const walls = [];
+let FOUND = null;
 const late = [];
 {
   const d = drawerAt(OC, OR);
@@ -94,12 +99,12 @@ const late = [];
   add(poly([P(u0, vb, hb), P(u1, vb, hb), P(u1, vb, ht), P(u0, vb, ht)], B1, B, 1.2));       // the slot
   add(poly([P(u0, vb, hb), P(u0, vf, hb), P(u0, vf, ht), P(u0, vb, ht)], B05, B, 1.2));      // left inner wall
   const n = 6, cardIn = 7, stick = 6, T = 3;
-  const lifted = env("LIFT", [3])[0];
+  const lifted = env("LIFT", [4])[0];
   const LIFTH = env("LH", [12])[0];       // clearance under the lifted card
-  const CH = env("CH", [80])[0];          // lifted card height
+  const CH = env("CH", [78])[0];          // lifted card height
   const cu0 = u0 + cardIn, cu1 = u1 - cardIn, cw = cu1 - cu0;
   const vAt = (i) => vb + 9 + i * ((OUT - 18) / (n - 1));
-  const tab = { x0: cw * 0.64, x1: cw * 0.64 + 28, h: 11 };
+  const tab = { x0: TABX, x1: TABX + 28, h: 11 };
   for (let i = 0; i < n; i++) {
     const v = vAt(i);
     if (i === lifted) {
@@ -115,6 +120,9 @@ const late = [];
       // the lime guide tab's own top and side, in the darker lime
       add(poly([P(cu0 + tab.x0, v, ctop + tab.h), P(cu0 + tab.x1, v, ctop + tab.h), P(cu0 + tab.x1, v - T, ctop + tab.h), P(cu0 + tab.x0, v - T, ctop + tab.h)], LIMED, B, 1));
       add(poly([P(cu0 + tab.x1, v, ctop), P(cu0 + tab.x1, v - T, ctop), P(cu0 + tab.x1, v - T, ctop + tab.h), P(cu0 + tab.x1, v, ctop + tab.h)], LIMED, B, 1));
+      // focus: the one result, ringed in a dotted outline (STYLE §4), drawn under the card so the tab covers it
+      add(`<g transform="${front(cu0, v, ctop + tab.h)}"><rect x="-7" y="${tab.h - 7}" width="${f(cw + 14)}" height="${f(CH + 14)}" rx="8" fill="none" stroke="${B}" stroke-width="1.5" stroke-dasharray="0.1 4" stroke-linecap="round"/></g>`);
+      FOUND = { u: cu0, v, h: cb };
       // the card face, tab included, as one outline
       const r = 4, tx0 = tab.x0, tx1 = tab.x1, th = tab.h;
       const tabPath = `M${f(tx0)} ${th} V2 Q${f(tx0)} 0 ${f(tx0 + 2)} 0 H${f(tx1 - 2)} Q${f(tx1)} 0 ${f(tx1)} 2 V${th}`;
@@ -127,19 +135,20 @@ const late = [];
         // one line of body text
         `<rect x="9" y="${th + 36}" width="${f(cw - 20)}" height="6" rx="3" fill="${B2}"/>` +
         // source: a blue link mark with a short dashed tail to the card's edge
-        `<g fill="none" stroke="${B}" stroke-width="2.6" stroke-linecap="round"><path d="M14.5 ${th + 51} h-3.5 a5 5 0 0 0 0 10 h3.5"/><path d="M19.5 ${th + 51} h3.5 a5 5 0 0 1 0 10 h-3.5"/><path d="M13 ${th + 56} h8"/></g>` +
-        `<path d="M34 ${th + 56} H${f(cw - 1)}" stroke="${B}" stroke-width="1.4" stroke-dasharray="3 3" stroke-linecap="round"/></g>`);
+        `<g transform="translate(16 0)" fill="none" stroke="${B}" stroke-width="2.6" stroke-linecap="round"><path d="M14.5 ${th + 51} h-3.5 a5 5 0 0 0 0 10 h3.5"/><path d="M19.5 ${th + 51} h3.5 a5 5 0 0 1 0 10 h-3.5"/><path d="M13 ${th + 56} h8"/></g>` +
+        `<path d="M50 ${th + 56} H${f(cw - 1)}" stroke="${B}" stroke-width="1.4" stroke-dasharray="3 3" stroke-linecap="round"/></g>`);
       // the search's connector: from the field's front edge, forward over the lid, down onto the lime tab
       const uC = cu0 + (tab.x0 + tab.x1) / 2;
       const vPill = V0 + PILL.b0 + PILL.wid;
       late.push(`<!-- The search finds the card: a dashed connector from the field onto the card's lime tab -->`);
       late.push(line([P(uC, vPill, HT), P(uC, v, HT), P(uC, v, ctop + th + 1)], ` stroke-dasharray="4 4"`));
+      { const [x, y] = P(uC, vPill + 1, HT); late.push(`<circle cx="${f(x)}" cy="${f(y)}" r="3.4" fill="${B}" stroke="${W}" stroke-width="1.4"/>`); }
     } else {
       add(`<g transform="${front(cu0, v, ht + stick)}"><rect width="${f(cw)}" height="${f(DH - 2)}" rx="4" fill="${B05}" stroke="${B3}" stroke-width="1.2"/></g>`);
     }
   }
   walls.push(poly([P(u1, vb, hb), P(u1, vf, hb), P(u1, vf, ht), P(u1, vb, ht)], B2, B, 1.2));  // right wall
-  walls.push(drawerFace(u0, vf, hb, LABELS[OR][OC], true, 1));                                  // front panel
+  walls.push(drawerFace(u0, vf, hb, LABELS[OR][OC], false, 1));                                  // front panel
 }
 
 // ---------------------------------------------------------------- people (STYLE §5): healthtech's pawn
@@ -161,15 +170,23 @@ function pawn(u, v, { arm } = {}) {
   if (arm) s += clientArm(x, y, arm.from, arm.to);
   return s;
 }
-const READER = env("READER", [60, 232]);
-const ARMTO = env("ARMTO", [80, -96]);
-add(`<!-- The reader: a client at the open drawer, a hand on the card the search found -->`);
-add(pawn(READER[0], READER[1], { arm: { from: [8, -H + 20], to: ARMTO } }));
+// the reader stands at the open drawer's front-left corner, close enough that a short arm takes the card
+const DR = drawerAt(OC, OR);
+const READER = env("READER", [DR.u0 - 24, V1 + OUT - 4]);
+const HANDH = env("HANDH", [-4])[0], HANDU = env("HANDU", [7])[0];     // where the hand meets the card's left edge, above its bottom
+const [rx, ry] = P(READER[0], READER[1]);
+const [hx, hy] = P(FOUND.u + HANDU, FOUND.v, FOUND.h + HANDH);
+const ARMFROM = env("ARMFROM", [6, -H + 6]);
+// drawn back to front: the reader stands beside the drawer, just behind its front panel; the arm comes after
+// the panel (masked by the body, so its root still grows out of the shoulder)
+add(`<!-- The reader: a client beside the open drawer, a short arm up to the card the search found -->`);
+add(pawn(READER[0], READER[1]));
 walls.forEach(add);
+add(clientArm(rx, ry, ARMFROM, [hx - rx, hy - ry]));
 late.forEach(add);
 
 // ---------------------------------------------------------------- viewBox
-const VB = process.env.VB || "-418 -101 656 456";
-const alt = "Isometric illustration for content and knowledge platform design. On a dotted floor stands a white library card catalogue of six labelled drawers on short legs, with a blue search field lying on its lid. A dashed line runs from the search field to one card lifted out of an open drawer, landing on the card's lime tab that marks it as the current version. The card shows its owner and a link mark for its source, while the faded cards behind it stay in the drawer. A client stands beside the drawer with a hand on that card.";
+const VB = process.env.VB || "-512 -126 865 584";
+const alt = "Isometric illustration for content and knowledge platform design. On a dotted floor stands a white library card catalogue of eight labelled drawers, with a blue search field lying on its lid. A dashed line runs from the search field, straight down from its magnifier, to one card lifted out of an open drawer and ringed in a dotted outline, landing on the card's lime tab that marks it as the current version. The card shows its owner and a link mark for its source, while the faded cards stay in the drawer below. A client stands beside the drawer and reaches up to take that card.";
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${VB}" role="img" aria-label="${alt}">\n${out.join("\n")}\n</svg>\n`;
 writeFileSync(new URL(process.env.OUT || "./hero.svg", import.meta.url), svg);

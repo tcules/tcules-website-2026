@@ -1,4 +1,5 @@
-// Generator for the /expertise/edtech-learning hero (v7: healthtech's plate and scale; the tablet plainly held).
+// Generator for the /expertise/edtech-learning hero (v8: healthtech's plate the right way round, the stair centred on
+// it, the lime book seated with its spine to the learner).
 //   node docs/illustrations/run-2026-11-05/expertise-edtech-learning/build.mjs
 // Writes hero.svg beside this file. World units on the family's 2:1 iso (as expertise.svg):
 //   screen x = 0.9x - 0.9y, screen y = 0.45x + 0.45y - z
@@ -60,16 +61,17 @@ const Utf = (x0, y, ztop) => { const [sx, sy] = P(x0, y, ztop); return `matrix(0
 // open case (it was several times the hub's scale and filled a narrow strip of floor edge to edge).
 const env = (k, d) => (process.env[k] !== undefined ? Number(process.env[k]) : d);
 // Healthtech's plate: 545 × 402 with the 45 inset. Turned a quarter so its long side runs along the climb (−y).
-const FL = { w: env('FW', 402), d: env('FD', 545) };
+const FL = { w: env('FW', 545), d: env('FD', 402) };
 // Four piles of books climb along −y (up and to the right on screen) toward the cap; each pile also steps a
 // little along −x, as books do, which keeps the stair centred on the plate.
-const BK = { w: env('BW', 130), d: env('BD', 64), cover: 5, pages: env('BP', 36) };
+const BK = { w: env('BW', 130), d: env('BD', 64), cover: 5, pages: env('BP', 40) };
 const bookH = BK.cover * 2 + BK.pages;
-const PITCH = env('PITCH', 70), DRIFT = env('DRIFT', 12);
-const BACK = { x: env('BX', 50), y: env('BY', 56) };
-const piles = [1, 2, 3, 4].map((n, i) => ({ n, x: BACK.x + (3 - i) * DRIFT, y: BACK.y + (3 - i) * PITCH }));
+const PITCH = env('PITCH', 70), DRIFT = env('DRIFT', 0);
+const BACK = { x: env('BX', 205), y: env('BY', 64) };
+const COUNTS = (process.env.COUNTS || '2,3,4,5').split(',').map(Number);
+const piles = COUNTS.map((n, i) => ({ n, x: BACK.x + (3 - i) * DRIFT, y: BACK.y + (3 - i) * PITCH }));
 const LEARNER_ON = 1, NEXT = 2, CAP_ON = 3;
-const limeTop = (NEXT + 1) * bookH; // top of the lime book
+const limeTop = COUNTS[NEXT] * bookH; // top of the lime book
 // Healthtech's people scale (gen.mjs): body radius 22, body 62, head 16; one arm 11 thick with its outline.
 const PW = { r: 22, h: 62, head: 16, arm: 11 };
 // The learner's tablet, held at the learner's right over the step (never past its edge), its screen facing the
@@ -98,7 +100,13 @@ function book(x0, y0, z0, { next = false } = {}) {
     raw(`<path d="M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}" stroke="${C.b300}" stroke-width="1" fill="none" ${J}/>`);
   }
   box(x0, y0, z0 + cover + pages, w, d, cover, cv);
-  if (next) limeBook = { x0, y0 };
+  if (next) {
+    // v8: the next book shows its spine to the learner, one solid lime face from cover to cover, so it reads as a
+    // whole book seated on the one below (with fore-edge pages there it read as a lime board floating over pages).
+    const y1 = y0 + d, x1 = x0 + w, z1 = z0 + bookH;
+    poly([P(x0, y1, z0), P(x1, y1, z0), P(x1, y1, z1), P(x0, y1, z1)], C.lime, C.limeD);
+    limeBook = { x0, y0 };
+  }
   return z0 + bookH;
 }
 function cap(cx, cy, z) {

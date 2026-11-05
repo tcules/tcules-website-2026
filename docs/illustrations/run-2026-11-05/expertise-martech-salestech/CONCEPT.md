@@ -1,14 +1,28 @@
 # /expertise/martech-salestech · hero
 
 Slot: hero beside the copy, paper ground, renders about 600px wide and as the /expertise card cover at 360.
-`hero.svg`, viewBox 776 × 518 (1.50), built by `gen.mjs` (`node gen.mjs` rewrites `hero.svg`). Projection is
-healthtech's (`x = -144 + 0.9(u - v)`, `y = 27 + 0.45(u + v) - h`); the floor is healthtech's plate (dots, inset 45,
-dashed edge 1.8 / 10 8) at 470 × 390, the content hero's precedent for a single object, so the box stays 3:2. Pawns
-are healthtech's size (body 44 × 62, head r16, arm 11 with hand r 8.8).
+`hero.svg`, viewBox 865 × 572 (1.51), built by `gen.mjs` (`node gen.mjs` rewrites `hero.svg`). Projection is
+healthtech's (`x = -144 + 0.9(u - v)`, `y = 27 + 0.45(u + v) - h`); the floor is healthtech's plate exactly (dots,
+inset 45, dashed edge 1.8 / 10 8) at 545 × 402, so the drawing renders at healthtech's scale. Pawns are
+healthtech's size (body 44 × 62, head r16, arm 11 with hand r 8.8).
 
 The page: "If your users send reports, quotes or AI drafts to managers and customers, our MarTech product design
 makes each one clear enough to stand behind." It lists CRM, pipeline, CPQ quoting and lead management. Jatin,
 30 Oct, on the customer card flipped up: "no. It has to be better."
+
+## Final polish (5 Nov)
+
+- **Size:** the floor went from 470 × 390 (viewBox 776) to the family's 545 × 402 (viewBox 865), the same scale as
+  healthtech side by side at 600 and 360. To fill a 3:2 box on the bigger plate the funnel grew taller (mouth at
+  336, radius 100; neck 206; tip 168), the quote grew to 100 × 138, and the lead cards to about 50 × 120.
+- **People:** the rep's hand on the stand's rod read as holding a stick. The rep no longer touches the stand: no
+  arm, standing beside the customer. The stand is just base, rod, arm and ring.
+- **Pair:** it was symmetric (a person each side of the apparatus, like marketplaces). Now the funnel and its
+  stand hold the left and middle, both people stand together on the right, in front of the empty back-right of
+  the floor: apparatus on one side, people on the other.
+- **Lighter funnel:** the deep brandeis-600/700 inside of the mouth (the heaviest blue in the set) is now light:
+  a white rim and a brandeis-100 inside, both outlined in blue, so the lead cards read against a pale bowl. The
+  outside of the cone stays solid blue (the hero object) with its brandeis-600 right half and white stage lines.
 
 ## Fix pass (5 Nov): the easel was redrawn
 
@@ -47,24 +61,25 @@ office); the pipeline board is a screen of columns, a second wall display, and n
 
 - **Idea:** "They design the tools that turn a pile of leads into one clear quote a rep can hand a customer."
 - **Drawn:** the family's dotted floor with a dashed edge and a soft inset. A solid blue sales funnel (the hero
-  object: brandeis-500 with a flat brandeis-600 right half, a deep brandeis-700 inside, two white stage lines round
+  object: brandeis-500 with a flat brandeis-600 right half, a light inside (white rim, brandeis-100 bowl), two white stage lines round
   its front) is held by a white retort stand: a base plate on the floor, one rod, a level arm to a ring round the
   funnel's neck. Three white lead cards (avatar and two bars, the back one faded) stand in its mouth, their feet
   inside the cone. From the spout hangs one white quote: a title bar, a small blue sparkle, three line items with
-  amounts, a rule and a lime total with a tick (the one accent). At the front-right a white client pawn with a
-  briefcase mark, the customer, holds the quote's edge with one short arm. At the front-left a white client pawn
-  with a target mark, the rep, keeps a hand on the stand's rod.
+  amounts, a rule and a lime total with a tick (the one accent). To the quote's right a white client pawn
+  with a briefcase mark, the customer, holds the quote's edge with one short arm; beside the customer, further
+  right, a white client pawn with a target mark, the rep, stands with no arm. Funnel left, people right.
 - **Alt:** Isometric illustration for MarTech and SalesTech product design. A solid blue sales funnel, held in a
   stand on a dotted floor, has three lead cards dropped into its wide mouth. Out of its spout comes one clear
   quote: a few line items, a lime total with a tick and a small AI sparkle as its drafter. A customer marked with a
-  briefcase takes the quote in one hand, while the sales rep who works the funnel stands by it.
+  briefcase takes the quote in one hand, with the sales rep, marked with a target, standing beside the customer.
 
 ## People
 
 Both are the client's people (the rep and the customer), white with a blue outline; no Tcules figure, because the
 idea is what the product hands the customer. Arms are healthtech's client arm: a white core in a blue outline, 11
-thick in all, round cap and round hand (r 8.8), masked inside the body so each grows from the shoulder; both about
-30 units long (a hand on the quote's edge, a hand on the rod), never a pointer.
+thick in all, round cap and round hand (r 8.8), masked inside the body so each grows from the shoulder; only the
+customer has one, about 30 units long to the quote's edge, never a pointer. The rep has no arm (final polish: a hand
+on the rod read as holding a stick).
 
 ## Rounds (this pass)
 
@@ -80,3 +95,7 @@ thick in all, round cap and round hand (r 8.8), masked inside the body so each g
 
 Checked at 600 and 360 (the funnel, the lead cards and the lime total all read at 360); joins zoomed at 2400: cards
 into the mouth, stage lines at the sides, arm into the ring, rod on the base, spout over the quote, both hands.
+
+Final polish checked at 600 and 360 beside healthtech (same plate, same pawn size); joins zoomed at 2400: cards into
+the pale mouth, ring and arm into the clamp, rod on the base, spout over the quote, the customer's hand on the quote's
+edge clear of the lime total.

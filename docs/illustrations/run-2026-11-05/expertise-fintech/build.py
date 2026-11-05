@@ -2,7 +2,7 @@
 
 Idea: the hub's bank card pays, and the product says plainly why it was declined and what to try next.
 
-r11 (family fix, 5 Nov): the product is a card terminal, not a phone. The terminal stands on the floor facing
+r12 (final polish, 5 Nov): healthtech floor 545 x 402, 865 wide; the terminal at hub scale with the card flat BESIDE it; the hand on the lime key. r11: the product is a card terminal, not a phone. The terminal stands on the floor facing
 right-down (healthtech's phone faces left-down), the hub's solid blue bank card lies flat on the floor and runs into
 the terminal's slot, so it has a footprint and the two are one object. The terminal's screen says the payment was
 declined and why; the way forward is one lime key on its keypad (a key, not a pill button). The customer, a client
@@ -75,17 +75,19 @@ def poly(points, fill, stroke=B500, sw=1.6):
 
 
 # ================================================================ layout (world units)
-# the card terminal: a light box standing on the floor, its face in the plane x=0 facing right-down
-TW, TH, TD, TR = 186, 318, 56, 24     # face width (along -y), height, depth (back along -x), corner radius
-YL = TW / 2                           # the face's left edge (screen left) is at y=+YL, its right edge at y=-YL
-# the bank card: the hub's object, solid blue, lying flat on the floor and running into the terminal's slot
-CWID, CLEN, CT, CR = 130, 206, 4, 12  # a real card's 1.59:1 at the family scale; 4 thick
-CIN = 30                              # how much of it is inside the slot
-# the customer: a client pawn at healthtech's size, standing in the clear at the terminal's right
-MX, MY = 86, -114
+# r12 (family polish): healthtech's floor exactly (545 x 402). The terminal comes down to hub scale and stands at
+# the back; the card lies flat BESIDE it on the floor (front-left), not in front of it, so nothing tall rises over
+# the card. The customer stands at the terminal's right and touches the lime key.
+TW, TH, TD, TR = 140, 262, 46, 20     # face width (along -y), height, depth (back along -x), corner radius
+YL = TW / 2
+TYC = 0                               # the terminal's centre line in y
+CWID, CLEN, CT, CR = 130, 206, 4, 12  # the hub card: a real card's 1.59:1, 4 thick
+CX0, CY = -30, 152                     # the card's near end (x) and centre line (y): beside the terminal, front-left
+MX, MY = 22, -80                      # the customer, in front of the terminal's right edge
 
 # ================================================================ floor: healthtech's, the family standard
-FX0, FY0, FX1, FY1 = -150, -225, 285, 150
+FX0, FY0 = -205, -146
+FX1, FY1 = FX0 + 545, FY0 + 402
 fx, fy = iso(FX0, FY0)
 FW, FH = FX1 - FX0, FY1 - FY0
 track([iso(FX0, FY0), iso(FX1, FY0), iso(FX1, FY1), iso(FX0, FY1)])
@@ -105,7 +107,7 @@ loc = rr_outline(TW, TH, TR)
 
 def tscr(u, v, d):
     """face point (u right, v down from the top) pushed back by d."""
-    return iso(-d, YL - u, TH - v)
+    return iso(-d, TYC + YL - u, TH - v)
 
 
 allp = [tscr(u, v, d) for (u, v) in loc for d in (0, TD)]
@@ -116,77 +118,82 @@ poly(hull(left), B200)          # left side, toward the viewer's left
 ox, oy = tscr(0, 0, 0)
 g = [f'<g transform="matrix(0.9 -0.45 0 1 {f(ox)} {f(oy)})">']
 g.append(f'<rect width="{TW}" height="{TH}" rx="{TR}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
-# the screen: dark blue, the decline and its reason
-SX, SY, SW, SH = 16, 18, TW - 32, 128
-g.append(f'<rect x="{SX}" y="{SY}" width="{SW}" height="{SH}" rx="12" fill="{B500}" stroke="{B600}" stroke-width="1.2"/>')
-WX, WY, WR = SX + 30, SY + 32, 14
-g.append(f'<circle cx="{WX}" cy="{WY}" r="{WR}" fill="{WHITE}"/>'
-         f'<path d="M{WX} {WY-7} v7.5" stroke="{B500}" stroke-width="3.4" stroke-linecap="round"/>'
-         f'<circle cx="{WX}" cy="{WY+6.4}" r="2.1" fill="{B500}"/>')
-g.append(f'<rect x="{WX+24}" y="{WY-10}" width="76" height="9" rx="4.5" fill="{WHITE}"/>'
-         f'<rect x="{WX+24}" y="{WY+4}" width="50" height="7" rx="3.5" fill="{B300}"/>')
-# the reason, written out
-g.append(f'<rect x="{SX+16}" y="{SY+70}" width="{SW-32}" height="7" rx="3.5" fill="{B200}"/>'
-         f'<rect x="{SX+16}" y="{SY+84}" width="{SW-58}" height="7" rx="3.5" fill="{B200}"/>'
-         f'<rect x="{SX+16}" y="{SY+98}" width="{SW-90}" height="7" rx="3.5" fill="{B200}"/>')
+# the screen: dark blue; the declined card with a warning on it, a title, and the reason written out
+SX, SY, SW, SH = 12, 14, TW - 24, 122
+g.append(f'<rect x="{SX}" y="{SY}" width="{SW}" height="{SH}" rx="10" fill="{B500}" stroke="{B600}" stroke-width="1.2"/>')
+CGX, CGY, CGW, CGH = SX + 12, SY + 18, 38, 25
+g.append(f'<rect x="{CGX}" y="{CGY}" width="{CGW}" height="{CGH}" rx="4" fill="{B200}"/>'
+         f'<rect x="{CGX+6}" y="{CGY+7}" width="9" height="7" rx="2" fill="{B500}"/>'
+         f'<rect x="{CGX+6}" y="{CGY+17}" width="22" height="3" rx="1.5" fill="{B300}"/>')
+WX, WY, WR = CGX + CGW - 2, CGY + CGH - 1, 10.5
+g.append(f'<circle cx="{WX}" cy="{WY}" r="{WR}" fill="{WHITE}" stroke="{B500}" stroke-width="2.4"/>'
+         f'<path d="M{WX} {f(WY-5.2)} v5.4" stroke="{B500}" stroke-width="2.8" stroke-linecap="round"/>'
+         f'<circle cx="{WX}" cy="{f(WY+4.6)}" r="1.7" fill="{B500}"/>')
+g.append(f'<rect x="{SX+62}" y="{SY+20}" width="{SW-76}" height="8" rx="4" fill="{WHITE}"/>'
+         f'<rect x="{SX+62}" y="{SY+33}" width="{SW-92}" height="6" rx="3" fill="{B300}"/>')
+g.append(f'<rect x="{SX+12}" y="{SY+64}" width="{SW-24}" height="6" rx="3" fill="{B200}"/>'
+         f'<rect x="{SX+12}" y="{SY+79}" width="{SW-44}" height="6" rx="3" fill="{B200}"/>'
+         f'<rect x="{SX+12}" y="{SY+94}" width="{SW-68}" height="6" rx="3" fill="{B200}"/>')
 # the keypad: nine pale keys and a row of three, the right one lime with a retry arrow
-KW, KH, KG = 42, 22, 12
+KW, KH, KG, KV = 32, 16, 10, 8
 KX0 = (TW - (3 * KW + 2 * KG)) / 2
-KY0 = SY + SH + 22
+KY0 = SY + SH + 14
 for r in range(3):
     for c in range(3):
-        g.append(f'<rect x="{f(KX0 + c*(KW+KG))}" y="{f(KY0 + r*(KH+10))}" width="{KW}" height="{KH}" rx="6" fill="{B100}"/>')
-FY = KY0 + 3 * (KH + 10) + 6
-FKH = 30
+        g.append(f'<rect x="{f(KX0 + c*(KW+KG))}" y="{f(KY0 + r*(KH+KV))}" width="{KW}" height="{KH}" rx="5" fill="{B100}"/>')
+FY = KY0 + 3 * (KH + KV) + 2
+FKH = 24
 for c in range(2):
-    g.append(f'<rect x="{f(KX0 + c*(KW+KG))}" y="{f(FY)}" width="{KW}" height="{FKH}" rx="8" fill="{WHITE}" stroke="{B300}" stroke-width="1.2"/>')
+    g.append(f'<rect x="{f(KX0 + c*(KW+KG))}" y="{f(FY)}" width="{KW}" height="{FKH}" rx="7" fill="{WHITE}" stroke="{B300}" stroke-width="1.2"/>')
 LX = KX0 + 2 * (KW + KG)
-g.append(f'<rect x="{f(LX)}" y="{f(FY)}" width="{KW}" height="{FKH}" rx="8" fill="{LIME}" stroke="{LIMED}" stroke-width="1.2"/>')
-rcx, rcy, rr = LX + KW / 2, FY + FKH / 2, 6.4
+g.append(f'<rect x="{f(LX)}" y="{f(FY)}" width="{KW}" height="{FKH}" rx="7" fill="{LIME}" stroke="{LIMED}" stroke-width="1.2"/>')
+rcx, rcy, rr = LX + KW / 2 - 1.5, FY + FKH / 2, 5.4
 a0 = (rcx + rr * math.cos(math.radians(-60)), rcy + rr * math.sin(math.radians(-60)))
 a1 = (rcx + rr * math.cos(math.radians(220)), rcy + rr * math.sin(math.radians(220)))
 t = (-math.sin(math.radians(220)), math.cos(math.radians(220)))
 n = (-t[1], t[0])
-tip = (a1[0] + t[0] * 4.4, a1[1] + t[1] * 4.4)
-hb = [(a1[0] + n[0] * 3.7 - t[0] * 0.6, a1[1] + n[1] * 3.7 - t[1] * 0.6),
-      (a1[0] - n[0] * 3.7 - t[0] * 0.6, a1[1] - n[1] * 3.7 - t[1] * 0.6)]
-g.append(f'<path d="M{f(a0[0])} {f(a0[1])} A{rr} {rr} 0 1 1 {f(a1[0])} {f(a1[1])}" fill="none" stroke="{INK}" stroke-width="2.3" stroke-linecap="round"/>'
+tip = (a1[0] + t[0] * 3.8, a1[1] + t[1] * 3.8)
+hb = [(a1[0] + n[0] * 3.2 - t[0] * 0.5, a1[1] + n[1] * 3.2 - t[1] * 0.5),
+      (a1[0] - n[0] * 3.2 - t[0] * 0.5, a1[1] - n[1] * 3.2 - t[1] * 0.5)]
+g.append(f'<path d="M{f(a0[0])} {f(a0[1])} A{rr} {rr} 0 1 1 {f(a1[0])} {f(a1[1])}" fill="none" stroke="{INK}" stroke-width="2.1" stroke-linecap="round"/>'
          f'<path d="M{f(tip[0])} {f(tip[1])} L{f(hb[0][0])} {f(hb[0][1])} L{f(hb[1][0])} {f(hb[1][1])} Z" fill="{INK}" stroke="{INK}" stroke-width="1" stroke-linejoin="round"/>')
-# the card slot at the foot of the face
-SLU0, SLU1 = YL - CWID / 2 - 8, YL + CWID / 2 + 8
-g.append(f'<rect x="{f(SLU0)}" y="{TH-16}" width="{f(SLU1-SLU0)}" height="11" rx="5.5" fill="{B700}"/>')
 g.append('</g>')
 out.extend(g)
-KEY_WORLD = (0, YL - (LX + KW / 2), TH - (FY + FKH / 2))
+# where the finger lands: the lime key's right-hand edge, a little in from it
+KEY_TOUCH = (0, TYC + YL - (LX + KW + 1), TH - (FY + FKH / 2))
 
-# ================================================================ the bank card, flat, running into the slot
-out.append('<!-- The bank card from the hub: solid blue, lying flat on the floor and running into the slot -->')
-# outline in card-local (u along +x out of the slot, v along +y), only the part outside the slot
-L = CLEN - CIN
-cl = [(0, -CWID / 2)] + arc_pts(L - CR, -CWID / 2 + CR, CR, -90, 0) + arc_pts(L - CR, CWID / 2 - CR, CR, 0, 90) + [(0, CWID / 2)]
-edge_all = [iso(u, v, z) for (u, v) in cl for z in (0, CT)]
-edge_end = [iso(u, v, z) for (u, v) in cl if u >= L - CR - 0.01 for z in (0, CT)]
+# ================================================================ the bank card, flat on the floor beside the terminal
+out.append('<!-- The bank card from the hub: solid blue, lying flat on the floor beside the terminal -->')
+L = CLEN
+cl = (arc_pts(L - CR, -CWID / 2 + CR, CR, -90, 0) + arc_pts(L - CR, CWID / 2 - CR, CR, 0, 90)
+      + arc_pts(CR, CWID / 2 - CR, CR, 90, 180) + arc_pts(CR, -CWID / 2 + CR, CR, 180, 270))
+
+
+def cw(u, v, z):
+    return iso(CX0 + u, CY + v, z)
+
+
+edge_all = [cw(u, v, z) for (u, v) in cl for z in (0, CT)]
+edge_end = [cw(u, v, z) for (u, v) in cl if u >= L - CR - 0.01 for z in (0, CT)]
 track(edge_all)
 poly(hull(edge_all), B600, B600, 1.2)
 poly(hull(edge_end), B700, B600, 1.2)
-top = [iso(u, v, CT) for (u, v) in cl]
+top = [cw(u, v, CT) for (u, v) in cl]
 poly(top, B500, B600, 1.6)
-# printed detail on the top face, laid in the card's own frame (u along its length, v across it)
-fx0, fy0 = iso(0, 0, CT)
+fx0, fy0 = cw(0, 0, CT)
 g = [f'<g transform="matrix(0.9 0.45 -0.9 0.45 {f(fx0)} {f(fy0)})">']
-# chip, near the outer end; contactless mark beside it; the number and name as bars
 g.append(f'<rect x="{L-62}" y="{-CWID/2+20}" width="34" height="26" rx="5.5" fill="{B100}"/>'
          f'<path d="M{L-62} {-CWID/2+33} H{L-28} M{L-45} {-CWID/2+20} V{-CWID/2+46}" stroke="{B300}" stroke-width="1.2"/>')
 for i, rad in enumerate((6, 11.5, 17)):
-    g.append(f'<path d="M{f(L-100 - rad)} {f(-CWID/2+33 - rad*0.0)} a{rad} {rad} 0 0 1 {f(2*rad)} 0" transform="rotate(180 {f(L-100)} {f(-CWID/2+33)})" '
+    g.append(f'<path d="M{f(L-100 - rad)} {f(-CWID/2+33)} a{rad} {rad} 0 0 1 {f(2*rad)} 0" transform="rotate(180 {f(L-100)} {f(-CWID/2+33)})" '
              f'fill="none" stroke="{WHITE}" stroke-width="2.2" stroke-linecap="round" stroke-opacity="{0.95 - i*0.22:.2f}"/>')
-g.append(f'<rect x="{30}" y="{8}" width="{L-58}" height="10" rx="5" fill="{WHITE}"/>'
-         f'<rect x="{30}" y="{32}" width="70" height="8" rx="4" fill="{WHITE}" fill-opacity="0.55"/>'
-         f'<rect x="{L-66}" y="{30}" width="38" height="11" rx="5.5" fill="{B300}"/>')
+g.append(f'<rect x="30" y="8" width="{L-58}" height="10" rx="5" fill="{WHITE}"/>'
+         f'<rect x="30" y="32" width="70" height="8" rx="4" fill="{WHITE}" fill-opacity="0.55"/>'
+         f'<rect x="{L-66}" y="30" width="38" height="11" rx="5.5" fill="{B300}"/>')
 g.append('</g>')
 out.extend(g)
 
-# ================================================================ the customer: a client pawn reaching toward the key
+# ================================================================ the customer: a client pawn pressing the lime key
 # healthtech's pawn exactly: body radius 22, body height 62, head 16; arm 11 incl. a 1.6 outline, hand 8.8
 R, H, HEAD = 22, 62, 16
 ARM, OUT = 11, 1.6
@@ -194,13 +201,10 @@ HAND = ARM * 0.8
 bx, by = iso(MX, MY)
 body = (f'M{f(bx-R)} {f(by)} V{f(by-H)} A{R} {R} 0 0 1 {f(bx+R)} {f(by-H)} V{f(by)} '
         f'A{R} {f(R*0.45)} 0 0 1 {f(bx-R)} {f(by)} Z')
-out.append('<!-- The customer: a client figure at the terminal, reaching toward the lime key -->')
+out.append('<!-- The customer: a client figure at the terminal, pressing the lime key -->')
 sh = (bx - 8, by - H + 22)
-tgt = iso(*KEY_WORLD)
-dx, dy = tgt[0] - sh[0], tgt[1] - sh[1]
-nn = math.hypot(dx, dy)
-AL = 33
-hand = (sh[0] + dx / nn * AL, sh[1] + dy / nn * AL)
+hand = iso(*KEY_TOUCH)
+ARM_LEN = math.hypot(hand[0] - sh[0], hand[1] - sh[1])
 out.append(f'<path d="{body}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>')
 out.append(f'<circle cx="{f(bx)}" cy="{f(by-H-R-4-HEAD)}" r="{HEAD}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
 out.append(f'<mask id="fintech-arm" maskUnits="userSpaceOnUse" x="{f(bx-200)}" y="{f(by-200)}" width="400" height="400">'
@@ -210,12 +214,14 @@ out.append(f'<mask id="fintech-arm" maskUnits="userSpaceOnUse" x="{f(bx-200)}" y
            f'<path d="M{f(sh[0])} {f(sh[1])} L{f(hand[0])} {f(hand[1])}" stroke="{WHITE}" stroke-width="{f(ARM-2*OUT)}" stroke-linecap="round"/>'
            f'<circle cx="{f(hand[0])}" cy="{f(hand[1])}" r="{f(HAND-OUT)}" fill="{WHITE}"/>')
 track([(bx - R, by + 11), (bx + R, by - H - R - 4 - 2 * HEAD), (hand[0] - 9, hand[1] - 9)])
+print("arm length", round(ARM_LEN, 1))
 
 svg_body = "\n".join(out)
 xs = [p[0] for p in pts_all]
 ys = [p[1] for p in pts_all]
 pad = 3
-vb = (math.floor(min(xs) - pad), math.floor(min(ys) - pad), math.ceil(max(xs) - min(xs) + 2 * pad), math.ceil(max(ys) - min(ys) + 2 * pad))
+vw = max(865, math.ceil(max(xs) - min(xs) + 2 * pad))
+vb = (math.floor((min(xs) + max(xs)) / 2 - vw / 2), math.floor(min(ys) - pad), vw, math.ceil(max(ys) - min(ys) + 2 * pad))
 ALT = ("Isometric illustration for FinTech product design. A solid blue bank card with a chip lies flat on a dotted "
        "floor and runs into the slot of a light card terminal standing behind it. The terminal's dark blue screen shows "
        "a warning mark with the reason for the decline written out under it, and on its keypad one key, the retry key, "

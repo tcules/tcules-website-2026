@@ -14,11 +14,11 @@ const poly = (arr, fill, sw = 1.6, stroke = B) =>
 const RX = (r) => 0.9 * Math.SQRT2 * r, RY = (r) => 0.45 * Math.SQRT2 * r;
 
 const FLOOR = `<defs><pattern id="mt-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="${B}" fill-opacity="0.38"/></pattern></defs>
-<g transform="matrix(0.9 0.45 -0.9 0.45 -144 27)"><rect width="470" height="390" fill="url(#mt-dots)"/><rect width="470" height="390" fill="none" stroke="${B}" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="45" y="45" width="380" height="300" fill="${B}" fill-opacity="0.07"/></g>`;
+<g transform="matrix(0.9 0.45 -0.9 0.45 -144 27)"><rect width="545" height="402" fill="url(#mt-dots)"/><rect width="545" height="402" fill="none" stroke="${B}" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="45" y="45" width="455" height="312" fill="${B}" fill-opacity="0.07"/></g>`;
 
 // ---- the funnel (hero, solid blue): mouth, three stage bands, neck and spout, held in a retort stand's ring
-const [AU, AV] = env("AXIS", [280, 222]);
-const F = { hTip: 144, hNeck: 178, hMouth: 288, rS: 13, rN: 15, rM: 84 };
+const [AU, AV] = env("AXIS", [305, 285]);
+const F = { hTip: 168, hNeck: 206, hMouth: 336, rS: 14, rN: 16, rM: 100 };
 const [ax, ay0] = P(AU, AV); // axis on the floor, in screen
 const Y = (h) => ay0 - h;
 const rAt = (h) => F.rN + ((h - F.hNeck) / (F.hMouth - F.hNeck)) * (F.rM - F.rN);
@@ -51,8 +51,8 @@ const coneBody =
   band(H1) + band(H2) + `</g>` +
   `<path d="${conePath}" fill="none" stroke="${B600}" stroke-width="1.6" stroke-linejoin="round"/>`;
 // the mouth: a white lip round a deep inside
-const mouthBack = ell(F.rM, F.hMouth, B600, B600) + ell(F.rM - 7, F.hMouth, B700);
-const lipFront = `<path d="M${f(ax - mA)} ${f(Y(F.hMouth))} A${f(mA)} ${f(mB)} 0 0 0 ${f(ax + mA)} ${f(Y(F.hMouth))}" fill="none" stroke="${B600}" stroke-width="1.6"/>`;
+const mouthBack = ell(F.rM, F.hMouth, W, B, 1.6) + ell(F.rM - 7, F.hMouth, B100, B, 1.2);
+const lipFront = `<path d="M${f(ax - mA)} ${f(Y(F.hMouth))} A${f(mA)} ${f(mB)} 0 0 0 ${f(ax + mA)} ${f(Y(F.hMouth))}" fill="none" stroke="${B}" stroke-width="1.6"/>`;
 
 // lead cards standing in the mouth, their feet hidden inside the cone (local x along u, local y down)
 function leadCard(du, dv, tilt, h = 64, w = 46, faded = false) {
@@ -67,7 +67,7 @@ function leadCard(du, dv, tilt, h = 64, w = 46, faded = false) {
 }
 const leadClip = `<clipPath id="mt-mouth"><path d="M${f(ax - mA - 60)} ${f(Y(F.hMouth) - 200)} H${f(ax + mA + 60)} V${f(Y(F.hMouth))} H${f(ax + mA)} A${f(mA)} ${f(mB)} 0 0 1 ${f(ax - mA)} ${f(Y(F.hMouth))} H${f(ax - mA - 60)} Z"/></clipPath>`;
 const leads = leadClip + `<g clip-path="url(#mt-mouth)">` +
-  leadCard(-44, -4, -0.1, 100, 44, true) + leadCard(-6, -34, 0.04, 108) + leadCard(10, 22, 0.14, 96, 44) + `</g>`;
+  leadCard(-50, -4, -0.1, 116, 50, true) + leadCard(-8, -40, 0.04, 124, 52) + leadCard(10, 24, 0.14, 110, 50) + `</g>`;
 
 // retort stand: a base plate, one rod, an arm to the ring that holds the funnel at its upper band
 const hRing = F.hNeck + (F.hMouth - F.hNeck) * 0.2, rRing = rAt(hRing) + 5;
@@ -95,14 +95,14 @@ const ringArc = (sweep) => {
 const ringBack = ringArc(1), ringFront = ringArc(0);
 
 // ---- the quote that comes out of the spout: line items, a lime total with a tick, an AI sparkle as its drafter
-const Q = { w: 96, h: 124 };
+const Q = { w: 100, h: 138 };
 // the sheet hangs from inside the spout: its top centre sits 4 above the spout's tip, behind the spout's front wall
 const [QDU, QDV] = [-Q.w / 2, 0];
 const qTop = F.hTip + 4;
 const [qx, qy] = P(AU + QDU, AV + QDV, qTop);
 const QM = `matrix(0.9 0.45 0 1 ${f(qx)} ${f(qy)})`;
 const rows = [0, 1, 2].map((i) => {
-  const y = 46 + i * 14;
+  const y = 50 + i * 16;
   return `<rect x="10" y="${y}" width="${[40, 32, 46][i]}" height="5.5" rx="2.75" fill="${B200}"/><rect x="${Q.w - 26}" y="${y}" width="16" height="5.5" rx="2.75" fill="${B300}"/>`;
 }).join("");
 const quote = `<g transform="${QM}">
@@ -142,12 +142,13 @@ function pawn(u, v, { badge, arm } = {}) {
 // quote corners in screen, for the customer's hand
 const qPt = (lx, ly) => [qx + 0.9 * lx, qy + 0.45 * lx + ly];
 const CUST = env("CUST", [AU + 96, AV - 6]);
+const REPP = env("REPP", [AU + 150, AV - 75]);
 // the rep stands in front of the stand's rod, a hand on it: the funnel is the rep's to run
 const REP = env("REP", [RU + 20, RV + 69]);
 const REP_HAND = [rx - 6.5, ry0 - 26];
-const HANDAT = qPt(Q.w - 2, Q.h - 40);
+const HANDAT = qPt(Q.w - 1, Q.h - 50);
 
-const ALT = "Isometric illustration for MarTech and SalesTech product design. A solid blue sales funnel, held in a stand on a dotted floor, has three lead cards dropped into its wide mouth. Out of its spout comes one clear quote: a few line items, a lime total with a tick and a small AI sparkle as its drafter. A customer marked with a briefcase takes the quote in one hand, while the sales rep who works the funnel stands by it.";
+const ALT = "Isometric illustration for MarTech and SalesTech product design. A solid blue sales funnel, held in a stand on a dotted floor, has three lead cards dropped into its wide mouth. Out of its spout comes one clear quote: a few line items, a lime total with a tick and a small AI sparkle as its drafter. A customer marked with a briefcase takes the quote in one hand, with the sales rep, marked with a target, standing beside the customer.";
 const svg = (vb) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" role="img" aria-label="${ALT}">
 ${FLOOR}
 <!-- The stand: base, rod, the arm to the ring -->
@@ -166,9 +167,9 @@ ${ringFront}
 ${quote}
 ${spout}
 <!-- The rep who works the funnel, and the customer the quote is for -->
-${pawn(REP[0], REP[1], { badge: "target", arm: { from: [12, -54], to: REP_HAND } })}
+${pawn(REPP[0], REPP[1], { badge: "target" })}
 ${pawn(CUST[0], CUST[1], { badge: "briefcase", arm: { from: [-10, -56], to: HANDAT } })}
 </svg>
 `;
-const VB = process.env.VB || "-497 -101 776 518";
+const VB = process.env.VB || "-512 -110 865 572";
 writeFileSync(new URL(process.env.OUT || "./hero.svg", import.meta.url), svg(VB));

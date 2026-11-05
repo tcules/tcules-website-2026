@@ -1,8 +1,8 @@
 # /expertise/content-knowledge-discovery-platforms · hero
 
 Slot: hero beside the copy, paper ground, renders about 600px wide, and appears as the /expertise card cover at 360.
-`hero.svg`, viewBox 656 × 456 (about 1.44:1). `gen.mjs` builds it: `node gen.mjs` rewrites `hero.svg`, and env
-overrides (`CU`, `CV`, `HT`, `LEG`, `GRID`, `READER`, `ARMTO`, `OPEN`, `LIFT`, `LH`, `CH`, `FLOOR`, `VB`) are only for trying layouts.
+`hero.svg`, viewBox 865 × 584 (about 1.48:1), on healthtech's 545 × 402 floor, so it renders at the family's scale. `gen.mjs` builds it: `node gen.mjs` rewrites `hero.svg`, and env
+overrides (`CU`, `CV`, `HT`, `LEG`, `GRID`, `OPEN`, `DOUT`, `LIFT`, `LH`, `CH`, `TABX`, `READER`, `ARMFROM`, `HANDH`, `HANDU`, `FLOOR`, `VB`) are only for trying layouts.
 Previews: `preview/hero.png`, `preview/hero.at-600.png`, `preview/hero.at-360.png`.
 
 ## The object
@@ -43,27 +43,33 @@ This hero has no screen at all. The product is the card itself.
 
 - **Idea:** "When people search, the platform hands them the one right document, and they can see who owns it,
   that it is the current version and where it comes from."
-- **Drawn:** healthtech's dotted plate with the dashed edge and the soft inset (420 × 300 here). A white library card
-  catalogue stands on it on four short legs: 260 wide, 100 deep, 196 high including the legs, so it sits at hub
-  scale and takes under half the frame. Its front holds six drawers (two columns, three rows), each with a label
-  frame whose bar is a different length (an index of topics, not identical lockers) and a round pull. The search
-  field is the one blue product element: a solid brandeis-500 pill lying flat on the lid, with a white magnifier
-  drawn in the lid's plane (handle along the pill's long axis) and a white query bar. The bottom-left drawer is
-  pulled out; its label frame carries a dotted focus outline. Its stale cards stand in a row, brandeis-50 with
-  brandeis-300 outlines. The one found card is lifted clear above the row, with two short dashed drop lines to its
-  slot, a true thin brandeis-200 edge on its right and top, and a lime guide tab on its top edge (#A1B71F edge, a
-  small neutral-950 tick). It shows a large blue owner avatar with one name bar, one text bar, and a blue link mark
-  with a short dashed tail to the card's edge (source). **One dashed connector (4/4) runs on the iso axes from the
-  search field's front edge, forward over the lid, and down onto the lime tab**: the search finds this card.
-  A white client pawn stands at the front left, a hand on the card's left edge.
+- **Drawn:** healthtech's dotted plate, at healthtech's size (545 × 402, the dashed edge, the soft inset), in a
+  viewBox 865 wide like healthtech's, so the catalogue and the pawn render at the family's scale. A white library
+  card catalogue stands on it on four short legs: 300 wide, 120 deep, 262 high including the legs (healthtech's
+  case is about 290 long). Its front holds eight drawers (two columns, four rows, the low wide drawers of a real
+  catalogue), each with a label frame whose bar is a different length (an index of topics, not identical lockers)
+  and a round pull. The search field is the one blue product element: a solid brandeis-500 pill lying flat on the
+  lid, with a white magnifier drawn in the lid's plane and a white query bar. **The search visibly leads to the
+  card:** the magnifier, the connector and the card's tab share one line. A small blue origin dot sits on the
+  pill's front edge straight under the magnifier, and one dashed connector (4/4) runs from it on the iso axes,
+  forward over the lid, past its edge, and straight down onto the found card's lime tab. The found card is ringed
+  in a dotted focus outline (STYLE §4), the "this is the result" mark. The bottom-left drawer is pulled out; its
+  stale cards stand in a row, brandeis-50 with brandeis-300 outlines. The found card is lifted clear above the row,
+  with two short dashed drop lines to its slot, a true thin brandeis-200 edge on its right and top, and a lime
+  guide tab at its top-left (#A1B71F edge, a small neutral-950 tick). It shows a large blue owner avatar with one
+  name bar, one text bar, and a blue link mark with a short dashed tail to the card's edge (source). A white client
+  pawn stands beside the drawer, just behind its front panel, and a short arm from the shoulder takes the card by
+  its lower-left corner.
 - **Accent:** one lime, the guide tab of the current card.
 - **People:** one client (white, blue outline, light arm in a blue outline growing from the shoulder, round hand,
-  healthtech's pawn dimensions and arm weight). No Tcules figure: the idea is the reader finding the right material.
+  healthtech's pawn dimensions and arm weight, at healthtech's scale). The arm is short: about 50 units from its
+  root inside the shoulder, about 30 of it visible. No Tcules figure: the idea is the reader finding the right material.
 - **Alt:** Isometric illustration for content and knowledge platform design. On a dotted floor stands a white
-  library card catalogue of labelled drawers on short legs, with a blue search field lying on its lid. A dashed
-  line runs from the search field to one card lifted out of an open drawer, landing on the card's lime tab that
-  marks it as the current version. The card shows its owner and a link mark for its source, while the faded cards
-  behind it stay in the drawer. A client stands beside the drawer with a hand on that card.
+  library card catalogue of eight labelled drawers, with a blue search field lying on its lid. A dashed line runs
+  from the search field, straight down from its magnifier, to one card lifted out of an open drawer and ringed in a
+  dotted outline, landing on the card's lime tab that marks it as the current version. The card shows its owner
+  and a link mark for its source, while the faded cards stay in the drawer below. A client stands beside the
+  drawer and reaches up to take that card.
 
 ## Rounds
 
@@ -106,6 +112,27 @@ Joins were checked zoomed at 2400:
 the link mark read. Zoomed at 2400: the connector clears the top-left drawer's label and stops on the tab's top;
 the pulled drawer's panel has square corners so its walls meet it without a notch; the drop lines stop at the
 row; the arm's root sits inside the shoulder and the hand rests on the card's left edge.
+
+8. **Final polish (5 Nov).** Three notes: the drawing sat on a smaller floor (420 × 300, viewBox 656) and so
+   rendered larger than its siblings; the client's arm was a long reach (about 90 units) to the card; and the blind
+   reader saw manual filing, not search.
+   - **Scale:** floor to healthtech's 545 × 402 and viewBox 865 × 584. The catalogue grew to 300 × 120 × 262 so it
+     holds the frame at the family's scale. It moved forward on the plate so it does not sit at the back edge.
+   - **Arm:** the reader moved from in front of the drawer to beside it, at the card's depth. The legs were
+     lowered (12) and the drawers made four low rows, so the card hangs lower. The arm now runs about 50 units
+     from inside the shoulder to the card's lower-left corner. The hand takes the corner from below, clear of the
+     source link (the link row moved 16 to the right so the hand never sits on it).
+   - **Search leads to the card:** the magnifier moved to sit straight above the card's tab, so the magnifier,
+     the connector and the tab are one line. The connector starts from an origin dot on the pill under the
+     magnifier, and the found card is ringed in a dotted focus outline. The dotted focus on the drawer's label was
+     removed, so there is one focus mark: the result, not the drawer.
+
+**Checked (final polish)** at 600 and 360, side by side with healthtech at 360: the plate and the pawns are the
+same size in both. At 360 the blue search pill, the dashed connector down to the lime tab, the ringed card, the
+avatar and the link mark read. Zoomed: the arm's root is inside the shoulder (masked by the body) and the hand
+meets the card's lower-left corner below the link; the drawer's front panel overlaps the reader's right edge, so
+the reader stands beside the drawer, not inside it; the origin dot sits on the pill's edge under the magnifier;
+the connector stops on the tab's top; the four legs stand on the floor.
 
 ## Open points for the owner
 
