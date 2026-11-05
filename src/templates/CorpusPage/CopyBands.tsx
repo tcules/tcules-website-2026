@@ -56,7 +56,14 @@ import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
-import { isCardSet, isClaimList, isIllustratedProse, isSituationProse, isWhatYouGet, signature } from './plan';
+import {
+  isCardSet,
+  isClaimList,
+  isIllustratedProse,
+  isSituationProse,
+  isWhatYouGet,
+  signature,
+} from './plan';
 import {
   boldLead,
   isExample,
@@ -298,7 +305,7 @@ function inlineLabel(block: CorpusBlock): { label: string; rest: InlineRun[] } |
 }
 
 /** A scenario's label and words, with its drawing on the end side (copy beside a drawing is a split). */
-function ScenarioSplit({
+export function ScenarioSplit({
   label,
   blocks,
   scene,
@@ -693,7 +700,7 @@ export function sheetParts(band: CorpusBand): SheetParts {
 }
 
 /** Promises per row: two for two or four, three for three, five or six (component-map § A). */
-const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
+export const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
 
 /**
  * A band's terms ("**Who does the work.** …") are the labelled claims after its items; every other
@@ -1587,7 +1594,8 @@ export function DrawnTableBand({
   scenario,
   arrangement = 'grid',
 }: {
-  page: CorpusPage;
+  /** The corpus page, for a photograph it binds beside the words after the table. */
+  page?: CorpusPage;
   band: CorpusBand;
   sceneOf: (key: string) => SketchName | undefined;
   scenario?: SketchName;
@@ -1700,9 +1708,9 @@ export function DrawnTableBand({
         </Layout>
       </Layout>
     );
-  const bound = page.composition.mediaBindings.some(
-    (b) => b.bound && b.supportsSection === band.id,
-  );
+  const bound =
+    page?.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id) ??
+    false;
   return (
     <ContentSection {...head(band)} data-band="drawn-table" lead={leadText}>
       <Layout rowGap="stack">
@@ -1719,7 +1727,7 @@ export function DrawnTableBand({
               align="center"
             >
               <BandBody blocks={after} />
-              <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
+              {page ? <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} /> : null}
             </Layout>
           ) : (
             <BandBody blocks={after} />
@@ -2714,7 +2722,9 @@ function onwardLinks(blocks: readonly CorpusBlock[]): CorpusLink[] {
 /** A claim's words: its paragraphs, a link line left out. */
 const claimText = (claim: Extract<CorpusBlock, { type: 'item' }>): string =>
   claim.blocks
-    .flatMap((block) => (block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : []))
+    .flatMap((block) =>
+      block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : [],
+    )
     .join(' ');
 
 /**
@@ -2780,8 +2790,7 @@ const CARD_GLYPHS: Readonly<Record<string, IconName>> = {
 };
 
 const glyphFor = (key: string): IconName | undefined =>
-  CARD_GLYPHS[key] ??
-  Object.entries(CARD_GLYPHS).find(([lead]) => key.startsWith(lead))?.[1];
+  CARD_GLYPHS[key] ?? Object.entries(CARD_GLYPHS).find(([lead]) => key.startsWith(lead))?.[1];
 
 /**
  * A set of cards under the head (plan `CARD_SETS`): the three-ways cards, each led by its glyph. Titled

@@ -302,6 +302,7 @@ const FOOTER: SiteFooterProps = {
     },
   ],
   newsletter: {
+    eyebrow: 'Newsletter',
     title: 'Beyond Interfaces',
     description:
       'A deep dive into the intersection of design, strategy, and product innovation.',
@@ -314,6 +315,8 @@ const FOOTER: SiteFooterProps = {
     placeholder: 'you@company.com',
   },
   studio: {
+    addressLabel: 'Address',
+    socialLabel: 'Elsewhere',
     statement:
       'Tcules is a digital product design studio creating ambitious new software products and making established ones better.',
     address: [

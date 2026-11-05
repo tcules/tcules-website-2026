@@ -39,11 +39,17 @@ import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import { sitePageSource } from './sources/strapi/site-pages';
 import { getPublishedAbout } from './sources/strapi/published-about';
+import { getPublishedServicesMaster } from './sources/strapi/published-services-master';
 import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
+import {
+  getPublishedService,
+  listPublishedServiceSlugs,
+} from './sources/strapi/published-service';
 import { getPublishedCaseStudy } from './sources/strapi/published-case';
 import { getPublishedHome } from './sources/strapi/home';
 import { getPublishedPageSeo } from './sources/strapi/page-seo';
+import { getPublishedNavigation } from './sources/strapi/site-chrome';
 import type {
   CaseStory,
   IdealAboutPage,
@@ -85,9 +91,9 @@ import type {
 /**
  * THE SEAM.
  *
- * Pages import from here and from nowhere else in @/content/sources. The general page and chrome
- * collections remain on fixtures while the audit, case-study, glossary and privacy-policy
- * families are assigned to Strapi. Neither route nor pattern code knows which source answered any
+ * Pages import from here and from nowhere else in @/content/sources. General pages remain on
+ * fixtures while Navigation and Footer use the public CMS. The audit, case-study, glossary and
+ * privacy-policy families are assigned to Strapi. Neither route nor pattern code knows which source answered any
  * reader.
  */
 const source: ContentSource = fixtureSource;
@@ -119,12 +125,13 @@ const sitePagesSource: SitePagesContentSource = sitePageSource;
 const corpusPagesSource: CorpusContentSource = corpusSource;
 
 export const getPublishedAboutPage = getPublishedAbout;
+export const getPublishedServicesMasterPage = getPublishedServicesMaster;
 export const getHomePage = getPublishedHome;
 export const getPageSeo = getPublishedPageSeo;
 
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
-export const getNavigation = source.getNavigation.bind(source);
+export const getNavigation = getPublishedNavigation;
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
 export const listAuthors = authorPagesSource.listAuthors.bind(authorPagesSource);
@@ -136,6 +143,9 @@ export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getResourceDetail = getPublishedResource;
 export const getAuthorDetail = getPublishedAuthor;
+/** A Service detail page (`/services/{slug}`) and the published slugs, from the new CMS. */
+export const getServiceDetail = getPublishedService;
+export const listServiceSlugs = listPublishedServiceSlugs;
 export const getCaseStudyDetail = getPublishedCaseStudy;
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
 
@@ -258,7 +268,10 @@ export function getReasonFigure(
 ): { src: string; width: number; height: number } | undefined {
   const ref = REASON_FIGURES[offerSceneKey(title)];
   if (!ref) return undefined;
-  return { src: `/illustrations/reasons/${ref.name}.${ground}.svg`, ...REASON_FIGURE_SIZE[ref.set] };
+  return {
+    src: `/illustrations/reasons/${ref.name}.${ground}.svg`,
+    ...REASON_FIGURE_SIZE[ref.set],
+  };
 }
 
 /**

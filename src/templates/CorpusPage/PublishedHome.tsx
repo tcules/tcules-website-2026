@@ -47,6 +47,7 @@ import type {
   HomeRating,
   HomeSection as Section,
 } from './published-home-model';
+import { labelWithoutArrow } from './text';
 
 function ReviewBadge({ rating }: { rating: HomeRating }) {
   const { mark, ...props } = rating;
@@ -59,9 +60,15 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
   );
 }
 
+/* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
+   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay). */
 function link(action: HomeAction | undefined) {
   return action ? (
-    <CtaRow rule={false} note={action.description} actions={[action]} />
+    <CtaRow
+      rule={false}
+      note={action.description}
+      actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
+    />
   ) : undefined;
 }
 

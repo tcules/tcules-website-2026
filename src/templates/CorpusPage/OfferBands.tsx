@@ -578,7 +578,11 @@ function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
  * (DrawnTableBand `ledger`): a chain of checks, a choice between services, a comparison. The bands
  * before them ("What you get") are the tile grid, so these take the other shape (round 5 critic).
  */
-const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 'compare']);
+export const LEDGER_BANDS: ReadonlySet<string> = new Set([
+  'status-example',
+  'options',
+  'compare',
+]);
 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
@@ -1214,9 +1218,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         };
         /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
         const quoteOf = (title: string) =>
-          authored.get(title)?.find(
-            (block): block is Extract<CorpusBlock, { type: 'quote' }> => block.type === 'quote',
-          );
+          authored
+            .get(title)
+            ?.find(
+              (block): block is Extract<CorpusBlock, { type: 'quote' }> =>
+                block.type === 'quote',
+            );
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons

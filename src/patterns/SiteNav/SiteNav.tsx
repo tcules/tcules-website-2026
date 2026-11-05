@@ -620,15 +620,19 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           </Cluster>
 
           <Cluster colGap="tight" nowrap>
-            <Button
-              as={Link}
-              href={cta.href}
-              size="sm"
-              data-nav-control=""
-              className={styles.cta}
-            >
-              {cta.label}
-            </Button>
+            {cta ? (
+              <Button
+                as={Link}
+                href={cta.href}
+                title={cta.description}
+                {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                size="sm"
+                data-nav-control=""
+                className={styles.cta}
+              >
+                {cta.label}
+              </Button>
+            ) : null}
             <Button
               id={toggleId}
               className={styles.toggle}
@@ -809,6 +813,10 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               <Button
                 as={Link}
                 href={ctaSecondary.href}
+                title={ctaSecondary.description}
+                {...(ctaSecondary.external
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
                 emphasis="ghost"
                 tone="neutral"
                 extendHitArea
@@ -816,9 +824,17 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 {ctaSecondary.label}
               </Button>
             ) : null}
-            <Button as={Link} href={cta.href} extendHitArea>
-              {cta.label}
-            </Button>
+            {cta ? (
+              <Button
+                as={Link}
+                href={cta.href}
+                title={cta.description}
+                {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                extendHitArea
+              >
+                {cta.label}
+              </Button>
+            ) : null}
           </Layout>
         </div>
       </div>
@@ -848,6 +864,8 @@ function PlatePane({ item }: { item: SiteNavItem }) {
       <Button
         as={Link}
         href={item.hub.href}
+        title={item.hub.description}
+        {...(item.hub.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         emphasis="link"
         tone="primary"
         size="sm"
@@ -928,11 +946,17 @@ function PlateRow({ link }: { link: SiteNavLink }) {
       <span className={styles.rowHead}>
         <span className={styles.rowLabel}>{link.label}</span>
         {link.external ? (
-          <Icon name="arrow-right-up" label="opens in a new tab" className={styles.rowExternal} />
+          <Icon
+            name="arrow-right-up"
+            label="opens in a new tab"
+            className={styles.rowExternal}
+          />
         ) : null}
         <Icon name="arrow-right" className={styles.rowArrow} />
       </span>
-      {link.description ? <span className={styles.rowDescription}>{link.description}</span> : null}
+      {link.description ? (
+        <span className={styles.rowDescription}>{link.description}</span>
+      ) : null}
     </Link>
   );
 }
@@ -1002,6 +1026,8 @@ function SheetPane({ item }: { item: SiteNavItem }) {
           <Button
             as={Link}
             href={item.hub.href}
+            title={item.hub.description}
+            {...(item.hub.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             emphasis="link"
             tone="neutral"
             size="sm"

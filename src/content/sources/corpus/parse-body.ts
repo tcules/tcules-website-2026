@@ -374,6 +374,15 @@ export const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
+/**
+ * A Markdown fragment (no `#`/`##` structure: one band's words) → its typed blocks, through the same
+ * tokenizer and block rules as a whole corpus body. CMS rich fields are this Markdown, so a CMS-backed
+ * page reads tables, lists, labelled lines and links exactly as a corpus page does.
+ */
+export function parseBlocks(markdown: string): CorpusBlock[] {
+  return blocksFrom(tokenize(markdown), { i: 0 }, 2);
+}
+
 export function parseBody(body: string): { hero: CorpusHero; bands: CorpusBand[] } {
   const tokens = tokenize(body);
   const firstBand = tokens.findIndex((t) => t.k === 'heading' && t.level === 2);

@@ -49,9 +49,9 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <SiteNav {...nav} />
+        {nav.available !== false ? <SiteNav {...nav} /> : null}
         <main>{children}</main>
-        <SiteFooter {...footer} />
+        {footer.available !== false ? <SiteFooter {...footer} /> : null}
       </body>
     </html>
   );

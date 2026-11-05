@@ -10,6 +10,7 @@
 export {
   getPage,
   getHomePage,
+  getPublishedServicesMasterPage,
   getPublishedAboutPage,
   getPageSeo,
   listPages,
@@ -28,6 +29,8 @@ export {
   getCaseStudyDetail,
   getResourceDetail,
   getAuthorDetail,
+  getServiceDetail,
+  listServiceSlugs,
   getCaseStory,
   getIdealAboutPage,
   getContactPage,

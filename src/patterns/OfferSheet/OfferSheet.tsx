@@ -50,6 +50,8 @@ export type OfferSheetItem = {
    * 2026: a row is not an icon card). Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
+  /** CMS art in the existing inline glyph slot. */
+  iconArt?: ReactNode;
   /**
    * `list` only: a label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer":
    * who acts at that step). Set on every item or on none.
@@ -263,12 +265,24 @@ export function OfferSheet({
                   <p className={styles.body}>{item.body}</p>
                 )}
               </Cluster>
-            ) : item.icon ? (
+            ) : item.icon || item.iconArt ? (
               /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
                  card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
               <Cluster colGap="text" align="start" nowrap>
                 <span className={styles.rowIcon}>
-                  <Icon name={item.icon} size="xl" />
+                  {item.iconArt ? (
+                    <span
+                      style={{
+                        display: 'block',
+                        inlineSize: 'var(--ofs-icon-size)',
+                        blockSize: 'var(--ofs-icon-size)',
+                      }}
+                    >
+                      {item.iconArt}
+                    </span>
+                  ) : item.icon ? (
+                    <Icon name={item.icon} size="xl" />
+                  ) : null}
                 </span>
                 {item.title ? <h3 className={styles.title}>{item.title}</h3> : null}
               </Cluster>
