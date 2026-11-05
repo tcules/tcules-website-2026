@@ -47,44 +47,43 @@ to know the cause; finding it is Claude's job.
    same shape, say so.
 
 **Claude has already checked** (`npm run shots -- --widths=1440,1024,768,390 --routes=…`), so skip these:
-horizontal scroll, and pages that throw errors. 5 Nov 2026: 76 captures, none with a problem.
+horizontal scroll, and pages that throw errors. 5 Nov 2026, after pass 1: every page above at all four widths, none with a problem.
 
-## The pages: 19 cover everything, 5 cover most
+## The pages: 17 cover everything, 4 cover most
 
 `npm run responsive:census` reads every page in the sitemap (253 on 5 Nov) and finds the fewest that
-between them render every component and every CSS rule that changes with the width (176 units). The
-list below is the 5 Nov run; rerun the command after big changes, as it updates itself.
+between them render every component and every CSS rule that changes with the width (174 units). The
+list below is the run after responsive pass 1 (5 Nov 2026); rerun the command after big changes, as it
+updates itself.
 
-### Pass 1: five pages, the whole page at all four widths (77% of units)
+### Pass 1: four pages, the whole page at all four widths (74% of units)
 
 | # | Page | What it carries |
 |---|---|---|
 | 1 | `/services/design-systems` | the nav and its phone sheet, footer, hero, bento, the tabbed claims, offer sheet, slider, quote, FAQ, enquiry form, close |
 | 2 | `/insights` | the listing template: index rail and filters, teaser rows, compact cards |
 | 3 | `/` | the home hero, the gateway, case cards, logo grid, testimonial, ratings |
-| 4 | `/glossary/coded-prototype` | the article shape: table of contents (rail, then the phone bar), data table, statement |
-| 5 | `/about` | a photo beside its words, profile cards, the joined table |
+| 4 | `/about` | a photo beside its words, profile cards, the record table, the data table |
 
-### Pass 2: fourteen pages, one band each (the other 23%)
+### Pass 2: thirteen pages, one band each (the other 26%)
 
 Open each page and look only at the band named. The rest of the page repeats Pass 1.
 
 | # | Page | Look only at |
 |---|---|---|
-| 6 | `/audits/prototype-readiness-review` | the film clips, the status marks, the deliverable as a list and as a table |
+| 5 | `/insights/guides/figma-to-react` | the table of contents (rail, then the phone bar), the summary panel, contributors, panel cards |
+| 6 | `/audits/prototype-hardening-review` | the film clips, the status marks, the deliverable as a list and as a table |
 | 7 | `/audits` | the wide bento tiles |
 | 8 | `/glossary` | the A–Z index |
 | 9 | `/expertise` | the centred band and the group headings |
-| 10 | `/careers` | the photo collage |
-| 11 | `/future-interfaces-lab/join` | the steps with arrows, the tile cards |
-| 12 | `/insights/guides/figma-to-react` | the summary panel, the contributors, the panel cards |
-| 13 | `/case-studies/legacy-saas-modernisation-information-architecture` | the case story shape (its offset column and markers) |
-| 14 | `/contact` | the row of cards |
-| 15 | `/services/product-design/ux-research` | the breadcrumbs (they shorten on a phone) |
-| 16 | `/expertise/healthtech` | the quote ledger |
-| 17 | `/tools/ai-trust-control-canvas` | the diagram plate |
-| 18 | `/audits/product-modernisation-test` | the mid-size quote |
-| 19 | `/case-studies/insurance-workflow-software-ux-chestnut` | the figure |
+| 10 | `/case-studies/legacy-saas-modernisation-information-architecture` | the case shape (offset column and markers) |
+| 11 | `/careers` | the photo collage |
+| 12 | `/future-interfaces-lab/join` | the steps with arrows, the tile cards |
+| 13 | `/services/product-design/ux-research` | the breadcrumbs (they shorten on a phone) |
+| 14 | `/expertise/healthtech` | the quote ledger |
+| 15 | `/tools/ai-trust-control-canvas` | the diagram plate |
+| 16 | `/audits/product-modernisation-test` | the mid-size quote |
+| 17 | `/case-studies/insurance-workflow-software-ux-chestnut` | the figure |
 
 **What the census can't see:** open and expanded states (the nav sheet, an opened FAQ, the gateway's
 detail, filters), which is why item 6 above says to open them, and the columns a Layout chooses per

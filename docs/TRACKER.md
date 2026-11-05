@@ -376,7 +376,8 @@ Dropped: not relevant, the site was built through the corpus pages and templates
 - [-] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya. Dropped: not relevant (owner, 5 Nov 2026).
 - [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
       launch (owner, 4 Nov 2026).
-- [~] **6.5** Responsive check across the site (owner, 31 Oct). How to review it, the widths and the 19 pages
+- [x] **6.5** Responsive check across the site (owner, 31 Oct). Done 5 Nov 2026: all 17 pages reviewed at 1440, 1024, 768
+      and 390, the notes fixed in their components and tokens and logged (decisions/2026-11-05-*). How to review it, the widths and the 19 pages
       that cover every responsive behaviour: `docs/responsive-check.md` (`npm run responsive:census`). Two concerns to test at 1440, 1024, 768
       and 390 before changing anything:
       - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
