@@ -140,7 +140,7 @@ export type PublishedServiceSection =
         detail?: { label: string; html?: string };
       }[];
     })
-  | (Head & { type: 'clients'; marks: LogoGridMark[] });
+  | (Head & { type: 'clients'; compact: boolean; marks: LogoGridMark[] });
 
 export type PublishedServicePage = {
   slug: string;

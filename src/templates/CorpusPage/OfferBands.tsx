@@ -593,7 +593,7 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
  * Each Why Tcules reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each
  * title gets an inline icon"). The same six reasons on every page that carries the band.
  */
-const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+export const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
   'Fluent in SaaS': 'layers',
   'Idea to launch': 'flag',
   'Craft people notice': 'eye',

@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, Sketch, type MediaImage } from '@/components';
+import { Layout, Media, Section as Band, Sketch, type MediaImage } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusLink } from '@/lib/corpus-types';
 import { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { placeholderIllustration } from '@/lib/placeholders';
@@ -41,6 +41,7 @@ import {
   ScenarioSplit,
   TableBand,
   acrossFor,
+  isAskLink,
   isExampleParagraph,
   scenarioParts,
   type Claim,
@@ -83,10 +84,15 @@ export type PublishedServiceProps = {
   ) => { src: string; width: number; height: number } | undefined;
 };
 
-type Ctx = Omit<PublishedServiceProps, 'page' | 'fallbackMedia'> & {
+/** What a shared section needs from its page: the route, and the drawings the frontend assigns. */
+export type SharedSectionCtx = Omit<PublishedServiceProps, 'page' | 'fallbackMedia'> & {
   route: string;
+  /** The enquiry's `serviceOrAudit` context: the page's slug. */
   slug: string;
+  /** The enquiry's `family` context. Default `service`. */
+  family?: string;
 };
+type Ctx = SharedSectionCtx;
 
 type Of<T extends Section['type']> = Extract<Section, { type: T }>;
 
@@ -340,6 +346,8 @@ function Claims({ section, ctx }: { section: Of<'claims'>; ctx: Ctx }) {
     };
   });
   const drawings = new Map(section.claims.map((claim) => [claim.title, claim.art?.image]));
+  /* A closing worked example keeps its label as the legend over its words, as the corpus set it. */
+  const after = scenarioParts(section.after);
   return (
     <ContentSection
       {...head(section)}
@@ -362,7 +370,14 @@ function Claims({ section, ctx }: { section: Of<'claims'>; ctx: Ctx }) {
               : ctx.claimFigure?.(title, on);
           }}
         />
-        {body(section.after, section.headingId)}
+        {body(after.before, section.headingId)}
+        {after.label ? (
+          <ScenarioSplit
+            label={after.label}
+            blocks={after.scenario}
+            scene={sceneFor(ctx, section.id, 'scenario')}
+          />
+        ) : null}
       </Layout>
     </ContentSection>
   );
@@ -395,8 +410,10 @@ function ServiceCards({ section, ctx }: { section: Of<'service-cards'>; ctx: Ctx
           })),
         }
       : undefined;
+  /* Split tiles (a detail each, either variant) take two tracks, so four tracks set them two a row,
+     as the corpus chooser did (OfferBands; /audits `choose`). */
   const tracks =
-    section.variant === 'two'
+    section.variant === 'two' || section.tiles.some((tile) => tile.detail)
       ? 4
       : cta
         ? ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
@@ -719,7 +736,11 @@ function plainOf(html: string): string {
     .trim();
 }
 
-/** A button CTA between bands: the onward line as its own island, the link as its one action. */
+/**
+ * A button CTA between bands. One that asks for the page's own enquiry form (`#enquiry`) is the ask
+ * island (L, the corpus `AskIsland`): the button is the page's solid ask. Any other is the onward
+ * line as its own island, the link as its one action.
+ */
 function Onward({ section }: { section: Extract<Section, { type: 'cta' }> }) {
   const [primary] = section.actions;
   if (!primary) return null;
@@ -728,6 +749,19 @@ function Onward({ section }: { section: Extract<Section, { type: 'cta' }> }) {
     : section.lead
       ? ([section.lead] as const)
       : undefined;
+  const action = { label: labelWithoutArrow(primary.label), href: primary.href };
+  if (isAskLink(primary)) {
+    return (
+      <CtaSection
+        id={section.id}
+        data-band="L"
+        arrangement="open"
+        heading={section.heading}
+        body={words}
+        actions={[action]}
+      />
+    );
+  }
   return (
     <CtaSection
       id={section.id}
@@ -736,7 +770,7 @@ function Onward({ section }: { section: Extract<Section, { type: 'cta' }> }) {
       intent="onward"
       heading={section.heading}
       body={words}
-      actions={[{ label: labelWithoutArrow(primary.label), href: primary.href }]}
+      actions={[action]}
     />
   );
 }
@@ -747,6 +781,7 @@ function Onward({ section }: { section: Extract<Section, { type: 'cta' }> }) {
  * sets them; its drawing is the CMS media, else the frontend's.
  */
 function Enquiry({
+  family = 'service',
   section,
   route,
   slug,
@@ -754,6 +789,7 @@ function Enquiry({
   section: Extract<Section, { type: 'cta' }>;
   route: string;
   slug: string;
+  family?: string;
 }) {
   const { form } = section;
   if (!form) return <PublishedSection section={section} route={route} />;
@@ -777,7 +813,7 @@ function Enquiry({
     context: {
       originRoute: route,
       placement: section.id ?? 'enquiry',
-      family: 'service',
+      family,
       serviceOrAudit: slug,
       referrer: '',
       campaign: '',
@@ -816,7 +852,12 @@ function Enquiry({
   );
 }
 
-function ServiceSection({ section, ctx }: { section: Section; ctx: Ctx }) {
+/**
+ * One shared Page Content section through its band component. Exported for the other page owners
+ * built from the same shared sections (Expertise Master, Expertise detail), so a section renders one
+ * way wherever it is placed.
+ */
+export function SharedSectionView({ section, ctx }: { section: Section; ctx: Ctx }) {
   switch (section.type) {
     case 'cases':
       return <Cases section={section} />;
@@ -839,14 +880,27 @@ function ServiceSection({ section, ctx }: { section: Section; ctx: Ctx }) {
     case 'illustrated':
       return <Illustrated section={section} ctx={ctx} />;
     case 'clients':
+      /* The client wall as the corpus recognition band (H): the heading is the wall's h2 context. */
       return (
-        <ContentSection {...head(section)} data-band="H" surface={section.surface}>
-          <LogoGrid marks={section.marks} edges="closed" />
-        </ContentSection>
+        <Band
+          id={section.id}
+          data-band="H"
+          surface={section.surface}
+          aria-labelledby={section.headingId}
+        >
+          <LogoGrid
+            marks={section.marks}
+            context={section.heading}
+            contextAs="h2"
+            headingId={section.headingId}
+            edges="closed"
+            density={section.compact ? 'compact' : 'default'}
+          />
+        </Band>
       );
     case 'cta':
       return section.variant === 'form' ? (
-        <Enquiry section={section} route={ctx.route} slug={ctx.slug} />
+        <Enquiry section={section} route={ctx.route} slug={ctx.slug} family={ctx.family} />
       ) : section.variant === 'button' ? (
         <Onward section={section} />
       ) : (
@@ -870,7 +924,7 @@ export function PublishedService({
       <PublishedHero hero={page.hero} fallbackMedia={fallbackMedia} />
       {page.sections.map((section) => (
         <Fragment key={section.key}>
-          <ServiceSection section={section} ctx={ctx} />
+          <SharedSectionView section={section} ctx={ctx} />
         </Fragment>
       ))}
     </>

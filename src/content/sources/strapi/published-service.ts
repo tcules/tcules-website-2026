@@ -50,7 +50,7 @@ type CmsBody = {
   labelled?: { title: Text; body: Text } | null;
   links?: { links: Entries<CmsAction> } | null;
 };
-type CmsFlow = CmsBody & {
+export type CmsFlow = CmsBody & {
   id: string;
   proof?: CmsProof | null;
   scenario?: {
@@ -82,11 +82,19 @@ type ServiceOnlySection = Band &
         __typename: 'ComponentSharedClientGrid';
         title: Text;
         clientSurface: Surface;
+        gridDensity: 'compact' | 'standard' | null;
         clients: Entries<{
           documentId: string;
           name: Text;
           density: number | null;
           media: StrapiUploadFile | null;
+        }>;
+        markOverrides: Entries<{
+          client: { documentId: string } | null;
+          media: StrapiUploadFile | null;
+          density: number | null;
+          width: number | null;
+          height: number | null;
         }>;
       }
     | {
@@ -200,9 +208,10 @@ type ServiceOnlySection = Band &
   );
 
 /* The Offer Sheet is read here with its supporting flow blocks, so Home's narrower shape is set aside. */
-type CmsServiceSection =
+export type CmsSharedSection =
   | Exclude<CmsHomeSection, { __typename: 'ComponentSharedOfferSheetSection' }>
   | ServiceOnlySection;
+type CmsServiceSection = CmsSharedSection;
 
 type CmsService = {
   documentId: string;
@@ -290,7 +299,10 @@ function bodyBlocks(block: CmsBody): CorpusBlock[] {
   }
 }
 
-function flowBlocks(entries: Entries<CmsFlow>, warn: (message: string) => void): CorpusBlock[] {
+export function flowBlocks(
+  entries: Entries<CmsFlow>,
+  warn: (message: string) => void,
+): CorpusBlock[] {
   return rows(entries).flatMap((block): CorpusBlock[] => {
     switch (block.kind) {
       case 'prose':
@@ -382,8 +394,12 @@ function tileHref(tile: CmsTile): string | undefined {
 
 /* ── Sections ────────────────────────────────────────────────────────────────── */
 
-function mapSection(
-  section: CmsServiceSection,
+/**
+ * One shared Page Content section (the 15 members every page owner built from the shared sections
+ * can hold) as its view model, or nothing when it cannot render. `route` names the page in warnings.
+ */
+export function mapSharedSection(
+  section: CmsSharedSection,
   route: string,
 ): PublishedServiceSection | undefined {
   const warn = (message: string) => console.warn(`New CMS ${route}: ${message}`);
@@ -685,23 +701,31 @@ function mapSection(
         ...head,
         type: 'clients',
         surface: section.clientSurface ?? undefined,
-        marks: rows(section.clients).flatMap<LogoGridMark>((client) => {
-          const name = text(client.name);
-          if (!name) return [];
-          const asset = upload(client.media);
-          if (!asset) warn(`${key} client ${client.documentId} has no usable logo`);
-          return asset
-            ? [
-                {
-                  src: asset.src,
-                  name,
-                  width: asset.width,
-                  height: asset.height,
-                  density: client.density ?? undefined,
-                },
-              ]
-            : [{ name }];
-        }),
+        /* The logo wall is compact unless the CMS asks for the standard grid (as the hero's wall). */
+        compact: section.gridDensity !== 'standard',
+        marks: (() => {
+          const overrides = new Map(
+            rows(section.markOverrides).map((mark) => [mark.client?.documentId, mark]),
+          );
+          return rows(section.clients).flatMap<LogoGridMark>((client) => {
+            const name = text(client.name);
+            if (!name) return [];
+            const override = overrides.get(client.documentId);
+            const asset = upload(override?.media) ?? upload(client.media);
+            if (!asset) warn(`${key} client ${client.documentId} has no usable logo`);
+            return asset
+              ? [
+                  {
+                    src: asset.src,
+                    name,
+                    width: override?.width ?? asset.width,
+                    height: override?.height ?? asset.height,
+                    density: override?.density ?? client.density ?? undefined,
+                  },
+                ]
+              : [{ name }];
+          });
+        })(),
       };
     default: {
       const mapped = mapBand(section, route);
@@ -746,7 +770,9 @@ export const getPublishedService = cache(
       route,
       name: text(service.name) ?? hero.title,
       hero,
-      sections: rows(service.content).flatMap((section) => mapSection(section, route) ?? []),
+      sections: rows(service.content).flatMap(
+        (section) => mapSharedSection(section, route) ?? [],
+      ),
     };
   },
 );

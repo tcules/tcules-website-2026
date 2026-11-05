@@ -3,13 +3,10 @@ import { notFound } from 'next/navigation';
 
 import { getOfferScenes, getPageSeo, getServiceDetail, listServiceSlugs } from '@/content';
 import { landedClaimFigure } from '@/app/_corpus/claim-figure';
+import { heroFallback } from '@/app/_corpus/hero-fallback';
 import { landedReasonFigure } from '@/app/_corpus/reason-figure';
-import { heroNeedsMedia } from '@/lib/hero-media';
 import { jsonLdMarkup } from '@/lib/json-ld';
-import { placeholderImage } from '@/lib/placeholders';
 import { servicePath } from '@/lib/routes';
-import { serviceIllustration } from '@/lib/service-illustrations';
-import type { HeroMedia } from '@/patterns';
 import { PublishedService } from '@/templates/CorpusPage/PublishedService';
 
 /**
@@ -35,27 +32,6 @@ export async function generateStaticParams() {
     console.error(error);
     return [];
   }
-}
-
-/** The service line's own hero drawing, else the register's labelled placeholder: illustrations only. */
-function heroFallback(route: string): HeroMedia | undefined {
-  const drawing = serviceIllustration(route);
-  if (drawing) {
-    return {
-      type: 'image',
-      image: {
-        src: drawing.src,
-        width: drawing.width,
-        height: drawing.height,
-        alt: drawing.alt,
-        kind: drawing.kind,
-      },
-      cut: drawing.cut,
-    };
-  }
-  return heroNeedsMedia(route)
-    ? { type: 'image', image: placeholderImage(route, 'hero') }
-    : undefined;
 }
 
 export async function generateMetadata({

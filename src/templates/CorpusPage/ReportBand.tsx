@@ -71,11 +71,24 @@ function trailingCaseLink(
 export const hasReportSheet = (band: CorpusBand): boolean =>
   band.blocks.some((block) => block.type === 'table');
 
-export function ReportBand({ band, surface }: { band: CorpusBand; surface: 'paper' | 'tint' }) {
-  const eyebrow = band.blocks
-    .flatMap((block) => (block.type === 'comment' ? [EYEBROW_NOTE.exec(block.text)?.[1]] : []))
-    .find(Boolean)
-    ?.trim();
+export function ReportBand({
+  band,
+  surface,
+  eyebrow: authoredEyebrow,
+}: {
+  band: CorpusBand;
+  surface: 'paper' | 'tint';
+  /** The CMS's eyebrow field (Worked Report). The corpus carries it as an authoring note instead. */
+  eyebrow?: string;
+}) {
+  const eyebrow =
+    authoredEyebrow ??
+    band.blocks
+      .flatMap((block) =>
+        block.type === 'comment' ? [EYEBROW_NOTE.exec(block.text)?.[1]] : [],
+      )
+      .find(Boolean)
+      ?.trim();
   const blocks = band.blocks.filter((block) => block.type !== 'comment');
   const tableAt = blocks.findIndex((block) => block.type === 'table');
   const sheet = blocks[tableAt] as TableBlock | undefined;

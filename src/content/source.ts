@@ -1,3 +1,4 @@
+import { getPublishedAuthorMaster } from './sources/strapi/published-author-master';
 import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
@@ -40,8 +41,21 @@ import { toolSource } from './sources/strapi/tool';
 import { sitePageSource } from './sources/strapi/site-pages';
 import { getPublishedAbout } from './sources/strapi/published-about';
 import { getPublishedServicesMaster } from './sources/strapi/published-services-master';
+import { getPublishedGlossaryMaster } from './sources/strapi/published-glossary-master';
+import { getPublishedToolsMaster } from './sources/strapi/published-tools-master';
 import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
+import {
+  getPublishedGlossary,
+  getPublishedGlossarySeo,
+} from './sources/strapi/published-glossary';
+import { getPublishedExpertiseMaster } from './sources/strapi/published-expertise-master';
+import { getPublishedAuditMaster } from './sources/strapi/published-audit-master';
+import { getPublishedAudit, listPublishedAuditSlugs } from './sources/strapi/published-audit';
+import {
+  getPublishedExpertise,
+  listPublishedExpertiseSlugs,
+} from './sources/strapi/published-expertise';
 import {
   getPublishedService,
   listPublishedServiceSlugs,
@@ -126,6 +140,10 @@ const corpusPagesSource: CorpusContentSource = corpusSource;
 
 export const getPublishedAboutPage = getPublishedAbout;
 export const getPublishedServicesMasterPage = getPublishedServicesMaster;
+/** `/glossary`: the Glossary Master single type on the new CMS, its terms through their relations. */
+export const getGlossaryMasterPage = getPublishedGlossaryMaster;
+/** `/tools`: the Tool Master single type on the new CMS, its tools through their relations. */
+export const getToolsMasterPage = getPublishedToolsMaster;
 export const getHomePage = getPublishedHome;
 export const getPageSeo = getPublishedPageSeo;
 
@@ -143,9 +161,22 @@ export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getResourceDetail = getPublishedResource;
 export const getAuthorDetail = getPublishedAuthor;
+/** A Glossary record (`/glossary/{slug}`) as the term page's view model, and its CMS SEO. */
+export const getGlossaryDetail = getPublishedGlossary;
+export const getGlossaryDetailSeo = getPublishedGlossarySeo;
 /** A Service detail page (`/services/{slug}`) and the published slugs, from the new CMS. */
 export const getServiceDetail = getPublishedService;
 export const listServiceSlugs = listPublishedServiceSlugs;
+/** The Expertise Master (`/expertise`) from the new CMS. */
+export const getExpertiseMasterPage = getPublishedExpertiseMaster;
+/** The Audit Master (`/audits`) from the new CMS, its audit cards through their Audit relations. */
+export const getAuditMasterPage = getPublishedAuditMaster;
+/** An Audit detail page (`/audits/{slug}`) and the published slugs, from the new CMS. */
+export const getAuditDetail = getPublishedAudit;
+export const listAuditSlugs = listPublishedAuditSlugs;
+/** An Expertise detail page (`/expertise/{slug}`) and the published slugs, from the new CMS. */
+export const getExpertiseDetail = getPublishedExpertise;
+export const listExpertiseSlugs = listPublishedExpertiseSlugs;
 export const getCaseStudyDetail = getPublishedCaseStudy;
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
 
@@ -475,3 +506,6 @@ export type {
 export async function getIdealAboutPage(): Promise<IdealAboutPage> {
   return idealAbout;
 }
+
+/** The published Authors Master and its ordered native author relations. */
+export const getPublishedAuthorMasterPage = getPublishedAuthorMaster;

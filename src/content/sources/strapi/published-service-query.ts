@@ -8,21 +8,38 @@ import {
   PUBLISHED_TESTIMONIALSECTION,
 } from './published-page-fields';
 
+/** The Why section and the Industry Grid as every page owner's zone selects them (Service, Audit Master). */
+export const PUBLISHED_WHYSECTION = `
+      ... on ComponentSharedWhySection {
+        id heading anchorId whySurface: surface cta { ...PublishedAction }
+        whyCards: cards {
+          id variant title points { text }
+          illustration { url width height alternativeText formats }
+          media { url width height alternativeText formats }
+        }
+      }
+`;
+
+export const PUBLISHED_INDUSTRYGRID = `
+      ... on ComponentSharedIndustryGrid {
+        id heading anchorId industrySurface: surface industrySide: mediaSide selectionMode
+        action { ...PublishedAction }
+        expertises { title expertise { documentId name slug } }
+        destinations { title href }
+      }
+`;
+
 /**
- * One published Service by its full relative slug (`product-design/ux-research`). The fixed Hero, then
- * every Page Content member of the Service Dynamic Zone, in the order the editor saved. Aliases keep
- * the union's same-named fields of different types apart; they rename nothing in the CMS.
+ * The Page Content members every page owner built from the shared sections can hold (Service, Expertise
+ * Master and their siblings), as inline fragments. A query spreads them inside its own zone's
+ * `content { __typename … }`; aliases keep the union's same-named fields of different types apart and
+ * rename nothing in the CMS.
  */
-export const PUBLISHED_SERVICE_QUERY = `
-query PublishedService($slug: String!) {
-  services(status: PUBLISHED, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
-    documentId name slug routePath
-${PUBLISHED_HERO}
-    content {
-      __typename
+export const SHARED_SECTION_MEMBERS = `
       ... on ComponentSharedClientGrid {
-        id title anchorId clientSurface: surface
+        id title anchorId clientSurface: surface gridDensity: density
         clients { documentId name density media { url width height alternativeText } }
+        markOverrides { client { documentId } media { url width height alternativeText } density width height }
       }
       ... on ComponentSharedServiceCard {
         id heading anchorId description variant serviceSurface: surface
@@ -45,14 +62,7 @@ ${PUBLISHED_HERO}
         offerCards: cards { id variant title description descriptionRich scene }
         before { ...ServiceFlow } after { ...ServiceFlow }
       }
-      ... on ComponentSharedWhySection {
-        id heading anchorId whySurface: surface cta { ...PublishedAction }
-        whyCards: cards {
-          id variant title points { text }
-          illustration { url width height alternativeText formats }
-          media { url width height alternativeText formats }
-        }
-      }
+${PUBLISHED_WHYSECTION}
       ... on ComponentSharedHardPartsSection {
         id heading anchorId description hardSurface: surface hardPartsPresentation: presentation
         before { ...ServiceFlow }
@@ -73,21 +83,16 @@ ${PUBLISHED_HERO}
         agreementEntries { id title body }
         before { ...ServiceFlow } after { ...ServiceFlow }
       }
-      ... on ComponentSharedIndustryGrid {
-        id heading anchorId industrySurface: surface industrySide: mediaSide selectionMode
-        action { ...PublishedAction }
-        expertises { title expertise { documentId name slug } }
-        destinations { title href }
-      }
+${PUBLISHED_INDUSTRYGRID}
 ${PUBLISHED_CASESTUDYCARDS}
 ${PUBLISHED_TESTIMONIALSECTION}
 ${PUBLISHED_ENGAGEMENTOPTIONS}
 ${PUBLISHED_FAQSECTION}
 ${PUBLISHED_CTA}
-    }
-  }
-}
+`;
 
+/** The named fragments `SHARED_SECTION_MEMBERS` spreads, with the shared page fields. */
+export const SHARED_SECTION_FRAGMENTS = `
 fragment ServiceIllustration on ComponentContentIllustration { source scene image { ...PublishedImage } }
 fragment ServiceTable on ComponentContentDataTable { caption columns { heading } rows { heading cells { body } } }
 fragment ServiceProof on ComponentContentProofExample { label body link { ...PublishedAction } }
@@ -107,6 +112,24 @@ fragment ServiceFlow on ComponentContentFlowBlock {
   ledger { entries { question role } }
 }
 ${PUBLISHED_FIELDS}
+`;
+
+/**
+ * One published Service by its full relative slug (`product-design/ux-research`). The fixed Hero, then
+ * every Page Content member of the Service Dynamic Zone, in the order the editor saved.
+ */
+export const PUBLISHED_SERVICE_QUERY = `
+query PublishedService($slug: String!) {
+  services(status: PUBLISHED, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
+    documentId name slug routePath
+${PUBLISHED_HERO}
+    content {
+      __typename
+${SHARED_SECTION_MEMBERS}
+    }
+  }
+}
+${SHARED_SECTION_FRAGMENTS}
 `;
 
 /** Every published Service's slug, for static params. */
