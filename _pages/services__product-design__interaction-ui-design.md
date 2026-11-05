@@ -199,7 +199,7 @@ Our UI design services cover every screen, including the loading, empty and erro
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get from our interaction and UI design services {#what-we-design}
+## What you get from our interaction and UI design services {#what-you-get}
 
 - **Every state.** Each important screen in its default, empty, loading, error, partial-data and no-permission versions, tested with long names and large tables.
 

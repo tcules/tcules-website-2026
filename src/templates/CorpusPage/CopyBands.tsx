@@ -1086,19 +1086,12 @@ export function WhatYouGetBand({
  * authored, in three columns across the content width (owner, 30 Oct 2026). A band whose rows do not
  * all carry an "Example:" reads down as before.
  */
-/**
- * The one page that renders its hard parts on the page instead of as tabs, so the two can be judged
- * side by side on real pages (owner, 31 Oct 2026). Every other hard-parts band is the tabs.
- */
-const HARD_PARTS_ON_PAGE: ReadonlySet<string> = new Set(['/services/product-design']);
 
 export function ChallengesBand({
-  page,
   band,
   claimFigure,
   ground = 'paper',
 }: {
-  page: CorpusPage;
   band: CorpusBand;
   /** A claim's drawing by its title, exported on the band's ground: undefined takes the slot. */
   claimFigure?: (
@@ -1125,7 +1118,6 @@ export function ChallengesBand({
         <ClaimRows
           claims={claims}
           stories={stories}
-          layout={HARD_PARTS_ON_PAGE.has(page.route) ? 'page' : 'tabs'}
           claimFigure={claimFigure}
           ground={ground}
           labelledBy={head(band).headingId}
@@ -1200,7 +1192,7 @@ export function ClaimRows({
 }: {
   claims: readonly Claim[];
   stories: readonly Story[];
-  /** ClaimSet's layout: `tabs` everywhere but the one page that shows the other (`HARD_PARTS_ON_PAGE`). */
+  /** ClaimSet's layout: `tabs` on every page (owner, 5 Nov 2026: product-design too); `page` is the specimen's. */
   layout?: 'tabs' | 'page';
   claimFigure?: (
     title: string,

@@ -328,7 +328,7 @@ const WALL_FROM = 6;
  * lead when it authors one. Its shape is decided by the count (owner, 29 Oct 2026):
  *
  *   6 or more  the wall of rated testimonial cards (TestimonialWall: three columns of stacks).
- *   fewer      ONE quote at a time: the centred italic quote with its stars, speaker and role
+ *   fewer      ONE quote at a time: the centred italic quote, speaker and role, no stars
  *              (Proof `display`, `align="center"`), in the kit's one-up Slider with its plain bars
  *              (2026-10-09-testimonial-slider-controls). Five, four or three cards made a wall with
  *              holes and a row of equal boxes; one voice at a time is the band's one idea. The owner's
@@ -389,31 +389,26 @@ export function QuoteGroupBand({
           items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
         />
       ) : (
-        <QuoteSlider
-          label={band.headingText}
-          quotes={quotes}
-          ratings={ratings}
-          avatars={avatars}
-        />
+        <QuoteSlider label={band.headingText} quotes={quotes} avatars={avatars} />
       )}
     </ContentSection>
   );
 }
 
 /**
- * The one-up quote slider: each slide the centred Proof with the client's stars. A portrait shows on
+ * The one-up quote slider: each slide the centred Proof, the client's words with no stars (owner,
+ * 5 Nov 2026, launch review: "yahan pe sirf padhna hai", a slide is read, not scored; the band's
+ * independent score stays in its footer). A portrait shows on
  * every slide or on none, the wall's rule (review 29 Oct: some faces and some not read as unevenly
  * finished). One quote is no slider: it stands alone.
  */
 function QuoteSlider({
   label,
   quotes,
-  ratings,
   avatars,
 }: {
   label: string;
   quotes: readonly QuoteBlock[];
-  ratings?: RatingsById;
   avatars?: AvatarsById;
 }) {
   const portraits = quotes.map((block) =>
@@ -421,13 +416,9 @@ function QuoteSlider({
   );
   const withPortraits = portraits.every(Boolean);
   const slides: ProofQuote[] = quotes.map((block, index) => {
-    const stars =
-      block.rating?.value ??
-      (block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined);
     const portrait = withPortraits ? portraits[index] : undefined;
     return {
       ...proofQuote(block),
-      ...(stars !== undefined ? { stars } : {}),
       ...(portrait
         ? {
             portrait: {

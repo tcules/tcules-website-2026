@@ -34,6 +34,7 @@ export type EngagementScope =
   | 'overlap'
   | 'commercial'
   | 'own'
+  | 'yours'
   | 'who'
   | 'communication'
   | 'response'

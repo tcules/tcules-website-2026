@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { Copy, Hop, Lens, Rect, Switch } from './offer';
-import { Chip, Focus, Glyph, Hatched } from './scenes';
+import { ArrowRight, Copy, Hop, Lens, Rect, Switch } from './offer';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -268,6 +268,145 @@ function StopsHealthtech() {
   );
 }
 
+/* ── What we design in ──────────────────────────────────────────────────────────── */
+
+/**
+ * Care platforms that connect families with carers at home: the family is matched to the one carer
+ * who will come. Rest: the family's card beside a list of carers, nobody chosen; hover: the line
+ * draws from the family to the list and that carer lights (patterns 1 + 2).
+ */
+function KindCareConnect() {
+  return (
+    <>
+      <Rect x={30} y={50} w={60} h={80} rx={8} className={styles.frame} />
+      <Glyph name="users-group-rounded" cx={60} cy={78} size={22} className={styles.glyph} />
+      <Copy x={46} y={106} w={28} />
+      <Copy x={46} y={116} w={18} quiet />
+      <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      {[50, 90, 130].map((cy) => (
+        <g key={cy}>
+          <Glyph name="user" cx={214} cy={cy} size={16} className={styles.glyph} />
+          <Copy x={236} y={cy - 4} w={36} />
+          <Copy x={236} y={cy + 4} w={24} quiet />
+        </g>
+      ))}
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      <TraceIn d="M90,90 L183,90" />
+      <GrowIn>
+        <ArrowRight x={190} y={90} />
+      </GrowIn>
+      <GrowIn>
+        <Focus x={214} y={90} glyph="user" size={12} />
+      </GrowIn>
+    </>
+  );
+}
+
+/** Apps for carers on home visits: the day's visits on the carer's phone, the one they are at lit. */
+function KindCarersVisits() {
+  return (
+    <>
+      <Rect x={120} y={30} w={80} h={120} rx={8} className={styles.frame} />
+      <Glyph name="check-circle" cx={142} cy={54} size={14} className={styles.glyphQuiet} />
+      <Copy x={158} y={54} w={26} quiet />
+      <Focus x={146} y={90} glyph="map-point" size={12} />
+      <Copy x={170} y={86} w={18} />
+      <Copy x={170} y={94} w={12} quiet />
+      <Glyph name="clock-circle" cx={142} cy={126} size={14} className={styles.glyph} />
+      <Copy x={158} y={126} w={26} quiet />
+    </>
+  );
+}
+
+/** Portals and admin tools for congress travel: every delegate on the admin's list, routed to the one place they travel to. */
+function KindCongressTravel() {
+  return (
+    <>
+      <Rect x={50} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      {[50, 90, 130].map((cy) => (
+        <g key={cy}>
+          <Glyph name="user" cx={74} cy={cy} size={16} className={styles.glyph} />
+          <Copy x={92} y={cy - 4} w={48} />
+          <Copy x={92} y={cy + 4} w={32} quiet />
+          <circle className={styles.node} cx={170} cy={cy} r="2.5" />
+        </g>
+      ))}
+      <path
+        className={styles.line}
+        d="M170,50 L184,50 A6,6 0 0 1 190,56 L190,124 A6,6 0 0 1 184,130 L170,130 M170,90 L225,90"
+      />
+      <circle className={styles.node} cx="190" cy="90" r="3.5" />
+      <ArrowRight x={232} y={90} />
+      <Focus x={256} y={90} glyph="map-point" size={14} />
+    </>
+  );
+}
+
+/** Clinician tools beside the patient record: out of the long record, the one fact the panel beside it holds. */
+function KindClinicianBeside() {
+  return (
+    <>
+      <Rect x={30} y={30} w={140} h={120} rx={8} className={styles.frame} />
+      <Chip x={46} y={42} glyph="heart-pulse" />
+      <Copy x={70} y={50} w={60} />
+      <Copy x={46} y={66} w={96} quiet />
+      <Rect x={46} y={82} w={108} h={16} rx={4} className={styles.tile} />
+      <Copy x={54} y={90} w={56} />
+      <Copy x={46} y={114} w={100} quiet />
+      <Copy x={46} y={126} w={84} quiet />
+      <Copy x={46} y={138} w={60} quiet />
+      <Hop x1={170} x2={210} y={90} />
+      <Rect x={210} y={50} w={80} h={80} rx={8} className={styles.frame} />
+      <Copy x={222} y={62} w={36} quiet />
+      <Rect x={216} y={76} w={68} h={28} rx={12} className={styles.halo} />
+      <Rect x={222} y={82} w={56} h={16} rx={8} className={styles.solid} />
+      <Copy x={222} y={118} w={44} quiet />
+    </>
+  );
+}
+
+/** Patient portals: the result, and under it on the same card what happens next, lit. */
+function KindResultNextStep() {
+  return (
+    <>
+      <Rect x={80} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      <Chip x={96} y={42} glyph="document-text" />
+      <Copy x={120} y={50} w={60} />
+      <Copy x={96} y={70} w={112} quiet />
+      <path className={styles.rule} d="M80,86 L240,86" />
+      <Focus x={114} y={118} glyph="calendar" size={12} />
+      <Copy x={142} y={114} w={60} />
+      <Copy x={142} y={124} w={40} quiet />
+    </>
+  );
+}
+
+/**
+ * Remote check-in after a hospital stay: the check-in sent from the patient's phone, answered in a plain
+ * reply that it was received and when someone will look.
+ */
+function KindCheckinAnswer() {
+  return (
+    <>
+      <Rect x={50} y={40} w={60} h={100} rx={8} className={styles.frame} />
+      <Rect x={74} y={47} w={12} h={3} rx={1.5} className={styles.tile} />
+      <Glyph name="heart-pulse" cx={80} cy={74} size={20} className={styles.glyph} />
+      <Copy x={64} y={100} w={32} />
+      <Rect x={64} y={112} w={32} h={12} rx={6} className={styles.tile} />
+      <Hop x1={110} x2={170} y={90} />
+      <path
+        className={styles.frame}
+        d="M178,50 H262 A8,8 0 0 1 270,58 V122 A8,8 0 0 1 262,130 H196 L180,142 L182,130 H178 A8,8 0 0 1 170,122 V58 A8,8 0 0 1 178,50 Z"
+      />
+      <Focus x={198} y={78} glyph="check-circle" size={13} />
+      <Copy x={226} y={74} w={32} />
+      <Copy x={226} y={84} w={20} quiet />
+      <Glyph name="clock-circle" cx={192} cy={112} size={12} className={styles.glyph} />
+      <Copy x={206} y={112} w={44} quiet />
+    </>
+  );
+}
+
 /**
  * /expertise/healthtech · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -291,4 +430,17 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-healthtech': NeedsHealthtech,
   /* Where our part stops: Hazard logs, risk assessments and medical device classification stay with your clinical safety, privacy and regulatory specialists, and clin */
   'stops-healthtech': StopsHealthtech,
+  /* MOVING: this tile links to /expertise/marketplaces-multi-sided-platforms, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Care platforms that connect families with carers at home: CuramCare */
+  'kind-healthtech-care-platforms-connect-families': KindCareConnect,
+  /* What we design in, tile: Apps for carers on home visits, used on a phone: CuramCare */
+  'kind-healthtech-apps-carers-home-visits': KindCarersVisits,
+  /* What we design in, tile: Portals and admin tools for healthcare professionals' congress travel: Vovisto */
+  'kind-healthtech-portals-admin-tools-healthcare': KindCongressTravel,
+  /* What we design in, tile: Clinician tools that sit beside the patient record: The one thing needed, found between patients */
+  'kind-healthtech-clinician-tools-sit-beside': KindClinicianBeside,
+  /* What we design in, tile: Patient portals for results, appointments and messages: Every result with what happens next */
+  'kind-healthtech-patient-portals-results-appointments': KindResultNextStep,
+  /* What we design in, tile: Remote check-in apps for care after a hospital stay: A plain answer on when someone will look */
+  'kind-healthtech-remote-check-apps-care': KindCheckinAnswer,
 };

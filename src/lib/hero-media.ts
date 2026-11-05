@@ -64,3 +64,12 @@ export const TEXT_HERO_ROUTES: ReadonlySet<string> = new Set([ROUTES.careers]);
 /** Whether a route's hero is the centred text stack with no media (`TEXT_HERO_ROUTES`). */
 export const heroIsText = (route: string): boolean =>
   TEXT_HERO_ROUTES.has(route) && !HERO_MEDIA_ROUTES.has(route);
+
+/**
+ * A service sub-page (`/services/<service>/<sub>`) with no drawing of its own shows no picture in its
+ * hero, and no placeholder: the words alone, stacked, until its illustration is drawn (owner, 5 Nov
+ * 2026; decisions/2026-11-05-service-subpage-heroes-no-placeholder). A drawn or clipped hero still
+ * shows (src/lib/service-illustrations.ts, hero-clips.ts); the caller checks those first.
+ */
+export const heroIsServiceSubPage = (route: string): boolean =>
+  route.startsWith(`${ROUTES.services}/`) && route.split('/').length > 3;

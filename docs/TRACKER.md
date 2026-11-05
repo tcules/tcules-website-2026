@@ -290,9 +290,19 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.
+      Scope set 5 Nov 2026 (owner): only drawings a page shows. In: the 12 expertise heroes (new ideas built
+      from the expertise hub's objects), the `/services`, `/tools` and `/future-interfaces-lab` heroes, the
+      three `/why-tcules` principles, and the designer's desk redrawn in the new hand for /careers or the Lab.
+      Out for now: the 25 service sub-page heroes (words only, no placeholder:
+      decisions/2026-11-05-service-subpage-heroes-no-placeholder) and the audit heroes (see 2.66). All older
+      illustration rules are loose; consistency with the 10 approved heroes is the standard. Owner signs off.
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+      No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
+      84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
+      drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
+      layout (owner, 5 Nov). Still open: auditing existing tile drawings against the four patterns.
 - [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
       what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
       the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
@@ -303,8 +313,12 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
 - [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
       wire them in as they land.
-- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
-      only, its path added to `src/lib/routes.ts`.
+      The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
+      placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
+      (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
+      `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
+- [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
+      Its unused path is removed from `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · enquiry form autofill, success/failure copy

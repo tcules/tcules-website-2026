@@ -108,7 +108,6 @@ export const ROUTES = {
   privacy: '/privacy-policy',
   terms: '/terms-of-use',
   cookiePolicy: '/cookie-policy',
-  accessibility: '/accessibility',
   sitemap: '/sitemap',
 
   /* The proving ground. Not linked from the site; named so a specimen can cross-link. */

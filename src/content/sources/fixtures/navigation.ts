@@ -175,8 +175,8 @@ const RESOURCES: SiteNavItem = {
   hub: to('All insights', ROUTES.insights),
 };
 
-/* No aside: three short groups take the whole plate, and the section has no index to send
-   anyone to. */
+/* "Get in touch" is the plate's aside, as every other section's way onward (owner, 5 Nov 2026,
+   launch review: "this becomes the side panel in studio menu"). */
 const STUDIO: SiteNavItem = {
   key: 'studio',
   label: 'Studio',
@@ -193,14 +193,14 @@ const STUDIO: SiteNavItem = {
         to('How we design with AI', ROUTES.howWeWorkAiNative),
       ],
     },
-    {
-      label: 'Get in touch',
-      links: [
-        to('Careers', ROUTES.careers, 'Work with us in Ahmedabad'),
-        to('Contact', ROUTES.contact, 'hello@tcules.com'),
-      ],
-    },
   ],
+  aside: {
+    label: 'Get in touch',
+    links: [
+      to('Careers', ROUTES.careers, 'Work with us in Ahmedabad'),
+      to('Contact', ROUTES.contact, 'hello@tcules.com'),
+    ],
+  },
 };
 
 /**

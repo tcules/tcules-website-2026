@@ -526,10 +526,12 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'who decides, and who owns the work': 'own',
   /* The 3 Nov copy's terms (2.60): the decision is yours (options meet at you), no minimum term is the
      notice drawing, the handover is agreed in the proposal before the work starts. "What we make is
-     yours" has no scene yet: its empty plate until the flat graphics pass (2.62) draws it. */
+     yours" is `scope-yours` (components/Sketch/wyg-how-we-work.tsx): its empty plate until the flat
+     graphics pass (2.62) draws it. */
   'you keep the product decisions': 'own',
   'no minimum term': 'commercial',
   'handover agreed before work begins': 'getting-started',
+  'what we make is yours': 'yours',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -842,7 +844,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'challenges':
       return (
         <ChallengesBand
-          page={page}
           band={band}
           claimFigure={ctx.claimFigure}
           ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
