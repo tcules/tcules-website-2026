@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 
 import type { CorpusPage } from '@/lib/corpus-types';
-import { heroIsCentred, heroIsText } from '@/lib/hero-media';
+import { heroIsCentred, heroIsServiceSubPage, heroIsText } from '@/lib/hero-media';
 import { heroClip } from '@/lib/hero-clips';
 import { heroImage, type SlotImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
@@ -57,10 +57,14 @@ export function OfferPage({
   const drawing = serviceIllustration(page.route);
   /* A words-only hero (hero-media.ts TEXT_HERO_ROUTES): the band under it is the first picture. */
   const textHero = heroIsText(page.route);
+  const clip = heroClip(page.route);
+  /* A service sub-page with no drawing or clip: no picture and no placeholder in its hero (owner,
+     5 Nov 2026). */
+  const bareHero = !drawing && !clip && heroIsServiceSubPage(page.route);
   const units = planOffer(
     page,
     new Set(Object.keys(scenes?.items ?? {})),
-    textHero ? 'none' : drawing ? 'isometric' : 'photo',
+    textHero || bareHero ? 'none' : drawing ? 'isometric' : 'photo',
   );
   const ctx: OfferContext = {
     page,
@@ -73,24 +77,24 @@ export function OfferPage({
     claimFigure,
   };
 
-  const clip = heroClip(page.route);
-  const media = textHero
-    ? undefined
-    : clip
-    ? ({ type: 'clip', ...clip } as const)
-    : drawing
-      ? ({
-          type: 'image',
-          image: {
-            src: drawing.src,
-            width: drawing.width,
-            height: drawing.height,
-            alt: drawing.alt,
-            kind: drawing.kind,
-          },
-          cut: drawing.cut,
-        } as const)
-      : heroMedia(heroImage(page));
+  const media =
+    textHero || bareHero
+      ? undefined
+      : clip
+        ? ({ type: 'clip', ...clip } as const)
+        : drawing
+          ? ({
+              type: 'image',
+              image: {
+                src: drawing.src,
+                width: drawing.width,
+                height: drawing.height,
+                alt: drawing.alt,
+                kind: drawing.kind,
+              },
+              cut: drawing.cut,
+            } as const)
+          : heroMedia(heroImage(page));
 
   return (
     <>
