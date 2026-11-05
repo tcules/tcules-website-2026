@@ -3,22 +3,18 @@
    artifact): a field of grey apps, one rising and opening onto the studio floor.
 
    Naming: --arena-{part}-{role}
-     parts  glow | lid | mask | control | ring
+     parts  glow | mask | control | ring
      roles  color · blur · lift · solid · size · bg · fg · rule · width · offset · inset
 
    ── No surface blocks, and that is the assertion ─────────────────────────────────
    The drawing paints its own field and fades to the page at its edges by a mask, so nothing here moves with `data-surface`. It is
    placed on paper only (the home hero). The control sits on the drawing, as Clip's sits on its
    film, and takes Clip's values for the same reason: paper with an ink glyph and a hairline.
-
-   --arena-lid-lift is in the SVG's user units (an SVG element's px is a user unit): how far an
-   app's lid rises in the field's idle salute.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --arena-glow-color: rgb(0 72 255 / 0.5);
+  --arena-glow-color: rgb(0 72 255 / 0.42);
   --arena-glow-blur: 26px;
-  --arena-lid-lift: 208.3px;
   /* the mask reads alpha only: an opaque stop, faded to transparent at the edge */
   --arena-mask-solid: #000;
 
