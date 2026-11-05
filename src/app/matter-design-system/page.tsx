@@ -1,16 +1,28 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedMatterPage } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-
-/**
- * `/matter-design-system` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+import { PublishedMatter } from '@/templates/CorpusPage/PublishedMatter';
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.matterDesignSystem)) ?? { title: 'Tcules' };
+  return (await getPageSeo(ROUTES.matterDesignSystem)).metadata;
 }
-
-export default function MatterDesignSystemPage() {
-  return <ComposedRoute route={ROUTES.matterDesignSystem} />;
+export default async function MatterPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedMatterPage(),
+    getPageSeo(ROUTES.matterDesignSystem),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedMatter page={page} />
+    </>
+  );
 }

@@ -1,3 +1,4 @@
+import { getPublishedMatter } from './sources/strapi/published-matter';
 import { getPublishedCareers } from './sources/strapi/published-careers';
 import { getPublishedLab, getPublishedLabJoin } from './sources/strapi/published-lab';
 import { getPublishedClientMaster } from './sources/strapi/published-client-master';
@@ -535,3 +536,5 @@ export const getPublishedLabPage = getPublishedLab;
 export const getPublishedLabJoinPage = getPublishedLabJoin;
 
 export const getPublishedCareersPage = getPublishedCareers;
+
+export const getPublishedMatterPage = getPublishedMatter;
