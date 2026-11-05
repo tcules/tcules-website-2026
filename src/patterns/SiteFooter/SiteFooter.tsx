@@ -98,7 +98,9 @@ export function SiteFooter({
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
-          <Layout className={styles.brandAction} rowGap="block" align="center">
+          {/* Shrink-to-fit, so the action is as wide as the button rather than the track: under
+              the tagline at the start on a phone, pushed to the end of its track from md. */}
+          <Layout rowGap="block" align="center" justifyItems={{ base: 'start', md: 'end' }}>
             {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
                 lede line makes two things compete for the same job, and the badge under it reads
                 as a caption to a smaller control rather than an equal to a larger one. */}
@@ -174,7 +176,12 @@ export function SiteFooter({
         </div>
 
         {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
-        <Layout className={styles.newsletterBand} columns={[1, 1]} colGap="section" rowGap="stack">
+        <Layout
+          className={styles.newsletterBand}
+          columns={[1, 1]}
+          colGap="section"
+          rowGap="stack"
+        >
           <Layout rowGap="block">
             {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
                 block makes them read as three unrelated lines rather than an eyebrow on a title
@@ -283,7 +290,13 @@ export function SiteFooter({
             The notice leads and the legal pages follow it on one line, the credit closes at the
             far end. All of it in the legal treatment: small print in link colour would read as one
             more navigation group. */}
-        <Cluster className={styles.band} justify="between" align="baseline" rowGap="text" colGap="block">
+        <Cluster
+          className={styles.band}
+          justify="between"
+          align="baseline"
+          rowGap="text"
+          colGap="block"
+        >
           <Cluster align="baseline" rowGap="tight" colGap="text">
             <p className={styles.legal}>{legal.notice}</p>
             <Cluster as="ul" rowGap="tight" colGap="text">

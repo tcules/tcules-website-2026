@@ -176,6 +176,56 @@
   --layout-justify-items: end;
 }
 
+/* justifyItems per breakpoint — `{ base: 'start', md: 'end' }`. Same specificity as the base
+   classes and later in this file, so a breakpoint's value wins from its width up. Written HERE
+   rather than as a caller's class override, which ties `.layout` on specificity and is then
+   decided by whichever CSS chunk the bundler emits last: the footer's action sat at the end on
+   one build and stretched the full track on another (6 Nov 2026). */
+@media (min-width: 768px) {
+  .justifyitems-md-stretch {
+    --layout-justify-items: stretch;
+  }
+  .justifyitems-md-start {
+    --layout-justify-items: start;
+  }
+  .justifyitems-md-center {
+    --layout-justify-items: center;
+  }
+  .justifyitems-md-end {
+    --layout-justify-items: end;
+  }
+}
+
+@media (min-width: 1024px) {
+  .justifyitems-lg-stretch {
+    --layout-justify-items: stretch;
+  }
+  .justifyitems-lg-start {
+    --layout-justify-items: start;
+  }
+  .justifyitems-lg-center {
+    --layout-justify-items: center;
+  }
+  .justifyitems-lg-end {
+    --layout-justify-items: end;
+  }
+}
+
+@media (min-width: 1440px) {
+  .justifyitems-xl-stretch {
+    --layout-justify-items: stretch;
+  }
+  .justifyitems-xl-start {
+    --layout-justify-items: start;
+  }
+  .justifyitems-xl-center {
+    --layout-justify-items: center;
+  }
+  .justifyitems-xl-end {
+    --layout-justify-items: end;
+  }
+}
+
 /* Track distribution. No class is emitted when `justify` is omitted, so the browser default
    stands. Only bites when the tracks leave slack — auto-width tracks, or a "fit" grid with room
    to spare; with 1fr tracks there is nothing to distribute. */
