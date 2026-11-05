@@ -12,6 +12,7 @@ export {
   getPublishedLabJoinPage,
   getPublishedCareersPage,
   getPublishedMatterPage,
+  getPublishedWhyPage,
   getPage,
   getHomePage,
   getPublishedClientMasterPage,
