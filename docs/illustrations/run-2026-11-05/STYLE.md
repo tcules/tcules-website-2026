@@ -69,7 +69,14 @@ polished."**
   stroke in the figure's own colour, **no white casing and no outline**, growing out of the shoulder (it starts
   inside the body's silhouette, so arm and body read as one shape), about a quarter of the body's width thick,
   with a round cap and a round hand (a filled circle about 1.6× the stroke) at its end. A cased line reads as a
-  stick held by the figure. On an outlined client figure, the arm is the same solid brandeis-500 stroke.
+  stick held by the figure.
+- **Who is who** (owner, 5 Nov 2026): **blue figures are Tcules people; white or light-blue figures are
+  clients** (and their users). A client's arm and hand are in the client's own colour, **white or light blue,
+  outlined in blue**: the same shape as the Tcules arm (from the shoulder, round cap, round hand), drawn as a
+  light stroke inside a brandeis-500 outline, never a solid blue stroke. A Tcules arm is solid blue, no outline.
+- **Never a crowd of blue.** A scene does not hold four blue figures. Where a scene shows how Tcules works with
+  clients, pair them: one Tcules figure beside one client figure, working on the same thing (owner, 5 Nov 2026,
+  `/why-tcules`: "3 pairs so it shows that we work directly with the client").
 - A headset or a hand is allowed where the role needs it (support agent; a hand pressing a button, as in
   `ai-copilots-agents.svg`).
 - People are scale and role, not decoration: include one only when the idea is about who does what.
