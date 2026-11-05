@@ -79,7 +79,29 @@ export function resourceSeo(
   },
   authors: { name: string; href?: string }[],
 ) {
-  const path = blogPath(page.slug);
+  const { slug, ...rest } = page;
+  return entrySeo(seo, settings, { ...rest, path: blogPath(slug), type: 'article' }, authors);
+}
+
+/**
+ * An entry's embedded SEO component (`seo` on a Resource, the Privacy Policy, the Terms of Use) as
+ * the page's metadata, under the CMS's public indexing gate (`seoSettings.allowIndexing`). `path` is
+ * the page's route, the canonical's authority; `type` the Open Graph type when the entry sets none.
+ */
+export function entrySeo(
+  seo: ResourceSeo | null,
+  settings: ResourceSeoSettings | null,
+  page: {
+    path: string;
+    title: string;
+    description?: string;
+    type: 'website' | 'article';
+    publicationDate?: string;
+    modificationDate?: string;
+  },
+  authors: { name: string; href?: string }[] = [],
+) {
+  const { path } = page;
   const directives = new Set(
     (seo?.robot ?? '')
       .toLowerCase()
@@ -101,13 +123,13 @@ export function resourceSeo(
     const url = absoluteAssetUrl(canonical, publicGraphqlUrl());
     if (url && new URL(url).pathname.replace(/\/+$/, '') !== path) {
       console.warn(
-        `New CMS ${path}: canonical path mismatch (${canonical}); using current CMS resource route on the configured origin`,
+        `New CMS ${path}: canonical path mismatch (${canonical}); using the page's route on the configured origin`,
       );
       canonical = absoluteAssetUrl(path, url);
     }
   }
   if (!text(seo?.canonicalURL)) {
-    console.warn(`New CMS ${path}: no resource canonical URL, using CMS siteURL and route`);
+    console.warn(`New CMS ${path}: no canonical URL, using CMS siteURL and route`);
   }
   const title = text(seo?.metaTitle) ?? page.title;
   const description = text(seo?.metaDescription) ?? page.description;
@@ -145,8 +167,8 @@ export function resourceSeo(
         openGraph: {
           title: text(og?.title) ?? title,
           description: text(og?.description) ?? description,
-          type: og?.type ?? 'article',
-          // The current resource route is authoritative when imported SEO names an obsolete path.
+          type: og?.type ?? page.type,
+          // The page's route is authoritative when imported SEO names an obsolete path.
           url: canonical ?? text(og?.url),
           siteName: text(og?.siteName) ?? text(settings?.siteName),
           locale: text(og?.locale),

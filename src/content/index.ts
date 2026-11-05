@@ -34,6 +34,8 @@ export {
   getCaseStudyPage,
   getCaseStudyDetail,
   getResourceDetail,
+  getPrivacyPolicyDocument,
+  getTermsOfUseDocument,
   getAuthorDetail,
   getGlossaryDetail,
   getGlossaryDetailSeo,

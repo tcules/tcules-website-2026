@@ -48,6 +48,10 @@ import { getPublishedTool, listPublishedToolSlugs } from './sources/strapi/publi
 import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
 import {
+  getPublishedPrivacyPolicy,
+  getPublishedTermsOfUse,
+} from './sources/strapi/published-legal';
+import {
   getPublishedGlossary,
   getPublishedGlossarySeo,
 } from './sources/strapi/published-glossary';
@@ -169,6 +173,9 @@ export const getCaseStudyIndex = getPublishedCaseIndex;
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getResourceDetail = getPublishedResource;
+/** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
+export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;
+export const getTermsOfUseDocument = getPublishedTermsOfUse;
 export const getAuthorDetail = getPublishedAuthor;
 /** A Glossary record (`/glossary/{slug}`) as the term page's view model, and its CMS SEO. */
 export const getGlossaryDetail = getPublishedGlossary;
