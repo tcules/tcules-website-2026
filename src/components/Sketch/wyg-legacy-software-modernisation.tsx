@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { ArrowRight, Copy, Hop, Rect } from './offer';
+import { ArrowRight, Copy, Hop, Lens, Rect } from './offer';
 import { Chip, Focus, Glyph, Hatched } from './scenes';
 import styles from './Sketch.module.css';
 
@@ -294,6 +294,31 @@ function StopsLegacySoftwareModernisation() {
   );
 }
 
+/* ── The method ───────────────────────────────────────────────────────────────── */
+
+/**
+ * First, map what the old system really does: the lens held over its plain screen finds the rule
+ * running underneath it (lit), the part nobody sees from the surface.
+ */
+function LegacyMethod() {
+  return (
+    <>
+      <Rect x={60} y={40} w={160} h={100} rx={8} className={styles.frame} />
+      {[56, 80, 104].map((y, i) => (
+        <g key={y}>
+          <Rect x={74} y={y} w={132} h={16} className={styles.tile} />
+          <Copy x={82} y={y + 8} w={[64, 48, 72][i] ?? 56} quiet />
+        </g>
+      ))}
+      <Lens x={220} y={90} r={34} />
+      {/* What it really does, under the surface. */}
+      <Rect x={194} y={78} w={52} h={24} rx={10} className={styles.halo} />
+      <Rect x={200} y={84} w={40} h={12} className={styles.solid} />
+      <Glyph name="checklist" cx={220} cy={90} size={10} className={styles.glyphOn} />
+    </>
+  );
+}
+
 /**
  * /services/product-modernisation/legacy-software-modernisation · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -315,4 +340,6 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-legacy-software-modernisation': NeedsLegacySoftwareModernisation,
   /* Where our part stops: Cloud migration and other infrastructure moves stay with your platform team or a specialist firm. We plan alongside them so product and plat */
   'stops-legacy-software-modernisation': StopsLegacySoftwareModernisation,
+  /* First, map what the old system really does (the method's one figure, beside its five places): A product that has grown for a decade carries rules added for customers who left long ago, and a few that still hold the business together. Before recommending anything, we look in five places where an old system hides how it really works: Behaviour: what the software allows, blocks, defaults to and recovers from. Rules: permissions, calculations, validation and exceptions. Data: the records and links that reports and integrations depend on. Connected systems: other software that quietly shapes what a workflow can do. People: support routines, manual fixes and the workarounds that keep things running. */
+  'wyg-legacy-software-modernisation-method': LegacyMethod,
 };

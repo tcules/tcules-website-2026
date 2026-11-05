@@ -130,7 +130,15 @@ function ScreensEveryState() {
       {/* Loading. */}
       <Rect x={32} y={50} w={64} h={80} rx={8} className={styles.frame} />
       {[66, 80, 94, 108].map((y, i) => (
-        <Rect key={y} x={44} y={y} w={[40, 28, 36, 24][i] ?? 30} h={6} rx={3} className={styles.tile} />
+        <Rect
+          key={y}
+          x={44}
+          y={y}
+          w={[40, 28, 36, 24][i] ?? 30}
+          h={6}
+          rx={3}
+          className={styles.tile}
+        />
       ))}
       {/* Empty. */}
       <Rect x={124} y={50} w={64} h={80} rx={8} className={styles.frame} />
@@ -334,6 +342,114 @@ function StopsProductRedesign() {
   );
 }
 
+/* ── The two kinds of redesign ─────────────────────────────────────────────────── */
+
+/** Visual refresh: the same three steps drawn twice, the dated row above (grey) and below it the
+ *  identical row restyled: the new palette and type (left) give it its blue fills. */
+function VisualRefresh() {
+  const cols = [60, 140, 220];
+  const row = (y: number, now: boolean) =>
+    cols.map((x) => (
+      <g key={`${x}-${y}`}>
+        <Rect
+          x={x}
+          y={y}
+          w={60}
+          h={36}
+          rx={now ? 8 : 2}
+          className={now ? styles.frame : styles.frameQuiet}
+        />
+        <Copy x={x + 12} y={y + 11} w={28} quiet={!now} />
+        <Rect
+          x={x + 12}
+          y={y + 19}
+          w={36}
+          h={10}
+          rx={now ? 5 : 0}
+          className={now ? styles.region : styles.tile}
+        />
+      </g>
+    ));
+  return (
+    <>
+      {/* The steps as they look now. */}
+      {row(32, false)}
+      <path className={styles.trail} d="M120,50 L140,50 M200,50 L220,50" />
+      {/* The same steps, refreshed. */}
+      <path className={styles.line} d="M170,68 L170,105" />
+      <circle className={styles.node} cx="170" cy="68" r="2.5" />
+      <ArrowDown x={170} y={112} />
+      {row(112, true)}
+      <path className={styles.rule} d="M120,130 L140,130 M200,130 L220,130" />
+      {/* The new look: its palette and its type. */}
+      {[0, 1, 2].map((i) => (
+        <circle
+          key={i}
+          cx={40}
+          cy={88 + i * 16}
+          r={5}
+          className={[styles.solid, styles.region, styles.tile][i]}
+        />
+      ))}
+      <Rect x={30} y={128} w={20} h={20} rx={4} className={styles.frame} />
+      <path
+        className={styles.copy}
+        d="M33,143.5 L36.5,133 L40,143.5 M34.4,139.5 L38.6,139.5"
+      />
+      <circle className={styles.copy} cx="44.5" cy="141" r="2.5" />
+      <path className={styles.copy} d="M47,138.5 L47,143.5" />
+    </>
+  );
+}
+
+/** SaaS product redesign: the steps restructured (a stack of three, the middle one reworded) into two
+ *  clear screens, one with its wording fixed (the chip) and the other with its failure designed: the
+ *  alert row inside it, and the way back to the screen before. */
+function SaasProductRedesign() {
+  return (
+    <>
+      {/* The structure: three steps in order, the middle one with its wording. */}
+      {[38, 78, 118].map((y, i) => (
+        <g key={y}>
+          <Rect x={40} y={y} w={60} h={24} rx={4} className={styles.tile} />
+          {i === 1 ? (
+            <>
+              <Copy x={50} y={y + 8} w={32} />
+              <Copy x={50} y={y + 16} w={22} quiet />
+            </>
+          ) : (
+            <Copy x={50} y={y + 12} w={i === 0 ? 28 : 36} quiet />
+          )}
+        </g>
+      ))}
+      <path className={styles.rule} d="M70,62 L70,78 M70,102 L70,118" />
+      <Hop x1={100} x2={140} y={90} />
+      {/* Screen one: its wording rewritten. */}
+      <Rect x={140} y={60} w={60} h={60} rx={8} className={styles.frame} />
+      <Copy x={152} y={74} w={26} />
+      <Rect x={152} y={84} w={36} h={12} rx={4} className={styles.region} />
+      <path className={styles.regionCopy} d="M158,90 L166,90 M171,90 L182,90" />
+      <Copy x={152} y={108} w={20} quiet />
+      {/* Screen two: its failure designed, the alert as a row inside it. */}
+      <path className={styles.line} d="M200,90 L213,90" />
+      <circle className={styles.node} cx="200" cy="90" r="2.5" />
+      <ArrowRight x={220} y={90} />
+      <Rect x={220} y={60} w={60} h={60} rx={8} className={styles.frame} />
+      <Rect x={230} y={70} w={40} h={14} rx={4} className={styles.solid} />
+      <Glyph name="danger-triangle" cx={239} cy={77} size={9} className={styles.glyphOn} />
+      <path className={styles.tick} d="M248,77 L262,77" />
+      <Copy x={232} y={96} w={28} />
+      <Copy x={232} y={106} w={18} quiet />
+      {/* The way back to the screen before. */}
+      <path
+        className={styles.trail}
+        d="M250,120 L250,134 A6,6 0 0 1 244,140 L176,140 A6,6 0 0 1 170,134 L170,127"
+      />
+      <path className={styles.quietMark} d="M170,120 L166,127 L174,127 Z" />
+    </>
+  );
+}
+
 /**
  * /services/product-modernisation/product-redesign · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -359,4 +475,8 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-product-redesign': NeedsProductRedesign,
   /* Where our part stops: The product calls stay with you, including what ships and when. Our part ends at specifications your engineers build from, unless we build i */
   'stops-product-redesign': StopsProductRedesign,
+  /* Visual refresh: Colours, type and spacing; the steps stay the same. Best for: Products whose workflows still work and only look dated */
+  'wyg-product-redesign-visual-refresh': VisualRefresh,
+  /* SaaS product redesign: Structure, steps, wording and what screens show when something fails. Best for: Products where the work itself has become harder */
+  'wyg-product-redesign-saas-product-redesign': SaasProductRedesign,
 };
