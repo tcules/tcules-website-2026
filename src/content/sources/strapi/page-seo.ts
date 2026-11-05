@@ -26,7 +26,7 @@ export type ResolvedSeo = {
     openGraph?: {
       title?: string;
       description?: string;
-      type?: 'website' | 'article';
+      type?: 'website' | 'article' | 'profile';
       publishedTime?: string;
       modifiedTime?: string;
       url?: string;

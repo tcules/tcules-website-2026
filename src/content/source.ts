@@ -39,6 +39,7 @@ import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import { sitePageSource } from './sources/strapi/site-pages';
 import { getPublishedAbout } from './sources/strapi/published-about';
+import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
 import { getPublishedCaseStudy } from './sources/strapi/published-case';
 import { getPublishedHome } from './sources/strapi/home';
@@ -134,6 +135,7 @@ export const getCaseStudyIndex = getPublishedCaseIndex;
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getResourceDetail = getPublishedResource;
+export const getAuthorDetail = getPublishedAuthor;
 export const getCaseStudyDetail = getPublishedCaseStudy;
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
 

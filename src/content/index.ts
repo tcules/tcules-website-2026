@@ -27,6 +27,7 @@ export {
   getCaseStudyPage,
   getCaseStudyDetail,
   getResourceDetail,
+  getAuthorDetail,
   getCaseStory,
   getIdealAboutPage,
   getContactPage,
