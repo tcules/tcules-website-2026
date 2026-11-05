@@ -356,9 +356,12 @@ export function Reasons({
   );
 
   if (arrangement === 'beside') {
-    if (process.env.NODE_ENV !== 'production' && shown.some((i) => i.figure || i.proof)) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      (bandFigure || shown.some((i) => i.figure || i.proof))
+    ) {
       console.warn(
-        'Reasons: `beside` sets words only; the figures and proofs passed are not drawn.',
+        'Reasons: `beside` sets words only; the figures, proofs and band figure passed are not drawn.',
       );
     }
     return (
@@ -394,6 +397,15 @@ export function Reasons({
     );
   }
 
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    bandFigure &&
+    shown.some((i) => i.figure || i.proof)
+  ) {
+    console.warn(
+      'Reasons: a `bandFigure` draws the whole set, so the items’ figures and proofs are not drawn.',
+    );
+  }
   const open = arrangement === 'open';
   // A set whose covers carry no figure (offer pages) sizes its plate to the cover: 16:9, no caption strip.
   const flatProofs =

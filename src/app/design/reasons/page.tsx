@@ -572,6 +572,39 @@ export default async function ReasonsSpecimen() {
       />
 
       <Variation
+        id="band-figure-boxed"
+        title="14c · One drawing for the band, boxed"
+        note="The same band figure over the boxed set: the frame holds the three principles, words only, under the one drawing."
+      />
+      <Reasons
+        heading="Better product decisions, before you build"
+        headingId="rsn-band-figure-boxed"
+        arrangement="boxed"
+        surface="tint"
+        bandFigure={{
+          src: '/illustrations/why-tcules/principles.svg',
+          width: 813,
+          height: 442,
+          alt: '',
+          kind: 'illustration',
+        }}
+        items={[
+          {
+            title: 'Evidence before screens',
+            body: 'We test your assumptions with real users before they become expensive mistakes.',
+          },
+          {
+            title: 'What to build first',
+            body: 'You leave knowing what to build, what can wait, and why.',
+          },
+          {
+            title: 'Design that pays back',
+            body: 'Every design decision is tied to the adoption, renewals or revenue it should move.',
+          },
+        ]}
+      />
+
+      <Variation
         id="home-beside"
         title="15 · Beside, words only: home's three reasons (owner, 30 Oct 2026)"
         note="Home's Why Tcules on the real words. The heading, lead and link in the leading track (5 of 12 from 1024); the three claims read down the trailing one, title (h4) over its sentence with its own links, a stack (48) apart. A section (96) split. No drawing, no figure, no rule: the sentences already name the clients, the live case and the tenures. Below 1024 one column, the head above."

@@ -1344,7 +1344,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               lead={parts.lead}
               action={action}
               items={titled.map((item) => {
-                const drawn = ctx.reasonFigure?.(item.title!, ground);
+                /* Under a band figure the reasons are words only: no per-reason drawing. */
+                const drawn = wide ? undefined : ctx.reasonFigure?.(item.title!, ground);
                 const parted = split(item.title!);
                 const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
@@ -1359,9 +1360,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                     : quoteOf(item.title!)
                       ? { example: <SupportQuote block={quoteOf(item.title!)!} /> }
                       : {}),
-                  figure: drawn
-                    ? { ...drawn, alt: '', kind: 'illustration' as const }
-                    : { ...placeholderIllustration(item.title!), alt: '' },
+                  ...(wide
+                    ? {}
+                    : {
+                        figure: drawn
+                          ? { ...drawn, alt: '', kind: 'illustration' as const }
+                          : { ...placeholderIllustration(item.title!), alt: '' },
+                      }),
                 };
               })}
             />
