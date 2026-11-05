@@ -73,7 +73,14 @@ polished."**
 - **Who is who** (owner, 5 Nov 2026): **blue figures are Tcules people; white or light-blue figures are
   clients** (and their users). A client's arm and hand are in the client's own colour, **white or light blue,
   outlined in blue**: the same shape as the Tcules arm (from the shoulder, round cap, round hand), drawn as a
-  light stroke inside a brandeis-500 outline, never a solid blue stroke. A Tcules arm is solid blue, no outline.
+  light stroke inside a brandeis-500 outline, never a solid blue stroke.
+- **One arm weight** (owner, 5 Nov 2026: "white figurines have thicker hands than blue ones. match the
+  weight"). In one drawing, a client's arm *including its blue outline* is exactly as thick as a Tcules arm,
+  and the two hands are the same size. The client's light core is thinner by twice the outline.
+- **Tcules figures carry a white outline** (owner, 5 Nov 2026: "so they can read separate from other blue
+  elements that overlap"). Head, body and arm of a blue figure are edged in white (about 1.5–2 at hero scale,
+  `paint-order: stroke` or a white shape behind, so the blue shape keeps its size), so a figure standing in
+  front of a blue screen or slab never merges with it. Client figures keep their blue outline.
 - **Never a crowd of blue.** A scene does not hold four blue figures. Where a scene shows how Tcules works with
   clients, pair them: one Tcules figure beside one client figure, working on the same thing (owner, 5 Nov 2026,
   `/why-tcules`: "3 pairs so it shows that we work directly with the client").
