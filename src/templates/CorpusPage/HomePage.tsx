@@ -417,6 +417,12 @@ function Situations({ b, eyebrows }: BandProps) {
      two ways in, then the band's ask centred under the set as the page's main action repeated — a
      primary solid in the band, as the owner asked (decisions/2026-11-04-where-to-start-doors). */
   if (paths.length > 0 && paths.every((path) => path.eyebrow)) {
+    /* Each door is its label, title and ways in, nothing else (owner, 5 Nov 2026, launch review:
+       "eyebrow, title, links. that's it"): the authored words and example are not set. */
+    const doors = paths.map(({ body: _body, example: _example, exampleLabel: _label, ...door }) => ({
+      ...door,
+      body: [],
+    }));
     return (
       /* On tint, the cards on paper: the set reads as three objects on a ground (owner, 4 Nov 2026:
          "this needs to be cleaner"). */
@@ -425,10 +431,9 @@ function Situations({ b, eyebrows }: BandProps) {
         eyebrow={eyebrows?.[b.id]}
         data-band="C-router"
         surface="tint"
-        align="center"
       >
         <GatewayPaths
-          paths={paths}
+          paths={doors}
           form="cards"
           close={
             ask
