@@ -33,6 +33,22 @@ async function bytes(src: string): Promise<Buffer> {
 }
 
 /**
+ * Whether a photograph was cut to a circle on transparency: all four corners clear. Such a portrait is
+ * a cut-out, not a photograph a frame can hold, so a person's card sets their initials instead
+ * (owner, 5 Nov 2026: Rakesh's and Rushali's photos are rounded crops). Read failures say no.
+ */
+export async function isCutOut(src: string): Promise<boolean> {
+  try {
+    const { data, info } = await sharp(await bytes(src)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const alpha = (x: number, y: number) => data[(y * info.width + x) * info.channels + 3] ?? 255;
+    const [r, b] = [info.width - 3, info.height - 3];
+    return [alpha(2, 2), alpha(r, 2), alpha(2, b), alpha(r, b)].every((a) => a < 16);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * The picture as a data URL at `width` × `height` export pixels. `cover` fills the box, cropped from
  * the centre; `contain` fits the whole picture inside it at its own ratio and returns the size it took.
  */

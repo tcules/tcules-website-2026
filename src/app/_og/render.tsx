@@ -124,23 +124,32 @@ const MONO: CSSProperties = {
 const M = 72; /* the outer margin */
 const COLUMN = 540; /* the words' column beside a picture */
 const SPLIT = 660; /* where the picture's half starts */
+const FACE = 440; /* a person's square */
+const VIDEO_W = 600; /* a video's 16:9, wider than the half's 548 */
+const SEAM = 48; /* the least air between the words and a picture that reaches into their column */
 
 export async function renderShareCard(card: ShareCard): Promise<Response> {
   const [ink, fontData] = await Promise.all([inks(), fonts()]);
   const media = card.media;
 
-  /* One frame for every framed picture (owner, 5 Nov 2026: "keep them all the same size"): the
-     half's full width at 16:9, centred on the height, rounded like every image. A case cover and a
-     video thumbnail are 16:9 and fill it whole; a photograph fills it from the face's focus; a person
-     without one has their initials on the byline's tint. A drawing takes no frame (below). */
-  const FRAME_W = W - SPLIT - M;
-  const FRAME_H = Math.round((FRAME_W * 9) / 16);
+  /* The frame a framed picture takes, by what it is (owner, 5 Nov 2026), each at the far margin and
+     centred on the height, rounded like every image:
+     - a person: a square, as the byline draws a face — their photograph from the face's focus, or
+       their initials on the byline's tint;
+     - a video: 16:9, a little wider than the half, the words' column giving way for it;
+     - a case cover, a banner, an article cover: 16:9 across the half, a V1 cover whole.
+     A drawing takes no frame (below). */
+  const person = card.initials !== null || media?.kind === 'portrait';
+  const video = card.source === 'video';
+  const FRAME_W = person ? FACE : video ? VIDEO_W : W - SPLIT - M;
+  const FRAME_H = person ? FACE : Math.round((FRAME_W * 9) / 16);
   const frame = {
-    left: px(SPLIT),
+    left: px(W - M - FRAME_W),
     top: px((H - FRAME_H) / 2),
     width: px(FRAME_W),
     height: px(FRAME_H),
   };
+  const column = video ? W - M - VIDEO_W - SEAM - (M + 8) : COLUMN;
   const frameBox: CSSProperties = {
     position: 'absolute',
     ...frame,
@@ -215,7 +224,7 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
             position: 'absolute',
             left: px(M + 8),
             top: px(M),
-            width: px(beside ? COLUMN : W - 2 * M - 16),
+            width: px(beside ? column : W - 2 * M - 16),
             height: px(H - 2 * M),
             display: 'flex',
             flexDirection: 'column',
@@ -226,7 +235,7 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
               size does not need (owner, 5 Nov 2026). It stays in the alt. */}
           <div style={{ ...MONO, display: 'flex', color: ink.blue }}>{card.meta.kind}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: px(16) }}>
-            <div style={{ ...title(beside ? 56 : 72, ink), display: 'flex', maxWidth: px(beside ? COLUMN : 980) }}>
+            <div style={{ ...title(beside ? 56 : 72, ink), display: 'flex', maxWidth: px(beside ? column : 980) }}>
               {card.hero}
             </div>
             {card.subtitle ? (

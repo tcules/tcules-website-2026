@@ -30,7 +30,7 @@ import {
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { shareCard, type ShareCard, type ShareSource } from './card';
-import type { ShareMedia } from './media';
+import { isCutOut, type ShareMedia } from './media';
 
 /**
  * Authored cuts, where the rules in `card.ts` leave a hero that reads badly (Claude, 4 Nov 2026; the
@@ -232,7 +232,7 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
      sits under their name (owner, 5 Nov 2026). */
   const person = await author(path);
   if (person) {
-    const photo = person.image;
+    const photo = person.image && !(await isCutOut(person.image.src)) ? person.image : undefined;
     return shareCard({
       path,
       title: person.name,
