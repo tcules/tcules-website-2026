@@ -70,6 +70,7 @@ import {
   type RatingsById,
 } from './blocks';
 import {
+  bandIllustration,
   bindingNamed,
   caseCover,
   coverFor,
@@ -808,7 +809,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   ? [
                       {
                         title: item.title,
-                        ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : { body: item.body }),
+                        ...(item.bodyHtml
+                          ? { bodyHtml: [item.bodyHtml] }
+                          : { body: item.body }),
                       },
                     ]
                   : [],
@@ -1324,14 +1327,19 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         };
         /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
         const quoteOf = (title: string) =>
-          authored.get(title)?.find(
-            (block): block is Extract<CorpusBlock, { type: 'quote' }> => block.type === 'quote',
-          );
+          authored
+            .get(title)
+            ?.find(
+              (block): block is Extract<CorpusBlock, { type: 'quote' }> =>
+                block.type === 'quote',
+            );
+        const wide = bandIllustration(page.route, band.id);
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              {...(wide ? { bandFigure: { ...wide, alt: '' } } : {})}
               figureSize="lg"
               lead={parts.lead}
               action={action}
@@ -2366,9 +2374,7 @@ function RoleRowsBand({
         title: block.headingText,
         ...(facts.length > 0 ? { facts } : {}),
         ...(icon ? { icon } : {}),
-        ...(apply
-          ? { href: `#${apply}`, choice: enquiryChoiceValue(block.headingText) }
-          : {}),
+        ...(apply ? { href: `#${apply}`, choice: enquiryChoiceValue(block.headingText) } : {}),
       },
     ];
   });

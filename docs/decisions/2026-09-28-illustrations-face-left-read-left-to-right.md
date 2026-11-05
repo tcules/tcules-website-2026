@@ -1,7 +1,7 @@
 ---
 title: "Illustrations face left and sequences read left to right"
 date: 2026-09-28
-status: active
+status: superseded
 area: [illustration]
 source: "Owner review, 28 Sep 2026 (service-line illustrations, round 2)"
 supersedes: []

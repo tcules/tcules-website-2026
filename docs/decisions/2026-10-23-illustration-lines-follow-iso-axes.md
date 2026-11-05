@@ -1,7 +1,7 @@
 ---
 title: "Every line from A to B in an illustration follows the isometric axes"
 date: 2026-10-23
-status: active
+status: superseded
 area: [illustration]
 source: "Owner, 23 Oct 2026 (enquiry close illustration)"
 supersedes: []
