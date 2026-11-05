@@ -1,7 +1,7 @@
 ---
 title: "A peer comparison is a keyless table with the page's own column picked"
 date: 2026-11-04
-status: proposed
+status: superseded
 area: [components]
 source: "Proposed by the audits, tools and glossary run, 4 Nov 2026 (branch design/audits-tools-glossary), for Devagya to judge on the built pages (glossary term pages)"
 supersedes: []

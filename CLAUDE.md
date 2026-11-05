@@ -67,7 +67,7 @@ a primitive. Same rule one tier up — a pattern does not import a pattern.
 `Section`, `Layout` and `Cluster` express every arrangement in the site between them:
 
 - **`Section`** — the full-width band. Paints the ground and owns the content column (1240 cap,
-  32 gutter) and the vertical air: ONE value per width — 96, and 64 below 768 — with the page's
+  32 gutter, 16 below 768: owner, 5 Nov 2026; decisions/2026-11-05-phone-gutter-is-16) and the vertical air: ONE value per width — 96, and 64 below 768 — with the page's
   first band taking 48 (tablet) / 32 (phone) above its content; `density="strip"` (24) and `flush`
   (0) are the only exceptions (owner, 7 Oct 2026). Every one of those values comes from `--sec-*`; the component contributes none of its own.
   `surface="paper | tint | ink | blue"` sets the ground for everything inside it.
@@ -142,8 +142,9 @@ Nine steps, named for what they separate:
    add a media query that swaps one step for another. One exception (owner, 7 Oct 2026): `Section`'s
    own vertical padding is one value per width — 96, 64 below 768 — and the page's first band
    takes 48 / 32 above its content below 1024, in `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
-   distance between two things. `Island`'s inset is the band's air in miniature and holds the same
-   exception (owner, 13 Oct 2026): 96 from 768; 64 block and the 32 gutter inline below it, in
+   distance between two things. The same exception covers the gutter (16 below 768) and `Island`'s
+   inset, the band's air in miniature: 48 from 768; below it 32 block and 24 inline, the form's island
+   16 inline (owner, 5 Nov 2026; decisions/2026-11-05-island-inset-on-a-phone), in
    `tokens/components/island.css` and nowhere else.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at

@@ -1,7 +1,7 @@
 ---
 title: "Island's inset is the band's air in miniature"
 date: 2026-10-13
-status: active
+status: superseded
 area: [spacing, components]
 source: "CLAUDE.md § gap-scale rule 4 (owner, 13 Oct 2026)"
 supersedes: []
