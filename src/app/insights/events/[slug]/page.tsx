@@ -161,6 +161,9 @@ function renderEventBlock(block: EventBlock, eventTitle: string) {
     case 'callout':
       return <Callout html={block.html} />;
 
+    case 'summary':
+      return <Callout tone="summary" label={block.heading} html={block.html} />;
+
     case 'separator':
       return <Prose html={block.html} />;
   }
@@ -338,10 +341,11 @@ export default async function EventPage({ params }: EventPageProps) {
       ) : null}
 
       {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
-          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
+          (owner, 30 Oct 2026). On tint, the last band before the footer (owner, 2 Nov 2026). */}
       <InsightResources
         heading="Explore other resources"
         items={resourceItems(event.resources)}
+        surface="tint"
       />
     </>
   );

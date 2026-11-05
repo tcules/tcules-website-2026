@@ -212,6 +212,9 @@
      move again without touching running text. Card bodies and anything under a title smaller than
      h3 take body-sm (14). Earlier: 9 Oct moved the lead 20 → 18 and body-lg 18 → 16. */
   --font-size-lead-lg: 18px;
+  /* An article's summary (owner, 2 Nov 2026): the one paragraph set above body outside the hero
+     lead and a testimonial quote, an h4's size at regular weight, read before the article. Phone 18. */
+  --font-size-summary: 22px;
   --font-size-lead: 16px;
   --font-size-body-lg: 16px;
   --font-size-body: 16px;
@@ -260,6 +263,7 @@
   --font-size-h4-lg-t: 24px;
   --font-size-h4-lg-m: 22px;
   --font-size-h4-m: 18px;
+  --font-size-summary-m: 18px;
   --font-size-h5-lg-m: 18px;
   --font-size-h5-m: 17px;
   --font-size-wordmark-m: 18px;
@@ -319,6 +323,7 @@
      running-text leading for three lines of speech. */
   --line-height-quote-xl: 1.25;
   --line-height-lead-lg: 1.5;
+  --line-height-summary: 1.5;
   --line-height-lead: 1.55;
   --line-height-body-lg: 1.6;
   --line-height-body: 1.6;
@@ -500,6 +505,11 @@
     var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-sans);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
+  /* The summary paragraph: h4's size and its title-fine tracking, at regular weight, because it is
+     a paragraph and not a title. Callout tone="summary" is its one consumer. */
+  --text-summary: var(--font-weight-regular) var(--font-size-summary)/var(--line-height-summary)
+    var(--font-family-sans);
+  --text-summary-tracking: var(--letter-spacing-title-fine);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
     var(--font-family-sans);
   --text-body-lg: var(--font-weight-regular) var(--font-size-body-lg)/var(--line-height-body-lg)
@@ -603,6 +613,8 @@
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
       var(--font-family-sans);
+    --text-summary: var(--font-weight-regular)
+      var(--font-size-summary-m)/var(--line-height-summary) var(--font-family-sans);
     --text-h4-lg: var(--font-weight-medium) var(--font-size-h4-lg-m)/var(--line-height-h4-lg-m)
       var(--font-family-sans);
     --text-h5-lg: var(--font-weight-medium) var(--font-size-h5-lg-m)/var(--line-height-h5-lg-m)

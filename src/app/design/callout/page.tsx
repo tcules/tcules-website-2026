@@ -139,6 +139,20 @@ export default function CalloutSpecimenPage() {
               html="<p>A dispatch screen where three teams edit one order, and nobody trusts its status. We followed a single order through all of them.</p>"
             />
           </Specimen>
+          <Specimen
+            title="tone=summary · an article's TL;DR"
+            note="The one tone with a ground (owner, 2 Nov 2026): the deep panel, the accent across its top, the mono key and the paragraph set large (--text-summary). The panel is as wide as its text, up to the lead measure; the short one shows it shrinking."
+          >
+            <Layout rowGap="stack">
+              <Callout tone="summary" label="Insights" html={"<p>Heuristic evaluation, usability testing and a UX audit answer different questions. Match yours to the method, the time it takes and what you get. Pick the method by the question you need answered.</p>"} />
+              <Callout
+                tone="summary"
+                label="Insights"
+                html="<p>Pick the method by the question you need answered.</p>"
+              />
+              <Callout tone="summary" html={"<p>Heuristic evaluation, usability testing and a UX audit answer different questions. Match yours to the method, the time it takes and what you get. Pick the method by the question you need answered.</p>"} />
+            </Layout>
+          </Specimen>
         </Layout>
       </Section>
 
@@ -209,6 +223,12 @@ export default function CalloutSpecimenPage() {
               note="No surface prop and no component-owned ground: the nearest data-surface is the only mechanism."
             >
               <Callout html={INLINE_RICH_TEXT} />
+            </Specimen>
+            <Specimen
+              title={`tone=summary on ${surface}`}
+              note="The summary panel restates its ground, rule, key and paragraph inks per surface."
+            >
+              <Callout tone="summary" label="Insights" html={"<p>Heuristic evaluation, usability testing and a UX audit answer different questions. Match yours to the method, the time it takes and what you get. Pick the method by the question you need answered.</p>"} />
             </Specimen>
           </Layout>
         </Section>

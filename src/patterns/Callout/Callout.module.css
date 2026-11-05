@@ -65,3 +65,28 @@
 .band .glyph {
   color: var(--call-band-glyph-ink);
 }
+
+/* ── tone="summary" ──────────────────────────────────────────────────────────────
+   An article's TL;DR (owner, 2 Nov 2026). The one tone with a ground: a bounded panel the reader
+   meets before the article, the accent drawn across its top edge. The key is the mono label; the
+   paragraph is set large (--text-summary) in the surface's full ink, so scale carries the weight.
+   The panel is as wide as its text and stops at the lead measure, so a short summary is never a
+   wide empty box. The gutter inset is the panel's own air, not outer spacing. */
+.summary {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding: var(--gap-gutter);
+  background: var(--call-summary-ground);
+  border-block-start: var(--call-summary-rule-width) solid var(--call-summary-rule-ink);
+}
+
+.summary .content {
+  max-inline-size: var(--measure-lead);
+  font: var(--text-summary);
+  letter-spacing: var(--text-summary-tracking);
+  color: var(--call-summary-content-ink);
+}
+
+.summary .label {
+  color: var(--call-summary-label-ink);
+}

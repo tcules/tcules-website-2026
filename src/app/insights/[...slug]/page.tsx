@@ -69,6 +69,9 @@ function renderBlogBlock(block: BlogBlock, blogTitle: string) {
     case 'callout':
       return <Callout html={block.html} />;
 
+    case 'summary':
+      return <Callout tone="summary" label={block.heading} html={block.html} />;
+
     case 'figures':
       return (
         <Layout
@@ -355,13 +358,8 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </Section>
       ) : null}
 
-      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
-          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
-      <InsightResources
-        heading="Explore other resources"
-        items={resourceItems(blog.resources)}
-      />
-
+      {/* The ask comes before the further reading (owner, 2 Nov 2026, confirmed with Yash): the reader
+          who finished the piece meets it first. */}
       {blog.cta ? (
         <CtaSection
           arrangement="open"
@@ -370,6 +368,15 @@ export default async function BlogPage({ params }: BlogPageProps) {
           actions={blog.cta.actions}
         />
       ) : null}
+
+      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
+          (owner, 30 Oct 2026). On tint, the page's last band before the footer (owner, 2 Nov 2026);
+          the ask above it is an island on paper, so no two tints meet. */}
+      <InsightResources
+        heading="Explore other resources"
+        items={resourceItems(blog.resources)}
+        surface="tint"
+      />
     </>
   );
 }
