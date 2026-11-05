@@ -203,7 +203,8 @@
     }
   }
 
-  /* The panel: paper, its height following the slide; the slide moves inside it and is clipped by it. */
+  /* The panel: paper, as tall as the tallest slide (see .slide); the slide moves inside it and is
+     clipped by it. */
   .panel {
     position: relative;
     overflow: hidden;
@@ -220,13 +221,20 @@
     position: relative;
   }
 
+  /* Every slide shares the track's one cell, so the panel is always as tall as the tallest claim and
+     never changes height when a claim is chosen. A panel that resized pushed everything below it,
+     footer included, on every autoplay step and hover choice — layout shift a reader never caused,
+     which Google counts (performance pass, 6 Nov 2026). Hidden slides keep their box but leave the
+     accessibility tree, as display: none did. */
   .slide {
-    display: none;
+    grid-area: 1 / 1;
+    visibility: hidden;
   }
 
   .slide[data-active],
-  .slide[data-leaving] {
-    display: block;
+  .slide[data-leaving],
+  .slide[data-peek] {
+    visibility: visible;
   }
 
   .slide[data-leaving] {
