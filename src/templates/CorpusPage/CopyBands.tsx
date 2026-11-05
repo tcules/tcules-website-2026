@@ -37,6 +37,11 @@ import {
   type ReadDownRow,
   type Step,
   ServiceTile,
+  TestimonialCard,
+  GatewayPaths,
+  type GatewayPath,
+  EngagementOptions,
+  type EngagementOption,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
@@ -45,19 +50,28 @@ import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 import { placeholderIllustration } from '@/lib/placeholders';
-import { MEDIA_SPLIT, MEDIA_SPLIT_HALVES } from '@/lib/image-sizes';
+import { FULL_COLUMN, MEDIA_SPLIT, MEDIA_SPLIT_HALVES } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
-import { ListTiles, head, headingIdOf } from './blocks';
+import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
 import {
   bandArtefact,
   slotImage,
+  slugOf,
   studioBandPhoto,
   type SlotImage,
 } from './images';
-import { isIllustratedProse, isIslandClose, isWhatYouGet, signature } from './plan';
+import {
+  isCardSet,
+  isClaimList,
+  isIllustratedProse,
+  isIslandClose,
+  isSituationProse,
+  isWhatYouGet,
+  signature,
+} from './plan';
 import {
   boldLead,
   isExample,
@@ -400,7 +414,7 @@ function groupNode(
         block.type === 'item' ? (
           <Layout key={index} rowGap="block">
             <h3>{block.headingText}</h3>
-            <BandBody blocks={block.blocks} labelledBy={labelledBy} />
+            <ItemBody blocks={block.blocks} labelledBy={labelledBy} />
           </Layout>
         ) : null,
       );
@@ -409,6 +423,76 @@ function groupNode(
     default:
       return null;
   }
+}
+
+/**
+ * A client's words quoted under a claim (the 3 Nov copy): the claim leads, the quote supports it, one
+ * step quieter (decisions/2026-10-10-claim-leads-proof-supports): the small testimonial card straight on
+ * the ground, its speaker's one rating with it.
+ */
+export function SupportQuote({ block }: { block: Extract<CorpusBlock, { type: 'quote' }> }) {
+  return <TestimonialCard item={testimonialItem(block)} size="sm" frame="none" />;
+}
+
+/**
+ * An `###` item's blocks in authored order: its words through BandBody, and each quote it carries as the
+ * supporting quote in its place (BandBody itself draws no quote: a band's quotes are its own units).
+ * An example sentence ("**Doodle** asked…", or "Example: …") is the ClaimProof panel
+ * (decisions/2026-11-02-examples-are-one-pattern).
+ */
+export function ItemBody({
+  blocks,
+  labelledBy,
+}: {
+  blocks: readonly CorpusBlock[];
+  labelledBy?: string;
+}): ReactNode {
+  if (
+    !blocks.some(
+      (block) =>
+        block.type === 'quote' ||
+        isExampleParagraph(block) ||
+        (block.type === 'links' && block.links.length >= 4),
+    )
+  ) {
+    return <BandBody blocks={blocks} labelledBy={labelledBy} />;
+  }
+  const runs: ReactNode[] = [];
+  let words: CorpusBlock[] = [];
+  const flush = () => {
+    if (words.length === 0) return;
+    runs.push(<BandBody key={runs.length} blocks={words} labelledBy={labelledBy} />);
+    words = [];
+  };
+  for (const block of blocks) {
+    if (block.type === 'quote') {
+      flush();
+      runs.push(<SupportQuote key={runs.length} block={block} />);
+    } else if (isExampleParagraph(block)) {
+      flush();
+      runs.push(<ClaimProof key={runs.length} example={claimExample(block.runs)} />);
+    } else if (block.type === 'links' && block.links.length >= 4) {
+      /* A run of destinations inside a claim (the twelve sectors under "Industries we know well"):
+         one line, as the copy sets it with its dots, never a stack of twelve link controls. */
+      flush();
+      runs.push(
+        <ContentSectionText key={runs.length}>
+          <Prose
+            html={`<p>${inlineToHtml(
+              block.links.flatMap((link, index): InlineRun[] => [
+                ...(index > 0 ? [{ type: 'text' as const, text: ' · ' }] : []),
+                { type: 'link' as const, href: link.href, children: link.label },
+              ]),
+            )}</p>`}
+          />
+        </ContentSectionText>,
+      );
+    } else {
+      words.push(block);
+    }
+  }
+  flush();
+  return <Layout rowGap="block">{runs}</Layout>;
 }
 
 const rowBody = (runs: readonly InlineRun[]) =>
@@ -1168,7 +1252,20 @@ export function isExampleParagraph(
 ): block is Extract<CorpusBlock, { type: 'paragraph' }> {
   if (block.type !== 'paragraph') return false;
   const first = block.runs[0];
-  return first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text);
+  if (first?.type === 'text' && /^\s*example\b[^:.]{0,40}:/i.test(first.text)) return true;
+  /* The 3 Nov copy dropped the "Example:" label and kept the shape: the client in bold running into
+     its sentence, the case linked at the end ("**Doodle** asked for scheduling automation. … [Read the
+     Doodle case](/case-studies/…)"). A bold label that ends in a stop ("**Our role:** …") is not one. */
+  const second = block.runs[1];
+  const last = trimEnd(block.runs).at(-1);
+  return (
+    first?.type === 'strong' &&
+    !/[.:?]\s*$/.test(plain(first.children)) &&
+    second?.type === 'text' &&
+    /^\s+[a-z]/.test(second.text) &&
+    last?.type === 'link' &&
+    last.href.startsWith(`${ROUTES.caseStudies}/`)
+  );
 }
 
 /** One hard part: its title, its words in order (a table included), and its example if it has one. */
@@ -1491,7 +1588,13 @@ export function TableBand({
    */
   agreement?: SketchName;
 }) {
-  const blocks = content(band);
+  const all = content(band);
+  /* The band's closing link line ("See how we work →", /why-tcules alternatives) is the head's end
+     action, on the heading's row (owner, 4 Nov 2026; decisions/2026-10-29-head-end-action-centred-on-
+     heading), never a stray link under the notes. */
+  const tail = all.at(-1);
+  const onward = tail?.type === 'links' ? tail.links : [];
+  const blocks = onward.length > 0 ? all.slice(0, -1) : all;
   const [first] = blocks;
   const leadText =
     first?.type === 'paragraph' && !leadOf(first) && !hasLink(first.runs)
@@ -1547,7 +1650,17 @@ export function TableBand({
   ) : (
     <BandBody blocks={parts.before} labelledBy={head(band).headingId} narrow={narrow} />
   );
-  return (
+  return onward.length > 0 ? (
+    <ContentSection
+      {...head(band)}
+      data-band="E"
+      lead={leadText}
+      actions={<LinkActions links={onward} />}
+      actionsAt="end"
+    >
+      {body}
+    </ContentSection>
+  ) : (
     <ContentSection {...head(band)} data-band="E" lead={leadText}>
       {body}
     </ContentSection>
@@ -2484,10 +2597,9 @@ export function TextBand({
       <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
     </Layout>
   ) : examplePanels.length > 0 ? (
-    <Layout rowGap="block">
-      <BandBody blocks={body} />
-      {examplePanels}
-    </Layout>
+    /* Each example where the copy sets it: under the claim it proves, never gathered at the band's
+       foot, where the last claim would seem to own it (/how-we-work design-to-release, 4 Nov 2026). */
+    <ItemBody blocks={blocks.filter((block) => block.type !== 'links')} />
   ) : (
     <BandBody blocks={body} />
   );
@@ -2497,6 +2609,9 @@ export function TextBand({
      The band's links follow the words they close, a `block` under the last paragraph: the media
      split places its `actions` after the body (owner, 4 Nov 2026, /careers "How AI fits into the
      job": "cta below the body?"; decisions/2026-11-04-prose-band-link-follows-its-body). */
+  if (isSituationProse(band.id)) return <SituationsBand band={band} surface={surface} />;
+  if (isClaimList(band.id)) return <ClaimListBand band={band} surface={surface} />;
+  if (isCardSet(band.id)) return <CardSetBand band={band} surface={surface} />;
   /* The page's own artefact beside its words (images.ts `ARTEFACT_BAND`), ahead of any illustration
      slot: a real picture of the thing the page is about replaces a placeholder (owner, 4 Nov 2026,
      /matter-design-system). Cropped as the split's photograph, or whole at its own ratio in a half. */
@@ -2541,7 +2656,61 @@ export function TextBand({
       </ContentSection>
     );
   }
-  if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
+  const bound = page.composition.mediaBindings.some(
+    (b) => b.bound && b.supportsSection === band.id,
+  );
+  /* Three or more titled claims carried by clients' words, with the photograph the copy binds
+     ("Experienced in complex, specialist software", /why-tcules 3 Nov copy): the claims are the band's
+     object, so they take the full width two by two, and the photograph is the I banner under the head
+     (3:1). Beside them, one long column of claims ran far past a 4:5 photo (2.60, 4 Nov 2026). */
+  const claimItems = body.filter(
+    (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
+  );
+  /* The words before the first claim are the band's lead ("An account lead keeps the work running
+     beside your senior designer.", /how-we-work your-team). */
+  const words: readonly CorpusBlock[] = body;
+  const firstClaim = words.findIndex((block) => block.type === 'item');
+  const intro = firstClaim > 0 ? words.slice(0, firstClaim) : [];
+  const introLead =
+    intro.length === 1 && intro[0]?.type === 'paragraph' && !hasLink(intro[0].runs)
+      ? plain(intro[0].runs)
+      : undefined;
+  if (
+    bound &&
+    examples.length === 0 &&
+    claimItems.length >= 3 &&
+    claimItems.length + intro.length === words.length &&
+    intro.every((block) => block.type === 'paragraph')
+  ) {
+    /* Three claims stand three across; four, two by two, so no row is left with one. */
+    const three = claimItems.length === 3;
+    return (
+      <ContentSection {...head(band)} lead={introLead} data-band="B" actions={actions}>
+        <Layout rowGap="stack">
+          {intro.length > 0 && !introLead ? <BandBody blocks={intro} /> : null}
+          {/* The copy binds a photograph of the people here (the team); only a photograph is cropped. */}
+          <Media
+            image={{ ...slotImage(page, band.id), kind: 'photograph' }}
+            ratio="3/1"
+            sizes={FULL_COLUMN}
+          />
+          <Layout
+            columns={three ? { base: 1, lg: 3 } : { base: 1, md: 2 }}
+            colGap="column"
+            rowGap="stack"
+          >
+            {claimItems.map((item) => (
+              <Layout key={item.headingText} id={item.id ?? undefined} rowGap="block">
+                <h3>{item.headingText}</h3>
+                <ItemBody blocks={item.blocks} />
+              </Layout>
+            ))}
+          </Layout>
+        </Layout>
+      </ContentSection>
+    );
+  }
+  if (bound) {
     return (
       <ContentSection surface={surface}
         {...head(band)}
@@ -2623,6 +2792,51 @@ export function TextBand({
       </ContentSection>
     );
   }
+  /* A band that argues for one named service and ends on its link ("Building an AI product?" … "See
+     AI Product UX →", /why-tcules 3 Nov copy): the service's own flat drawing on its plate beside the
+     words, the link the band's action under them. A split, as a scenario beside its drawing; never a
+     service card beside the head (clickable cards sit under their head). */
+  const nested = blocks.flatMap((block) =>
+    block.type === 'item'
+      ? block.blocks.flatMap((b) => (b.type === 'links' ? b.links : []))
+      : [],
+  );
+  const onward = [...links, ...nested];
+  const serviceScene =
+    onward.length === 1 && onward[0] ? serviceSceneFor(onward[0].href) : undefined;
+  /* One claim that is one named service's argument, closing on its link ("Building an AI
+     product?", /why-tcules): a CTA block, the ink island, its heading, the band's words and the
+     service as its action (owner, 4 Nov 2026: "CTA block not this card"). */
+  const said = [
+    ...words.filter((block) => block.type !== 'item'),
+    ...claimItems.flatMap((item) => item.blocks),
+  ];
+  const sentences = said.flatMap((block) =>
+    block.type === 'paragraph' && !hasLink(block.runs) ? [plain(block.runs)] : [],
+  );
+  const onlyWords =
+    sentences.length > 0 &&
+    sentences.length <= 2 &&
+    claimItems.length <= 1 &&
+    said.every((block) => block.type === 'paragraph' || block.type === 'links');
+  if (serviceScene && onlyWords && onward[0]) {
+    const [one, two] = sentences;
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        heading={band.headingText}
+        body={one ? (two ? [one, two] : [one]) : undefined}
+        actions={[
+          {
+            label: plain(onward[0].label).replace(/\s*→\s*$/, ''),
+            href: onward[0].href,
+          },
+        ]}
+      />
+    );
+  }
   return (
     <ContentSection surface={surface} {...head(band)} data-band="C-text" footer={actions}>
       {text}
@@ -2651,6 +2865,235 @@ const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([
   /* /matter-design-system `use` left 4 Nov 2026 (pass 2): the band now carries Matter's own components
      beside its words (images.ts ARTEFACT_BAND). */
 ]);
+
+/**
+ * Starting situations (plan `SITUATION_PROSE`, /how-we-work "Every project starts from your product
+ * and your users"): home's where-to-start cards (owner, 4 Nov 2026: "isn't this essentially the where
+ * to start section?"; decisions/2026-11-04-where-to-start-no-examples), the centred head on tint and
+ * one paper card a situation, its title and sentence. The copy links none, so no card has ways in.
+ * The words after them sit as one row under the cards, the paragraph beside the example.
+ */
+function SituationsBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
+  const blocks = content(band).filter((block) => block.type !== 'links');
+  /* The parser files "**A new product.** We find…" as a labelled block: the bold label, its words. */
+  const situations = blocks.flatMap((block) =>
+    block.type === 'labelled'
+      ? [
+          {
+            block,
+            title: inlineToText(block.label).trim().replace(/\.$/, ''),
+            body: inlineToText(block.body).trim(),
+          },
+        ]
+      : [],
+  );
+  const taken = new Set<CorpusBlock>(situations.map((situation) => situation.block));
+  const firstSituation = blocks.findIndex((block) => taken.has(block));
+  const before = blocks.filter((block, index) => !taken.has(block) && index < firstSituation);
+  const after = blocks.filter((block, index) => !taken.has(block) && index > firstSituation);
+  const lead =
+    before.length === 1 && before[0]?.type === 'paragraph' && !hasLink(before[0].runs)
+      ? plain(before[0].runs)
+      : undefined;
+  /* Every card is led by its glyph, or none is: a set never mixes. */
+  const glyphs = situations.every((situation) => SITUATION_GLYPHS[situation.title]);
+  const paths: GatewayPath[] = situations.map((situation) => ({
+    id: slugOf(situation.title),
+    title: situation.title,
+    body: [situation.body],
+    links: [],
+    ...(glyphs ? { glyph: SITUATION_GLYPHS[situation.title] } : {}),
+  }));
+  /* The one sentence after the cards is the set's close, centred under it, as home's line over its ask. */
+  const [closing] = after;
+  const closeLine =
+    after.length === 1 && closing?.type === 'paragraph' && !hasLink(closing.runs)
+      ? plain(closing.runs)
+      : undefined;
+  return (
+    <ContentSection
+      {...head(band)}
+      lead={lead}
+      data-band="C-router"
+      surface={surface ?? 'tint'}
+      align="center"
+    >
+      <Layout rowGap="column">
+        {before.length > 0 && !lead ? <BandBody blocks={before} /> : null}
+        <GatewayPaths
+          paths={paths}
+          form="cards"
+          {...(closeLine ? { close: { line: closeLine, lineSize: 'body' as const } } : {})}
+        />
+        {after.length > 0 && !closeLine ? <ItemBody blocks={after} /> : null}
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/** Each starting situation's glyph, by its title as authored. */
+const SITUATION_GLYPHS: Readonly<Record<string, IconName>> = {
+  'A new product': 'ruler-pen',
+  'A prototype': 'code-square',
+  'An established product': 'refresh-square',
+};
+
+/** Each claim's glyph in a claim list, by its title as authored (one set never mixes). */
+const CLAIM_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Part of your team': 'hand-shake',
+  'Seen your problem before': 'users-group-rounded',
+  'Working across time zones': 'clock-circle',
+  'Complex made clear': 'widget',
+  'Industries we know well': 'map-point',
+  'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Ready for your engineers': 'code-square',
+};
+
+/** A paragraph that is one link and nothing else ("[See all industries →](/expertise)"): a link line. */
+function loneLink(block: CorpusBlock): CorpusLink | undefined {
+  if (block.type !== 'paragraph') return undefined;
+  const runs = trimEnd(block.runs);
+  const [only] = runs;
+  return runs.length === 1 && only?.type === 'link'
+    ? { href: only.href, label: only.children, labelText: plain(only.children) }
+    : undefined;
+}
+
+/** A band's onward links wherever the copy files them: link lines after the set or under a claim. */
+function onwardLinks(blocks: readonly CorpusBlock[]): CorpusLink[] {
+  return blocks.flatMap((block) => {
+    if (block.type === 'links') return block.links;
+    if (block.type === 'item') return onwardLinks(block.blocks);
+    const link = loneLink(block);
+    return link ? [link] : [];
+  });
+}
+
+/** A claim's words: its paragraphs, a link line left out. */
+const claimText = (claim: Extract<CorpusBlock, { type: 'item' }>): string =>
+  claim.blocks
+    .flatMap((block) => (block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : []))
+    .join(' ');
+
+/**
+ * A set of short titled claims (plan `CLAIM_LIST`): home's Why Tcules list (OfferSheet `list`), the
+ * heading, its lead and the band's onward link at the left, the claims down the right, one ruled row
+ * each, its glyph inline before its title and its words under it.
+ */
+function ClaimListBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
+  const blocks = content(band);
+  const claims = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
+  );
+  const paragraphs = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const [first] = paragraphs;
+  const lead = first && !hasLink(first.runs) ? plain(first.runs) : undefined;
+  const links = onwardLinks(blocks);
+  /* Titled claims are rows with their titles; a band of untitled lines ("How we use AI in our own
+     work") is a row a line, its glyph before its words. */
+  const lines = claims.length > 0 ? [] : lead ? paragraphs.slice(1) : paragraphs;
+  const keys =
+    claims.length > 0
+      ? claims.map((claim) => claim.headingText)
+      : lines.map((block) => plain(block.runs));
+  const glyphs = keys.map((key) => CLAIM_GLYPHS[key] ?? glyphFor(key));
+  const iconed = glyphs.every(Boolean);
+  const items: OfferSheetItem[] =
+    claims.length > 0
+      ? claims.map((claim, index) => ({
+          title: claim.headingText,
+          body: claimText(claim),
+          ...(iconed ? { icon: glyphs[index]! } : {}),
+        }))
+      : lines.map((block, index) => ({
+          id: plain(block.runs),
+          bodyHtml: inlineToHtml(block.runs),
+          ...(iconed ? { icon: glyphs[index]! } : {}),
+        }));
+  return (
+    <OfferSheet
+      {...head(band)}
+      arrangement="list"
+      surface={surface}
+      lead={claims.length > 0 && paragraphs.length !== 1 ? undefined : lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
+/** Each card's glyph, by its title, or by its line's opening words where a card has no title. */
+const CARD_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Ready for your engineers': 'code-square',
+  'Faster to first release': 'graph-up',
+  'Complex made clear': 'widget',
+  'Industries we know well': 'map-point',
+  'Fluent in SaaS': 'layers',
+  'Seen your problem before': 'users-group-rounded',
+  'AI speeds up routine work': 'bolt-circle',
+  'A senior designer approves': 'shield-check',
+  'If your organisation has': 'lock',
+};
+
+const glyphFor = (key: string): IconName | undefined =>
+  CARD_GLYPHS[key] ??
+  Object.entries(CARD_GLYPHS).find(([lead]) => key.startsWith(lead))?.[1];
+
+/**
+ * A set of cards under the head (plan `CARD_SETS`): the three-ways cards, each led by its glyph. Titled
+ * claims are cards with their titles; a band of lines with no titles ("How we use AI in our own
+ * work") is a card a line, its glyph and its words. The paragraph before them is the lead, the band's
+ * onward link the head's end action. No picture: a section never borrows a case's image (owner, 4 Nov
+ * 2026).
+ */
+function CardSetBand({ band, surface }: { band: CorpusBand; surface?: 'paper' | 'tint' }) {
+  const blocks = content(band);
+  const claims = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'item' }> => block.type === 'item',
+  );
+  /* The band's onward link, wherever the copy files it: after the set, or under its last claim
+     ("See all industries →", /why-tcules). */
+  const links = onwardLinks(blocks);
+  const paragraphs = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const [first, ...lines] = paragraphs;
+  const lead = first && !hasLink(first.runs) ? plain(first.runs) : undefined;
+  const options: EngagementOption[] =
+    claims.length > 0
+      ? claims.map((claim) => ({
+          title: claim.headingText,
+          body: claimText(claim),
+        }))
+      : (lead ? lines : paragraphs).map((block) => ({
+          title: '',
+          body: <>{renderInline(block.runs)}</>,
+        }));
+  const keys =
+    claims.length > 0
+      ? claims.map((claim) => claim.headingText)
+      : (lead ? lines : paragraphs).map((block) => plain(block.runs));
+  const glyphs = keys.map(glyphFor);
+  const iconed = glyphs.every(Boolean)
+    ? options.map((option, index) => ({
+        ...option,
+        icon: <Icon name={glyphs[index]!} />,
+      }))
+    : options;
+  return (
+    <EngagementOptions
+      {...head(band)}
+      arrangement="cards"
+      {...(surface ? { surface } : {})}
+      lead={lead}
+      options={iconed}
+      action={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
 
 /** A boundary on the band before it (`confidentiality`): one Callout under its own heading. */
 export function NoteBand({ band }: { band: CorpusBand }) {

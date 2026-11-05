@@ -260,6 +260,7 @@
   block-size: var(--gwy-card-visual-height);
 }
 
+
 .cardTitle {
   font: var(--gwy-title-text);
   letter-spacing: var(--gwy-title-tracking);
@@ -399,6 +400,20 @@
 }
 
 /* The kind of product: the label voice, so mono and uppercase in presentation only. */
+/* The door's glyph, heading its card above the label and title (an icon heads its card). */
+.doorGlyph {
+  display: block;
+  inline-size: var(--gwy-door-glyph-size);
+  block-size: var(--gwy-door-glyph-size);
+  color: var(--gwy-door-glyph-ink);
+}
+
+.doorGlyph > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
 .doorEyebrow {
   font: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow-tracking);
@@ -524,4 +539,11 @@
   text-wrap: balance;
   color: var(--gwy-title-ink);
   max-inline-size: var(--gwy-door-close-measure);
+}
+
+/* A close that is a sentence of the set's own words, not a line over an ask (/how-we-work, owner
+   4 Nov 2026: "this could just be body text no wrap"): the body role, at the column's width. */
+.doorCloseLineBody {
+  font: var(--gwy-door-close-body-text);
+  color: var(--gwy-body-ink);
 }

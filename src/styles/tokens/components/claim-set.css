@@ -67,7 +67,7 @@
   --clm-number-ink: var(--color-neutral-700);
   --clm-timer-rail: var(--color-neutral-300); /* decoration */
   --clm-timer-fill: var(--color-brandeis-500);
-  --clm-proof-ground: var(--color-paper-deep);
+  --clm-proof-ground: var(--color-paper); /* a paper panel on tint, as the stage's: paper-deep vanished on it (4 Nov 2026) */
   --clm-label-ink: var(--color-neutral-700);
   --clm-proof-ink: var(--color-neutral-900);
   --clm-link-ink: var(--color-brandeis-500);

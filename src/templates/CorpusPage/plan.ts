@@ -386,6 +386,12 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
+  /* /why-tcules, the 3 Nov copy (2.60): claims carried by clients' words. Complex software and design
+     to code are prose beside the photograph the copy binds to each (the team; ConnectX's coded demo);
+     "Building an AI product?" argues for one service, its drawing beside the words (TextBand). */
+  'complex-software': 'text',
+  'design-to-code': 'text',
+  'ai-products': 'text',
   /* Three instructions on reading the index: the listing's lead, beside the rail of groups it points
      at (4 Nov 2026). Not a method: the order is not a sequence (2026-10-11-no-decorative-numbering). */
   'how-to-use': 'index',
@@ -573,7 +579,18 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
  * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
  */
-const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
+/* Empty since 4 Nov 2026: the owner rejected /how-we-work's four bands as one alternating
+   image-and-words split each ("designed for the content"); each now takes its content's shape
+   (SITUATION_PROSE, CLAIM_LIST, the bound prototype, the AI band beside its heading). */
+const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set<string>([]);
+
+/**
+ * Prose bands that are a set of short titled claims, a sentence or two each (/how-we-work "Who you
+ * work with", /why-tcules "Experienced in complex, specialist software"): home's Why Tcules list, the
+ * heading at the left, the claims down the right, one ruled row each led by its glyph (owner, 4 Nov
+ * 2026: "the service page, expertise page, homepage are the north star").
+ */
+const CLAIM_LIST: ReadonlySet<string> = new Set([
   'your-team',
   'working-loop',
   'design-to-release',
@@ -591,7 +608,38 @@ const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
      an abstract claim about the job, so one band-scale isometric illustration
      (docs/page-build/pages/careers.md). */
   'ai-fluency',
+  /* Swapped with complex-software (owner, 4 Nov 2026: "swap the layouts … keeping the same position"). */
+  'design-to-code',
+  /* Untitled lines as list rows, each led by its glyph (owner, 4 Nov 2026: "this is list card"). */
+  'ai-native-practice',
 ]);
+
+/**
+ * Prose bands whose claims or lines are a set of cards under the head, each led by its glyph (owner,
+ * 4 Nov 2026: "stop using project/case study images in sections … make the 2 items cards"; "3 cards,
+ * one for each line"): the three-ways cards (EngagementOptions `cards`).
+ */
+const CARD_SETS: ReadonlySet<string> = new Set(['design-to-release', 'complex-software']);
+
+/** Routes whose bands alternate tint and paper down to the quotes band (planOffer). */
+const ALTERNATING: ReadonlySet<string> = new Set(['/how-we-work', '/why-tcules']);
+
+/** Whether a prose band is a set of cards (`CARD_SETS`). */
+export const isCardSet = (bandId: string): boolean => CARD_SETS.has(bandId);
+
+/** Whether a prose band is a set of short titled claims (`CLAIM_LIST`). */
+export const isClaimList = (bandId: string): boolean => CLAIM_LIST.has(bandId);
+
+/**
+ * Prose bands that name the reader's starting situations, each a bold-led paragraph ("**A new
+ * product.** We find who it's for…"): home's "where to start" board, every situation at once with its
+ * drawing, title and sentence, none of them a link (owner, 4 Nov 2026: "isn't this essentially the
+ * where to start section?").
+ */
+const SITUATION_PROSE: ReadonlySet<string> = new Set(['product-knowledge']);
+
+/** Whether a prose band names starting situations (`SITUATION_PROSE`). */
+export const isSituationProse = (bandId: string): boolean => SITUATION_PROSE.has(bandId);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
 export const isIllustratedProse = (bandId: string): boolean => ILLUSTRATED_PROSE.has(bandId);
@@ -646,7 +694,7 @@ export function registerOf(
       if (bandArtefact(page.route, band.id)) return 'photo';
       /* Each item a detail of the page's own artefact (images.ts ITEM_CUT_OUTS). */
       if (itemCutOuts(page.route, band.id)) return 'photo';
-      if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
+      if (ILLUSTRATED_PROSE.has(band.id) || SITUATION_PROSE.has(band.id)) return 'isometric';
       /* The studio collage is six photographs (images.ts STUDIO_COLLAGE). */
       if (studioCollage(page.route, band.id)) return 'photo';
       /* A set beside one studio photograph (images.ts PHOTO_BESIDE). */
@@ -738,6 +786,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
             studioBandPhoto(page.route, band.id) !== undefined ||
             bandArtefact(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
+            SITUATION_PROSE.has(band.id) ||
             drawn.has(band.id) ||
             /* Six studio photographs, or an icon set (glyph-bands.ts). */
             studioCollage(page.route, band.id) !== undefined ||
@@ -896,6 +945,20 @@ export function planOffer(
             unit.band.blocks.some((block) => block.type === 'links')));
       unit.surface = !island && previous !== 'tint' ? 'tint' : 'paper';
       previous = unit.surface;
+    }
+  }
+
+  /* A page whose bands alternate grounds for rhythm (owner, 4 Nov 2026, /how-we-work: "lets use
+     alternating tint bands"): from the first band after the client marks to the quotes band, tint and
+     paper in turn, so two tints never touch; the form and the FAQ stay paper. */
+  if (ALTERNATING.has(page.route)) {
+    const from = planned.findIndex((unit) => unit.kind === 'recognition') + 1;
+    const to = planned.findIndex((unit) => unit.kind === 'quotes');
+    if (to > from) {
+      for (let index = from; index <= to; index += 1) {
+        const unit = planned[index];
+        if (unit) unit.surface = (to - index) % 2 === 0 ? 'tint' : 'paper';
+      }
     }
   }
 

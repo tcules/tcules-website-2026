@@ -1,8 +1,8 @@
 import type { CollagePhotos } from '@/patterns';
-import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 import type { CorpusCaseRef, CorpusMediaBinding, CorpusPage } from '@/lib/corpus-types';
 import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
+import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import {
   placeholderCover,
   placeholderImage,
@@ -154,11 +154,6 @@ const aboutPhoto = (id: string, assetUri: string, altIntent: string): CorpusMedi
   attribution: null,
 });
 const CLOUD = 'https://res.cloudinary.com/dbay1gb0s/image/upload';
-const ABOUT_TEAM = aboutPhoto(
-  'about_team',
-  `${CLOUD}/v1788186423/Image_3_ef562c4bc0.webp`,
-  'Tcules team together outside the studio in Ahmedabad.',
-);
 const ABOUT_REVIEW = aboutPhoto(
   'about_studio_review',
   `${CLOUD}/v1788186528/Image_2_6b09ca7e30.webp`,
@@ -170,13 +165,8 @@ const ABOUT_WALL = aboutPhoto(
   'A working wall of discovery, product thinking, UX and visual design material.',
 );
 const STUDIO_HERO: Record<string, CorpusMediaBinding> = {
-  [ROUTES.howWeWork]: ABOUT_TEAM,
   [ROUTES.howWeWorkAiNative]: ABOUT_WALL,
   [ROUTES.howWeWorkAiTransparency]: ABOUT_REVIEW,
-  /* "Designers who see what your product could become": the working wall, the page's own
-     `why_work_wall` binding, which its Reasons band no longer carries (reasons take drawings). The team
-     photograph stays the studio band's. */
-  [ROUTES.whyTcules]: ABOUT_WALL,
   /* "Who we've worked with and what each asked for": the studio presenting work in review, the nearest
      of the three to client work; the page binds no hero of its own (docs/page-build/pages/clients.md). */
   [ROUTES.clients]: ABOUT_REVIEW,
@@ -210,6 +200,25 @@ const STUDIO_BAND: readonly {
 export function studioBandPhoto(route: string, bandId: string): CorpusMediaBinding | undefined {
   return STUDIO_BAND.find((entry) => entry.band === bandId && entry.routes(route))?.photo;
 }
+
+/**
+ * Heroes that show the studio at work, from the kit's studio photographs (owner, 4 Nov 2026: "they both
+ * need to be of people working in the studio. reuse something from the collection we have"). The team
+ * outdoors and the bare working wall were not people at work.
+ */
+const STUDIO_AT_WORK: Readonly<Record<string, { id: PhotoId; alt: string }>> = {
+  /* "Experienced designers and engineers, working closely with your product team": two designers
+     working through a screen together. */
+  [ROUTES.howWeWork]: {
+    id: 'studio-desk-pairing',
+    alt: 'Two Tcules designers working through a design together at a desk in the studio.',
+  },
+  /* "Designers who see what your product could become": designers sorting research on the wall. */
+  [ROUTES.whyTcules]: {
+    id: 'studio-sticky-wall-sorting',
+    alt: 'Tcules designers sorting research notes on a wall in the studio.',
+  },
+};
 
 /**
  * A hero that shows the page's own artefact, by route: the thing the page is about, where the page
@@ -279,6 +288,8 @@ export function bandArtefact(route: string, bandId: string): BandArtefact | unde
  * then its placeholder.
  */
 export function heroImage(page: CorpusPage): SlotImage {
+  const atWork = STUDIO_AT_WORK[page.route];
+  if (atWork) return getKitPhoto(atWork.id, { alt: atWork.alt });
   const own = page.composition.mediaBindings.find(
     (binding) => binding.bound && binding.supportsSection === 'hero',
   );

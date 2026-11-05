@@ -13,7 +13,20 @@ Composed from the library: OfferPage's plan. No new components; two new flat dra
 - Studio: the Primelis/Vovisto example is the ClaimProof panel under the text.
 - Testimonials: every quote rated by its person (decisions/2026-11-02-one-person-one-rating).
 
-## Band → component
+## The 3 Nov copy (2.60, 4 Nov 2026, local branch design/2-60-why-how, awaiting owner review)
+New outline: selected work, principles, complex software, design to code, AI products, testimonials, alternatives.
+Every claim carries a client's quote (treatment rules, "Added 4 Nov 2026 (/why-tcules and /how-we-work)").
+| Band | Kind / component | Notes |
+|---|---|---|
+| selected-work | cases · M | "Craft people notice" leads the set (words start, quote beside); Eden AI, Omny AI, Phoenix as cards. Phoenix has no case file in the copy, so its card shows the placeholder cover (its page is live from Strapi) |
+| principles | reasons · Reasons | isometric slots (illustration workstream); each quote under its reason |
+| complex-software | text · B | the team photo (why_team) as the 3:1 banner; four claims two by two; the sectors as one dotted line |
+| design-to-code | text · B | ConnectX coded demo beside, two claims with quotes |
+| ai-products | text · B | AI Product UX's own flat drawing beside the words; "See AI Product UX" the action |
+| alternatives | table · E | unchanged; "Start small" and the OctiFi line render under the table as before |
+| studio, signature-work | — | cut by the copy |
+
+## Band → component (2 Nov)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, work-wall photo, record figures | |
@@ -27,3 +40,10 @@ Composed from the library: OfferPage's plan. No new components; two new flat dra
 
 ## Open
 - The craft reason's illustration (register row). Client marks for Dealpath, Benchmark Gensuite, ConnectX, JoVE, Ringier.
+
+## Owner review, 4 Nov 2026 (2.60)
+- complex-software → the four claims as three-ways glyph cards (plan `CARD_SETS`), "See all industries →" the head's
+  end action; design-to-code → the Why Tcules list (plan `CLAIM_LIST`). Swapped at the owner's word, positions kept.
+- ai-products → the ink CTA island. Claim quotes, "Craft people notice", the twelve industry links, the Start small /
+  OctiFi lines and the AI band's sub-heading cut (docs/content-changes.md).
+- Hero → `studio-sticky-wall-sorting` (designers sorting notes on the wall); grounds alternate to the quotes band.

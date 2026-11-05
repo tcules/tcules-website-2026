@@ -900,7 +900,7 @@ that the Dealpath example still renders where it should once the line is gone.
 
 **Found in.** Review with Jatin, 2 Nov 2026.
 
-## /future-interfaces-lab/join: "How selection works" becomes its own band (4 Nov 2026, owner)
+## /future-interfaces-lab/join: "How selection works" split from the application heading (4 Nov 2026, owner)
 
 **Page / section.** `/future-interfaces-lab/join`, the application band `apply`.
 
@@ -912,8 +912,55 @@ with the three steps (Send your application, We review, Shortlisting), titles an
 in `_pages/future-interfaces-lab__join.md` (band order and composition map updated); Strapi needs the same
 split.
 
-**Why.** Owner's review, 4 Nov: "how selection works as a new section after the form". The steps crowded
-the island; as their own band they read as what happens after you apply. The form's sent view still repeats
+**Why.** Owner's review, 4 Nov: "how selection works as a new section after the form", then, on the built
+page: "just under the form is fine. In a section of its own the gap is too much". On the site the steps sit
+under the form inside the apply band (plan.ts `STEPS_UNDER_FORM`); in Strapi they are still their own
+section with that heading. The form's sent view still repeats
 them (`APPLICATION_FORMS` `stepsBand`).
 
 **Found in.** /future-interfaces-lab/join pass 2 (tracker 2.35).
+
+## /why-tcules and /how-we-work: cut for the design (4 Nov 2026, owner)
+
+**Page / section.** `/why-tcules` and `/how-we-work`, the 3 Nov copy (tracker 2.60).
+
+**What changed.** Removed from `_pages/` so each band can take the home, service and expertise pages'
+shapes (the owner: "the embedded testimonials make the designs bad … the service page, expertise page,
+homepage are the north star"; "anywhere you think something needs to be removed … do it and note it"):
+
+- **Every quote under a claim** (12). Each page keeps its own "What clients say" band. Removed:
+  - /why-tcules: Trishanya Raju (The Wandering Raven), Pranjal Dev Goswami (Novus Insights), Stephanie
+    Leue (Doodle, "Their research changed…"), David Aghaei (Gold Image Printing), Jody O'Neill (CuramCare,
+    a cut-down copy of her quote on /how-we-work), Ashok Mohanty (Auxentios), Akshay Vyas (Knovos), Pratik
+    Ghoshal (ConnectX), Samy Melaine (Eden AI), Clément Contamine (Primelis, a fragment of his full quote).
+  - /how-we-work: Dhanur Aashray Majety (JoVE, a cut-down copy of his quote in /why-tcules' band),
+    Stephanie Leue (Doodle, "Impressed with the design team's efficiency…").
+  If any should stay on the site, add it to a page's "What clients say" band whole, not under a claim.
+- **/why-tcules selected-work: "Craft people notice"** and its sentence. A claim heading a set of cases
+  read as a fourth case; it is already one of the Why Tcules reasons on every other page.
+- **/why-tcules complex-software: the twelve industry links.** Only "See all industries →" stays, as the
+  band's link. Twelve links inside one claim row broke the list; the industries pill band carries them
+  on the other pages.
+- **/why-tcules alternatives: "Start small." and the OctiFi sentence.** They repeat the three ways to
+  work and floated under the table; "See how we work →" stays.
+- **/how-we-work product-knowledge: the Doodle example.** Home's where-to-start set dropped its examples
+  (decisions/2026-11-04-where-to-start-no-examples); the paragraph after the cards is now its close line.
+- **/how-we-work design-to-release: the Benchmark Gensuite example.** The prototype screenshot beside the
+  band shows the same work.
+
+**Why.** Each band now renders through one north-star shape: where-to-start cards, the Why Tcules list,
+a picture beside its words, a service tile, the beside-in-halves band. The cut lines had no place in them.
+
+**Found in.** Tracker 2.60, owner review 4 Nov 2026.
+
+**Added the same day (second review):**
+- **/how-we-work ai-native-practice: the "AI-fluent designers" heading.** Its three sentences are now
+  three cards, one a line (owner: "3 cards, one for each line"); a lone heading over them would title
+  only the first.
+- **Unbound images:** /how-we-work `how_we_work_coded_prototype` (Benchmark Gensuite) and /why-tcules'
+  ConnectX demo stay in the front matter but are not shown: a section never borrows a case's image
+  (decisions/2026-11-04-no-case-images-in-sections). The /how-we-work studio photo for `your-team` is
+  also unused (the claims are a list). Strapi can drop these bindings.
+- **/why-tcules ai-products: the "Shorter AI learning curve" heading.** The band is now a CTA block (the ink
+  island: heading, its two sentences, "See AI Product UX"); a sub-heading inside it would be a second head
+  (owner: "CTA block not this card").

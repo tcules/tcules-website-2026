@@ -304,7 +304,20 @@ export function OfferSheet({
             rowGap="text"
             align="start"
           >
-            {item.icon ? (
+            {item.icon && !item.title ? (
+              /* An untitled point (/how-we-work "How we use AI": a list row a line, owner 4 Nov
+                 2026): the glyph leads its words on their first line, as it leads a title. */
+              <Cluster colGap="text" align="start" nowrap>
+                <span className={styles.rowIcon}>
+                  <Icon name={item.icon} size="xl" />
+                </span>
+                {item.bodyHtml ? (
+                  <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                ) : (
+                  <p className={styles.body}>{item.body}</p>
+                )}
+              </Cluster>
+            ) : item.icon ? (
               /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
                  card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
               <Cluster colGap="text" align="start" nowrap>
@@ -316,7 +329,7 @@ export function OfferSheet({
             ) : (
               titleOf(item)
             )}
-            {bodyOf(item)}
+            {item.icon && !item.title ? null : bodyOf(item)}
           </Layout>
         </li>
       ))}
