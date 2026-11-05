@@ -25,10 +25,7 @@ import {
  */
 
 export type SlotImage =
-  | CorpusImage
-  | HeroCutOut
-  | PlaceholderImage
-  | NonNullable<CorpusCaseRef['thumbnail']>;
+  CorpusImage | HeroCutOut | PlaceholderImage | NonNullable<CorpusCaseRef['thumbnail']>;
 
 /**
  * A hero picture that is the page's own artefact cut out of its frame (Media kind `cut-out`): the real
@@ -278,6 +275,28 @@ const ARTEFACT_BAND: Readonly<Record<string, BandArtefact>> = {
      (plan.ts ILLUSTRATED_PROSE), a labelled placeholder until drawn. */
 };
 
+/**
+ * A band drawn as ONE scene instead of one drawing per item (owner, 5 Nov 2026, /why-tcules: "one wide
+ * drawing for the band"; three Tcules–client pairs, one per principle). Keyed `<route>#<band>`; the
+ * band's component takes it as its band figure (Reasons `bandFigure`). Drawn on the tint band's
+ * paper-deep ground; the SVG itself is transparent.
+ */
+const BAND_ILLUSTRATION: Readonly<
+  Record<string, { src: string; width: number; height: number; kind: 'illustration' }>
+> = {
+  '/why-tcules#principles': {
+    src: '/illustrations/why-tcules/principles.svg',
+    width: 813,
+    height: 442,
+    kind: 'illustration',
+  },
+};
+
+/** The one drawing a band shows for all its items, if any (`BAND_ILLUSTRATION`). */
+export function bandIllustration(route: string, bandId: string) {
+  return BAND_ILLUSTRATION[`${route}#${bandId}`];
+}
+
 /** The page's own artefact a prose band shows on this route, if any (`ARTEFACT_BAND`). */
 export function bandArtefact(route: string, bandId: string): BandArtefact | undefined {
   return ARTEFACT_BAND[`${route}#${bandId}`];
@@ -415,7 +434,10 @@ const STUDIO_COLLAGE: Readonly<Record<string, CollagePhotos>> = {
       focus: { x: 0.4, y: 0.62 },
       zoom: 1.15,
     },
-    middle: { image: getKitPhoto('studio-whiteboard-walkthrough'), focus: { x: 0.62, y: 0.45 } },
+    middle: {
+      image: getKitPhoto('studio-whiteboard-walkthrough'),
+      focus: { x: 0.62, y: 0.45 },
+    },
     middleStart: { image: getKitPhoto('studio-pair-at-monitor'), focus: { x: 0.5, y: 0.5 } },
     middleEnd: { image: getKitPhoto('studio-desk-pairing'), focus: { x: 0.45, y: 0.5 } },
     end: { image: getKitPhoto('studio-talk-presenter-portrait'), focus: { x: 0.46, y: 0.6 } },
