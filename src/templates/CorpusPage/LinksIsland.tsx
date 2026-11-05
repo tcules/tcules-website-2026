@@ -56,7 +56,9 @@ export function LinksIsland({
       >
         <h2 id={headingId}>{heading}</h2>
         <Layout rowGap="block" justifyItems="center">
-          <Cluster colGap="stack" rowGap="block" justify="center">
+          {/* One link per row on a phone (owner, 5 Nov 2026): wrapped, four links fell into a
+              two-and-two whose columns did not line up, which read as a broken row. */}
+          <Cluster colGap="stack" rowGap="block" justify="center" stackUntil="md">
             {links.map((link) => (
               <Button
                 key={link.href}

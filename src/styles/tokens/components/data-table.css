@@ -71,18 +71,6 @@
      taking the rest. 28% of the 1048 report page is about 293, room for "How sure we are" on one line
      at the mono label size; a longer key wraps by word. A share, so it holds at every width. */
   --dtab-sheet-key-share: 28%;
-  /* A split record's key floor where its halves join (below 1024): both halves' key columns take at
-     least this, so the rule between key and value runs straight through the join. 152 holds a key
-     word of ~104 ("Headquarters", "Collaboration" at the h6 role) plus the cell's two `block` insets,
-     the width the About record's key already took at 390, so the value column keeps its width. A component
-     SIZE, so a literal. */
-  --dtab-split-key-size: 152px;
-  /* …but never more than this share of the VIEWPORT: on a phone narrower than 390 the floor gives way
-     (128 at 320), so the value column keeps room for its longest word and the joined record never
-     scrolls. A viewport unit, because a percentage min-width on a table cell is ignored by the table
-     algorithm (measured: `min(152px, 48%)` floored nothing), and the join only happens on one column,
-     where the track is the viewport less its gutters. */
-  --dtab-split-key-cap: 40vw;
   /* The width of each scroll fade — about a third of a column's text floor, so the fade softens the
      clipped edge without hiding a whole word under it. A component size, not a layout distance. */
   --dtab-fade-size: var(--space-48);

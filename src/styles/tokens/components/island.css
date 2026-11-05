@@ -43,12 +43,14 @@
   --isl-inset-band-inline: var(--gap-section);
 }
 
-/* Phone: 48 above and below, as from 768, and 16 at the sides (owner, 5 Nov 2026; was the 32
-   gutter): the band's own gutter on a phone, so the form inside the close gets its width back. */
+/* Phone: 24 on every side (owner, 5 Nov 2026, the responsive pass; was 48 above and below and the
+   32 gutter at the sides). The island is a box inside a 16-gutter band, so its own air steps down
+   with it: 48 read as a void at the top of a one-column island, and 32 at the sides left the form
+   inside the close narrow. The `band` inset keeps the band's air, below. */
 @media (max-width: 767px) {
   :root {
-    --isl-inset-block: var(--gap-stack);
-    --isl-inset-inline: var(--gap-text);
+    --isl-inset-block: var(--gap-block);
+    --isl-inset-inline: var(--gap-block);
     --isl-inset-band-block: var(--gap-column);
     --isl-inset-band-inline: var(--gap-text);
   }
