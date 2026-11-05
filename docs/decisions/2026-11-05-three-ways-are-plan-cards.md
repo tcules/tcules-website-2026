@@ -12,7 +12,7 @@ enforced_by: structure (EngagementOptions `plans`, OfferBands `planOptions`)
 The repeated "Three ways to work with us" band is a pricing table without prices: EngagementOptions
 `plans`, three equal cards a `gutter` apart, each a hairline card on white with its eyebrow (the
 authored label line) and name over a hairline, then its checklist with one shared blue tick on every
-line, then its own action at the foot: a full-width blue outline Button, the same on all three, so no
+line, then its own action at the foot: a full-width blue outline Button at `md` (owner: "one size smaller"), the same on all three, so no
 card is featured. Names drop their article ("Pilot project"). The name is the new `--text-h4-lg`
 (26 / 24 / 22, sans). No glyph, no description, no "Yours" or "Working hours" terms. The
 "Not sure which suits you?" line and its links stay the compact ink island a `section` under the set.

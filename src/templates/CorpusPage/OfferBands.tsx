@@ -1104,7 +1104,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   as="a"
                   href={plan.link.href}
                   emphasis="outline"
-                  size="lg"
+                  size="md"
                   icon={<Icon name="arrow-right" />}
                 >
                   {plan.link.labelText}
