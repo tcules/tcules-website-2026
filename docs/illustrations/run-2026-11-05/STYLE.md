@@ -132,6 +132,26 @@ Drawings that share a band (the three `/why-tcules` principles) are one set: the
 the same scale of objects, one hero object each, and **each with a different centrepiece**, so the three
 read as siblings and never as one picture repeated. A page's hero idea is not reused on another page.
 
+## 9a · The expertise family (owner, 5 Nov 2026: "A is good", polish, keep each idea)
+
+The twelve industry heroes are one family, children of `expertise.svg`. Each is built around its industry's
+object from the hub (card, wind turbine, cap on books, house on its lime tile, shopping bag, medical case);
+an industry the hub has no object for gets one real object drawn in the same way. Simple is right here: one
+idea per page, not a rich scene. What makes them one family:
+
+- **One floor:** healthtech's, the standard: the dotted plate, the brandeis-50 inset, the dashed edge, wide
+  enough to hold every object with air around it.
+- **One scale:** the hub object and the product (a phone, a screen) at the scale of the hub drawing and the
+  healthtech hero. No oversized card or wall display.
+- **Everything stands on something.** Nothing floats unless it is plainly lifted with dashed drop lines.
+- **At least one person**, by the people rules (§5); a Tcules person works beside a client where the idea is
+  about working together.
+- **No shared formula.** Healthtech owns "hub object on the left, blue phone on the right, lime pill button";
+  no other industry hero repeats that arrangement. Vary where the object sits and what the product is
+  (phone, laptop, wall screen, tablet, a printed thing) so siblings never look alike.
+- **One screen at most**, unless the idea is two people's views of the same thing.
+- **Box:** 5:4 to 3:2, the viewBox trimmed; it must read at 360px as the industry's card cover on /expertise.
+
 ## 10 · Files
 
 - Hand-written SVG, `viewBox` trimmed, no `width`/`height` attributes, no `<style>`, no ids that could clash
