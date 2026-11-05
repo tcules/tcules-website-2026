@@ -388,6 +388,11 @@ export function startArena(
     });
   }
 
+  /* Stacked in the wide cut (768–1023), the band under the hero follows the drawing, and the stage's
+     downward bleed put the floor's foot inside the gap before it. The camera looks this far lower,
+     in user units, so the floor ends higher in the box (owner, 5 Nov 2026). The square phone cut
+     already ends the floor short of its box, so it takes no lift. */
+  const STACKED_LIFT = 40;
   /* Camera stops, measured once the drawing is in the page. */
   setOpen(1);
   const bb = hero.getBBox();
@@ -414,7 +419,7 @@ export function startArena(
            so the floor sits in the middle of the column (owner, 5 Nov 2026: at 768–1023 it read
            pushed to the end). */
         cx: stacked ? cb.x + cb.width / 2 : bb.x + bb.width / 2 + 6,
-        cy: bb.y + bb.height / 2 - RISE - 8,
+        cy: bb.y + bb.height / 2 - RISE - 8 + (stacked ? STACKED_LIFT : 0),
         k: Math.min(1024 / (bb.width - 10), 720 / (bb.height - 5)),
       };
 
