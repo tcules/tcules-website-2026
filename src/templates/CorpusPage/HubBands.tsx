@@ -4,6 +4,7 @@ import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
+import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { head } from './blocks';
 import { BandBody } from './CopyBands';
@@ -59,8 +60,9 @@ function linkOf(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }
 /**
  * `/expertise` `product-types` (G16): two `###` groups, each a table of six pages (key = the linked
  * page, then "Best for" and "How we design for it"). Each group is its h3 over one card per page,
- * three across under the band's full-width head: the page's photograph as the 16:9 cover (home's
- * approved sector photographs, else the marked placeholder until the missing four arrive), the
+ * three across under the band's full-width head: the page's own hero illustration as the cover once
+ * it is drawn (owner, 5 Nov 2026: the stock photographs are replaced by illustrations), until then
+ * home's sector photograph, else the marked placeholder; the
  * linked name as the title, and the two cells as the card's two paragraphs, in order. A
  * spreadsheet of twelve rows becomes twelve places to go, which is the band's job.
  */
@@ -78,6 +80,12 @@ export function DestinationGroupsBand({ page, band }: { page: CorpusPage; band: 
   const rest = blocks.slice(firstGroup).filter((block) => !isGroup(block));
 
   const image = (href: string, title: string) => {
+    /* The industry's hero drawing, whole (an illustration is never cropped to the 16:9 cover). */
+    const drawing = serviceIllustration(href);
+    if (drawing) {
+      const { src, width, height, alt, kind } = drawing;
+      return { src, width, height, alt, kind };
+    }
     const photo = HOME_SECTOR_PHOTOS[href];
     return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
   };
