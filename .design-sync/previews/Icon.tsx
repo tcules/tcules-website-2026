@@ -66,6 +66,8 @@ const NAMES = [
   'hand-shake',
   'share-circle',
   'map-point',
+  'compass',
+  'palette',
 ] as const;
 
 /** Every glyph at the default 16. Every one is solid and filled with currentColor. */

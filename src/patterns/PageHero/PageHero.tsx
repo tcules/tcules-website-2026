@@ -24,6 +24,7 @@ import {
   type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import { leavesSite } from '@/lib/href';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import {
   FULL_COLUMN,
@@ -155,6 +156,14 @@ export type HeroImage = {
    * other kind, the image renders alone.
    */
   cut?: HeroCut;
+  /**
+   * A recomposed cut of the image for a phone, below 768: a DIFFERENT file, one part of the image
+   * rather than the whole of it, where the whole shrunk to a 326 column leaves nothing to read (a
+   * collage of three product frames came out 262 × 144; /matter-design-system, 4 Nov 2026). Its own
+   * `width` and `height`, since its ratio differs. Same kind, panel and alt as the image: the cut
+   * shows a part of what the alt describes. Ignored where a numbered `cut` applies.
+   */
+  phone?: { src: string; width: number; height: number };
 };
 
 /** One label of an illustration's numbered cut. `tone` is its colour in the drawing: `accent` the
@@ -634,6 +643,9 @@ const MAX_TAGS = 6;
    a CSS module cannot read a TSX constant, so the one breakpoint is written twice, here (the
    <source> Media renders) and there (the legend), and the two must move together. */
 const CUT_QUERY = '(max-width: 1439.98px)';
+
+/* Where an image's phone cut replaces it (`HeroImage.phone`): below Layout's md, the single column. */
+const PHONE_QUERY = '(max-width: 767.98px)';
 
 /* The label a role selects. A fixed map rather than a prop, and it does NOT change with the
    count — two authors are still "Written by". A hero whose credit label read differently on one
@@ -1115,9 +1127,10 @@ export function PageHero({
   /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is the page's one main action, the
      blue solid (r7-buttons, 8 Oct 2026: there is no ink solid) — and carries NO arrow: the label
-     carries the ask. The second is a primary GHOST with
-     the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
-     link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
+     carries the ask. The one glyph it may carry is the leaving-the-site mark, when its href is
+     off-site (lib/href.ts): that says where the click goes, not that it is a link. The second is a
+     primary GHOST with the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner
+     is a ghost, never a link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
      rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
      as the alternative rather than a second ask. Recorded in docs/specs/Button.md § 14a.
      From 768 the pair sits on one line, centred on the cross axis. Below 768 it ALWAYS stacks, the
@@ -1141,7 +1154,15 @@ export function PageHero({
             emphasis={index === 0 ? 'solid' : 'ghost'}
             size="md"
             extendHitArea
-            icon={index === 0 ? undefined : <Icon name="arrow-right" />}
+            icon={
+              /* An action that leaves the site says so, solid or ghost (lib/href.ts): the
+                 leaving mark replaces the ghost's arrow and is the solid's only glyph. */
+              leavesSite(action.href) ? (
+                <Icon name="arrow-right-up" />
+              ) : index === 0 ? undefined : (
+                <Icon name="arrow-right" />
+              )
+            }
           >
             {action.label}
           </Button>
@@ -1259,7 +1280,13 @@ export function PageHero({
             ? HERO_SHAPE_RATIO[media.shape ?? 'wide']
             : undefined)
         }
-        art={legend ? [{ media: CUT_QUERY, src: legend.src }] : undefined}
+        art={
+          legend
+            ? [{ media: CUT_QUERY, src: legend.src }]
+            : media.phone
+              ? [{ media: PHONE_QUERY, ...media.phone }]
+              : undefined
+        }
         priority
       />
     ) : null;

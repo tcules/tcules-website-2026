@@ -355,3 +355,16 @@
   inline-size: var(--cta-footnote-glyph);
   block-size: var(--cta-footnote-glyph);
 }
+
+/* The paired close's action row: one md box tall with its control centred (Cluster `align="center"`),
+   so the first half's solid and the second half's bare link share a centre line. Pinned to each
+   half's foot, their bottoms already met; the link's 16 label then sat 12 under the solid's label. */
+.pairActions {
+  min-block-size: var(--cta-pair-action-block-size);
+}
+
+/* `after`'s heading: h3, a step under the band's heading, in the band's own ink. */
+.afterHeading {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+}

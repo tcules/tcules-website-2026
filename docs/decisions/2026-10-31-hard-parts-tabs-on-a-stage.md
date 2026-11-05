@@ -1,7 +1,7 @@
 ---
 title: "Hard parts: the claims as tabs on a stage, one slide moving as one piece, no drawings"
 date: 2026-10-31
-status: active
+status: superseded
 area: [layout, proof, motion]
 source: "Devagya, 31 Oct 2026, hard parts rounds 1–4 (artifact 56SLJxHf8TUXzRq9CxgWYd) and the built pages on design/expertise-pages"
 supersedes: [2026-10-30-hard-parts-three-columns-as-authored, 2026-10-30-claim-visual-depicts-the-claim]

@@ -19,7 +19,6 @@ export type BentoItem = {
    */
   body?: string;
   supportingCopy?: string;
-  action?: string;
   picture?: ReactNode;
   /**
    * What the destination gives you, as the tile's second half (owner, 2 Nov 2026, /services, mock A):
@@ -46,6 +45,14 @@ export type BentoItem = {
    * set among the others so no row of the table is dropped. It does not move and carries no action.
    */
   href?: string;
+  /**
+   * The tile's own action at its foot, its words as authored ("See Matter Design System"): an item
+   * whose copy ends on its link (4 Nov 2026, /future-interfaces-lab's Matter, critic). Linked tiles
+   * only. The whole tile stays the one anchor, so the action is the link Button rendered as a span,
+   * which takes the tile's hover; in a set of still tiles it is what says this one can be clicked.
+   * A split tile's action is `detail.action`. Authored case; Button sets the case.
+   */
+  action?: string;
   /** The destination's own Sketch scene, on its plate inside the tile. Absent, the empty plate. */
   scene?: SketchName;
   /**
@@ -101,6 +108,20 @@ export type BentoProps = {
    * its row leaves (owner, 30 Oct 2026).
    */
   cta?: BentoCta;
+  /**
+   * Where a single tile's drawing sits: `end` (default), the words over the drawing pinned to the
+   * tile's foot (home's bento); `start`, the drawing heads the tile, then the title and body, then
+   * the action pinned to the foot (4 Nov 2026, /future-interfaces-lab critic: a drawn set that is
+   * the peer of a covered card set reads media first as its peer does, as an icon heads its card).
+   * Wide and split tiles keep their own arrangement.
+   */
+  visual?: 'start' | 'end';
+  /**
+   * Each tile a paper panel of its own (owner, 4 Nov 2026: "white fill cards?", the Lab's tile set on
+   * a tint band): the tile declares `data-surface="paper"`, as the enquiry island's form panel does, so
+   * its fill, inks and the drawing's dotted plate all read as on paper. For a set on a tint band.
+   */
+  panels?: boolean;
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -173,9 +194,18 @@ function CtaCard({ route }: { route: BentoCtaRoute }) {
 }
 
 /** A tile's box: the link, or a still card when the tile has no destination. */
-function TileBox({ href, children }: { href?: string; children: ReactNode }) {
+function TileBox({
+  href,
+  action = false,
+  children,
+}: {
+  href?: string;
+  /** The tile carries a link Button as a span, which takes the anchor's states. */
+  action?: boolean;
+  children: ReactNode;
+}) {
   return href ? (
-    <a href={href} className={styles.tile}>
+    <a href={href} className={styles.tile} data-btn-link-group={action ? true : undefined}>
       {children}
     </a>
   ) : (
@@ -188,10 +218,12 @@ function TileLink({
   item,
   wide,
   full = false,
+  visual = 'end',
   Title,
 }: {
   item: BentoItem;
   wide: boolean;
+  visual?: 'start' | 'end';
   /** A split tile alone on the set's last row, which it takes whole from 1024 (`full`). */
   full?: boolean;
   Title: 'h2' | 'h3' | 'h4';
@@ -201,11 +233,6 @@ function TileLink({
       <Title className={styles.title}>{item.title}</Title>
       {item.body ? <p className={styles.body}>{item.body}</p> : null}
       {item.supportingCopy ? <p className={styles.body}>{item.supportingCopy}</p> : null}
-      {item.action && item.href && !item.detail ? (
-        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-          {item.action}
-        </Button>
-      ) : null}
     </Layout>
   );
   const words = named;
@@ -288,8 +315,27 @@ function TileLink({
       </TileBox>
     );
   }
+  /* A single tile's foot action takes the link Button's `sm` (Button: "anything inside a dense
+     grid cell"): at md (13) "See Matter Design System" missed one line in a four-across tile's
+     236 column by under a pixel at 1440 and wrapped at 1100–1280; at 12 it holds one line from
+     1280, and below that the link's balanced wrap is the fallback (critic, 4 Nov 2026,
+     /future-interfaces-lab). A wide tile has the room and keeps md. */
+  const action =
+    item.href && item.action?.trim() ? (
+      <Cluster>
+        <Button
+          as="span"
+          emphasis="link"
+          tone="primary"
+          size={wide ? 'md' : 'sm'}
+          icon={<Icon name="arrow-right" />}
+        >
+          {item.action}
+        </Button>
+      </Cluster>
+    ) : null;
   return (
-    <TileBox href={item.href}>
+    <TileBox href={item.href} action={Boolean(action)}>
       {wide ? (
         <Layout
           className={styles.fill}
@@ -297,13 +343,35 @@ function TileLink({
           colGap="gutter"
           rowGap="block"
         >
-          {words}
+          {action ? (
+            <Layout rowGap="block">
+              {words}
+              {action}
+            </Layout>
+          ) : (
+            words
+          )}
           {art}
+        </Layout>
+      ) : visual === 'start' ? (
+        /* The drawing heads the tile, then its words, then its action pinned to the foot, so the
+           actions of tiles sharing a row sit on one line. */
+        <Layout className={styles.fill} rowGap="block" pinLast={Boolean(action)}>
+          {art}
+          {words}
+          {action}
         </Layout>
       ) : (
         <Layout className={styles.fill} rowGap="block" pinLast>
           {words}
-          {art}
+          {action ? (
+            <Layout rowGap="block">
+              {art}
+              {action}
+            </Layout>
+          ) : (
+            art
+          )}
         </Layout>
       )}
     </TileBox>
@@ -525,7 +593,15 @@ export function ServiceTile({
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: BentoProps) {
+export function Bento({
+  items,
+  titleAs: Title = 'h3',
+  tracks = 4,
+  note,
+  cta,
+  visual = 'end',
+  panels = false,
+}: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
   if (
@@ -567,8 +643,15 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
             item.detail && styles.split,
             index === fullAt && styles.full,
           )}
+          data-surface={panels ? 'paper' : undefined}
         >
-          <TileLink item={item} wide={span === 2} full={index === fullAt} Title={Title} />
+          <TileLink
+            item={item}
+            wide={span === 2}
+            full={index === fullAt}
+            visual={visual}
+            Title={Title}
+          />
         </li>
       ))}
       {routes.length > 0 ? (

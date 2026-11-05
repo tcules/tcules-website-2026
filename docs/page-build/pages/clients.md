@@ -18,7 +18,7 @@ Moved into launch as tracker 2.58 (owner, 2 Nov 2026). Composed from the library
   Solar Bold glyph 16 (`text`) before it (owner, 4 Nov 2026): ruler-pen, refresh-square, stars, code-square,
   users-group-rounded, magnifier-bug (added to the set for this band). The solid forms, so the set is one weight.
   The icon-heads-its-card ruling is about cards; these are rows. Case links inline as
-  authored. Opted in per band (`SHEET_ROWS`, OfferBands.tsx), so other sheets keep the grid.
+  authored. Opted in per band (`SHEET_GLYPHS`, OfferBands.tsx), so other sheets keep the grid.
 - Client list: stays a table (DataTable, E): it reads across rows, so it is not drawn (l1-drawn-tables). 16 rows
   is past DataTable's designed 12; every row stays visible (no-hidden-cards). Below 768 it scrolls inside its
   frame, as every DataTable does.

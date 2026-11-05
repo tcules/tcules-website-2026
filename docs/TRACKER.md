@@ -178,7 +178,9 @@ pass on another account; a page ships with its placeholders until then.
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
-- [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
+- [x] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
+      Done 4 Nov 2026 (`design/careers-lab-matter`, records docs/page-build/pages/future-interfaces-lab{,-join}.md):
+      alternating grounds, selection steps under the form, Why join as the Why Tcules list (decisions/2026-11-04-lab-pages-alternate-grounds).
 - [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
@@ -209,8 +211,8 @@ choice (2.34).
       work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
       case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
       Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
-- [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
-- [ ] **2.43** `/matter-design-system`: crucial.
+- [x] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct). Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/careers.md).
+- [x] **2.43** `/matter-design-system`: crucial. Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/matter-design-system.md): the live site's Matter images in the hero, contents and use bands.
 - [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
       Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
@@ -288,21 +290,35 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.
+      Scope set 5 Nov 2026 (owner): only drawings a page shows. In: the 12 expertise heroes (new ideas built
+      from the expertise hub's objects), the `/services`, `/tools` and `/future-interfaces-lab` heroes, the
+      three `/why-tcules` principles, and the designer's desk redrawn in the new hand for /careers or the Lab.
+      Out for now: the 25 service sub-page heroes (words only, no placeholder:
+      decisions/2026-11-05-service-subpage-heroes-no-placeholder) and the audit heroes (see 2.66). All older
+      illustration rules are loose; consistency with the 10 approved heroes is the standard. Owner signs off.
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+      No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
+      84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
+      drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
+      layout (owner, 5 Nov). Still open: auditing existing tile drawings against the four patterns.
 - [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
       what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
       the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
       The studio collage leaves home for /about (owner, 4 Nov 2026): its photo picks, focal points and zoom
       are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
-- [ ] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
-      the header still needs work.
+- [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
+      the header still needs work. Done 4 Nov 2026 (#215, #216, #217).
 - [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
 - [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
       wire them in as they land.
-- [ ] **2.67** `/accessibility` page (owner, 4 Nov 2026), phase 1: a new page built from existing components
-      only, its path added to `src/lib/routes.ts`.
+      The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
+      placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
+      (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
+      `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
+- [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
+      Its unused path is removed from `src/lib/routes.ts`.
 
 Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
 screen or report where the problem is evident · enquiry form autofill, success/failure copy

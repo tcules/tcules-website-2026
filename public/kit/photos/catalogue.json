@@ -2477,5 +2477,125 @@
       652,
       320
     ]
+  },
+  {
+    "file": "studio-meeting-room-laptops.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "The team round a meeting-room table on laptops, a product screen on the wall",
+    "mood": "collaborative, working, everyday",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the /careers studio collage, 4 Nov 2026.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.093,
+      "sat": 0.272
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-meeting-table-portrait.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A review over printed screens at the studio's long table, the desk floor behind",
+    "mood": "focused, collaborative",
+    "orientation": "portrait",
+    "width": 1800,
+    "height": 2400,
+    "focalPoint": {
+      "x": 0.4,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the /careers studio collage, 4 Nov 2026.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.121,
+      "sat": 0.31
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-whiteboard-walkthrough.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "One person walking the team through a sticky-note whiteboard",
+    "mood": "explaining, critique, working",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1800,
+    "focalPoint": {
+      "x": 0.6,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the /careers studio collage, 4 Nov 2026.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.062,
+      "sat": 0.164
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "studio-talk-presenter-portrait.webp",
+    "source": "tcules-studio",
+    "sourceUrl": "https://github.com/tcules/tcules-website-2026/tree/main/public/kit/photos/studio-2026-11",
+    "originalUrl": "Yash Rawal, starred Google Photos, 3 Nov 2026",
+    "subject": "A presenter at the studio whiteboard under the studio sign",
+    "mood": "explaining, talk, studio",
+    "orientation": "portrait",
+    "width": 1800,
+    "height": 2400,
+    "focalPoint": {
+      "x": 0.45,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "collage"
+    ],
+    "notes": "Real studio photo (Nov 2026 set). No person named: alt=\"\" or a scene description. Picked for the /careers studio collage, 4 Nov 2026.",
+    "temperature": "cool",
+    "saturation": "quiet",
+    "tone": {
+      "rb": -0.025,
+      "sat": 0.18
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
   }
 ]

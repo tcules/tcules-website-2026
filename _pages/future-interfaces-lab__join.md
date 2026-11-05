@@ -74,6 +74,7 @@ render:
   - what-youll-gain
   - what-youll-do
   - apply
+  - how-selection-works
   - frequently-asked-questions
   - artefact-access
 structured_data:
@@ -117,6 +118,7 @@ page_composition:
       what-youll-gain: argument_thesis
       what-youll-do: capability_scope
       apply: capability_scope
+      how-selection-works: capability_scope
       frequently-asked-questions: faq
       artefact-access: enquiry
   media_bindings: []
@@ -209,11 +211,15 @@ Fellows are paired into small pods, often combining design, engineering and go-t
 
 Pods operate as real product teams. They build continuously, review openly and ship work that can be demonstrated.
 
-## Apply to the Future Interfaces Lab (FIL): how selection works {#apply}
+## Apply to the Future Interfaces Lab (FIL) {#apply}
 
 Applications for the next cohort are now open.
 
 *FIL is a selective fellowship, run separately from Tcules job openings.*
+
+[Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
+
+## How selection works {#how-selection-works}
 
 ### Send your application
 
@@ -226,8 +232,6 @@ We assess applications for merit, fit and relevance to Tcules.
 ### Shortlisting
 
 Shortlisted applicants go on to the practical round, followed by a final review.
-
-[Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
 
 ## Questions about the Future Interfaces Lab fellowship {#frequently-asked-questions}
 

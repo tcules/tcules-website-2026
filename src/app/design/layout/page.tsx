@@ -141,6 +141,17 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={{ base: 2, md: 3 }} trail='until-md'"
+          note="The last child spans every track below 768, in a row of its own: at 390 children 1 and 2 pair and 3 runs across under them, where it would otherwise sit alone in the first track. From 768 nothing is placed and the three sit side by side. The studio collage's lower row is built on it."
+        >
+          <Layout columns={{ base: 2, md: 3 }} colGap="text" rowGap="text" trail="until-md">
+            <Box tall>1</Box>
+            <Box tall>2</Box>
+            <Box accent>3 · trail — across on a phone</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={[1, 1]} reverse — from md up"
           note="Bare reverse applies from md, like a bare columns spec. At 1440 the image (accent, first in the DOM) sits RIGHT; at 390 the row is one 326 track and the image comes first, in source order. Visual only: reading and Tab order are always the DOM order, so reverse is for image/text pairs, never for a sequence."
         >

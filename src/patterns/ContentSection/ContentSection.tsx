@@ -67,10 +67,32 @@ export type ContentSectionMediaSide = 'start' | 'end';
  *
  * A photograph (`kind: 'photograph'`), because only a photograph takes a ratio (Media, H3) and a
  * media split is "a photograph beside copy" (§ 3.2). An illustration beside copy is the hero's job.
+ *
+ * OR A FLAT DRAWING (`drawing`, owner 4 Nov 2026, /future-interfaces-lab promotion: "why isn't the
+ * title simply in the left side area with the body?"). A band whose words stand beside one small flat
+ * figure is the same split: the head AND the body in the copy column, the figure in the other track,
+ * 96 apart. A drawing is a node rather than a record because it has no crop to own: it sits at its own
+ * ratio, never cropped (decisions/2026-10-16-drawing-never-cropped-faces-its-form). The two tracks
+ * are halves, the copy shares the figure's top edge (decisions/2026-10-11-secondary-anchored-to-primary),
+ * and below 1024 the figure FOLLOWS the words it illustrates (the photograph's lead-on-a-phone is its
+ * weight; a figure has none to lead with). `weight`, `height` and `counterweight` are a photograph's
+ * and are ignored beside a drawing.
  */
-export type ContentSectionMedia = {
-  image: MediaImage;
-  /** Default `start` — the photo leads. Consecutive media bands on a page alternate it (§ 3.2 rule 4). */
+export type ContentSectionMedia = (
+  | {
+      image: MediaImage;
+      drawing?: never;
+    }
+  | {
+      /** One flat figure (a `Sketch`), at its own ratio in its own half. */
+      drawing: ReactNode;
+      image?: never;
+    }
+) & {
+  /**
+   * Default `start` — the photo leads. Consecutive media bands on a page alternate it (§ 3.2 rule 4).
+   * A `drawing` defaults to `end`: the words lead and the figure answers them.
+   */
   side?: ContentSectionMediaSide;
   /**
    * Whether a copy column that ends in a footer UNDER BLOCKS stretches to the photo and pins the
@@ -282,7 +304,7 @@ type ContentSectionBaseProps = {
                   254 overflows the 638 a band has).
      withAside    beside only — an aside belongs to a head TRACK, and only `beside` has one.
      media        the photograph is required — a media split without one is `stacked`. Actions are
-                  allowed (they sit under the lead in the copy column); an aside is not.
+                  allowed (they follow the body, a `block` under it); an aside is not.
 
    `actions` and `aside` are ReactNode slots for the same reason `footer` is: the caller composes a
    CtaRow (rule off) or a Media, and this band only places them. */
@@ -309,9 +331,10 @@ type WithActionsProps = {
   /**
    * The head's own action row, a `stack` (48) under the lead (§ 1.2: lead → actions) — in practice
    * a `CtaRow` with `rule={false}`. Stacked, under the lead in the one head column; `beside`, in the
-   * head track (H-beside-actions); `media`, under the lead in the copy column. Never on a centred
+   * head track (H-beside-actions). Never on a centred
    * head (§ 3.5), never beside an aside (§ 1.4 rule 6), and never in a track of its own beside the
-   * heading (the retired H-row, owner 7 Oct 2026).
+   * heading (the retired H-row, owner 7 Oct 2026). (`media` takes its own `actions`: see
+   * `MediaSplitProps.actions`.)
    */
   actions: ReactNode;
   /**
@@ -379,6 +402,13 @@ type MediaSplitProps = {
   arrangement: 'media';
   /** The photograph beside the copy. Required: a media split without one is `stacked`. */
   media: ContentSectionMedia;
+  /**
+   * The band's own link row, AFTER its body, a `block` (24) under the words it closes, never between
+   * the heading and the body (owner, 4 Nov 2026, /careers "How AI fits into the job": "cta below the
+   * body?"; decisions/2026-11-04-prose-band-link-follows-its-body). Beside a picture the copy column is
+   * a piece of prose, and a way on before the argument reads as a skip link. With no body it sits a
+   * `stack` under the head. Never pinned: the `footer` is the slot that pins.
+   */
   actions?: ReactNode;
   aside?: never;
 };
@@ -849,15 +879,47 @@ function MediaSplit({
   /* `height: 'copy'` (cmp-process-stats): the copy column stretches with the photo, which stops at
      the 2:3 copy-led ceiling rather than the general one. */
   const toCopy = media.height === 'copy';
-  const body =
-    blocks && footer ? (
-      <Layout rowGap="stack">
+  /* The band's own link follows the words it closes, a `block` under them, never between the head and
+     the body (owner, 4 Nov 2026; decisions/2026-11-04-prose-band-link-follows-its-body). */
+  const words =
+    blocks && actions ? (
+      <Layout rowGap="block">
         {blocks}
+        {actions}
+      </Layout>
+    ) : (
+      (blocks ?? actions)
+    );
+  const body =
+    words && footer ? (
+      <Layout rowGap="stack">
+        {words}
         {footer}
       </Layout>
     ) : (
-      (blocks ?? footer)
+      (words ?? footer)
     );
+  const image = media.image;
+  if (image === undefined) {
+    /* A flat figure beside the words (see ContentSectionMedia): halves, the copy column first in the
+       DOM so a phone reads the words before the figure; `side="start"` mirrors it from 1024. Top
+       edges shared, nothing pinned: the figure has no height the copy should stretch to. */
+    return (
+      <Layout
+        columns={{ lg: [1, 1] }}
+        colGap="section"
+        rowGap="stack"
+        reverse={media.side === 'start' ? { lg: true } : undefined}
+        align="start"
+      >
+        <Layout rowGap="stack">
+          {headText}
+          {body}
+        </Layout>
+        {media.drawing}
+      </Layout>
+    );
+  }
   return (
     <Layout
       columns={photoLeads ? { lg: [7, 5] } : { lg: [4, 8], xl: [5, 7] }}
@@ -873,15 +935,14 @@ function MediaSplit({
       <div className={styles.photoTrack}>
         <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
           <Media
-            image={media.image}
+            image={image}
             fit="fill"
-            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', media.image)}
+            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', image)}
           />
         </div>
       </div>
       <Layout rowGap="stack" pinLast={pinned}>
         {headText}
-        {actions}
         {body}
         {counterweight ? <TextureCounterweight /> : null}
       </Layout>

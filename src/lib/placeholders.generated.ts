@@ -220,6 +220,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
       shows:
         'A Tcules designer walking a client\'s team through a flow on screen, the client pointing at an open question while it is still cheap to change. Beside banner (11 Oct 2026, the home "why" pattern); the first reason uses the bound studio photograph.',
     },
+  '/future-interfaces-lab#hero': {
+    src: '/placeholders/future-interfaces-lab--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "The Lab's bench: a few experiments in progress side by side (a canvas of connected steps, a voice prompt answered in Gujarati, a design library a machine reads), each being tried, and one carried off the bench into the studio's client work. Not the `direction` band's three shifts on one interface: this is the Lab at work, that is where software is heading.",
+  },
   '/insights/cpq-ux-design#design-for-the-revision-not-the-first-draft': {
     src: '/placeholders/insights-cpq-ux-design--design-for-the-revision-not-the-first-draft.svg',
     width: 1600,
@@ -436,6 +444,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'A design that is tried in code while it is still open: the drawn screen and its coded version side by side, real data and states running through the coded one.',
   },
+  'illustration:how-ai-fits-into-the-job': {
+    src: '/placeholders/illustration--how-ai-fits-into-the-job.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "The split of the job between AI and judgement: on one light base plate, an agent's station turning out a run of drafts that travel along the plate's axis to a designer's desk, where one draft is lifted off the run and held up to be checked; the run is the repetitive work, the desk is where what is good gets decided. Left-facing, an object not a diagram, lines on the iso axes. /careers `ai-fluency`.",
+  },
   'illustration:keeping-teams-on-the-system-after-launch': {
     src: '/placeholders/illustration--keeping-teams-on-the-system-after-launch.svg',
     width: 1600,
@@ -509,6 +525,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The problems on a screen traced down to the one cause underneath them.',
   },
+  'illustration:what-a-working-design-system-adds-to-a-figma-file': {
+    src: '/placeholders/illustration--what-a-working-design-system-adds-to-a-figma-file.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The Figma file as one sheet in the centre, with the working system built around it: an owner, a coded component, a documentation page and a release, and a machine reader taking from the same names. /matter-design-system `beyond-the-file`.',
+  },
   'illustration:what-customers-do-without-looking': {
     src: '/placeholders/illustration--what-customers-do-without-looking.svg',
     width: 1600,
@@ -524,6 +548,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'The first move chosen underneath the product: the change that what customers use most depends on.',
+  },
+  'illustration:where-we-think-software-interfaces-are-heading': {
+    src: '/placeholders/illustration--where-we-think-software-interfaces-are-heading.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'Three shifts on one interface: software that acts across tools while a person approves and can undo, a voice and a local language speaking to it, and a machine reading the same design description a person does. /future-interfaces-lab `direction`.',
   },
   'illustration:work-that-happens-outside-the-product': {
     src: '/placeholders/illustration--work-that-happens-outside-the-product.svg',

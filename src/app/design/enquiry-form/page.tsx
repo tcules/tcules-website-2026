@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 
 import { Button, Cluster, Layout, Media, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
+import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
 import {
@@ -25,6 +26,20 @@ const CONTEXT = {
 } as const;
 
 const BODY = ['Tell us what you are trying to ship and who it is for.'] as const;
+
+/* The application's selection steps, as /future-interfaces-lab/join authors them. */
+const APPLICATION_STEPS = [
+  {
+    label: 'Send your application',
+    detail:
+      'Submit the form with your background, links to your proof-of-work and why you want to build in FIL.',
+  },
+  { label: 'We review', detail: 'We assess applications for merit, fit and relevance to Tcules.' },
+  {
+    label: 'Shortlisting',
+    detail: 'Shortlisted applicants go on to the practical round, followed by a final review.',
+  },
+] as const;
 
 /* The caller's next steps: the success view numbers what it is handed. */
 const STEPS = [
@@ -339,6 +354,100 @@ export default function EnquiryFormSpecimenPage() {
           />
         </Fragment>
       ))}
+
+      {/* The application wording (4 Nov 2026, /future-interfaces-lab/join, owner to confirm). */}
+      <Section>
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Blue island · dress “card” · application wording</p>
+          <p className={s.specNote}>
+            The same card, worded for an application: urlLabel “Links to your proof-of-work”,
+            workLabel “Your background and why you want to build in FIL” (both the copy’s words, typed
+            unions), the band’s own ask as the submit, “or write to” the programme’s address and no reply
+            promise (none is authored). In the halves close with no drawing, the selection steps as the
+            island’s numbered points; the success view repeats them as next steps. Send it to see.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandArrangement="halves"
+        islandTexture="flow"
+        heading="Apply to the Future Interfaces Lab (FIL): how selection works"
+        body={['Applications for the next cohort are now open.']}
+        points={APPLICATION_STEPS}
+        footnote="FIL is a selective fellowship, run separately from Tcules job openings."
+        footnoteIcon="info-circle"
+        form={
+          <EnquiryForm
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={{ ...CONTEXT, placement: 'application', family: 'future-interfaces-lab' }}
+            urlLabel="Links to your proof-of-work"
+            workLabel="Your background and why you want to build in FIL"
+            submitLabel="Apply to the Lab"
+            nextSteps={APPLICATION_STEPS}
+            dress={{ kind: 'card', writeTo: 'fil@tcules.com' }}
+            fieldScale="md"
+          />
+        }
+      />
+
+      {/* The role application (4 Nov 2026, /careers, owner to confirm). */}
+      <Section>
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Blue island · dress “card” · role application</p>
+          <p className={s.specNote}>
+            The card asking only what the copy asks for (“the role you want and a link to work that
+            shows your reasoning”): a pick-one chip group first (dress `role`, posts `role`: the open
+            roles, then “No matching role”), Email, and urlLabel “Link to the work”, required
+            (`urlRequired`: the copy asks for the link, so it carries no “Optional” and a send checks
+            it); workLabel `null` drops the free-text question. No “or write to” (the band’s own
+            sentence gives the address, live), no reply promise (none is authored). The submit “Send
+            application” is interface wording. With no steps the island keeps its drawing over the
+            words; the linkless “No matching role?” line is the footnote under the island
+            (close-footnote-under-island). A link on the page carrying `data-enquiry-role` picks its
+            chip when followed (/design/offer-sheet 8c writes them).
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandArrangement="halves"
+        islandTexture="flow"
+        art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
+        heading="Apply for a role"
+        body={[
+          <>
+            Email <a href="mailto:hello@tcules.com">hello@tcules.com</a> with the role you want and a
+            link to work that shows your reasoning.
+          </>,
+        ]}
+        footnote="No matching role? If your work feels unusually relevant, write anyway. We will keep your work in mind and know where to find you when the right role opens."
+        footnoteIcon="info-circle"
+        form={
+          <EnquiryForm
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={{ ...CONTEXT, placement: 'application', family: 'careers' }}
+            urlLabel="Link to the work"
+            urlRequired
+            workLabel={null}
+            submitLabel="Send application"
+            dress={{
+              kind: 'card',
+              role: {
+                question: 'The role you want',
+                options: [
+                  { value: 'ux-ui-designer-generalist', label: 'UX/UI Designer (Generalist)' },
+                  { value: 'lead-designer-ai-products', label: 'Lead Designer (AI Products)' },
+                  { value: 'ai-systems-architect', label: 'AI Systems Architect' },
+                  { value: 'visual-designer', label: 'Visual Designer' },
+                  { value: 'no-matching-role', label: 'No matching role' },
+                ],
+              },
+            }}
+            fieldScale="md"
+          />
+        }
+      />
 
       <CtaSection
         eyebrow="Variant · enquiry"

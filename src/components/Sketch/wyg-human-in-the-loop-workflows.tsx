@@ -434,7 +434,7 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'wyg-human-in-the-loop-workflows-routing-queue': RoutingQueue,
   /* The record.: The original AI result, the reviewer's choice, the reason and the action that followed. */
   'wyg-human-in-the-loop-workflows-record': Record,
-  /* A day's workload.: How much a person can judge properly in a day, riskiest items first and routine ones cleared in groups. */
+  /* How much one reviewer can handle.: How much a person can judge properly in a day, riskiest items first and routine ones cleared in groups. */
   'wyg-human-in-the-loop-workflows-days-workload': DaysWorkload,
   /* A path to spot checks.: The rules for moving a type of work from full review to sampling, and back again. */
   'wyg-human-in-the-loop-workflows-path-spot-checks': PathSpotChecks,
