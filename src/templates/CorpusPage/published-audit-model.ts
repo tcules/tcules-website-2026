@@ -25,7 +25,12 @@ type Head = {
 
 export type AuditAction = { label: string; href: string; external: boolean };
 export type AuditCard = { title: string; body: string; href?: string };
-export type AuditLabelledItem = { title: string; body: string; href?: string };
+export type AuditLabelledItem = {
+  title: string;
+  body: string;
+  href?: string;
+  external?: boolean;
+};
 
 export type AuditContentColumn = {
   id: string;

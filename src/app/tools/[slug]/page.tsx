@@ -3,9 +3,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Layout, Prose, type LayoutProps } from '@/components';
-import { ToolRoute, isCorpusTool, toolMetadata, toolSlugs } from '@/app/_corpus/tool';
-import { getToolPage, type ToolBlock, type ToolContentColumn } from '@/content';
-import { ROUTES, toolPath } from '@/lib/routes';
+import {
+  getPageSeo,
+  getToolDetail,
+  listToolSlugs,
+  type ToolBlock,
+  type ToolContentColumn,
+} from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
+import { ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   BlockCard,
@@ -16,10 +22,13 @@ import {
   ContentSectionText,
   DataTable,
   Figure,
+  type HeroAction,
+  type HeroActions,
   ListCard,
   PageHero,
   Proof,
 } from '@/patterns';
+import { LongformPage } from '@/templates';
 
 function cardColumns(count: 1 | 2 | 3 | 4): LayoutProps['columns'] {
   switch (count) {
@@ -191,86 +200,104 @@ function renderToolBlock(block: ToolBlock) {
   }
 }
 
-function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
-  return JSON.stringify(data).replaceAll('<', '\\u003c');
+/** A hero takes two actions at most, in saved order (PageHero `HeroActions`). */
+function heroActions(actions: readonly HeroAction[]): HeroActions {
+  const [first, second] = actions;
+  return first ? (second ? [first, second] : [first]) : [];
 }
 
-export function generateStaticParams() {
-  return toolSlugs().map((slug) => ({ slug }));
+/**
+ * `/tools/{slug}`: a Tool record from the new CMS, resolved by slug on demand, so a tool published
+ * later renders without a rebuild and an unknown or unpublished slug is a 404. Its words, sections,
+ * order and drawings are the record's; its <head> is the published SEO Page for the same path.
+ *
+ *   article   the corpus tool page (LongformPage `tool`), the record mapped onto its page model
+ *   sections  the section-by-section page below, each Audit Section a ContentSection of its blocks
+ */
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  try {
+    return (await listToolSlugs()).map((slug) => ({ slug }));
+  } catch (error) {
+    /* The CMS unreachable at build: every route renders on its first request instead. */
+    console.error(error);
+    return [];
+  }
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<'/tools/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const corpus = await toolMetadata(`/tools/${slug}`);
-  if (corpus) return corpus;
-  const tool = await getToolPage(slug);
-
-  if (!tool) {
+  try {
+    const tool = await getToolDetail(slug);
+    if (!tool) {
+      return {
+        title: 'Tool not found | Tcules',
+        description: null,
+        robots: { index: false, follow: false },
+      };
+    }
+    return (await getPageSeo(tool.route)).metadata;
+  } catch {
     return {
-      title: 'Tool not found | Tcules',
+      title: 'Tool temporarily unavailable | Tcules',
+      description: null,
       robots: { index: false, follow: false },
     };
   }
-
-  const title = tool.seo?.title || tool.title;
-  const description = tool.seo?.description || tool.hero.description;
-  const canonical = tool.seo?.canonical;
-
-  return {
-    title,
-    description,
-    ...(canonical ? { alternates: { canonical } } : {}),
-    ...(tool.seo?.robots ? { robots: tool.seo.robots } : {}),
-    openGraph: {
-      title,
-      description,
-      type: 'website',
-      ...(canonical ? { url: canonical } : {}),
-      images: [],
-    },
-    twitter: {
-      card: 'summary',
-      title,
-      description,
-      images: [],
-    },
-  };
 }
 
 export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
   const { slug } = await params;
-  if (isCorpusTool(`/tools/${slug}`)) return <ToolRoute route={`/tools/${slug}`} />;
-  const tool = await getToolPage(slug);
-
+  const tool = await getToolDetail(slug);
   if (!tool) notFound();
+  const { structuredData } = await getPageSeo(tool.route);
+  const jsonLd = structuredData ? (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+    />
+  ) : null;
 
-  const title = tool.title || tool.hero.highlightedText || '';
+  if (tool.presentation === 'article') {
+    return (
+      <>
+        {jsonLd}
+        <LongformPage
+          page={tool.page}
+          family="tool"
+          caseRefs={{}}
+          heroMedia={tool.heroMedia}
+          toolShell={tool.shell}
+        />
+      </>
+    );
+  }
+
+  const page = tool.tool;
+  const title = page.title || page.hero.highlightedText || '';
 
   const crumbs: BreadcrumbItem[] = [
     { label: 'Home', href: ROUTES.home },
     { label: 'Tools', href: ROUTES.tools },
-    { label: title, href: toolPath(tool.slug) },
+    { label: title, href: tool.route },
   ];
 
   return (
     <>
-      {tool.seo?.structuredData ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(tool.seo.structuredData) }}
-        />
-      ) : null}
+      {jsonLd}
 
       <PageHero
         trail={heroTrail(crumbs, title, (t) => (
           <Breadcrumbs {...t} />
         ))}
         title={title}
-        eyebrow={eyebrowBesideTrail(tool.hero.eyebrow, crumbs)}
-        body={[tool.hero.description]}
-        dates={tool.publishedAt ? { published: tool.publishedAt } : undefined}
+        eyebrow={eyebrowBesideTrail(page.hero.eyebrow, crumbs)}
+        body={[page.hero.description, ...(page.hero.paragraphs ?? [])]}
+        {...(page.hero.actions?.length ? { actions: heroActions(page.hero.actions) } : {})}
+        dates={page.publishedAt ? { published: page.publishedAt } : undefined}
         surface="paper"
       />
 
@@ -283,7 +310,7 @@ export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
           `liftLead` recovers a lead from an italic opening paragraph, and that convention was
           measured across this corpus and found only on product-design; wiring it here would be
           dead code. When the CMS grows a real field, it arrives as one prop. */}
-      {tool.sections.map((section) => (
+      {page.sections.map((section) => (
         <ContentSection
           key={section.id}
           heading={section.heading?.text}

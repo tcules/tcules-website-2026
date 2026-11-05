@@ -8,6 +8,7 @@ import {
   DataTable,
   Statement,
   type BlockCardSetItem,
+  type HeroMedia,
 } from '@/patterns';
 import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
@@ -28,6 +29,16 @@ export type LongformPageProps = {
   family: LongformFamily;
   /** The cases the page cites, as each case's own page describes them (title, cover). */
   caseRefs: Readonly<Record<string, CorpusCaseRef>>;
+  /**
+   * A tool's hero drawing from the CMS. Absent, the drawing the frontend files under the route
+   * (`serviceSceneFor`), else the end-fade.
+   */
+  heroMedia?: HeroMedia;
+  /**
+   * A tool's worked-example and diagram drawings from the CMS, by band. A band with none keeps the
+   * frontend's drawing for it (`TOOL_SCENES`).
+   */
+  toolShell?: ToolShell;
 };
 
 /**
@@ -63,10 +74,17 @@ export type LongformPageProps = {
  *
  * Nothing is reordered, and every word is the corpus's.
  */
-export function LongformPage({ page, family, caseRefs }: LongformPageProps) {
+export function LongformPage({
+  page,
+  family,
+  caseRefs,
+  heroMedia,
+  toolShell,
+}: LongformPageProps) {
   if (family === 'article') return <ArticlePage page={page} />;
   if (family === 'term') return <TermPage page={page} />;
-  if (family === 'tool') return <ToolArticlePage page={page} />;
+  if (family === 'tool')
+    return <ToolArticlePage page={page} heroMedia={heroMedia} toolShell={toolShell} />;
   return <CasePage page={page} caseRefs={caseRefs} />;
 }
 
@@ -217,23 +235,37 @@ const NO_TOOL_SCENES: ToolShell = { stories: {}, diagrams: {} };
  * outline, the FAQ last. A tool has no close band: its last words are its questions, and the band
  * sending the reader on keeps its place and its inline links.
  */
-function ToolArticlePage({ page }: { page: CorpusPage }) {
+function ToolArticlePage({
+  page,
+  heroMedia,
+  toolShell,
+}: {
+  page: CorpusPage;
+  heroMedia?: HeroMedia;
+  toolShell?: ToolShell;
+}) {
   /* The tool's own scene in its hero (tools critic, 4 Nov 2026): the drawing its hub tile carries,
      registered once by route (`serviceSceneFor`), so the page that IS the tool shows the picture the
      card promised and the right half is not an empty fade. A tool with no scene keeps the end-fade. */
   const scene = serviceSceneFor(page.route);
+  const media: HeroMedia | undefined =
+    heroMedia ?? (scene ? { type: 'sketch', name: scene } : undefined);
+  /* The CMS's drawings win band by band; a band it gives none keeps the frontend's. */
+  const own = TOOL_SCENES[page.route] ?? NO_TOOL_SCENES;
+  const tool: ToolShell = toolShell
+    ? {
+        stories: { ...own.stories, ...toolShell.stories },
+        diagrams: { ...own.diagrams, ...toolShell.diagrams },
+      }
+    : own;
   return (
     <>
-      {scene ? (
-        <CorpusHero page={page} arrangement="beside" media={{ type: 'sketch', name: scene }} />
+      {media ? (
+        <CorpusHero page={page} arrangement="beside" media={media} />
       ) : (
         <CorpusHero page={page} texture />
       )}
-      <ArticleShell
-        page={page}
-        sections={formBeforeFaq(page.bands)}
-        tool={TOOL_SCENES[page.route] ?? NO_TOOL_SCENES}
-      />
+      <ArticleShell page={page} sections={formBeforeFaq(page.bands)} tool={tool} />
     </>
   );
 }

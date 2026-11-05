@@ -32,7 +32,7 @@ export type ResolvedSeo = {
       url?: string;
       siteName?: string;
       locale?: string;
-      images?: SocialImage[];
+      images?: (SocialImage | string)[];
     };
     twitter?: {
       card: 'summary' | 'summary_large_image';
@@ -40,7 +40,7 @@ export type ResolvedSeo = {
       description?: string;
       site?: string;
       creator?: string;
-      images?: SocialImage[];
+      images?: (SocialImage | string)[];
     };
   };
   structuredData?: Record<string, unknown> | unknown[];
@@ -61,8 +61,10 @@ function canonicalUrl(value: string | undefined, path: string): string | undefin
   return url.pathname === path && !url.username && !url.password ? url.href : undefined;
 }
 
-function socialImages(images: SocialImage[] | undefined, base: string) {
-  return images?.flatMap((image) => {
+/** The CMS resolves a social image as an object, or (Twitter) as its bare URL: both are read. */
+function socialImages(images: (SocialImage | string)[] | undefined, base: string) {
+  return images?.flatMap((entry) => {
+    const image = typeof entry === 'string' ? { url: entry } : entry;
     const url = absoluteAssetUrl(image.url, base);
     return url ? [{ ...image, url }] : [];
   });

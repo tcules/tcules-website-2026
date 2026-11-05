@@ -30,7 +30,7 @@ import { expertiseSource } from './sources/strapi/expertise';
 import { futureInterfacesLabJoinSource } from './sources/strapi/future-interfaces-lab-join';
 import { futureInterfacesLabSource } from './sources/strapi/future-interfaces-lab';
 import { glossarySource } from './sources/strapi/glossary';
-import { insightsSource } from './sources/strapi/insights';
+import { getPublishedResourceListing } from './sources/strapi/published-resource-listing';
 import { matterDesignSystemSource } from './sources/strapi/matter-design-system';
 import { podcastSource } from './sources/strapi/podcast';
 import { privacyPolicySource } from './sources/strapi/privacy-policy';
@@ -44,6 +44,7 @@ import { getPublishedAbout } from './sources/strapi/published-about';
 import { getPublishedServicesMaster } from './sources/strapi/published-services-master';
 import { getPublishedGlossaryMaster } from './sources/strapi/published-glossary-master';
 import { getPublishedToolsMaster } from './sources/strapi/published-tools-master';
+import { getPublishedTool, listPublishedToolSlugs } from './sources/strapi/published-tool';
 import { getPublishedAuthor } from './sources/strapi/published-author';
 import { getPublishedResource } from './sources/strapi/published-resource';
 import {
@@ -127,7 +128,11 @@ const futureInterfacesLabJoinPagesSource: FutureInterfacesLabJoinContentSource =
 const futureInterfacesLabsSource: FutureInterfacesLabContentSource = futureInterfacesLabSource;
 const glossariesSource: GlossaryContentSource = glossarySource;
 const howWeWorkPagesSource: HowWeWorkContentSource = howWeWorkSource;
-const insightsPagesSource: InsightsContentSource = insightsSource;
+/** `/insights`: the Resource Listing single type on the new CMS, its pieces through the Resource Index. */
+const insightsPagesSource: InsightsContentSource = {
+  getInsightsPage: async (slug) =>
+    slug.replace(/^\/+|\/+$/g, '') === 'insights' ? getPublishedResourceListing() : null,
+};
 const matterDesignSystemsSource: MatterDesignSystemContentSource = matterDesignSystemSource;
 const podcastsSource: PodcastContentSource = podcastSource;
 const privacyPoliciesSource: PrivacyPolicyContentSource = privacyPolicySource;
@@ -145,6 +150,9 @@ export const getPublishedServicesMasterPage = getPublishedServicesMaster;
 export const getGlossaryMasterPage = getPublishedGlossaryMaster;
 /** `/tools`: the Tool Master single type on the new CMS, its tools through their relations. */
 export const getToolsMasterPage = getPublishedToolsMaster;
+/** A Tool record (`/tools/{slug}`) from the new CMS, by its presentation, and the published slugs. */
+export const getToolDetail = getPublishedTool;
+export const listToolSlugs = listPublishedToolSlugs;
 export const getHomePage = getPublishedHome;
 export const getPageSeo = getPublishedPageSeo;
 
@@ -218,7 +226,7 @@ export const getHowWeWorkPage =
 export const getInsightsPage = insightsPagesSource.getInsightsPage.bind(insightsPagesSource);
 /**
  * The insights hub as DESIGNED, with stress content (sources/fixtures/insights.ts) — for the
- * ListingIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
+ * ListingIndex specimen only, never a live route: /insights reads the new CMS's Resource Listing.
  */
 export async function getInsightsFixturePage(): Promise<InsightsPage> {
   return INSIGHTS_FIXTURE;

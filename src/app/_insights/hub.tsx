@@ -1,4 +1,9 @@
-import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
+import type {
+  InsightImage,
+  InsightResource,
+  InsightResourceKind,
+  InsightsPage,
+} from '@/content';
 import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { Media } from '@/components';
 import { EnquiryForm } from '@/patterns';
@@ -170,46 +175,63 @@ export const formatsWithContent = (page: InsightsPage) =>
  * alone on tint (beauty round 3, 16 Oct 2026). Strapi recommendation logged: an image on the
  * insights page's `secondSection`.
  */
+/** A source picture as Media draws it: only one whose intrinsic size is known. */
+const pictureOf = (image: InsightImage | undefined) =>
+  image?.width && image.height
+    ? {
+        src: image.src,
+        alt: image.alt,
+        width: image.width,
+        height: image.height,
+        ...(image.sources ? { sources: image.sources } : {}),
+        ...(image.kind ? { kind: image.kind } : {}),
+      }
+    : undefined;
+
 const labOf = (page: InsightsPage) =>
   page.lab?.action
     ? {
         heading: page.lab.heading,
         body: page.lab.description,
         action: { label: page.lab.action.label, href: page.lab.action.href },
+        ...(pictureOf(page.lab.image) ? { image: pictureOf(page.lab.image) } : {}),
       }
     : undefined;
 
 /**
- * The close: the page's last beat, the ask on paper before the ink footer. The CMS's closing section
- * today is a newsletter prompt with no link ("Level up your UX knowledge" — Strapi's `fourthSection`
- * has no link field), and the footer directly under it already carries that newsletter form, so it
- * would be the same ask twice and an ask with nothing to click. Until the CMS's close carries its own
- * action, the close is the specimen fixture's authored one: the reader's problem, and the way to
- * tell us about it. Strapi recommendation logged: a link on `fourthSection`, which retires this.
+ * The close: the page's last beat, the ask on paper before the ink footer, with the enquiry form, sent
+ * from `origin`. Its words are the CMS's close (the Resource Listing's last enabled CTA); a page whose
+ * CMS has no close ends without one rather than on words written here. The hub's, and every page in
+ * its family that ends the way the hub does.
  */
-const CLOSE_STAND_IN = {
-  heading: 'Talk to us',
-  body: 'If one of these pieces describes a problem in your own product, tell us about it.',
-  action: { label: 'Tell us about it', href: ROUTES.contact },
-};
-
-/**
- * The close: the authored ask (or its stand-in) with the enquiry form, sent from `origin`. The hub's,
- * and every page in its family that ends the way the hub does (the author pages, 1 Nov 2026).
- */
-export function closingOf(page: InsightsPage, origin: string, placement: string): ListingClosing {
-  const copy = page.closing?.action
-    ? {
-        heading: page.closing.heading,
-        body: page.closing.description,
-        action: { label: page.closing.action.label, href: page.closing.action.href },
-      }
-    : CLOSE_STAND_IN;
+export function closingOf(
+  page: InsightsPage,
+  origin: string,
+  placement: string,
+): ListingClosing | undefined {
+  const closing = page.closing;
+  if (!closing?.heading) return undefined;
+  const copy = {
+    heading: closing.heading,
+    body: closing.description,
+    ...(closing.action
+      ? { action: { label: closing.action.label, href: closing.action.href } }
+      : {}),
+  };
   return {
     ...copy,
-    /* The island close, as home has it: the halves, the sketch-to-shipped drawing over the words, the
-       moving field across the island, the form in its card dress (owner, 28 Oct 2026). */
-    island: { surface: 'blue', art: <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> },
+    /* The island close, as home has it: the halves, the drawing over the words, the moving field
+       across the island, the form in its card dress (owner, 28 Oct 2026). The close's own CMS
+       illustration where it has one; else the sketch-to-shipped drawing. */
+    island: {
+      surface: 'blue',
+      art: (
+        <Media
+          image={pictureOf(page.closing?.image) ?? ENQUIRY_SKETCH_TO_SHIPPED}
+          sizes="300px"
+        />
+      ),
+    },
     form: (
       <EnquiryForm
         variant="enquiry"

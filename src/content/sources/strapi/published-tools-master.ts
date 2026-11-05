@@ -17,6 +17,7 @@ import {
   type CmsFlow,
   type CmsSharedSection,
 } from './published-service';
+import { htmlProseToMarkdown } from './prose-html';
 import { PUBLISHED_TOOLS_MASTER_QUERY } from './published-tools-master-query';
 import { publicGraphql } from './public-graphql';
 
@@ -69,65 +70,17 @@ function warn(message: string) {
   console.warn(`New CMS ${ROUTES.tools}: ${message}`);
 }
 
-/* ── Prose saved as HTML ─────────────────────────────────────────────────────── */
-
-const ENTITIES: Readonly<Record<string, string>> = {
-  amp: '&',
-  lt: '<',
-  gt: '>',
-  quot: '"',
-  apos: "'",
-  nbsp: ' ',
-};
-
-function decodeEntities(value: string): string {
-  return value.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/giu, (whole, name: string) => {
-    if (name.startsWith('#x') || name.startsWith('#X'))
-      return String.fromCodePoint(Number.parseInt(name.slice(2), 16));
-    if (name.startsWith('#')) return String.fromCodePoint(Number.parseInt(name.slice(1), 10));
-    return ENTITIES[name.toLowerCase()] ?? whole;
-  });
-}
-
-/**
- * A flow block's prose is Markdown on every other owner; the Tool Master's was saved as HTML
- * (`<p>…<a href="/audits">audits</a>…</p>`, 5 Nov 2026). Paragraphs, links and emphasis are read as
- * the Markdown they stand for, so the words render rather than their tags; any other tag is dropped
- * with a warning, keeping its words.
- */
-function proseFromHtml(body: Text, context: string): Text {
-  const source = text(body);
-  if (!source || !/^<[a-z][^>]*>/iu.test(source)) return body;
-  const markdown = source
-    .replace(/\r\n?/gu, '\n')
-    .replace(/<\/p>\s*<p(?:\s[^>]*)?>/giu, '\n\n')
-    .replace(/<\/?p(?:\s[^>]*)?>/giu, '\n\n')
-    .replace(/<br\s*\/?>/giu, '\n')
-    .replace(
-      /<a\s[^>]*?href\s*=\s*(["'])(.*?)\1[^>]*>([\s\S]*?)<\/a>/giu,
-      (_whole, _quote: string, href: string, label: string) =>
-        `[${label}](${decodeEntities(href)})`,
-    )
-    .replace(/<\/?(?:strong|b)>/giu, '**')
-    .replace(/<\/?(?:em|i)>/giu, '*')
-    .replace(/<[^>]+>/gu, (tag) => {
-      warn(`${context}: drops the unsupported HTML tag ${tag}`);
-      return '';
-    });
-  return decodeEntities(markdown)
-    .split(/\n{2,}/u)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean)
-    .join('\n\n');
-}
-
 /** Flow blocks with any HTML prose read as Markdown, for `flowBlocks` and the shared sections. */
 function markdownProse(entries: Entries<CmsFlow>, context: string): CmsFlow[] {
   return rows(entries).map((block) =>
     block.prose
       ? {
           ...block,
-          prose: { body: proseFromHtml(block.prose.body, `${context} block ${block.id}`) },
+          prose: {
+            body: htmlProseToMarkdown(block.prose.body, (message) =>
+              warn(`${context} block ${block.id}: ${message}`),
+            ),
+          },
         }
       : block,
   );

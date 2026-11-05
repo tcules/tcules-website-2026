@@ -65,7 +65,7 @@ type CmsWorkedReport = {
   reportAction: CmsAction | null;
 };
 
-type CmsAuditBlock = {
+export type CmsAuditBlock = {
   id: string;
   kind: string | null;
   heading: Text;
@@ -253,7 +253,7 @@ function auditTable(value: CmsTable | null | undefined): AuditTable | undefined 
 
 const GRID_COLUMNS = [1, 2, 3, 4] as const;
 
-function mapAuditBlock(
+export function mapAuditBlock(
   block: CmsAuditBlock,
   key: string,
   warn: (message: string) => void,
@@ -339,7 +339,14 @@ function mapAuditBlock(
       const links = rows(block.links).flatMap((link) => {
         const mapped = auditAction(link);
         return mapped
-          ? [{ title: mapped.label, body: text(link.description) ?? '', href: mapped.href }]
+          ? [
+              {
+                title: mapped.label,
+                body: text(link.description) ?? '',
+                href: mapped.href,
+                ...(mapped.external ? { external: true } : {}),
+              },
+            ]
           : [];
       });
       if (!heading || links.length === 0) return skip('has no heading or no valid links');

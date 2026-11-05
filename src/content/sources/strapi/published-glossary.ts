@@ -143,7 +143,7 @@ function richRuns(nodes: readonly RichNode[], context: string): InlineRun[] {
   });
 }
 
-function richBlocks(value: unknown, context: string): CorpusBlock[] {
+export function richBlocks(value: unknown, context: string): CorpusBlock[] {
   if (typeof value === 'string') return value.trim() ? parseBlocks(value) : [];
   if (!Array.isArray(value)) return [];
   return value

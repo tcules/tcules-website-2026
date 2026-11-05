@@ -15,6 +15,8 @@ export {
   getPublishedServicesMasterPage,
   getGlossaryMasterPage,
   getToolsMasterPage,
+  getToolDetail,
+  listToolSlugs,
   getPublishedAboutPage,
   getPageSeo,
   listPages,
