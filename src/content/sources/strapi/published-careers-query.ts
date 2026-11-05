@@ -1,11 +1,13 @@
+import { PUBLISHED_FIELDS, PUBLISHED_HERO } from './published-page-fields';
+
+/* The shared hero in full (eyebrow, media, illustration, stats …), so nothing the CMS authors on it is
+   dropped. GraphQL rejects an unused fragment, and no Careers field carries a rating. */
+const FIELDS = PUBLISHED_FIELDS.replace(/fragment PublishedRating[^}]*}/, '');
+
 export const CAREERS_QUERY = `query PublishedCareers {
   page:careerMaster(status: PUBLISHED) {
     documentId routePath
-    hero {
-      title description arrangement
-      breadcrumbs { label href }
-      actions { name href isExternal }
-    }
+${PUBLISHED_HERO}
     content {
       __typename
       ... on ComponentSharedCollageSection {
@@ -55,4 +57,5 @@ fragment CareerPhoto on ComponentContentCollagePhoto {
     file { documentId url width height alternativeText mime formats }
   }
 }
+${FIELDS}
 `;

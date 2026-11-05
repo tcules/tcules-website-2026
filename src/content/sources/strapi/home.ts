@@ -294,7 +294,7 @@ const scopeNames: readonly EngagementScope[] = [
   'hours',
 ];
 
-const formUrlLabels = [
+export const formUrlLabels = [
   'Website',
   'Link to the work',
   'Where can we see it?',

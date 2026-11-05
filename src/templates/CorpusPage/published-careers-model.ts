@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 import type { MediaImage } from '@/components';
 import type { IconName } from '@/lib/icon-glyphs';
-import type { Collage } from '@/patterns';
+import type { Collage, EnquiryUrlLabel } from '@/patterns';
 import type { HomeAction, HomeHero } from './published-home-model';
 export type CareersPageModel = {
   hero: HomeHero;
@@ -35,7 +35,9 @@ export type CareersPageModel = {
       formLabel: string;
       submitLabel: string;
       showWork: boolean;
+      urlLabel?: EnquiryUrlLabel;
       urlRequired: boolean;
+      success?: { heading: string; body: string };
       roleListingAnchor: string;
       roleQuestion: string;
       otherRoleLabel: string;

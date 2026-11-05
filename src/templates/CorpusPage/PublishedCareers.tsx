@@ -163,8 +163,9 @@ export function PublishedCareers({ page }: { page: CareersPageModel }) {
                     label={form.formLabel}
                     submitLabel={form.submitLabel}
                     workLabel={form.showWork ? undefined : null}
-                    urlLabel="Link to the work"
+                    urlLabel={form.urlLabel}
                     urlRequired={form.urlRequired}
+                    success={form.success}
                     action={ENDPOINTS.enquiry}
                     dress={{
                       kind: 'card',
