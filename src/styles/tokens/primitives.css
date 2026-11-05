@@ -176,6 +176,10 @@
      steps are optical, not arithmetic: h4 at 22 carries the weight the serif h4 had at 28, h5 at 18
      (the size the owner liked on the video tiles) and h6 at 16 the weight of the serif's 22 and 18. */
   --font-size-h4: 22px;
+  /* h4-lg sits between h4 and h3: a card title that heads a set of three comparable cards, the
+     "Three ways to work with us" plan cards (owner, 5 Nov 2026: "slightly larger titles"). Still the
+     sans: 26 is under the serif's 28 floor. Its tablet and phone steps land on 24 and h4's own 22. */
+  --font-size-h4-lg: 26px;
   /* h5-lg sits between h4 and h5: a title that heads its own row in a list of rows read one after
      another — an FAQ question (owner, 22 Oct 2026: "Question 20px"). 18 tied the question to the
      card title it shares a page with; 22 is a band's h4. A standard step rather than a one-off so
@@ -253,6 +257,8 @@
   /* h4's steps are the serif's 25 and 22 at the same optical ratio (22 / 28), and stay one step
      above h5 at every width: 20 over 18, 18 over 17. */
   --font-size-h4-t: 20px;
+  --font-size-h4-lg-t: 24px;
+  --font-size-h4-lg-m: 22px;
   --font-size-h4-m: 18px;
   --font-size-h5-lg-m: 18px;
   --font-size-h5-m: 17px;
@@ -295,6 +301,8 @@
   /* h4 in the sans: the taller x-height wants more leading than the serif's 1.2 at 28, and it sits
      just under h5's 1.28 as the larger of the two. */
   --line-height-h4: 1.25;
+  /* h4-lg: a step tighter than h4, as each larger title role is; its phone step is h4's own 22/1.25. */
+  --line-height-h4-lg: 1.2;
   /* h4's tablet ratio at the same 20px: one size, one leading, wherever it appears. */
   --line-height-h5-lg: 1.26;
   --line-height-h5: 1.28;
@@ -339,6 +347,8 @@
   --line-height-h3-t: 1.2;
   --line-height-h3-m: 1.22;
   --line-height-h4-t: 1.26;
+  --line-height-h4-lg-t: 1.22;
+  --line-height-h4-lg-m: 1.25;
   --line-height-h4-m: 1.3;
   --line-height-h5-lg-m: 1.3;
   --line-height-h5-m: 1.3;
@@ -435,6 +445,10 @@
   --text-h4: var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4)
     var(--font-family-sans);
   --text-h4-tracking: var(--letter-spacing-title-fine);
+  /* h4-lg: h4 one step up (26 / 24 / 22), the same sans and the same light correction. */
+  --text-h4-lg: var(--font-weight-medium) var(--font-size-h4-lg)/var(--line-height-h4-lg)
+    var(--font-family-sans);
+  --text-h4-lg-tracking: var(--letter-spacing-title-fine);
   /* h5-lg: the sans at 20, with h4's title-fine correction — h4 is set at this same 20 on a tablet
      with that tracking, so one size reads one way. NO TABLET STEP: 20 already is h4's tablet size,
      and stepping under it would put a row title below the body-scale h5 it outranks. Phone 18. */
@@ -560,6 +574,8 @@
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t)
       var(--font-family-sans);
+    --text-h4-lg: var(--font-weight-medium) var(--font-size-h4-lg-t)/var(--line-height-h4-lg-t)
+      var(--font-family-sans);
     --text-quote-lg: italic var(--font-weight-regular)
       var(--font-size-quote-lg-t)/var(--line-height-quote-lg-t) var(--font-family-display);
     --text-quote-xl: italic var(--font-weight-regular)
@@ -586,6 +602,8 @@
     --text-h3: var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-h3-m)
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
+      var(--font-family-sans);
+    --text-h4-lg: var(--font-weight-medium) var(--font-size-h4-lg-m)/var(--line-height-h4-lg-m)
       var(--font-family-sans);
     --text-h5-lg: var(--font-weight-medium) var(--font-size-h5-lg-m)/var(--line-height-h5-lg-m)
       var(--font-family-sans);

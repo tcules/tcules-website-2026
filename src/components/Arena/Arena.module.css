@@ -48,28 +48,10 @@
   block-size: 100%;
 }
 
-/* The field of apps, and each app's idle salute while the field is held. */
+/* The field of apps: still while it is held (v11: the lids no longer salute), and gone once
+   ours has risen. */
 .stage :global(#arena-field) {
-  transition: opacity 1.2s ease;
-}
-
-.stage :global(.alid) {
-  animation: salute 2.2s cubic-bezier(0.7, 0, 0.3, 1) infinite;
-}
-
-@keyframes salute {
-  0%,
-  8% {
-    transform: translateY(0);
-  }
-  20%,
-  52% {
-    transform: translateY(calc(-1 * var(--arena-lid-lift)));
-  }
-  64%,
-  100% {
-    transform: translateY(0);
-  }
+  transition: opacity 2.4s ease;
 }
 
 .stage :global(#arena-heroc) {
@@ -80,23 +62,9 @@
   filter: drop-shadow(0 0 var(--arena-glow-blur) var(--arena-glow-color));
 }
 
-/* Risen: the field recedes and stops saluting. */
+/* Risen: the field leaves the picture. */
 .stage[data-phase='far'] :global(#arena-field) {
-  opacity: 0.2;
-}
-
-.stage[data-phase='far'] :global(.alid) {
-  animation: none;
-}
-
-.stage[data-paused='true'] :global(.alid) {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stage :global(.alid) {
-    animation: none;
-  }
+  opacity: 0;
 }
 
 /* The control: placed in the drawing's end corner, inside its own box (not an arrangement). */
