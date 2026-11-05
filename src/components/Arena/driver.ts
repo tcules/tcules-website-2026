@@ -5,6 +5,10 @@
  * into the 11.8-second loop. v11 (4 Nov 2026, https://claude.ai/artifact/ENhFK86hDXngbWxzgTVof9):
  * the lid lifts with a little give, the stations rise into place, the work arcs between them, and
  * the finished task pops out, resolves and catches the light. They are not layout values and do not belong in the token layer.
+ * The drawing, its geometry, the camera and the opening are the v11 artifact's as published, taken
+ * whole (owner, 5 Nov 2026: "just use the new one and replace the old one"): a warm field, one
+ * slow move in onto the closed app, a beat, then the loop, with the camera opening out to the app
+ * edge to edge.
  *
  * Scoped to one SVG: every element is looked up inside it by its `arena-` prefixed id, never on the
  * document, so the drawing cannot reach anything else on the page.
@@ -21,14 +25,14 @@ type Shim = 'shR' | 'shD' | 'shB';
 
 /* The drawing's geometry, measured when it was drawn. */
 const J = {
-  off: 201.5,
+  off: 222.3,
   posts: [
-    [320.0, 134.4, -67.1],
-    [658.0, 303.4, 101.9],
-    [106.8, 241.0, 39.5],
+    [320.0, 134.4, -87.9],
+    [658.0, 303.4, 81.1],
+    [106.8, 241.0, 18.7],
   ] as const,
   pts: {
-    row: [239.68, 15.38],
+    row: [239.68, -5.42],
     note: [222.76, 210.06],
     c1a: [240.7, 270.25],
     c1b: [309.6, 264.4],
@@ -37,7 +41,7 @@ const J = {
     c2a: [440.9, 287.15],
     c2b: [512.4, 281.3],
     built: [613.8, 263.62],
-    card: [388.07, 104.86],
+    card: [388.07, 84.06],
   } as Record<Pt, XY>,
   nd: [
     [16.38, 11.2],
@@ -161,7 +165,6 @@ export function startArena(
   const notes = [...svg.querySelectorAll<SVGGraphicsElement>('#arena-hero .note')];
   const P = J.pts;
   let OFF = 0;
-  let LASTO = 0;
   let LIVE = false;
 
   const op = (id: string, v: number) => $(id)?.setAttribute('opacity', v.toFixed(2));
@@ -181,7 +184,7 @@ export function startArena(
         const y1 = p[1];
         const y2 = p[2] + OFF;
         if (y1 > y2 + 1)
-          h += `<line x1="${p[0]}" y1="${y1}" x2="${p[0]}" y2="${y2}" stroke="#B8C8FF" stroke-width="1"/>`;
+          h += `<line x1="${p[0]}" y1="${y1}" x2="${p[0]}" y2="${y2}" stroke="#D3CEC2" stroke-width="1"/>`;
       });
     gap.innerHTML = h;
   };
@@ -313,6 +316,22 @@ export function startArena(
     });
   }
 
+  const NS = 'http://www.w3.org/2000/svg';
+  const heroc = need('heroc');
+  /* A spark: a four-point star, a blue dot or a lime dot, in turn. */
+  const spark = (i: number) => {
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('opacity', '0');
+    g.innerHTML =
+      i % 3 === 0
+        ? '<path d="M0 -7 C1 -1.5 1.5 -1 7 0 C1.5 1 1 1.5 0 7 C-1 1.5 -1.5 1 -7 0 C-1.5 -1 -1 -1.5 0 -7 Z" fill="#E2F26A" stroke="#0048FF" stroke-width="1.2"/>'
+        : i % 3 === 1
+          ? '<circle r="3" fill="#0048FF"/>'
+          : '<circle r="2.4" fill="#E2F26A" stroke="#A1B71F" stroke-width="1"/>';
+    heroc.appendChild(g);
+    return g;
+  };
+
   /* A ring spreads under each hand-off as the work lands at the next station. */
   const RIP = (
     [
@@ -321,7 +340,15 @@ export function startArena(
       [4950, 'slot'],
       [5600, 'built'],
     ] as const
-  ).map(([t, k], i) => ({ t, k, e: $(`rip${i}`) }));
+  ).map(([t, k]) => {
+    const e = document.createElementNS(NS, 'ellipse');
+    e.setAttribute('fill', 'none');
+    e.setAttribute('stroke', '#A1B71F');
+    e.setAttribute('stroke-width', '1.8');
+    e.setAttribute('opacity', '0');
+    heroc.appendChild(e);
+    return { t, k, e };
+  });
   function ripples(c: number) {
     RIP.forEach((r) => {
       if (!r.e) return;
@@ -339,7 +366,7 @@ export function startArena(
 
   /* Nine sparks burst from the finished card as it resolves. */
   const SPK = Array.from({ length: 9 }, (_, i) => ({
-    g: $(`spark${i}`),
+    g: spark(i),
     a: -Math.PI / 2 + (i - 4) * 0.36 + (i % 2 ? 0.12 : -0.08),
     d: 46 + (i % 4) * 14,
   }));
@@ -365,10 +392,11 @@ export function startArena(
   const cb = crews[0]?.getBBox() ?? bb;
   setOpen(0);
   const W0 = { cx: J.heroClosed.cx, cy: J.heroClosed.cy - 140, k: 0.32 };
-  const W1 = {
-    cx: bb.x + bb.width / 2,
-    cy: bb.y + bb.height / 2 - RISE,
-    k: Math.min(1024 / (bb.width + 70), 720 / (bb.height + 50)),
+  /* Close on the closed app: where the opening move lands, and where each loop returns. */
+  const Wc = {
+    cx: J.heroClosed.cx + 4,
+    cy: J.heroClosed.cy - RISE - 26,
+    k: phone ? 0.95 : Math.min((1024 * 0.74) / 577, (720 * 0.62) / 300),
   };
   const W2 = phone
     ? {
@@ -377,9 +405,9 @@ export function startArena(
         k: Math.min(1024 / (cb.width + 200), 720 / (cb.height + 170)),
       }
     : {
-        cx: bb.x + bb.width / 2,
-        cy: bb.y + bb.height / 2 - RISE,
-        k: Math.min(1024 / (bb.width + 50), 720 / (bb.height + 36)),
+        cx: bb.x + bb.width / 2 + 6,
+        cy: bb.y + bb.height / 2 - RISE - 8,
+        k: Math.min(1024 / (bb.width - 10), 720 / (bb.height - 5)),
       };
 
   function loop(c: number) {
@@ -387,7 +415,6 @@ export function startArena(
     let o = 0;
     let tk: XY | null = null;
     let ta = 1;
-    LASTO = 0;
     if (c < 900) {
       /* held */
     } else if (c < 1900) {
@@ -406,11 +433,10 @@ export function startArena(
     }
     setSeam(x);
     setOpen(o);
-    LASTO = o;
     floor(c);
     if (LIVE) {
-      const q = ease(Math.min(1, o));
-      setCam(lerp(W1.cx, W2.cx, q), lerp(W1.cy, W2.cy, q), lerp(W1.k, W2.k, q));
+      const q = Math.min(1, o);
+      setCam(lerp(Wc.cx, W2.cx, q), lerp(Wc.cy, W2.cy, q), lerp(Wc.k, W2.k, q));
     }
     op('rowPulse', c > 1700 && c < 2300 ? 0.55 + 0.45 * Math.sin((c - 1700) / 85) : 0);
     /* The work arcs between stations: lifted 14 at the middle of each hop. */
@@ -489,26 +515,31 @@ export function startArena(
   }
 
   function render(t: number) {
-    if (t < 550) {
+    const rise = (y: number) => hero.setAttribute('transform', `translate(0 ${y.toFixed(1)})`);
+    if (t < 700) {
+      /* A vast, still field; ours already shows the finished screen. */
       stage.dataset.phase = 'grey';
       setCam(W0.cx, W0.cy, W0.k);
-      hero.setAttribute('transform', 'translate(0 0)');
+      rise(0);
       loop(0);
-    } else if (t < 1500) {
+    } else if (t < 2600) {
+      /* One smooth move in to our product. */
       stage.dataset.phase = 'far';
-      const p = ease(clamp((t - 550) / 950));
-      hero.setAttribute('transform', `translate(0 ${(-RISE * p).toFixed(1)})`);
-      loop(t >= 900 ? t : 0);
-      const q = ease(Math.min(1, LASTO));
-      const tx = lerp(W1.cx, W2.cx, q);
-      const ty = lerp(W1.cy, W2.cy, q);
-      const tk = lerp(W1.k, W2.k, q);
-      setCam(lerp(W0.cx, tx, p), lerp(W0.cy, ty, p), lerp(W0.k, tk, p));
+      const p = ease(clamp((t - 700) / 1900));
+      rise(-RISE * p);
+      setCam(lerp(W0.cx, Wc.cx, p), lerp(W0.cy, Wc.cy, p), lerp(W0.k, Wc.k, p));
+      loop(0);
+    } else if (t < 3100) {
+      /* A moment to see it whole, then the lid opens. */
+      stage.dataset.phase = 'far';
+      rise(-RISE);
+      setCam(Wc.cx, Wc.cy, Wc.k);
+      loop(0);
     } else {
       stage.dataset.phase = 'far';
-      hero.setAttribute('transform', `translate(0 ${-RISE})`);
+      rise(-RISE);
       LIVE = true;
-      loop(t % LOOP);
+      loop((t - 3100 + 900) % LOOP);
       LIVE = false;
     }
   }
