@@ -1,21 +1,23 @@
+import { unstable_cache } from 'next/cache';
+
+import { CMS_CONTENT_TAG, CMS_REVALIDATE_SECONDS } from './cache';
+
 const PRODUCTION_URL = 'https://tcules-cms-2026-production.up.railway.app/graphql';
 
 export function publicGraphqlUrl(): string {
   return process.env.NEW_CMS_GRAPHQL_URL?.trim() || PRODUCTION_URL;
 }
 
-/** Published reads for routes on the new CMS. The legacy endpoint remains route-specific. */
-export async function publicGraphql<T>(
-  query: string,
+async function requestPublishedData<T>(
+  url: string,
   operationName: string,
-  variables?: Record<string, string>,
+  body: string,
 ): Promise<T> {
-  const response = await fetch(publicGraphqlUrl(), {
+  const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query, operationName, variables }),
-    cache: 'force-cache',
-    next: { revalidate: 300, tags: [operationName] },
+    body,
+    cache: 'no-store',
     signal: AbortSignal.timeout(8_000),
   });
   const result = (await response.json()) as {
@@ -27,4 +29,22 @@ export async function publicGraphql<T>(
     throw new Error(`New CMS ${operationName}: ${reason || `HTTP ${response.status}`}`);
   }
   return result.data;
+}
+
+/** Published reads for routes on the new CMS. The legacy endpoint remains route-specific. */
+export function publicGraphql<T>(
+  query: string,
+  operationName: string,
+  variables?: Record<string, string>,
+): Promise<T> {
+  // Cache validated GraphQL data so HTTP 200 responses containing errors are never stored.
+  const read = unstable_cache(requestPublishedData<T>, ['strapi-published-graphql'], {
+    revalidate: CMS_REVALIDATE_SECONDS,
+    tags: [CMS_CONTENT_TAG, operationName],
+  });
+  return read(
+    publicGraphqlUrl(),
+    operationName,
+    JSON.stringify({ query, operationName, variables }),
+  );
 }

@@ -9,6 +9,7 @@ import type {
   ServicesMasterSection,
 } from '@/templates/CorpusPage/published-services-master-model';
 
+import { CMS_MEDIA_TAG, CMS_REVALIDATE_SECONDS } from './cache';
 import { action, actionHref, illustration, mapBand, mapHero, rows, text } from './home';
 import type {
   CmsAction,
@@ -308,7 +309,7 @@ export const getPublishedServicesMaster = cache(
             try {
               const response = await fetch(mark.src, {
                 cache: 'force-cache',
-                next: { revalidate: 300 },
+                next: { revalidate: CMS_REVALIDATE_SECONDS, tags: [CMS_MEDIA_TAG] },
                 signal: AbortSignal.timeout(8_000),
               });
               const mime = response.headers.get('content-type')?.split(';')[0];

@@ -92,6 +92,7 @@ export {
   getCaseStages,
 } from './source';
 export { getCaseRefs, getCorpusBindings, getInsightRefs } from './corpus-refs';
+export { revalidatePublishedCms } from './sources/strapi/cache';
 export type {
   Page,
   PageBlock,
