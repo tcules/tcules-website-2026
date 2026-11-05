@@ -541,6 +541,15 @@
   max-inline-size: var(--gwy-door-close-measure);
 }
 
+/* A close with an ask (`close.action`): the line at the cards' own title role, the action at the
+   row's end (owner, 5 Nov 2026: "match the heading of the card"). */
+.doorCloseRowLine {
+  font: var(--gwy-door-title-text);
+  letter-spacing: var(--gwy-door-title-tracking);
+  text-wrap: pretty;
+  color: var(--gwy-title-ink);
+}
+
 /* A close that is a sentence of the set's own words, not a line over an ask (/how-we-work, owner
    4 Nov 2026: "this could just be body text no wrap"): the body role, at the column's width. */
 .doorCloseLineBody {

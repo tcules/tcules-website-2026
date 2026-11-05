@@ -211,12 +211,6 @@ A prototype is quick to make now. Getting customers to rely on it starts with th
 
 A product with AI at its core adds a sixth: what it may do on its own, and where a person signs off. Our guide to [showing each role why the product is worth using](/insights/guides/saas-onboarding-strategies-to-increase-customer-retention) goes further on the first.
 
-*Illustration, not client work*
-
-A founder wants vet practices to send pet owners a treatment estimate they can approve from their phone. The first release does one job: an owner approves or declines an estimate before treatment starts.
-
-It covers sending, changing, approving and declining one estimate, with prices taken from the practice's existing system and a record the practice can rely on. Deposits, payment plans, insurance claims and reminders wait for later.
-
 ## Which kind of MVP help do you need? {#options}
 
 A demo has to work for the person showing it; a first release has to work for strangers, with their own accounts and money. In its study of apps made with AI app builders, [Escape.tech](https://escape.tech/state-of-security-of-vibe-coded-apps) reported more than 2,000 highly critical vulnerabilities and more than 400 exposed secrets across about 1,400 applications.

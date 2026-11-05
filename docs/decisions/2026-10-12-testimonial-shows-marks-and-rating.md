@@ -1,7 +1,7 @@
 ---
 title: "A testimonial always shows its quote marks and star rating"
 date: 2026-10-12
-status: active
+status: superseded
 area: [proof, components]
 source: "Owner, 12 Oct 2026"
 supersedes: []
@@ -18,3 +18,5 @@ legacy: "memory/home-review-patterns-oct-2026.md"
 **The mistake it prevents.** A content source that drops the testimonial id, so the rating cannot resolve.
 
 **How to apply.** Any new content source carries the testimonial id so the rating resolves. The warning is a development warning in the component, not a build check.
+
+Superseded 5 Nov 2026 by `2026-11-05-testimonial-slides-carry-no-stars`.

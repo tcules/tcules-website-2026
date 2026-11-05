@@ -1,7 +1,7 @@
 ---
 title: The header's menus are an index of short-labelled groups beside an aside, at the content width
 date: 2026-11-04
-status: proposed
+status: superseded
 area: [components, layout]
 source: "Owner, 4 Nov 2026, header mock rounds 1–3 (Header Menu Directions artifact): \"build B with short labels in SiteNav\""
 supersedes: []
@@ -33,3 +33,5 @@ under each.
 **How to apply.** SiteNav and the nav fixture in `src/content/sources/fixtures/navigation.ts`. A new
 way onward joins the section's aside instead of becoming a column or a foot. A new section with no way
 onward has no aside. Promote to `active` when the owner approves the built header.
+
+Superseded 5 Nov 2026 by `2026-11-05-studio-menu-has-an-aside`.
