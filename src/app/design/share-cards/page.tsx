@@ -28,6 +28,8 @@ const SOURCE_LABEL: Record<ShareCard['source'], string> = {
   banner: 'Case banner',
   cover: 'Article cover',
   video: 'Video thumbnail',
+  portrait: 'Portrait',
+  initials: 'Initials',
   none: 'Title only',
 };
 

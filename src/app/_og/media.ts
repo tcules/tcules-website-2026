@@ -14,7 +14,9 @@ import sharp from 'sharp';
  * for the share card only.
  */
 export type ShareMedia = {
-  kind: 'illustration' | 'capture';
+  kind: 'illustration' | 'capture' | 'portrait';
+  /** Where a crop is anchored, 0–1 on each axis; the centre when absent. A portrait passes the face. */
+  focus?: { x: number; y: number };
   /** A public path (`/kit/…`, `/illustrations/…`) or an absolute CMS URL. */
   src: string;
   width: number;
@@ -38,14 +40,28 @@ export async function preparedMedia(
   media: ShareMedia,
   box: { width: number; height: number },
   fit: 'cover' | 'contain',
+  /** The ground under any transparency (a portrait cut to a circle), since JPEG has none. */
+  ground?: string,
 ): Promise<{ src: string; width: number; height: number }> {
   const input = await bytes(media.src);
   const density = media.src.endsWith('.svg') ? 300 : undefined;
   const image = sharp(input, density ? { density } : {});
 
   if (fit === 'cover') {
-    const out = await image
-      .resize(box.width, box.height, { fit: 'cover', position: 'centre' })
+    const { width: w = box.width, height: h = box.height } = await sharp(input).metadata();
+    const scale = Math.max(box.width / w, box.height / h);
+    const sw = Math.max(box.width, Math.round(w * scale));
+    const sh = Math.max(box.height, Math.round(h * scale));
+    const focus = media.focus ?? { x: 0.5, y: 0.5 };
+    const clamp = (v: number, max: number) => Math.min(Math.max(0, Math.round(v)), max);
+    const out = await (ground ? image.flatten({ background: ground }) : image)
+      .resize(sw, sh)
+      .extract({
+        left: clamp(focus.x * sw - box.width / 2, sw - box.width),
+        top: clamp(focus.y * sh - box.height / 2, sh - box.height),
+        width: box.width,
+        height: box.height,
+      })
       .jpeg({ quality: 90 })
       .toBuffer();
     return { src: `data:image/jpeg;base64,${out.toString('base64')}`, ...box };

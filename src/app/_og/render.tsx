@@ -51,6 +51,8 @@ function tokens(): Promise<Map<string, string>> {
 type Ink = {
   paper: string;
   title: string;
+  subtitle: string;
+  portraitGround: string;
   blue: string;
   mark: string;
   tracking: string;
@@ -67,6 +69,9 @@ async function inks(): Promise<Ink> {
   return {
     paper: get('color-paper'),
     title: get('color-neutral-900'),
+    /* The byline portrait's own pair (page-hero.css: --hero-portrait-ground, -initials-ink). */
+    subtitle: get('color-neutral-700'),
+    portraitGround: get('color-neutral-200'),
     blue: get('color-brandeis-500'),
     mark: get('color-neutral-950'),
     /* The sans title roles' tracking (--text-h4 reads -title-fine; at card size -title holds it). */
@@ -122,8 +127,51 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
   const [ink, fontData] = await Promise.all([inks(), fonts()]);
   const media = card.media;
 
+  /* A person's face: a square at the half's far edge, centred on the height, rounded like every
+     image — their photograph from the face's focus, or their initials on the byline's tint. */
+  const FACE = 440;
+  const face = { left: px(W - M - FACE), top: px((H - FACE) / 2), width: px(FACE), height: px(FACE) };
+  const faceBox: CSSProperties = {
+    position: 'absolute',
+    ...face,
+    display: 'flex',
+    borderRadius: px(ink.mediaRadius),
+    overflow: 'hidden',
+  };
+
   let picture = null;
-  if (media) {
+  if (card.initials) {
+    picture = (
+      <div
+        style={{
+          ...faceBox,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: ink.portraitGround,
+          fontFamily: 'Public Sans',
+          fontWeight: 500,
+          fontSize: px(160),
+          letterSpacing: ink.tracking,
+          color: ink.title,
+        }}
+      >
+        {card.initials}
+      </div>
+    );
+  } else if (media?.kind === 'portrait') {
+    const prepared = await preparedMedia(
+      media,
+      { width: face.width, height: face.height },
+      'cover',
+      ink.portraitGround,
+    );
+    picture = (
+      <div style={faceBox}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
+        <img src={prepared.src} width={face.width} height={face.height} alt="" />
+      </div>
+    );
+  } else if (media) {
     const box = { x: SPLIT, y: M, w: W - SPLIT - M, h: H - 2 * M };
     /* A banner or a cover fills the half, cropped. A video's thumbnail is shown whole at its own 16:9:
        YouTube frames carry their own words, and a crop cuts them mid-word (5 Nov 2026). */
@@ -152,6 +200,8 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
     );
   }
 
+  const beside = picture !== null;
+
   const response = new ImageResponse(
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', backgroundColor: ink.paper }}>
@@ -161,7 +211,7 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
             position: 'absolute',
             left: px(M + 8),
             top: px(M),
-            width: px(media ? COLUMN : W - 2 * M - 16),
+            width: px(beside ? COLUMN : W - 2 * M - 16),
             height: px(H - 2 * M),
             display: 'flex',
             flexDirection: 'column',
@@ -171,8 +221,23 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
           {/* One eyebrow, the page's kind: the fact beside it is a second level a card read at feed
               size does not need (owner, 5 Nov 2026). It stays in the alt. */}
           <div style={{ ...MONO, display: 'flex', color: ink.blue }}>{card.meta.kind}</div>
-          <div style={{ ...title(media ? 56 : 72, ink), display: 'flex', maxWidth: px(media ? COLUMN : 980) }}>
-            {card.hero}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: px(16) }}>
+            <div style={{ ...title(beside ? 56 : 72, ink), display: 'flex', maxWidth: px(beside ? COLUMN : 980) }}>
+              {card.hero}
+            </div>
+            {card.subtitle ? (
+              <div
+                style={{
+                  ...title(beside ? 56 : 72, ink),
+                  display: 'flex',
+                  fontSize: px(32),
+                  lineHeight: 1.25,
+                  color: ink.subtitle,
+                }}
+              >
+                {card.subtitle}
+              </div>
+            ) : null}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: px(24) }}>
             {card.action ? <div style={{ ...MONO, color: ink.blue }}>{card.action}</div> : null}

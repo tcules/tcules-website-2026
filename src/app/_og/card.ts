@@ -30,7 +30,7 @@ export type ShareKind =
 
 export type ShareGround = 'paper' | 'paper-deep';
 
-export type ShareSource = 'own' | 'hub' | 'banner' | 'cover' | 'video' | 'none';
+export type ShareSource = 'own' | 'hub' | 'banner' | 'cover' | 'video' | 'portrait' | 'initials' | 'none';
 
 /** A hero rung (A3): 88 holds 40 characters, 72 holds 55. Nothing between, nothing below. */
 export type ShareRung = 88 | 72;
@@ -41,6 +41,10 @@ export type ShareCard = {
   /** The meta line as two runs: what kind of thing this is, then its one fact (may be empty). */
   meta: { kind: string; fact: string };
   hero: string;
+  /** A line under the hero, a step smaller: an author's position (owner, 5 Nov 2026). Else null. */
+  subtitle: string | null;
+  /** A person without a photograph: their initials hold the portrait's square. Else null. */
+  initials: string | null;
   rung: ShareRung;
   ground: ShareGround;
   /** The action line, on the four types C4 gives one; null everywhere else. */
@@ -354,6 +358,8 @@ export function shareCard(input: {
    * changes when its picture does (see `id`).
    */
   fingerprint?: string;
+  subtitle?: string | null;
+  initials?: string | null;
 }): ShareCard {
   const kind = kindOf(input.path);
   const { hero, rung } = setHero(input.cut ?? input.title, kind);
@@ -365,15 +371,17 @@ export function shareCard(input: {
     kind,
     meta,
     hero,
+    subtitle: input.subtitle ?? null,
+    initials: input.initials ?? null,
     rung,
     ground,
     action,
     media: input.media ?? null,
     source: input.source ?? 'none',
-    format: input.media?.kind === 'capture' ? 'jpeg' : 'png',
-    alt: `${label}: ${hero}`,
+    format: input.media && input.media.kind !== 'illustration' ? 'jpeg' : 'png',
+    alt: `${label}: ${hero}${input.subtitle ? `, ${input.subtitle}` : ''}`,
     id: `tcules-og-${kind}-${slugOf(input.path)}-${VERSION}-${shortHash(
-      [hero, label, action ?? '', input.fingerprint ?? ''].join('\n'),
+      [hero, label, action ?? '', input.fingerprint ?? '', input.subtitle ?? '', input.initials ?? ''].join('\n'),
     )}`,
   };
 }

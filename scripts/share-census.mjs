@@ -14,6 +14,7 @@
  *   banner  a case study's banner from Strapi
  *   cover   an article's cover from Strapi
  *   video   a video's YouTube thumbnail
+ *   portrait / initials   an author's photograph, else their initials
  *   none    no picture: the title alone
  * A drawing reaches a card only through HERO_ILLUSTRATIONS — a file in public/illustrations/heroes/
  * that is not registered there is invisible to the card, and this census shows the page as `hub`
@@ -62,7 +63,7 @@ if (cards.length === 0) {
   process.exit(1);
 }
 
-const ORDER = ['own', 'hub', 'banner', 'cover', 'video', 'none'];
+const ORDER = ['own', 'hub', 'banner', 'cover', 'video', 'portrait', 'initials', 'none'];
 const counts = Object.fromEntries(ORDER.map((source) => [source, 0]));
 for (const card of cards) counts[card.source] = (counts[card.source] ?? 0) + 1;
 

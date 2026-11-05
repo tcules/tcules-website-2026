@@ -11,6 +11,7 @@ import {
   listSitePages,
   type SitePageFamily,
 } from '@/content';
+import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import { inlineToText } from '@/lib/inline';
 import {
   auditPath,
@@ -76,13 +77,14 @@ function cmsTitle(path: string): Promise<string | undefined> {
 }
 
 /** Everyone with an author page, by path, read once per build. */
-let authors: Promise<Map<string, { name: string; role?: string }>> | undefined;
+type Person = { name: string; role?: string; image?: { src: string; width: number; height: number } };
+let authors: Promise<Map<string, Person>> | undefined;
 function author(path: string) {
   authors ??= listAuthors()
     .then((list) => new Map(list.map((one) => [authorPath(one.slug), one])))
     .catch((error: unknown) => {
       console.error('share cards: authors unavailable', error);
-      return new Map<string, { name: string; role?: string }>();
+      return new Map<string, Person>();
     });
   return authors.then((byPath) => byPath.get(path));
 }
@@ -116,7 +118,8 @@ function caseCover(slug: string) {
  * The page's picture (owner, 4 Nov 2026):
  * - its own hero drawing, where it has one;
  * - else its family hub's drawing until its own lands: a service's line, /audits for an audit,
- *   /expertise for an expertise page (expertise pages take illustrations, never photographs);
+ *   /expertise for an expertise page (expertise pages take illustrations, never photographs), /tools
+ *   for a tool;
  * - a case study's V1 cover (owner, 5 Nov 2026), else its banner from Strapi;
  * - a video's YouTube thumbnail, else its cover from Strapi;
  * - an article's cover from Strapi.
@@ -132,7 +135,9 @@ function drawingFor(path: string): { media: ShareMedia; source: ShareSource } | 
         ? ROUTES.audits
         : family === 'expertise'
           ? ROUTES.expertise
-          : null;
+          : family === 'tools'
+            ? ROUTES.tools
+            : null;
   const own = serviceIllustration(path);
   const drawing = own ?? (hub ? serviceIllustration(hub) : undefined);
   if (!drawing) return null;
@@ -222,10 +227,26 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
       ...(await pictureFor(path)),
     });
   }
+  /* A person's card carries their face: their photograph, else their initials in its square, as
+     the byline draws them (decisions/2026-11-01-byline-initials-without-a-photo); their position
+     sits under their name (owner, 5 Nov 2026). */
   const person = await author(path);
   if (person) {
-    const eyebrow = person.role ? `Author · ${person.role}` : 'Author';
-    return shareCard({ path, title: person.name, eyebrow, name: person.name });
+    const photo = person.image;
+    return shareCard({
+      path,
+      title: person.name,
+      eyebrow: null,
+      name: person.name,
+      subtitle: person.role ?? null,
+      ...(photo
+        ? {
+            media: { kind: 'portrait' as const, ...photo, focus: PORTRAIT_FOCUS },
+            source: 'portrait' as const,
+            fingerprint: photo.src,
+          }
+        : { initials: initialsOf(person.name), source: 'initials' as const, fingerprint: 'initials' }),
+    });
   }
   const title = await cmsTitle(path);
   if (title) {
