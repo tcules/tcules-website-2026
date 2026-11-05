@@ -51,7 +51,6 @@ function tokens(): Promise<Map<string, string>> {
 type Ink = {
   paper: string;
   title: string;
-  meta: string;
   blue: string;
   mark: string;
   tracking: string;
@@ -68,7 +67,6 @@ async function inks(): Promise<Ink> {
   return {
     paper: get('color-paper'),
     title: get('color-neutral-900'),
-    meta: get('color-neutral-700'),
     blue: get('color-brandeis-500'),
     mark: get('color-neutral-950'),
     /* The sans title roles' tracking (--text-h4 reads -title-fine; at card size -title holds it). */
@@ -167,11 +165,9 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
             justifyContent: 'space-between',
           }}
         >
-          <div style={{ ...MONO, display: 'flex', flexWrap: 'wrap', columnGap: '0.6em' }}>
-            <span style={{ color: ink.blue }}>{card.meta.kind}</span>
-            {card.meta.fact ? <span style={{ color: ink.meta }}>·</span> : null}
-            {card.meta.fact ? <span style={{ color: ink.meta }}>{card.meta.fact}</span> : null}
-          </div>
+          {/* One eyebrow, the page's kind: the fact beside it is a second level a card read at feed
+              size does not need (owner, 5 Nov 2026). It stays in the alt. */}
+          <div style={{ ...MONO, display: 'flex', color: ink.blue }}>{card.meta.kind}</div>
           <div style={{ ...title(media ? 56 : 72, ink), display: 'flex', maxWidth: px(media ? COLUMN : 980) }}>
             {card.hero}
           </div>
