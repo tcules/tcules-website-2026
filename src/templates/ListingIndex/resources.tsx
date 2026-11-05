@@ -14,19 +14,30 @@ import { CardGrid, type InsightItem } from './compositions';
  */
 export function InsightResources({
   heading,
+  id,
+  description,
   items,
   surface = 'paper',
 }: {
   heading: string;
+  id?: string;
+  description?: string;
   items: readonly InsightItem[];
   surface?: SectionSurface;
 }) {
   const headingId = useId();
   if (items.length === 0) return null;
   return (
-    <Section surface={surface} aria-labelledby={headingId}>
+    <Section id={id} surface={surface} aria-labelledby={headingId}>
       <Layout rowGap="stack">
-        <h2 id={headingId}>{heading}</h2>
+        {description ? (
+          <Layout rowGap="block">
+            <h2 id={headingId}>{heading}</h2>
+            <p>{description}</p>
+          </Layout>
+        ) : (
+          <h2 id={headingId}>{heading}</h2>
+        )}
         <CardGrid cards={items} meta={{ withKind: true }} facts />
       </Layout>
     </Section>

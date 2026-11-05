@@ -26,6 +26,7 @@ export {
   idealServiceSlugs,
   getCaseStudyPage,
   getCaseStudyDetail,
+  getResourceDetail,
   getCaseStory,
   getIdealAboutPage,
   getContactPage,

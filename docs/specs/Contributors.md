@@ -32,10 +32,19 @@ more of them. It closes an article; it is not a card set and not an advert for t
 ## 3 · Props
 
 ```ts
-type ContributorLink = { label: string; href: string }
-type Contributor = { name: string; role?: string; portrait?: MediaImage; link?: ContributorLink }
-type ContributorsProps = { label: string; people: readonly Contributor[] }
+type ContributorLink = { label: string; href: string };
+type Contributor = {
+  name: string;
+  role?: string;
+  portrait?: MediaImage;
+  link?: ContributorLink;
+  descriptionHtml?: string;
+  socialLinks?: readonly ContributorLink[];
+};
+type ContributorsProps = { label: string; people: readonly Contributor[] };
 ```
+
+Resources can also pass the CMS author biography as `descriptionHtml` and LinkedIn/profile links as `socialLinks`. These optional fields use the existing Prose and link Button treatments; absent fields add no markup.
 
 `label` is authored by the caller, so the count decides "author" or "authors" at the call site. The
 role is as authored ("Host · Founder and CEO, Tcules"): the host is marked inside the role, not by a

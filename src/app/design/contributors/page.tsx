@@ -34,6 +34,9 @@ export default function ContributorsSpecimen() {
                     role: 'Product Designer, Tcules',
                     portrait: shoghi,
                     link: { label: 'More from Shoghi', href: '#' },
+                    descriptionHtml:
+                      '<p>An authored biography can accompany the contributor’s name and role.</p>',
+                    socialLinks: [{ label: 'LinkedIn', href: 'https://www.linkedin.com/' }],
                   },
                 ]}
               />

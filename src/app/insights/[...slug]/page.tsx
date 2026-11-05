@@ -2,21 +2,16 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Layout, Media, Prose, Section } from '@/components';
-import {
-  LongformRoute,
-  isCorpusLongform,
-  longformMetadata,
-  longformSlugs,
-} from '@/app/_corpus/longform';
-import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/content';
-import { authorPath, blogPath, ROUTES } from '@/lib/routes';
+import { Icon, Layout, Media, Prose, Section } from '@/components';
+import { getResourceDetail } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { heroTrail } from '@/lib/trail';
 import {
+  Accordion,
   Breadcrumbs,
   Callout,
   Contributors,
-  CtaSection,
+  DataTable,
   Figure,
   PageHero,
   TableOfContents,
@@ -24,49 +19,27 @@ import {
   type HeroPerson,
   type TocItem,
 } from '@/patterns';
-import type { BreadcrumbItem } from '@/patterns';
 import { InsightResources } from '@/templates';
+import { PublishedSection } from '@/templates/CorpusPage/PublishedHome';
 
-import { resourceItems } from '../../_insights/resources';
-
-type BlogPageProps = { params: Promise<{ slug: string[] }> };
-
-function requestedSlug(slug: readonly string[]): string {
-  return slug
-    .map((segment) => segment.trim())
-    .filter(Boolean)
-    .join('/');
-}
-
-/* Figure's own `sizes` (Figure.tsx): the full content column, which over-fetches in the narrower
-   article track rather than ever under-fetching. */
+type Resource = NonNullable<Awaited<ReturnType<typeof getResourceDetail>>>;
+type Block = Resource['blocks'][number];
+type ResourcePageProps = { params: Promise<{ slug: string[] }> };
 const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
-function figureImage(image: BlogImage) {
-  return {
-    src: image.src,
-    alt: image.alt,
-    width: image.width,
-    height: image.height,
-    /* The derived widths and the kind fields travel with the record so Figure's Media can serve
-       a srcset and draw the edge by kind; `mime` is the one field left behind. */
-    sources: image.sources,
-    kind: image.kind,
-    panel: image.panel,
-    shadow: image.shadow,
-  };
-}
-
-function renderBlogBlock(block: BlogBlock, blogTitle: string) {
+function renderBlock(block: Block) {
   switch (block.type) {
+    case 'heading':
     case 'prose':
-    case 'code':
-    case 'separator':
       return <Prose html={block.html} />;
-
     case 'callout':
-      return <Callout html={block.html} />;
-
+      return (
+        <Callout
+          html={block.html}
+          label={block.label}
+          icon={block.icon ? <Icon name={block.icon} /> : undefined}
+        />
+      );
     case 'figures':
       return (
         <Layout
@@ -74,254 +47,131 @@ function renderBlogBlock(block: BlogBlock, blogTitle: string) {
           colGap={block.figures.length > 1 ? 'gutter' : undefined}
           rowGap="gutter"
         >
-          {block.figures.map((figure, index) =>
-            /* A body image with no authored caption renders bare, through Figure's own Media:
-               a Figure's caption is required, and the words under an image are never invented. */
-            figure.caption ? (
-              <Figure
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                caption={figure.caption}
-              />
-            ) : (
-              <Media
-                key={`${block.id}-${figure.image.src}-${index}`}
-                image={figureImage(figure.image)}
-                sizes={BODY_IMAGE_SIZES}
-              />
-            ),
-          )}
-        </Layout>
-      );
-
-    case 'video':
-      return (
-        <Layout rowGap="block">
-          {block.title || block.description ? (
-            <Layout rowGap="tight">
-              {block.title ? <h2>{block.title}</h2> : null}
-              {block.description ? <p>{block.description}</p> : null}
+          {block.figures.map((figure) => (
+            <Layout key={figure.id} id={figure.id} rowGap="text">
+              {figure.caption ? (
+                <Figure image={figure.image} caption={figure.caption} note={figure.note} />
+              ) : (
+                <>
+                  {figure.image ? (
+                    <Media image={figure.image} sizes={BODY_IMAGE_SIZES} />
+                  ) : null}
+                  {figure.note ? (
+                    <Prose>
+                      <p>{figure.note}</p>
+                    </Prose>
+                  ) : null}
+                </>
+              )}
+              {figure.label || figure.notes.length ? (
+                <Prose>
+                  {figure.label ? <p>{figure.label}</p> : null}
+                  {figure.notes.length ? (
+                    <ol>
+                      {figure.notes.map((note, index) => (
+                        <li key={index}>{note}</li>
+                      ))}
+                    </ol>
+                  ) : null}
+                </Prose>
+              ) : null}
             </Layout>
-          ) : null}
-          {block.youtubeId ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${block.youtubeId}`}
-              title={block.title || `${blogTitle} video`}
-              width="100%"
-              height="698"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              loading="lazy"
-              allowFullScreen
-            />
-          ) : block.video ? (
-            <video
-              controls
-              autoPlay={block.video.autoplay}
-              muted={block.video.autoplay}
-              loop={block.video.loop}
-              playsInline
-              poster={block.video.poster}
-              width={block.video.width}
-              height={block.video.height}
-              preload="metadata"
-            >
-              <source src={block.video.src} type={block.video.mime} />
-            </video>
-          ) : block.thumbnail ? (
-            <Figure
-              image={figureImage(block.thumbnail)}
-              caption={block.title || block.description || `${blogTitle} video`}
-            />
-          ) : null}
+          ))}
         </Layout>
       );
-
-    case 'embed':
+    case 'table':
+      return <DataTable {...block} />;
+    case 'faq':
       return (
-        <Layout rowGap="block">
-          <Layout rowGap="tight">
-            <h2>{block.title}</h2>
-            {block.description ? <p>{block.description}</p> : null}
-          </Layout>
-          {block.url ? (
-            <iframe
-              src={block.url}
-              title={block.title}
-              width={block.width ?? '100%'}
-              height={block.height ?? 720}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
-          ) : block.thumbnail ? (
-            <Figure image={figureImage(block.thumbnail)} caption={block.title} />
-          ) : null}
+        <Layout id={block.id} rowGap="block">
+          {block.heading ? <h2>{block.heading}</h2> : null}
+          {block.description ? <p>{block.description}</p> : null}
+          {block.items.length ? <Accordion items={block.items} /> : null}
         </Layout>
       );
   }
 }
 
-function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
-  return JSON.stringify(data).replaceAll('<', '\\u003c');
-}
+export const revalidate = 300;
 
-/** The format a piece sits under, as the podcast and event pages name theirs: Home / Insights / Articles. */
-const FORMAT_CRUMB: Record<BlogPage['kind'], BreadcrumbItem> = {
-  article: { label: 'Articles', href: ROUTES.articles },
-  guide: { label: 'Guides', href: ROUTES.guides },
-  research: { label: 'Research', href: ROUTES.research },
-  video: { label: 'Videos', href: ROUTES.videos },
-};
-
-function blogBreadcrumbs(blog: BlogPage): BreadcrumbItem[] {
-  return [
-    { label: 'Home', href: ROUTES.home },
-    { label: 'Insights', href: ROUTES.insights },
-    FORMAT_CRUMB[blog.kind],
-    { label: blog.title, href: blogPath(blog.slug) },
-  ];
-}
-
-function uniqueLabels(labels: readonly string[]): string[] {
-  return [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
-}
-
-export function generateStaticParams() {
-  return longformSlugs('/insights').map((slug) => ({ slug: slug.split('/') }));
-}
-
-export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ResourcePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const corpus = await longformMetadata(`/insights/${requestedSlug(slug)}`);
-  if (corpus) return corpus;
-  const blog = await getBlogPage(requestedSlug(slug));
-
-  if (!blog) {
+  try {
+    const resource = await getResourceDetail(slug.join('/'));
+    return (
+      resource?.seo.metadata ?? {
+        title: 'Resource not found | Tcules',
+        description: null,
+        robots: { index: false, follow: false },
+      }
+    );
+  } catch {
     return {
-      title: 'Insight not found | Tcules',
+      title: 'Resource temporarily unavailable | Tcules',
+      description: null,
       robots: { index: false, follow: false },
     };
   }
-
-  const title = blog.seo?.title || blog.title;
-  const description = blog.seo?.description || blog.description;
-  const canonical = blog.seo?.canonical;
-  const image = blog.socialImage;
-
-  return {
-    title,
-    description,
-    ...(canonical ? { alternates: { canonical } } : {}),
-    ...(blog.seo?.robots ? { robots: blog.seo.robots } : {}),
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      ...(canonical ? { url: canonical } : {}),
-      ...(blog.publishedContent ? { publishedTime: blog.publishedContent } : {}),
-      ...(blog.authors.length > 0
-        ? { authors: blog.authors.map((author) => author.name) }
-        : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
-    },
-    twitter: {
-      card: image ? 'summary_large_image' : 'summary',
-      title,
-      description,
-      images: image ? [image.src] : [],
-    },
-  };
 }
 
-export default async function BlogPage({ params }: BlogPageProps) {
+export default async function ResourcePage({ params }: ResourcePageProps) {
   const { slug } = await params;
-  if (isCorpusLongform(`/insights/${requestedSlug(slug)}`))
-    return <LongformRoute route={`/insights/${requestedSlug(slug)}`} />;
-  const blog = await getBlogPage(requestedSlug(slug));
-
-  if (!blog) notFound();
-
-  /* The outline the seam derived from this body's level-2 headings, mapped to what the component
-     takes. An article is a long-form document, which is what earns it a rail —
-     page type decides, not heading count (docs/specs/TableOfContents.md § 1).
-
-     The anchors are opaque and already on the rendered headings; see
-     docs/guides/long-form-outline.md. */
-  const outline: TocItem[] = blog.outline.map((entry) => ({
-    label: entry.label,
-    href: `#${entry.anchorId}` as const,
+  const resource = await getResourceDetail(slug.join('/'));
+  if (!resource) notFound();
+  const outline: TocItem[] = resource.outline.map(({ label, anchorId }) => ({
+    label,
+    href: `#${anchorId}`,
   }));
-
-  /* The component's own floor is two. Below it there is no rail AND no reserved track — a [1, 4]
-     grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
   const hasOutline = outline.length >= 2;
-
-  /* The authored date only. Strapi's publishedAt and updatedAt are the CMS's last publish and save
-     (every live article re-published 28–30 Oct 2026), so neither is shown as the piece's date, and
-     there is no "Updated" until the CMS carries an authored one. */
-  const published = blog.publishedContent;
-  const authors: HeroPerson[] = blog.authors.map((author) => ({
-    name: author.name,
-    ...(author.slug ? { href: authorPath(author.slug) } : {}),
-    ...(author.image ? { portrait: author.image } : {}),
+  const people: HeroPerson[] = resource.authors.map(({ name, href, portrait }) => ({
+    name,
+    href,
+    portrait,
   }));
-  const credits: HeroCredit[] | undefined = authors[0]
-    ? [{ role: 'author', people: authors as [HeroPerson, ...HeroPerson[]] }]
+  const credits: HeroCredit[] | undefined = people[0]
+    ? [{ role: 'author', people: people as [HeroPerson, ...HeroPerson[]] }]
     : undefined;
-  const heroMedia = blog.heroVideo
-    ? {
-        type: 'youtube' as const,
-        id: blog.heroVideo.id,
-        title: blog.heroVideo.title,
-      }
-    : blog.featureImage
-      ? { type: 'image' as const, image: blog.featureImage }
-      : undefined;
-  const labels = uniqueLabels([...blog.categories, ...blog.tags]);
+  const heroMedia =
+    resource.heroVideo ??
+    (resource.bannerImage
+      ? { type: 'image' as const, image: resource.bannerImage }
+      : undefined);
 
   return (
     <>
-      {blog.seo?.structuredData ? (
+      {resource.seo.structuredData ? (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(blog.seo.structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(resource.seo.structuredData) }}
         />
       ) : null}
-
       <PageHero
-        trail={heroTrail(blogBreadcrumbs(blog), blog.title, (t) => (
-          <Breadcrumbs {...t} />
-        ))}
-        title={blog.title}
-        body={[blog.description || `Read ${blog.title}.`]}
+        trail={
+          resource.breadcrumbs.length
+            ? heroTrail(resource.breadcrumbs, resource.title, (trail) => (
+                <Breadcrumbs {...trail} />
+              ))
+            : undefined
+        }
+        title={resource.title}
+        eyebrow={resource.eyebrow}
+        body={resource.body}
         credits={credits}
-        readingTime={blog.readingTime}
-        dates={published ? { published } : undefined}
+        readingTime={resource.readingTime}
+        dates={resource.dates}
         media={heroMedia}
         arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
+        labels={resource.labels}
         surface="paper"
-
-        labels={labels}
-      />
-
-      {blog.blocks.length > 0 ? (
+      >
+        {resource.bylineText ? (
+          <Prose>
+            <p>{resource.bylineText}</p>
+          </Prose>
+        ) : null}
+      </PageHero>
+      {resource.blocks.length || resource.authors.length || resource.takeaways ? (
         <Section as="div" surface="paper">
-          {/* The shell from docs/specs/TableOfContents.md § 10. The rail is a TRACK, not a band, so it
-              sits inside this Section — which is what makes the two arrangements one piece of markup:
-              below 1024 the columns collapse and the first track becomes the first block of the
-              Section, nothing moved in the DOM. `align="start"` is required, not stylistic: a
-              stretched grid item fills the row and has nowhere to stick. The <article> stays around
-              the document — the outline is about the article, not part of it. */}
           <Layout
             columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
             colGap="column"
@@ -330,47 +180,38 @@ export default async function BlogPage({ params }: BlogPageProps) {
           >
             {hasOutline ? <TableOfContents items={outline} /> : null}
             <Layout as="article" rowGap="stack">
-              {blog.blocks.map((block) => (
-                <Fragment key={block.id}>{renderBlogBlock(block, blog.title)}</Fragment>
+              {resource.takeaways ? (
+                <Callout label={resource.takeaways.label} html={resource.takeaways.html} />
+              ) : null}
+              {resource.blocks.map((block) => (
+                <Fragment key={block.key}>{renderBlock(block)}</Fragment>
               ))}
-              {/* Who wrote it, after what they wrote (byline board G): the hero carries their faces
-                  and names, this says who each is and links to the rest of what they wrote. */}
               <Contributors
-                label={blog.authors.length > 1 ? 'About the authors' : 'About the author'}
-                people={blog.authors.map((author) => ({
+                label={resource.authors.length > 1 ? 'About the authors' : 'About the author'}
+                people={resource.authors.map((author) => ({
                   name: author.name,
-                  ...(author.designation ? { role: author.designation } : {}),
-                  ...(author.image ? { portrait: author.image } : {}),
-                  ...(author.slug
+                  role: author.role,
+                  portrait: author.portrait,
+                  descriptionHtml: author.descriptionHtml,
+                  socialLinks: author.linkedIn
+                    ? [{ label: 'LinkedIn', href: author.linkedIn }]
+                    : undefined,
+                  link: author.href
                     ? {
-                        link: {
-                          label: `More from ${author.name.trim().split(/\s+/)[0]}`,
-                          href: authorPath(author.slug),
-                        },
+                        label: `More from ${author.name.trim().split(/\s+/)[0]}`,
+                        href: author.href,
                       }
-                    : {}),
+                    : undefined,
                 }))}
               />
             </Layout>
           </Layout>
         </Section>
       ) : null}
-
-      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
-          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
-      <InsightResources
-        heading="Explore other resources"
-        items={resourceItems(blog.resources)}
-      />
-
-      {blog.cta ? (
-        <CtaSection
-          arrangement="open"
-          heading={blog.cta.heading}
-          body={blog.cta.body}
-          actions={blog.cta.actions}
-        />
+      {resource.related?.heading ? (
+        <InsightResources {...resource.related} heading={resource.related.heading} />
       ) : null}
+      {resource.cta ? <PublishedSection section={resource.cta} route={resource.path} /> : null}
     </>
   );
 }
