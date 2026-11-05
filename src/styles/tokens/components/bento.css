@@ -44,6 +44,7 @@
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --bnt-tile-ground: var(--color-paper); /* the page's own ground: on a paper band the hairline draws the tile; a panel tile (`panels`) on tint reads white */
   --bnt-rule-ink: var(--color-neutral-200); /* decoration */
   --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-100); /* decoration */
@@ -56,6 +57,7 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --bnt-tile-ground: var(--color-paper); /* paper on the tint, as BlockCard's tile (owner, 4 Nov 2026: "white fill cards") */
   --bnt-rule-ink: var(--color-neutral-300);
   --bnt-cta-rule-ink: var(--color-neutral-400); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
@@ -68,6 +70,7 @@
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
+  --bnt-tile-ground: transparent; /* the hairline draws the tile */
   --bnt-rule-ink: var(--color-neutral-800);
   --bnt-cta-rule-ink: var(--color-neutral-600); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-700);
@@ -80,6 +83,7 @@
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
 [data-surface='blue'] {
+  --bnt-tile-ground: transparent; /* the hairline draws the tile */
   --bnt-rule-ink: var(--color-brandeis-400);
   --bnt-cta-rule-ink: var(--color-brandeis-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);

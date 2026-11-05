@@ -2088,6 +2088,7 @@ export function DestinationsBand({
         items={tiles}
         tracks={dest.length % 4 === 0 ? 4 : 3}
         visual={drawn?.every(Boolean) ? 'start' : 'end'}
+        panels={surface === 'tint'}
       />
     );
   } else {

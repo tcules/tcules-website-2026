@@ -163,3 +163,8 @@ Registers: photo, none, isometric, flat, photo, none, flat, none, island. No tin
   every band was paper. Fix: plan.ts `ALTERNATE_GROUNDS`, and `surface` threaded through TextBand,
   CloseBand, CloseFigureBand, DestinationsBand, SheetBand, MethodBand, GlyphTilesBand and the FAQ (global
   plumbing; only routes in the set change).
+- "White fill cards?" (owner, 4 Nov 2026): the design-work tiles on the tint band are paper panels. Cause:
+  a Bento tile is only its hairline, so on tint it was a tint box with an invisible plate. Fix: Bento
+  `panels` (each tile declares `data-surface="paper"`, as the enquiry island's form panel does, so its
+  fill, inks and the drawing's dotted plate read as on paper) and `--bnt-tile-ground`; DestinationsBand
+  sets `panels` when its band is tint. Global for any Bento set on a tint band.

@@ -114,6 +114,12 @@ export type BentoProps = {
    * Wide and split tiles keep their own arrangement.
    */
   visual?: 'start' | 'end';
+  /**
+   * Each tile a paper panel of its own (owner, 4 Nov 2026: "white fill cards?", the Lab's tile set on
+   * a tint band): the tile declares `data-surface="paper"`, as the enquiry island's form panel does, so
+   * its fill, inks and the drawing's dotted plate all read as on paper. For a set on a tint band.
+   */
+  panels?: boolean;
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -591,6 +597,7 @@ export function Bento({
   note,
   cta,
   visual = 'end',
+  panels = false,
 }: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
@@ -633,6 +640,7 @@ export function Bento({
             item.detail && styles.split,
             index === fullAt && styles.full,
           )}
+          data-surface={panels ? 'paper' : undefined}
         >
           <TileLink
             item={item}
