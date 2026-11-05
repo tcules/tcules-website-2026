@@ -63,6 +63,8 @@ const HERO_ILLUSTRATIONS: Readonly<
      the expertise hub drawing. */
   [ROUTES.services]: { src: '/illustrations/heroes/services.svg', width: 1210, height: 630 },
   [ROUTES.tools]: { src: '/illustrations/heroes/tools.svg', width: 860, height: 650 },
+  /* The designer's desk, redrawn in the run's hand (owner, 5 Nov 2026: "put the desk on the careers hero"). */
+  [ROUTES.careers]: { src: '/illustrations/heroes/careers.svg', width: 864, height: 607 },
   [ROUTES.futureInterfacesLab]: {
     src: '/illustrations/heroes/future-interfaces-lab.svg',
     width: 864,
