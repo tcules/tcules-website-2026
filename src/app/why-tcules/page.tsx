@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPageSeo, getPublishedWhyPage } from '@/content';
+import { landedReasonFigure } from '@/app/_corpus/reason-figure';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
 import { PublishedWhy } from '@/templates/CorpusPage/PublishedWhy';
@@ -22,7 +23,7 @@ export default async function WhyPage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
         />
       ) : null}
-      <PublishedWhy page={page} />
+      <PublishedWhy page={page} reasonFigure={landedReasonFigure} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { ENDPOINTS } from '@/lib/routes';
+import { placeholderIllustration } from '@/lib/placeholders';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
-import { Layout, Media, Prose, Section } from '@/components';
+import { Layout, Media, Prose, Section, type MediaImage } from '@/components';
 import {
   BlockCardSet,
   ContentSection,
@@ -14,12 +15,25 @@ import {
 } from '@/patterns';
 import { PublishedHero, PublishedSection } from './PublishedHome';
 import type { WhyPageModel, WhySection } from './published-why-model';
-function WhyBand({ section: s }: { section: WhySection }) {
-  const head = { id: s.id, heading: s.heading, headingId: s.headingId };
+/** The drawing the frontend files for a reason by its title, once its file has landed (the route
+    passes `landedReasonFigure`, which reads the disk, so this tier stays free of it). */
+type ReasonFigure = (
+  title: string,
+  ground: 'paper' | 'paper-deep',
+) => { src: string; width: number; height: number } | undefined;
+
+function WhyBand({
+  section: s,
+  reasonFigure,
+}: {
+  section: WhySection;
+  reasonFigure?: ReasonFigure;
+}) {
+  const head = { id: s.id, heading: s.heading, headingId: s.headingId, surface: s.surface };
   switch (s.type) {
     case 'why-logos':
       return (
-        <Section id={s.id} data-band="H" aria-labelledby={s.headingId}>
+        <Section id={s.id} data-band="H" surface={s.surface} aria-labelledby={s.headingId}>
           <LogoGrid
             context={s.heading}
             contextAs="h2"
@@ -48,19 +62,33 @@ function WhyBand({ section: s }: { section: WhySection }) {
           />
         </ContentSection>
       );
-    case 'why-reasons':
+    case 'why-reasons': {
+      // The band has always sat on tint; the CMS's ground wins when it sets one.
+      const surface = s.surface ?? 'tint';
+      const ground = surface === 'tint' ? 'paper-deep' : 'paper';
       return (
         <Reasons
           {...head}
-          surface="tint"
+          surface={surface}
           figureSize="lg"
-          items={s.entries.map((e) => ({
-            title: e.title,
-            body: <span dangerouslySetInnerHTML={{ __html: e.html }} />,
-            figure: e.figure,
-          }))}
+          items={s.entries.map((e) => {
+            // The CMS illustration, else the frontend's own drawing for the reason, else its
+            // labelled placeholder — the illustration fallback, and the only one.
+            const landed = e.figure ? undefined : reasonFigure?.(e.title, ground);
+            const figure: MediaImage =
+              e.figure ??
+              (landed
+                ? { ...landed, alt: '', kind: 'illustration' }
+                : { ...placeholderIllustration(e.title), alt: '' });
+            return {
+              title: e.title,
+              body: <span dangerouslySetInnerHTML={{ __html: e.html }} />,
+              figure,
+            };
+          })}
         />
       );
+    }
     case 'why-comparison':
       return (
         <ContentSection
@@ -147,12 +175,18 @@ function WhyBand({ section: s }: { section: WhySection }) {
       );
   }
 }
-export function PublishedWhy({ page }: { page: WhyPageModel }) {
+export function PublishedWhy({
+  page,
+  reasonFigure,
+}: {
+  page: WhyPageModel;
+  reasonFigure?: ReasonFigure;
+}) {
   return (
     <>
       <PublishedHero hero={page.hero} />
       {page.sections.map((s) => (
-        <WhyBand key={s.key} section={s} />
+        <WhyBand key={s.key} section={s} reasonFigure={reasonFigure} />
       ))}
     </>
   );

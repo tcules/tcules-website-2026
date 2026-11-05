@@ -2,7 +2,14 @@ import type { MediaImage } from '@/components';
 import type { BlockCardSet, DataTableProps, LogoGridMark } from '@/patterns';
 import type { ComponentProps } from 'react';
 import type { HomeHero, HomeSection, HomeAction } from './published-home-model';
-type Head = { key: string; id: string; heading: string; headingId: string };
+type Head = {
+  key: string;
+  id?: string;
+  heading: string;
+  headingId: string;
+  /** The CMS's ground for the band; absent, the band's own default. */
+  surface?: 'paper' | 'tint';
+};
 export type WhySection =
   | HomeSection
   | (Head &
