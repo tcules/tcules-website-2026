@@ -842,7 +842,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'challenges':
       return (
         <ChallengesBand
-          page={page}
           band={band}
           claimFigure={ctx.claimFigure}
           ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
