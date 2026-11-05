@@ -228,22 +228,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "The Lab's bench: a few experiments in progress side by side (a canvas of connected steps, a voice prompt answered in Gujarati, a design library a machine reads), each being tried, and one carried off the bench into the studio's client work. Not the `direction` band's three shifts on one interface: this is the Lab at work, that is where software is heading.",
   },
-  '/insights/cpq-ux-design#design-for-the-revision-not-the-first-draft': {
-    src: '/placeholders/insights-cpq-ux-design--design-for-the-revision-not-the-first-draft.svg',
-    width: 1600,
-    height: 900,
-    kind: 'diagram',
-    shows:
-      'Two versions of one quote side by side: the lines that changed marked, the one change that moved the price called out, and which version the customer saw. Added in the critic pass.',
-  },
-  '/insights/cpq-ux-design#the-quote-is-the-shared-object': {
-    src: '/placeholders/insights-cpq-ux-design--the-quote-is-the-shared-object.svg',
-    width: 1600,
-    height: 900,
-    kind: 'diagram',
-    shows:
-      'The responsibility map: six roles (sales representative, sales manager, product, pricing, solution and maintenance experts) contributing to one quotation, with where information changes and where a hand-off or exit sits.',
-  },
   '/insights#lab': {
     src: '/placeholders/insights--lab.svg',
     width: 1600,
