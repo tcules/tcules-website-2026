@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -187,19 +187,17 @@ content_governance:
 
 # Dashboard design services that keep the analysis inside your product
 
-A dashboard is for the Monday meeting, the operator's next exception and the finance review, where one number has to mean the same thing to everyone reading it. Tcules provides dashboard design services for SaaS and data products: every figure defined, compared and dated, with a view for each role.
+Our dashboard design gives each role its own view and every figure one agreed meaning, so customers act on the numbers.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-[Tell us who opens your dashboard](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from our dashboard design services {#what-you-get}
 
 We start from the questions each role brings to the screen, and every number we show answers one of them. Dashboard design sits within our [Product Design](/services/product-design) service.
-
-**What you receive**
 
 - **A view for each role.** Defaults, level of detail and actions for each person who opens the dashboard, all drawing on the same figures.
 
@@ -237,7 +235,7 @@ In Benchmark Gensuite's safety and sustainability suite, the scope selector sets
 
 Research with Ryzeo's ecommerce marketing customers put reporting first. We reworked how reports were organised and how people tailor a view to their own question, then documented shared rules for filters, states and data. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
-## Dashboard UX design: every number defined, compared and dated {#every-number}
+## Dashboard UX design: every number defined, compared and time-stamped {#every-number}
 
 A good-looking chart can't rescue a metric nobody has defined. So for each view we work through five things, and the first three come before any chart is drawn.
 
@@ -257,7 +255,7 @@ Example: a score shown without its inputs carries more authority than it has ear
 
 ## Dashboard design, research or a BI tool: which do you need? {#routes}
 
-A dashboard that fails can have its cause in the screen, in the records behind it or in questions nobody has asked yet.
+Pick by where the trouble sits: the screen, the records behind it, or what users need to know.
 
 | Service | What it covers | Best for |
 |---|---|---|
@@ -278,41 +276,57 @@ A dashboard that fails can have its cause in the screen, in the records behind i
 > “Easy to work with and communicate.”  
 > **Kalpesh Gohill, Founder & CEO, TreadCommand**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For dashboards, a good first piece of work is the dashboard of the role whose questions matter most, with every number defined and every data state designed.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** For [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation), we watched staff use the existing system and followed orders past checkout into production before redesigning the store and the ERP together.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we kept every piece of property data on the listing card and changed its reading order, grouping the core values for comparison.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** For three years we have designed every product Primelis has, as an ongoing partnership.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about dashboard design services {#faq}
 
@@ -350,6 +364,6 @@ A new dashboard or one people avoid. Share who opens it and the questions they b
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

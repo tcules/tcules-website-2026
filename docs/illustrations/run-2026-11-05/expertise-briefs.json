@@ -1,0 +1,355 @@
+{
+ "ai-products-developer-tools": {
+  "route": "/expertise/ai-products-developer-tools",
+  "eyebrow": "Expertise \u00b7 AI products and developer tools",
+  "title": "UX design for developer tools and AI platforms, from first demo to daily use",
+  "lead": "Our AI product design gets developers to a working first result and lets reviewers see what the model checked before they sign off.",
+  "designs": [
+   "Model and API platforms with workflow builders, search and documentation \u00b7 Eden AI",
+   "AI review tools where an engineer signs off each result \u00b7 BuildTwin",
+   "AI-native products shaped from an early idea \u00b7 ConnectX",
+   "AI-assisted survey and research products \u00b7 Novus Insights",
+   "AI writing suggestions added to an existing product \u00b7 Omny AI",
+   "UX troubleshooting for an AI software firm \u00b7 Knovos"
+  ],
+  "r3": [
+   {
+    "title": "First call, clean response",
+    "idea": "An upright solid blue code panel with the code glyph and white text bars stands centre.",
+    "drawn": "A blue code panel stands in the middle with a documentation page beside it. A dashed line carries the request to a white block marked AI; a small reply card comes back along a lime rod and lands with a tick in front of the panel. A developer stands nearby."
+   },
+   {
+    "title": "What the model checked",
+    "idea": "An upright white review panel shows an AI-badged result.",
+    "drawn": "A wide white review panel shows a result marked AI, with text and a small chart. On the floor in front, five tiles each carry a tick. At the end of the row a big lime button is being pressed by a hand, a reviewer beside it."
+   }
+  ],
+  "r3_pick": "expertise__ai-products-developer-tools-A"
+ },
+ "b2b-saas-workflow-software": {
+  "route": "/expertise/b2b-saas-workflow-software",
+  "eyebrow": "Expertise \u00b7 B2B SaaS and workflow software",
+  "title": "SaaS UI/UX design agency for B2B software that many roles share",
+  "lead": "As your B2B product adds roles, large accounts and AI agents, our SaaS UI/UX design keeps each record and handover clear, so customers renew.",
+  "designs": [
+   "Deal and pipeline software for a single industry, such as real estate \u00b7 Dealpath",
+   "Quoting, pricing and approvals (CPQ) shared by several specialists \u00b7 Auxentios",
+   "Staffing and people operations linking clients, candidates and jobs \u00b7 Scissors",
+   "Scheduling across teams and companies \u00b7 Doodle",
+   "Environment, health, safety and sustainability suites for large firms \u00b7 Benchmark Gensuite",
+   "Back-office software for a single trade, such as tyre shops \u00b7 TreadCommand"
+  ],
+  "r3": [
+   {
+    "title": "One record, every role",
+    "idea": "A tall upright solid blue record card stands centre, a quote or order drawn in white text bars.",
+    "drawn": "A tall solid blue record stands on a low base, with an order drawn in white bars. A lime strip of dots runs down its left edge for its history. Five round badges dock on its right edge: four people and one marked AI. A small figure stands at its foot."
+   },
+   {
+    "title": "The exception finds its owner",
+    "idea": "A white track enters from the left and branches into three.",
+    "drawn": "A white track comes in from the left and splits into three lanes, each ending at a person. A card with a flag rides the middle lane, which is marked by a lime rod all the way to its owner, who raises an arm."
+   },
+   {
+    "title": "Handover with history",
+    "idea": "Two white desks stand apart, a pawn at each.",
+    "drawn": "Two plain desks stand apart, one person at each. A record card hangs halfway between them, trailing an arc of small blue beads back to the first desk; the newest bead, next to the card, is lime. A dashed arrow points on to the second desk."
+   },
+   {
+    "title": "Every role turns with the record",
+    "idea": "Business software that many roles share: each role's work meshes with one shared record, so it all moves together.",
+    "drawn": "A big solid blue gear stands on a post, with a lime record card at its centre. Four smaller white gears mesh round its edge, each carrying a person's badge for a different role."
+   }
+  ],
+  "r3_pick": "expertise__b2b-saas-workflow-software-A"
+ },
+ "climatetech-energy": {
+  "route": "/expertise/climatetech-energy",
+  "eyebrow": "Expertise \u00b7 ClimateTech and energy",
+  "title": "ClimateTech product design for energy software that separates readings, forecasts and targets",
+  "lead": "From live readings to yearly totals, our ClimateTech product design makes each figure clear enough to decide on and solid enough to report.",
+  "designs": [
+   "Building energy products with live data and a digital twin \u00b7 ConnectX",
+   "Peak-price events and battery suggestions for building operators \u00b7 ConnectX",
+   "Safety and sustainability software for large organisations \u00b7 Benchmark Gensuite",
+   "EV charging and fleet electrification products \u00b7 Charging plans for drivers and depots that weigh vehicle readiness against tariffs",
+   "Renewable and storage asset monitoring \u00b7 Live output, forecasts and faults told apart at a glance",
+   "Carbon accounting and emissions reporting tools \u00b7 Every total traceable to its sources and approver"
+  ],
+  "r3": [
+   {
+    "title": "Tonight's peak, read clearly",
+    "idea": "An energy day chart where measured, forecast and target can never be mistaken for one another.",
+    "drawn": "A tall wind turbine stands on the left. Beside it, a wide chart board runs from a sun at one end to a moon at the other: a solid line for what was measured, a dashed line for the forecast, and a lime bar for the target. A lightning mark sits on tonight's peak, and an operator stands in front."
+   },
+   {
+    "title": "A total with its evidence",
+    "idea": "A reported energy total that traces straight back to the meters behind it.",
+    "drawn": "A tall report stands at the back with one bold blue total. Thin lines drop from that total to three electricity meters on the floor, each with a dial and a lightning mark. One of the lines is lime, and a sustainability lead points at the report."
+   }
+  ],
+  "r3_pick": "expertise__climatetech-energy-A"
+ },
+ "commerce-transactional-products": {
+  "route": "/expertise/commerce-transactional-products",
+  "eyebrow": "Expertise \u00b7 commerce and transactional products",
+  "title": "Ecommerce UX design for technical and made-to-order products, from search to delivery",
+  "lead": "With our ecommerce UX design, buyers can check fit, stock and delivery on the product page and order without emailing support first.",
+  "designs": [
+   "Specialist Shopify stores where buyers check fit before buying \u00b7 GT Tools",
+   "Web-to-print and made-to-order ordering \u00b7 Gold Image Printing",
+   "Production and fulfilment systems behind the store \u00b7 Gold Image Printing",
+   "Listing-content tools for Amazon sellers \u00b7 Omny AI",
+   "B2B ordering and trade portals \u00b7 Reorders, account prices and approvals made quick",
+   "Subscriptions and repeat ordering \u00b7 Skips, swaps and renewals customers manage themselves"
+  ],
+  "r3": [
+   {
+    "title": "The part, checked before ordering",
+    "idea": "A technical part stands on its own product page, measured and confirmed to fit before the buyer orders.",
+    "drawn": "A product page lies flat. On it stands a large machined fitting: a flange with bolt holes and a round collar with a bore through the middle. Measuring lines with arrow ends show its height and width, a lime tick sits at its base, and the page beside it has a price, options, an in-stock dot and an add button."
+   },
+   {
+    "title": "Into the workshop after payment",
+    "idea": "The options a buyer chose arrive at the workbench as a production ticket that matches the order exactly.",
+    "drawn": "A workbench stands in the middle with a small press on it. A production ticket is held by a lime clip on a post, and its two option chips match the product page standing faded at the back. A worker stands at the front of the bench."
+   },
+   {
+    "title": "The parcel leaving",
+    "idea": "One clear route from the order button to a parcel ready to ship.",
+    "drawn": "A product page lies flat at the back. A lime path runs from its order button across the floor to a taped and labelled parcel on a pallet at the front, with a blue tick above the parcel."
+   }
+  ],
+  "r3_pick": "expertise__commerce-transactional-products-A"
+ },
+ "content-knowledge-discovery-platforms": {
+  "route": "/expertise/content-knowledge-discovery-platforms",
+  "eyebrow": "Expertise \u00b7 content and knowledge platforms",
+  "title": "Knowledge platform product design for search, current documents and sourced AI answers",
+  "lead": "People pick the right material first time when our knowledge platform design shows the owner, version and source behind every result and AI answer.",
+  "designs": [
+   "Search and documentation inside a developer platform \u00b7 Eden AI",
+   "AI review feeds that keep each source beside its finding \u00b7 BuildTwin",
+   "Product discovery for specialist catalogues \u00b7 GT Tools",
+   "Internal knowledge bases and enterprise search \u00b7 One search box for experts and newcomers alike",
+   "Policy and document libraries with versions and owners \u00b7 The current version obvious in every result",
+   "Media and publishing products \u00b7 Ringier Media Switzerland"
+  ],
+  "r3": [
+   {
+    "title": "Found, and stamped current",
+    "idea": "People find the current version of a document and can see at once that it is current.",
+    "drawn": "A loose pile of faded old pages lies on the floor, with one crisp page on top. A lime stamp mark with a tick sits on the top page, a highlighted passage is being read, and the rubber stamp that made the mark stands beside the pile. An engineer stands at the near corner."
+   },
+   {
+    "title": "A passage, cited where used",
+    "idea": "A quoted passage stays tied to the exact line in the source document it came from.",
+    "drawn": "A tall document with a folded corner stands at the back, one line of it lime. A thin dashed thread runs down to a card lying in front, where the same lime line is quoted beside a link mark. A researcher stands at the card."
+   },
+   {
+    "title": "Found on the shelf",
+    "idea": "In a large library of documents, search finds the one source you need.",
+    "drawn": "A tall bookcase full of books, binders and archive boxes. One volume is pulled half out and is lime. A big magnifying glass hovers over it."
+   }
+  ],
+  "r3_pick": "expertise__content-knowledge-discovery-platforms-D"
+ },
+ "data-analytics-decision-products": {
+  "route": "/expertise/data-analytics-decision-products",
+  "eyebrow": "Expertise \u00b7 data and analytics products",
+  "title": "Data product design for analytics that shows users what to do next",
+  "lead": "Built around the decisions your customers make, our data product design shows what changed and why, in figures every team reads alike.",
+  "designs": [
+   "Customer-facing reports and dashboards inside a SaaS product \u00b7 Ryzeo",
+   "Scores that show what they are based on \u00b7 Doodle",
+   "Multi-site data filtered to the right part of the organisation \u00b7 Benchmark Gensuite",
+   "Operational dashboards for tyre shop software \u00b7 TreadCommand",
+   "Ask-the-data analytics, where users type a question \u00b7 Answers held to the same standard as any chart"
+  ],
+  "r3": [
+   {
+    "title": "Same figure, two teams' slides",
+    "idea": "Two teams present different charts, but the figure they both quote is identical.",
+    "drawn": "Two slides stand side by side on a long meeting table. One shows a bar chart, the other a line chart, but both carry the same lime figure tile in the same top corner. One person from each team stands in front."
+   },
+   {
+    "title": "What changed since Monday",
+    "idea": "Analytics built into the product that point customers to what changed and what to do about it.",
+    "drawn": "A thick product slab lies flat with a report sunk into its surface: a small chart, a summary tile and a row that has changed. That row carries a lime clock marker and an up arrow. A customer stands at the near edge."
+   }
+  ],
+  "r3_pick": "expertise__data-analytics-decision-products-A"
+ },
+ "edtech-learning": {
+  "route": "/expertise/edtech-learning",
+  "eyebrow": "Expertise \u00b7 EdTech and learning",
+  "title": "EdTech product design for learning platforms, courses and teacher tools",
+  "lead": "In our EdTech product design, learners get a clear next step, even on a phone, and teachers see at a glance who is stuck.",
+  "designs": [
+   "LMS and Moodle course experiences, with custom themes and plugins \u00b7 The Wandering Raven",
+   "Creative learning products for young people aged eight to eighteen \u00b7 The Wandering Raven",
+   "Growth projects inside a learning platform's product team \u00b7 JoVE",
+   "Workplace training and apprenticeship apps \u00b7 Practice that fits between shifts",
+   "Assessment and skills sign-off tools \u00b7 Evidence, witness and assessor on one record",
+   "Teacher dashboards and educator views \u00b7 Who is stuck, seen early enough to help"
+  ],
+  "r3": [
+   {
+    "title": "A lesson, then the question",
+    "idea": "A large white tablet plate lies flat.",
+    "drawn": "A large tablet stands propped on a ledge. Its top half is a blue video with a white play button and progress bar; below are three answers, the middle one lime and ticked. A learner stands to the side."
+   },
+   {
+    "title": "Who is stuck",
+    "idea": "Six small desk boxes stand in two rows, a learner pawn at each.",
+    "drawn": "Six small desks stand in two rows, a learner behind each. A lime flag rises from one desk. At the front, the teacher holds a tablet showing the same six desks with the same one lime."
+   }
+  ],
+  "r3_pick": "expertise__edtech-learning-A"
+ },
+ "fintech": {
+  "route": "/expertise/fintech",
+  "eyebrow": "Expertise \u00b7 FinTech",
+  "title": "FinTech UX design for lending and payments, with each status explained",
+  "lead": "In lending, payments and business finance, our FinTech UX design gives every decline a reason and every failed payment a way forward.",
+  "designs": [
+   "Mobile lending apps, from sign-up to loan issuance \u00b7 OctiFi",
+   "Payment apps for small shops and the people who run them \u00b7 Researched for a merchant payments client",
+   "Business finance tools for spending, approvals and payouts, including finance inside SaaS products \u00b7 Each approval shows its limit and who signs next",
+   "Staff review screens for identity checks, credit approvals and fraud cases \u00b7 Each case with its evidence and the reviewer's limit in view",
+   "Banking and money management apps for balances, transfers and savings goals \u00b7 One meaning for every status",
+   "Insurance quote, claims and underwriting tools \u00b7 Cover explained before anyone pays"
+  ],
+  "r3": [
+   {
+    "title": "The card and its payment",
+    "idea": "A large solid blue bank card lies flat at the front with a white chip square and a stripe.",
+    "drawn": "A large blue bank card lies flat in front, with its chip, contactless mark and number. Behind it runs a short track of four stops: two ticked, the third lime with a moon above it (where the payment is now), the last only a dashed ring."
+   },
+   {
+    "title": "Checked at night",
+    "idea": "An upright window frame stands on the floor with a moon glyph outside it.",
+    "drawn": "A room wall with a night window (solid blue, white moon, a few stars) fills the back. A person stands in front holding up a phone that shows a short vertical timeline with the current step lime."
+   },
+   {
+    "title": "Approved between meetings",
+    "idea": "Two small room boxes (meeting rooms, doors open) stand apart on the floor.",
+    "drawn": "Two small meeting rooms stand left and right, doors open, a meeting visible through each glass side. A dotted footstep path joins the doors, and at its bend the manager holds up a phone showing a card, an amount and a lime approve button."
+   }
+  ],
+  "r3_pick": "expertise__fintech-A"
+ },
+ "healthtech": {
+  "route": "/expertise/healthtech",
+  "eyebrow": "Expertise \u00b7 HealthTech product design",
+  "title": "Healthcare UX design for apps patients, clinicians and carers can trust",
+  "lead": "With our healthcare UX design, each person gets a clear next step and a plain consent request, and your clinical safety lead reviews screens early.",
+  "designs": [
+   "Care platforms that connect families with carers at home \u00b7 CuramCare",
+   "Apps for carers on home visits, used on a phone \u00b7 CuramCare",
+   "Portals and admin tools for healthcare professionals' congress travel \u00b7 Vovisto",
+   "Clinician tools that sit beside the patient record \u00b7 The one thing needed, found between patients",
+   "Patient portals for results, appointments and messages \u00b7 Every result with what happens next",
+   "Remote check-in apps for care after a hospital stay \u00b7 A plain answer on when someone will look"
+  ],
+  "r3": [
+   {
+    "title": "Today's dose, seen by the circle",
+    "idea": "A long white pill organiser box with seven lidded compartments lies centre floor; today's lid is open and lime, with two small capsules inside.",
+    "drawn": "A long seven-day pill organiser lies in the middle. Today's lid is flipped up in lime and two capsules sit inside. Four people stand around it, each holding a small card showing the same lime tile."
+   },
+   {
+    "title": "The family decides what to share",
+    "idea": "A family member pawn holds a phone lying almost flat, showing three share switches; two are on and lime.",
+    "drawn": "A large phone lies flat with a heart at the top and three people listed, each with a switch; two switches are lime (on), one off. Dashed lines fan out from the switches to three people standing apart; the one switched off is faded. The family member stands at the phone's edge."
+   }
+  ],
+  "r3_pick": "expertise__healthtech-B"
+ },
+ "marketplaces-multi-sided-platforms": {
+  "route": "/expertise/marketplaces-multi-sided-platforms",
+  "eyebrow": "Expertise \u00b7 Marketplace product design",
+  "title": "Marketplace product design for two-sided platforms and the teams that run them",
+  "lead": "Buyers book providers they trust, and providers spot requests worth taking. Our marketplace product design makes every booking clear from request to completion.",
+  "designs": [
+   "Care marketplaces matching families with self-employed carers \u00b7 CuramCare",
+   "Separate apps for each side, joined by one web platform \u00b7 CuramCare",
+   "Booking and rental marketplaces \u00b7 Cancellation rules each side can read",
+   "Freelance and talent marketplaces \u00b7 Requests worth a provider's time",
+   "Local service marketplaces for quotes, visits and reviews \u00b7 Arrival times and payouts run from a phone",
+   "B2B marketplaces connecting trade buyers with suppliers \u00b7 Contract prices and approvals kept plain"
+  ],
+  "r3": [
+   {
+    "title": "Two sides under one awning",
+    "idea": "A marketplace where buyers and providers meet over one booking, under one roof.",
+    "drawn": "A market stall with a blue and white striped awning stands centre. On its counter, two blue phones face into the stall: one shows a provider, the other a request. A lime booking card with a tick floats between them, and a small operations person sits at a desk to the side."
+   },
+   {
+    "title": "A slipped booking, caught",
+    "idea": "When a booking slips, the operations team catches it before it is lost.",
+    "drawn": "A long shelf at the back holds a row of booking cards with one empty, dashed slot. The missing card, in lime, is falling off the end and a large hand reaching up from an operations desk catches it. The operations person stands at the desk."
+   }
+  ],
+  "r3_pick": "expertise__marketplaces-multi-sided-platforms-A"
+ },
+ "martech-salestech": {
+  "route": "/expertise/martech-salestech",
+  "eyebrow": "Expertise \u00b7 MarTech and SalesTech",
+  "title": "MarTech product design for CRM, reporting and AI-drafted marketing content",
+  "lead": "If your users send reports, quotes or AI drafts to managers and customers, our MarTech product design makes each one clear enough to stand behind.",
+  "designs": [
+   "Marketing automation and reporting for ecommerce brands \u00b7 Ryzeo",
+   "Budget and listing-content tools for Amazon sellers \u00b7 Omny AI",
+   "Quoting (CPQ) tools shared by sales reps and pricing experts \u00b7 Auxentios",
+   "AI-assisted survey and market research products \u00b7 Novus Insights",
+   "CRM, pipeline and commission tools \u00b7 Commission shown on the deal, with the rule behind it",
+   "Lead management and sales enablement software \u00b7 The next action on a lead in one glance"
+  ],
+  "r3": [
+   {
+    "title": "The brand signs off the draft",
+    "idea": "AI drafts the marketing, and the brand reviewer approves it before it goes anywhere.",
+    "drawn": "A tall marketing draft stands centre with a picture, a heading and copy, and the AI badge in its corner. Beside it stands a fanned deck of brand colour swatches. A hand presses the lime approve button at the foot of the draft while the brand reviewer stands close by."
+   },
+   {
+    "title": "The quote goes out",
+    "idea": "A sales quote, checked to the total, goes into the envelope.",
+    "drawn": "An open envelope lies on the floor and a quote slides into it, leaning back out of the opening. The quote shows a small table and a lime total with a tick. A sales rep stands beside the envelope."
+   },
+   {
+    "title": "The customer card, flipped up",
+    "idea": "The customer record that sales and marketing teams work from, found and lifted out of the file.",
+    "drawn": "A big desk contact wheel with its cards fanned round a central rod and round knobs at each end. The file is flipped open at one customer, whose card stands up taller than the rest in lime, showing a photo and name lines."
+   }
+  ],
+  "r3_pick": "expertise__martech-salestech-D"
+ },
+ "proptech-contech-field-operations": {
+  "route": "/expertise/proptech-contech-field-operations",
+  "eyebrow": "Expertise \u00b7 PropTech, ConTech and field operations",
+  "title": "PropTech product design for deal teams, engineers and people on site",
+  "lead": "From deal desk to building site, our PropTech product design puts everyone on one record of each property, with the source behind every sign-off.",
+  "designs": [
+   "Acquisition and deal-pipeline software for real estate acquisitions teams \u00b7 Dealpath",
+   "Listing screens that show which property deserves a closer look \u00b7 Dealpath",
+   "AI drawing checks with an engineer who signs off each one \u00b7 BuildTwin",
+   "Field apps for inspections and site visits \u00b7 Offline saving and a clear \"saved\" state",
+   "Defect and handover apps for new homes \u00b7 Every defect with its before and after photos",
+   "Property management and tenant portals \u00b7 Tenant, manager and contractor on one job"
+  ],
+  "r3": [
+   {
+    "title": "Crane, plot and phone",
+    "idea": "A pale site plan plate lies flat, its plots marked as white rectangles.",
+    "drawn": "A tower crane rises at the corner of a site plan, its jib reaching over the plots and a load hanging above the lime plot. One plot has a finished building. A site manager stands on the plan holding a phone that shows the same plots, the same one lime."
+   },
+   {
+    "title": "Desk to site, same property",
+    "idea": "In the middle of the floor stands a small white building box.",
+    "drawn": "A house with a lime ridge stands in the middle. At the back left, a desk holds a screen showing the house in a listing; at the front right, a person holds a phone showing the same house. Dashed lines join the house to both."
+   }
+  ],
+  "r3_pick": "expertise__proptech-contech-field-operations-B"
+ }
+}

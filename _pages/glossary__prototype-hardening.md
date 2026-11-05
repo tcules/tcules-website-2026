@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Prototype Hardening
     url: /glossary/prototype-hardening
+  section_labels:
+    practice: Where it starts
+    steps: Steps
+    prototype-vs-production: Vs production code
+    comparison: Vs a readiness review
+    faq: FAQs
+    next: The free checklist
 render:
   band_order:
   - practice
@@ -117,7 +124,7 @@ Hardening spans several disciplines: product and design choices, engineering, se
 
 If a prototype exists, a good place to start is the [Prototype Readiness Review](/audits/prototype-readiness-review). It checks the experience and, when you share access to the code, the code itself.
 
-The review then sorts what the demo proved from what it skipped. Tcules can take the prototype on to a first release through [New Product Design & First Release](/services/new-product-design-first-release).
+The review then sorts what the demo proved from what it skipped. Tcules can take the prototype on to a first release through [Design-led MVP Development](/services/mvp-development).
 
 The free [Prototype Readiness Checklist](/tools/prototype-readiness-checklist) works through the common gaps and needs no technical knowledge. The review flags when you need a specialist security or infrastructure review.
 

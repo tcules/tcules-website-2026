@@ -1,7 +1,16 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
+import { ROUTES } from '@/lib/routes';
 
+import { glyphBand } from './glyph-bands';
+import {
+  bandArtefact,
+  itemCutOuts,
+  photoBeside,
+  studioBandPhoto,
+  studioCollage,
+} from './images';
 import { formBeforeFaq } from './order';
-import { boldLead, exampleLink, linkLead, plain } from './text';
+import { boldLead, exampleLink, linkLead, onwardLine, plain, type OnwardLine } from './text';
 
 /**
  * OfferPage's plan: for every band of a corpus page, WHAT SHAPE it is and, from the page's rhythm,
@@ -59,8 +68,15 @@ export type OfferKind =
   | 'text'
   /** A labelled set of items that is not What you get (31 Oct 2026): the sheet, to design. */
   | 'set'
+  /**
+   * A worked example that carries a table (the audits' 3 Nov 2026 "What the report looks like"): a
+   * sample page of the report (ReportBand). A worked example told as bold-led story rows is `record`.
+   */
+  | 'example'
   | 'note'
   | 'close'
+  /** A listing's term index (4 Nov 2026, /glossary): its lead and its groups, set by ListingIndex. */
+  | 'index'
   /** No rule names this band: it renders every block plainly and warns (a planning gap). */
   | 'generic';
 
@@ -94,7 +110,47 @@ export type OfferUnit = {
   visual: boolean;
   /** The register the band is drawn in; adjacent bands change it (a development warning). */
   register: VisualRegister;
+  /**
+   * The band's onward line, lifted out of it and set as an ink island after it (tracker 2.53;
+   * `placeOnward`). Absent where the band has none, or where an island there would break a rule.
+   */
+  onward?: OnwardLine;
 };
+
+/* ── Onward lines (tracker 2.53) ────────────────────────────────────────────────── */
+
+/** The bands that are, or end in, an ink island of their own: an island beside one would be two. */
+const ISLAND_KINDS: ReadonlySet<OfferKind> = new Set(['enquiry', 'close']);
+const ENQUIRY_HREF = '#enquiry';
+
+function endsInAsk(band: CorpusBand): boolean {
+  const scan = (blocks: readonly CorpusBlock[]): boolean =>
+    blocks.some(
+      (block) =>
+        (block.type === 'links' && block.links.some((link) => link.href === ENQUIRY_HREF)) ||
+        (block.type === 'item' && scan(block.blocks)),
+    );
+  return scan(band.blocks);
+}
+
+/**
+ * A band's onward line becomes an ink island after the band (`OnwardIsland`) unless that would set
+ * two islands side by side or one beside the close (tracker 2.53): the next unit is the enquiry close
+ * or a closing ask (`close`), or the band already ends in its own ask island (`AskIsland`, a band
+ * carrying an `#enquiry` link). Where it may not, the line stays in its band, as written. Only the
+ * band's last unit carries it, since the line is the band's last block. The island is a visual band,
+ * so it never makes a text-heavy pair, and it sits on paper, so it never makes two tints touch.
+ */
+function placeOnward(planned: OfferUnit[]): void {
+  planned.forEach((unit, index) => {
+    const next = planned[index + 1];
+    if (!next || next.band === unit.band) return;
+    if (ISLAND_KINDS.has(unit.kind) || ISLAND_KINDS.has(next.kind) || unit.kind === 'faq') return;
+    if (endsInAsk(unit.band)) return;
+    const line = onwardLine(unit.band);
+    if (line) unit.onward = line;
+  });
+}
 
 /* ── Shape signatures ───────────────────────────────────────────────────────────── */
 
@@ -166,7 +222,7 @@ const boldLedList = (band: CorpusBand): boolean =>
 const personaOrChallenges: ShapeRule = (band) =>
   isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'challenges';
 /** A term index (`A` lines) where the copy uses the same id for a tool group (`L` + `P`). */
-const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'related' : 'directory');
+const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'index' : 'directory');
 
 /**
  * THE LOOKUP, SECTION ID FIRST (component-map § A and § B, 29 Oct 2026). The content team's band ids
@@ -191,18 +247,27 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'related-terms': 'related',
   'hard-parts': personaOrChallenges,
   'what-we-design': 'catalog',
-  compare: 'table',
+  /* A comparison of options to choose between ("Option | …") is the services hub's split tiles
+     (owner, 2 Nov 2026, audits). A table of the free tools ("Tool | …", /tools) heads the tool groups
+     after it, its columns in their tiles (CopyBands DirectoryBand, tools critic 4 Nov 2026). Any other
+     comparison stays a table. */
+  compare: (band) => {
+    const table = band.blocks.find((block) => block.type === 'table');
+    const key = table?.type === 'table' ? plain(table.header[0] ?? []).trim() : '';
+    return /^options?$/i.test(key) ? 'router' : /^tools?$/i.test(key) ? 'directory' : 'table';
+  },
   routes: 'table',
   articles: 'related',
   'client-recognition': 'recognition',
   method: 'method',
   scope: (_band, sig) =>
     /U/.test(sig) && /L/.test(sig) ? 'outcomes' : /T/.test(sig) ? 'table' : 'text',
-  deliverables: 'deliverables',
+  /* An audit's What you get (owner, 2 Nov 2026: "typical what you get section like the services page"). */
+  deliverables: 'outcomes',
   'services-on-their-own': 'router',
   /* ── G11 · option and record tables ── */
   'company-record': 'table',
-  'gap-map': 'table',
+  'gap-map': 'outcomes',
   'client-list': 'table',
   'design-run': 'table',
   autonomy: 'table',
@@ -234,8 +299,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   states: 'table',
   platforms: 'table',
   alternatives: 'table',
-  /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
-  choose: 'table',
+  /* ── G12 · hub routers ── */
+  /* /audits' chooser: five named audits, each with who it is for and what you come away with. The
+     /services hub solved the same table on 2 Nov (owner; named-services-are-service-tiles): split
+     tiles, each its own drawing, the third column the tile's labelled panel (4 Nov 2026). */
+  choose: 'router',
   /* /services' chooser: eight named services, so the service tiles, each its own drawing, the table's
      third column kept as a labelled detail (owner, 2 Nov 2026; named-services-are-service-tiles). */
   'service-guide': 'router',
@@ -266,7 +334,12 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'why-join': 'outcomes',
   'who-we-are-looking-for': 'outcomes',
   'what-youll-gain': 'outcomes',
-  'what-youll-do': 'outcomes',
+  /* /future-interfaces-lab/join "How the fellowship works": its lead names a sequence (apply, pass a
+     practical round, then build), so it is a method, not a set (4 Nov 2026). */
+  'what-youll-do': 'method',
+  /* /future-interfaces-lab/join "How selection works": three steps after the application island, split
+     from its heading (owner, 4 Nov 2026: "how selection works as a new section after the form"). */
+  'how-selection-works': 'method',
   /* /how-we-work's practical details: drawn cards, as About's working terms (owner, 1 Nov 2026). */
   essentials: 'tiles',
   'engagement-shapes': 'tiles',
@@ -281,10 +354,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'product-situations': 'destinations',
   /* ── G18 · open roles · G6 term indexes ── */
   'open-roles': 'related',
-  'ai-in-products': 'related',
-  'ai-in-practice': 'related',
-  'design-and-code': 'related',
-  structure: 'related',
+  /* The glossary's term groups: sections of the listing's index, each term a drawn card (4 Nov 2026). */
+  'ai-in-products': 'index',
+  'ai-in-practice': 'index',
+  'design-and-code': 'index',
+  structure: 'index',
   /* ── G23 · tool hub groups, or a term index where the same id names one ── */
   ai: termsOrTools,
   'design-systems': termsOrTools,
@@ -312,13 +386,25 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
-  /* Three instructions as plain paragraphs: numbered steps (MethodBand), so the glossary opens on a
-     shape before its five term groups (review 29 Oct). */
-  'how-to-use': 'method',
+  /* /why-tcules, the 3 Nov copy (2.60): claims carried by clients' words. Complex software and design
+     to code are prose beside the photograph the copy binds to each (the team; ConnectX's coded demo);
+     "Building an AI product?" argues for one service, its drawing beside the words (TextBand). */
+  'complex-software': 'text',
+  'design-to-code': 'text',
+  'ai-products': 'text',
+  /* Three instructions on reading the index: the listing's lead, beside the rail of groups it points
+     at (4 Nov 2026). Not a method: the order is not a sequence (2026-10-11-no-decorative-numbering). */
+  'how-to-use': 'index',
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
-  lab: 'close',
-  apply: 'close',
+  /* /careers "Tcules internships, residencies and Future Interfaces Lab places": prose with two inline
+     links, a side path for early-career readers, not the page's ask (apply is). A close here fell to
+     C-text, the no-link fallback, and took the close's automatic tint (4 Nov 2026). */
+  lab: 'text',
+  /* An application band takes the application on the page: the enquiry island in its application
+     wording (owner, 4 Nov 2026: "reuse the existing enquiry form"), with or without selection steps
+     (/future-interfaces-lab/join's `###` steps; /careers' email line). order.ts sets it before the FAQ. */
+  apply: 'enquiry',
   'case-studies': (_band, sig) => (/^P$/.test(sig) ? 'close' : 'text'),
   purpose: 'close',
   promotion: 'close',
@@ -326,12 +412,17 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'artefact-access': 'close',
   'your-rules': 'close',
   talk: 'close',
+  /* The audits' "After the audit": one sentence and its onward link, the page's handover to the
+     work that follows, so it is a closing ask on its ink island (owner, 4 Nov 2026), not a prose band. */
+  'after-the-audit': 'close',
   confidentiality: 'note',
   /* ── G21 · one worked example; and the ids the earlier copy used ── */
   'signature-work': 'record',
   'complex-products': 'cases',
   proof: 'cases',
-  'worked-example': 'record',
+  /* A worked example that carries a table is a page of the report (the audits, 3 Nov 2026 copy); one
+     told as bold-led story rows stays the case spread. */
+  'worked-example': (band) => (band.blocks.some((b) => b.type === 'table') ? 'example' : 'record'),
   engagement: 'tiles',
   approach: 'principles',
   /* ── G24 · home's own bands (HomePage composes them; this is the shared fallback) ── */
@@ -350,11 +441,11 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
 export const TEMPLATE_BANDS = {
   '/': [
     'client-recognition',
+    'why-tcules',
     'product-situations',
     'product-design',
     'selected-work',
     'testimonials',
-    'people',
     'ai-native-practice',
     'expertise',
     'insights',
@@ -407,8 +498,16 @@ export function kindOf(band: CorpusBand): OfferKind {
   const kind = kindById(band) ?? kindByShape(band, sig);
   /* "What you get" is one band, four parts (OfferParts); any other labelled set the copy calls by
      another name is a set of items (31 Oct 2026, kinds:check on the composed pages). */
-  return kind === 'outcomes' && band.id !== 'what-you-get' ? 'set' : kind;
+  return kind === 'outcomes' && !isWhatYouGet(band) ? 'set' : kind;
 }
+
+/**
+ * The bands that are "What you get": the service and expertise pages' `what-you-get`, and an audit's
+ * `deliverables` (or `gap-map`, the readiness review's), which render the same four parts (owner,
+ * 2 Nov 2026). One answer, read by the planner, the sheet parser and the renderer.
+ */
+const WHAT_YOU_GET_IDS: ReadonlySet<string> = new Set(['what-you-get', 'deliverables', 'gap-map']);
+export const isWhatYouGet = (band: CorpusBand): boolean => WHAT_YOU_GET_IDS.has(band.id);
 
 /** The shape fallback: the rules OfferPage applied before the id table, still right for an unnamed band. */
 export function kindByShape(band: CorpusBand, sig: string = signature(band)): OfferKind {
@@ -457,6 +556,7 @@ const MEDIA_KINDS: ReadonlySet<OfferKind> = new Set([
 const VISUAL: ReadonlySet<OfferKind> = new Set([
   'symptoms',
   'record',
+  'example',
   'cases',
   'tiles',
   'router',
@@ -479,12 +579,67 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
  * hero's promise as one story, so they share one register (owner, 1 Nov 2026,
  * docs/page-build/pages/how-we-work.md). Each slot is a labelled placeholder until drawn.
  */
-const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set([
+/* Empty since 4 Nov 2026: the owner rejected /how-we-work's four bands as one alternating
+   image-and-words split each ("designed for the content"); each now takes its content's shape
+   (SITUATION_PROSE, CLAIM_LIST, the bound prototype, the AI band beside its heading). */
+const ILLUSTRATED_PROSE: ReadonlySet<string> = new Set<string>([]);
+
+/**
+ * Prose bands that are a set of short titled claims, a sentence or two each (/how-we-work "Who you
+ * work with", /why-tcules "Experienced in complex, specialist software"): home's Why Tcules list, the
+ * heading at the left, the claims down the right, one ruled row each led by its glyph (owner, 4 Nov
+ * 2026: "the service page, expertise page, homepage are the north star").
+ */
+const CLAIM_LIST: ReadonlySet<string> = new Set([
   'your-team',
   'working-loop',
   'design-to-release',
   'product-knowledge',
+  /* /matter-design-system: "What a working design system adds to a Figma file", what a system needs
+     beyond the file (owners, coded components, docs, releases, a machine reader). No frame of the
+     file shows that, so the isometric placeholder until drawn (matter critic, pass 2, 4 Nov 2026: the
+     old site's green screen-and-code picture that stood here for an hour was removed). */
+  'beyond-the-file',
+  /* /future-interfaces-lab: "Where we think software interfaces are heading", the Lab's thesis told in
+     three paragraphs; an abstract claim, so one band-scale isometric illustration, and it keeps the
+     short `purpose` intro from touching another prose band (docs/page-build/pages/future-interfaces-lab.md). */
+  'direction',
+  /* /careers "How AI fits into the job": what to hand AI and what to check, and where software is going;
+     an abstract claim about the job, so one band-scale isometric illustration
+     (docs/page-build/pages/careers.md). */
+  'ai-fluency',
+  /* Swapped with complex-software (owner, 4 Nov 2026: "swap the layouts … keeping the same position"). */
+  'design-to-code',
+  /* Untitled lines as list rows, each led by its glyph (owner, 4 Nov 2026: "this is list card"). */
+  'ai-native-practice',
 ]);
+
+/**
+ * Prose bands whose claims or lines are a set of cards under the head, each led by its glyph (owner,
+ * 4 Nov 2026: "stop using project/case study images in sections … make the 2 items cards"; "3 cards,
+ * one for each line"): the three-ways cards (EngagementOptions `cards`).
+ */
+const CARD_SETS: ReadonlySet<string> = new Set(['design-to-release', 'complex-software']);
+
+/** Routes whose bands alternate tint and paper down to the quotes band (planOffer). */
+const ALTERNATING: ReadonlySet<string> = new Set(['/how-we-work', '/why-tcules']);
+
+/** Whether a prose band is a set of cards (`CARD_SETS`). */
+export const isCardSet = (bandId: string): boolean => CARD_SETS.has(bandId);
+
+/** Whether a prose band is a set of short titled claims (`CLAIM_LIST`). */
+export const isClaimList = (bandId: string): boolean => CLAIM_LIST.has(bandId);
+
+/**
+ * Prose bands that name the reader's starting situations, each a bold-led paragraph ("**A new
+ * product.** We find who it's for…"): home's "where to start" board, every situation at once with its
+ * drawing, title and sentence, none of them a link (owner, 4 Nov 2026: "isn't this essentially the
+ * where to start section?").
+ */
+const SITUATION_PROSE: ReadonlySet<string> = new Set(['product-knowledge']);
+
+/** Whether a prose band names starting situations (`SITUATION_PROSE`). */
+export const isSituationProse = (bandId: string): boolean => SITUATION_PROSE.has(bandId);
 
 /** Whether a prose band carries an isometric illustration of its own claim (`ILLUSTRATED_PROSE`). */
 export const isIllustratedProse = (bandId: string): boolean => ILLUSTRATED_PROSE.has(bandId);
@@ -518,8 +673,14 @@ export function registerOf(
     case 'enquiry':
       return 'isometric';
     case 'industries':
-    case 'destinations':
       return 'photo';
+    /* A set of destinations the page draws item by item is flat; otherwise its images are photographs
+       or captures (/future-interfaces-lab: the drawn tools, then the captured experiments). */
+    case 'destinations':
+      return drawn.has(band.id) ? 'flat' : 'photo';
+    /* A close drawn beside its one figure (/future-interfaces-lab `promotion`). */
+    case 'close':
+      return drawn.has(band.id) ? 'flat' : 'none';
     case 'deliverables':
       return bound ? 'photo' : 'none';
     case 'outcomes':
@@ -529,12 +690,66 @@ export function registerOf(
     case 'table':
     case 'method':
     case 'text':
-      if (ILLUSTRATED_PROSE.has(band.id)) return 'isometric';
-      return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
+      /* The page's own artefact, a real image of the thing (images.ts ARTEFACT_BAND). */
+      if (bandArtefact(page.route, band.id)) return 'photo';
+      /* Each item a detail of the page's own artefact (images.ts ITEM_CUT_OUTS). */
+      if (itemCutOuts(page.route, band.id)) return 'photo';
+      if (ILLUSTRATED_PROSE.has(band.id) || SITUATION_PROSE.has(band.id)) return 'isometric';
+      /* The studio collage is six photographs (images.ts STUDIO_COLLAGE). */
+      if (studioCollage(page.route, band.id)) return 'photo';
+      /* A set beside one studio photograph (images.ts PHOTO_BESIDE). */
+      if (photoBeside(page.route, band.id)) return 'photo';
+      return drawn.has(band.id)
+        ? 'flat'
+        : bound || studioBandPhoto(page.route, band.id)
+          ? 'photo'
+          : 'none';
     default:
       return 'none';
   }
 }
+
+/**
+ * Two closes that share ONE ink island, by route: the first band's unit renders the island in two peer
+ * halves, the second band's words in its end half, and the second band takes no unit of its own
+ * (kinds.ts `BANDS_ELSEWHERE` names where its words went). /future-interfaces-lab: the candidate's ask
+ * (`join`) and the product owner's (`talk`), each one sentence with one link; two islands would touch,
+ * and as prose they made three text bands in a row after the FAQ (4 Nov 2026, owner to confirm).
+ */
+export const PAIRED_CLOSES: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  '/future-interfaces-lab': { join: 'talk' },
+};
+
+/**
+ * Closes whose inline links all go to one destination, set as the ink island with that destination as
+ * the one action (CopyBands `CloseBand`), by route and band. Opt-in until the owner rules it for every
+ * such close (4 Nov 2026, /future-interfaces-lab/join "Ask to see work from an experiment").
+ */
+const ISLAND_CLOSES: ReadonlySet<string> = new Set([
+  `${ROUTES.futureInterfacesLabJoin}#artefact-access`,
+]);
+
+/** Whether this route sets the close as its single-destination island (`ISLAND_CLOSES`). */
+export const isIslandClose = (route: string, bandId: string): boolean =>
+  ISLAND_CLOSES.has(`${route}#${bandId}`);
+
+/** The band a close shares its island with on this route, if any (`PAIRED_CLOSES`). */
+export const pairedCloseOf = (route: string, bandId: string): string | undefined =>
+  PAIRED_CLOSES[route]?.[bandId];
+
+/**
+ * Steps set under an application's form, in its band, rather than as a band of their own: by route,
+ * the steps band and the form band it goes under (blocks.tsx APPLICATION_FORMS `stepsBand`; owner,
+ * 4 Nov 2026, /future-interfaces-lab/join "How selection works": "just under the form is fine").
+ */
+const STEPS_UNDER_FORM: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  [ROUTES.futureInterfacesLabJoin]: { 'how-selection-works': 'apply' },
+};
+
+/** Whether a band's words live in another close's island on this route, so it takes no unit. */
+const pairedAway = (route: string, bandId: string): boolean =>
+  Object.values(PAIRED_CLOSES[route] ?? {}).includes(bandId) ||
+  STEPS_UNDER_FORM[route]?.[bandId] !== undefined;
 
 type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
@@ -568,8 +783,19 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            studioBandPhoto(page.route, band.id) !== undefined ||
+            bandArtefact(page.route, band.id) !== undefined ||
             ILLUSTRATED_PROSE.has(band.id) ||
+            SITUATION_PROSE.has(band.id) ||
             drawn.has(band.id) ||
+            /* Six studio photographs, or an icon set (glyph-bands.ts). */
+            studioCollage(page.route, band.id) !== undefined ||
+            photoBeside(page.route, band.id) !== undefined ||
+            glyphBand(page.route, band.id) !== undefined ||
+            /* A paired close is an island, and an island is a visual band. */
+            (kind === 'close' &&
+              (pairedCloseOf(page.route, band.id) !== undefined ||
+                isIslandClose(page.route, band.id))) ||
             band.blocks.some(
               (block) =>
                 block.type === 'paragraph' &&
@@ -594,6 +820,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   };
 
   for (const band of formBeforeFaq(page.bands)) {
+    if (pairedAway(page.route, band.id)) continue;
     const kind = kindOf(band);
     const quoted = band.blocks.some((block) => block.type === 'quote');
     switch (kind) {
@@ -635,6 +862,12 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   return units;
 }
 
+/** Routes whose bands alternate tint and paper down the page (owner, 4 Nov 2026). */
+const ALTERNATE_GROUNDS: ReadonlySet<string> = new Set([
+  ROUTES.futureInterfacesLab,
+  ROUTES.futureInterfacesLabJoin,
+]);
+
 /**
  * The page's units, with surfaces, media sides and texture decided from the whole sequence.
  */
@@ -667,9 +900,12 @@ export function planOffer(
 
     /* Prose with a photograph of its own is a media split (B) too: without this every one of them
        took the start side, and /how-we-work's three ran image-left down the page (1 Nov 2026). */
+    /* The studio collage is not a split: its big frame always sits at the end, so it takes no side. */
     const carriesMedia =
       (MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b')) ||
-      (draft.kind === 'text' && (draft.register === 'photo' || draft.register === 'isometric'));
+      (draft.kind === 'text' &&
+        studioCollage(page.route, draft.band.id) === undefined &&
+        (draft.register === 'photo' || draft.register === 'isometric'));
     /* Two media splits already in a row: a third would be a third B. A read-down with the
        photograph beside its head says the same thing in a different shape (page-mapping M11). */
     const variant: OfferUnit['variant'] =
@@ -689,10 +925,44 @@ export function planOffer(
   /* A worked example is a story on its own ground: tint, unless a neighbour is already tint (two tints
      never touch). */
   planned.forEach((unit, index) => {
-    if (unit.kind !== 'record' && unit.kind !== 'close') return;
+    if (unit.kind !== 'record' && unit.kind !== 'example' && unit.kind !== 'close') return;
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
+
+  /* Alternating grounds, by route (owner, 4 Nov 2026, the Future Interfaces Lab pages: "alternating
+     bands"): the first band under the hero on tint, then paper, tint, down the page. An island close
+     (the enquiry form, a close island) stays on paper, its island the band's colour, and the count
+     runs on through it, so two tints never touch. */
+  if (ALTERNATE_GROUNDS.has(page.route)) {
+    let previous = 'paper' as OfferUnit['surface'];
+    for (const unit of planned) {
+      const island =
+        unit.kind === 'enquiry' ||
+        (unit.kind === 'close' &&
+          (pairedCloseOf(page.route, unit.band.id) !== undefined ||
+            isIslandClose(page.route, unit.band.id) ||
+            unit.band.blocks.some((block) => block.type === 'links')));
+      unit.surface = !island && previous !== 'tint' ? 'tint' : 'paper';
+      previous = unit.surface;
+    }
+  }
+
+  /* A page whose bands alternate grounds for rhythm (owner, 4 Nov 2026, /how-we-work: "lets use
+     alternating tint bands"): from the first band after the client marks to the quotes band, tint and
+     paper in turn, so two tints never touch; the form and the FAQ stay paper. */
+  if (ALTERNATING.has(page.route)) {
+    const from = planned.findIndex((unit) => unit.kind === 'recognition') + 1;
+    const to = planned.findIndex((unit) => unit.kind === 'quotes');
+    if (to > from) {
+      for (let index = from; index <= to; index += 1) {
+        const unit = planned[index];
+        if (unit) unit.surface = (to - index) % 2 === 0 ? 'tint' : 'paper';
+      }
+    }
+  }
+
+  placeOnward(planned);
 
   /* Rhythm: never two text-heavy bands adjacent (page-mapping § 3). A warning, not a refusal: the
      page renders as written and the fault is visible on it. */

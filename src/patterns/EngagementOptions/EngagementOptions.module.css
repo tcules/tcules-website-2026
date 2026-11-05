@@ -121,3 +121,74 @@
     display: none;
   }
 }
+
+/* `cards`: each option a card, a hairline round it at the card radius, on the card's own ground,
+   the copy a `gutter` inside. */
+.card {
+  padding: var(--gap-gutter);
+  border: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+  border-radius: var(--eop-card-radius);
+  background: var(--eop-card-ground);
+}
+
+/* The cell's glyph: the accent, at the glyph size a card's head takes. */
+.cellIcon {
+  display: block;
+  inline-size: var(--eop-cell-icon-size);
+  block-size: var(--eop-cell-icon-size);
+  color: var(--eop-cell-icon-ink);
+}
+
+.cellIcon > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* `plans`: each option a plan card, a hairline round it at the card radius, on the plan's own ground
+   (white on paper, as approved in the 5 Nov mock), the copy a `gutter` inside. */
+.plan {
+  padding: var(--gap-gutter);
+  border: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+  border-radius: var(--eop-card-radius);
+  background: var(--eop-plan-ground);
+}
+
+/* The head closes on the card's own hairline, the block step under the name inside its box. */
+.planHead {
+  padding-block-end: var(--gap-block);
+  border-block-end: var(--eop-rule-width) solid var(--eop-card-rule-ink);
+}
+
+/* A plan's name: h4 one step up (owner, 5 Nov 2026: "slightly larger titles"). */
+.planTitle {
+  font: var(--eop-plan-title-text);
+  letter-spacing: var(--eop-plan-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eop-title-ink);
+}
+
+/* The line under a plan's name: what the plan is for, at the card body size. */
+.planBody {
+  font: var(--eop-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--eop-body-ink);
+}
+
+.planItem {
+  font: var(--eop-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--eop-plan-item-ink);
+  min-inline-size: 0;
+}
+
+/* The shared tick, in the accent, set on the item's first line. */
+.tick {
+  display: block;
+  color: var(--eop-cell-icon-ink);
+  padding-block-start: var(--eop-tick-optical-offset);
+}
+
+.tick > svg {
+  display: block;
+}

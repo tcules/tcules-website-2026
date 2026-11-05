@@ -43,6 +43,8 @@ import {
   type HeroAction,
 } from '@/patterns';
 
+import { withShareImage } from '../../_og';
+
 type HeroActions = readonly [] | readonly [HeroAction] | readonly [HeroAction, HeroAction];
 
 function requestedSlug(slug: readonly string[]): string {
@@ -355,10 +357,19 @@ export function generateStaticParams() {
   return offerSlugs('/services').map((slug) => ({ slug: slug.split('/') }));
 }
 
+/**
+ * The page's metadata with its share card attached. A catch-all segment cannot hold an
+ * `opengraph-image` file (Turbopack refuses one after `[...slug]`), so this family's cards are
+ * served by `/og/[...path]` and named here instead (`_og/index.ts`).
+ */
 export async function generateMetadata({
   params,
 }: PageProps<'/services/[...slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  return withShareImage(await pageMetadata(slug), `/services/${requestedSlug(slug)}`);
+}
+
+async function pageMetadata(slug: string[]): Promise<Metadata> {
   const corpus = await offerMetadata(`/services/${requestedSlug(slug)}`);
   if (corpus) return corpus;
   const service = await getServicePage(requestedSlug(slug));
@@ -384,13 +395,11 @@ export async function generateMetadata({
       description,
       type: 'website',
       ...(canonical ? { url: canonical } : {}),
-      images: [],
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: [],
     },
   };
 }

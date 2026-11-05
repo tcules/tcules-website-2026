@@ -2,6 +2,8 @@ import { useId } from 'react';
 
 import { Cluster, Icon, Layout, Tag } from '@/components';
 
+import { cx } from '@/lib/cx';
+
 import styles from './ProcessFlow.module.css';
 
 export type ProcessFlowStage = {
@@ -32,6 +34,13 @@ export type ProcessFlowProps = {
   throughout?: ProcessFlowLane;
   /** The element for each stage name. Heading semantics only; the visual role does not change. */
   stageHeading?: ProcessFlowStageHeading;
+  /**
+   * Default `true`: each stage opens on a hairline and each item closes on one. `false` (owner,
+   * 4 Nov 2026, home's "How our designers use AI": "ruled cards are a no no"): no rules at all, the
+   * stages parted by the gutter and the arrows alone, each stage's one line at the body size, for a
+   * flow of a few one-line stages where the rules made a row of boxes.
+   */
+  ruled?: boolean;
 };
 
 function warn(message: string) {
@@ -64,6 +73,7 @@ export function ProcessFlow({
   actor,
   throughout,
   stageHeading = 'h3',
+  ruled = true,
 }: ProcessFlowProps) {
   const laneLabelId = useId();
   const valid = stages
@@ -104,7 +114,10 @@ export function ProcessFlow({
           rowGap="stack"
         >
           {valid.map((stage, index) => (
-            <li key={`${index}-${stage.label}`} className={styles.stage}>
+            <li
+              key={`${index}-${stage.label}`}
+              className={cx(styles.stage, !ruled && styles.open)}
+            >
               <Layout rowGap="block">
                 <Cluster nowrap justify="between" align="center" colGap="text">
                   <Cluster nowrap align="baseline" colGap="text">
@@ -121,7 +134,10 @@ export function ProcessFlow({
                 </Cluster>
                 <Layout as="ul" rowGap="none">
                   {stage.items.map((item, itemIndex) => (
-                    <li key={`${itemIndex}-${item}`} className={styles.item}>
+                    <li
+                      key={`${itemIndex}-${item}`}
+                      className={cx(styles.item, !ruled && styles.openItem)}
+                    >
                       {item}
                     </li>
                   ))}

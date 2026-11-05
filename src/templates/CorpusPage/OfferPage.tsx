@@ -1,15 +1,30 @@
+import { Fragment } from 'react';
+
 import type { CorpusPage } from '@/lib/corpus-types';
-import { heroIsCentred } from '@/lib/hero-media';
-import { heroImage } from './images';
+import { heroIsCentred, heroIsServiceSubPage, heroIsText } from '@/lib/hero-media';
+import { heroClip } from '@/lib/hero-clips';
+import { heroImage, type SlotImage } from './images';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
-import { CorpusHero } from './blocks';
+import { CorpusHero, withApplicationAnchor } from './blocks';
+import { OnwardIsland } from './CopyBands';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer } from './plan';
+import { withoutBlock } from './text';
 
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
 };
+
+/** The hero's image as PageHero media: a phone cut on the record (images.ts `HeroCutOut.phone`)
+ *  becomes the hero's art direction, and the image itself goes to Media without it. */
+function heroMedia(slot: SlotImage) {
+  if ('phone' in slot && slot.phone) {
+    const { phone, ...image } = slot;
+    return { type: 'image', image, phone } as const;
+  }
+  return { type: 'image', image: slot } as const;
+}
 
 /**
  * TIER 3 — the offer page: a service, an audit or an expertise page from the `_pages/` corpus
@@ -40,10 +55,16 @@ export function OfferPage({
   claimFigure,
 }: OfferPageProps) {
   const drawing = serviceIllustration(page.route);
+  /* A words-only hero (hero-media.ts TEXT_HERO_ROUTES): the band under it is the first picture. */
+  const textHero = heroIsText(page.route);
+  const clip = heroClip(page.route);
+  /* A service sub-page with no drawing or clip: no picture and no placeholder in its hero (owner,
+     5 Nov 2026). */
+  const bareHero = !drawing && !clip && heroIsServiceSubPage(page.route);
   const units = planOffer(
     page,
     new Set(Object.keys(scenes?.items ?? {})),
-    drawing ? 'isometric' : 'photo',
+    textHero || bareHero ? 'none' : drawing ? 'isometric' : 'photo',
   );
   const ctx: OfferContext = {
     page,
@@ -56,22 +77,24 @@ export function OfferPage({
     claimFigure,
   };
 
-  const media = drawing
-    ? ({
-        type: 'image',
-        image: {
-          src: drawing.src,
-          width: drawing.width,
-          height: drawing.height,
-          alt: drawing.alt,
-          kind: drawing.kind,
-        },
-        cut: drawing.cut,
-      } as const)
-    : ({
-        type: 'image',
-        image: heroImage(page),
-      } as const);
+  const media =
+    textHero || bareHero
+      ? undefined
+      : clip
+        ? ({ type: 'clip', ...clip } as const)
+        : drawing
+          ? ({
+              type: 'image',
+              image: {
+                src: drawing.src,
+                width: drawing.width,
+                height: drawing.height,
+                alt: drawing.alt,
+                kind: drawing.kind,
+              },
+              cut: drawing.cut,
+            } as const)
+          : heroMedia(heroImage(page));
 
   return (
     <>
@@ -79,15 +102,29 @@ export function OfferPage({
           (decisions/2026-10-29-studio-record-is-figures). The hero's "Selected … work:" line names the cases the page lists further down; where it
           does list them (a case band), the line only repeats that list and read as unfinished
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
+      {/* An application taken on the page: the hero's ask lands on it (blocks.ts APPLICATION_FORMS). */}
       <CorpusHero
-        page={page}
-        arrangement={heroIsCentred(page.route) ? 'centred' : 'beside'}
+        page={withApplicationAnchor(page)}
+        arrangement={
+          clip ? 'stacked' : textHero || heroIsCentred(page.route) ? 'centred' : 'beside'
+        }
         media={media}
         proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />
-      {units.map((unit) => (
-        <UnitView key={unit.id} unit={unit} ctx={ctx} />
-      ))}
+      {/* A band's onward line is said once, on its island after the band (tracker 2.53). */}
+      {units.map((unit) =>
+        unit.onward ? (
+          <Fragment key={unit.id}>
+            <UnitView
+              unit={{ ...unit, band: withoutBlock(unit.band, unit.onward.index) }}
+              ctx={ctx}
+            />
+            <OnwardIsland bandId={unit.band.id} line={unit.onward} />
+          </Fragment>
+        ) : (
+          <UnitView key={unit.id} unit={unit} ctx={ctx} />
+        ),
+      )}
     </>
   );
 }

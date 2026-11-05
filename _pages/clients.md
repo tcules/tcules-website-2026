@@ -54,11 +54,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -131,7 +131,7 @@ content_governance:
 
 Founders and product teams in 19 countries have trusted us with new products, software their customers rely on, AI features and designs that had to become working software. You'll know some of the names, and recognise the problems.
 
-[Start a conversation](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -170,6 +170,7 @@ Knovos asked us to find what was really holding its product back, then deal with
 | Client | Product | Our work |
 |---|---|---|
 | [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) | Enterprise meeting scheduling | Research, product modelling, interface design and new components for Doodle's design system |
+| [Ringier Media Switzerland](/case-studies/news-app-ux-shared-design-media-group-ringier) | News, finance and business media apps (Blick, cash.ch, Bilanz) | Embedded product design across sport, subscription, onboarding and roadmap concepts |
 | [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) | Real estate deal management | A product audit, then a focused redesign of the listing-to-deal workflow |
 | [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) | Environment, health, safety and sustainability suite | Shared interface direction, a scope selector redesign and coded prototypes |
 | [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) | AI platform for developers | A redesign of how people start a workflow, with search and AI help |
@@ -202,7 +203,7 @@ Knovos asked us to find what was really holding its product back, then deal with
 > “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
 > **Clément Contamine, CPO, Primelis**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Clients who keep working with us {#returning-clients}
 
@@ -220,7 +221,7 @@ Tcules has worked with Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX, 
 
 ### Is Tcules well reviewed on Clutch?
 
-Tcules is rated 4.8 on Clutch from 13 reviews. Each review shows the client's own rating and comments, and you can read them all on the [Tcules Clutch profile](https://clutch.co/profile/tcules-saas-product-design-studio).
+Tcules is rated 4.8 on Clutch. Each review shows the client's own rating and comments, and you can read them all on the [Tcules Clutch profile](https://clutch.co/profile/tcules-saas-product-design-studio).
 
 ### Has Tcules worked on AI products?
 
@@ -244,6 +245,6 @@ Tell us what it does and what it needs next.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

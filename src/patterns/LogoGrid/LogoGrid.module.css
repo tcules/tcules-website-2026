@@ -21,6 +21,11 @@
   border-inline-start: var(--lgrid-rule-width) solid var(--lgrid-rule-ink);
 }
 
+/* The compact wall: shorter cells, the marks a step smaller in proportion (LogoGrid `density`). */
+.compact {
+  min-block-size: var(--lgrid-cell-height-compact);
+}
+
 /* The closing cell: when the last row holds one mark it spans the row, so the grid is a whole
    rectangle (nine on a phone is 4 × 2 + 1). Placement of this unit's own cell inside the Layout it
    renders, at the breakpoint where it applies — LogoGrid.tsx decides which, from the count.

@@ -96,4 +96,4 @@ Send us a note through the [contact page](/contact) and say whether you want to 
 
 ## Speak at a Tcules event or host one with us {#talk}
 
-Want to speak at a session, or host one with us? [Get in touch](/contact).
+[Get in touch](/contact) and tell us which you have in mind.

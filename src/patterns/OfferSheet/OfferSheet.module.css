@@ -71,25 +71,67 @@
 /* The ratio holds at every width: the frame never stretches to the set's height (owner, 11 Oct
    2026 — a stretched image is a crop nobody chose). */
 
-/* A promise whose title is a link (`href`, component-map C7): the title's own ink, underlined on the
-   accent mark's ink so it reads as a way on; the pointer takes the link ink. No transition: the
-   title does not move, it only says it is a link. */
+/* A promise whose title is a link (`href`, component-map C7; /careers' open roles). No underline at
+   rest (owner, 4 Nov 2026, /careers: "no underlines here please"; 2026-10-16-linked-card-hover-is-
+   accent-title): an underlined title reads as an inline link inside the row, not as the row. The
+   WHOLE item is the target instead: the link's box is stretched over its item (`.linked`, below),
+   so the glyph, the meta line and the air round them all answer the pointer. Hover and keyboard focus
+   are one move (2026-10-19-hover-is-a-move): the title takes the accent ink and slides a hair along
+   the reading direction, on the site's one curve, there and back. The ring is drawn round the item,
+   not the words. */
 .titleLink {
   color: inherit;
-  text-decoration-line: underline;
-  text-decoration-thickness: var(--ofs-rule-width);
-  text-decoration-color: var(--ofs-title-link-rule);
-  text-underline-offset: var(--ofs-title-link-offset);
+  text-decoration: none;
 }
 
-.titleLink:hover {
+/* The stretched box. `.titleLink` itself is never transformed: any transform makes it the
+   containing block for this `::after`, which then shrinks from the item to the title's words on
+   hover and focus, taking the target and the ring with it (/careers critic, 4 Nov 2026). The move
+   is on the label inside it (`.titleText`). */
+.titleLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.titleText {
+  display: inline-block;
+  transition: transform var(--ofs-title-link-duration) var(--ofs-title-link-easing);
+}
+
+.titleLink:hover,
+.titleLink:focus-visible {
   color: var(--ofs-title-ink-hover);
-  text-decoration-color: currentColor;
+}
+
+.titleLink:hover .titleText,
+.titleLink:focus-visible .titleText {
+  transform: translateX(var(--ofs-title-link-shift));
 }
 
 .titleLink:focus-visible {
+  outline: none;
+}
+
+.titleLink:focus-visible::after {
   outline: var(--ofs-ring-width) solid var(--ofs-ring-ink);
   outline-offset: var(--ofs-ring-offset);
+}
+
+/* The item the stretched link covers: the containing block for `.titleLink::after`. */
+.linked {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titleText {
+    transition: none;
+  }
+
+  .titleLink:hover .titleText,
+  .titleLink:focus-visible .titleText {
+    transform: none;
+  }
 }
 
 /* The band's FOOT: a term's words, at the body role, kept to a reading measure beside its title. */
@@ -113,4 +155,72 @@
   letter-spacing: var(--ofs-term-title-tracking);
   max-inline-size: var(--ofs-title-measure);
   text-wrap: balance;
+}
+
+/* `rows`: ListCard's row frame, duplicated on purpose (a pattern does not import a pattern). The
+   hairline CLOSES each row, under it, with no blue mark: the mark is the grid's device, where a rule
+   opens each promise. The rows' seam is the frame's own padding, `gutter` either side of the rule,
+   so the list carries no gap; the first row drops its top inset so its title starts on the line
+   under the heading's stack seam. */
+.row {
+  padding-block: var(--gap-gutter);
+  border-block-end: var(--ofs-rule-width) solid var(--ofs-rule-ink);
+}
+
+.row:first-child {
+  padding-block-start: 0;
+}
+
+/* A row's glyph, before its title: one line of the title's font tall, so the glyph centres on the
+   title's FIRST line however many lines the title runs to; 1em wide, in the accent ink. */
+.rowIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font: var(--ofs-title-text);
+  block-size: 1lh;
+  color: var(--ofs-mark-ink);
+}
+
+.rowIcon > svg {
+  display: block;
+  width: var(--ofs-icon-size);
+  height: var(--ofs-icon-size);
+}
+
+/* A glyph-headed grid item's head: the glyph at its own size (Icon `xl`, 24) in the accent ink, a
+   row of its own over the title. */
+.headIcon {
+  display: block;
+  color: var(--ofs-mark-ink);
+  line-height: 0;
+}
+
+/* `facts`: the body role as one wrapping line of facts. Each fact is kept whole, so a narrow track
+   breaks between facts and never at a hyphen inside one; each but the last carries its middle dot
+   at its own end, inside its own box (the Cluster owns the distance to the next), so a wrapped line
+   never opens on a dot. EngagementOptions' fact list, duplicated on purpose. */
+.facts {
+  font: var(--ofs-body-text);
+  color: var(--ofs-body-ink);
+}
+
+.facts > li {
+  white-space: nowrap;
+}
+
+.facts > li:not(:last-child)::after {
+  content: '·';
+  padding-inline-start: var(--gap-tight);
+}
+
+/* `list`: the same closing hairline, the row's air the `block` step either side of it: a title and one
+   sentence need less than the rows arrangement's paragraphs. The first row keeps its top inset at 0,
+   so its title starts level with the heading beside it. */
+.listRow {
+  padding-block: var(--gap-block);
+}
+
+.listRow:first-child {
+  padding-block-start: 0;
 }

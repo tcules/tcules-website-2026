@@ -56,9 +56,9 @@ structured_data:
     - Trust in AI interfaces
     - Design systems for SaaS
   has_part_routes:
-  - /insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces
-  - /insights/articles/generative-ai-product-patterns-for-saas
-  - /insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency
+  - /insights/building-trust-and-transparency-in-ai-first-user-interfaces
+  - /insights/generative-ai-product-patterns-for-saas
+  - /insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency
 release:
   content_state: AUTHOR_PROFILE_DRAFT_2026-10-13
   site_release_state: SITE_RELEASE_HOLD
@@ -93,8 +93,8 @@ The design system article follows a product team's request for a new component s
 
 ## Shoghi Bagul's articles on generative AI patterns and design systems {#articles}
 
-- **[Trust and transparency in AI interfaces: what to show, and how much](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces)**
+- **[Trust and transparency in AI interfaces: what to show, and how much](/insights/building-trust-and-transparency-in-ai-first-user-interfaces)**
 
-- **[Seven generative AI product patterns for SaaS and the controls each needs](/insights/articles/generative-ai-product-patterns-for-saas)**
+- **[Seven generative AI product patterns for SaaS and the controls each needs](/insights/generative-ai-product-patterns-for-saas)**
 
-- **[How to build a SaaS design system product teams keep using](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency)**
+- **[How to build a SaaS design system product teams keep using](/insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency)**

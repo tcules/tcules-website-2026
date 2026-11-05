@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -96,7 +96,7 @@ page_composition:
     role: demonstrate
     supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
-    alt_intent: The Chain Hut case cover for the Magento store Tcules designed and built. Check the cover shows the storefront before release; otherwise bind chain_hut_audit.
+    alt_intent: The Chain Hut case cover for the Magento store Tcules designed and built.
     source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   - id: backend_gt_tools
@@ -196,19 +196,17 @@ content_governance:
 
 # Backend and API development services for SaaS products customers rely on
 
-Backend work is for the customer whose payment goes through once, the admin whose permissions hold on every screen, and the engineer on call when a supplier's system goes down. Tcules provides backend development services for SaaS products: data, business rules, permissions, APIs and third-party integrations.
+When a connected system fails, your product recovers safely. Our backend development services make sure each payment is taken once and permissions hold everywhere.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)*
 
-[Tell us what your backend handles](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from our backend and API development {#what-you-get}
 
 The data, rules, permissions, APIs and integrations behind screens you already have or are building now, for a new product or one that is live.
-
-**What you receive**
 
 - **The rules written down.** What each record means, who may do what and which system holds the true value, agreed before the code (the five answers below).
 
@@ -244,7 +242,7 @@ We built The Chain Hut's store on Magento and kept the platform's core purchase 
 
 Specialist buyers need stock, pre-order status, product codes and options before they commit. We developed GT Tools' redesigned store on Shopify and added custom work where the product pages needed more than the platform offers. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
 
-## API development services that start with five agreed answers {#contracts}
+## API development services that start by agreeing the rules {#contracts}
 
 One rule lives in the frontend, the backend and an operations spreadsheet, and each says something slightly different. The interface hides a button, but the API still accepts the request. We start by agreeing five answers.
 
@@ -282,43 +280,57 @@ Example: Vovisto's platform draws flight and hotel inventory from outside travel
 > “Always helping, the support team were very reactive and efficient. They are very dedicated and committed to the project and they are now like a member of our family.”  
 > **Eagles Security Aruba & Hotel California Aruba**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For backend work, a good first piece of work is a review of the backend you have, ending in its riskiest gaps in the order we would close them.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **One studio can take it into working software, with the designers staying in the build.** CuramCare's web platform and both its apps were redesigned by our designers, and our developers then coded the frontend of all three from those designs, in the same studio.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** Because [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers reviewed working prototypes, one could ask whether drag and drop needed an external library with Bootstrap 5 before the choice was made.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Three years on, Primelis still treats us as part of its product team, and we have designed every product it runs in that time.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[HealthTech](/expertise/healthtech)
-
-Vovisto's healthcare platform, where we coordinated the supplier integrations, is the backend work we can name by industry. The related work above comes from [ClimateTech](/expertise/climatetech-energy) and [Commerce](/expertise/commerce-transactional-products).
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about backend and API development {#faq}
 
@@ -352,6 +364,6 @@ Share the application, the services and data it relies on, and any integration t
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

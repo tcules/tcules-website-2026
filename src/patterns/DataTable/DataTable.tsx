@@ -90,9 +90,23 @@ export type DataTableProps = {
   caption?: string;
   /** A plain-text lead-in, rendered as a paragraph immediately before the table. */
   summary?: string;
-  keyColumn: DataTableKeyColumn;
+  /**
+   * The first column, whose cells name each row (`<th scope="row">`). Absent (4 Nov 2026, the
+   * glossary's comparisons): a KEYLESS table, every column a peer under its own head, for a table
+   * whose head row IS the things compared ("Style guide · Component library · Design system") and
+   * whose rows are sentences across them. Then `cellsHtml` holds every column's cell and a row's
+   * `header` is only its plain name for the warnings; no cell is set as a row label.
+   */
+  keyColumn?: DataTableKeyColumn;
   /** The data columns. One to five is the designed range; the count is data, never a variant. */
   columns: readonly DataTableColumn[];
+  /**
+   * The column the table recommends or is about, by its index in `columns` (4 Nov 2026): a keyless
+   * comparison's column naming the page's own term. The row pick's treatment turned a quarter turn —
+   * the blue ground down every cell, the head in blue, a bar across the head's top edge. At most
+   * one; it never reorders the columns.
+   */
+  pickColumn?: number;
   /** Three to twelve is the designed range (eight until 1 Oct 2026). Never sorted, filtered or paginated. */
   rows: readonly DataTableRow[];
   /**
@@ -109,6 +123,35 @@ export type DataTableProps = {
    * by its own content and would not; it should not be split. Default false.
    */
   split?: boolean;
+  /**
+   * What the table does on a phone (below 768). `scroll`, the default, is the boxed table at every
+   * width, scrolling sideways when its columns' floors outrun the track (7 Oct ruling 6). `read-down`
+   * (4 Nov 2026, the tools' worksheets; status proposed) is for a table a reader WORKS through
+   * rather than compares at a glance: below 768 each row becomes one block in the same box, its key
+   * as the title and each value under its column head in the mono label voice, read down the page
+   * instead of across a clipped frame. From 768 it is the boxed table, unchanged. The precedent is the
+   * audits' report sheet (ReportBand: "below 768 the sheet reads down, each row's key its title").
+   * One view shows at a time, and `display: none` keeps the other out of the accessibility tree.
+   */
+  narrow?: 'scroll' | 'read-down';
+  /**
+   * How the table is drawn. `boxed`, the default, is the frame, the head fill and a hairline between
+   * every row and column. `sheet` (4 Nov 2026, status proposed; the audits' "What the report looks
+   * like") is for a RECORD, a key and one value read down the rows: the spec sheet EngagementOptions
+   * already draws for an option's facts, as a table. The key in the mono label voice in a narrow track,
+   * its value beside it in body, a rule above the set and none between rows or columns; no frame, no
+   * fill, and the head row set out of sight (its words stay in the accessibility tree). A table with
+   * more than one value column is compared across its rows and stays `boxed`.
+   */
+  appearance?: 'boxed' | 'sheet';
+  /**
+   * The table sits on a ground that already bounds it (a tool's worked-example panel, 4 Nov 2026,
+   * tools critic: on a phone the panel's inset and the box's stacked, leaving the answers ~210 wide).
+   * With `narrow="read-down"`, below 768 the rows drop the box's side edges, fill and inline inset and
+   * keep its rules above, between and below them, so the answers take the panel's whole measure. From
+   * 768 the boxed table, unchanged.
+   */
+  bounded?: boolean;
 };
 
 /*
@@ -187,7 +230,10 @@ function warn(message: string) {
  * It is a table at every width. The frame — outer border, head fill, body ground, and a hairline
  * between every row and every column — is what makes it readable as a structure, so a narrow track does not
  * restructure it: when its columns' floors add up to more than the track, the frame scrolls
- * sideways and the table inside keeps its shape. The body is never re-laid out as a stack.
+ * sideways and the table inside keeps its shape. The body is never re-laid out as a stack, with one
+ * opt-in exception for a worksheet a reader works through (`narrow="read-down"`, 4 Nov 2026, status
+ * proposed: decisions/2026-11-04-worksheet-tables-read-down-on-a-phone): below 768 its rows read down
+ * as blocks inside the same box.
  *
  * When it scrolls, a fade to the body ground marks each edge that has more beyond it, driven by the
  * frame's own scroll position (a scroll-driven animation, so no client JS). A browser without
@@ -215,8 +261,16 @@ export function DataTable({
   columns,
   rows,
   split = false,
+  pickColumn,
+  narrow = 'scroll',
+  appearance = 'boxed',
+  bounded = false,
 }: DataTableProps) {
   const captionId = useId();
+
+  if (pickColumn !== undefined && !columns[pickColumn]) {
+    warn(`pickColumn ${pickColumn} names no column; nothing is picked.`);
+  }
 
   if (rows.length === 0) {
     warn('received no rows; rendering nothing.');
@@ -247,14 +301,27 @@ export function DataTable({
     warn('a head-less record takes at most one value column; the others read without a head.');
   }
 
-  const keyBehaviour = keyColumn.behaviour ?? 'hold';
+  if (appearance === 'sheet' && (columns.length > 1 || !keyColumn)) {
+    warn('`sheet` is for a record (a key column and one value column); drawn boxed.');
+  }
+  const sheet = appearance === 'sheet' && columns.length === 1 && keyColumn !== undefined;
+
+  const keyBehaviour = keyColumn?.behaviour ?? 'hold';
+  const picked = (index: number) => index === pickColumn;
   const breakAt = split ? splitAt(rows) : rows.length;
 
   /* One boxed frame over `part` of the rows; `inSplit` marks both halves of a split and `joins` the
      second. The shell holds the frame and draws the scroll fades over its clipped edges. It does
      not scroll itself, which is what keeps the fades pinned while the table moves beneath them. */
   const renderFrame = (part: readonly DataTableRow[], joins: boolean, inSplit: boolean) => (
-    <div className={cx(styles.shell, inSplit && styles.split, joins && styles.joins)}>
+    <div
+      className={cx(
+        styles.shell,
+        inSplit && styles.split,
+        joins && styles.joins,
+        sheet && styles.sheet,
+      )}
+    >
       <div
         className={styles.frame}
         role="region"
@@ -265,7 +332,7 @@ export function DataTable({
           ? { 'aria-labelledby': captionId }
           : labelledBy
             ? { 'aria-labelledby': labelledBy }
-            : { 'aria-label': `${keyColumn.heading} table` })}
+            : { 'aria-label': `${keyColumn?.heading ?? columns[0]?.heading ?? ''} table` })}
       >
         <table
           /* A record is read down its rows, a key and ONE value: head-less, or with a head row
@@ -283,14 +350,27 @@ export function DataTable({
           {head ? (
             <thead className={joins ? styles.joinHead : undefined}>
               <tr>
-                <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
-                  {keyColumn.heading}
-                </th>
+                {keyColumn ? (
+                  <th
+                    scope="col"
+                    className={cx(
+                      styles.colHead,
+                      styles.keyHead,
+                      BEHAVIOUR_CLASS[keyBehaviour],
+                    )}
+                  >
+                    {keyColumn.heading}
+                  </th>
+                ) : null}
                 {columns.map((column, index) => (
                   <th
                     key={index}
                     scope="col"
-                    className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
+                    className={cx(
+                      styles.colHead,
+                      BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                      picked(index) && styles.pickHead,
+                    )}
                   >
                     {column.heading}
                   </th>
@@ -313,13 +393,15 @@ export function DataTable({
 
               return (
                 <tr key={rowIndex} className={cx(styles.row, row.pick && styles.pick)}>
-                  <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
-                    {row.headerHtml ? (
-                      <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
-                    ) : (
-                      <span className={styles.keyText}>{row.header}</span>
-                    )}
-                  </th>
+                  {keyColumn ? (
+                    <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
+                      {row.headerHtml ? (
+                        <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
+                      ) : (
+                        <span className={styles.keyText}>{row.header}</span>
+                      )}
+                    </th>
+                  ) : null}
                   {columns.map((column, index) => {
                     const cell = row.cellsHtml[index] ?? '';
                     const html = typeof cell === 'string' ? cell : '';
@@ -330,6 +412,7 @@ export function DataTable({
                           styles.cell,
                           typeof cell !== 'string' && styles.nodeCell,
                           BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                          picked(index) && styles.pickCell,
                         )}
                       >
                         {typeof cell !== 'string' ? (
@@ -355,6 +438,58 @@ export function DataTable({
     </div>
   );
 
+  /* The phone reading (`narrow="read-down"`): one block per row inside the same box. The key is the
+     row's title; a keyless table has no title and every column reads as a labelled value. A picked
+     row keeps its ground; a picked column's label takes the pick ink. */
+  const renderDown = () => (
+    <div className={styles.downView}>
+      <ul
+        className={cx(styles.down, bounded && styles.downBounded)}
+        {...(caption
+          ? { 'aria-labelledby': captionId }
+          : labelledBy
+            ? { 'aria-labelledby': labelledBy }
+            : {})}
+      >
+        {rows.map((row, rowIndex) => (
+          <li key={rowIndex} className={cx(styles.downRow, row.pick && styles.downPick)}>
+            <Layout rowGap="text">
+              {keyColumn ? (
+                row.headerHtml ? (
+                  <Prose as="span" html={row.headerHtml} className={styles.downTitle} />
+                ) : (
+                  <p className={styles.downTitle}>{row.header}</p>
+                )
+              ) : null}
+              {columns.map((column, index) => {
+                const cell = row.cellsHtml[index] ?? '';
+                const html = typeof cell === 'string' ? cell : '';
+                return (
+                  <Layout key={index} rowGap="inline">
+                    <p className={cx(styles.downLabel, picked(index) && styles.downLabelPick)}>
+                      {column.heading}
+                    </p>
+                    {typeof cell !== 'string' ? (
+                      <div>{cell.node}</div>
+                    ) : html.trim() ? (
+                      <Prose html={html} className={styles.value} />
+                    ) : (
+                      <span className={styles.empty} aria-hidden="true">
+                        —
+                      </span>
+                    )}
+                  </Layout>
+                );
+              })}
+            </Layout>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  const readDown = narrow === 'read-down' && head;
+
   return (
     <Layout rowGap="block" className={styles.root}>
       {summary ? (
@@ -372,7 +507,10 @@ export function DataTable({
             {caption}
           </p>
         ) : null}
-        {split && rows.length > 1 ? (
+        {readDown ? renderDown() : null}
+        {readDown ? (
+          <div className={styles.acrossView}>{renderFrame(rows, false, false)}</div>
+        ) : split && rows.length > 1 ? (
           /* The halves: side by side from 1024, a `gutter` apart, and ONE table below it — no row
              gap, and the second frame's top edge and head row give way (DataTable.module.css). */
           <Layout columns={{ lg: 2 }} colGap="gutter" rowGap="none" align="start">

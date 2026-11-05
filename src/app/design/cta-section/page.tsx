@@ -437,6 +437,70 @@ export default function CtaSectionSpecimenPage() {
       />
 
       <SpecimenNote
+        title="3a · Two asks on one island (second)"
+        note="Two closing asks for two readers (4 Nov 2026, /future-interfaces-lab: the candidate's and the product owner's). Two peer halves from 1024, a section gap apart: each its heading at the close step, its one sentence as the lede and its action pinned to the half's foot, so the two actions share a line however the headings wrap. The first keeps the solid; the second takes a blue link with its arrow and its own anchor. Stacked below 1024. Second: a short heading beside a long one, and the longest lede."
+      />
+      <CtaSection
+        arrangement="open"
+        heading="Apply to work on Lab projects"
+        body={[
+          'People who want to work on Lab projects can apply through the Lab application page, which shows what is open now and on what terms.',
+        ]}
+        actions={[{ label: 'Lab application page', href: ROUTES.futureInterfacesLabJoin }]}
+        second={{
+          heading: 'Talk to us',
+          body: [
+            'Want to work on an experiment with us, or talk about your own product? Send a note through our contact page.',
+          ],
+          action: { label: 'contact page', href: ROUTES.contact },
+        }}
+      />
+      <CtaSection
+        arrangement="open"
+        heading="Talk to us"
+        body={['Send a note.']}
+        actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+        second={{
+          heading: 'Apply to work on Lab projects and help shape what the studio tries next',
+          body: [
+            'People who want to work on Lab projects can apply through the Lab application page, which shows what is open now, on what terms, for how long, and who you would work beside while the experiment runs.',
+          ],
+          action: { label: 'Lab application page', href: ROUTES.futureInterfacesLabJoin },
+        }}
+      />
+
+      <SpecimenNote
+        title="3b · The onward island (intent=onward)"
+        note="A band's onward line, lifted onto its own ink island mid-page (tracker 2.53): the setup as the heading, the sentence holding the link as the lead, and the link's own words as the one blue LINK with its arrow, never a solid, because it points to reading and the page's one main action belongs to the hero and the close. Three spellings: a link closing the line (no lead), a line with no setup (the sentence is the heading), and the longest label the copy carries."
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Added a confidence score and usage stayed flat?"
+        actions={[{ label: 'Read why a score alone doesn’t earn trust', href: ROUTES.insights }]}
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Is your vibe-coded app ready for production? covers where AI-built apps break first."
+        actions={[{ label: 'Is your vibe-coded app ready for production?', href: ROUTES.insights }]}
+      />
+      <CtaSection
+        arrangement="open"
+        intent="onward"
+        heading="Still weighing it up?"
+        body={[
+          'Our guide, Does my SaaS need a mobile app? A moment-by-moment test, walks through the questions.',
+        ]}
+        actions={[
+          {
+            label: 'Does my SaaS need a mobile app? A moment-by-moment test',
+            href: ROUTES.insights,
+          },
+        ]}
+      />
+
+      <SpecimenNote
         title="4 · Points ladder"
         note="Zero, one, three, and six points in each arrangement, and four and five in offer as well. Zero renders no list; six proves split growth and open's second row without equalRows. An offer that asks with actions runs its points as ruled rows in the 763 body track beside its head (cmp-cta); only an offer with a form keeps the 2-up-from-md, 3-up-from-lg strip, where every second-row point starts under a first-row label. Each numeral holds its own place beside its label at every width, never wrapping above it."
       />

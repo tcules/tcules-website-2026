@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { ArrowRight, Copy, Cursor, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched, TraceIn } from './scenes';
+import { ArrowRight, Copy, Cursor, Hop, Lens, Rect } from './offer';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -300,6 +300,151 @@ function Stops() {
   );
 }
 
+/* ── What we design in ─────────────────────────────────────────────────────────────── */
+
+/** UX troubleshooting: the AI tool's screen, and the lens on the one control where people get stuck. */
+function UxTroubleshooting() {
+  return (
+    <>
+      <Rect x={80} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M106,30 L106,150" />
+      <Glyph name="stars" cx={93} cy={50} size={12} className={styles.glyph} />
+      <Copy x={122} y={50} w={48} quiet />
+      <Copy x={122} y={74} w={44} />
+      <Copy x={122} y={86} w={32} quiet />
+      <Copy x={122} y={134} w={24} quiet />
+      {/* The snag, under the lens. */}
+      <Lens x={196} y={104} r={26} />
+      <Rect x={178} y={94} w={36} h={20} rx={10} className={styles.region} />
+      <Glyph name="danger-triangle" cx={196} cy={104} size={12} className={styles.glyphAccent} />
+    </>
+  );
+}
+
+/** Model and API platforms: one call branches to two models and they meet again, and the workflow runs. */
+function ModelApiWorkflow() {
+  return (
+    <>
+      <Rect x={50} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="code-square" cx={70} cy={90} size={18} className={styles.glyph} />
+      {[50, 130].map((y) => (
+        <g key={y}>
+          <Rect x={130} y={y - 12} w={40} h={24} rx={4} className={styles.frame} />
+          <Glyph name="cpu" cx={150} cy={y} size={14} className={styles.glyph} />
+        </g>
+      ))}
+      <TraceIn d="M90,90 L104,90 A6,6 0 0 0 110,84 L110,56 A6,6 0 0 1 116,50 L130,50" />
+      <TraceIn d="M90,90 L104,90 A6,6 0 0 1 110,96 L110,124 A6,6 0 0 0 116,130 L130,130" />
+      <TraceIn d="M170,50 L184,50 A6,6 0 0 1 190,56 L190,84 A6,6 0 0 0 196,90 L239,90" />
+      <TraceIn d="M170,130 L184,130 A6,6 0 0 0 190,124 L190,96 A6,6 0 0 1 196,90 L239,90" />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      <GrowIn>
+        <circle className={styles.node} cx="190" cy="90" r="3.5" />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.halo} cx="250" cy="90" r="18" />
+      </GrowIn>
+      <circle className={styles.release} cx="250" cy="90" r="11" />
+      <Glyph name="play" cx={251} cy={90} size={12} className={styles.releaseMark} />
+    </>
+  );
+}
+
+/** AI review tools: the engineer's route reaches the AI's result and its sign-off box fills with a tick. */
+function ReviewSignOff() {
+  return (
+    <>
+      <Rect x={50} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={70} cy={90} size={20} className={styles.glyph} />
+      <Rect x={130} y={30} w={150} h={120} rx={8} className={styles.frame} />
+      <Glyph name="stars" cx={152} cy={50} size={12} className={styles.glyph} />
+      <Copy x={166} y={50} w={48} quiet />
+      <Copy x={150} y={74} w={112} />
+      <Copy x={150} y={86} w={96} />
+      <Copy x={150} y={98} w={72} quiet />
+      <GrowIn>
+        <Rect x={144} y={114} w={72} h={32} rx={16} className={styles.halo} />
+      </GrowIn>
+      <Rect x={150} y={120} w={60} h={20} rx={10} className={styles.press} />
+      <path className={styles.tick} d="M174,130 L178,134 L186,126" />
+      <TraceIn d="M90,90 L104,90 A6,6 0 0 1 110,96 L110,124 A6,6 0 0 0 116,130 L150,130" />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+    </>
+  );
+}
+
+/** AI-native products: the early idea, still a dashed spark, routed into a dashed outline of a product that takes solid shape. */
+function AiNativeShaped() {
+  return (
+    <>
+      <circle className={styles.trail} cx="60" cy="90" r="20" />
+      <Glyph name="stars" cx={60} cy={90} size={16} className={styles.glyphQuiet} />
+      {/* The product as it is at the start: only an outline. */}
+      <Rect x={215} y={35} w={40} h={110} rx={8} className={styles.trailFrame} />
+      <GrowIn>
+        <Rect x={215} y={35} w={40} h={110} rx={8} className={styles.frame} />
+        <Rect x={223} y={55} w={24} h={40} rx={4} className={styles.block} />
+        <Copy x={223} y={111} w={24} />
+        <Copy x={223} y={123} w={16} quiet />
+      </GrowIn>
+      <TraceIn d="M80,90 L215,90" />
+      <circle className={styles.node} cx="80" cy="90" r="2.5" />
+    </>
+  );
+}
+
+/** AI-assisted survey and research: the stack of answers routed into the chart, and the theme most of them share lights. */
+function SurveyResearch() {
+  return (
+    <>
+      <Rect x={38} y={42} w={70} h={80} rx={8} className={styles.frameQuiet} />
+      <Rect x={34} y={46} w={70} h={80} rx={8} className={styles.frameQuiet} />
+      <Rect x={30} y={50} w={70} h={80} rx={8} className={styles.frame} />
+      <Glyph name="chat-round-dots" cx={48} cy={68} size={12} className={styles.glyph} />
+      <Copy x={60} y={68} w={24} quiet />
+      <Copy x={44} y={92} w={40} />
+      <Copy x={44} y={104} w={30} />
+      <Copy x={44} y={116} w={36} quiet />
+      <Rect x={170} y={30} w={110} h={120} rx={8} className={styles.frame} />
+      <Glyph name="stars" cx={262} cy={48} size={12} className={styles.glyph} />
+      <GrowIn>
+        <Rect x={184} y={52} w={28} h={84} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Rect x={190} y={58} w={16} h={72} rx={3} className={styles.press} />
+      <Rect x={218} y={86} w={16} h={44} rx={3} className={styles.tile} />
+      <Rect x={246} y={102} w={16} h={28} rx={3} className={styles.tile} />
+      <TraceIn d="M100,90 L190,90" />
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="170" cy="90" r="3" />
+      </GrowIn>
+      <circle className={styles.node} cx="100" cy="90" r="2.5" />
+    </>
+  );
+}
+
+/** AI writing suggestions: in the product's existing editor, the suggested words write themselves on after the caret, ready to accept. */
+function WritingSuggestions() {
+  return (
+    <>
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M50,58 L270,58" />
+      <Copy x={66} y={44} w={40} quiet />
+      <Copy x={70} y={76} w={170} />
+      <Copy x={70} y={90} w={150} />
+      <path className={styles.hair} d="M89,103 L89,117" />
+      <TraceIn d="M95,110 L235,110" />
+      <TraceIn d="M95,124 L235,124" />
+      <TraceIn d="M95,138 L195,138" />
+      <GrowIn>
+        <Rect x={201} y={132} w={26} h={12} rx={6} className={styles.block} />
+      </GrowIn>
+      <GrowIn>
+        <Glyph name="stars" cx={70} cy={110} size={10} className={styles.glyphAccent} />
+      </GrowIn>
+    </>
+  );
+}
+
 /**
  * /expertise/ai-products-developer-tools · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -323,4 +468,21 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-ai-products-developer-tools': Needs,
   /* Where our part stops: The model, prompts, evaluations, infrastructure and security stay with your engineers. Where rules such as the EU AI Act apply, your legal t */
   'stops-ai-products-developer-tools': Stops,
+  /* MOVING: this tile links to /case-studies/unifying-workflow-creation-through-intelligent-search, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Model and API platforms with workflow builders, search and documentation: Eden AI */
+  'kind-ai-products-developer-tools-model-api-platforms-workflow': ModelApiWorkflow,
+  /* MOVING: this tile links to /case-studies/ai-quality-control-expert-review-buildtwin, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI review tools where an engineer signs off each result: BuildTwin */
+  'kind-ai-products-developer-tools-ai-review-tools-engineer': ReviewSignOff,
+  /* MOVING: this tile links to /case-studies/ai-native-building-energy-product-connectx, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI-native products shaped from an early idea: ConnectX */
+  'kind-ai-products-developer-tools-ai-native-products-shaped': AiNativeShaped,
+  /* MOVING: this tile links to /case-studies/saas-ux-ui-case-study-ai-for-market-research-automation, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI-assisted survey and research products: Novus Insights */
+  'kind-ai-products-developer-tools-ai-assisted-survey-research': SurveyResearch,
+  /* MOVING: this tile links to /case-studies/designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI writing suggestions added to an existing product: Omny AI */
+  'kind-ai-products-developer-tools-ai-writing-suggestions-added': WritingSuggestions,
+  /* What we design in, tile: UX troubleshooting for an AI software firm: Knovos */
+  'kind-ai-products-developer-tools-ux-troubleshooting-ai-software': UxTroubleshooting,
 };

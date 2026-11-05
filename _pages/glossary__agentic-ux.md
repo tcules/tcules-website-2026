@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Agentic UX
     url: /glossary/agentic-ux
+  section_labels:
+    examples: Examples
+    practice: Principles
+    comparison: Vs conversational UX
+    related-terms: Related terms
+    faq: FAQs
+    next: How much it does
 render:
   band_order:
   - examples
@@ -170,4 +177,4 @@ We design for an agent that takes whole tasks off a customer's hands, inside lim
 
 That balance will keep moving. As models plan better, products will hand agents whole jobs, and the design work shifts from approving each step to setting limits, following the run and repairing what went wrong.
 
-[See AI Copilots and Agents](/services/ai-product-ux/ai-copilots-agents)
+[See AI Copilots and Agents →](/services/ai-product-ux/ai-copilots-agents)

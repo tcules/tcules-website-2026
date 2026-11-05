@@ -5,13 +5,13 @@ page_name: AI Products & Developer Tools
 page_type: expertise
 expertise_kind: product_shape
 seo:
-  title: 'AI Product Design for Platforms & Developer Tools | Tcules'
-  description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
+  title: 'Developer Tools and AI Platform UX Design | Tcules'
+  description: 'UX design for developer tools and AI model platforms: first steps that work, docs beside the task, and results people can check and overrule.'
   canonical: https://www.tcules.com/expertise/ai-products-developer-tools
   robots: index,follow
 social:
-  og_title: 'AI Product Design for Platforms & Developer Tools | Tcules'
-  og_description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
+  og_title: 'Developer Tools and AI Platform UX Design | Tcules'
+  og_description: 'UX design for developer tools and AI model platforms: first steps that work, docs beside the task, and results people can check and overrule.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,8 +19,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI Product Design for Platforms & Developer Tools | Tcules'
-  twitter_description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
+  twitter_title: 'Developer Tools and AI Platform UX Design | Tcules'
+  twitter_description: 'UX design for developer tools and AI model platforms: first steps that work, docs beside the task, and results people can check and overrule.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: AI product and developer tool Product Design
@@ -29,18 +29,14 @@ search_context:
   - Is designing an AI product the same as designing a chatbot?
   - Do you design developer portals and API dashboards?
   - Can you start from our demo or prototype?
-  primary_query: 'AI product design'
+  primary_query: 'developer tools UX design'
   secondary_queries:
   - 'AI platform UX design'
-  - 'AI product design process'
-  - 'AI product design for startups'
-  - 'AI product design examples'
   - 'developer portal design'
   - 'API dashboard design'
   - 'LLM platform design'
   - 'designing an AI product vs a chatbot'
   - 'start from our AI demo'
-  - 'AI product design company'
 navigation:
   breadcrumb:
   - name: Home
@@ -58,11 +54,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -187,15 +183,17 @@ content_governance:
 ---
 *Expertise · AI products and developer tools*
 
-# AI product design for developer platforms, from first demo to daily use
+# UX design for developer tools and AI platforms, from first demo to daily use
 
-Developers judge an AI platform in their first session, by whether the docs and a first call work. Reviewers judge it every day after, by whether they can see what the model checked before they sign. Tcules provides AI product design for model platforms, developer tools and AI-native products, new or established.
+Our AI product design gets developers to a working first result and lets reviewers see what the model checked before they sign off.
 
-[Tell us what your product does](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in AI platforms and developer tools {#what-we-design}
+
+For founders and product teams building on AI models, with a product still in demo or already live.
 
 - **Model and API platforms** with workflow builders, search and documentation · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)
 
@@ -215,7 +213,7 @@ Developers judge an AI platform in their first session, by whether the docs and 
 
 Developers on Eden AI's platform had three ways in: pick a template, ask the AI, or open a blank canvas. We kept all three and brought them into one search box that recognises how someone wants to begin, with the Tab key as the deliberate step into AI help. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-### ConnectX: a question that opens a workspace, from demo to production
+### ConnectX: ask about a building in plain words, live since 2025
 
 ConnectX's users ask about a building in plain words and get a working view back, with data, assets and a digital twin. We shaped eight scenarios, proved them in a coded demo on sample data, then took the demo to a production-ready module that has run since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
@@ -225,9 +223,9 @@ We took Novus Insights' AI-assisted survey product from market and stakeholder r
 
 ## Where AI products and developer tools get hard {#hard-parts}
 
-People try an AI tool once, then judge it. The hard parts sit where the model meets a person: the first session, the result an expert has to sign and the text that leaves the product under someone's name.
+People try an AI tool once, then judge it. Three moments are hardest to get right: the first session, the result an expert has to sign and the text that leaves the product under someone's name.
 
-### A first session that ends in a working call
+### A first session that ends in a working result
 
 On day one a developer portal has a single job: sign-up, an API key, a code sample that runs and an error message that says what to fix. Documentation and previews belong beside the work, so nobody loses their place in another tab.
 
@@ -253,9 +251,7 @@ Example: in our MVP design for Novus Insights, every AI-written question carried
 
 ## What you get when Tcules designs your AI product {#what-you-get}
 
-Our AI product design process follows the model's output to the person using it: how they start, what they see, and how they check and correct what it produces.
-
-**What you receive**
+We design how people start, what the AI shows them and how they check and correct it.
 
 - **A first working result:** the path from sign-up to a first working result, with keys, code samples and error messages
 
@@ -275,7 +271,7 @@ Our AI product design process follows the model's output to the person using it:
 
 **Where our part stops.** The model, prompts, evaluations, infrastructure and security stay with your engineers. Where rules such as the EU AI Act apply, your legal team sets the requirements and we design how the product shows them to the people using it.
 
-AI features added to an established SaaS product sit under [AI Product UX](/services/ai-product-ux). A feature already in use can start with an [AI Product UX Readiness Review](/audits/ai-product-ux-readiness), and a founder with an idea and no product yet with [New Product Design & First Release](/services/new-product-design-first-release).
+AI features added to an established SaaS product sit under [AI Product UX](/services/ai-product-ux). A feature already in use can start with an [AI UX Audit](/audits/ai-product-ux-readiness), and a founder with an idea and no product yet with [Design-led MVP Development](/services/mvp-development).
 
 ## What clients say {#testimonials}
 
@@ -291,41 +287,57 @@ AI features added to an established SaaS product sit under [AI Product UX](/serv
 > “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
 > **Clément Contamine, CPO, Primelis**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For an AI product, a good first piece of work is the path from sign-up to a first result people trust, designed end to end and tested with new users.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We design AI that people can check and correct.** In Omny AI's listing tools, nothing the AI wrote reached a listing until a person chose it, and every line showed who wrote it. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we redesigned the web platform and both apps, and our developers coded the frontend for each one.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We work out what the product has to know before we draw it.** For BuildTwin's AI review, we first mapped the detailer, the quality engineer and the approver, and the four questions the engineer has to answer before signing. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-## Other industries we know {#industries}
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
+
+## Other industries {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about AI product design {#faq}
 
@@ -359,6 +371,6 @@ Share the product and who it is for. Tell us where they leave, or start doubting
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

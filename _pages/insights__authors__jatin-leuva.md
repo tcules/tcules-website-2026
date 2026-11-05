@@ -61,8 +61,8 @@ structured_data:
   - /insights/vibe-coded-app-production-ready
   - /insights/podcasts/mastering-design-decisions
   - /insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo
-  - /insights/articles/my-experiments-with-ux-aishwarya-ashok
-  - /insights/articles/my-experiments-with-ux-karthik-pasupathy
+  - /insights/my-experiments-with-ux-aishwarya-ashok-on-ux-evolution-from-traditional-to-ai-first-products
+  - /insights/experiments-with-ux-karthik-pasupathy-context-clarity-core-functionality
   - /insights/guides/saas-does-your-app-need-a-mobile-version
 release:
   content_state: AUTHOR_PROFILE_DRAFT_2026-10-13
@@ -97,7 +97,7 @@ Founder and CEO, Tcules
 
 Jatin Leuva is Founder and CEO of Tcules, a digital product design studio in Ahmedabad. He writes about AI product UX, mobile apps for B2B SaaS and taking vibe-coded prototypes to production.
 
-He hosts recorded conversations with founders and with product, engineering and design leaders. Subjects range from choosing AI providers to making product calls when feedback and data tell only part of the story. He also writes My Experiments with UX, interviews with people who ship products about how AI changes their thinking.
+He hosts recorded conversations with founders and with product, engineering and design leaders. Subjects range from choosing AI providers to making product decisions when feedback and data tell only part of the story. He also writes My Experiments with UX, interviews with people who ship products about how AI changes their thinking.
 
 His guides ask whether a B2B SaaS product needs a mobile app, and what a vibe-coded app needs before real users rely on it.
 
@@ -109,8 +109,8 @@ His guides ask whether a B2B SaaS product needs a mobile app, and what a vibe-co
 
 - **[Eden AI's Samy Melaine on building AI products for users: podcast](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo)**
 
-- **[Aishwarya Ashok on the AI-first product experience: an interview](/insights/articles/my-experiments-with-ux-aishwarya-ashok)**
+- **[Aishwarya Ashok on the AI-first product experience: an interview](/insights/my-experiments-with-ux-aishwarya-ashok-on-ux-evolution-from-traditional-to-ai-first-products)**
 
-- **[Karthik Pasupathy interview: product design, clarity and the core task](/insights/articles/my-experiments-with-ux-karthik-pasupathy)**
+- **[Karthik Pasupathy interview: product design, clarity and the core task](/insights/experiments-with-ux-karthik-pasupathy-context-clarity-core-functionality)**
 
 - **[Does my SaaS need a mobile app? A moment-by-moment test](/insights/guides/saas-does-your-app-need-a-mobile-version)**

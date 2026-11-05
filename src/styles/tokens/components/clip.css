@@ -1,0 +1,35 @@
+/* ══ Component layer — Clip ══════════════════════════════════════════════════════
+   Tier 1. A silent film played from the site's own files: it plays once when it comes into
+   view and holds on its last frame, with one control in its corner (pause, play, play again).
+
+   Naming: --clip-{part}-{role}
+     parts  control | ring | hidden
+     roles  size · bg · fg · rule · width · offset · inset
+
+   ── No surface blocks, and that is the assertion ─────────────────────────────────
+   The control sits ON THE FILM, never on the band's ground: the film paints its own fields
+   (paper, blue, near-black) whatever surface the section declares. So nothing here moves with
+   `data-surface`, and every value is declared once in :root. The control is paper with an ink
+   glyph and a hairline, which reads on every field the film paints, and its focus ring is two
+   tones — a paper gap inside a blue ring — so it shows on the blue field as well as on paper.
+
+   The inset is a DISTANCE: the film's edge to the control inside it, the "cell padding" step
+   (--gap-text), as a control sits in a table cell. It does not move responsively.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* the WCAG 2.5.5 target, the same 44 as the Slider's step target */
+  --clip-control-size: 44px;
+  --clip-control-inset: var(--gap-text);
+  --clip-control-radius: var(--radius-full);
+  --clip-control-rule-width: var(--border-width-1);
+  --clip-control-bg: var(--color-paper);
+  --clip-control-fg: var(--color-neutral-900);
+  --clip-control-rule: var(--color-neutral-300);
+  --clip-ring-width: var(--focus-ring-width);
+  --clip-ring-offset: var(--focus-ring-offset);
+  --clip-ring-color: var(--color-brandeis-500);
+  --clip-ring-gap-color: var(--color-paper);
+  /* the visually-hidden description: the clip rectangle the hidden-text idiom needs */
+  --clip-hidden-size: 1px;
+}

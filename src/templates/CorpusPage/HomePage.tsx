@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react';
 
 import {
+  Button,
+  Cluster,
   isSituationFigureName,
   Layout,
   SituationFigure,
@@ -11,25 +13,24 @@ import {
   Banner,
   Bento,
   BlockCard,
-  BlockCardSet,
   CaseCard,
   ContentSection,
   ContentSectionText,
   CtaRow,
   Gateway,
   GatewayPaths,
-  Reasons,
+  OfferSheet,
   Teaser,
   TEASER_FORMAT_ICON,
   type TeaserFormat,
   type BentoItem,
-  type BlockCardSetItem,
   type GatewayItem,
   type GatewayPath,
   type HeroStat,
   type ReasonsItem,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
+import type { InlineRun } from '@/lib/inline';
 import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -42,7 +43,6 @@ import type {
   PlaceholderReasons,
   ProposedEyebrows,
 } from '@/lib/corpus-types';
-import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { recordFigures } from '@/lib/studio-record';
@@ -50,18 +50,28 @@ import { recordFigures } from '@/lib/studio-record';
 import {
   CorpusHero,
   QuoteGroupBand,
-  RecognitionBand,
+  RecognitionGrid,
   bodyOf,
   head,
   headingIdOf,
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { LinkActions, RelatedBand, content, entriesOf, sheetParts } from './CopyBands';
+import {
+  AskIsland,
+  IndustriesBand,
+  LinkActions,
+  RelatedBand,
+  askLinkIn,
+  content,
+  entriesOf,
+  isAskLink,
+  sheetParts,
+} from './CopyBands';
 import { bindingNamed, coverFor, slugOf } from './images';
-import { UnitView, type OfferContext } from './OfferBands';
-import { planOffer, TEMPLATE_BANDS, type OfferUnit } from './plan';
-import { bandLinks, labelTitle, leadOf, plain, trimEnd } from './text';
+import { UnitView, WhyTculesBand, type OfferContext } from './OfferBands';
+import { planOffer, TEMPLATE_BANDS } from './plan';
+import { bandLinks, inline, labelTitle, leadOf, plain, trimEnd, trimStart } from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -139,22 +149,29 @@ export function HomePage({
   /* The plan decides every band's kind and surface, and the form sits right before the questions. */
   const units = planOffer(page);
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, reasonFigure };
+  /* The logo wall is the hero's foot row, full width under the split (owner, 4 Nov 2026, homepage
+     pass), so its band renders nothing of its own (Recognition, below). */
+  const recognition = page.bands.find((band) => band.id === 'client-recognition');
   return (
     <>
       <CorpusHero
         page={page}
         arrangement="beside"
-        media={{ type: 'image', image: placeholderImage(page.route, 'hero') }}
+        media={{
+          type: 'scene',
+          scene: 'arena',
+          title:
+            'A field of similar grey apps, each made by one person at a prompt. One app stands out, rises and opens: underneath, a client and a researcher talk while an AI agent sorts what they say; a designer chooses one of several options the agent proposes; an engineer and an agent build it, with questions passing back and forth. The finished card flies up into the app, which now shows a clear new screen in place of a cluttered old one.',
+        }}
         proofLine={false}
         stats={recordStats(page)}
+        foot={recognition ? <RecognitionGrid band={recognition} /> : undefined}
       />
       {units.map((unit) => {
         const b = unit.band;
-        /* Why Tcules on home: the head beside the three claims, words only (WhyTcules, below). */
-        if (b.id === 'why-tcules' && unit.part !== 'b') {
-          const why = whyTcules(b);
-          if (why) return <WhyTcules key={unit.id} unit={unit} b={b} items={why} />;
-        }
+        /* Why Tcules on home renders as on every other page: the plan's Reasons, one illustration
+           per reason (owner, 3 Nov 2026, superseding 2026-10-30-home-reasons-beside-words-only: the
+           3 Nov copy's six reasons are the services pages' six, so one drawn set serves both). */
         const Band = unit.part === 'b' ? undefined : BANDS[b.id];
         /* Home composes its own bands (the table below); every other band of the copy renders as
            the plan names it, so no band is ever skipped (component-map § E, 29 Oct 2026). */
@@ -222,8 +239,9 @@ export function recordStats(page: CorpusPage): HeroStat[] {
  *
  * NO LINE UNDER THE GRID (owner, home round 2): the badge IS the link to the Clutch profile.
  */
-function Recognition({ b }: BandProps) {
-  return <RecognitionBand band={b} />;
+function Recognition() {
+  /* Drawn inside the hero as its foot row (HomePage). */
+  return null;
 }
 
 /* ── 2 · six situations, the gateway to the services ──────────────────────────────── */
@@ -286,11 +304,42 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
  * of links or as link lines, each with its service's own scene for its graphic card
  * (decisions/2026-10-31-paths-graphic-cards). Exported so /design/kit/gateway proves the paths form on the real words.
  */
+/** An "Example:" paragraph's runs without the lead word, which the card sets as the example's label. */
+function withoutExampleLead(runs: readonly InlineRun[]): InlineRun[] {
+  const [first, ...rest] = runs;
+  if (first?.type !== 'text') return [...runs];
+  const text = first.text.replace(/^\s*Example:\s*/, '');
+  return text ? [{ type: 'text', text }, ...rest] : rest;
+}
+
+/**
+ * The band's closing line before its ask ("Somewhere in between? Tell us where your product is…",
+ * owner, 4 Nov 2026): the copy writes it after the last door's links, so the parser files it under
+ * that door. The paragraphs after the last door's links, as plain text; none, undefined.
+ */
+function askLineIn(b: CorpusBand): string | undefined {
+  const last = items(b).at(-1);
+  if (!last) return undefined;
+  const linksAt = last.blocks.findIndex(
+    (block) => block.type === 'list' || block.type === 'links',
+  );
+  if (linksAt < 0) return undefined;
+  const line = paragraphRuns(last.blocks.slice(linksAt + 1))
+    .map((runs) => plain(runs).trim())
+    .filter(Boolean)
+    .join(' ');
+  return line || undefined;
+}
+
 export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
     const links = path.blocks.flatMap((block) => {
       if (block.type === 'links') {
-        return block.links.map((link) => ({ label: link.labelText, href: link.href }));
+        /* The ask filed under the last path ("Book a call") is not a service: Situations sets it as
+           its own island (owner, 3 Nov 2026). */
+        return block.links
+          .filter((link) => !isAskLink(link))
+          .map((link) => ({ label: link.labelText, href: link.href }));
       }
       if (block.type === 'list') {
         return block.items.flatMap((item) =>
@@ -302,11 +351,42 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
       return [];
     });
     if (links.length === 0) return [];
+    /* A door's words stop at its links: a line after them under the last door is the band's own
+       closing line before its ask (askLineIn), not that door's. */
+    const linksAt = path.blocks.findIndex(
+      (block) => block.type === 'list' || block.type === 'links',
+    );
+    const paragraphs = paragraphRuns(linksAt < 0 ? path.blocks : path.blocks.slice(0, linksAt));
+    /* A first paragraph wholly italic ("*New product*") names the kind of product the path is for:
+       the card's label, not its first line (v2.1 copy, 4 Nov 2026). A paragraph opening "Example:"
+       is the path's example, kept whole with its case link (decisions/2026-11-02-examples-are-one-
+       pattern: the example is set apart from the argument). */
+    const [first] = paragraphs;
+    const only = first?.length === 1 ? first[0] : undefined;
+    const eyebrow = only?.type === 'em' ? plain(only.children).trim() : undefined;
+    const isExample = (runs: (typeof paragraphs)[number]) => /^\s*Example:/.test(plain(runs));
+    const example = paragraphs.find(isExample);
+    const words = paragraphs
+      .filter((runs) => runs !== first || !eyebrow)
+      .filter((runs) => !isExample(runs));
     return [
       {
         id: slugOf(path.headingText),
         title: path.headingText,
-        body: paragraphRuns(path.blocks).map((runs) => plain(runs)),
+        body: words.map((runs) => plain(runs)),
+        ...(eyebrow ? { eyebrow } : {}),
+        /* The example under its card (owner, 4 Nov 2026, variant G): "Example:" becomes its label
+           and the sentence after it the example, every word kept. */
+        ...(example
+          ? {
+              exampleLabel: 'Example',
+              example: (
+                <span
+                  dangerouslySetInnerHTML={{ __html: inline(withoutExampleLead(example)) }}
+                />
+              ),
+            }
+          : {}),
         /* Each service's own scene, the one its service page draws; none borrowed (owner, 31 Oct
            2026; decisions/2026-10-31-paths-graphic-cards). */
         links: links.map((link) => {
@@ -331,10 +411,53 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
 function Situations({ b, eyebrows }: BandProps) {
   const paths = gatewayPaths(b);
   const multi = paths.some((path) => path.links.length > 1);
+  const ask = askLinkIn(b);
+  /* The v2.1 copy's three doors, each named by its kind of product (owner, 4 Nov 2026, homepage
+     pass): a classic three-card set under the head, each card its label, title, words, example and
+     two ways in, then the band's ask centred under the set as the page's main action repeated — a
+     primary solid in the band, as the owner asked (decisions/2026-11-04-where-to-start-doors). */
+  if (paths.length > 0 && paths.every((path) => path.eyebrow)) {
+    /* Each door is its label, title and ways in, nothing else (owner, 5 Nov 2026, launch review:
+       "eyebrow, title, links. that's it"): the authored words and example are not set. */
+    const doors = paths.map(({ body: _body, example: _example, exampleLabel: _label, ...door }) => ({
+      ...door,
+      body: [],
+    }));
+    return (
+      /* On tint, the cards on paper: the set reads as three objects on a ground (owner, 4 Nov 2026:
+         "this needs to be cleaner"). */
+      <ContentSection
+        {...head(b)}
+        eyebrow={eyebrows?.[b.id]}
+        data-band="C-router"
+        surface="tint"
+      >
+        <GatewayPaths
+          paths={doors}
+          form="cards"
+          close={
+            ask
+              ? {
+                  line: askLineIn(b),
+                  action: (
+                    <Button as="a" href={ask.href} size="md">
+                      {ask.labelText}
+                    </Button>
+                  ),
+                }
+              : undefined
+          }
+        />
+      </ContentSection>
+    );
+  }
   return multi ? (
-    <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
-      <GatewayPaths paths={paths} />
-    </ContentSection>
+    <>
+      <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+        <GatewayPaths paths={paths} />
+      </ContentSection>
+      {ask ? <AskIsland link={ask} /> : null}
+    </>
   ) : (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
       <Gateway items={gatewayBoardItems(b)} arrangement="board" />
@@ -385,34 +508,6 @@ function OneStudio({ b }: BandProps) {
 
 /* ── 2c · the people, and how the designers use AI ─────────────────────────────── */
 
-/**
- * The studio's people: the team photograph under the head (Banner `below`, component-map Q17
- * default). The band's two paragraphs are its lead, both at the lead's role and measure, and the
- * two links are one row under them: "Meet the studio" an outlined button, "Careers at Tcules" the
- * quieter link (owner, 29 Oct 2026).
- */
-function People({ page, b }: BandProps) {
-  const paras = paragraphRuns(b.blocks);
-  const binding = page.composition.mediaBindings.find(
-    (m) => m.bound && m.supportsSection === b.id,
-  );
-  return (
-    <Banner
-      form="below"
-      id={b.id}
-      headingId={headingIdOf(b)}
-      heading={b.headingText}
-      lead={paras.map((runs) => plain(runs))}
-      actions={<LinkActions links={bandLinks(b)} pair />}
-      image={
-        binding
-          ? { ...corpusImage(binding), kind: 'photograph' }
-          : { ...placeholderImage(page.route, b.id), kind: 'photograph' }
-      }
-    />
-  );
-}
-
 /* ── 3 · selected work: every case as a horizontal case card ───────────────────────── */
 
 /**
@@ -460,7 +555,12 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
        `home_dealpath_workflow`). */
     const binding = bindingNamed(page, item.headingText.split(':')[0] ?? item.headingText);
     const focus = binding ? COVER_FOCUS[binding.id] : undefined;
-    const paragraphs = paragraphRuns(item.blocks);
+    /* A first paragraph wholly italic ("*Doodle · New product*") is the case's tag: the card's
+       eyebrow (v2.1 copy), not a line of its story. */
+    const all = paragraphRuns(item.blocks);
+    const only = all[0]?.length === 1 ? all[0][0] : undefined;
+    const tag = only?.type === 'em' ? plain(only.children).trim() : undefined;
+    const paragraphs = tag ? all.slice(1) : all;
     const story =
       paragraphs.length === 1 && paragraphs[0]
         ? bodyOf(paragraphs[0])
@@ -468,7 +568,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
     const image = binding
       ? { ...corpusImage(binding), ...(focus ? { focus } : {}) }
       : undefined;
-    return { link, story, image };
+    return { link, story, image, tag };
   };
 
   const card = (item: ItemBlock, index: number) => {
@@ -493,10 +593,13 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
      case studies, so each gets the row. Every other page sets its selected work as the three-across
      BlockCard grid (OfferBands), because there the cases are paths to more content. The cover is the
      page's binding that names the case, else the case's own cover, else its placeholder (coverFor). */
+  /* Below 768 the cases are one swipe row, one card in view and the next peeking (owner, 4 Nov 2026:
+     "on phone, we can keep the case study cards in a horizontal scroll to save space"); every card
+     is a link, so the row is reachable by Tab, and every case is in the page as it loads. */
   const body = (
-    <Layout rowGap="gutter">
+    <Layout rowGap="gutter" colGap="gutter" columns={1} scroll="until-md">
       {cases.map((item, index) => {
-        const { link, story, image } = parts(item, index);
+        const { link, story, image, tag } = parts(item, index);
         /* A case without its link falls back to the plain card. */
         if (!link) return <ul key={item.headingText}>{card(item, index)}</ul>;
         const cover =
@@ -510,6 +613,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
           <CaseCard
             key={item.headingText}
             {...splitClaim(item.headingText)}
+            {...(tag ? { eyebrow: tag } : {})}
             {...story}
             href={link.href}
             ctaLabel={link.labelText}
@@ -525,9 +629,7 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
       {...head(b)}
       data-band="M"
       actionsAt="end"
-      actions={
-        <CtaRow rule={false} actions={[{ label: closing.labelText, href: closing.href }]} />
-      }
+      actions={<LinkActions links={[closing]} />}
     >
       {body}
     </ContentSection>
@@ -611,32 +713,9 @@ export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   );
 }
 
-/**
- * "A product design partner for ambitious SaaS teams" on home: Reasons `beside`, the heading, lead and
- * link in the leading track and the three claims reading down the trailing one. No drawing, no figure,
- * no rule. The band keeps the plan's surface.
- */
-function WhyTcules({
-  unit,
-  b,
-  items: reasons,
-}: {
-  unit: OfferUnit;
-  b: CorpusBand;
-  items: ReasonsItem[];
-}) {
-  const parts = sheetParts(b);
-  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
-  return (
-    <Reasons
-      {...head(b)}
-      arrangement="beside"
-      surface={unit.surface === 'tint' ? 'tint' : 'paper'}
-      lead={parts.lead}
-      action={links.length > 0 ? <LinkActions links={links} /> : undefined}
-      items={reasons}
-    />
-  );
+/* Why Tcules renders as on every page that repeats it: WhyTculesBand (OfferBands). */
+function WhyTcules({ b }: BandProps) {
+  return <WhyTculesBand band={b} />;
 }
 
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
@@ -647,7 +726,54 @@ function ClientVoices({ b, ratings, avatars }: BandProps) {
 
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */
 
+/** The AI run's drawings, one per step in order (components/Sketch/wyg-home.tsx). */
+const AI_RUN_SCENES = ['home-ai-check', 'home-ai-decide', 'home-ai-fix'] as const;
+
 function AiPractice({ page, b }: BandProps) {
+  /* The v2.1 copy (4 Nov 2026): one line, then the run as steps ("1. **AI:** Checks your live
+     product…"), then the link. Each step's bold label is who acts, its words what they do: the
+     flow's stages, in order, under the head; the link the band's action. */
+  const list = b.blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'list' }> =>
+      block.type === 'list' && block.ordered,
+  );
+  const stages = (list?.items ?? []).flatMap((runs) => {
+    const [first, ...rest] = runs;
+    if (first?.type !== 'strong') return [];
+    return [
+      {
+        label: plain(first.children).trim().replace(/[:.]$/, ''),
+        items: [plain(trimStart(rest))],
+      },
+    ];
+  });
+  if (stages.length >= 2) {
+    const intro = paragraphRuns(b.blocks).find(
+      (runs) => !runs.some((run) => run.type === 'link'),
+    );
+    const link = bandLinks(b)[0];
+    /* Direction A (owner, 4 Nov 2026): the head at the left with its link, the run down the right,
+       each step its drawing beside who acts and what they do. The drawings are the steps' own, by
+       position: the AI's check, the designer's choice, the fix signed off. */
+    const scenes = AI_RUN_SCENES.length === stages.length ? AI_RUN_SCENES : undefined;
+    return (
+      <OfferSheet
+        {...head(b)}
+        arrangement="list"
+        /* On tint for the page's rhythm (owner, 4 Nov 2026): its neighbours, Three ways and the
+           industries, are paper. */
+        surface="tint"
+        lead={intro ? plain(intro) : undefined}
+        items={stages.map((stage, index) => ({
+          id: `${index}-${stage.label}`,
+          eyebrow: `${index + 1} · ${stage.label}`,
+          title: stage.items[0] ?? '',
+          ...(scenes ? { scene: scenes[index] } : {}),
+        }))}
+        note={link ? <LinkActions links={[link]} /> : undefined}
+      />
+    );
+  }
   const [lead, ...rest] = paragraphRuns(b.blocks);
   /* The band's link closes its last paragraph ("… [See a typical AI-assisted design run](…)"): the
      link is the banner's action, and the sentence before it stays, under the lead. */
@@ -691,25 +817,8 @@ function AiPractice({ page, b }: BandProps) {
  * no faces), else its register slot.
  */
 function Expertise({ page, b }: BandProps) {
-  const cards: BlockCardSetItem[] = bandLinks(b).map((link) => {
-    const photo = HOME_SECTOR_PHOTOS[link.href];
-    return {
-      id: link.href,
-      title: link.labelText,
-      href: link.href,
-      media: {
-        type: 'image',
-        image: photo
-          ? getKitPhoto(photo)
-          : placeholderImage(page.route, b.id, slugOf(link.labelText)),
-      },
-    };
-  });
-  return (
-    <ContentSection {...head(b)} data-band="C-image">
-      <BlockCardSet items={cards} lead="none" across={4} cue="title" phone="pair" />
-    </ContentSection>
-  );
+  /* The industries band as on every page that carries it: the pill band (IndustriesBand). */
+  return <IndustriesBand page={page} band={b} />;
 }
 
 /* ── 7 · selected thinking: a resource listing, one piece per row ────────────────────── */
@@ -777,11 +886,11 @@ const HOME_BANDS: Readonly<
   Record<(typeof TEMPLATE_BANDS)['/'][number], ComponentType<BandProps>>
 > = {
   'client-recognition': Recognition,
+  'why-tcules': WhyTcules,
   'product-situations': Situations,
   'product-design': OneStudio,
   'selected-work': SelectedWork,
   testimonials: ClientVoices,
-  people: People,
   'ai-native-practice': AiPractice,
   expertise: Expertise,
   insights: Insights,

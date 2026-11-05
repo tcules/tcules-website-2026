@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Design Engineering
     url: /glossary/design-engineering
+  section_labels:
+    role: The role
+    practice: Examples
+    comparison: Vs frontend developer
+    related-terms: Related terms
+    faq: FAQs
+    next: Working in code
 render:
   band_order:
   - role
@@ -176,4 +183,4 @@ Design engineering keeps design judgement in the work until the product is runni
 
 AI coding tools are pulling more design work into code. Design engineering is how that code stays good design: someone with design judgement, working in the running product, decides what the generated code should do and spots where it drifts.
 
-[See Design Engineering](/services/design-engineering)
+[See Design Engineering →](/services/design-engineering)

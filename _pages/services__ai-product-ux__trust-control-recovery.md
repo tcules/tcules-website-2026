@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Book a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -170,11 +170,11 @@ content_governance:
 
 # AI trust UX design for features users can check, correct and undo
 
-AI trust UX is for the moment an AI feature gets something wrong. The customer needs to see what the AI wrote and put it right in a click, and support needs to tell what happened. Tcules provides AI trust UX design for SaaS teams whose AI features suggest, write or act for their customers.
+AI trust UX design lets customers put a wrong AI answer right in a click, so they keep using the feature.
 
 *Selected work: [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design)*
 
-[Show us the AI feature people hesitate over](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -182,11 +182,9 @@ AI trust UX is for the moment an AI feature gets something wrong. The customer n
 
 The controls around one AI feature, so the people using it can tell what the AI did, change it and take it back.
 
-**What you receive**
+- **What a suggestion shows at each stage.** Suggested and provisional, apart from the user's own work; supported, with its sources one click away; accepted, with who accepted it and when; correctable; and recoverable through undo or a repair path.
 
-- **Five suggestion states.** Suggested and provisional, apart from the user's own work; supported, with its sources one click away; accepted, with who accepted it and when; correctable; and recoverable through undo or a repair path.
-
-- **One labelling rule.** AI and human work marked apart with the same colour or mark everywhere in the product.
+- **One mark for AI, everywhere.** AI and human work marked apart with the same colour or mark everywhere in the product.
 
 - **Buttons for common fixes.** Shorter, more formal or a wrong name each get a control, so users stop re-prompting to change one detail.
 
@@ -200,13 +198,13 @@ The controls around one AI feature, so the people using it can tell what the AI 
 
 **What we need from you.** The feature itself, what it produces, what your system can genuinely reverse, and any tickets or feedback about it.
 
-**Where our part stops.** Model quality, tool permissions and technical rollback stay with your engineers, and we say plainly where a control depends on them. For a ranked fix list first, start with an [AI Product UX Readiness Review](/audits/ai-product-ux-readiness); to have the controls built, add [AI Product Engineering](/services/software-development/ai-product-engineering).
+**Where our part stops.** Model quality, tool permissions and technical rollback stay with your engineers, and we say plainly where a control depends on them. For a ranked fix list first, start with an [AI UX Audit](/audits/ai-product-ux-readiness); to have the controls built, add [AI Product Engineering](/services/software-development/ai-product-engineering).
 
 ## Selected AI trust UX work {#selected-work}
 
 In each of these designs, people can see what the AI did and change it.
 
-### Omny AI: blank by default, purple for AI and blue for people
+### Omny AI: AI suggestions wait until someone picks one
 
 Omny AI, acquired by Primelis, once filled its Amazon listing content with AI suggestions before anyone acted. In our redesign the area starts empty, a suggestion takes a deliberate click, and purple marks the AI's work, blue a person's. Omny reported users grew more forgiving when a suggestion missed. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
@@ -230,11 +228,13 @@ Once the AI has acted, "Something went wrong" leaves people guessing what to fix
 | The result is uncertain | A way to check before anyone builds on it |
 | The change cannot be reversed | The person or process that can fix it |
 
-We check each undo, retry and override against what your system can really reverse, so the screen never promises a rescue it cannot deliver. How much each step shows depends on what is at stake, which our article on [how much an AI feature should show users, and when to show more](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces) works through.
+We check each undo, retry and override against what your system can really reverse, so the screen never promises a rescue it cannot deliver. How much each step shows depends on what is at stake, which our article on [how much an AI feature should show users, and when to show more](/insights/building-trust-and-transparency-in-ai-first-user-interfaces) works through.
 
 As AI moves from suggesting to acting, customers will want to see what it remembers about them and set how far it may go without asking. Labels for AI-written work should travel with the content into exports and emails.
 
 We design these controls into the product now, so each new capability arrives with its limits and its way back.
+
+A score beside each answer doesn't fix trust on its own. [What does: a review step people control →](/insights/confidence-scores-dont-fix-trust-when-review-step-never)
 
 ## What clients say {#testimonials}
 
@@ -247,41 +247,57 @@ We design these controls into the product now, so each new capability arrives wi
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For AI trust UX, a good first piece of work is an [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) of one feature people hesitate to rely on.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We design AI that people can check and correct.** For [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), when an AI check cannot run, the review names the missing information so the engineer can supply it and try again.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We work out what the product has to know before we draw it.** For [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation), we followed orders past checkout into production before redesigning the store and the system its staff use.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), our coded demo on sample data let the team review a request, its data and the digital twin together before any live integration.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about AI trust UX design {#faq}
 
@@ -305,7 +321,7 @@ With a direct edit or a choice of alternatives, plus a short reason when someone
 
 A pause costs a click, and it goes where it protects someone: before a person accepts AI content they answer for. Low-risk, reversible changes can apply straight away with an easy undo.
 
-## Tell us what happens when your AI gets it wrong {#enquiry}
+## Make your AI feel safe to use {#enquiry}
 
 Share the feature, what it produces and how users check or undo it today.
 
@@ -315,6 +331,6 @@ Share the feature, what it produces and how users check or undo it today.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Book a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

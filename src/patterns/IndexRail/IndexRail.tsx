@@ -266,8 +266,12 @@ export function IndexRail({
   const count = active.items.length;
   /* The phone bar's one line when the modes are VIEWS: the switch, and at the row's end the section
      in view as a button that opens the jump list (beauty round 4). A picker keeps its list as the
-     bar's scrolling line. */
-  const collapsible = views && modes.length > 1;
+     bar's scrolling line. One view (the glossary's groups) is collapsible too: the bar is the button
+     alone, as a term page's "On this page" bar is (TOC redesign, 26 Oct 2026). Its list as a
+     sideways line cut the third group's name mid-word at 390 and read as clipped, not scrollable
+     (glossary critic, 4 Nov 2026). */
+  const collapsible = views;
+  const hasSwitch = modes.length > 1;
   const here = active.items.find((item) => item.href === `#${current}`) ?? active.items[0];
 
   const picked = active.items.find((item) => item.current) ?? active.items[0];
@@ -363,6 +367,13 @@ export function IndexRail({
             align="center"
             className={styles.bar}
           >
+            {collapsible && !hasSwitch && label ? (
+              /* One view on a phone: no switch to lead the bar, so the rail's label does, as "On this
+                 page" leads a term page's bar; the section in view opens the list at its end. */
+              <p className={styles.barLabel} aria-hidden="true">
+                {label}
+              </p>
+            ) : null}
             {modes.length > 1 ? (
               <div
                 role="group"

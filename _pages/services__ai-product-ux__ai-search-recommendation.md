@@ -57,11 +57,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -174,11 +174,11 @@ content_governance:
 
 # AI search UX design for answers and recommendations users can check
 
-AI search is tested when a prospect types a real question in the demo, and every day after, when a customer wants the source before acting on an answer. Support hears about each answer that had none. Tcules provides AI search UX design for SaaS and knowledge products: search, generated answers and recommendations.
+With AI search UX design, every generated answer shows its source and every recommendation its reason. Customers then know which results to act on.
 
 *Selected work: [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)*
 
-[Show us what your users search for](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -186,9 +186,7 @@ AI search is tested when a prospect types a real question in the demo, and every
 
 The whole path from the search box to the next step in the work, tried on your own content before it is built.
 
-**What you receive**
-
-- **Search entry.** Exact lookups and plain-language questions in one box, with a one-key switch between them.
+- **The search box.** Exact lookups and plain-language questions in one box, with a one-key switch between them.
 
 - **Results that show their source.** Cards and previews with the source, its date and what it covers.
 
@@ -196,9 +194,9 @@ The whole path from the search box to the next step in the work, tried on your o
 
 - **Recommendations that explain themselves.** The reasons behind each pick, what was left out, what happens on accepting it, and preferences people can change.
 
-- **Corrections.** Exclude a source, fix a name, narrow the search or fall back to the raw results, plus a way to flag a bad answer that your team learns from.
+- **Ways to fix a bad answer.** Exclude a source, fix a name, narrow the search or fall back to the raw results, plus a way to flag a bad answer that your team learns from.
 
-- **The next step.** The chosen result carried straight into the screen where the work happens, so nobody copies it across by hand.
+- **Results that open where the work is.** The chosen result carried straight into the screen where the work happens, so nobody copies it across by hand.
 
 - **A test on your own content.** A coded version run against a sample of your documents, showing where answers drift before engineering builds it.
 
@@ -224,7 +222,7 @@ BuildTwin's AI checks structural drawings, and a quality engineer has to trust e
 
 Omny AI, acquired by Primelis, suggests product benefits and use cases for Amazon listings. We moved its suggestions into a panel beside an empty content area, so a pick reaches the listing only when a person clicks to add it. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-## AI search vs ordinary search: which result fits each job {#search-jobs}
+## AI search vs ordinary search: when each one helps {#search-jobs}
 
 People search for different reasons, and each needs a different kind of result. Sometimes the best AI search keeps the AI out of the way. Eden AI's founder talks through [why to build AI around the user's job](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo) in our podcast.
 
@@ -252,41 +250,57 @@ In many products the search box is becoming the front door. A person describes w
 > “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For AI search, a good first piece of work is one product area's real queries, sorted by the job behind each, with its results redesigned to show their sources.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We design AI that people can check and correct.** For [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), we kept the AI's original visible beneath any survey question the researcher rewrites.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We work out what the product has to know before we draw it.** At [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that availability depended on a meeting's priority, so the design compares times by how likely each is to hold.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), a coded demo on sample data showed each question with its data before any live integration.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about AI search UX design {#faq}
 
@@ -324,6 +338,6 @@ Share what the AI returns, or what you want it to return, and what people do wit
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

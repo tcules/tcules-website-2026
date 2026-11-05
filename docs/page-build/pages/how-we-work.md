@@ -44,7 +44,30 @@ details → what clients say → FAQ → enquiry. The middle four are ONE story 
   across, then each fact as one ruled row, its key over the three values aligned under their option. Rows was
   shown beside it and set aside; rows stand in below 1024.
 
-## Band → component (/how-we-work)
+## The 3 Nov copy (2.60, 4 Nov 2026, local branch design/2-60-why-how, awaiting owner review)
+Reordered: product knowledge first, engagement shapes, who you work with, design to working software, how we use
+AI (new), the terms. `working-loop` cut. Engagement shapes lost their eyebrows and facts, so they render as the
+three plated options. `ai-native-practice` joins the illustrated set (image end). Quotes sit under their claims;
+the Doodle and Benchmark Gensuite examples are ClaimProof panels where the copy sets them. The terms' new titles
+map to drawn scenes (decisions → `own`, no minimum term → `commercial`, handover → `getting-started`); "What we
+make is yours" is an empty plate until 2.62 draws it.
+
+### Owner review of the 3 Nov build (4 Nov 2026)
+"All sections are just alternating image + text"; "the embedded testimonials make the designs bad … the service
+page, expertise page, homepage are the north star". Each band now takes one north-star shape; cuts are in
+docs/content-changes.md ("cut for the design").
+- product-knowledge → home's where-to-start cards (GatewayPaths `cards`, tint), each led by a glyph (`glyph` on a
+  path, new), no foot row where no card has ways in; the paragraph after them is the close line. Doodle example cut.
+- engagement-shapes → the three-ways glyph cards (EngagementOptions `cards`), as every other page.
+- your-team → home's Why Tcules list (OfferSheet `list`, glyph rows; plan `CLAIM_LIST`). No photo.
+- design-to-release → the two claims as three-ways glyph cards (plan `CARD_SETS`). No case image. Example cut.
+- ai-native-practice → list rows (OfferSheet `list`), a glyph before each line; heading, lead and "See how we use AI" in the left half. Its h3 cut.
+- Grounds alternate tint / paper from product knowledge to the quotes band (plan `ALTERNATING`).
+- Hero → `studio-desk-pairing` (two designers working at a desk), in place of the team outdoors.
+- The close line under the where-to-start cards is body text across the column.
+- Quotes under claims cut; the testimonials band is unchanged.
+
+## Band → component (/how-we-work, 2 Nov)
 | Band | Kind / component | Notes |
 |---|---|---|
 | hero | CorpusHero beside, studio photo (team), record figures | |

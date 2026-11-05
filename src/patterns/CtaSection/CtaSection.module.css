@@ -133,6 +133,16 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* The compact island's heading (owner, 4 Nov 2026): h3, a step under the band it closes, so the short
+   ask never outweighs that band's own heading. */
+.headingCompact {
+  max-inline-size: var(--cta-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-compact-heading-text);
+  letter-spacing: var(--cta-compact-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
 /* The closes' heading (cmp-cta fix round 1): the same part one and two steps up the ladder, so the
    page's last ask outweighs every mid-page head. Split takes h1 at the title measure; open takes
    display at the display measure, centred by its column. Separate rules rather than modifiers on
@@ -323,4 +333,38 @@
 .artSmall {
   inline-size: var(--cta-art-inline-size-sm);
   max-inline-size: 100%;
+}
+
+/* The island's footnote (`footnote`): one plain line under the island on the band's ground, in the
+   band's own ink, at the body's measure. */
+.footnote {
+  max-inline-size: var(--cta-body-measure);
+  font: var(--text-body-sm);
+}
+
+/* The footnote's leading glyph: the accent, sized to the small body's line box so it sits on the
+   first line (a box of the line's height, the glyph centred in it). */
+.footnoteIcon {
+  display: inline-flex;
+  align-items: center;
+  block-size: var(--cta-footnote-line);
+  color: var(--cta-marker-ink);
+}
+
+.footnoteIcon > svg {
+  inline-size: var(--cta-footnote-glyph);
+  block-size: var(--cta-footnote-glyph);
+}
+
+/* The paired close's action row: one md box tall with its control centred (Cluster `align="center"`),
+   so the first half's solid and the second half's bare link share a centre line. Pinned to each
+   half's foot, their bottoms already met; the link's 16 label then sat 12 under the solid's label. */
+.pairActions {
+  min-block-size: var(--cta-pair-action-block-size);
+}
+
+/* `after`'s heading: h3, a step under the band's heading, in the band's own ink. */
+.afterHeading {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
 }

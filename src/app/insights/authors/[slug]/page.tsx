@@ -101,18 +101,8 @@ export async function generateMetadata({ params }: AuthorPageProps): Promise<Met
       description,
       type: 'profile',
       url,
-      images: author.image
-        ? [
-            {
-              url: author.image.src,
-              width: author.image.width,
-              height: author.image.height,
-              alt: author.name,
-            },
-          ]
-        : [],
     },
-    twitter: { card: 'summary', title, description, images: author.image ? [author.image.src] : [] },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 

@@ -133,9 +133,7 @@ export type {
   SiteNavItem,
   SiteNavLink,
   SiteNavGroup,
-  SiteNavCard,
-  SiteNavCardImage,
-  SiteNavRail,
+  SiteNavAside,
   SiteNavForm,
   SiteNavStatus,
 } from './SiteNav';
@@ -168,6 +166,7 @@ export type {
   EnquiryFormProps,
   EnquiryNextStep,
   EnquiryUrlLabel,
+  EnquiryWorkLabel,
 } from './EnquiryForm';
 
 export { ProcessFlow } from './ProcessFlow';
@@ -300,9 +299,10 @@ export type {
   SiteFooterBrand,
   SiteFooterGroup,
   SiteFooterLink,
-  SiteFooterMetaItem,
+  SiteFooterLegal,
   SiteFooterNewsletter,
-  SiteFooterSocial,
+  SiteFooterRating,
+  SiteFooterStudio,
 } from './SiteFooter';
 export { Banner } from './Banner';
 export type {
@@ -354,6 +354,7 @@ export {
   type LogoGridMarkArt,
   type LogoGridMarkName,
   type LogoGridTrack,
+  type LogoGridDensity,
 } from './LogoGrid';
 
 /* CaseCard — one featured case as one card: the 16:9 cover beside its claim, the whole card the case's
@@ -385,7 +386,12 @@ export {
   type GatewayProps,
 } from './Gateway';
 /* GatewayPaths — the two-door form: two paths, each its drawing, words and links (home, 29 Oct 2026). */
-export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gateway';
+export {
+  GatewayPaths,
+  type GatewayPath,
+  type GatewayPathsForm,
+  type GatewayPathsProps,
+} from './Gateway';
 
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
@@ -511,3 +517,6 @@ export {
   type ClaimSetProps,
   type ClaimExample,
 } from './ClaimSet';
+/* Collage — a band's words in one corner and six studio photographs round them in an L (owner,
+   3 Nov 2026: the About page's "The Ahmedabad studio"). */
+export { Collage, type CollagePhoto, type CollagePhotos, type CollageProps } from './Collage';

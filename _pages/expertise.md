@@ -53,11 +53,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -148,19 +148,19 @@ content_governance:
 
 # Product design expertise by industry, matched to the product you run
 
-Knowing a field shows in small places: screens in your users' own words, a status that means what your compliance lead expects, and a sales demo in the buyer's language. Tcules brings product design expertise by industry and product type to SaaS and other software, new or long established.
+Our product design starts from how your industry works, so your product speaks to customers in their own words.
 
 Find the page closest to the product you're launching or improving. Each shows how we design for its hardest part, with real projects.
 
 *Selected work: [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience)*
 
-[Not sure which page fits? Tell us about your product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Some of the teams we've worked with {#client-recognition}
 
-[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · Ringier Media Switzerland
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · [Ringier Media Switzerland](/case-studies/news-app-ux-shared-design-media-group-ringier)
 
 ## UX design by industry and product type: find the closest page {#product-types}
 
@@ -170,7 +170,7 @@ Six pages cover SaaS design by product type, and six cover industries. Many prod
 
 | Product type | Best for | How we design for it |
 |---|---|---|
-| [B2B SaaS & Workflow Software](/expertise/b2b-saas-workflow-software) | Products where deals, quotes, hires or approvals pass between several roles | We design shared records, a view for each role and a route for the cases that fall off the happy path. |
+| [B2B SaaS & Workflow Software](/expertise/b2b-saas-workflow-software) | Products where deals, quotes, hires or approvals pass between several roles | We design one shared record, a view for each role and a clear route for every exception. |
 | [AI Products & Developer Tools](/expertise/ai-products-developer-tools) | AI platforms, APIs and developer tools that people try once and then judge | We design so first-time users find a way in and experienced ones keep their speed. |
 | [Data, Analytics & Decision Products](/expertise/data-analytics-decision-products) | Dashboards and reports customers open once a month, then forget | We design figures people can trust, each with a next step beside it. |
 | [Content, Knowledge & Discovery Platforms](/expertise/content-knowledge-discovery-platforms) | Knowledge bases, document libraries and large catalogues where search returns too much, or the wrong version | We design search so people find the right item and can tell which version counts. |
@@ -190,8 +190,6 @@ Six pages cover SaaS design by product type, and six cover industries. Many prod
 
 ## Selected work from different industries {#selected-work}
 
-Three products from three fields, each with its own hard part.
-
 ### Doodle: meeting times ranked by how likely they are to hold
 
 In enterprise scheduling across companies, an empty slot only helps if the meeting will happen. Our research showed that priority decides who makes time, so the bookability interface we designed compares possible times by how likely each one is to hold.
@@ -200,11 +198,11 @@ In enterprise scheduling across companies, an empty slot only helps if the meeti
 
 ### BuildTwin: every AI check traceable, and open to challenge
 
-In structural engineering, a quality engineer signs off each drawing and has to defend the call. Our redesign of BuildTwin's AI review lets that engineer follow each check back to its source and overrule it, with the reason kept on the record.
+In structural engineering, a quality engineer signs off each drawing and has to defend the decision. Our redesign of BuildTwin's AI review lets that engineer follow each check back to its source and overrule it, with the reason kept on the record.
 
 [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-### The Wandering Raven: a writing world that holds together on Moodle
+### The Wandering Raven: a character-led writing world, built into Moodle
 
 Learners aged eight to eighteen meet this creative-writing world on Moodle. After researching how educators and learners work, we revised the structure, designed a character-led visual world and carried it into Moodle with selected plugins and a custom theme.
 
@@ -224,41 +222,57 @@ Learners aged eight to eighteen meet this creative-writing world on Moodle. Afte
 > “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-Whatever your industry, a good first piece of work is the part of the product that is hardest for your users.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** For [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), stakeholder interviews and personas for brand managers and researchers came before the MVP design, and they set where the product starts: with the research question.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **Senior people do the work, and clients keep us for years.** Three years into an ongoing partnership, Primelis still has us design every one of its products.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, so the thinking behind how specialist buyers find and compare equipment reached the store they use.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Services we bring to every industry {#services}
 
-[Product Design](/services/product-design) · [New Product Design & First Release](/services/new-product-design-first-release) · [Product Modernisation](/services/product-modernisation) · [Design Systems](/services/design-systems) · [AI Product UX](/services/ai-product-ux) · [Design Engineering](/services/design-engineering) · [Software Development](/services/software-development) · [Audits & Assessments](/audits)
+[Product Design](/services/product-design) · [Design-led MVP Development](/services/mvp-development) · [Product Modernisation](/services/product-modernisation) · [Design Systems](/services/design-systems) · [AI Product UX](/services/ai-product-ux) · [Design Engineering](/services/design-engineering) · [Software Development](/services/software-development) · [Audits & Assessments](/audits)
 
 ## Questions about industry experience in product design {#faq}
 
@@ -300,6 +314,6 @@ Not sure which page fits? Say what your product does, who uses it and what you'd
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

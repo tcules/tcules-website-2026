@@ -115,7 +115,7 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
 
 **Visual pass — before Stage 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
-- [ ] **2.17** ★ Visual overhaul: review every shipped component's specimen at 1440 and 390 against CLAUDE.md
+- [x] **2.17** ★ Visual overhaul (done, owner 3 Nov 2026): review every shipped component's specimen at 1440 and 390 against CLAUDE.md
       § Design quality and the brand chapters, and propose per component what to change. The owner approves each
       proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
 - [x] **2.18** Reasons: the "why Tcules" band (15 Oct queue). Six argued reasons, each with an isometric drawing of
@@ -132,23 +132,23 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
 
 *Batch 2: exploratory, after batch 1 is reviewed.*
-- [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
+- [-] **2.24** Moved to phase 2 (owner, 3 Nov 2026). Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
       improve the current card instead, on a paper-deep card ground.
-- [ ] **2.25** Recolour every Reasons isometric without peridot, to see the set in blue only.
-- [~] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
+- [x] **2.25** (done, owner 3 Nov 2026) Recolour every Reasons isometric without peridot, to see the set in blue only.
+- [x] **2.26** (done, owner 3 Nov 2026) Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
       The bento's six drawings are redrawn and solve their story on hover (decisions/2026-10-25-bento-drawings-tell-their-story).
       Rolled out 26 Oct (branch design/s2-flat-grammar, awaiting the owner's look): every Sketch plate draws the
       redrawn scenes, still and held solved, in the two weights; EngagementOptions and TracePlates draw through
       Sketch, their 14 drawings redrawn as kit scenes; EngagementModel takes the weights and dash. Logged as proposed: decisions/2026-10-26-flat-graphics-grammar and
       -flat-or-isometric-two-questions.
-- [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
-- [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
+- [x] **2.27** (done, owner 3 Nov 2026) Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
+- [-] **2.28** Moved to phase 2 (owner, 3 Nov 2026). Tools in the listings, looking like tools rather than standard cards.
 - [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further
       (owner, 23 Oct 2026): the close at 1:1 (`islandArrangement="halves"`, the panel at a `stack` inset),
       the TextureFlow field, and the sketch-to-shipped drawing; both versions on /design/cta-section § 1d.
       Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
-- [~] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
+- [-] **2.30** Scrapped (owner, 3 Nov 2026). Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
       cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
       Photos replaced (owner, 26 Oct 2026): no faces, a close crop on the main part of each sector's activity.
       The band stays the 4×2 grid for now; accordion, contact-sheet and sentence directions were mocked and set aside.
@@ -170,24 +170,30 @@ a template before the single pages it serves, since one pass there fixes every p
 and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
 the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
 pass on another account; a page ships with its placeholders until then.
-- [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
-      from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
-      carry sector photos. Polished tier.
+- [x] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+      from what the service pages got in round 5. Polished tier. Done for launch (owner, 4 Nov 2026): the shared
+      components change with the homepage pass (2.63) and carry across these pages, and the missing visuals (the
+      12 hero placeholders, the empty "What we design" plates, the pending "Why founders…" illustrations and the
+      "Other industries" slots) belong to the illustration and flat graphics passes (2.61, 2.62).
 - [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
       band as a DataTable is still an open owner call. Polished tier.
 - [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
-- [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-- [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+- [x] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
+      Done 4 Nov 2026 (`design/careers-lab-matter`, records docs/page-build/pages/future-interfaces-lab{,-join}.md):
+      alternating grounds, selection steps under the form, Why join as the Why Tcules list (decisions/2026-11-04-lab-pages-alternate-grounds).
+- [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
       `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
       in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
-      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
-- [~] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
-      Design pass 2 Nov (branch design/services-hub, record docs/page-build/pages/services.md): the guide is split
+      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
+      approved 4 Nov (record docs/page-build/pages/audits.md).
+- [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+      Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
       service tiles (mock A); centred hero, illustration placeholder until art.
-- [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
-- [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
-      relief (lowest score on 29 Oct, 4/10).
+- [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
+      services hub (#194).
+- [x] **2.39** (#213) Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
+      relief (lowest score on 29 Oct, 4/10). approved 4 Nov (record docs/page-build/pages/glossary.md).
 
 *More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
 
@@ -198,15 +204,15 @@ needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:c
 problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
 `/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
 choice (2.34).
-- [~] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [x] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
       First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
-      the four middle illustrations and the subpages' prose runs are open.
+      the four middle illustrations and the subpages' prose runs are open. Done for now (owner, 2 Nov 2026).
 - [x] **2.41** `/why-tcules`: every service page links to it. First pass done 2 Nov (owner: "decent for now"):
       work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
       case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
       Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
-- [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
-- [ ] **2.43** `/matter-design-system`: crucial.
+- [x] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct). Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/careers.md).
+- [x] **2.43** `/matter-design-system`: crucial. Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/matter-design-system.md): the live site's Matter images in the hero, contents and use bands.
 - [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
       render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
       Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
@@ -214,7 +220,7 @@ choice (2.34).
       terms got their subsections, quotes and FAQs back in the same PR.
 - [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough. They render in the article shell (#181).
-- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
+- [-] **2.46** Moved to phase 2 (owner, 4 Nov 2026). Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
       that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
       designed no-visual state.
 - [x] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap). All seven
@@ -233,6 +239,94 @@ choice (2.34).
       everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
       hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
       name, role, bio, topic labels and LinkedIn).
+
+**Review with Jatin, 2 Nov 2026.** Jatin's order: home, the CTAs and the enquiry modal, the reused bands
+(engagement, trust markers, FAQ), then the commercial banners. His note on the whole site: the problem is now
+more content than design, and the owner keeps visual consistency, pushing back on content that can't be
+designed well. Everything here is designed before the lock on Wed 4 Nov. Not ours: Yash sends Jatin the
+page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
+the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
+checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
+- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
+      plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
+      one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
+      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
+      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
+- [-] **2.51** Obsolete: the new homepage design (2.63) covers it (owner, 4 Nov 2026). How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
+      pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
+      real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
+      engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
+- [ ] **2.52** CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
+      on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
+      success and failure copy, and CTA-source analytics come after launch. May move to phase 2 (owner, 4 Nov 2026).
+- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
+      apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
+      adjacent, never beside the close.
+- [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
+      (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
+- [ ] **2.55** Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
+      Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
+      links to `/expertise`.
+- [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
+      "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
+      social media, the other ways to reach us, and the studio address.
+- [x] **2.57** (#213) `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
+      the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
+- [x] **2.58** (#218) `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
+      decisions and records them in `docs/page-build/pages/clients.md`.
+- [ ] **2.59** Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
+      illustrations instead.
+- [x] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
+      `/why-tcules` (two new bands, `design-to-code` and `ai-products`, match no kind), the six audit pages (new
+      outline: worked example, talk, after the audit; compare moves last; how-we-work-together and industries
+      cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
+      copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
+      `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
+      The six audit pages: done 4 Nov (#213). `/why-tcules` and `/how-we-work`: done 4 Nov
+      (design/2-60-why-how), every band on a home/service/expertise shape, claim quotes and stray lines cut
+      (content-changes), studio-at-work heroes, alternating grounds; rulings 2026-11-04-claims-carry-no-quotes,
+      -studio-pages-alternate-grounds, -studio-heroes-show-people-at-work, -no-heading-row-over-a-split,
+      -no-case-images-in-sections. The article URL scheme is set aside by the owner (4 Nov), still open.
+- [x] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
+      isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
+      Works alongside 2.59's banners.
+      Scope set 5 Nov 2026 (owner): only drawings a page shows. In: the 12 expertise heroes (new ideas built
+      from the expertise hub's objects), the `/services`, `/tools` and `/future-interfaces-lab` heroes, the
+      three `/why-tcules` principles, and the designer's desk redrawn in the new hand for /careers or the Lab.
+      Out for now: the 25 service sub-page heroes (words only, no placeholder:
+      decisions/2026-11-05-service-subpage-heroes-no-placeholder) and the audit heroes (see 2.66). All older
+      illustration rules are loose; consistency with the 10 approved heroes is the standard. Owner signs off.
+      Done 5 Nov 2026 (design/illustration-run): the twelve industry heroes, the /services, /tools and Lab heroes,
+      the /why-tcules band as one drawing, the ten approved heroes brought to the figure rules; rulings
+      2026-11-05-*. Left: where the redrawn designer's desk goes (docs/illustrations/run-2026-11-05/designer-desk/,
+      owner to place: /careers or the Lab), and the audit heroes (2.66).
+- [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
+      dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
+      plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
+      No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
+      84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
+      drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
+      layout (owner, 5 Nov). Still open: auditing existing tile drawings against the four patterns.
+- [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
+      what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
+      the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
+      The studio collage leaves home for /about (owner, 4 Nov 2026): its photo picks, focal points and zoom
+      are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
+- [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
+      the header still needs work. Done 4 Nov 2026 (#215, #216, #217).
+- [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
+- [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
+      wire them in as they land.
+      The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
+      placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
+      (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
+      `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
+- [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
+      Its unused path is removed from `src/lib/routes.ts`.
+
+Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
+screen or report where the problem is evident · enquiry form autofill, success/failure copy
+and CTA-source analytics · a pricing section · taxonomy collection pages.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
@@ -270,9 +364,10 @@ Jatin's explicit sign-off on the reduced type size.
 ## Stage 6 — Rollout and plumbing
 
 - [ ] **6.1** Remaining services, audits and expertise onto the templates.
-- [ ] **6.2** Draft preview, and an empty optional section renders nothing.
-- [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
-- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [-] **6.2** Draft preview, and an empty optional section renders nothing. Dropped: not needed (owner, 4 Nov 2026).
+- [~] **6.3** Ongoing, not a one-off task (owner, 4 Nov 2026). Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
+- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
+      launch (owner, 4 Nov 2026).
 - [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
       and 390 before changing anything:
       - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
@@ -282,6 +377,12 @@ Jatin's explicit sign-off on the reduced type size.
         reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
         Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
         a fix that needs it to is a ruling for `/decide`, not a local media query.
+- [x] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
+      at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
+      No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
+      insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
+      Done 5 Nov 2026 (`feat/og-images`): all 253 sitemap pages, reviewed on /design/share-cards
+      (decisions/2026-11-05-share-cards-words-left-picture-right); `npm run share:census` lists each card's picture.
 
 ## Parked (handoff says don't freeze yet)
 
@@ -289,7 +390,11 @@ Homepage · About · final positioning copy · migrating all 135 routes · share
 
 ## Phase 2 — after the 6 Nov launch
 
-- [ ] `/clients` (owner, 31 Oct 2026).
+- [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
+- [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (was 2.46;
+      owner, 4 Nov 2026).
+- [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
+- [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
 - [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs

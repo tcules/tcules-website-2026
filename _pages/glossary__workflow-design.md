@@ -43,6 +43,12 @@ navigation:
     url: /glossary
   - name: Workflow Design
     url: /glossary/workflow-design
+  section_labels:
+    practice: Examples
+    patterns: Patterns
+    comparison: Vs process design
+    faq: FAQs
+    next: Rules before screens
 render:
   band_order:
   - practice
@@ -161,4 +167,4 @@ Product designers usually lead it, with product managers bringing the business r
 
 Roles, rules and handoffs have to work together as one product, whatever the screens look like. Workflows are also gaining a new kind of participant. An AI agent that drafts, routes or approves part of the work needs the same explicit rules and handoffs as any role, plus a clear point where a person can step in. [User journey mapping](/glossary/user-journey-mapping) looks wider, across stages and channels, and [human in the loop](/glossary/human-in-the-loop) covers the review steps where software proposes and a person decides.
 
-[See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
+[See Information Architecture and Workflow Design →](/services/product-design/information-architecture-workflow-design)

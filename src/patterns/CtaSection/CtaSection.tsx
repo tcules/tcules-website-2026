@@ -21,6 +21,9 @@ import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
 
+/** One paragraph of the close's lede: plain words, or a sentence with its authored links. */
+export type CtaParagraph = string | ReactElement;
+
 /**
  * One step in "what happens next". `label` is the step, `detail` an optional clause under it.
  *
@@ -113,8 +116,11 @@ type CtaSectionBaseProps = {
    *
    * A third paragraph does not compile, and that is the point of the tuple: this block asks, it
    * does not explain. Whatever wants a third paragraph belongs in the page above it.
+   *
+   * A paragraph may be rich text (a ReactNode) where its links are part of the sentence as authored
+   * (an audit's "After the audit", 4 Nov 2026); the island's surface inks them.
    */
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
@@ -200,6 +206,7 @@ export type CtaFormIsland = Extract<IslandSurface, 'blue' | 'ink'>;
 
 type CtaSplitProps = {
   arrangement?: 'split';
+  second?: never;
   /**
    * The full EnquiryForm. A `ReactElement`, not a `ReactNode`, so `form={null}` (or `false`) does
    * not compile: a split close with nothing in its 7-track reserved the track and its 96 seam for
@@ -207,6 +214,7 @@ type CtaSplitProps = {
    */
   form: ReactElement;
   actions?: readonly [];
+  intent?: never;
   /**
    * Refused since cmp-cta fix round 1. A close with the FULL form and a proof row ran 880–1104 at
    * 1470 with standard copy — past the 830 fold at every proof kind — so the evidence for the ask is
@@ -275,16 +283,65 @@ type CtaSplitProps = {
    * the column, the ground and the air. Island only.
    */
   inBand?: boolean;
+  /**
+   * One plain line under the island, on the band's own ground (owner, 3 Nov 2026: contact's "Need an
+   * NDA first?" sits outside the island so the island stays the ask and the form). Island only.
+   */
+  footnote?: string;
+  /**
+   * A glyph leading the footnote, on its first line, in the accent: what kind of line it is at a
+   * glance (owner, 3 Nov 2026: contact's NDA line takes a shield). Ignored without `footnote`.
+   */
+  footnoteIcon?: IconName;
+  /**
+   * What follows the island inside the same band, on its ground: its own heading (h3, a step under
+   * the band's) and its content (owner, 4 Nov 2026, /future-interfaces-lab/join: "how selection
+   * works … just under the form is fine. In a section of its own the gap is too much and it feels
+   * disconnected"). A `stack` under the island and its footnote: block to block inside one band.
+   * Island only.
+   */
+  after?: CtaAfter;
+};
+
+/** A follow-on under the island (`after`): a heading and what it heads. */
+export type CtaAfter = { heading: string; content: ReactNode };
+
+/**
+ * The open island's second ask (4 Nov 2026, /future-interfaces-lab: the candidate's ask and the
+ * product owner's). Its own heading, one lede sentence and ONE action, which is a blue link with its arrow:
+ * the island's first ask keeps the page's one blue solid.
+ */
+export type CtaSecondAsk = {
+  /** The half's own anchor, where the copy filed this ask as a band of its own. */
+  id?: string;
+  heading: string;
+  body?: readonly [CtaParagraph];
+  action: CtaAction;
 };
 
 type CtaOpenProps = {
   arrangement: 'open';
   form?: never;
   /**
+   * A second ask on the same island (4 Nov 2026): the island splits into two peer halves from 1024,
+   * the first ask (heading, body, its one solid) in the start half and this one (its outline action)
+   * in the end half, each its heading, lede and action, the actions on one line. Below 1024 they stack, `stack`
+   * apart. For two closing asks of one page aimed at two readers, which as two islands would touch.
+   * With it, `actions` takes one action and `proof` and `points` are not rendered.
+   */
+  second?: CtaSecondAsk;
+  /**
    * The close's ask: the blue solid, then at most its blue ghost partner. A close is where the page
    * makes its one main action (r7-buttons, 8 Oct 2026), so this is a solid by position.
    */
   actions: readonly [CtaAction] | readonly [CtaAction, CtaAction];
+  /**
+   * What the actions do (tracker 2.53, 3 Nov 2026). `ask` (default): the page's ask, the blue solid
+   * then its ghost. `onward`: the island points to a piece of reading mid-page (a band's onward line,
+   * set as its own island), so its action is the blue LINK with its arrow, never a solid: the page's
+   * one main action belongs to the hero and the close (r7-buttons, 8 Oct 2026).
+   */
+  intent?: 'ask' | 'onward';
   proof?: ReactNode;
   media?: never;
   contact?: never;
@@ -298,11 +355,24 @@ type CtaOpenProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
-  inBand?: never;
+  /**
+   * `compact` (owner, 4 Nov 2026, homepage pass: "a CTA island variant that's compact and has
+   * buttons on the right"): the heading and its line at the start, the actions at the inline end
+   * from 1024, centred on the words, at the island's own inset. For a short ask that closes the band
+   * it follows ("Not sure which suits you?"), not the page: it never takes the display scale.
+   */
+  density?: 'compact';
+  /**
+   * `compact` only: the island set inside the band it closes rather than as a band of its own (a
+   * labelled `<section>`, no Section), so it sits a step under that band's set instead of a band's
+   * air away from it. See the split close's `inBand`.
+   */
+  inBand?: boolean;
 };
 
 type CtaOfferWithActionsProps = {
   arrangement: 'offer';
+  second?: never;
   form?: never;
   /**
    * ONE action, rendered as the blue LINK button with its arrow — never a solid (r7-buttons, owner
@@ -312,6 +382,7 @@ type CtaOfferWithActionsProps = {
    * CtaRow rule); a second destination is a second band's.
    */
   actions: readonly [CtaAction];
+  intent?: never;
   proof?: never;
   /**
    * The K offer's photograph. With it, the band is [7, 5] — copy in 7 (667 at 1470), the 4:5 photo
@@ -356,13 +427,14 @@ function present(node: ReactNode): boolean {
  * `open` display (the centred open close), `halves` the offer step at a two-line measure (the halves
  * close, 25 Oct 2026). The element is an `h2` in all four.
  */
-type CtaHeadingScale = 'offer' | 'close' | 'open' | 'halves';
+type CtaHeadingScale = 'offer' | 'close' | 'open' | 'halves' | 'compact';
 
 const HEADING_CLASS: Record<CtaHeadingScale, string | undefined> = {
   offer: styles.heading,
   close: styles.headingClose,
   open: styles.headingOpen,
   halves: styles.headingHalves,
+  compact: styles.headingCompact,
 };
 
 function CtaLede({
@@ -379,7 +451,7 @@ function CtaLede({
   mark?: ReactNode;
   eyebrow?: string;
   heading: string;
-  body?: readonly [string] | readonly [string, string];
+  body?: readonly [CtaParagraph] | readonly [CtaParagraph, CtaParagraph];
   leadRole?: 'lead' | 'body';
   scale?: CtaHeadingScale;
   centred?: boolean;
@@ -388,7 +460,9 @@ function CtaLede({
      around nothing. The survivors are re-indexed, so an empty body[0] promotes body[1] into the lead
      role rather than rendering an empty lead above a body paragraph. An absent body (cmp-feature:
      the body is optional) renders the head alone. */
-  const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
+  const paragraphs = (body ?? []).filter((paragraph) =>
+    typeof paragraph === 'string' ? paragraph.trim().length > 0 : paragraph != null,
+  );
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
@@ -418,7 +492,7 @@ function CtaLede({
         <Layout rowGap="text" justifyItems={centred ? 'center' : undefined}>
           {paragraphs.map((paragraph, index) => (
             <p
-              key={`${index}-${paragraph}`}
+              key={index}
               className={index === 0 && leadRole === 'lead' ? styles.lead : styles.body}
             >
               {paragraph}
@@ -627,23 +701,36 @@ function CtaActions({
   actions,
   kind,
   justify,
+  className,
 }: {
   actions: readonly CtaAction[];
-  /** `ask` on a close, `link` on the offer. See above. */
-  kind: 'ask' | 'link';
+  /** The paired close's row class (`.pairActions`). */
+  className?: string;
+  /** `ask` on a close, `link` on the offer, `partner` a second ask's lone link. See above. */
+  kind: 'ask' | 'link' | 'partner';
   /** `center` in the open close's centred column; otherwise the row starts at the copy's edge. */
   justify?: 'center';
 }) {
   return (
-    <Cluster colGap="block" rowGap="block" align="center" justify={justify}>
+    <Cluster
+      className={className}
+      colGap="block"
+      rowGap="block"
+      align="center"
+      justify={justify}
+    >
       {actions.map((action, index) => {
         const solid = kind === 'ask' && index === 0;
+        /* A lone partner is a link, not a ghost (critic, 4 Nov 2026): with no solid beside it a ghost's
+           inset put its label 12 inside the column, off the edge its heading and the other half's
+           solid start on; the link's label sits on the edge. */
+        const emphasis = solid ? 'solid' : kind === 'ask' ? 'ghost' : 'link';
         return (
           <Button
             key={`${index}-${action.href}-${action.label}`}
             as="a"
             href={action.href}
-            emphasis={solid ? 'solid' : kind === 'ask' ? 'ghost' : 'link'}
+            emphasis={emphasis}
             size="md"
             extendHitArea
             icon={solid ? undefined : <Icon name="arrow-right" />}
@@ -768,7 +855,9 @@ export function CtaSection(props: CtaSectionProps) {
   /* The heading owns the region's name. `useId` rather than a caller-supplied id, because two
      instances on one route would otherwise have to be told apart by hand — and the id is only ever
      pointed at the `h2`, which is always rendered, so the idref can never dangle. */
-  const headingId = `${useId()}-heading`;
+  const baseId = useId();
+  const headingId = `${baseId}-heading`;
+  const secondHeadingId = `${baseId}-second-heading`;
   const points = props.points ?? [];
   const markers: CtaPointMarker = props.markers ?? 'number';
   const hasPoints = points.some((point) => point.label.trim().length > 0);
@@ -808,6 +897,98 @@ export function CtaSection(props: CtaSectionProps) {
       </Island>
     );
     const arrangement = 'open-island';
+    const actionKind = props.intent === 'onward' ? 'link' : 'ask';
+
+    /* ── Open, two asks in halves (4 Nov 2026) ─────────────────────────────────────────────────
+       Two peer halves at `section` (96), the gap of two regions sharing a row: each its heading at
+       the close step, its lede and its action pinned to the half's foot, so the two headings share
+       a line and so do the two actions, however the headings wrap. The
+       first ask keeps the solid; the second takes a blue link. Below 1024, stacked. The
+       field stays calm behind both ledes. */
+    const second = props.second;
+    if (second) {
+      return (
+        <Section
+          surface={band}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={`${headingId} ${secondHeadingId}`}
+          data-arrangement="open-island-pair"
+        >
+          {field(
+            /* Stacked, the two routes part at `column` (64), the larger seam: at `stack` they parted
+               at the distance each route's lede already keeps from its own action, so the second
+               read as the first's continuation (critic, 4 Nov 2026). */
+            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="column">
+              <Layout rowGap="stack" justifyItems="start" pinLast>
+                <div data-texture-calm>{lede({ scale: 'close' })}</div>
+                <CtaActions
+                  actions={props.actions.slice(0, 1)}
+                  kind={actionKind}
+                  className={styles.pairActions}
+                />
+              </Layout>
+              <Layout rowGap="stack" justifyItems="start" pinLast id={second.id}>
+                <div data-texture-calm>
+                  <CtaLede
+                    headingId={secondHeadingId}
+                    heading={second.heading}
+                    body={second.body}
+                    scale="close"
+                  />
+                </div>
+                <CtaActions
+                  actions={[second.action]}
+                  kind="partner"
+                  className={styles.pairActions}
+                />
+              </Layout>
+            </Layout>,
+          )}
+        </Section>
+      );
+    }
+
+    /* ── Open, compact ───────────────────────────────────────────────────────────────────────
+       The words at the start and the actions at the end of one row from 1024, centred on each
+       other: a split, so `section` (96) between them. The heading takes h3, a step under a band's h2, and the line
+       under it the body role: a short ask, not the page's close. Below 1024 the actions sit a
+       `block` under the words. */
+    if (props.density === 'compact') {
+      const content = field(
+        <Layout
+          columns={{ base: 1, lg: [1, 'auto'] }}
+          colGap="section"
+          rowGap="block"
+          align="center"
+        >
+          <Layout justifyItems="start">
+            <div data-texture-calm>{lede({ scale: 'compact', leadRole: 'body' })}</div>
+          </Layout>
+          <CtaActions actions={props.actions} kind={actionKind} />
+        </Layout>,
+      );
+      return props.inBand ? (
+        <section
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement={arrangement}
+        >
+          {content}
+        </section>
+      ) : (
+        <Section
+          surface={band}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement={arrangement}
+        >
+          {content}
+        </Section>
+      );
+    }
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in
@@ -833,7 +1014,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <div data-texture-calm>{lede({ scale: 'close' })}</div>
                 </Layout>
                 <CtaPoints shape="row" markers={markers} points={points} />
-                <CtaActions actions={props.actions} kind="ask" />
+                <CtaActions actions={props.actions} kind={actionKind} />
               </Layout>
               <div>{props.proof}</div>
             </Layout>,
@@ -873,7 +1054,7 @@ export function CtaSection(props: CtaSectionProps) {
                   <CtaPoints shape="centred" markers={markers} points={points} />
                 </Layout>
               ) : null}
-              <CtaActions actions={props.actions} kind="ask" justify="center" />
+              <CtaActions actions={props.actions} kind={actionKind} justify="center" />
             </Layout>
           </div>,
         )}
@@ -1034,6 +1215,10 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <IslandBand
         inBand={props.inBand}
+        footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
+        after={props.after}
+        afterHeadingId={`${baseId}-after-heading`}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1074,6 +1259,10 @@ export function CtaSection(props: CtaSectionProps) {
     return (
       <IslandBand
         inBand={props.inBand}
+        footnote={props.footnote}
+        footnoteIcon={props.footnoteIcon}
+        after={props.after}
+        afterHeadingId={`${baseId}-after-heading`}
         surface={band}
         id={props.id}
         data-band={props['data-band']}
@@ -1107,6 +1296,10 @@ export function CtaSection(props: CtaSectionProps) {
   return (
     <IslandBand
       inBand={props.inBand}
+      footnote={props.footnote}
+      footnoteIcon={props.footnoteIcon}
+      after={props.after}
+      afterHeadingId={`${baseId}-after-heading`}
       surface={band}
       id={props.id}
       data-band={props['data-band']}
@@ -1143,6 +1336,10 @@ export function CtaSection(props: CtaSectionProps) {
  */
 function IslandBand({
   inBand,
+  footnote,
+  footnoteIcon,
+  after,
+  afterHeadingId,
   surface,
   id,
   'data-band': dataBand,
@@ -1150,15 +1347,52 @@ function IslandBand({
   children,
 }: {
   inBand?: boolean;
+  footnote?: string;
+  footnoteIcon?: IconName;
+  after?: CtaAfter;
+  afterHeadingId?: string;
   surface: SectionSurface;
   id?: string;
   'data-band'?: string;
   'aria-labelledby'?: string;
   children: ReactNode;
 }) {
+  /* The footnote is the band's, not the island's: a `block` under it, on the ground. */
+  const body = footnote ? (
+    <Layout rowGap="block">
+      {children}
+      {footnoteIcon ? (
+        <Cluster colGap="tight" align="start" nowrap>
+          <span className={styles.footnoteIcon} aria-hidden="true">
+            <Icon name={footnoteIcon} />
+          </span>
+          <p className={styles.footnote}>{footnote}</p>
+        </Cluster>
+      ) : (
+        <p className={styles.footnote}>{footnote}</p>
+      )}
+    </Layout>
+  ) : (
+    children
+  );
+  const banded = after ? (
+    <Layout rowGap="stack">
+      {body}
+      <section aria-labelledby={afterHeadingId}>
+        <Layout rowGap="block">
+          <h3 id={afterHeadingId} className={styles.afterHeading}>
+            {after.heading}
+          </h3>
+          {after.content}
+        </Layout>
+      </section>
+    </Layout>
+  ) : (
+    body
+  );
   return inBand ? (
     <section id={id} data-band={dataBand} aria-labelledby={labelledBy}>
-      {children}
+      {banded}
     </section>
   ) : (
     <Section
@@ -1168,7 +1402,7 @@ function IslandBand({
       aria-labelledby={labelledBy}
       data-arrangement="split"
     >
-      {children}
+      {banded}
     </Section>
   );
 }

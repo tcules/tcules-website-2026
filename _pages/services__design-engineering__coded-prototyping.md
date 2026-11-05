@@ -58,11 +58,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -178,11 +178,11 @@ content_governance:
 
 # Coded prototyping services to test real behaviour before you build
 
-Coded prototyping is for the review where engineers try the drag, the slow answer and the crowded table in a browser. It is also for the roadmap call that follows: build it, change it or stop. Tcules provides coded prototyping services for SaaS and AI products, on real or representative data.
+Coded prototyping turns your idea into working code on real or sample data. Your team then decides what to build from something it can try.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)*
 
-[Tell us what you need to see working](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -190,11 +190,9 @@ Coded prototyping is for the review where engineers try the drag, the slow answe
 
 One high-fidelity coded prototype in the browser, built to answer one question your team cannot answer from a picture.
 
-**What you receive**
-
 - **The question, agreed first.** One sentence the prototype must answer, and what would count as an answer, written down before any code.
 
-- **The hard cases before the happy path.** Empty, loading, error, long content, dense data and different user roles, built first because they are most likely to break the idea.
+- **Awkward cases built first.** Empty, loading, error, long content, dense data and different user roles, built first because they are most likely to break the idea.
 
 - **Real or representative data.** Your own records when access and privacy allow, or sample data shaped like them.
 
@@ -210,9 +208,9 @@ One high-fidelity coded prototype in the browser, built to answer one question y
 
 ## Selected coded prototyping work {#selected-work}
 
-Two of these ran in code. The third shows the level below code, where an interactive prototype answered the question.
+Two ran in code. The third used a clickable prototype, which was enough to answer the question.
 
-### ConnectX: a request, its data and the twin, seen working together
+### ConnectX: question, data and digital twin in one demo
 
 ConnectX was defining an AI-native building-energy product. Before any live integration, our coded demo on sample data showed a plain-language request, its data and the digital twin working as one product. That demo later became a production-ready module. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
@@ -224,15 +222,15 @@ We built the suite's attachments area as a working prototype: nested folders, pr
 
 For Gold Image Printing's store and production system, hybrid wireframes carried interaction detail into the earliest drafts. Interactive prototypes then let stakeholders review the intended flow before implementation began. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-## When to use a coded prototype: what it has to survive {#hard-cases}
+## When to use a coded prototype {#hard-cases}
 
-Code earns its place when a static design can only describe the answer. These are the cases we build into a prototype first.
+Use code when a picture can't show the answer: dragging, real data, small screens or slow responses. These are the cases we build into a prototype first.
 
-**Movement.** Does the idea still make sense once people can drag, reorder or nest things, by mouse and by keyboard?
+**Dragging and reordering.** Does the idea still make sense once people can drag, reorder or nest things, by mouse and by keyboard?
 
 **Real data.** What happens when long names, empty records and uneven numbers make the layout dense?
 
-**Size.** Does the screen still work on a phone, or when someone narrows the window halfway through a task?
+**Screen size.** Does the screen still work on a phone, or when someone narrows the window halfway through a task?
 
 **Waiting and failing.** What do people see while something loads, when it fails, and when an AI answer is slow, unsure or wrong?
 
@@ -262,41 +260,57 @@ We pick the level that answers the question soonest, and go further only when th
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
 > **Stephanie Leue, Doodle**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For coded prototyping, a good first piece of work is one interaction or one AI behaviour, built in code to answer a single question.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, with the custom work needed to fit the design to the platform.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** On [Dealpath's](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) deal-management software, our redesign changed one step, Add to pipeline, and left the other three listing actions largely as users knew them.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We work out what the product has to know before we draw it.** At [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that people's availability depended on how important a meeting was, and priority became part of the product model.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about coded prototyping services {#faq}
 
@@ -330,6 +344,6 @@ Describe the flow you want to try before anyone builds it, and the data it has t
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

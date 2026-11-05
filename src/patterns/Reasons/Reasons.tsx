@@ -149,6 +149,14 @@ export type ReasonsProps = {
    * illustration is never boxed (ch05 §4a).
    */
   figureSize?: 'sm' | 'lg';
+  /**
+   * ONE drawing for the whole set, at the content width between the head and the reasons (owner,
+   * 5 Nov 2026, /why-tcules "Better product decisions, before you build": "one wide drawing for the
+   * band"). The drawing holds every reason in one scene, so the reasons under it are words only: any
+   * `figure` or `proof` an item carries is not drawn. `open` and `boxed` only; `beside` is words only.
+   * Decorative (`alt` empty): the titles and sentences under it say what it shows.
+   */
+  bandFigure?: MediaImage;
 };
 
 /** The drawing's rendered width: its box is --rsn-figure-height tall at the set's widest ratio (6:5),
@@ -157,6 +165,9 @@ const FIGURE_SIZES = '170px';
 
 /** The `lg` drawing's rendered width: 256 tall at the set's widest ratio (6:5), ~310 at most. */
 const FIGURE_SIZES_LG = '(min-width: 1024px) 310px, 100vw';
+
+/** The band figure's rendered width: the content column, 1176 at most. */
+const BAND_FIGURE_SIZES = '(min-width: 1240px) 1176px, 100vw';
 
 /** The case cover's rendered width: the plate's full width, ~400 at most. */
 const COVER_SIZES = '(min-width: 1024px) 400px, 100vw';
@@ -289,6 +300,7 @@ export function Reasons({
   arrangement = 'open',
   surface = 'paper',
   figureSize = 'sm',
+  bandFigure,
 }: ReasonsProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
   if (process.env.NODE_ENV !== 'production' && ![3, 4, 5, 6].includes(shown.length)) {
@@ -344,9 +356,12 @@ export function Reasons({
   );
 
   if (arrangement === 'beside') {
-    if (process.env.NODE_ENV !== 'production' && shown.some((i) => i.figure || i.proof)) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      (bandFigure || shown.some((i) => i.figure || i.proof))
+    ) {
       console.warn(
-        'Reasons: `beside` sets words only; the figures and proofs passed are not drawn.',
+        'Reasons: `beside` sets words only; the figures, proofs and band figure passed are not drawn.',
       );
     }
     return (
@@ -382,18 +397,37 @@ export function Reasons({
     );
   }
 
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    bandFigure &&
+    shown.some((i) => i.figure || i.proof)
+  ) {
+    console.warn(
+      'Reasons: a `bandFigure` draws the whole set, so the items’ figures and proofs are not drawn.',
+    );
+  }
   const open = arrangement === 'open';
   // A set whose covers carry no figure (offer pages) sizes its plate to the cover: 16:9, no caption strip.
   const flatProofs =
     items.some((i) => i.proof?.kind === 'cover') &&
     !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
-  const allProof = shown.length > 0 && shown.every((i) => i.proof);
-  /* A reason's picture: its proof, else its drawing at the set's figure size. */
+  const allProof = !bandFigure && shown.length > 0 && shown.every((i) => i.proof);
+  /* A reason's picture: its proof, else its drawing at the set's figure size; none under a band figure. */
   const visualOf = (item: (typeof shown)[number]) =>
-    item.proof ? (
+    bandFigure ? null : item.proof ? (
       <Proof proof={item.proof} flat={flatProofs} />
     ) : item.figure ? (
-      <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
+      /* A figure that is not a drawing (`kind` other than `illustration`) is the register's labelled
+         slot, standing in until the drawing lands. It fills the track at the set's ratio, so an
+         undrawn set sits on the grid; at the drawing's fixed height it took about 70% of the track
+         and the row read ragged (critic, audits run, 4 Nov 2026). */
+      <div
+        className={cx(
+          styles.figure,
+          figureSize === 'lg' && styles.figureLg,
+          item.figure.kind !== 'illustration' && styles.figureSlot,
+        )}
+      >
         <Media
           image={{ ...item.figure, alt: '' }}
           sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
@@ -459,6 +493,9 @@ export function Reasons({
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="reasons">
       <Layout rowGap="stack">
         {head}
+        {bandFigure ? (
+          <Media image={{ ...bandFigure, alt: '' }} sizes={BAND_FIGURE_SIZES} />
+        ) : null}
         {framed}
       </Layout>
     </Section>

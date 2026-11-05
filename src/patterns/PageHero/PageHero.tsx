@@ -1,24 +1,30 @@
 import type { ReactNode } from 'react';
 
 import {
+  Arena,
   BrandMark,
   Button,
+  Clip,
   Cluster,
   Icon,
   Layout,
   Media,
   RatingBadge,
   Section,
+  Sketch,
   Stat,
   Tag,
   Texture,
   TextureShape,
   type MediaImage,
   type BrandMarkName,
+  type ClipRendition,
   type MediaRatioSpec,
   type SectionSurface,
+  type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import { leavesSite } from '@/lib/href';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import {
   FULL_COLUMN,
@@ -150,6 +156,14 @@ export type HeroImage = {
    * other kind, the image renders alone.
    */
   cut?: HeroCut;
+  /**
+   * A recomposed cut of the image for a phone, below 768: a DIFFERENT file, one part of the image
+   * rather than the whole of it, where the whole shrunk to a 326 column leaves nothing to read (a
+   * collage of three product frames came out 262 × 144; /matter-design-system, 4 Nov 2026). Its own
+   * `width` and `height`, since its ratio differs. Same kind, panel and alt as the image: the cut
+   * shows a part of what the alt describes. Ignored where a numbered `cut` applies.
+   */
+  phone?: { src: string; width: number; height: number };
 };
 
 /** One label of an illustration's numbered cut. `tone` is its colour in the drawing: `accent` the
@@ -191,7 +205,50 @@ export type HeroVideo = {
  * at the CALL SITE, on 129 routes, in a tier whose whole job is composition. The two renderings
  * are a closed set and the component owns them.
  */
-export type HeroMedia = HeroImage | HeroVideo;
+export type HeroMedia = HeroImage | HeroVideo | HeroScene | HeroClip | HeroSketch;
+
+/**
+ * A flat Sketch drawing on its dotted plate (4 Nov 2026, the tool pages: each tool's hero carries
+ * the scene its hub tile draws, so the page that IS the tool shows the picture the card promised).
+ * An illustration in every sense the split reads: no edge of its own beyond the plate, centred on
+ * the copy, the drawing's third from 1024. `name` is a registered scene, never markup.
+ */
+export type HeroSketch = {
+  type: 'sketch';
+  name: SketchName;
+};
+
+/**
+ * An animated drawing from the site's own files (owner, 2 Nov 2026, the home hero): the Arena,
+ * an SVG fetched after paint and run on its own loop, with a pause / play control. A closed set of
+ * one — `scene` names which drawing, so a caller cannot pass a URL or markup into the opening
+ * block. It sits as an illustration does: no box, centred on the copy. `title` is its accessible
+ * name: what the drawing shows.
+ */
+export type HeroScene = {
+  type: 'scene';
+  scene: 'arena';
+  title: string;
+};
+
+const HERO_SCENES: Record<HeroScene['scene'], string> = {
+  arena: '/illustrations/home/arena.svg',
+};
+
+/**
+ * A silent film from the site's own files (2 Nov 2026, the Prototype Readiness Review): it plays
+ * once when it comes into view and holds on its end card, with a pause / play-again control. The
+ * wide rendition is 16/9 and the optional tall one, 4/5, replaces it below 640. `title` is its
+ * accessible name; `description` is what the film says, as text, for a screen reader. Rendered by
+ * the Clip primitive; the hero adds only its media edge.
+ */
+export type HeroClip = {
+  type: 'clip';
+  wide: ClipRendition;
+  tall?: ClipRendition;
+  title: string;
+  description?: string;
+};
 
 /**
  * The page's ancestor trail, inside the hero's band (kit `fdn-top`, 5 Oct 2026):
@@ -493,6 +550,14 @@ type PageHeroBaseProps = {
    */
   stats?: readonly HeroStat[];
   /**
+   * A full-width row under the hero's split (owner, 4 Nov 2026, homepage pass: "move logo wall into
+   * the hero as a row under the split spanning full width"), composed by the caller: in practice the
+   * compact LogoGrid. It spans the whole column whatever the arrangement,
+   * so the clients read as part of the opening instead of a band of their own. A `section` (96) under
+   * the split (owner, 4 Nov 2026): a region of another kind. Absent renders no row.
+   */
+  foot?: ReactNode;
+  /**
    * The Tcules pixel-grid texture, for a paper hero with NO media only: the end-fade, the field
    * Statement's `end-fade` draws (end −120, 30% wide, blur 160, the band's full height), so it runs
    * hard along the end edge and fades toward the copy. From 1024; not drawn below.
@@ -521,6 +586,13 @@ type PageHeroBaseProps = {
    * and a hero adjunct is subordinate to them.
    */
   children?: ReactNode;
+  /**
+   * A quiet line straight after the actions, a `block` under them: the copy's redirect for the reader
+   * who is on the wrong page ("Already live with customers? See the UX & Product Audit.", the six
+   * audits, 4 Nov 2026), in its authored place after the ask. The caller's node, like `children`: it
+   * carries no colour or distance of its own here. Rendered only where the hero has actions.
+   */
+  actionsNote?: ReactNode;
 };
 
 /** One figure in the hero's record row. Structurally `Stat`'s value, unit and label. */
@@ -571,6 +643,9 @@ const MAX_TAGS = 6;
    a CSS module cannot read a TSX constant, so the one breakpoint is written twice, here (the
    <source> Media renders) and there (the legend), and the two must move together. */
 const CUT_QUERY = '(max-width: 1439.98px)';
+
+/* Where an image's phone cut replaces it (`HeroImage.phone`): below Layout's md, the single column. */
+const PHONE_QUERY = '(max-width: 767.98px)';
 
 /* The label a role selects. A fixed map rather than a prop, and it does NOT change with the
    count — two authors are still "Written by". A hero whose credit label read differently on one
@@ -742,9 +817,11 @@ export function PageHero({
   surface = 'paper',
   tags = [],
   stats = [],
+  foot,
   texture = false,
   announcement,
   children,
+  actionsNote,
   'data-band': dataBand,
   'data-fold-hero': dataFoldHero,
 }: PageHeroProps) {
@@ -817,7 +894,10 @@ export function PageHero({
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
      photograph, a capture or a video has an edge, so the h1 and that top edge share a line. */
-  const isIllustration = media?.type === 'image' && media.image.kind === 'illustration';
+  const isIllustration =
+    (media?.type === 'image' && media.image.kind === 'illustration') ||
+    media?.type === 'scene' ||
+    media?.type === 'sketch';
   const isPhotograph = media?.type === 'image' && media.image.kind === 'photograph';
   const centred = split && isIllustration;
 
@@ -1047,16 +1127,17 @@ export function PageHero({
   /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is the page's one main action, the
      blue solid (r7-buttons, 8 Oct 2026: there is no ink solid) — and carries NO arrow: the label
-     carries the ask. The second is a primary GHOST with
-     the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner is a ghost, never a
-     link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
+     carries the ask. The one glyph it may carry is the leaving-the-site mark, when its href is
+     off-site (lib/href.ts): that says where the click goes, not that it is a link. The second is a
+     primary GHOST with the trailing arrow: the owner's 7 Oct 2026 pairing rule (a primary's partner
+     is a ghost, never a link button; the ghost takes the arrow because it navigates). Its label and arrow stay blue at
      rest, the foreground accent (visual-direction § 4.2), and it has no fill at rest, so it reads
      as the alternative rather than a second ask. Recorded in docs/specs/Button.md § 14a.
      From 768 the pair sits on one line, centred on the cross axis. Below 768 it ALWAYS stacks, the
      ghost 24 under the solid (`stackUntil`): the phone shape no longer depends on how long the
      labels are (fix round 2). size="md" with extendHitArea on both: each box is 40 and the
      extension covers the missing 4. */
-  const actionsNode =
+  const actionsRow =
     controls.length > 0 ? (
       <Cluster
         colGap="block"
@@ -1073,13 +1154,32 @@ export function PageHero({
             emphasis={index === 0 ? 'solid' : 'ghost'}
             size="md"
             extendHitArea
-            icon={index === 0 ? undefined : <Icon name="arrow-right" />}
+            icon={
+              /* An action that leaves the site says so, solid or ghost (lib/href.ts): the
+                 leaving mark replaces the ghost's arrow and is the solid's only glyph. */
+              leavesSite(action.href) ? (
+                <Icon name="arrow-right-up" />
+              ) : index === 0 ? undefined : (
+                <Icon name="arrow-right" />
+              )
+            }
           >
             {action.label}
           </Button>
         ))}
       </Cluster>
     ) : null;
+
+  /* The redirect line after the ask: one unit with it, a `block` under the row. */
+  const actionsNode =
+    actionsRow && actionsNote != null ? (
+      <Layout rowGap="block" justifyItems={justify}>
+        {actionsRow}
+        <div>{actionsNote}</div>
+      </Layout>
+    ) : (
+      actionsRow
+    );
 
   /* ── tags · an unboxed mono grid, each mark a blue pixel ───────────────────
      Each tag is a mono label after a 6px blue square (the eyebrow's mark), set in three equal
@@ -1180,12 +1280,26 @@ export function PageHero({
             ? HERO_SHAPE_RATIO[media.shape ?? 'wide']
             : undefined)
         }
-        art={legend ? [{ media: CUT_QUERY, src: legend.src }] : undefined}
+        art={
+          legend
+            ? [{ media: CUT_QUERY, src: legend.src }]
+            : media.phone
+              ? [{ media: PHONE_QUERY, ...media.phone }]
+              : undefined
+        }
         priority
       />
     ) : null;
   const mediaNode =
-    media === undefined ? null : media.type === 'image' ? (
+    media === undefined ? null : media.type === 'sketch' ? (
+      <Sketch name={media.name} />
+    ) : media.type === 'scene' ? (
+      <Arena
+        src={HERO_SCENES[media.scene]}
+        label={media.title}
+        glyphs={{ play: <Icon name="chrome-play" />, pause: <Icon name="chrome-pause" /> }}
+      />
+    ) : media.type === 'image' ? (
       legend ? (
         <Layout rowGap="block">
           {image}
@@ -1210,6 +1324,19 @@ export function PageHero({
       ) : (
         image
       )
+    ) : media.type === 'clip' ? (
+      <Clip
+        className={styles.clip}
+        wide={media.wide}
+        tall={media.tall}
+        label={media.title}
+        description={media.description}
+        glyphs={{
+          play: <Icon name="chrome-play" />,
+          pause: <Icon name="chrome-pause" />,
+          replay: <Icon name="refresh" />,
+        }}
+      />
     ) : (
       /* youtube-nocookie.com: it withholds the tracking cookies until a visitor presses play. The
          whole URL is built here rather than taken from the caller, so every route embeds the same
@@ -1381,6 +1508,9 @@ export function PageHero({
                    drawing     [2, 1] from 1024 and [1, 1] from 1440. The 67px title needs 576 at
                                1024 ("unresolved product." is one line there); the drawing takes
                                the third and its numbered cut, so its labels stay readable.
+                   scene       the animated drawing: [1, 1] at every split width (owner, 4 Nov
+                               2026, homepage pass: "50/50 split for hero"); a scene has a camera
+                               and needs more than a still drawing's third.
         wide     the photograph LEADS: [1, 1] from 1024 and copy 2 : media 3 from 1440, a 3:2
                  photograph at 686 × 457 beside a 458 copy column. The family's second photograph
                  idea, so the home and studio heroes are not one rectangle at a squint (fix round 2).
@@ -1389,11 +1519,13 @@ export function PageHero({
        anything else is top-aligned in its own box. */
     const columns = !split
       ? undefined
-      : wide
-        ? { lg: [1, 1], xl: [2, 3] }
-        : isIllustration
-          ? { lg: [2, 1], xl: [1, 1] }
-          : { lg: [1, 1] };
+      : media?.type === 'scene'
+        ? { lg: [1, 1] }
+        : wide
+          ? { lg: [1, 1], xl: [2, 3] }
+          : isIllustration
+            ? { lg: [2, 1], xl: [1, 1] }
+            : { lg: [1, 1] };
 
     const copyTrack = stack;
 
@@ -1445,6 +1577,14 @@ export function PageHero({
       content
     );
     top = trailInCopy ? headed : withTrail(headed);
+  }
+  if (foot != null) {
+    top = (
+      <Layout rowGap="section">
+        {top}
+        {foot}
+      </Layout>
+    );
   }
 
   return (

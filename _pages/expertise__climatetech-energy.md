@@ -58,11 +58,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -180,13 +180,15 @@ content_governance:
 
 # ClimateTech product design for energy software that separates readings, forecasts and targets
 
-An energy product is read at two speeds. An operator has an hour to act on tonight's peak price, and a sustainability lead has weeks to defend a reported total to an assurer. Tcules is a ClimateTech product design studio for energy management and sustainability software, from an early idea to an established suite.
+From live readings to yearly totals, our ClimateTech product design makes each figure clear enough to decide on and solid enough to report.
 
-[Tell us which numbers your users act on](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in ClimateTech and energy software {#what-we-design}
+
+For teams building energy management and sustainability software, from an early idea to a suite run across many sites.
 
 - **Building energy products** with live data and a digital twin · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)
 
@@ -200,15 +202,13 @@ An energy product is read at two speeds. An operator has an hour to act on tonig
 
 - **Carbon accounting and emissions reporting tools** · Every total traceable to its sources and approver
 
-## Selected ClimateTech product design work {#selected-work}
+## ClimateTech and related product design work {#selected-work}
 
-Work closest to ClimateTech: two energy and sustainability products, and one from the built environment, where engineers sign off what the software found.
-
-### ConnectX: a simpler twin that explains the building
+### ConnectX: a simpler digital twin that explains the building
 
 ConnectX was shaping an AI building-energy product. A simplified 2.5D twin replaced a detailed 3D model, because highlighting the connected assets explained more than a realistic building did. We proved the direction in a coded demo, and a production-ready module built from it went live in late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
-### Benchmark Gensuite: a site picker that knows where you stand
+### Benchmark Gensuite: find your site by where you are
 
 Benchmark Gensuite's suite runs environment, health, safety and sustainability programmes across large organisations. We split its scope selector into Browse, Recents and Favourites, and Nearby, so someone on site can find the right site by location, without walking the hierarchy. Benchmark's engineers reviewed the new patterns as coded prototypes. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
@@ -260,9 +260,7 @@ So we would design that night first: each van's charge against the price forecas
 
 ## What you get when Tcules designs your energy software {#what-you-get}
 
-Energy management software UX starts with the people who act on the numbers. We design for them, from an early idea to a suite customers already run across their sites.
-
-**What you receive**
+We design for the people who act on the numbers: operators, finance teams and sustainability leads.
 
 - **Each role's view of the same figures:** each role's view of the same figures, at the depth that role needs
 
@@ -288,8 +286,6 @@ One misread dashboard may need only [dashboard design](/services/product-design/
 
 ## What clients say {#testimonials}
 
-One voice from our energy work, and two from clients in other fields on working with the studio.
-
 > “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
@@ -299,41 +295,57 @@ One voice from our energy work, and two from clients in other fields on working 
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For energy software, a good first piece of work is one question a role asks often, such as a peak-price alert, designed end to end on sample data.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** For Doodle's scheduling MVP, one interview showed that availability depends on how much a meeting matters, and priority joined the product's model. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **Senior people do the work, and clients keep us for years.** Primelis has kept us as its design partner for three years, and we have designed every one of its products.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we redesigned a web platform and two apps, and our developers built the frontends from those designs.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-## Other industries we know {#industries}
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
+
+## Other industries {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about ClimateTech product design {#faq}
 
@@ -363,6 +375,6 @@ Share the product, who uses it and the data you have today, measured or modelled
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

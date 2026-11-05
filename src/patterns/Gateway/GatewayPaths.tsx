@@ -1,5 +1,8 @@
-import { Icon, Layout, Sketch } from '@/components';
+import type { ReactNode } from 'react';
+
+import { Cluster, Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
+import type { IconName } from '@/lib/icon-glyphs';
 import type { SketchName } from '@/lib/sketches';
 
 import styles from './Gateway.module.css';
@@ -20,13 +23,53 @@ export type GatewayPath = {
    * is drawn.
    */
   links: readonly GatewayPathLink[];
+  /**
+   * `cards` only: what kind of product the path is for ("New product"), set as the card's label over
+   * its title. Authored case kept; the transform is CSS.
+   */
+  eyebrow?: string;
+  /** `cards` only: the glyph heading the card, above its label and title. */
+  glyph?: IconName;
+  /**
+   * `cards` only: the path's example, one line of inline content composed by the caller with its own
+   * link to the case ("Example: Doodle's enterprise MVP, reshaped by research."), set under the words
+   * at the small step.
+   */
+  example?: ReactNode;
+  /**
+   * `cards` only: the example's label, set in the label voice over it ("Example", the copy's own
+   * "Example:" lifted out of the sentence). Absent, the example stands alone.
+   */
+  exampleLabel?: string;
 };
 
 /** One of a path's services: the action's words, where it goes and the service's own scene. */
 export type GatewayPathLink = { label: string; href: string; scene?: SketchName };
 
+/**
+ * `graphic` (default): each path a split, its services as graphic cards on equal tracks
+ * (decisions/2026-10-31-paths-graphic-cards). `cards` (owner, 4 Nov 2026, homepage pass: "a classic 3
+ * card layout"): each path ONE card, three across from 1024 — label, title, words, example, then its
+ * services as ruled link rows at the card's foot — so a reader compares the three situations side by
+ * side and every door's way in sits on one line.
+ */
+export type GatewayPathsForm = 'graphic' | 'cards';
+
 export type GatewayPathsProps = {
   paths: readonly GatewayPath[];
+  /** Default `graphic`. See `GatewayPathsForm`. */
+  form?: GatewayPathsForm;
+  /**
+   * `cards` only: the set's close, a `stack` (48) under the cards (owner, 4 Nov 2026: the lone button
+   * "feels orphaned"): a line and the band's ask, composed by the caller, centred, the line over the
+   * action.
+   */
+  close?: {
+    line?: string;
+    /** `body`: the line is the set's own sentence, set at the body role across the column. */
+    lineSize?: 'body';
+    action?: ReactNode;
+  };
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
@@ -48,8 +91,127 @@ export type GatewayPathsProps = {
  * empty (owner, 31 Oct 2026: equal cards). Below 768 each card is a row, the scene beside the words
  * with the arrow trailing the last one.
  */
-export function GatewayPaths({ paths, titleAs = 'h3', className }: GatewayPathsProps) {
+export function GatewayPaths({
+  paths,
+  form = 'graphic',
+  close,
+  titleAs = 'h3',
+  className,
+}: GatewayPathsProps) {
   const Title = titleAs;
+  if (form === 'cards') {
+    const ways = paths.some((path) => path.links.length > 0);
+    return (
+      <Layout rowGap="stack" className={className}>
+        {/* Three items, one column below 1024 (three ~220 cards at 768 left each title a word a
+        line). Each item is its card and, outside the card's box, its example (owner, 4 Nov
+        2026, variant G): from 1024 the items share three rows (subgrid) and each card spans the
+        first two, so the heads, the ways in and the examples each start on one line across the
+        set whatever their lengths. In the card the head and the ways in are a `stack` (48)
+        apart, open air under the words; the example sits a `text` (16) under its card, on the
+        card's outer edge. Items in a set are a `gutter` apart, and a `stack` when they stack,
+        so an example never reads as the next card's. */}
+        <Layout
+          as="ul"
+          columns={{ base: 1, lg: 3 }}
+          colGap="gutter"
+          /* Stacked items a `stack` apart when an example sits under each card, so it never reads as
+           the next card's; otherwise the card set's own `gutter`. */
+          rowGap={paths.some((path) => path.example) ? 'stack' : 'gutter'}
+          /* A third shared row only when an example sits under a card; without one it would leave its
+           track and seam under every card. */
+          shareRows={
+            ways
+              ? paths.some((path) => path.example)
+                ? 3
+                : 2
+              : paths.some((path) => path.example)
+                ? 2
+                : undefined
+          }
+          className={styles.root}
+        >
+          {paths.map((path) => (
+            <Layout as="li" key={path.id} rowGap="text">
+              {/* A set with no ways in has no foot row: the card is its head alone, so no air is
+                  held open under the words (owner, 4 Nov 2026). */}
+              <Layout spanRows={ways ? 2 : undefined} rowGap="stack" className={styles.door}>
+                <Layout rowGap="text">
+                  {path.glyph ? (
+                    <span className={styles.doorGlyph} aria-hidden="true">
+                      <Icon name={path.glyph} />
+                    </span>
+                  ) : null}
+                  {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
+                  <Title className={styles.doorTitle}>{path.title}</Title>
+                  {path.body.map((paragraph, index) => (
+                    <p key={index} className={styles.doorBody}>
+                      {paragraph}
+                    </p>
+                  ))}
+                </Layout>
+                {/* The ways in: one ruled row each, the whole row the link, its arrow at the row's
+                  end. The rows close the card, so the card needs no action of its own. */}
+                {path.links.length > 0 ? (
+                  <ul>
+                    {path.links.map((link) => (
+                      <li key={link.href} className={styles.doorRow}>
+                        <a href={link.href} className={styles.doorLink}>
+                          <Cluster colGap="text" justify="between" align="center" nowrap>
+                            <span>{link.label}</span>
+                            <span className={styles.doorArrow} aria-hidden="true">
+                              <Icon name="arrow-right" />
+                            </span>
+                          </Cluster>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </Layout>
+              {path.example ? (
+                <Layout rowGap="tight">
+                  {path.exampleLabel ? (
+                    <p className={styles.doorExampleLabel}>{path.exampleLabel}</p>
+                  ) : null}
+                  <p className={styles.doorExample}>{path.example}</p>
+                </Layout>
+              ) : null}
+            </Layout>
+          ))}
+        </Layout>
+        {close?.action ? (
+          /* A close with an ask is one row under the cards (owner, 5 Nov 2026, launch review): the
+             line at the cards' title role at the start, the action at the end, both centred on the
+             row's axis. Below 768 the action drops under the line. */
+          <Cluster
+            colGap="gutter"
+            rowGap="block"
+            justify="between"
+            align="center"
+            stackUntil="md"
+          >
+            {close.line ? <p className={styles.doorCloseRowLine}>{close.line}</p> : null}
+            {close.action}
+          </Cluster>
+        ) : close ? (
+          /* A close with no ask is the set's own sentence, centred under the cards. */
+          <Layout rowGap="block" justifyItems="center" className={styles.doorClose}>
+            {close.line ? (
+              <p
+                className={
+                  close.lineSize === 'body' ? styles.doorCloseLineBody : styles.doorCloseLine
+                }
+              >
+                {close.line}
+              </p>
+            ) : null}
+            {close.action}
+          </Layout>
+        ) : null}
+      </Layout>
+    );
+  }
   return (
     <Layout as="ul" rowGap="column" className={cx(styles.root, className)}>
       {paths.map((path) => (

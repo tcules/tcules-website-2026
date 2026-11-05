@@ -726,8 +726,9 @@ link.
    of empty column between the tiles and the CtaRow's rule at 1440. ContentSection's `media.pin: false`
    centres that column instead; `/design/content-section` § 14 renders the two side by side, and
    `cmp-media-split` builds on the owner's choice (ContentSection spec, open question 7).
-2. **When it does not end in an action** (a quote, rows only), the copy is centred on the image
-   (`align="center"`).
+2. **When it does not end in an action** (a quote, rows only), the copy shares the image's top edge
+   (`align="start"`). It was centred until 4 Nov 2026; the active ruling "pairs top-align"
+   (decisions/2026-10-11-secondary-anchored-to-primary) governs, and a centred head floated mid-photo.
 3. **An illustration has no box,** so it is always centred on the copy (the hero).
 4. Consecutive media bands on a page alternate side.
 

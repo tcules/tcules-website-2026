@@ -2,6 +2,7 @@ import { Icon, Layout, type IconName } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import {
+  BlockCardSet,
   Callout,
   ContentSection,
   ContentSectionText,
@@ -16,10 +17,42 @@ import { CorpusHero, EnquiryBand, headingIdOf, head } from './blocks';
 import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
+import { BANDS_ELSEWHERE } from './kinds';
+import { LinksIsland, type IslandLink } from './LinksIsland';
 import { planOffer, type TEMPLATE_BANDS } from './plan';
 import { boldLead, hasLink, labelTitle, leadOf, plain, sentenceLead, trimStart } from './text';
 
-export type ContactPageProps = Omit<OfferContext, 'page'> & { page: CorpusPage };
+/** What a way to reach the studio is, which decides its glyph. */
+export type ContactChannelKind = 'email' | 'partners' | 'careers' | 'studio';
+
+/**
+ * One way to reach the studio other than the form (tracker 2.56): its title and its one action, a
+ * mailbox or a page, whose label is the destination as the reader will use it ("hello@tcules.com",
+ * "Careers"). The page passes them in from the content seam.
+ */
+export type ContactChannel = {
+  kind: ContactChannelKind;
+  title: string;
+  /** One line under the title, where the route needs it (the studio's street address). */
+  body?: string;
+  href: string;
+  action: string;
+};
+
+/** The studio's profiles and address, for the contact page's "Follow us on" island. */
+export type ContactFollow = {
+  heading: string;
+  links: readonly IslandLink[];
+  address?: string;
+};
+
+export type ContactPageProps = Omit<OfferContext, 'page'> & {
+  page: CorpusPage;
+  /** The other ways to reach the studio, as a row of tiles after the form. Absent, no band. */
+  channels?: readonly ContactChannel[];
+  /** The profiles and the studio address, as a short links island after the tiles. */
+  follow?: ContactFollow;
+};
 
 type ContactBand = (typeof TEMPLATE_BANDS)['/contact'][number];
 
@@ -128,6 +161,47 @@ function NextSteps({ band }: { band: CorpusBand }) {
   );
 }
 
+/* One Solar glyph per kind of channel, heading its tile (an icon heads its card). */
+const CHANNEL_GLYPHS = {
+  email: 'letter',
+  partners: 'hand-shake',
+  careers: 'users-group-rounded',
+  studio: 'map-point',
+} as const satisfies Record<ContactChannelKind, IconName>;
+
+/**
+ * The other ways to reach the studio (tracker 2.56; owner's Contact A, 3 Nov 2026): one filled tile
+ * per route, glyph then title then its one action as a labelled outline, the mailbox or the page
+ * itself as the label. The tile does not answer the pointer; the action does. Under the head "Other
+ * ways to reach us" (owner, 3 Nov 2026).
+ */
+function Channels({ channels }: { channels: readonly ContactChannel[] }) {
+  return (
+    <ContentSection
+      id="channels"
+      data-band="C-channels"
+      heading="Other ways to reach us"
+      headingId="channels-heading"
+    >
+      <BlockCardSet
+        lead="none"
+        across={channels.length >= 4 ? 4 : 3}
+        frame="tile"
+        linkScope="cta"
+        ctaEmphasis="outline"
+        items={channels.map((channel) => ({
+          id: channel.kind,
+          title: channel.title,
+          icon: CHANNEL_GLYPHS[channel.kind],
+          body: channel.body,
+          href: channel.href,
+          ctaLabel: channel.action,
+        }))}
+      />
+    </ContentSection>
+  );
+}
+
 /**
  * Keep the first message high-level: a boundary on the form, under its own heading, the head in the
  * leading third and the note beside it, so the short band does not repeat the centred questions under
@@ -149,12 +223,17 @@ function Confidentiality({ band }: { band: CorpusBand }) {
 /**
  * TIER 3 — the contact page from the `_pages/` copy (component-map § E /contact). The hero centred
  * with the studio's record as figures (the line `next-steps` ends on, Q10) and no media, the enquiry
- * island straight under it (owner, 31 Oct 2026), then the brief (head above its read-down) and the
- * next steps (head beside its steps) as two bands, the quotes on tint, the confidentiality note and
- * the questions. Every other band renders as the plan names it.
+ * island straight under it (owner, 31 Oct 2026), then the other ways to reach the studio as a row of
+ * icon cards (tracker 2.56), then the questions. Next steps is not a band: its steps are the form's
+ * sent state and its record line the hero's figures (BANDS_ELSEWHERE). The brief, next-steps and
+ * confidentiality views stay for copy that still authors those bands. Every other band renders as
+ * the plan names it.
  */
-export function ContactPage({ page, ...rest }: ContactPageProps) {
-  const units = planOffer(page);
+export function ContactPage({ page, channels = [], follow, ...rest }: ContactPageProps) {
+  /* A band the owner moved into another element's state (BANDS_ELSEWHERE) is read for its words
+     but not drawn as a band: next steps lives in the form's sent state (tracker 2.56). */
+  const elsewhere = BANDS_ELSEWHERE[page.route] ?? {};
+  const units = planOffer({ ...page, bands: page.bands.filter((b) => !(b.id in elsewhere)) });
   const ctx: OfferContext = { page, ...rest };
   const next = page.bands.find((b) => b.id === ('next-steps' satisfies ContactBand));
   /* The form sits in the hero where an image would (owner, 31 Oct 2026): the enquiry island, as
@@ -188,6 +267,16 @@ export function ContactPage({ page, ...rest }: ContactPageProps) {
           ) : undefined
         }
       />
+      {channels.length > 0 ? <Channels channels={channels} /> : null}
+      {follow ? (
+        <LinksIsland
+          id="follow"
+          band="C-links"
+          heading={follow.heading}
+          links={follow.links}
+          footnote={follow.address}
+        />
+      ) : null}
       {units.map((unit) => {
         if (enquiry && unit.part !== 'b' && unit.band === enquiry) return null;
         if (unit.part === 'b') return <UnitView key={unit.id} unit={unit} ctx={ctx} />;

@@ -15,6 +15,10 @@
 
 /* ── Geometry, type and motion · identical on every surface ──────────────────── */
 :root {
+  /* A door's glyph heads its card, at the size the three-ways cards' glyphs take (owner, 4 Nov 2026,
+     /how-we-work: "we can add icons in this one"). */
+  --gwy-door-glyph-size: var(--icon-size-32);
+  --gwy-door-close-body-text: var(--text-body);
   /* The situation is the reason to click (owner, home round 2), so it is the band's largest
      repeated thing — but two steps under the band's h2 heading, not one: at h3 (34 under 43) the
      six titles competed with the heading (owner, round 8). h4 (28, the sans 22 since 19 Oct 2026) lets the heading lead and the
@@ -79,11 +83,43 @@
   --gwy-service-arrow-shift: var(--space-4);
   --gwy-service-arrow-inset: var(--space-8);
   --gwy-service-arrow-drop: var(--space-2);
+  /* `GatewayPaths` `cards` (home "Where to start", owner 4 Nov 2026). Each door a card at the tile
+     radius. The title is h4 (the sans 22): two steps under the band's h2, a card's own heading. The
+     example is the caption step under the 14 words; the ways in are h6 (16, the sans, medium), the
+     card's largest words after its title. A row is padded 12 above and below its words, so a
+     one-line row clears the 44 touch target (an inset inside the row, not a distance between two
+     things); the underline sits 2 under the example's baseline, an optical offset. */
+  --gwy-door-radius: var(--radius-16);
+  /* The set's closing line before its ask (owner, 4 Nov 2026): h5-lg (20, the sans), a step under the
+     card titles' 22, so the close carries the button without matching the doors. At body size it
+     read as a footnote between the titles and the solid. A title measure, so it balances over two
+     lines. */
+  --gwy-door-close-text: var(--text-h5-lg);
+  --gwy-door-close-tracking: var(--text-h5-lg-tracking);
+  --gwy-door-close-measure: var(--measure-title);
+  --gwy-door-title-text: var(--text-h4);
+  --gwy-door-title-tracking: var(--text-h4-tracking);
+  --gwy-door-example-text: var(--text-caption);
+  --gwy-door-link-text: var(--text-h6);
+  --gwy-door-link-tracking: var(--text-h6-tracking);
+  --gwy-door-row-inset: var(--space-12);
+  --gwy-door-arrow-size: var(--icon-size-18);
+  --gwy-door-underline-offset: var(--space-2);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --gwy-door-glyph-ink: var(--color-brandeis-500);
+  --gwy-door-ground: var(--color-paper);
+  --gwy-door-rule-ink: var(--color-neutral-200); /* decoration */
+  --gwy-door-eyebrow-ink: var(--color-brandeis-500); /* 6.17:1, the blue label (owner, 4 Nov 2026, variant G) */
+  --gwy-door-example-ink: var(--color-neutral-600); /* 4.92:1 */
+  --gwy-door-link-ink: var(--color-brandeis-500); /* 6.17:1 — the example's case link */
+  --gwy-door-link-ink-hover: var(--color-brandeis-700);
+  --gwy-door-row-ink: var(--color-neutral-900); /* the ways in, in ink (owner, 4 Nov 2026) */
+  --gwy-door-row-ink-hover: var(--color-brandeis-600);
+  --gwy-door-arrow-ink: var(--color-neutral-500); /* decoration */
   --gwy-title-ink: var(--color-neutral-900); /* 14.62:1; 13.9:1 on the marker */
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — board: a linked item's title */
   --gwy-arrow-ink: var(--color-brandeis-500); /* 5.6:1 on the marker */
@@ -96,6 +132,16 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --gwy-door-glyph-ink: var(--color-brandeis-500);
+  --gwy-door-ground: var(--color-paper);
+  --gwy-door-rule-ink: var(--color-neutral-200); /* decoration */
+  --gwy-door-eyebrow-ink: var(--color-brandeis-500); /* on the card's paper */
+  --gwy-door-example-ink: var(--color-neutral-600); /* on the card's paper */
+  --gwy-door-link-ink: var(--color-brandeis-500);
+  --gwy-door-link-ink-hover: var(--color-brandeis-700);
+  --gwy-door-row-ink: var(--color-neutral-900);
+  --gwy-door-row-ink-hover: var(--color-brandeis-600);
+  --gwy-door-arrow-ink: var(--color-neutral-500); /* decoration */
   --gwy-title-ink: var(--color-neutral-900);
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --gwy-arrow-ink: var(--color-brandeis-500);
@@ -108,6 +154,16 @@
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
+  --gwy-door-glyph-ink: var(--color-brandeis-300);
+  --gwy-door-ground: var(--color-neutral-900);
+  --gwy-door-rule-ink: var(--color-neutral-700); /* decoration */
+  --gwy-door-eyebrow-ink: var(--color-brandeis-300);
+  --gwy-door-example-ink: var(--color-neutral-400);
+  --gwy-door-link-ink: var(--color-brandeis-300);
+  --gwy-door-link-ink-hover: var(--color-brandeis-200);
+  --gwy-door-row-ink: var(--color-white);
+  --gwy-door-row-ink-hover: var(--color-brandeis-200);
+  --gwy-door-arrow-ink: var(--color-neutral-400); /* decoration */
   --gwy-title-ink: var(--color-white);
   --gwy-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --gwy-arrow-ink: var(--color-brandeis-300);
@@ -120,6 +176,16 @@
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
+  --gwy-door-glyph-ink: var(--color-white);
+  --gwy-door-ground: var(--color-brandeis-600);
+  --gwy-door-rule-ink: var(--color-brandeis-300); /* decoration */
+  --gwy-door-eyebrow-ink: var(--color-brandeis-50);
+  --gwy-door-example-ink: var(--color-brandeis-50);
+  --gwy-door-link-ink: var(--color-white);
+  --gwy-door-link-ink-hover: var(--color-brandeis-50);
+  --gwy-door-row-ink: var(--color-white);
+  --gwy-door-row-ink-hover: var(--color-brandeis-50);
+  --gwy-door-arrow-ink: var(--color-brandeis-100); /* decoration */
   --gwy-title-ink: var(--color-white);
   --gwy-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --gwy-arrow-ink: var(--color-white);

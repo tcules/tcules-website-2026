@@ -4,12 +4,12 @@ slug: product-maintenance
 page_name: Product Maintenance & Evolution
 page_type: service
 seo:
-  title: 'Application Maintenance Services for Live SaaS | Tcules'
+  title: 'SaaS Product Maintenance and Ongoing Improvement | Tcules'
   description: 'Application maintenance services for live SaaS products: fixes, updates, security patches, performance work and new features from a team that learns the code.'
   canonical: https://www.tcules.com/services/software-development/product-maintenance
   robots: index,follow
 social:
-  og_title: 'Application Maintenance Services for Live SaaS | Tcules'
+  og_title: 'SaaS Product Maintenance and Ongoing Improvement | Tcules'
   og_description: 'Application maintenance services for live SaaS products: fixes, updates, security patches, performance work and new features from a team that learns the code.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
@@ -18,7 +18,7 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Application Maintenance Services for Live SaaS | Tcules'
+  twitter_title: 'SaaS Product Maintenance and Ongoing Improvement | Tcules'
   twitter_description: 'Application maintenance services for live SaaS products: fixes, updates, security patches, performance work and new features from a team that learns the code.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
@@ -31,7 +31,7 @@ search_context:
   - How does a maintenance engagement start?
   - What does SaaS maintenance cost?
   - Do you maintain mobile apps as well as web apps?
-  primary_query: application maintenance services
+  primary_query: 'SaaS product maintenance'
   secondary_queries:
   - software maintenance services
   - SaaS product maintenance
@@ -62,11 +62,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -179,19 +179,17 @@ content_governance:
 
 # Application maintenance services for live SaaS products, new features included
 
-Application maintenance is for the support team that should close a bug once, the engineers who need a calm release day, and a roadmap that keeps moving while the product stays up. Tcules provides application maintenance services for live SaaS products, from a team that learns your code before changing it.
+With our application maintenance services, a team that learns your code first handles fixes, security patches and performance, while new features keep shipping.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [OctiFi](/case-studies/octifi-mobile-lending-product-design)*
 
-[Tell us what needs looking after](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from application maintenance {#change-types}
 
 Ongoing care and change for a live web or mobile product, including code someone else wrote.
-
-**What you receive**
 
 - **A review before the first fix.** Code, environments, release process and change history, read first, with what we find written down.
 
@@ -203,7 +201,7 @@ Ongoing care and change for a live web or mobile product, including code someone
 
 - **Improvements and new features.** Small improvements fit the regular flow of work. Larger features are planned and designed as their own piece of work, instead of being squeezed in as tickets.
 
-- **An order you can see and change.** Each request sorted by kind and weighed for impact, with the reasons shown.
+- **A priority list you can see and change.** Each request sorted by kind and weighed for impact, with the reasons shown.
 
 - **Releases with a way back.** Every change gets a test, a review and a release your team can see, and a way back if it misbehaves.
 
@@ -263,43 +261,57 @@ Example: we designed Vovisto's healthcare event and travel platform, led it into
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For application maintenance, a good first piece of work is a review of your code, environments and release process before the first fix.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, so the thinking behind the design went all the way into the store buyers use.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** When we built [The Chain Hut's](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store) store on Magento, we kept Magento's core purchase workflow intact and improved the journeys around it.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and we continue to improve every product we have designed for it as part of its product team.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[HealthTech](/expertise/healthtech)
-
-Vovisto's healthcare platform is the maintenance work we can name by industry. The related work above comes from [B2B SaaS](/expertise/b2b-saas-workflow-software), [PropTech and ConTech](/expertise/proptech-contech-field-operations) and [FinTech](/expertise/fintech).
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about application maintenance {#faq}
 
@@ -329,6 +341,6 @@ Tell us what's running, what keeps changing and who handles releases now. If the
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

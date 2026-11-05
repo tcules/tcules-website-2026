@@ -147,10 +147,23 @@
      line's length away from the word it belongs to (`where-this-work-sits` at 390). As inline
      content the glyph follows the label's last word on whichever line that ends. One line long,
      the two forms render identically: same 8 between label ink and glyph, glyph centred on the
-     label. */
+     label.
+
+     Its lines take the CONTAINER's alignment (`inherit`, 3 Nov 2026), not `.button`'s centring and
+     not a fixed start: a link has no box to centre within, so a wrapped label in a centred column
+     (the onward island at 390) ranged left under a centred heading. In a start-aligned column it
+     inherits start, as before.
+
+     A wrapped label BALANCES (owner, 4 Nov 2026, /future-interfaces-lab: "SEE MATTER DESIGN / SYSTEM →"
+     in a four-across tile "feels broken when wrapping"). Greedy wrapping filled the first line and
+     left the last word and the arrow stranded under it, which reads as a label that ran out of room.
+     Balanced, the lines come out near-equal ("SEE MATTER / DESIGN SYSTEM →") and the break reads as
+     set. A link label is a title-like run of a few words, so it takes the title wrap; one line long
+     it renders exactly as before. */
   display: inline-block;
   white-space: normal;
-  text-align: start;
+  text-wrap: var(--text-title-wrap);
+  text-align: inherit;
   height: auto;
   min-block-size: 0;
   padding-block: 0;

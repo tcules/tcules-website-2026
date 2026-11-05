@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -180,13 +180,15 @@ content_governance:
 
 # Ecommerce UX design for technical and made-to-order products, from search to delivery
 
-Every technical order is tested on the product page, where the buyer checks fit and stock, in the support inbox if they guessed, and in production after payment. Tcules provides ecommerce UX design for stores and ordering systems, and builds the store when you want one team for both.
+With our ecommerce UX design, buyers can check fit, stock and delivery on the product page and order without emailing support first.
 
-[Tell us what customers keep asking](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in ecommerce and ordering {#what-we-design}
+
+For stores and ordering systems that sell technical or made-to-order goods. We can build the store too, so one team does both.
 
 - **Specialist Shopify stores** where buyers check fit before buying · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)
 
@@ -206,7 +208,7 @@ Every technical order is tested on the product page, where the buyer checks fit 
 
 GT Tools sells equipment for automotive-glass repair, and its buyers often confirm compatibility before they pay. Product pages gained stock and pre-order indicators, product codes, configurable options, shipping, warranty and finance, with the price and buy button pinned in view. We then developed the store on Shopify, custom work included. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
 
-### Gold Image Printing: one set of components for store and production
+### Gold Image Printing: orders that look the same to customer and staff
 
 Gold Image Printing's online orders run on into artwork, scheduling, inventory and fulfilment in an internal ERP. We designed one set of components and one style guide for both, so an order looks the same to the customer and to the staff producing it. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
@@ -252,8 +254,6 @@ Before payment, a short check reads the figures back and asks a friendly questio
 
 We take on the purchase from first search to delivery, and the systems behind it.
 
-**What you receive**
-
 - **Research from support emails and search terms:** research from support emails, search terms and abandoned baskets, and from watching staff handle orders
 
 - **Product pages that answer fit:** navigation, search and product pages that answer fit, variant, stock, delivery and warranty beside the price
@@ -270,15 +270,13 @@ We take on the purchase from first search to delivery, and the systems behind it
 
 **Who does the work.** Your lead is a senior product designer who also does the design, with an account lead keeping the work on track. Researchers join for the observation, and our developers build the store when you want one team for both.
 
-**What we need from you.** Support emails, search terms and analytics, and time with the staff who handle orders. Buyers or trade accounts to test with, access to the store platform and back office, and someone who makes the calls.
+**What we need from you.** Support emails, search terms and analytics, and time with the staff who handle orders. Buyers or trade accounts to test with, access to the store platform and back office, and someone who makes the decisions.
 
 **Where our part stops.** Ads, email campaigns and testing programmes stay with your performance marketing specialists. Consumer rules and payment authentication stay with your legal and payments teams.
 
 A store that loses buyers at a step nobody can name can start with a [UX & Product Audit](/audits/ux-product-audit). An ERP or order system that has to change in stages sits under [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation), and two-sided stores with independent sellers under [marketplace product design](/expertise/marketplaces-multi-sided-platforms).
 
 ## What clients say {#testimonials}
-
-One voice from our commerce work, and two from clients in other fields on working with the studio.
 
 > “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
@@ -289,41 +287,57 @@ One voice from our commerce work, and two from clients in other fields on workin
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a store, a good first piece of work is the product page buyers keep emailing about, redesigned around the questions they ask.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** We interviewed people in all six specialist roles that touch an Auxentios quotation before designing a single component. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **One studio can take it into working software, with the designers staying in the build.** For The Chain Hut, we began with a UX audit, designed the store mobile first and built it on Magento. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and in that time we have designed each of its products alongside its own product team.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-## Other industries we know {#industries}
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
+
+## Other industries {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about ecommerce UX design {#faq}
 
@@ -357,6 +371,6 @@ Fit, stock, delivery? Share the store, what you sell and the questions that arri
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

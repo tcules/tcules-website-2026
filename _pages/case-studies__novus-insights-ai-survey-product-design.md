@@ -56,13 +56,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -249,11 +249,11 @@ Two more products where a person's judgement had to live inside the workflow.
 
 [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-[See Human-in-the-Loop Workflows](/services/ai-product-ux/human-in-the-loop-workflows)
+[See Human-in-the-Loop Workflows →](/services/ai-product-ux/human-in-the-loop-workflows)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us where a person has to stay in the loop {#enquiry}
 

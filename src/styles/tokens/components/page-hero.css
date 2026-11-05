@@ -244,6 +244,9 @@
 --hero-note-text:var(--text-body-sm);
 --hero-media-ratio:16 / 9;
 --hero-media-radius:var(--radius-0);
+/* A film (Clip) is footage, so it takes the photograph's 8, as a VideoTestimonial poster does
+   (visual-direction § 5.3; owner, 2 Nov 2026). The YouTube frame keeps --hero-media-radius. */
+--hero-clip-radius:var(--radius-8);
 --hero-media-rule-width:var(--border-width-hairline);
   /* The mark (one pixel of the texture's grid, 6) and the legend's numeral disc (20, around an
      11px micro glyph) are component SIZES, and they read the space ramp — a STATED EXCEPTION to

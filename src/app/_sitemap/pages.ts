@@ -89,7 +89,14 @@ const FIXED_PAGES: readonly { route: RouteKey; title: string; group: SitemapGrou
   },
   { route: 'matterDesignSystem', title: 'Matter Design System', group: 'company' },
   { route: 'services', title: 'Services', group: 'services' },
+  /* The family hubs: each is its own corpus route, not a slug under one, so no family list names it
+     and it has to be named here (missing from the sitemap until 4 Nov 2026). */
+  { route: 'audits', title: 'Audits', group: 'audits' },
+  { route: 'expertise', title: 'Expertise', group: 'expertise' },
+  { route: 'glossary', title: 'Glossary', group: 'glossary' },
+  { route: 'tools', title: 'Tools', group: 'tools' },
   { route: 'caseStudies', title: 'Case studies', group: 'caseStudies' },
+  { route: 'clients', title: 'Clients', group: 'caseStudies' },
   { route: 'insights', title: 'Insights', group: 'insights' },
   { route: 'authors', title: 'Authors', group: 'insights' },
   { route: 'privacy', title: 'Privacy policy', group: 'legal' },

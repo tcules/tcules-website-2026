@@ -12,14 +12,16 @@ import {
 import type { CorpusBand, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
+import { serviceSceneFor } from '@/lib/sketches';
+import { toolPath } from '@/lib/routes';
 
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
-import { ArticleShell } from './LongformShell';
+import { ArticleShell, type ToolShell } from './LongformShell';
 import { coverFor } from './images';
 import { formBeforeFaq } from './order';
-import { blocksOf, hasLink, loneLink, plain } from './text';
+import { blocksOf, hasLink, isStatementLine, labelWithoutArrow, loneLink, plain } from './text';
 
-export type LongformFamily = 'case' | 'article' | 'term';
+export type LongformFamily = 'case' | 'article' | 'term' | 'tool';
 
 export type LongformPageProps = {
   page: CorpusPage;
@@ -47,15 +49,24 @@ export type LongformPageProps = {
  *            outline rail, then the close the author wrote last: a tinted band whose sentences keep
  *            their inline links, with the ask as a link button.
  *
- *   term     the hero holds the definition; the term's sharpest sentence is its statement (a split
- *            from the hero); the rest of the definition opens the shell as a head-less section above
- *            the headed ones; a close with one link as the page's ask.
+ *   term     the hero holds the definition beside the term's drawing; a second paragraph that is one
+ *            short line with no link is its statement (a split from the hero); the rest of the
+ *            definition opens the shell as a head-less section above the headed ones; a close with
+ *            one link as the page's ask.
+ *
+ *   tool     a free tool (4 Nov 2026, the tools shape-off: "tools launch as article-style pages"): the
+ *            hero with its one action to the worksheet (#workspace), no byline and no dates, then the
+ *            whole worksheet in one shell beside its outline, the FAQ last in the column. The column
+ *            adds the tool's shapes (`ToolShell`): the bold-led method as Steps, the worked example as
+ *            the example panel with its story drawing, a flat diagram after the words it explains.
+ *            The band sending the reader on ("next") stays prose with its links, in its authored place.
  *
  * Nothing is reordered, and every word is the corpus's.
  */
 export function LongformPage({ page, family, caseRefs }: LongformPageProps) {
   if (family === 'article') return <ArticlePage page={page} />;
   if (family === 'term') return <TermPage page={page} />;
+  if (family === 'tool') return <ToolArticlePage page={page} />;
   return <CasePage page={page} caseRefs={caseRefs} />;
 }
 
@@ -136,17 +147,121 @@ function ArticlePage({ page }: { page: CorpusPage }) {
   );
 }
 
+/* ── The tool ─────────────────────────────────────────────────────────────────── */
+
+/**
+ * Each tool's drawings in its column, by route then band id: the worked example's story and the
+ * diagram after the paragraph naming what it shows (the tools assessment, 4 Nov 2026). Every scene is
+ * drawn from that page's own words (components/Sketch/wyg-tool-<slug>.tsx); undrawn, its empty plate.
+ */
+const TOOL_SCENES: Readonly<Record<string, ToolShell>> = {
+  [toolPath('ai-product-ux-readiness-check')]: {
+    stories: { example: 'tool-ai-product-ux-readiness-check-example' },
+    diagrams: {
+      marking: {
+        after: 'evidence available',
+        scene: 'tool-ai-product-ux-readiness-check-marking',
+      },
+    },
+  },
+  [toolPath('ai-trust-control-canvas')]: {
+    stories: { example: 'tool-ai-trust-control-canvas-example' },
+    diagrams: {
+      /* The band is its table alone, so the diagram follows the table (`after` names its head). */
+      'reading-your-canvas': {
+        after: 'If the canvas shows',
+        scene: 'tool-ai-trust-control-canvas-reading',
+      },
+    },
+  },
+  [toolPath('audit-redesign-modernise-rebuild')]: {
+    stories: { example: 'tool-audit-redesign-modernise-rebuild-example' },
+    diagrams: {
+      'reading-your-results': {
+        after: 'candidate',
+        scene: 'tool-audit-redesign-modernise-rebuild-reading',
+      },
+    },
+  },
+  [toolPath('design-system-drift-checker')]: {
+    stories: { 'reading-your-results': 'tool-design-system-drift-checker-example' },
+    diagrams: {
+      workspace: {
+        after: 'intentional exception',
+        scene: 'tool-design-system-drift-checker-marks',
+      },
+    },
+  },
+  [toolPath('figma-storybook-fidelity-checklist')]: {
+    stories: { example: 'tool-figma-storybook-fidelity-checklist-example' },
+    diagrams: {
+      corrections: {
+        after: 'Put first',
+        scene: 'tool-figma-storybook-fidelity-checklist-corrections',
+      },
+    },
+  },
+  [toolPath('prototype-readiness-checklist')]: {
+    stories: { example: 'tool-prototype-readiness-checklist-example' },
+    diagrams: {
+      /* The marks, then the brief's three lists: after the paragraph that sorts into the lists. */
+      brief: { after: 'three lists', scene: 'tool-prototype-readiness-checklist-brief' },
+    },
+  },
+};
+
+const NO_TOOL_SCENES: ToolShell = { stories: {}, diagrams: {} };
+
+/**
+ * A free tool: the hero (its one action to the worksheet), then every band in one shell beside the
+ * outline, the FAQ last. A tool has no close band: its last words are its questions, and the band
+ * sending the reader on keeps its place and its inline links.
+ */
+function ToolArticlePage({ page }: { page: CorpusPage }) {
+  /* The tool's own scene in its hero (tools critic, 4 Nov 2026): the drawing its hub tile carries,
+     registered once by route (`serviceSceneFor`), so the page that IS the tool shows the picture the
+     card promised and the right half is not an empty fade. A tool with no scene keeps the end-fade. */
+  const scene = serviceSceneFor(page.route);
+  return (
+    <>
+      {scene ? (
+        <CorpusHero page={page} arrangement="beside" media={{ type: 'sketch', name: scene }} />
+      ) : (
+        <CorpusHero page={page} texture />
+      )}
+      <ArticleShell
+        page={page}
+        sections={formBeforeFaq(page.bands)}
+        tool={TOOL_SCENES[page.route] ?? NO_TOOL_SCENES}
+      />
+    </>
+  );
+}
+
 /* ── The term ─────────────────────────────────────────────────────────────────── */
 
 /**
- * A defined term. The hero keeps the definition (its first paragraph); the sharpest sentence after
- * it is the term's statement (J, a split from the hero); the paragraphs that follow open the shell as
- * a head-less section, so the definition reads on into the headed sections beside the same rail.
+ * A defined term. The hero keeps the definition (its first paragraph) beside the term's own drawing;
+ * the paragraph after it is the term's statement (J, a split from the hero) only where it is ONE short
+ * line with no link (`isStatementLine`), and otherwise it opens the shell at body size with its links
+ * kept, the rest of the definition reading on into the headed sections beside the same rail.
+ *
+ * The gate (glossary critic, 4 Nov 2026): the statement had taken the second paragraph whatever its
+ * length, so ux-debt and ai-assisted-product-development set 10 to 12 lines of near-h1 serif, larger
+ * than every h2 on the page, and agentic-ux lost the two links in it. The drawing had stood beside the
+ * statement; it now stands beside the definition in the hero, so every term page carries it in the same
+ * place whether or not it has a statement.
  */
 function TermPage({ page }: { page: CorpusPage }) {
   const { hero } = page;
-  const [definition, sharpest, ...rest] = hero.lede;
-  const { shell, close } = splitClose(formBeforeFaq(page.bands));
+  const [definition, second, ...after] = hero.lede;
+  const statement = second && isStatementLine(second) ? second : undefined;
+  const rest = statement
+    ? after
+    : [second, ...after].filter((runs): runs is InlineRun[] => Boolean(runs));
+  /* The close reads on in the column as the last section, its link the onward line: the words carry a
+     glossary page, so it ends in them rather than on a tile or an island (owner, 4 Nov 2026). */
+  const shell = formBeforeFaq(page.bands);
   const continued: CorpusBand | undefined =
     rest.length > 0
       ? {
@@ -157,16 +272,18 @@ function TermPage({ page }: { page: CorpusPage }) {
           blocks: rest.map((runs) => ({ type: 'paragraph' as const, runs })),
         }
       : undefined;
+  const ledes = definition ? [definition] : [];
   return (
     <>
-      <CorpusHero page={page} ledes={definition ? [definition] : []} texture />
-      {sharpest ? (
+      {/* The words are the page (owner, 4 Nov 2026: "the words/phrases are the important pieces;
+          drawings dilute the meaning"): the term and its definition, no drawing, no field. */}
+      <CorpusHero page={page} ledes={ledes} />
+      {statement ? (
         <Statement as="p" align="start" id="definition">
-          {plain(sharpest)}
+          {plain(statement)}
         </Statement>
       ) : null}
       <ArticleShell page={page} sections={continued ? [continued, ...shell] : shell} />
-      {close ? <CloseBand band={close} /> : null}
     </>
   );
 }
@@ -216,7 +333,7 @@ function CloseBand({ band }: { band: CorpusBand }) {
         arrangement="open"
         heading={band.headingText}
         body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
-        actions={[{ label: link.labelText, href: link.href }]}
+        actions={[{ label: labelWithoutArrow(link.labelText), href: link.href }]}
       />
     );
   }
@@ -229,7 +346,10 @@ function CloseBand({ band }: { band: CorpusBand }) {
           ))}
         </Layout>
       </ContentSectionText>
-      <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+      <CtaRow
+        rule={false}
+        actions={[{ label: labelWithoutArrow(link.labelText), href: link.href }]}
+      />
     </ContentSection>
   );
 }

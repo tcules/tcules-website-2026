@@ -57,13 +57,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -259,11 +259,11 @@ In both, the work began by choosing which part of an established product to chan
 
 [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-[See SaaS Product Redesign](/services/product-modernisation/product-redesign)
+[See SaaS Product Redesign →](/services/product-modernisation/product-redesign)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us what should be redesigned first {#enquiry}
 

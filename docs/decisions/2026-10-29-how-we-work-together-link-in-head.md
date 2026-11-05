@@ -1,7 +1,7 @@
 ---
 title: "How we work together: its own link is the head's end action; the band's other link closes it"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, illustration, components]
 source: "Owner review, 29 Oct 2026 (feat/new-copy, home and the offer pages: the action \"How we work together →\" moves into the header)"
 supersedes: [2026-10-29-how-we-work-together-band]

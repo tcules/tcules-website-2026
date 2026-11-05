@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { ArrowRight, ArrowUp, Copy, Cursor, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched } from './scenes';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -346,6 +346,257 @@ function StopsContentKnowledge() {
   );
 }
 
+/** The one arrowhead pointing down, tip at (x, y). */
+const ArrowDown = ({ x, y }: { x: number; y: number }) => (
+  <path className={styles.solid} d={`M${x},${y} L${x - 4},${y - 7} L${x + 4},${y - 7} Z`} />
+);
+
+/** A small search lens at (x, y), drawn at copy weight, for a search pill. */
+const SearchMark = ({ x, y }: { x: number; y: number }) => (
+  <>
+    <circle className={styles.copy} cx={x} cy={y} r={4} />
+    <path className={styles.copy} d={`M${x + 3},${y + 3} L${x + 6},${y + 6}`} />
+  </>
+);
+
+/**
+ * The knowledge base's one page reached both ways: the newcomer types into the search box above it,
+ * the expert picks it from the tree beside it, and both routes land on the same article.
+ */
+function KnowledgeBaseTwoWays() {
+  return (
+    <>
+      <Rect x={40} y={30} w={240} h={120} rx={8} className={styles.frame} />
+      {/* The tree, browsed: the expert's way in, one page picked. */}
+      <Copy x={56} y={50} w={40} quiet />
+      <Copy x={64} y={70} w={32} quiet />
+      <Copy x={64} y={90} w={28} quiet />
+      <Rect x={52} y={102} w={58} h={16} rx={4} className={styles.region} />
+      <path className={styles.regionCopy} d="M64,110 L94,110" />
+      <Copy x={56} y={130} w={36} quiet />
+      {/* The box, typed into: the newcomer's way in. */}
+      <Rect x={150} y={40} w={120} h={20} rx={10} className={styles.frame} />
+      <SearchMark x={166} y={49} />
+      <Copy x={180} y={50} w={44} />
+      {/* Both arrive at the one article. */}
+      <path className={styles.line} d="M210,60 L210,73" />
+      <ArrowDown x={210} y={80} />
+      <circle className={styles.node} cx={210} cy={60} r={2.5} />
+      <Hop x1={110} x2={150} y={110} />
+      <Rect x={150} y={80} w={120} h={60} rx={4} className={styles.frame} />
+      <Copy x={166} y={96} w={56} />
+      <Copy x={166} y={110} w={84} quiet />
+      <Copy x={166} y={122} w={64} quiet />
+    </>
+  );
+}
+
+/** One version of a document: an old one, quiet, behind the current. */
+function OldVersion({ x }: { x: number }) {
+  return (
+    <>
+      <Rect x={x} y={55} w={60} h={70} rx={4} className={styles.frameQuiet} />
+      <Glyph name="document-text" cx={x + 30} cy={78} size={16} className={styles.glyphQuiet} />
+      <Copy x={x + 12} y={100} w={36} quiet />
+      <Copy x={x + 12} y={110} w={24} quiet />
+    </>
+  );
+}
+
+/**
+ * The library's versions in a row: the two before it quiet and dashed off, the current one larger,
+ * ticked and carrying its owner, so which one is in force reads at a glance.
+ */
+function PolicyCurrentVersion() {
+  return (
+    <>
+      <OldVersion x={30} />
+      <OldVersion x={110} />
+      <path className={styles.trail} d="M90,90 L110,90 M170,90 L190,90" />
+      <Rect x={190} y={40} w={100} h={100} rx={4} className={styles.frame} />
+      <Focus x={240} y={72} glyph="check-circle" size={13} />
+      <Copy x={206} y={104} w={68} />
+      <C cx={214} cy={124} glyph="user" />
+      <Copy x={230} y={124} w={40} quiet />
+    </>
+  );
+}
+
+/**
+ * MOVING. Search inside the developer platform reaches the docs: at rest the console's search box and
+ * the docs page sit apart; on hover the route runs from the box into the docs and the code block it
+ * answers with lights.
+ */
+function SearchDocsInPlatform() {
+  return (
+    <>
+      {/* The platform's console, its search box at the top. */}
+      <Rect x={30} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Rect x={46} y={40} w={84} h={20} rx={10} className={styles.frame} />
+      <SearchMark x={60} y={49} />
+      <Copy x={74} y={50} w={36} />
+      <Rect x={46} y={80} w={88} h={20} rx={4} className={styles.tile} />
+      <Copy x={56} y={90} w={44} quiet />
+      <Rect x={46} y={110} w={88} h={20} rx={4} className={styles.tile} />
+      <Copy x={56} y={120} w={32} quiet />
+      {/* The docs page: a heading, a paragraph, the code block. */}
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={206} y={66} w={48} />
+      <Copy x={206} y={78} w={68} quiet />
+      <GrowIn>
+        <Rect x={204} y={94} w={76} h={32} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Rect x={210} y={100} w={64} h={20} rx={4} className={styles.press} />
+      <Glyph name="code" cx={242} cy={110} size={12} className={styles.releaseMark} />
+      <Copy x={206} y={136} w={56} quiet />
+      <circle className={styles.node} cx={130} cy={50} r={2.5} />
+      <TraceIn d="M130,50 L184,50 A6,6 0 0 1 190,56 L190,104 A6,6 0 0 0 196,110 L203,110" />
+      <GrowIn>
+        <ArrowRight x={210} y={110} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx={150} cy={50} r={3} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx={170} cy={50} r={3} />
+      </GrowIn>
+    </>
+  );
+}
+
+/** One finding in the review feed: what the AI flagged, in a card. */
+function Finding({ cy }: { cy: number }) {
+  return (
+    <>
+      <Rect x={30} y={cy - 14} w={80} h={28} rx={4} className={styles.frame} />
+      <Glyph name="stars" cx={44} cy={cy} size={12} className={styles.glyph} />
+      <Copy x={56} y={cy - 4} w={40} />
+      <Copy x={56} y={cy + 4} w={28} quiet />
+    </>
+  );
+}
+
+/**
+ * MOVING. The AI review feed keeps each finding beside its source: at rest the findings sit apart from
+ * the drawing they came from; on hover the route runs from one finding to its spot on the plan, which
+ * lights.
+ */
+function ReviewFeedSource() {
+  return (
+    <>
+      <Finding cy={50} />
+      <Finding cy={90} />
+      <Finding cy={130} />
+      {/* The source: a floor plan, its walls, and the spot the finding is about. */}
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <path
+        className={styles.rule}
+        d="M240,30 L240,66 M240,90 L240,150 M240,110 L290,110 M170,124 L210,124"
+      />
+      <GrowIn>
+        <Rect x={194} y={70} w={40} h={40} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Rect x={200} y={76} w={28} h={28} rx={4} className={styles.press} />
+      <circle className={styles.node} cx={110} cy={130} r={2.5} />
+      <TraceIn d="M110,130 L124,130 A6,6 0 0 0 130,124 L130,96 A6,6 0 0 1 136,90 L193,90" />
+      <GrowIn>
+        <ArrowRight x={200} y={90} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx={170} cy={90} r={3} />
+      </GrowIn>
+    </>
+  );
+}
+
+/** A product in the catalogue: one more tool that looks like all the others. */
+function Product({ x, y, fits = false }: { x: number; y: number; fits?: boolean }) {
+  return (
+    <>
+      <Rect x={x} y={y} w={32} h={40} rx={4} className={fits ? styles.press : styles.tile} />
+      <Glyph
+        name="ruler-pen"
+        cx={x + 16}
+        cy={y + 20}
+        size={14}
+        className={fits ? styles.releaseMark : styles.glyphQuiet}
+      />
+    </>
+  );
+}
+
+/**
+ * MOVING. Discovery in a specialist catalogue: at rest a wall of tools that look alike beside a panel
+ * of specs; on hover the spec the buyer knows is ticked, its route runs into the catalogue, and the one
+ * tool that fits lights.
+ */
+function CatalogueSpecFits() {
+  const specs = [70, 90, 110];
+  return (
+    <>
+      {/* The spec filters; the first is the one the buyer knows. */}
+      <Rect x={30} y={30} w={80} h={100} rx={8} className={styles.frame} />
+      <Rect x={44} y={45} w={10} h={10} rx={3} className={styles.press} />
+      <Copy x={62} y={50} w={32} />
+      {specs.map((y, i) => (
+        <g key={y}>
+          <Rect x={44} y={y - 5} w={10} h={10} rx={3} className={styles.tile} />
+          <Copy x={62} y={y} w={[28, 34, 22][i] ?? 28} quiet />
+        </g>
+      ))}
+      {/* The catalogue: six tools that look the same. */}
+      {[170, 214, 258].map((x) => (
+        <Product key={x} x={x} y={38} />
+      ))}
+      <GrowIn>
+        <Rect x={164} y={84} w={44} h={52} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Product x={170} y={90} fits />
+      <Product x={214} y={90} />
+      <Product x={258} y={90} />
+      <circle className={styles.node} cx={110} cy={50} r={2.5} />
+      <TraceIn d="M110,50 L144,50 A6,6 0 0 1 150,56 L150,104 A6,6 0 0 0 156,110 L163,110" />
+      <GrowIn>
+        <ArrowRight x={170} y={110} />
+      </GrowIn>
+    </>
+  );
+}
+
+/**
+ * MOVING. The newsroom's story reaches the reader: at rest the article and the reader's phone sit
+ * apart; on hover the route runs from the article up into the phone and its top story lights.
+ */
+function StoryReachesReader() {
+  return (
+    <>
+      {/* The article, written in the newsroom: its picture, headline and standfirst. */}
+      <Rect x={30} y={70} w={100} h={80} rx={8} className={styles.frame} />
+      <Rect x={42} y={82} w={76} h={28} rx={4} className={styles.tile} />
+      <Copy x={42} y={124} w={64} />
+      <Copy x={42} y={136} w={44} quiet />
+      {/* The reader's phone: the top-story slot, the feed under it. */}
+      <Rect x={210} y={30} w={80} h={120} rx={8} className={styles.frame} />
+      <Copy x={238} y={40} w={24} quiet />
+      <GrowIn>
+        <Rect x={218} y={50} w={64} h={40} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Rect x={224} y={56} w={52} h={28} rx={4} className={styles.press} />
+      <Copy x={224} y={104} w={44} />
+      <Copy x={224} y={114} w={32} quiet />
+      <Rect x={224} y={124} w={52} h={16} rx={4} className={styles.tile} />
+      <circle className={styles.node} cx={130} cy={110} r={2.5} />
+      <TraceIn d="M130,110 L164,110 A6,6 0 0 0 170,104 L170,76 A6,6 0 0 1 176,70 L217,70" />
+      <GrowIn>
+        <ArrowRight x={224} y={70} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx={210} cy={70} r={3} />
+      </GrowIn>
+    </>
+  );
+}
+
 /**
  * /expertise/content-knowledge-discovery-platforms · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -372,4 +623,26 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-content-knowledge-discovery-platforms': NeedsContentKnowledge,
   /* Where our part stops: Ranking, indexing and relevance tuning stay with your search engineers or vendor, with a clear brief from the design on what the screens dep */
   'stops-content-knowledge-discovery-platforms': StopsContentKnowledge,
+  /* MOVING: this tile links to /case-studies/unifying-workflow-creation-through-intelligent-search, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Search and documentation inside a developer platform: Eden AI */
+  'kind-content-knowledge-discovery-platforms-search-documentation-inside-developer':
+    SearchDocsInPlatform,
+  /* MOVING: this tile links to /case-studies/ai-quality-control-expert-review-buildtwin, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: AI review feeds that keep each source beside its finding: BuildTwin */
+  'kind-content-knowledge-discovery-platforms-ai-review-feeds-keep':
+    ReviewFeedSource,
+  /* MOVING: this tile links to /case-studies/redesigning-for-a-shopify-website-ux-design, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Product discovery for specialist catalogues: GT Tools */
+  'kind-content-knowledge-discovery-platforms-product-discovery-specialist-catalogues':
+    CatalogueSpecFits,
+  /* What we design in, tile: Internal knowledge bases and enterprise search: One search box for experts and newcomers alike */
+  'kind-content-knowledge-discovery-platforms-internal-knowledge-bases-enterprise':
+    KnowledgeBaseTwoWays,
+  /* What we design in, tile: Policy and document libraries with versions and owners: The current version obvious in every result */
+  'kind-content-knowledge-discovery-platforms-policy-document-libraries-versions':
+    PolicyCurrentVersion,
+  /* MOVING: this tile links to /case-studies/news-app-ux-shared-design-media-group-ringier, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Media and publishing products: Ringier Media Switzerland */
+  'kind-content-knowledge-discovery-platforms-media-publishing-products':
+    StoryReachesReader,
 };

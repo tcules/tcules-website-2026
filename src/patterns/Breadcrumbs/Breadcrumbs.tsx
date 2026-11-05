@@ -153,20 +153,22 @@ export function Breadcrumbs({ items, endsWith = 'page' }: BreadcrumbsProps) {
         reads as one phrase rather than as four separated items; rowGap between WRAPPED lines,
         which is Cluster's largest step and is there for the touch targets. */}
       <Cluster as="ol" colGap="inline" rowGap="block" align="baseline" className={styles.trail}>
-        {/* The first crumb has one child and no divider, so it needs no arrangement and stays a
-          bare <li>. Every other crumb is a nowrap Cluster: the trail wraps BETWEEN crumbs and
-          never inside one, so a divider can never be stranded at the end of a line from the
-          label it belongs to. A single label longer than the track still breaks inside itself —
-          nowrap governs the flex children, not the text inside one of them. */}
-        <li>
+        {/* Every crumb but the last is a nowrap Cluster of its label and the divider AFTER it: the
+          trail wraps BETWEEN crumbs and never inside one, and the divider stays at the end of the
+          line with the crumb it follows, so a wrapped line never STARTS with a solidus (critic,
+          audits run, 4 Nov 2026: "Home / Audits & Assessments" then "/ Product Modernisation
+          Assessment" on a 390 phone read as an orphaned mark). The last crumb has no divider. A
+          single label longer than the track still breaks inside itself — nowrap governs the flex
+          children, not the text inside one of them. */}
+        <Cluster as="li" colGap="inline" align="baseline" nowrap>
           <a className={styles.link} href={first.href}>
             {first.label}
           </a>
-        </li>
+          <Divider />
+        </Cluster>
 
         {collapsed ? (
           <Cluster as="li" colGap="inline" align="baseline" nowrap>
-            <Divider />
             {/* Inert, deliberately. It says levels were dropped without pretending to be a
               control — so there is no aria-expanded, no aria-controls naming a list that is not
               rendered, no keyboard contract and no focus to place after a state change. The
@@ -183,15 +185,16 @@ export function Breadcrumbs({ items, endsWith = 'page' }: BreadcrumbsProps) {
             <span className={cx(styles.collapseCount, styles.narrowOnly)}>
               {levelsOmitted(omittedNarrow)}
             </span>
+            <Divider />
           </Cluster>
         ) : null}
 
         {middle.map((item) => (
           <Cluster key={item.href} as="li" colGap="inline" align="baseline" nowrap>
-            <Divider />
             <a className={styles.link} href={item.href}>
               {item.label}
             </a>
+            <Divider />
           </Cluster>
         ))}
 
@@ -200,15 +203,14 @@ export function Breadcrumbs({ items, endsWith = 'page' }: BreadcrumbsProps) {
           cannot see must not be a tab stop or an announced crumb either. */}
         {collapsed && parent ? (
           <Cluster as="li" colGap="inline" align="baseline" nowrap className={styles.wideOnly}>
-            <Divider />
             <a className={styles.link} href={parent.href}>
               {parent.label}
             </a>
+            <Divider />
           </Cluster>
         ) : null}
 
-        <Cluster as="li" colGap="inline" align="baseline" nowrap>
-          <Divider />
+        <li>
           {/* Never an <a>, and never a link that has merely been marked: currency here is
             STRUCTURAL — it is the last item — so it is a different element with its own token,
             which is why no --crumb-link-ink-current exists. It differs from its ancestors by ink
@@ -226,7 +228,7 @@ export function Breadcrumbs({ items, endsWith = 'page' }: BreadcrumbsProps) {
               {current.label}
             </span>
           )}
-        </Cluster>
+        </li>
       </Cluster>
     </nav>
   );

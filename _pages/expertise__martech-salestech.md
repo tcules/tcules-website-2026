@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -198,13 +198,15 @@ content_governance:
 
 # MarTech product design for CRM, reporting and AI-drafted marketing content
 
-Marketing and sales software is used under someone else's eye. A marketer takes its report to a budget meeting, a rep sends its quote to a customer, and a brand signs off AI-drafted copy. Tcules is a MarTech product design studio, from reporting and AI content tools to CRM and quoting.
+If your users send reports, quotes or AI drafts to managers and customers, our MarTech product design makes each one clear enough to stand behind.
 
-[Tell us about your marketing or sales product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in MarTech and SalesTech {#what-we-design}
+
+For teams building marketing and sales software, new or already in customers' hands.
 
 - **Marketing automation and reporting** for ecommerce brands · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
@@ -218,15 +220,13 @@ Marketing and sales software is used under someone else's eye. A marketer takes 
 
 - **Lead management and sales enablement software** · The next action on a lead in one glance
 
-## Selected MarTech product design work {#selected-work}
-
-Two pieces of marketing software, and the closest work we have to a CRM pipeline: deal software for real estate acquisitions teams.
+## MarTech and related product design work {#selected-work}
 
 ### Omny AI: AI drafts that wait for a person
 
 Omny AI, since acquired by Primelis, writes listing content for brands and agencies selling on Amazon; its suggestions used to fill the content area before anyone chose them. Our redesign starts the area empty, gives adding a suggestion its own click and colours AI content purple. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-### Ryzeo: reporting first, with rules for what follows
+### Ryzeo: reports that show customers where to act
 
 Ryzeo's ecommerce customers wanted reports that helped them choose where to act. Five research inputs made reporting the first move. We restructured the reports, designed how customers shape a view around their own questions, and documented the rules later screens share. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
@@ -236,7 +236,7 @@ Dealpath's Add to pipeline opened Create deal straight away, even for a deal the
 
 ## MarTech UX design for reports, AI drafts and pipelines {#hard-parts}
 
-Marketing and sales software is full of figures, scores and drafts, and each one asks someone to act. The hard part is the step between seeing and doing, for people who are often between calls.
+Marketing and sales software is full of figures, scores and drafts, and each one asks someone to act. The hardest step is acting on what the screen shows, for people who are often between calls.
 
 ### Reports that point to a next step
 
@@ -280,13 +280,11 @@ Your legal team decides what those rules require; we design consent records and 
 
 We take on the screens where your customers read, decide and send, in a new product or an established one.
 
-**What you receive**
-
 - **Interviews with marketers and reps:** interviews with marketers, reps, pricing experts and their managers, so the first change comes from what users say they need most
 
 - **Reports with the next action:** reports and dashboards where each figure that matters has its next action on the same screen
 
-- **AI draft review:** AI draft review: suggestions kept apart, acceptance made deliberate, and AI and human work marked
+- **AI draft review:** suggestions kept apart, acceptance made deliberate, and AI and human work marked
 
 - **The shared record:** the shared record for a campaign, deal or quote, with every role and tool it passes through
 
@@ -318,41 +316,57 @@ One analytics screen may only need [dashboard design](/services/product-design/d
 > “Tcules interviewed people in all six roles that touch one of our quotations, then designed a single shared quotation where each role works on its own part. That shared quotation is the backbone of our MVP.”  
 > **Ashok Mohanty, Founder, Auxentios**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a marketing or sales product, a good first piece of work is the report customers open most, redesigned so it points to a next step.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** In Doodle's scheduling research, one interview showed that a person's availability depends on how much the meeting matters, and priority became part of the model. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** Benchmark Gensuite's customers had built fast habits on its suite, so we tried each modernised pattern in coded prototypes and checked it against those habits before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed GT Tools' Shopify store, so the thinking behind product discovery went all the way into the store buyers use. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-## Other industries we know {#industries}
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
+
+## Other industries {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about MarTech product design {#faq}
 
@@ -382,6 +396,6 @@ Share the product, who reads the report and what they do with it today.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

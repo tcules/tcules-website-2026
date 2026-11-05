@@ -326,7 +326,7 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'wyg-ai-search-recommendation-recommendations-explain-themselves': RecommendationsExplain,
   /* Corrections.: Exclude a source, fix a name, narrow the search or fall back to the raw results, plus a way to flag a bad answer that your team learns from. */
   'wyg-ai-search-recommendation-corrections': Corrections,
-  /* The next step.: The chosen result carried straight into the screen where the work happens, so nobody copies it across by hand. */
+  /* Results that open where the work is.: The chosen result carried straight into the screen where the work happens, so nobody copies it across by hand. */
   'wyg-ai-search-recommendation-next-step': NextStep,
   /* A test on your own content.: A coded version run against a sample of your documents, showing where answers drift before engineering builds it. */
   'wyg-ai-search-recommendation-test-own-content': TestOwnContent,

@@ -19,6 +19,10 @@
   /* The lede's mark (`mark`): a bare glyph at 40, the eye's entry into the close. A component size,
      read from the space ramp because no gap step names a glyph's box. */
   --cta-mark-size: var(--space-40);
+  /* The footnote's leading glyph (owner, 3 Nov 2026) and the line box it centres in: the small
+     body's size and line height, so the glyph sits on the footnote's first line. Component sizes. */
+  --cta-footnote-glyph: var(--icon-size-16);
+  --cta-footnote-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
   /* The OFFER's heading — the K band only (`.heading`). h2, because the offer interrupts a page
@@ -37,6 +41,9 @@
      open pair stays its own so the centred close can move without the split one. The K offer stays
      h2: it interrupts, it does not end. The element is an `h2` in every case. */
   --cta-close-heading-text: var(--text-h1);
+  /* The compact island (owner, 4 Nov 2026): h3, a short ask under the band it closes. */
+  --cta-compact-heading-text: var(--text-h3);
+  --cta-compact-heading-tracking: var(--text-h3-tracking);
   --cta-close-heading-tracking: var(--text-h1-tracking);
   --cta-open-heading-text: var(--text-h1);
   --cta-open-heading-tracking: var(--text-h1-tracking);
@@ -96,6 +103,10 @@
   /* The halves close's title (owner, 25 Oct 2026): the split keeps its 96, so the title takes a
      two-line measure here instead of the column a 128 gap would have left it. Balanced wrap. */
   --cta-heading-measure-halves: 18ch;
+  /* The paired close's action row (4 Nov 2026, /future-interfaces-lab critic): one box tall, its
+     control centred, so a link in one half and a solid in the other share a centre line instead of
+     a foot. The md button's 40, duplicated on purpose (token rule 6). */
+  --cta-pair-action-block-size: 40px;
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105

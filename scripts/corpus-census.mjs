@@ -87,7 +87,7 @@ const LEVEL_1_SERVICES = new Set([
   'ai-product-ux',
   'design-engineering',
   'design-systems',
-  'new-product-design-first-release',
+  'mvp-development',
   'product-design',
   'product-modernisation',
   'software-development',

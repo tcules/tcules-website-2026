@@ -1,24 +1,19 @@
 /* ══ Component layer — Bento ════════════════════════════════════════════════════
    Tier 2. A set of linked tiles on four tracks, some two tracks wide, each a title, a line and its
    service's drawing (home "What we do", owner 19 Oct 2026, mocks S1–S3 v1–v13, after Supabase's
-   product grid). Behind the drawings, one continuous texture per row: the site's pixel grid seen
-   through a feathered wave drawn across the whole row and clipped by each tile.
+   product grid). Each drawing sits on the Sketch plate inside its tile; the tile carries no texture
+   (owner, 3 Nov 2026, decisions/2026-11-03-flat-graphics-on-one-plate).
 
    Naming: --bnt-{part}-{role}
-     parts  tile · rule · title · body · art · tex · ring · lift · cta (roles: rule-ink · rule-width)
-     roles  ink · width · radius · text · tracking · measure · scale · strength · duration · easing
+     parts  tile · rule · title · body · ring · lift · cta (roles: rule-ink · rule-width)
+     roles  ink · width · radius · text · tracking · measure · duration · easing
 
    One state, hover (and keyboard focus, which gets what the pointer gets): the tile lifts, its
-   hairline turns light blue, its texture turns from neutral to blue and its title takes the accent
+   hairline turns light blue and its title takes the accent
    (owner, 19 Oct 2026). Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* ── Geometry · identical on every surface ─────────────────────────────────────
-   --bnt-art-scale       a component SIZE: the drawing's scale in a one-track tile, against its own
-                         drawing units (a 204-unit scene is 143 wide at .7).
-   --bnt-art-scale-wide  the same in a two-track tile, where the drawing has half the tile (1.3).
-   --bnt-art-scale-m     the phone step: one tile across, the drawing at its foot.
-   --bnt-tex-strength    how strongly the pixel grid shows: a share of the grid's measured alphas.  */
+/* ── Geometry · identical on every surface ───────────────────────────────────── */
 :root {
   --bnt-radius: var(--radius-16);
   --bnt-rule-width: var(--border-width-hairline);
@@ -33,14 +28,6 @@
   /* A picture in the drawing's place (ServiceTile `picture`): the card crop box's radius. */
   --bnt-picture-radius: var(--radius-8);
   --bnt-body-measure: var(--measure-lead);
-  --bnt-art-scale: 0.7;
-  --bnt-art-scale-wide: 1.3;
-  --bnt-art-scale-m: 0.75;
-  /* The split tile's drawing (`detail`): half a wide tile, so between the single and the wide scale. */
-  --bnt-art-scale-split: 1;
-  /* The split tile's result panel: the card crop box's radius, one step inside the tile's 16. */
-  --bnt-panel-radius: var(--radius-8);
-  --bnt-tex-strength: 0.8;
   /* An optical lift, not a distance between two things: the ramp's 2, so the tile rises off the
      band by a hair rather than travelling. */
   --bnt-lift: var(--space-2);
@@ -57,6 +44,7 @@
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --bnt-tile-ground: var(--color-paper); /* the page's own ground: on a paper band the hairline draws the tile; a panel tile (`panels`) on tint reads white */
   --bnt-rule-ink: var(--color-neutral-200); /* decoration */
   --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-100); /* decoration */
@@ -64,14 +52,12 @@
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
   --bnt-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --bnt-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 */
-  --bnt-tex-ink: var(--color-neutral-500); /* decoration */
-  --bnt-tex-ink-hover: var(--color-brandeis-400); /* decoration */
   --bnt-ring-color: var(--color-brandeis-500); /* 6.17:1 */
-  --bnt-panel-ground: var(--color-paper-deep); /* the result panel: one step off the band's ground */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --bnt-tile-ground: var(--color-paper); /* paper on the tint, as BlockCard's tile (owner, 4 Nov 2026: "white fill cards") */
   --bnt-rule-ink: var(--color-neutral-300);
   --bnt-cta-rule-ink: var(--color-neutral-400); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
@@ -79,14 +65,12 @@
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --bnt-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bnt-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
-  --bnt-tex-ink: var(--color-neutral-600);
-  --bnt-tex-ink-hover: var(--color-brandeis-400);
   --bnt-ring-color: var(--color-brandeis-500);
-  --bnt-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
+  --bnt-tile-ground: transparent; /* the hairline draws the tile */
   --bnt-rule-ink: var(--color-neutral-800);
   --bnt-cta-rule-ink: var(--color-neutral-600); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-700);
@@ -94,14 +78,12 @@
   --bnt-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --bnt-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --bnt-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --bnt-tex-ink: var(--color-neutral-600);
-  --bnt-tex-ink-hover: var(--color-brandeis-300);
   --bnt-ring-color: var(--color-brandeis-300);
-  --bnt-panel-ground: var(--color-neutral-800);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
 [data-surface='blue'] {
+  --bnt-tile-ground: transparent; /* the hairline draws the tile */
   --bnt-rule-ink: var(--color-brandeis-400);
   --bnt-cta-rule-ink: var(--color-brandeis-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
@@ -109,8 +91,5 @@
   --bnt-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --bnt-eyebrow-ink: var(--color-brandeis-50); /* 5.57:1 */
-  --bnt-tex-ink: var(--color-brandeis-300);
-  --bnt-tex-ink-hover: var(--color-white);
   --bnt-ring-color: var(--color-white);
-  --bnt-panel-ground: var(--color-brandeis-600);
 }

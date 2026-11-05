@@ -31,7 +31,13 @@
   /* The slide's travel and the panel's height change: one duration, the site's ease (hover-is-a-move). */
   --clm-slide-duration: var(--duration-slow);
   --clm-slide-easing: var(--easing-ease);
-  --clm-tab-lift: -2px; /* an inactive title's hover move: an optical nudge, not a distance */
+  --clm-tab-lift: -2px; /* a hovered title's move: an optical nudge, not a distance */
+  /* The peek, once, as the stage comes into view: the first slide eases aside and the next one's edge
+     shows, then both come back. The travel is a move, not a distance between two things, so it reads
+     the space ramp; the curve is the slide's. Slower than a slide, so it reads as a hint, not a change. */
+  --clm-peek-travel: var(--space-96);
+  --clm-peek-duration: 520ms; /* each leg, out and back */
+  --clm-peek-hold: 360ms; /* how long the next slide's edge stays in view before the return */
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -61,7 +67,7 @@
   --clm-number-ink: var(--color-neutral-700);
   --clm-timer-rail: var(--color-neutral-300); /* decoration */
   --clm-timer-fill: var(--color-brandeis-500);
-  --clm-proof-ground: var(--color-paper-deep);
+  --clm-proof-ground: var(--color-paper); /* a paper panel on tint, as the stage's: paper-deep vanished on it (4 Nov 2026) */
   --clm-label-ink: var(--color-neutral-700);
   --clm-proof-ink: var(--color-neutral-900);
   --clm-link-ink: var(--color-brandeis-500);

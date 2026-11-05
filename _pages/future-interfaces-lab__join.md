@@ -64,7 +64,7 @@ conversion:
     - Tell us about the artefact
     required_fields:
     - Email address
-    submit_label: Submit form
+    submit_label: Send request
     processor: existing_live_form_reverify
   enquiry_contact: fil@tcules.com
 render:
@@ -74,6 +74,7 @@ render:
   - what-youll-gain
   - what-youll-do
   - apply
+  - how-selection-works
   - frequently-asked-questions
   - artefact-access
 structured_data:
@@ -117,6 +118,7 @@ page_composition:
       what-youll-gain: argument_thesis
       what-youll-do: capability_scope
       apply: capability_scope
+      how-selection-works: capability_scope
       frequently-asked-questions: faq
       artefact-access: enquiry
   media_bindings: []
@@ -129,11 +131,11 @@ page_composition:
   testimonial_ids: *id001
 ---
 
-*R&D hub for building next-gen experiences at Tcules*
+*Future Interfaces Lab · Fellowship*
 
 # Join the Future Interfaces Lab fellowship: build AI products in Ahmedabad
 
-A selective, in-person fellowship for builders who think beyond pixels: in systems, stories and motion. You join a small pod and build under real constraints, expected to ship work you can demonstrate.
+A selective, in-person fellowship in Ahmedabad for AI builders, product designers and growth operators who want to ship. You join a small team and build under real constraints, expected to ship work you can demonstrate.
 
 [Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
 
@@ -179,7 +181,7 @@ People who can take a product to market: positioning, launch, distribution and e
 
 ### Shipped proof-of-work
 
-Real systems and real product calls, with work that shows how you think and build.
+Real systems and real product decisions, with work that shows how you think and build.
 
 ### Stronger product judgement
 
@@ -187,7 +189,7 @@ Learn to defend trade-offs, take critique and work clearly under constraints.
 
 ## How the design and AI fellowship in Ahmedabad works {#what-youll-do}
 
-You arrive with proof-of-work, earn your place through a practical round and build inside small pods that are expected to ship. Nobody hands you a task list.
+You apply with work you have shipped, pass a practical round, then build in a small team expected to ship. Nobody hands you a task list.
 
 ### Apply with shipped work
 
@@ -209,11 +211,15 @@ Fellows are paired into small pods, often combining design, engineering and go-t
 
 Pods operate as real product teams. They build continuously, review openly and ship work that can be demonstrated.
 
-## Apply to the Future Interfaces Lab (FIL): how selection works {#apply}
+## Apply to the Future Interfaces Lab (FIL) {#apply}
 
 Applications for the next cohort are now open.
 
 *FIL is a selective fellowship, run separately from Tcules job openings.*
+
+[Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
+
+## How selection works {#how-selection-works}
 
 ### Send your application
 
@@ -226,8 +232,6 @@ We assess applications for merit, fit and relevance to Tcules.
 ### Shortlisting
 
 Shortlisted applicants go on to the practical round, followed by a final review.
-
-[Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
 
 ## Questions about the Future Interfaces Lab fellowship {#frequently-asked-questions}
 

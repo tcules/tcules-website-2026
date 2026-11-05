@@ -37,6 +37,16 @@
   --eop-term-text: var(--text-body);
   /* The rule over an option's facts. */
   --eop-rule-width: var(--border-width-hairline);
+  /* `cards` (owner, 4 Nov 2026): the card radius the home doors take, so the two card sets on one
+     page are one shape. */
+  --eop-card-radius: var(--radius-16);
+  /* A cell's glyph (`cards`): the icon size a card's head takes. */
+  --eop-cell-icon-size: var(--icon-size-32);
+  /* `plans` (owner, 5 Nov 2026): a plan's name, h4 one step up. */
+  --eop-plan-title-text: var(--text-h4-lg);
+  --eop-plan-title-tracking: var(--text-h4-lg-tracking);
+  /* Optical correction: the 18 tick centres on the 14 item's first line (line box ~20). */
+  --eop-tick-optical-offset: var(--space-1);
   /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
   --eop-key-optical-offset: var(--space-2);
 }
@@ -44,6 +54,11 @@
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --eop-cell-icon-ink: var(--color-brandeis-500);
+  --eop-card-ground: var(--color-paper);
+  --eop-plan-ground: var(--color-white); /* a step brighter than the paper band */
+  --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
+  --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-300); /* decoration */
   --eop-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   --eop-heading-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -55,6 +70,11 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --eop-cell-icon-ink: var(--color-brandeis-500);
+  --eop-card-ground: var(--color-paper);
+  --eop-plan-ground: var(--color-white); /* the brightest object on tint */
+  --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
+  --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on tint */
   --eop-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
   --eop-heading-ink: var(--color-neutral-900); /* 13.05:1 */
@@ -66,6 +86,11 @@
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
 [data-surface='ink'] {
+  --eop-cell-icon-ink: var(--color-brandeis-300);
+  --eop-card-ground: var(--color-neutral-900);
+  --eop-plan-ground: var(--color-neutral-900);
+  --eop-plan-item-ink: var(--color-neutral-300); /* 11.07:1 */
+  --eop-card-rule-ink: var(--color-neutral-700); /* decoration */
   --eop-rule-ink: var(--color-neutral-700); /* decoration */
   --eop-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --eop-heading-ink: var(--color-white); /* 17.26:1 */
@@ -77,6 +102,11 @@
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
+  --eop-cell-icon-ink: var(--color-white);
+  --eop-card-ground: var(--color-brandeis-600);
+  --eop-plan-ground: var(--color-brandeis-600);
+  --eop-plan-item-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --eop-card-rule-ink: var(--color-brandeis-300); /* decoration */
   --eop-rule-ink: var(--color-brandeis-300); /* decoration */
   --eop-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --eop-heading-ink: var(--color-white); /* 6.23:1 */

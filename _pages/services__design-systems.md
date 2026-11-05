@@ -61,11 +61,11 @@ navigation:
 conversion:
   form: project_enquiry
   anchor: enquiry
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
 structured_data:
@@ -157,13 +157,11 @@ render:
 
 # Design system services: one set of parts for every team and product
 
-A design system is for the ordinary Tuesday when a team ships a feature that already matches the rest of the product. It is for the designer and developer who would otherwise argue over which button is right, and for the AI coding tools that build from whatever rules they are given.
-
-Tcules provides design system services for SaaS teams and products: one set of parts in Figma and in code, with clear rules for using and changing them.
+Your teams build screens faster from documented components in Figma and code. Our design system services keep the library current as the product grows.
 
 *Selected work: [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Matter](/matter-design-system)*
 
-[Start a design system enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -181,7 +179,7 @@ Auxentios' industrial quoting product was planned to run to more than 200 screen
 
 [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
 
-### Benchmark Gensuite: the shared layer before any single screen
+### Benchmark Gensuite: shared components first, across every application
 
 In Benchmark Gensuite's suite, one change to a shared component reaches every application. We started at that layer, tested the components inside a high-use control, and our coded prototypes gave Benchmark's engineers a component direction for their move to Bootstrap 5.3.
 
@@ -191,9 +189,7 @@ In Benchmark Gensuite's suite, one change to a shared component reaches every ap
 
 Buy the work as one programme, or start with the part that hurts most.
 
-**What you receive**
-
-- **Foundations named by meaning:** colour, type and spacing tokens that give every product one look, named so people and AI coding tools pick the right one.
+- **Colours, type and spacing named by use:** colour, type and spacing tokens that give every product one look, named so people and AI coding tools pick the right one.
 
 - **Components in Figma and in code,** each with all its states, shown in Storybook and released together, so design and code describe the same button.
 
@@ -201,15 +197,15 @@ Buy the work as one programme, or start with the part that hurts most.
 
 - **A first release:** tried on a real part of your product before you sign it off.
 
-- **A route for change:** who owns the system, how teams contribute and raise exceptions, how releases go out, and how you will see whether teams use it.
+- **A way to change the system:** who owns the system, how teams contribute and raise exceptions, how releases go out, and how you will see whether teams use it.
 
 **Who does the work.** The system is led and designed by a senior product designer, and an account lead keeps the project on track. Design engineers build the coded components to fit your frontend, working inside your team's Figma files, code and release routine.
 
 **What we need from you.** The screens, Figma files and code your teams use today, and where they copy or override shared parts. We also need the product, design and frontend leads who will own the result.
 
-**Where our part stops.** After the first release, your team runs contributions, exceptions and releases, with us alongside when you want the help. Your codebase and your product calls stay yours.
+**Where our part stops.** After the first release, your team runs contributions, exceptions and releases, with us alongside when you want the help. Your codebase and your product decisions stay yours.
 
-## One status label, checked in five places {#status-example}
+## Worked example: one status label, everywhere it appears {#status-example}
 
 A "Partly complete" status works only if every part of the system agrees on it.
 
@@ -269,41 +265,57 @@ One hard interaction to try in code is [Design Engineering](/services/design-eng
 > “Our product was expected to need more than 200 screens. Tcules designed the core ones first, then turned what kept repeating into components, design tokens and layout rules, so our product and engineering teams could design the rest the same way.”  
 > **Ashok Mohanty, Founder, Auxentios**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a design system, a good first piece of work is one component family or one product area's rules, or a [Design System Audit](/audits/design-system-audit) of the components you already have.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We know what to leave alone in a product people rely on.** In [Dealpath's](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) listing workflow, our redesign changed the Add to pipeline step and largely kept the other three listing actions as users knew them.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** [ConnectX](/case-studies/ai-native-building-energy-product-connectx) judged its new product in our coded demo on sample data before any live integration, and we then took the demo through to a production-ready module.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** For the last three years, each of Primelis' products has been designed in our studio, as part of one ongoing partnership.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions buyers ask about design system services {#faq}
 
@@ -313,7 +325,7 @@ Yes. Tcules designs the system in Figma and builds the coded components, Storybo
 
 ### Can you fix our existing system instead of starting again?
 
-Yes. Tcules reviews your components and how teams use them, then repairs or extends what needs it. If replacing a part is the better call, we say so.
+Yes. Tcules reviews your components and how teams use them, then repairs or extends what needs it. If replacing a part is the better decision, we say so.
 
 ### Should Storybook be our single source of truth?
 
@@ -345,6 +357,6 @@ Share your Figma library or component code, and we'll find out why the copies ke
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

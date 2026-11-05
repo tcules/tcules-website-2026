@@ -314,13 +314,11 @@ export async function generateMetadata({
       description,
       type: 'website',
       ...(canonical ? { url: canonical } : {}),
-      images: [],
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: [],
     },
   };
 }

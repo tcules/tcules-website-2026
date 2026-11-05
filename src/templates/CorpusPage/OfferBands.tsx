@@ -1,12 +1,13 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Button, Icon, Layout, Prose, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
   Bento,
   CaseSpread,
   ClaimProof,
+  Collage,
   ContentSection,
   ContentSectionText,
   CtaRow,
@@ -23,6 +24,7 @@ import {
   VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
+  type CollagePhotos,
   type EngagementFact,
   type EngagementScope,
   type TraceScene,
@@ -31,6 +33,7 @@ import {
 import { caseStudyLink } from '@/lib/case-links';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
+import { enquiryChoiceValue } from '@/lib/enquiry-pick';
 import type {
   CorpusBand,
   CorpusBlock,
@@ -40,7 +43,6 @@ import type {
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { placeholderIllustration } from '@/lib/placeholders';
-import { ROUTES } from '@/lib/routes';
 import {
   offerSceneKey,
   serviceSceneFor,
@@ -52,11 +54,14 @@ import { renderInline } from '@/lib/inline-render';
 
 import {
   EnquiryBand,
+  applicationAnchor,
   FaqItems,
+  faqFooter,
   GenericBlocks,
   ListTiles,
   bodyOf,
   head,
+  headingIdOf,
   QuoteGroupBand,
   RecognitionBand,
   proofQuote,
@@ -65,6 +70,7 @@ import {
   type RatingsById,
 } from './blocks';
 import {
+  bandIllustration,
   bindingNamed,
   caseCover,
   coverFor,
@@ -72,6 +78,10 @@ import {
   slotImage,
   slugOf,
   type SlotImage,
+  itemCovers,
+  itemCutOuts,
+  photoBeside,
+  studioCollage,
 } from './images';
 import {
   BandBody,
@@ -81,7 +91,9 @@ import {
   claimsOf,
   isExampleParagraph,
   CloseBand,
+  CloseFigureBand,
   DestinationsBand,
+  PairedCloseBand,
   DirectoryBand,
   DrawnTableBand,
   IndustriesBand,
@@ -91,12 +103,19 @@ import {
   RelatedBand,
   SheetBand,
   TableBand,
+  withToolKeyLinks,
   TextBand,
   WhatYouGetBand,
   sheetParts,
+  AskIsland,
+  askLinkIn,
+  isAskLink,
+  SupportQuote,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
-import { kindOf, type OfferUnit } from './plan';
+import { ReportBand } from './ReportBand';
+import { glyphBand } from './glyph-bands';
+import { isWhatYouGet, kindOf, pairedCloseOf, type OfferUnit } from './plan';
 import {
   bandLinks,
   blocksOf,
@@ -107,6 +126,7 @@ import {
   linksIn,
   linkLead,
   plain,
+  tileActionFor,
   trimEnd,
   trimStart,
 } from './text';
@@ -173,7 +193,8 @@ function trailingCaseLink(
   if (last?.type !== 'link' || !last.href.startsWith('/case-studies/')) return null;
   const rest = runs.slice(0, -1);
   const prev = rest[rest.length - 1];
-  if (prev?.type === 'text') rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
+  if (prev?.type === 'text')
+    rest[rest.length - 1] = { type: 'text', text: prev.text.trimEnd() };
   return { link: { labelText: plain(last.children), href: last.href }, rest };
 }
 
@@ -403,15 +424,59 @@ function trailingParagraphs(band: CorpusBand): InlineRun[][] {
 
 const quoteOf = (band: CorpusBand) => blocksOf(band, 'quote')[0];
 
-/** The paragraphs before a band's first labelled claim (its lead-in), as runs. */
+/** The paragraphs before a band's first labelled claim (its lead-in), as runs. A label line that
+    names the first claim's kind (`optionEyebrows`) is the claim's, not the lead-in's. */
 function leadingParagraphs(band: CorpusBand): InlineRun[][] {
   const out: InlineRun[][] = [];
+  const labels = optionEyebrows(band);
   for (const block of band.blocks) {
     if (block.type === 'comment') continue;
     if (block.type !== 'paragraph' || leadOf(block)) break;
+    if (labels.has(block)) continue;
     out.push(block.runs);
   }
   return out;
+}
+
+/** A paragraph that is one italic run and nothing else ("*A known goal*"), as its text. */
+function italicLine(block: CorpusBlock | undefined): string | undefined {
+  if (block?.type !== 'paragraph') return undefined;
+  const runs = block.runs.filter((run) => !(run.type === 'text' && run.text.trim() === ''));
+  const only = runs.length === 1 ? runs[0] : undefined;
+  return only?.type === 'em' ? inlineToText(only.children).trim() : undefined;
+}
+
+/**
+ * The label lines over a band's bold-led options (v2.1 copy, 4 Nov 2026: "*Optional first step*" over
+ * "**A pilot project.** …"): an italic-only paragraph directly before a labelled claim names that
+ * claim's kind. Keyed by the paragraph, valued by the claim's title.
+ */
+function optionEyebrows(band: CorpusBand): Map<CorpusBlock, string> {
+  const out = new Map<CorpusBlock, string>();
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  blocks.forEach((block, index) => {
+    const line = italicLine(block);
+    const next = blocks[index + 1];
+    const lead = next ? leadOf(next) : null;
+    if (line && lead) out.set(block, line);
+  });
+  return out;
+}
+
+/** The eyebrow over a claim, by the claim's title. */
+function eyebrowFor(band: CorpusBand, title: string): string | undefined {
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  const at = blocks.findIndex((block) => {
+    const lead = leadOf(block);
+    return lead ? labelTitle(lead.label) === title : false;
+  });
+  return at > 0 ? italicLine(blocks[at - 1]) : undefined;
+}
+
+/** A plain closing line split into the island's heading (its first sentence) and lead (the rest). */
+function splitAsk(text: string): { heading: string; lead?: string } {
+  const match = /^(.+?[.?!])\s+(.+)$/.exec(text.trim());
+  return match ? { heading: match[1]!, lead: match[2] } : { heading: text.trim() };
 }
 
 /** A case band's closing links: the link lines after the last case's own "Read the … case". */
@@ -460,6 +525,14 @@ const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
   'working across time zones': 'overlap',
   'fees and notice': 'commercial',
   'who decides, and who owns the work': 'own',
+  /* The 3 Nov copy's terms (2.60): the decision is yours (options meet at you), no minimum term is the
+     notice drawing, the handover is agreed in the proposal before the work starts. "What we make is
+     yours" is `scope-yours` (components/Sketch/wyg-how-we-work.tsx): its empty plate until the flat
+     graphics pass (2.62) draws it. */
+  'you keep the product decisions': 'own',
+  'no minimum term': 'commercial',
+  'handover agreed before work begins': 'getting-started',
+  'what we make is yours': 'yours',
 };
 
 function scopeOf(title: string): EngagementScope | undefined {
@@ -468,6 +541,8 @@ function scopeOf(title: string): EngagementScope | undefined {
   if (term) return term;
   /* The 26 Oct copy's three engagements (component-map C9): a focused piece of work draws one
      feature, a defined project an area, an ongoing partnership the embedded designer. */
+  /* "A pilot project." (3 Nov copy): the fixed price agreed first, then one flow. */
+  if (/\bpilot\b/.test(name)) return 'pilot';
   if (/\bfocused\b/.test(name)) return 'feature';
   if (/\bdefined project\b/.test(name)) return 'area';
   if (/\bongoing\b/.test(name)) return 'embedded';
@@ -524,6 +599,182 @@ const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
 
+/* Sheets set one item per row, title beside its words (OfferSheet `rows`): /clients' "What clients
+   have asked us to do", whose items are several sentences naming clients (owner, 4 Nov 2026). */
+/**
+ * Each Why Tcules reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each
+ * title gets an inline icon"). The same six reasons on every page that carries the band.
+ */
+const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+  'Fluent in SaaS': 'layers',
+  'Idea to launch': 'flag',
+  'Craft people notice': 'eye',
+  'Evidence before screens': 'clipboard-check',
+  'Seen your problem before': 'users-group-rounded',
+  'Start small': 'hand-shake',
+};
+
+/**
+ * "Why founders and product teams choose Tcules", on every page that repeats it (owner, 4 Nov 2026:
+ * the homepage's design carries across): the heading at the left with its way deeper under it, the
+ * six reasons down the right in halves, one ruled row each, its glyph inline before its title and its
+ * sentence under it (OfferSheet `list`). A reason whose title has no glyph sets the whole list
+ * without glyphs, so nothing is dropped and the set never mixes.
+ */
+export function WhyTculesBand({
+  band,
+  surface,
+}: {
+  band: CorpusBand;
+  surface?: 'paper' | 'tint';
+}) {
+  const parts = sheetParts(band);
+  /* The run-in's closing full stop is its punctuation, not part of the reason's name. */
+  const titled = parts.items.map((item) => ({
+    ...item,
+    title: item.title?.replace(/\.$/, ''),
+  }));
+  const glyphs = titled.every((item) => item.title && WHY_GLYPHS[item.title]);
+  const items = titled.map((item) =>
+    glyphs && item.title ? { ...item, icon: WHY_GLYPHS[item.title] } : item,
+  );
+  const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <OfferSheet
+      {...head(band)}
+      arrangement="list"
+      surface={surface}
+      lead={parts.lead}
+      items={items}
+      note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+    />
+  );
+}
+
+/**
+ * The plan shape of "Three ways to work with us" (owner, 5 Nov 2026: "a pricing component without
+ * literal prices"): each option an optional italic label line, its bold name, its checklist and its
+ * own link, in that order; then the set's closing line and its links. Null unless every option has a
+ * checklist, so a band authored the older way keeps its old reading.
+ */
+function planOptions(band: CorpusBand): {
+  plans: {
+    eyebrow?: string;
+    title: string;
+    /* The words after the bold name ("Try us on one real problem"), one line under it. */
+    body?: readonly InlineRun[];
+    checklist: ReactNode[];
+    link?: { labelText: string; href: string };
+  }[];
+  close: InlineRun[][];
+  links: { labelText: string; href: string }[];
+} | null {
+  const blocks = band.blocks.filter((block) => block.type !== 'comment');
+  const plans: NonNullable<ReturnType<typeof planOptions>>['plans'] = [];
+  const close: InlineRun[][] = [];
+  const links: { labelText: string; href: string }[] = [];
+  let eyebrow: string | undefined;
+  for (const [index, block] of blocks.entries()) {
+    const current = plans.at(-1);
+    const lead = leadOf(block);
+    const line = italicLine(block);
+    if (line && blocks[index + 1] && leadOf(blocks[index + 1]!)) {
+      eyebrow = line;
+    } else if (lead) {
+      plans.push({
+        ...(eyebrow ? { eyebrow } : {}),
+        title: labelTitle(lead.label).replace(/\.$/, ''),
+        ...(inlineToText(lead.body).trim() ? { body: lead.body } : {}),
+        checklist: [],
+      });
+      eyebrow = undefined;
+    } else if (block.type === 'list' && current && current.checklist.length === 0) {
+      current.checklist = block.items.map((runs) => renderInline(runs));
+    } else if (block.type === 'links' && current && !current.link && close.length === 0) {
+      current.link = block.links[0];
+    } else if (block.type === 'paragraph') {
+      close.push(block.runs);
+    } else if (block.type === 'links') {
+      links.push(...block.links);
+    }
+  }
+  return plans.length >= 2 && plans.every((plan) => plan.checklist.length > 0)
+    ? { plans, close, links }
+    : null;
+}
+
+/** A carded option's glyph, by its name as authored (owner, 4 Nov 2026: "icons or small graphics"). */
+const OPTION_GLYPHS: Readonly<Record<string, IconName>> = {
+  'A pilot project': 'flag',
+  'A defined project': 'clipboard-check',
+  'An ongoing partnership': 'refresh',
+};
+
+/**
+ * Sheets that carry a glyph per item, by band id, with the arrangement the glyphs sit in. Each glyph by
+ * the item's title, as authored; a title the copy renames falls back to no glyph and the set warns as
+ * mixed. Every other sheet keeps its plain grid.
+ *
+ *   rows  one item per row, title beside its words, the glyph inline before the title
+ *         (decisions/2026-11-04-sheet-row-glyph-sits-inline): /clients' "What clients have asked us
+ *         to do", whose items are several sentences naming clients (owner, 4 Nov 2026).
+ *   list  the Why Tcules list (decisions/2026-11-04-why-tcules-is-a-list): heading and lead in the first
+ *         half, the items down the second, one ruled row each, the glyph inline before the title.
+ *         /future-interfaces-lab/join "Why join" (owner, 4 Nov 2026, pass 2: "why tcules style list").
+ *   grid  the glyph heads each item, over its title and words, no hairline or mark. No band uses it
+ *         since pass 2; the arrangement stays in OfferSheet (specimen 8).
+ */
+const SHEET_GLYPHS: Readonly<
+  Record<
+    string,
+    { arrangement: 'grid' | 'rows' | 'list'; icons: Readonly<Record<string, IconName>> }
+  >
+> = {
+  'product-responsibility': {
+    arrangement: 'rows',
+    icons: {
+      'Shape a new product': 'ruler-pen',
+      'Improve software customers already rely on': 'refresh-square',
+      'Design AI into the product': 'stars',
+      'Carry the design into working software': 'code-square',
+      'Work as part of an internal product team': 'users-group-rounded',
+      "Find out what's wrong before fixing it": 'magnifier-bug',
+    },
+  },
+  /* Five reasons to join, set as Why Tcules is (owner, 4 Nov 2026, pass 2: "why tcules style list";
+     decisions/2026-11-04-why-tcules-is-a-list): the heading and its lead in the first half, the
+     reasons down the second, one ruled row each, the glyph inline before the title. */
+  'why-join': {
+    arrangement: 'list',
+    icons: {
+      'Real build pressure': 'clock-circle',
+      'Direct critique': 'chat-round-dots',
+      'Work you can show': 'monitor',
+      'Small serious cohort': 'users-group-rounded',
+      'Product-level thinking': 'layers',
+    },
+  },
+};
+
+/**
+ * A close whose ask is the case index, set as the cases it leads to (owner, 4 Nov 2026: /clients' "Case
+ * studies behind the client names"). The copy names no case, so the page picks them here, by the client
+ * name routes.ts files the case under; the cards are the 3-column case grid (treatment rules § 1), the
+ * paragraph is the lead without its link, and the link is the centred action under the cards.
+ */
+/**
+ * A prose band whose sentences are each about one named client, set as list cards beside the head
+ * (owner 4 Nov 2026, /clients). One title per sentence, in order: the client's name, words the
+ * sentence already carries. The sentence is the card's body, verbatim, links kept.
+ */
+const SENTENCE_ROWS: Readonly<Record<string, readonly string[]>> = {
+  '/clients#returning-clients': ['Primelis', 'Benchmark Gensuite'],
+};
+
+const CLOSE_CASES: Readonly<Record<string, readonly string[]>> = {
+  '/clients#case-studies': ['Doodle', 'Benchmark Gensuite', 'Eden AI'],
+};
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -533,10 +784,18 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
   switch (unit.kind) {
     case 'faq':
       return (
-        <ContentSection {...head(band)} data-band="D-faq" align="center">
-          <ContentSectionText>
-            <FaqItems band={band} />
-          </ContentSectionText>
+        /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
+           decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
+           every page. */
+        <ContentSection
+          {...head(band)}
+          data-band="D-faq"
+          surface={unit.surface}
+          arrangement="beside"
+          split="halves"
+          footer={faqFooter(band)}
+        >
+          <FaqItems band={band} />
         </ContentSection>
       );
 
@@ -567,14 +826,62 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        round 7; decisions/2026-10-30-what-you-get-label-rows): the deliverables, then who does the
        work, what we need and where our part stops, each part's title in a label column, the last
        three each led by its drawing. The sheet stands wherever a drawing is missing. */
+    case 'catalog':
+      return <CatalogBand band={band} ctx={ctx} />;
     case 'outcomes':
-    case 'set':
-    case 'catalog': {
+    case 'set': {
       const scenes = (title: string) => sceneFor(ctx, band, title);
-      if (band.id === 'what-you-get') {
+      if (isWhatYouGet(band)) {
         return <WhatYouGetBand band={band} scenes={scenes} />;
       }
-      return <SheetBand band={band} scenes={scenes} />;
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'list-beside') {
+        return <ListBesideBand band={band} icons={glyphs.icons} />;
+      }
+      if (glyphs?.arrangement === 'tiles') {
+        return <GlyphTilesBand band={band} icons={glyphs.icons} surface={unit.surface} />;
+      }
+      /* A few peers beside one studio photograph (images.ts PHOTO_BESIDE): the head and the items in
+         the copy column as the media split's own tiles (the two-reasons B band's shape), the photograph
+         in the other track. No glyphs: the photograph is the band's picture. */
+      const photo = photoBeside(page.route, band.id);
+      if (photo) {
+        const parts = sheetParts(band);
+        return (
+          <ContentSection
+            {...head(band)}
+            data-band="B"
+            surface={unit.surface}
+            arrangement="media"
+            media={{ image: photo, side: 'end', weight: 'photo', head: 'lg' }}
+          >
+            <ListTiles
+              rows={parts.items.flatMap((item) =>
+                item.title
+                  ? [
+                      {
+                        title: item.title,
+                        ...(item.bodyHtml
+                          ? { bodyHtml: [item.bodyHtml] }
+                          : { body: item.body }),
+                      },
+                    ]
+                  : [],
+              )}
+            />
+          </ContentSection>
+        );
+      }
+      const cutOuts = itemCutOuts(page.route, band.id);
+      return (
+        <SheetBand
+          band={band}
+          surface={unit.surface}
+          scenes={scenes}
+          {...(cutOuts ? { images: cutOuts } : {})}
+          {...(SHEET_GLYPHS[band.id] ?? {})}
+        />
+      );
     }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */
@@ -592,7 +899,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'challenges':
       return (
         <ChallengesBand
-          page={page}
           band={band}
           claimFigure={ctx.claimFigure}
           ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
@@ -611,14 +917,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return (
         <MethodBand
           band={band}
+          surface={unit.surface}
           scenario={sceneFor(ctx, band, 'scenario')}
           {...(figure ? { figure } : {})}
           {...(METHOD_NOTE_ICON[band.id] ? { noteIcon: METHOD_NOTE_ICON[band.id] } : {})}
         />
       );
     }
-    case 'related':
+    case 'related': {
+      const glyphs = glyphBand(page.route, band.id);
+      if (glyphs?.arrangement === 'role-rows') {
+        return (
+          <RoleRowsBand band={band} icons={glyphs.icons} apply={applicationAnchor(page)} />
+        );
+      }
       return <RelatedBand band={band} />;
+    }
+    case 'example':
+      return <ReportBand band={band} surface={unit.surface} />;
     case 'recognition':
       return <RecognitionBand band={band} />;
     case 'destinations':
@@ -626,23 +942,44 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return hasDestinationGroups(band) ? (
         <DestinationGroupsBand page={page} band={band} />
       ) : (
-        <DestinationsBand band={band} />
+        <DestinationsBand
+          band={band}
+          surface={unit.surface}
+          sceneOf={(title) => sceneFor(ctx, band, title)}
+          covers={itemCovers(page.route, band.id)}
+        />
       );
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
-    case 'text':
+    case 'text': {
+      const clients = SENTENCE_ROWS[`${page.route}#${band.id}`];
+      if (clients) return <SentenceRowsBand band={band} titles={clients} />;
+      const collage = studioCollage(page.route, band.id);
+      if (collage) return <CollageBand band={band} photos={collage} />;
       return (
         <TextBand
           page={page}
           band={band}
+          surface={unit.surface}
           side={unit.side}
           scenario={sceneFor(ctx, band, 'scenario')}
         />
       );
+    }
     case 'note':
       return <NoteBand band={band} />;
-    case 'close':
-      return <CloseBand page={page} band={band} />;
+    case 'close': {
+      const picks = CLOSE_CASES[`${page.route}#${band.id}`];
+      if (picks) return <CaseLinksBand band={band} ctx={ctx} names={picks} />;
+      /* Two closes on one island (plan.ts PAIRED_CLOSES): this band's ask, then its partner's. */
+      const pairId = pairedCloseOf(page.route, band.id);
+      const pair = pairId ? page.bands.find((other) => other.id === pairId) : undefined;
+      if (pair) return <PairedCloseBand page={page} band={band} second={pair} />;
+      /* A close the page draws: its sentence beside its one figure. */
+      const figure = sceneFor(ctx, band, 'figure');
+      if (figure) return <CloseFigureBand band={band} scene={figure} surface={unit.surface} />;
+      return <CloseBand page={page} band={band} surface={unit.surface} />;
+    }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
        product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
@@ -720,7 +1057,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       /* The 26 Oct copy: a lead paragraph, three `###` cases, and on some pages a closing link line
          after the last case ("See all case studies"), which is the band's action (component-map C3). */
       const caseLead = leadText(band);
-      const closing = closingCaseLinks(band);
+      const cases = band;
+      const closing = closingCaseLinks(cases);
+      const set = <CaseSet ctx={ctx} band={cases} />;
       return closing.length > 0 ? (
         <ContentSection
           {...head(band)}
@@ -729,11 +1068,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           actionsAt="end"
           actions={<LinkActions links={closing} />}
         >
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       ) : (
         <ContentSection {...head(band)} data-band="M" lead={caseLead}>
-          <CaseSet ctx={ctx} band={band} />
+          {set}
         </ContentSection>
       );
     }
@@ -744,17 +1083,95 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        buttons split up and down is horrible design… an island section with that title and a button to
        the contact page"). */
     case 'tiles': {
+      /* The plan cards (owner, 5 Nov 2026): eyebrow, name, checklist and the option's own outline
+         action; the closing line and its links are the compact ink island under the set. */
+      const planned = planOptions(band);
+      if (planned) {
+        const ask = planned.links.find(isAskLink);
+        const others = planned.links.filter((link) => !isAskLink(link));
+        const words = planned.close.length
+          ? splitAsk(planned.close.map((runs) => inlineToText(runs)).join(' '))
+          : undefined;
+        return (
+          <EngagementOptions
+            {...head(band)}
+            surface={unit.surface}
+            arrangement="plans"
+            options={planned.plans.map((plan) => ({
+              ...(plan.eyebrow ? { eyebrow: plan.eyebrow } : {}),
+              title: plan.title,
+              body: plan.body ? renderInline(plan.body) : null,
+              checklist: plan.checklist,
+              action: plan.link ? (
+                <Button
+                  as="a"
+                  href={plan.link.href}
+                  emphasis="outline"
+                  size="md"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {plan.link.labelText}
+                </Button>
+              ) : undefined,
+            }))}
+            note={
+              words && ask ? (
+                <CtaSection
+                  id={`${band.id}-ask`}
+                  data-band="onward"
+                  arrangement="open"
+                  density="compact"
+                  inBand
+                  heading={words.heading}
+                  body={words.lead ? [words.lead] : undefined}
+                  actions={
+                    others[0]
+                      ? [
+                          { label: ask.labelText, href: ask.href },
+                          {
+                            label: others[0].labelText.replace(/\s*→\s*$/, ''),
+                            href: others[0].href,
+                          },
+                        ]
+                      : [{ label: ask.labelText, href: ask.href }]
+                  }
+                />
+              ) : undefined
+            }
+          />
+        );
+      }
       const opening = leadingParagraphs(band);
       const closing = closingNote(band);
-      const terms = [...closing.rest, ...trailingParagraphs(band)];
-      const links = bandLinks(band);
+      const trailing = [...closing.rest, ...trailingParagraphs(band)];
+      /* Links by role, never by position (owner, 3 Nov 2026): the page link ("See how we work") is
+         the head's action, the ask ("Book a call", to the form) its own island after the band. */
+      const ask = askLinkIn(band);
+      const links = bandLinks(band).filter((link) => !isAskLink(link));
+      /* The v2.1 copy (4 Nov 2026) closes the set on a plain line before its links ("Not sure which
+         suits you? Tell us about the product, and we'll suggest one."): with an ask, that line is the
+         compact island's words, and both links its actions, the ask first. A term is labelled
+         ("*Working hours:* …"), so an unlabelled last line beside an ask is the ask's. */
+      const lastLine = trailing.at(-1);
+      const askWords =
+        ask && lastLine && !factOf(lastLine) && trailing.some((runs) => factOf(runs))
+          ? splitAsk(inlineToText(lastLine))
+          : undefined;
+      const terms = (askWords ? trailing.slice(0, -1) : trailing).map((runs) => {
+        const fact = factOf(runs);
+        return fact ? { label: fact.label, body: fact.body } : { body: renderInline(runs) };
+      });
       const options =
         leads(band).length > 0
-          ? leads(band).map((row) => ({
-              title: row.title,
-              body: renderInline(row.body),
-              scope: scopeOf(row.title),
-            }))
+          ? leads(band).map((row) => {
+              const eyebrow = eyebrowFor(band, row.title);
+              return {
+                ...(eyebrow ? { eyebrow } : {}),
+                title: row.title,
+                body: renderInline(row.body),
+                scope: scopeOf(row.title),
+              };
+            })
           : listOptions(band).length > 0
             ? listOptions(band)
             : itemOptions(band);
@@ -770,6 +1187,38 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           (('more' in option && Array.isArray(option.more) && option.more.length > 0) ||
             ('facts' in option && Array.isArray(option.facts) && option.facts.length > 0)),
       );
+      /* Options that each name their kind in a label line and are told in one sentence are cards
+         (owner, 4 Nov 2026, homepage pass: "cards that look like cards"); no drawing. */
+      /* And the repeated "Three ways to work with us" band, wherever it appears (owner, 4 Nov 2026:
+         the homepage's cards carry across), with or without the label lines. */
+      const carded =
+        !rich &&
+        options.length > 0 &&
+        /* /how-we-work's own "Three ways to work with us" is the same three options
+           (decisions/2026-11-04-three-ways-cards). */
+        (band.id === 'how-we-work-together' ||
+          band.id === 'engagement-shapes' ||
+          options.every((option) => 'eyebrow' in option && Boolean(option.eyebrow)));
+      const compactAsk =
+        askWords && ask ? (
+          <CtaSection
+            id={`${band.id}-ask`}
+            data-band="onward"
+            arrangement="open"
+            density="compact"
+            inBand
+            heading={askWords.heading}
+            body={askWords.lead ? [askWords.lead] : undefined}
+            actions={
+              links[0]
+                ? [
+                    { label: ask.labelText, href: ask.href },
+                    { label: links[0].labelText.replace(/\s*→\s*$/, ''), href: links[0].href },
+                  ]
+                : [{ label: ask.labelText, href: ask.href }]
+            }
+          />
+        ) : undefined;
       return (
         <Fragment>
           {/* A rich set compares (owner, 1 Nov 2026, /how-we-work: picked over the rows, which stand in
@@ -778,9 +1227,26 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={options}
-            arrangement={rich ? 'compare' : 'grid'}
-            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            options={
+              carded
+                ? /* A card's name drops the run-in's closing full stop: its punctuation, not the name. */
+                  options.map((option) => {
+                    const title = option.title.replace(/\.$/, '');
+                    /* "A pilot project, at a fixed price": the option is named before its terms. */
+                    const glyph =
+                      OPTION_GLYPHS[title] ?? OPTION_GLYPHS[title.split(',')[0]?.trim() ?? ''];
+                    return {
+                      ...option,
+                      scope: undefined,
+                      title,
+                      ...(glyph ? { icon: <Icon name={glyph} size="xl" /> } : {}),
+                    };
+                  })
+                : options
+            }
+            arrangement={rich ? 'compare' : carded ? 'cards' : 'grid'}
+            terms={terms}
+            note={compactAsk}
             closing={
               closing.note
                 ? {
@@ -796,16 +1262,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   }
                 : undefined
             }
-            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+            action={
+              !compactAsk && links.length > 0 ? (
+                <LinkActions links={links.slice(0, 1)} />
+              ) : undefined
+            }
           />
-          {links[1] ? (
-            <CtaSection
-              data-band="L"
-              arrangement="open"
-              heading={links[1].labelText}
-              actions={[{ label: 'Start a project', href: ROUTES.contact }]}
-            />
-          ) : null}
+          {ask && !compactAsk ? <AskIsland link={ask} /> : null}
         </Fragment>
       );
     }
@@ -870,8 +1333,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* M15 — a comparison: a key column against rows, boxed. */
-    case 'table':
+    /* M15 — a comparison: a key column against rows, boxed. A table naming the page's free tools
+       links each to its tool and reads down on a phone (withToolKeyLinks). */
+    case 'table': {
+      const toolTable = withToolKeyLinks(page, band);
+      if (toolTable) return <TableBand band={toolTable} narrow="read-down" />;
       return ctx.scenes?.items[band.id] &&
         !sceneFor(ctx, band, 'agree') &&
         blocksOf(band, 'table').length > 0 ? (
@@ -889,6 +1355,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           agreement={sceneFor(ctx, band, 'agree')}
         />
       );
+    }
 
     /* What you receive: a list of deliverables, with the product shot beside it. */
     /* What you receive — the deliverables as ONE offer (OfferSheet, as "What you get" on the service
@@ -926,6 +1393,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
+      /* The repeated Why Tcules band takes the homepage's list (owner, 4 Nov 2026). */
+      if (band.id === 'why-tcules') {
+        return (
+          <WhyTculesBand band={band} surface={unit.surface === 'tint' ? 'tint' : 'paper'} />
+        );
+      }
       /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
          closing links. One isometric illustration per reason, band scale (`figureSize="lg"`), never
          a case cover or a figure panel (decisions/2026-10-30-reasons-take-illustrations): the case
@@ -962,16 +1435,27 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             .join(' ');
           return { bodyHtml, example: claimExample(example.runs) };
         };
+        /* A reason carried by a client's words (the 3 Nov copy): the quote supports the claim under it. */
+        const quoteOf = (title: string) =>
+          authored
+            .get(title)
+            ?.find(
+              (block): block is Extract<CorpusBlock, { type: 'quote' }> =>
+                block.type === 'quote',
+            );
+        const wide = bandIllustration(page.route, band.id);
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              {...(wide ? { bandFigure: { ...wide, alt: '' } } : {})}
               figureSize="lg"
               lead={parts.lead}
               action={action}
               items={titled.map((item) => {
-                const drawn = ctx.reasonFigure?.(item.title!, ground);
+                /* Under a band figure the reasons are words only: no per-reason drawing. */
+                const drawn = wide ? undefined : ctx.reasonFigure?.(item.title!, ground);
                 const parted = split(item.title!);
                 const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
@@ -981,10 +1465,18 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                   ) : (
                     (item.body ?? '')
                   ),
-                  ...(parted ? { example: <ClaimProof example={parted.example} /> } : {}),
-                  figure: drawn
-                    ? { ...drawn, alt: '', kind: 'illustration' as const }
-                    : { ...placeholderIllustration(item.title!), alt: '' },
+                  ...(parted
+                    ? { example: <ClaimProof example={parted.example} /> }
+                    : quoteOf(item.title!)
+                      ? { example: <SupportQuote block={quoteOf(item.title!)!} /> }
+                      : {}),
+                  ...(wide
+                    ? {}
+                    : {
+                        figure: drawn
+                          ? { ...drawn, alt: '', kind: 'illustration' as const }
+                          : { ...placeholderIllustration(item.title!), alt: '' },
+                      }),
                 };
               })}
             />
@@ -1309,13 +1801,60 @@ function ctaTracks(cells: number): 3 | 4 {
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
+/**
+ * An expertise page's "What we design" (owner, 2 Nov 2026: drawn tiles, as the services hub): each kind
+ * of product a Bento tile — its drawing (the labelled plate until it is drawn), the kind as authored,
+ * and what follows the ` · ` (the client, or the promise) as the body. Where the copy links the client
+ * to a case study, the whole tile is that link; a kind with no case is a still tile. Words unchanged.
+ */
+function CatalogBand({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
+  const parts = sheetParts(band);
+  const list = blocksOf(band, 'list')[0];
+  const items = parts.items.map((item, index) => {
+    const runs = list?.items[index] ?? [];
+    const link = linksIn(runs)[0];
+    const title = item.title ?? item.body ?? item.id ?? '';
+    const note = plain(runs).split(' · ').slice(1).join(' · ').trim();
+    const scene = sceneFor(ctx, band, title);
+    return {
+      id: title,
+      title,
+      ...(note ? { body: note.charAt(0).toUpperCase() + note.slice(1) } : {}),
+      ...(link ? { href: link.href } : {}),
+      ...(scene ? { scene } : {}),
+    };
+  });
+  const rest = [...parts.intro, ...parts.after];
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="catalog-tiles"
+      lead={parts.lead}
+      footer={
+        rest.length > 0 ? (
+          <BandBody blocks={rest} labelledBy={head(band).headingId} />
+        ) : undefined
+      }
+    >
+      <Bento tracks={items.length === 4 || items.length >= 7 ? 4 : 3} items={items} />
+    </ContentSection>
+  );
+}
+
+const tileAction = tileActionFor;
+
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
      column links each service and whose second column says who it is for (component-map C8), or as
      a link row of names alone. */
   const table = blocksOf(band, 'table')[0];
+  /* A table of options to choose between (an audit's "Option | What it gives | Best for", owner,
+     2 Nov 2026: "the new pattern we made for services hub"): every row is a tile, the ones with no
+     link too — the page's own option and those outside the studio are still tiles, never dropped. */
+  const optionTable =
+    table !== undefined && /^(option|options)$/i.test(plain(table.header[0] ?? []).trim());
   const rows: {
-    href: string;
+    href?: string;
     title: string;
     body: string;
     detail?: { label: string; text: string };
@@ -1326,13 +1865,23 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           row[0]?.flatMap((run) =>
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
-        return link && link.type === 'link'
+        const detail = routerDetail(table, row);
+        if (link && link.type === 'link') {
+          return [
+            {
+              href: link.href,
+              title: plain(link.children),
+              body: routerBody(table, row),
+              ...(detail ? { detail } : {}),
+            },
+          ];
+        }
+        return optionTable
           ? [
               {
-                href: link.href,
-                title: plain(link.children),
+                title: plain(row[0] ?? []).trim(),
                 body: routerBody(table, row),
-                ...(routerDetail(table, row) ? { detail: routerDetail(table, row) } : {}),
+                ...(detail ? { detail } : {}),
               },
             ]
           : [];
@@ -1399,8 +1948,22 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. Services
      named as a set are always the service tile, each with its own scene, wherever they are named
      (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
-  const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
-  if (rows.length >= 3 && scenes.every(Boolean)) {
+  const scenes = rows.map((row) =>
+    row.href
+      ? (sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href))
+      : (sceneFor(ctx, band, row.title) ??
+        /* the page's own option takes the page's own drawing */
+        (ctx.page.name.toLowerCase() === row.title.toLowerCase()
+          ? serviceSceneFor(ctx.page.route)
+          : undefined)),
+  );
+  /* An option table always takes the tiles, from two rows (one full row of two split tiles; owner,
+     2 Nov 2026: "the new pattern we made for services hub", on every audit page, 4 Nov 2026): a
+     missing drawing is the labelled empty plate. */
+  if (
+    (rows.length >= 3 || (optionTable && rows.length >= 2)) &&
+    (optionTable || scenes.every(Boolean))
+  ) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
@@ -1461,20 +2024,24 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
         }
         cta={cta}
         items={rows.map((row, index) => ({
-          id: row.href,
+          id: row.href ?? row.title,
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
-          /* The split tile's action: the service tile's one wording (ServiceTile `action`). */
-          ...(row.detail ? { detail: { ...row.detail, action: 'Explore the service' } } : {}),
-          href: row.href,
-          scene: scenes[index] as SketchName,
+          /* The split tile's action: the service tile's one wording (ServiceTile `action`), named
+             for what the link opens. */
+          ...(row.detail ? { detail: { ...row.detail, action: tileAction(row.href) } } : {}),
+          ...(row.href ? { href: row.href } : {}),
+          ...(scenes[index] ? { scene: scenes[index] as SketchName } : {}),
         }))}
       />,
       routes ? undefined : (coda ?? closingFooter),
     );
   }
-  const glyphs = rows.map((row) => glyphForRoute(row.href));
-  const items: BlockCardSetItem[] = rows.map((row, index) => ({
+  const linked = rows.filter((row): row is (typeof rows)[number] & { href: string } =>
+    Boolean(row.href),
+  );
+  const glyphs = linked.map((row) => glyphForRoute(row.href));
+  const items: BlockCardSetItem[] = linked.map((row, index) => ({
     id: row.href,
     title: row.title,
     ...(runOn(row) ? { body: sentence(runOn(row)) } : {}),
@@ -1487,7 +2054,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
       <BlockCardSet
         items={items}
         lead="none"
-        across={rows.length % 4 === 0 ? 4 : 3}
+        across={linked.length % 4 === 0 ? 4 : 3}
         cue="title"
         scroll="never"
       />,
@@ -1496,7 +2063,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   }
   return wrap(
     <Layout as="ul" rowGap="none">
-      {rows.map((row) => (
+      {linked.map((row) => (
         <ListCard
           key={row.href}
           titleAs="h3"
@@ -1697,5 +2264,242 @@ function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
         <Proof quote={quote} align="center" />
       )}
     </Section>
+  );
+}
+
+/** CLOSE_CASES' band: the picked cases as the 3-column grid, the close's link centred under them. */
+function CaseLinksBand({
+  band,
+  ctx,
+  names,
+}: {
+  band: CorpusBand;
+  ctx: OfferContext;
+  names: readonly string[];
+}) {
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
+  const link = paragraphs
+    .flatMap((block) => block.runs)
+    .find((run): run is Extract<typeof run, { type: 'link' }> => run.type === 'link');
+  const lead = paragraphs
+    .map((block) =>
+      plain(block.runs.filter((run) => run.type !== 'link'))
+        .replace(/\s+/g, ' ')
+        .trim(),
+    )
+    .filter((text) => text.length > 0)
+    .join(' ');
+  const items: BlockCardSetItem[] = names.flatMap((name) => {
+    const found = caseStudyLink(name);
+    if (!found) return [];
+    const ref = ctx.caseRefs[found.href];
+    return [
+      {
+        id: name,
+        title: ref?.title ?? name,
+        media: { type: 'image' as const, image: caseCover(name, ref) },
+        href: found.href,
+      },
+    ];
+  });
+  const set = (
+    <BlockCardSet lead="none" scroll="never" cue="title" across={3} size="md" items={items} />
+  );
+  const leadProp = lead ? { lead } : {};
+  if (!link) {
+    return (
+      <ContentSection {...head(band)} data-band="M" {...leadProp}>
+        {set}
+      </ContentSection>
+    );
+  }
+  return (
+    <ContentSection
+      {...head(band)}
+      data-band="M"
+      {...leadProp}
+      actionsAt="end"
+      actions={
+        <CtaRow rule={false} actions={[{ label: plain(link.children), href: link.href }]} />
+      }
+    >
+      {set}
+    </ContentSection>
+  );
+}
+
+function SentenceRowsBand({ band, titles }: { band: CorpusBand; titles: readonly string[] }) {
+  const sentences = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? sentencesOf(block.runs) : [],
+  );
+  return (
+    <ContentSection {...head(band)} data-band="C-list" arrangement="beside">
+      <Layout as="ul" rowGap="none">
+        {sentences.map((sentence, index) => (
+          <ListCard
+            key={titles[index] ?? sentence.text}
+            titleAs="h3"
+            title={titles[index] ?? sentence.text}
+            {...bodyOf(sentence.runs)}
+          />
+        ))}
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/**
+ * A band that shows the studio itself, as the studio collage (decisions/2026-11-03-studio-collage):
+ * the heading and paragraphs as authored in the top-left corner, six studio photographs round them in
+ * an L (images.ts STUDIO_COLLAGE). Its links, if any, are the band's way on under the words, as home's.
+ */
+function CollageBand({ band, photos }: { band: CorpusBand; photos: CollagePhotos }) {
+  const paragraphs = band.blocks.flatMap((block) =>
+    block.type === 'paragraph' ? [block] : [],
+  );
+  const links = band.blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
+  return (
+    <Section id={band.id} data-band="B-collage" aria-labelledby={headingIdOf(band)}>
+      <Collage
+        heading={band.headingText}
+        headingId={headingIdOf(band)}
+        photos={photos}
+        actions={links.length > 0 ? <LinkActions links={links} /> : undefined}
+      >
+        <Prose
+          html={paragraphs.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')}
+        />
+      </Collage>
+    </Section>
+  );
+}
+
+/**
+ * A checklist a reader checks themselves against, beside its heading (glyph-bands.ts `list-beside`):
+ * the /about "Who uses Tcules" composition (decisions/2026-11-01-bodiless-row-title-two-lines). The head
+ * in the start half, the items as bodiless rows down the end half, each led by its glyph; the band's
+ * closing line under the list at body. Words as authored, full stops kept.
+ */
+/**
+ * Peers that are kinds of people, as text cards that look like cards (glyph-bands.ts `tiles`;
+ * /future-interfaces-lab/join "Who we look for", owner 4 Nov 2026): BlockCard `tile`, its glyph on its
+ * own row over the title, the item's words under it, all three at equal weight under the head. Every
+ * word as authored; a title with no glyph sets the whole set without glyphs, so the set never mixes.
+ */
+function GlyphTilesBand({
+  band,
+  surface,
+  icons,
+}: {
+  band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const parts = sheetParts(band);
+  const glyphed = parts.items.every((item) => item.title && icons[item.title]);
+  const items: BlockCardSetItem[] = parts.items.map((item, index) => ({
+    id: item.id ?? item.title ?? String(index),
+    title: item.title ?? item.body ?? '',
+    ...(item.title && item.bodyHtml
+      ? { bodyHtml: [item.bodyHtml] }
+      : item.title && item.body
+        ? { body: item.body }
+        : {}),
+    ...(glyphed && item.title ? { icon: icons[item.title] } : {}),
+  }));
+  return (
+    <ContentSection surface={surface} {...head(band)} data-band="glyph-tiles" lead={parts.lead}>
+      <BlockCardSet lead="none" across={items.length >= 4 ? 2 : 3} frame="tile" items={items} />
+    </ContentSection>
+  );
+}
+
+function ListBesideBand({
+  band,
+  icons,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+}) {
+  const items = band.blocks.flatMap((block) => (block.type === 'list' ? block.items : []));
+  const lines = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
+  return (
+    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside" split="halves">
+      <Layout as="ul" rowGap="none">
+        {items.map((runs, index) => {
+          const title = plain(runs);
+          const icon = icons[title];
+          return (
+            <ListCard
+              key={index}
+              size="md"
+              titleAs="h3"
+              title={title}
+              {...(icon ? { marker: { type: 'icon' as const, name: icon } } : {})}
+            />
+          );
+        })}
+      </Layout>
+      {lines.length > 0 ? (
+        <ContentSectionText>
+          <Prose html={lines.map((block) => `<p>${inlineToHtml(block.runs)}</p>`).join('')} />
+        </ContentSectionText>
+      ) : null}
+    </ContentSection>
+  );
+}
+
+/**
+ * The roles a reader picks from (glyph-bands.ts `role-rows`; /careers' open roles), the page's job:
+ * OfferSheet `rows`, one role a row across the column, its discipline's glyph inline before the title
+ * (decisions/2026-11-04-sheet-row-glyph-sits-inline), the title a link to the application on the page
+ * with that role's chip picked (`choice`), and the meta line's facts beside it, each kept whole. Four
+ * full-width rows give each title room and an obvious target, where four quarter tiles left the band
+ * the quietest on the page and broke "In-/office" (critic, 4 Nov 2026). Every word as authored; the
+ * link is the page's own `#apply`, so nothing is added. A band with no application on the page keeps
+ * plain titles.
+ */
+function RoleRowsBand({
+  band,
+  icons,
+  apply,
+}: {
+  band: CorpusBand;
+  icons: Readonly<Record<string, IconName>>;
+  /** The application band's anchor on this page, if it takes one. */
+  apply?: string;
+}) {
+  const roles = band.blocks.flatMap((block) => {
+    if (block.type !== 'item') return [];
+    const meta = block.blocks.find((inner) => inner.type === 'paragraph');
+    const facts =
+      meta?.type === 'paragraph'
+        ? plain(meta.runs)
+            .split('·')
+            .map((fact) => fact.trim())
+            .filter(Boolean)
+        : [];
+    const icon = icons[facts[0] ?? ''];
+    return [
+      {
+        id: block.headingText,
+        title: block.headingText,
+        ...(facts.length > 0 ? { facts } : {}),
+        ...(icon ? { icon } : {}),
+        ...(apply ? { href: `#${apply}`, choice: enquiryChoiceValue(block.headingText) } : {}),
+      },
+    ];
+  });
+  const lead = band.blocks.find((block) => block.type === 'paragraph');
+  return (
+    <OfferSheet
+      {...head(band)}
+      {...(lead?.type === 'paragraph' ? { lead: plain(lead.runs) } : {})}
+      items={roles}
+      arrangement="rows"
+    />
   );
 }

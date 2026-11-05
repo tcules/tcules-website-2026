@@ -95,7 +95,7 @@ Questions we are testing here: can AI help review a product without dulling a de
 
 ### Matter Design System
 
-A free Figma design system we made and published. Colours, spacing and other values are named for their purpose, and components are built from smaller parts. [Explore Matter](/matter-design-system)
+A free Figma design system we made and published. Colours, spacing and other values are named for their purpose, and components are built from smaller parts. [See Matter Design System →](/matter-design-system)
 
 ### AI Design Audit Agent
 

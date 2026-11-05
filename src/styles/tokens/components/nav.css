@@ -12,8 +12,7 @@
    Naming: --nav-{part}-{modifier}-{state}.
      item          a top-level bar item — the disclosure trigger or the plain link
      row           a link row inside a plate column or a sheet pane
-     rail          the plate's third column, in Services only
-     card          a rail card: an image slot and a title
+     aside         the plate's right-hand region: the way onward, on a deeper ground
      plate         the desktop panel — one box, three sections, morphing between them
      sheet         the mobile bottom sheet
      panel         both of the above, where the value is the same for each
@@ -77,34 +76,12 @@
   --nav-item-icon-size: var(--icon-size-14);
 
   /* ── The plate ───────────────────────────────────────────────────────────────
-     THREE WIDTHS, and they are the whole reason the plate is not a Section. Services
-     carries two columns and the rail and fills the content column; Expertise carries two
-     columns and no rail; Insights carries two short ones. A plate held at the widest for all
-     three shows hundreds of pixels of empty ground next to Insights, which reads as a mistake
-     rather than as restraint. T-shirt names, per the rule that a component SIZE takes an ordinal
-     and only a shared DISTANCE takes a role name.
-
-     ALL THREE ARE TUNED AGAINST --nav-row-text, and that is the thing to know before changing any
-     of them. At 18px rows they were 1240, 880 and 720. lg came down again, 1120 to 1056, when the
-     rail's seam was halved — the 64px that came out of the seam came out of the PLATE rather than
-     going into tracks that already had slack, which is the only way to fix an oversized gap without
-     opening another one somewhere else. At 14px each left a column holding far less
-     than its track: 191px of slack in Services' first column against a 148px label, 83px in
-     Expertise, 163px in Insights — the Insights plate was better than half air. So all three came
-     down, and Services' [5,3] pane ratio came down with it so the cut lands on the columns rather
-     than on the rail (see PlatePane).
-
-     lg USED TO BE 1240 to match --sec-max-inline, so the widest plate lined up with every band on
-     the page behind it. That was worth having when the plate was full; at 14px it bought an
-     alignment nobody can see through a 20% scrim in exchange for a 255px hole between two lists.
-     The alignment is the thing that was given up here — if the row type ever goes back up, this is
-     the first decision to revisit.
-
-     Re-point the row type and all three want re-measuring: widest label in a column, doubled, plus
-     one --gap-column seam and two --gap-gutter edges. */
-  --nav-plate-width-lg: 1056px;
-  --nav-plate-width-md: 780px;
-  --nav-plate-width-sm: 560px;
+     ONE WIDTH: the content column, so the plate's edges sit on the logo and the CTA in the bar
+     above it (owner, 4 Nov 2026, header round 3). It used to be three (1056, 780, 560), shrunk to
+     each section's content; the aside now gives every section a right-hand region and four groups
+     fill the index, so the column is no longer mostly air. A literal, and a deliberate duplicate of
+     Section's column: a component never reads another component's tokens. */
+  --nav-plate-width: 1240px;
   --nav-plate-radius: var(--radius-8);
   /* The air between the bar's hairline and the plate's top edge. It is a token rather than a bare
      --gap-text at the call site because TWO rules have to agree on it: the stage pads by it, and
@@ -118,8 +95,8 @@
   --nav-plate-morph: var(--duration-slow);
   --nav-plate-fade: calc(var(--nav-plate-morph) / 2);
 
-  /* Cap the plate at the space actually below the bar and let it scroll. Services carries twelve
-     rows and a rail; on a 13" laptop in a browser with two toolbars, the uncapped plate runs
+  /* Cap the plate at the space actually below the bar and let it scroll. Expertise carries twelve
+     rows beside an aside; on a 13" laptop in a browser with two toolbars, the uncapped plate runs
      off the bottom and the last row cannot be reached at all. dvh, not vh, so a mobile
      browser's collapsing chrome does not leave the cap wrong by the height of its own
      address bar.
@@ -133,58 +110,18 @@
     100dvh - var(--nav-bar-height) - var(--nav-rule-width) - var(--nav-plate-inset)
   );
 
-  /* A row inside a plate column or a sheet pane. */
-  --nav-row-padding-block: var(--gap-tight);
-  --nav-row-padding-inline: var(--gap-text);
-  --nav-row-radius: var(--radius-8);
-  /* body-sm, not body-lg. It closes the size gap to the 12px group label above a row to 2px, which
-     is deliberate and survivable only because size is the LEAST of the four things separating the
-     two: the label is mono where the row is sans, uppercase where the row is sentence case,
-     tracked open where the row is not, and a step lighter in ink. Drop any of those three and the
-     column reads flat. */
+  /* A row inside a plate column or a sheet pane. The label is body-sm at medium weight, so a label
+     over its description reads as the title of that line; the description is caption (13). */
   --nav-row-text: var(--text-body-sm);
+  --nav-row-label-weight: var(--font-weight-medium);
+  --nav-row-description-text: var(--text-caption);
+  --nav-row-head-gap: var(--space-6); /* optical: label to its arrow, between inline and tight */
   --nav-row-arrow-size: var(--icon-size-14);
   --nav-row-arrow-travel: var(--space-4); /* optical: the arrow slides in from -4px */
   /* The row's own line box, composed from the two halves of its type role rather than measured.
      A label long enough to wrap keeps its arrow centred on the FIRST line, and centring on a line
      means knowing how tall a line is — which the `font:` composite cannot be asked for back. */
   --nav-row-line: calc(var(--font-size-body-sm) * var(--line-height-body-sm));
-
-  /* The rail — the plate's third column, in Services alone.
-     NO WIDTH TOKEN, and the rail's width is a CONSEQUENCE rather than a decision. The design
-     measured 340px; the arrangement is a Layout ratio instead, because Layout has no fixed-track
-     mode and hand-rolling a grid to get one is what the layout rule prohibits. At `[5, 3]` and a
-     1120 plate that resolves to 308 — near enough the 340 asked for, and deliberately the term the
-     ratio HOLDS STILL when the plate narrows, since the rail is the one column whose width buys
-     something. Recorded in docs/specs/SiteNav.md §12 rather than fixed by reaching around the
-     primitive. */
-  /* h6 — 18px serif medium, the title role that did not exist until this card needed it.
-     
-     The card is the only shape in the rail and its title should be the heaviest text in the pane,
-     but h5 put it at 22 desktop / 20 mobile against 14px rows: a 1.43x step that read as a section
-     heading. Dropping it to body-lg fixed the size and broke the voice — the card is a mono eyebrow
-     above a title, and primitives.css states the canonical stack as mono eyebrow -> serif title ->
-     sans body, so a sans title collapses the middle of it. h6 is 18 AND serif, which is the pairing
-     nothing in the ladder could express before.
-
-     Its tracking companion comes back with it, because h6 has one — `none`, as h5's is. */
-  --nav-rail-title-text: var(--text-h6);
-  --nav-rail-title-tracking: var(--text-h6-tracking);
-
-  /* THE RAIL'S SECONDARY ACTION AND THE SHEET'S BACK CONTROL HAVE NO TOKENS HERE ANY MORE.
-     Both were hand-rolled links reading --nav-rail-action-* and --nav-sheet-back-*; both are
-     `Button emphasis="link"` now, so their type, case, ink, hover and focus all answer to --btn-*.
-     Six tokens went with them, including two per surface block. A component may not read another
-     component's tokens, and a token only this component could read which merely restates what
-     Button already decided is the --sec-gap mistake in a different costume.
-
-     A rail card. The image slot holds its ratio whether or not an image is supplied, so the
-     rail's height does not change the day one lands. */
-  --nav-card-radius: var(--radius-8);
-  --nav-card-padding: var(--gap-text);
-  --nav-card-image-radius: var(--radius-4);
-  --nav-card-image-ratio: 16 / 7;
-  --nav-card-arrow-size: var(--icon-size-16);
 
   /* Labels — a group's name over its links. Mono, uppercase, the same eyebrow role the rest
      of the system uses for a label that is not a link.
@@ -290,10 +227,9 @@
    distinguishes nothing. Blue is what the item becomes when you reach for it, and what the
    CURRENT item holds. The active state is the held second step, matching the button model.
 
-   ROW HOVER IS DIRECTION B, settled: a brandeis-50 fill with the label and the arrow both at
-   brandeis-500, 5.57:1. That is a second hover language beside the bar item's neutral ghost
-   fill, and it is deliberate — a control and a row are different things, and the panel's rows
-   are where the blue is doing the work of saying "this is the destination".
+   ROW HOVER IS A MOVE, not a ground (owner, 4 Nov 2026; decisions 2026-10-19-no-hover-only-
+   grounds): the label takes brandeis-500 and the arrow slides in. The blue is what says "this is
+   the destination", on the plate's ground and on the aside's alike.
 
    The scrim is neutral-950 at 20%. It is written as an rgb() rather than composed from the
    token, because there is no alpha ramp in this system and inventing one for a single value
@@ -309,14 +245,12 @@
   --nav-panel-ground: var(--color-paper);
   --nav-scrim: rgb(27 27 24 / 0.2); /* neutral-950 at 20% */
   --nav-row-label-ink: var(--color-neutral-900); /* 14.62:1 */
-  --nav-row-label-ink-hover: var(--color-brandeis-500); /*  5.57:1 on the fill below */
-  --nav-row-bg-hover: var(--color-brandeis-50);
+  --nav-row-label-ink-hover: var(--color-brandeis-500); /* on paper and on the paper-deep aside */
   --nav-row-arrow-ink: var(--color-brandeis-500);
+  --nav-aside-ground: var(--color-paper-deep);
+  --nav-row-description-ink: var(--color-neutral-700);
   --nav-label-ink: var(--color-neutral-700); /*  8.14:1 */
   --nav-title-ink: var(--color-neutral-900);
-  --nav-card-edge: var(--color-neutral-200);
-  --nav-card-edge-hover: var(--color-brandeis-500);
-  --nav-card-image-ground: var(--color-paper-deep);
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-500);
   --nav-grab-bg: var(--color-neutral-300);
@@ -331,12 +265,12 @@
 
    The FILLS: neutral-100 is already close to this ground, so the item's hover fill goes to
    200 and its active fill from brandeis-50 to 100 — 50 on paper-deep is invisible, which
-   would leave the current item marked by colour alone. The ROW's hover fill steps with it,
-   and its label steps to brandeis-600 to hold 5.99:1 against the deeper fill.
+   would leave the current item marked by colour alone. The ROW's hover label steps to
+   brandeis-600, to hold its contrast on the deeper aside.
 
    The MUTED INKS: neutral-600 on paper-deep is 4.39:1 and FAILS AA, so the label steps to
-   700 (7.27:1). The card's image slot steps to neutral-200, because a paper-deep slot on a
-   paper-deep ground is not a slot.                                                    */
+   700 (7.27:1). The aside steps to neutral-200, because a paper-deep aside on a paper-deep
+   plate is not a region.                                                    */
 [data-surface='tint'] {
   --nav-rule: var(--color-neutral-300);
   --nav-item-fg: var(--color-neutral-900); /* 13.06:1 */
@@ -347,14 +281,12 @@
   --nav-panel-ground: var(--color-paper-deep);
   --nav-scrim: rgb(27 27 24 / 0.2);
   --nav-row-label-ink: var(--color-neutral-900); /* 13.06:1 */
-  --nav-row-label-ink-hover: var(--color-brandeis-600); /*  5.99:1 on the fill below */
-  --nav-row-bg-hover: var(--color-brandeis-100);
+  --nav-row-label-ink-hover: var(--color-brandeis-600); /* on the aside too */
   --nav-row-arrow-ink: var(--color-brandeis-600);
+  --nav-aside-ground: var(--color-neutral-200);
+  --nav-row-description-ink: var(--color-neutral-700);
   --nav-label-ink: var(--color-neutral-700); /*  7.27:1 — 600 would be 4.39:1 */
   --nav-title-ink: var(--color-neutral-900);
-  --nav-card-edge: var(--color-neutral-300);
-  --nav-card-edge-hover: var(--color-brandeis-500);
-  --nav-card-image-ground: var(--color-neutral-200);
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-600);
   --nav-grab-bg: var(--color-neutral-400);
@@ -390,14 +322,12 @@
   --nav-panel-ground: var(--color-neutral-950);
   --nav-scrim: rgb(0 0 0 / 0.5); /* see the header: the only non-palette value in this file */
   --nav-row-label-ink: var(--color-white);
-  --nav-row-label-ink-hover: var(--color-brandeis-300); /*  6.26:1 on the fill below */
-  --nav-row-bg-hover: var(--color-neutral-900);
+  --nav-row-label-ink-hover: var(--color-brandeis-300);
   --nav-row-arrow-ink: var(--color-brandeis-300);
+  --nav-aside-ground: var(--color-neutral-900);
+  --nav-row-description-ink: var(--color-neutral-400);
   --nav-label-ink: var(--color-neutral-500); /*  5.41:1 */
   --nav-title-ink: var(--color-white);
-  --nav-card-edge: var(--color-neutral-800);
-  --nav-card-edge-hover: var(--color-brandeis-300);
-  --nav-card-image-ground: var(--color-neutral-900);
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-300);
   --nav-grab-bg: var(--color-neutral-700);
@@ -425,14 +355,12 @@
   --nav-panel-ground: var(--color-brandeis-500);
   --nav-scrim: rgb(27 27 24 / 0.2);
   --nav-row-label-ink: var(--color-white); /*  6.23:1 */
-  --nav-row-label-ink-hover: var(--color-white); /*  7.59:1 on the fill below */
-  --nav-row-bg-hover: var(--color-brandeis-600);
+  --nav-row-label-ink-hover: var(--color-white); /* the arrow carries the hover on blue */
   --nav-row-arrow-ink: var(--color-white);
+  --nav-aside-ground: var(--color-brandeis-600);
+  --nav-row-description-ink: var(--color-brandeis-100);
   --nav-label-ink: var(--color-brandeis-100); /*  4.91:1 */
   --nav-title-ink: var(--color-white);
-  --nav-card-edge: var(--color-brandeis-400);
-  --nav-card-edge-hover: var(--color-white);
-  --nav-card-image-ground: var(--color-brandeis-600);
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-50);
   --nav-grab-bg: var(--color-brandeis-300);

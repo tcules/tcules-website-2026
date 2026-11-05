@@ -7,8 +7,8 @@
  *   npm run placeholders -- --check exit 1 if either is stale; writes nothing
  *
  * An image slot the corpus does not yet bind is a PLACEHOLDER, not a stock photograph and not a
- * generated image: a neutral panel at the slot's reserved ratio, a hairline, and a label that says
- * what the slot is for ("Image to come · studio photo") and what it must show. The label is part of
+ * generated image: a neutral panel at the slot's reserved ratio, and a short label that says
+ * what the slot is for ("Image to come · studio photo"); what it must show stays in the register. The label is part of
  * the placeholder and not type laid over an image, so ch05's "no type on images" is not engaged.
  * When the real asset lands, the page's record points at it and the register row is deleted; this
  * script then stops drawing the panel.
@@ -103,72 +103,26 @@ for (const [page, bandCell, kindCell, shows, ratioCell] of rows) {
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-/** Greedy word wrap on a character budget. */
-function wrap(s, max) {
-  const lines = [];
-  let line = '';
-  for (const word of s.split(/\s+/)) {
-    if ((line + ' ' + word).trim().length > max && line) {
-      lines.push(line);
-      line = word;
-    } else line = (line + ' ' + word).trim();
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
-function svgFor({ width, height, kind, shows, file }) {
+function svgFor({ width, height, kind, file }) {
   const unit = Math.min(width, height);
   /* An illustration slot is contained, never cropped, and its smallest showing is 168 wide (a hard-parts
      claim's drawing, a home reason): its label is sized for that, so it is legible there. Every other
-     kind is sized off the canvas, as before. */
+     kind is sized off the canvas. */
   const small168 = kind === 'illustration' && file.startsWith('illustration--');
-  const k = width / 168;
-  const pad = small168 ? Math.round(12 * k) : Math.round(unit * 0.06);
-  const small = small168 ? Math.round(8 * k) : Math.round(unit * 0.03);
-  const body = small168 ? Math.round(9 * k) : Math.round(unit * 0.038);
-  /* The label is set in the panel's central square and centred in the panel, because every placement
-     crops: a 3:1 banner is 3:2 on a phone, a 4:5 slot is 6:5 in a photo-weighted split and 4:3 above
-     the copy, a 16:9 cover is 4:5 in a story split. Anchored top-left, the label was the first thing
-     each crop cut (the careers banner at 390, the case index's story cover). The box is the central
-     square less a double pad, so a centre crop down to about 4:5 of the short side keeps the whole
-     label (a 3:2 slot in a `asideFill` aside beside a tall accordion is about 0.9:1 at 1440), and one
-     panel serves every placement of its slot. */
-  const box = small168 ? width - pad * 2 : unit - pad * 4;
-  const x = Math.round((width - box) / 2);
-  const budget = Math.max(24, Math.floor(box / (body * 0.52)));
-  /* The first sentence of the brief, without markup: the panel says what the slot is for, and the
-     full brief lives in the register. */
-  /* The register's FALLBACK row documents itself for the register's reader; its sentence is a note to
-     developers and never a visitor's label, so its panel draws the head alone (review 29 Oct). */
-  const brief = /^FALLBACK\b/.test(shows)
-    ? ''
-    : shows
-        /* A parenthetical that names a frontmatter key ("(frontmatter healthtech_asset; …)") is for the
-       register's reader, not for the panel's. */
-        .replace(/\s*\([^)]*_[^)]*\)/g, '')
-        .replace(/`/g, '')
-        .split(/(?<=\.)\s/)[0];
-  const maxLines = small168 ? 6 : 7;
-  const lines = brief ? wrap(brief, budget).slice(0, maxLines) : [];
+  const size = small168 ? Math.round(6 * (width / 168)) : Math.round(unit * 0.03);
+  /* The panel shows its short label and nothing else (decisions/2026-11-04-placeholders-show-their-
+     label-only, proposed). The brief lives in docs/image-register.md for whoever draws it: printed in
+     the slot, a paragraph of art direction read as broken page copy (matter critic, 4 Nov 2026). The
+     label is centred in the panel, so every crop of the slot keeps it. */
   const head = small168 ? 'Illustration to come' : `Image to come · ${kind}`;
-  /* The label block's height: the head's line, the gap to the brief, then the brief's lines. */
-  const block = lines.length
-    ? small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1)
-    : small;
-  const top = Math.round((height - block) / 2);
-  /* Neutral and unbranded on purpose: a placeholder must never be mistaken for a finished asset. */
-  const tspans = lines
-    .map(
-      (l, i) =>
-        `<tspan x="${x}" dy="${i === 0 ? 0 : Math.round(body * 1.45)}">${esc(l)}${i === maxLines - 1 && wrap(brief, budget).length > maxLines ? '…' : ''}</tspan>`,
-    )
-    .join('');
+  /* The ground is the plate every drawing sits on (paper-deep, #F3F1EA) and the label the warm
+     neutral-600 (#71706A): the warm palette, never a cool grey. No stroke: Media draws the slot's
+     hairline, and a dashed edge inside a rounded crop was clipped into a broken line. Mono label
+     voice, uppercase, tracked as the mono roles are. A literal stack because an <img> SVG cannot
+     read the page's fonts. */
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${esc(head)}">
-<rect width="${width}" height="${height}" fill="#EEF0F3"/>
-<rect x="1" y="1" width="${width - 2}" height="${height - 2}" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="${small} ${small}"/>
-<text x="${x}" y="${top + small}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="${small}" letter-spacing="${(small * 0.1).toFixed(1)}" fill="#4A5361">${esc(head.toUpperCase())}</text>
-<text x="${x}" y="${top + small + Math.round(body * 2.2)}" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="${body}" fill="#2B323D">${tspans}</text>
+<rect width="${width}" height="${height}" fill="#F3F1EA"/>
+<text x="${Math.round(width / 2)}" y="${Math.round(height / 2)}" text-anchor="middle" dominant-baseline="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="${size}" letter-spacing="${(size * 0.1).toFixed(1)}" fill="#71706A">${esc(head.toUpperCase())}</text>
 </svg>
 `;
 }

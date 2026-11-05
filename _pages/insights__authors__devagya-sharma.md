@@ -55,7 +55,7 @@ structured_data:
     - Release acceptance
     - UX debt
   has_part_routes:
-  - /insights/articles/silent-ui-regression-debt
+  - /insights/silent-ui-regression-debt-erodes-adoption-before-it-shows
 release:
   content_state: AUTHOR_PROFILE_DRAFT_2026-10-13
   site_release_state: SITE_RELEASE_HOLD
@@ -86,4 +86,4 @@ The article shows the hidden work a regression adds for customers: retrying a sa
 
 ## Devagya Sharma's article on silent UI regression {#articles}
 
-- **[Silent UI regressions: how to catch them before customers lose confidence](/insights/articles/silent-ui-regression-debt)**
+- **[Silent UI regressions: how to catch them before customers lose confidence](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows)**

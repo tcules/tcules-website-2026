@@ -62,13 +62,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -187,7 +187,7 @@ One question in plain words now opens a working view of the building, with the d
 
 [Follow the product choice](#choice)
 
-[Browse all case studies](/case-studies)
+[See all case studies →](/case-studies)
 
 ## ConnectX at a glance {#case-context}
 
@@ -300,11 +300,11 @@ BuildTwin and Eden AI had the same need: a model's contribution that people coul
 
 [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-[See Product Design](/services/product-design)
+[See Product Design →](/services/product-design)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us what your AI product should be able to answer {#enquiry}
 

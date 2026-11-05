@@ -38,14 +38,19 @@
      geometry), not a distance between two things, so it reads the ramp, as Stat's does. */
   --ofs-mark-width: var(--border-width-2);
   --ofs-mark-length: var(--space-32);
+  /* A rows sheet's glyph: one em of the title role over which it stands (ListCard's tile marker). */
+  --ofs-icon-size: 1em;
   /* The sheet's lead (component-map C4): the system's lead role at its own measure. */
   --ofs-lead-text: var(--text-lead);
   --ofs-lead-measure: var(--measure-lead);
   /* The list's own label ("What you receive"): the mono label voice. */
   --ofs-label-text: var(--text-eyebrow);
   --ofs-label-tracking: var(--text-eyebrow-tracking);
-  /* A linked title's underline sits clear of the descenders: an optical correction, so the ramp. */
-  --ofs-title-link-offset: var(--space-4);
+  /* A linked title's hover move: an optical nudge along the reading direction, so the ramp; the
+     owner's hover curve (2026-10-19-hover-is-a-move), one duration both ways. */
+  --ofs-title-link-shift: var(--space-4);
+  --ofs-title-link-duration: var(--duration-slow);
+  --ofs-title-link-easing: var(--easing-ease);
   --ofs-ring-width: var(--border-width-2);
   --ofs-ring-offset: var(--space-2); /* optical: clears the title's side bearings */
 }
@@ -60,7 +65,6 @@
   --ofs-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
   --ofs-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --ofs-label-ink: var(--color-neutral-600); /* 4.92:1 */
-  --ofs-title-link-rule: var(--color-brandeis-500); /* the mark's ink */
   --ofs-title-ink-hover: var(--color-brandeis-600); /* 8.6:1 */
   --ofs-ring-ink: var(--color-brandeis-500); /* 6.17:1 */
 }
@@ -74,7 +78,6 @@
   --ofs-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --ofs-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --ofs-label-ink: var(--color-neutral-700); /* 7.27:1 */
-  --ofs-title-link-rule: var(--color-brandeis-500);
   --ofs-title-ink-hover: var(--color-brandeis-600);
   --ofs-ring-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
@@ -88,7 +91,6 @@
   --ofs-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --ofs-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --ofs-label-ink: var(--color-neutral-400); /* 8.05:1 */
-  --ofs-title-link-rule: var(--color-brandeis-300);
   --ofs-title-ink-hover: var(--color-brandeis-200);
   --ofs-ring-ink: var(--color-brandeis-300); /* 7.32:1 */
 }
@@ -102,7 +104,6 @@
   --ofs-mark-ink: var(--color-white); /* 6.23:1 */
   --ofs-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --ofs-label-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --ofs-title-link-rule: var(--color-white);
   --ofs-title-ink-hover: var(--color-brandeis-50);
   --ofs-ring-ink: var(--color-white); /* 6.23:1 */
 }

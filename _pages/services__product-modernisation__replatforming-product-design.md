@@ -64,11 +64,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -192,11 +192,11 @@ content_governance:
 
 # Replatforming product design that keeps customers' workflows and saved work intact
 
-Replatforming product design is for the months when some customers are on the new platform and some on the old, and for the support team explaining both. Tcules designs the customer side of a platform migration for established SaaS and enterprise products: which features carry over, and what happens to saved work.
+During a replatforming, we decide with you what carries over and what customers see while both platforms run, so nobody loses saved work.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience)*
 
-[Tell us which platforms you're moving between](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -204,11 +204,9 @@ Replatforming product design is for the months when some customers are on the ne
 
 Your engineers move the data. We design what it means to customers when it arrives, as part of our [Product Modernisation](/services/product-modernisation) work.
 
-**What you receive**
+- **What happens to each feature.** Moved as it is, fixed on the way, moved later or left behind, decided feature by feature with a reason.
 
-- **Each feature's fate.** Moved as it is, fixed on the way, moved later or left behind, decided feature by feature with a reason.
-
-- **The months in between, designed.** Who sees which version, where their records live and how support tells the versions apart.
+- **The changeover months, designed.** Who sees which version, where their records live and how support tells the versions apart.
 
 - **A plan for saved work.** What happens to customers' saved views, filters, reports, roles and drafts, agreed item by item with your engineers.
 
@@ -242,7 +240,7 @@ Learners aged eight to eighteen take The Wandering Raven's creative-writing cour
 
 ## Platform migration UX: what carries over, and the months in between {#transition}
 
-"Feature parity" sounds tidy. In practice each feature needs its own answer, and a migration is the rare moment a product can change a lot at once, so old problems can stay on the old platform.
+Every feature needs its own answer when you move, and the move is a chance to leave old problems behind.
 
 | For each feature | Best for |
 |---|---|
@@ -273,41 +271,57 @@ The things customers created need the most care. Some move automatically, some n
 > “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For replatforming, a good first piece of work is one feature family mapped before the platform is chosen: what customers rely on, and what each feature's fate should be.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we redesigned only Add to pipeline, and the other three listing actions stayed largely as users knew them.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we proved the AI workspace in a coded demo on sample data before it met live systems, then took it through to a production-ready module.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Three years on, Primelis still has us design every one of its products.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Replatforming product design FAQs {#faq}
 
@@ -345,6 +359,6 @@ Share the old and new platforms, the customers making the trip and the workflows
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

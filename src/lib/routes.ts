@@ -21,6 +21,7 @@ export const ROUTES = {
   /* Services — the six offers, plus the two ways an engagement starts. */
   services: '/services',
   productDesign: '/services/product-design',
+  mvpDevelopment: '/services/mvp-development',
   productModernisation: '/services/product-modernisation',
   designSystems: '/services/design-systems',
   aiProductUx: '/services/ai-product-ux',
@@ -41,7 +42,7 @@ export const ROUTES = {
   designToCodeAudit: '/audits/design-to-code-audit',
   productModernisationAssessment: '/audits/product-modernisation-assessment',
   aiProductUxReadiness: '/audits/ai-product-ux-readiness',
-  prototypeHardeningReview: '/audits/prototype-hardening-review',
+  prototypeReadinessReview: '/audits/prototype-readiness-review',
 
   /* Work. `/case-studies` is the canonical family and `/work` is not a route — the previous
      codebase carried that question unresolved across five files, which is why it is settled
@@ -107,7 +108,6 @@ export const ROUTES = {
   privacy: '/privacy-policy',
   terms: '/terms-of-use',
   cookiePolicy: '/cookie-policy',
-  accessibility: '/accessibility',
   sitemap: '/sitemap',
 
   /* The proving ground. Not linked from the site; named so a specimen can cross-link. */
@@ -304,6 +304,14 @@ export const INSIGHT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
  * `/expertise/fintech-insurtech` became `/expertise/fintech`. Every expertise page renders from the
  * corpus now, so next.config.ts sends the old path to the new one and old links keep landing.
  */
+/**
+ * An audit path the copy renamed → its new path (the copy's `redirect_from`): the Prototype Hardening
+ * Review became the Prototype Readiness Review (2 Nov 2026), so old links keep landing.
+ */
+export const AUDIT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
+  '/audits/prototype-hardening-review': '/audits/prototype-readiness-review',
+};
+
 export const EXPERTISE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
   'fintech-insurtech': 'fintech',
 };
@@ -390,7 +398,7 @@ export const UNRESOLVED_ROUTE = '/#unresolved-route';
 export const UNRESOLVED_EXTERNAL = '#unresolved-external';
 
 /**
- * Off-site profiles that more than one component links to. All three are supplied.
+ * Off-site profiles that more than one component links to. All are supplied.
  *
  * Clutch is the reason this exists: the footer's rating badge and `Stat`'s source link are two
  * consumers of one URL, and two fixtures each holding their own copy is how they drift apart.
@@ -408,6 +416,13 @@ export const EXTERNAL = {
   clutch: 'https://clutch.co/profile/tcules-ux-design-studio',
   linkedin: 'https://in.linkedin.com/company/tcules',
   youtube: 'https://www.youtube.com/@tcules',
+  /* Instagram and X as tcules.com/contact links them (read 3 Nov 2026, tracker 2.56). */
+  instagram: 'https://www.instagram.com/tcules.ux',
+  /* The studio on Google Maps, searched by its street address (owner, 3 Nov 2026: /contact's studio
+     tile opens it). */
+  studioMap:
+    'https://www.google.com/maps/search/?api=1&query=614%2C+Silver+Radiance+2%2C+Science+City+Road%2C+Sola%2C+Ahmedabad+380060',
+  x: 'https://x.com/tculesux',
 } as const;
 
 /**

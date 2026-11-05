@@ -136,6 +136,7 @@ release:
 migration:
   redirects_from:
   - /insights/podcasts/do-ai-not-for-ai-sake-but-for-your-user-insights-from-eden-ai-ctpo
+  - /insights/videos/do-ai-not-for-ai-sake-but-for-your-user-insights-from-eden-ai-ctpo
 content_governance:
   master_contract: Tcules Website V11, Editorial Embodiment & Visual Proof Pass
   v10_role: media_preserve_and_refine
@@ -246,7 +247,7 @@ The related [Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesig
 
 ## How to use this episode on your own roadmap {#how-to-use-this-episode}
 
-The conversation makes the case for starting from the user's work and putting it ahead of model novelty, and for planning product and technical roadmaps together. For the controls an AI workflow needs, see [how much an AI feature should show to earn trust](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces).
+The conversation makes the case for starting from the user's work and putting it ahead of model novelty, and for planning product and technical roadmaps together. For the controls an AI workflow needs, see [how much an AI feature should show to earn trust](/insights/building-trust-and-transparency-in-ai-first-user-interfaces).
 
 After listening, try this on your own roadmap. Name one thing a user decides, the smallest job the model does to support it, and what happens when the model cannot help. If you cannot write those down, the roadmap item is still a capability label with no product commitment behind it.
 
@@ -277,5 +278,5 @@ In this Tcules podcast episode, published on 6 April 2026. The full recording is
 ## Related listening and reading {#related-reading}
 
 - [Product design decisions podcast: how do product, engineering and design leaders agree?](/insights/podcasts/mastering-design-decisions)
-- [Which generative AI pattern fits your feature?](/insights/articles/generative-ai-product-patterns-for-saas)
+- [Which generative AI pattern fits your feature?](/insights/generative-ai-product-patterns-for-saas)
 - [AI Products and Developer Tools](/expertise/ai-products-developer-tools): the AI and developer products Tcules designs.

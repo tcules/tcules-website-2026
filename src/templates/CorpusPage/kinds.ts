@@ -16,6 +16,10 @@ import type { OfferKind } from './plan';
  *              not failed.
  *
  * A kind missing from this list fails the check: register it in the same change that adds it.
+ *
+ * Not a kind: a band's onward line lifted onto its own ink island after the band (tracker 2.53;
+ * `OnwardIsland`, `data-band="onward"`, id `<band>-onward`). It is part of the band it came from, so
+ * the check reads the island's words as that band's and the band keeps its own kind and component.
  */
 export type KindStatus = 'approved' | 'to-design';
 
@@ -36,26 +40,30 @@ export const KIND_COMPONENTS: Readonly<
   },
   personas: { component: ['voice-ledger'], status: 'approved' },
   catalog: {
-    component: ['offer-sheet', 'D'],
+    component: ['catalog-tiles'],
     status: 'to-design',
-    note: 'What we design. The ruled blue-marker cell is for figures only (owner, 30 Oct 2026); flat drawing per product kind. Past six items the two-column read-down (D).',
+    note: 'What we design: drawn Bento tiles, as the services hub (owner, 2 Nov 2026); a tile links its case where the copy does. Plates until each kind is drawn. Owner to judge on the expertise pages.',
   },
   cases: { component: ['M'], status: 'approved' },
   quotes: { component: ['G'], status: 'approved' },
   tiles: { component: ['engagement-options'], status: 'approved' },
-  reasons: { component: ['reasons'], status: 'approved' },
+  reasons: {
+    component: ['reasons', 'offer-sheet'],
+    status: 'approved',
+    note: 'Why Tcules: heading left, the six reasons as a list with inline glyphs (OfferSheet `list`, owner 4 Nov 2026); other reason sets keep Reasons.',
+  },
   industries: {
-    component: ['C-image'],
-    status: 'to-design',
-    note: 'Eleven photo cards; the band is heavy for a set of links (inventory § 1).',
+    component: ['C-pills'],
+    status: 'approved',
+    note: 'A short band: the sectors as destination pills, "See all industries" at the heading\'s end (owner, 4 Nov 2026, homepage pass).',
   },
   enquiry: { component: ['L'], status: 'approved' },
   faq: { component: ['D-faq'], status: 'approved' },
   router: { component: ['C-icon'], status: 'approved' },
   method: {
-    component: ['F'],
+    component: ['F', 'process-flow'],
     status: 'approved',
-    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026).',
+    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026). A short sequence after a heavy band, opted in by id (CopyBands FLOW_METHODS, /future-interfaces-lab/join "How selection works"): the stages across, unruled, arrows between (process-flow; 4 Nov 2026, owner to judge).',
   },
   deliverables: { component: ['offer-sheet'], status: 'to-design' },
   table: {
@@ -69,37 +77,74 @@ export const KIND_COMPONENTS: Readonly<
     note: 'A trace read across its columns (design-to-code audit).',
   },
   text: {
-    component: ['C-text', 'B'],
+    component: ['C-text', 'B', 'C-list', 'C-router', 'offer-sheet', 'L', 'engagement-options', 'B-collage'],
     status: 'to-design',
-    note: 'Prose; with a photograph of its own, the copy beside it (B).',
+    note: 'Prose; with a photograph of its own, the copy beside it (B). Starting situations, each a bold-led paragraph, as home\'s where-to-start cards (C-router; plan SITUATION_PROSE). Short titled claims as home\'s Why Tcules list (offer-sheet; plan CLAIM_LIST). One claim arguing for one service, closing on its link: a CTA block, the ink island (L). Claims or lines as the three-ways glyph cards (engagement-options; plan CARD_SETS). /how-we-work and /why-tcules, 4 Nov 2026. A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A paragraph whose sentences each name one client (OfferBands SENTENCE_ROWS, /clients): list cards beside the head, one per sentence, titled with the client (C-list). A band that shows the studio itself (images.ts STUDIO_COLLAGE, /careers `ahmedabad`): the studio collage, as home\'s people band (B-collage; studio-collage). Two peer paragraphs (CopyBands PEER_PARAGRAPHS, /careers `product-work`): two columns under the head (C-text). 4 Nov 2026, owner to judge on /careers. A band that shows the page\'s own artefact (images.ts ARTEFACT_BAND, /matter-design-system `use`, `beyond-the-file`): the real image beside the words, cropped as the photograph or whole in a half (B). 4 Nov 2026.',
   },
   /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
   set: {
-    component: ['offer-sheet', 'D'],
+    component: ['offer-sheet', 'D', 'list-beside', 'glyph-tiles', 'B'],
     status: 'to-design',
-    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D).',
+    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D). A checklist a reader checks themselves against (glyph-bands.ts `list-beside`, /careers `what-we-look-for`): the head in one half, glyph-led bodiless rows in the other, as /about Who uses (4 Nov 2026, owner to judge). Peers that are kinds of people (glyph-bands.ts `tiles`, /future-interfaces-lab/join `who-we-are-looking-for`): glyph-headed BlockCard tiles, three across (4 Nov 2026, owner\'s pick). A few peers beside one studio photograph (images.ts PHOTO_BESIDE, /future-interfaces-lab/join `what-youll-gain`): the media split (B), the head and the items as tiles in the copy column (critic, 4 Nov 2026, owner to judge).',
   },
   record: {
     component: ['case-spread'],
     status: 'approved',
     note: 'One worked case (CaseSpread).',
   },
+  example: {
+    component: ['report'],
+    status: 'to-design',
+    note: "What the report looks like (the audits' 3 Nov outline): one paper report page on the tint band, the label, scenario, sheet and reading inside it (ReportBand; the 2 Nov one-panel answer). Owner to judge on the six audit pages.",
+  },
   recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
   destinations: {
     component: ['C-image', 'C-icon'],
     status: 'to-design',
-    note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
+    note: "Hub destinations: grouped with images (C-image) or a plain set (C-icon). A set the page draws item by item is Bento's drawn tiles, still where an item has no page (C-icon); a set whose route names every item's own image is covered cards (C-image), /future-interfaces-lab (4 Nov 2026, owner to judge).",
   },
   related: {
-    component: ['K'],
+    component: ['K', 'service-tile', 'offer-sheet'],
     status: 'to-design',
-    note: 'Ruled link rows (open roles, glossary groups).',
+    note: 'Ruled link rows (glossary groups); one named offer alone is its wide service tile (/audits `prototype`, named-services-are-service-tiles). Roles a reader picks from (glyph-bands.ts `role-rows`, /careers `open-roles`): offer-sheet rows, the discipline glyph inline before each title, the title a link to the application on the page with its role chip picked, the facts of the meta line beside it (4 Nov 2026 critic, owner to judge).',
   },
-  directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  directory: {
+    component: ['tool-tiles'],
+    status: 'to-design',
+    note: "The /tools groups as the /services hub's split tiles (tools critic, 4 Nov 2026): every tool one form, its router table's columns in the result panel; the compare table hosts the groups after it, two single-tool groups share a row as headed halves. Owner to judge on /tools.",
+  },
+  index: {
+    component: ['listing-lead', 'listing-section'],
+    status: 'to-design',
+    note: 'A term index as a listing (ListingIndex): the lead beside the rail, each group a dictionary of ruled term rows, no drawings (/glossary, owner 4 Nov 2026).',
+  },
   note: { component: ['C-note'], status: 'to-design' },
   close: {
-    component: ['L', 'C-text'],
+    component: ['L', 'C-text', 'M'],
     status: 'to-design',
-    note: 'A closing ask: the ink island with its link (L); with no link, prose.',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose. A close whose ask is the case index and whose page picks its cases (OfferBands CLOSE_CASES, /clients): the case grid (M), the link the head’s end action, on the heading’s row (owner 4 Nov 2026). A close the page draws (its `figure` scene): the sentence beside its one flat figure (C-text). Two closes a route pairs (plan.ts PAIRED_CLOSES): one ink island in two peer halves (L), /future-interfaces-lab (4 Nov 2026, owner to judge). A close whose inline links share one destination, opted in by route (plan.ts ISLAND_CLOSES): the ink island with that destination as one link action (L), /future-interfaces-lab/join (4 Nov 2026, owner to judge).',
+  },
+};
+
+/**
+ * Bands the owner moved out of the band loop into another element's state, by route, each with
+ * where its words now live. The template does not draw them as bands; `npm run kinds:check` lists
+ * them instead of failing on the missing `<section>`, so a band only leaves the page by an entry
+ * here, never silently.
+ *
+ *   /contact next-steps  "What happens after you send" merges into the post-send state (tracker
+ *                        2.56, owner, 3 Nov 2026): the steps show in the enquiry form's sent view,
+ *                        word for word, and the record line it ends on is the hero's figures.
+ */
+export const BANDS_ELSEWHERE: Readonly<Record<string, Readonly<Record<string, string>>>> = {
+  '/contact': {
+    'next-steps': "the enquiry form's sent state (steps) and the hero's figures (record line)",
+  },
+  /* plan.ts PAIRED_CLOSES (4 Nov 2026, owner to confirm). */
+  '/future-interfaces-lab/join': {
+    'how-selection-works': 'under the application form, in the apply band (plan.ts STEPS_UNDER_FORM)',
+  },
+  '/future-interfaces-lab': {
+    talk: "the closing island's end half, beside Apply to work on Lab projects (id `talk` kept on the half)",
   },
 };

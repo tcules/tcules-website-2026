@@ -4,12 +4,12 @@ slug: ai-product-ux
 page_name: AI Product UX
 page_type: service
 seo:
-  title: 'AI UX Design Services for SaaS Teams Adding AI | Tcules'
+  title: 'AI Product Design and UX Services for SaaS | Tcules'
   description: 'AI UX design services for SaaS teams adding AI: what the AI does, how people steer it, and how they check, correct or undo its work.'
   canonical: https://www.tcules.com/services/ai-product-ux
   robots: index,follow
 social:
-  og_title: 'AI UX Design Services for SaaS Teams Adding AI | Tcules'
+  og_title: 'AI Product Design and UX Services for SaaS | Tcules'
   og_description: 'AI UX design services for SaaS teams adding AI: what the AI does, how people steer it, and how they check, correct or undo its work.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules AI Product UX for copilots, agents, search and AI-assisted workflows.
@@ -18,7 +18,7 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI UX Design Services for SaaS Teams Adding AI | Tcules'
+  twitter_title: 'AI Product Design and UX Services for SaaS | Tcules'
   twitter_description: 'AI UX design services for SaaS teams adding AI: what the AI does, how people steer it, and how they check, correct or undo its work.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
@@ -32,8 +32,12 @@ search_context:
   - What is your AI UX design process?
   - Should our AI feature show a confidence score on every answer?
   - Which design studios specialise in UX for AI features?
-  primary_query: AI UX design services
+  primary_query: 'AI product design'
   secondary_queries:
+  - 'AI product design process'
+  - 'AI product design for startups'
+  - 'AI product design examples'
+  - 'AI product design company'
   - AI UX design
   - generative AI UX design
   - AI interface design
@@ -60,11 +64,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Get your AI feature designed
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -157,21 +161,19 @@ content_governance:
 
 *AI Product UX services*
 
-# AI UX design services: AI features your users can check and correct
+# AI product design and UX services: AI features your users can check and correct
 
-AI UX design is for the customer deciding whether to trust an AI feature with real work, and for the support team asked what the AI just did. People rely on AI they can check, correct and undo.
-
-Tcules provides AI UX design services for SaaS teams adding AI to a product customers already use, and for founders building an AI product from the first idea.
+When you add AI to a new or established product, our AI UX design services make it a feature customers trust with real work.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)*
 
-[Start an AI UX enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Selected AI UX design work {#selected-work}
 
-### ConnectX: a question in plain words opens a working view
+### ConnectX: plain-language questions that open the right dashboard
 
 ConnectX wanted facilities, finance and sustainability teams to ask about a building in plain words. Each question sets up the right data, assets and digital twin beside the dashboard, within eight agreed scenarios. ConnectX tried them all in our coded demo, which we then took through to a production module, live since late 2025.
 
@@ -179,7 +181,7 @@ ConnectX wanted facilities, finance and sustainability teams to ask about a buil
 
 ### BuildTwin: a review feed for the engineer who signs off
 
-In BuildTwin's structural-engineering software, a quality engineer approves each drawing the AI has checked and must defend that call. We turned a pass-and-fail list into one review feed. In our design, each finding shows its source and flags missing information, and a changed status needs a reason, kept beside the AI's original.
+In BuildTwin's structural-engineering software, a quality engineer approves each drawing the AI has checked and must defend that decision. We turned a pass-and-fail list into one review feed. In our design, each finding shows its source and flags missing information, and a changed status needs a reason, kept beside the AI's original.
 
 [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
@@ -192,8 +194,6 @@ Omny AI, acquired by Primelis, writes product copy for Amazon sellers, and its s
 ## What you get from our AI UX design services {#what-you-get}
 
 We design a single AI feature or a product built around AI: help inside the task, search and recommendations, review steps, agents, and voice or text conversation.
-
-**What you receive**
 
 - **What the AI may do at each step:** find, suggest, draft or act, and with which data and permissions.
 
@@ -211,7 +211,7 @@ We design a single AI feature or a product built around AI: help inside the task
 
 **Where our part stops.** You decide what the AI may do alone. How accurate the model is stays with your engineers, or with ours in AI Product Engineering, and security and compliance sign-off stays with your specialists.
 
-## AI UX design best practices: controls that match what the AI does {#autonomy}
+## AI UX design best practices: decide what the AI may do alone {#autonomy}
 
 For every step, we agree with you whether the AI finds, suggests, drafts or acts. Sorting incoming requests can run alone. Refunding a customer waits for a person.
 
@@ -224,7 +224,9 @@ For every step, we agree with you whether the AI finds, suggests, drafts or acts
 
 Most products already have roles, permissions and records, and the AI works within them. It sees what the user may see, its changes join the shared history, and the manual route stays open. In our AI interface design, AI help looks different from manual work, so people know which they are using.
 
-Example: in our design for [Eden AI's](/case-studies/eden-ai-workflow-builder-search-redesign) workflow builder, template search and AI help share one search box, and Tab moves people into AI help as a separate mode. [Which generative AI pattern fits the work your users do](/insights/articles/generative-ai-product-patterns-for-saas) compares seven of them.
+Example: in our design for [Eden AI's](/case-studies/eden-ai-workflow-builder-search-redesign) workflow builder, template search and AI help share one search box, and Tab moves people into AI help as a separate mode. [Which generative AI pattern fits the work your users do](/insights/generative-ai-product-patterns-for-saas) compares seven of them.
+
+Added a confidence score and usage stayed flat? [Read why a score alone doesn't earn trust →](/insights/confidence-scores-dont-fix-trust-when-review-step-never)
 
 ## AI feature design for what SaaS products become next {#whats-next}
 
@@ -246,10 +248,10 @@ We would let it send reminders from an approved template without asking, and hol
 | [AI Search & Recommendation](/services/ai-product-ux/ai-search-recommendation) | Search, generated answers and recommendations with visible sources | Knowledge, content and catalogue products |
 | [Human-in-the-Loop Workflows](/services/ai-product-ux/human-in-the-loop-workflows) | Review steps, queues and a record of every override | AI output an expert has to sign off |
 | [Trust, Control & Recovery](/services/ai-product-ux/trust-control-recovery) | Suggestion states, AI labelling, undo and repair | Live AI features people hesitate to rely on |
-| [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) | A ranked list of fixes for an AI feature already in use | Teams who want to know what to fix first |
+| [AI UX Audit](/audits/ai-product-ux-readiness) | A ranked list of fixes for an AI feature already in use | Teams who want to know what to fix first |
 | [AI Product Engineering](/services/software-development/ai-product-engineering) | The AI feature built into your product, with designers and engineers working together | Teams who need the build as well as the design |
 
-Building a new AI product? [New Product Design & First Release](/services/new-product-design-first-release) takes it from idea to MVP.
+Building a new AI product? [Design-led MVP Development](/services/mvp-development) takes it from idea to MVP.
 
 ## What clients say {#testimonials}
 
@@ -265,41 +267,57 @@ Building a new AI product? [New Product Design & First Release](/services/new-pr
 > “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For AI UX, a good first piece of work is one AI feature designed end to end, or an [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) of one that is already live.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We design AI that people can check and correct.** In the survey tool we designed for [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), AI drafts the first questionnaire, and a question the researcher rewrites keeps the AI's original visible beneath it.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We work out what the product has to know before we draw it.** For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that people's availability depends on how important a meeting is, so priority joined the scheduling model before the screens.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** One of [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers, reviewing our coded prototypes, asked how drag and drop would work in Bootstrap 5 while the choice was still open.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about AI UX design services {#faq}
 
@@ -331,7 +349,7 @@ No. Tcules adds a confidence score where it is reliable and bears on what the pe
 
 Look for a studio that has designed AI inside real products and can show you the review, override and undo screens as well as the chat. Tcules has designed AI features for ConnectX, BuildTwin, Omny AI, Novus Insights and Eden AI, and each case shows the screens and the choices behind them.
 
-## Tell us what your AI should do for users {#enquiry}
+## Shape the AI before your users rely on it {#enquiry}
 
 Share the task, what the AI does today and where users hesitate.
 
@@ -341,6 +359,6 @@ Share the task, what the AI does today and where users hesitate.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Get your AI feature designed
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

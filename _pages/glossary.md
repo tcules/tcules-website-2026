@@ -40,6 +40,14 @@ navigation:
     url: /
   - name: Glossary
     url: /glossary
+  section_labels:
+    how-to-use: How to use it
+    ai-in-products: AI in products
+    ai-in-practice: AI in product teams
+    design-and-code: Design and code
+    design-systems: Design systems
+    structure: Structure and change
+    faq: FAQs
 render:
   band_order:
   - how-to-use
@@ -97,7 +105,7 @@ Where a term names work Tcules does, the entry links to that service, so you can
 
 ## How product teams use AI in their own work {#ai-in-practice}
 
-[AI-native product design](/glossary/ai-native-product-design): a way of working in which designers direct AI agents and automation through parts of the work. People make the calls that matter.
+[AI-native product design](/glossary/ai-native-product-design): a way of working in which designers direct AI agents and automation through parts of the work. People make the decisions that matter.
 
 [AI-assisted product development](/glossary/ai-assisted-product-development): AI tools used in research, design, prototyping, engineering or testing, with people still answerable for what gets released.
 
@@ -111,7 +119,7 @@ Where a term names work Tcules does, the entry links to that service, so you can
 
 [Design to code](/glossary/design-to-code): turning designs into working software and keeping the two in step, from behaviour and content to accessibility.
 
-[Prototype hardening](/glossary/prototype-hardening): the engineering that replaces a demo's shortcuts, such as pretend sign-in or sample data, with the real thing before customers arrive. If a prototype exists, the [Prototype Readiness Review](/audits/prototype-readiness-review) is a good place to start, and Tcules can take it on to a [first release](/services/new-product-design-first-release).
+[Prototype hardening](/glossary/prototype-hardening): the engineering that replaces a demo's shortcuts, such as pretend sign-in or sample data, with the real thing before customers arrive. If a prototype exists, the [Prototype Readiness Review](/audits/prototype-readiness-review) is a good place to start, and Tcules can take it on to a [first release](/services/mvp-development).
 
 ## Design system glossary: shared components and the rules around them {#design-systems}
 

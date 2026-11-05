@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -184,19 +184,17 @@ content_governance:
 
 # Usability testing services that let you change your mind in a prototype
 
-Usability testing is for the roadmap meeting before engineering commits, and for the two directions your team keeps debating. Tcules provides usability testing services for SaaS: a prototype built for the question, from rough clickable screens to working code, tried by people who match your users.
+People who match your users try a clickable or coded prototype, and our usability testing shows you what to change first.
 
 *Selected work: [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [OctiFi](/case-studies/octifi-mobile-lending-product-design) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-[Tell us what you need to test](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from prototyping and usability testing {#what-you-get}
 
 Each round answers one question your team has to decide before engineers build. Testing sits inside our [Product Design](/services/product-design) work.
-
-**What you receive**
 
 - **The prototype the question needs.** Rough clickable screens when the order of steps is in doubt, realistic content and data when people must read and compare, and working code when the question is how the browser behaves.
 
@@ -244,7 +242,7 @@ Example: for [Gold Image Printing](/case-studies/gold-image-printing-web-to-prin
 
 ## Usability testing, research or an audit: which do you need? {#routes}
 
-Each answers a different question about your product. The right one depends on what you have in hand.
+Test a design you have, research how people work today, or audit a live product that isn't working.
 
 | Service | What it covers | Best for |
 |---|---|---|
@@ -265,41 +263,57 @@ Each answers a different question about your product. The right one depends on w
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
 > **Stephanie Leue, Doodle**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For usability testing, a good first piece of work is one round of moderated sessions on one flow, or two directions tried on the same task.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that whether people are free depends on how much a meeting matters, and priority became part of the MVP direction.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), our redesign changed one listing action, Add to pipeline, and kept viewing, marking a comparable and passing largely as users knew them.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), a coded demo on sample data let the client review the AI workspace as one product before any live integration, and we then took it to a production-ready module.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [FinTech](/expertise/fintech)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [FinTech](/expertise/fintech) · [See all industries →](/expertise)
 
 ## Questions about usability testing services {#faq}
 
@@ -319,6 +333,10 @@ Tcules tests each group of users until the same problems keep repeating, then st
 
 Yes. Tcules tests a prototype built with AI tools like any other, with people who match your users. If paying customers are next, a [Prototype Readiness Review](/audits/prototype-readiness-review) shows what needs rebuilding first.
 
+### What happens to test recordings and participant details?
+
+Recordings, notes and participant details stay in tools we agree with you, and we sign your NDA and data processing agreement.
+
 ### How much does usability testing cost?
 
 The cost depends on the number of rounds, the user groups involved and how realistic the prototype needs to be. Tcules prices testing up front once that scope is agreed, and one round on one flow is a strong place to start. [How pricing works](/how-we-work#engagement-shapes)
@@ -333,6 +351,6 @@ Send the idea, design or prototype and the question you want answered. We'll tes
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

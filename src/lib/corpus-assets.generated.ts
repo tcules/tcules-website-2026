@@ -37,8 +37,16 @@ export const CORPUS_ASSET_SIZES: Readonly<
     { width: 936, height: 1262 },
   'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186528/Image_2_6b09ca7e30.webp':
     { width: 960, height: 720 },
-  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788500386/Thumbnail_case_study_doodle_e1840df53b.webp':
-    { width: 2560, height: 2560 },
-  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788505970/Thumbnail_case_study_eden_AI_258a48e39d.webp':
-    { width: 2560, height: 2560 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196957/RG_00_Hero_4800x2000_0686fcf013.webp':
+    { width: 4800, height: 2000 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196959/RG_02_Match_Widget_0fadc23e90.webp':
+    { width: 4096, height: 2484 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196962/RG_02b_Sport_Calendar_f61a1e5aae.webp':
+    { width: 4096, height: 2484 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196963/RG_03_Subscription_Before_After_c06920b9df.webp':
+    { width: 4096, height: 2484 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196965/RG_04_Reader_Decisions_af16faf556.webp':
+    { width: 4096, height: 2484 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1791196968/RG_05_Vision_Concepts_5f107f58d4.webp':
+    { width: 4096, height: 2484 },
 };

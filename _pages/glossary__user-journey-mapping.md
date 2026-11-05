@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: User Journey Mapping
     url: /glossary/user-journey-mapping
+  section_labels:
+    practice: How it works
+    template: Template
+    customer-journey: Vs customer journey
+    comparison: Vs workflow design
+    faq: FAQs
+    next: Where to start
 render:
   band_order:
   - practice
@@ -113,7 +120,7 @@ Without a named choice to inform, a map becomes wall art.
 
 A useful map follows a promised onboarding outcome through sales, setup, first value and support. At each stage it records what was observed and names the choice that observation could change. Invented stages, feelings and pain points are workshop theatre.
 
-[Workflow design](/glossary/workflow-design) looks closer at the records, roles and rules a product must carry. [UX Research](/services/product-design/ux-research) can supply what a map needs. The article on [UX, CX and design thinking](/insights/articles/design-thinking-vs-cx-vs-ux-explained) helps pick the right scope before choosing a mapping method.
+[Workflow design](/glossary/workflow-design) looks closer at the records, roles and rules a product must carry. [UX Research](/services/product-design/ux-research) can supply what a map needs. The article on [UX, CX and design thinking](/insights/design-thinking-vs-cx-vs-ux-explained) helps pick the right scope before choosing a mapping method.
 
 ## How user journey mapping works in a product team {#practice}
 
@@ -166,4 +173,4 @@ It sits between research and design. Research supplies what the map records, fro
 
 A map earns its cost when it changes what the team does next. Start from that question, then choose the method. Journeys are changing shape as AI assistants carry out steps for people, so a current map shows which steps a person takes, which an AI takes for them and where the person needs to see what happened. [Information architecture](/glossary/information-architecture) takes over when the question is where things live inside the product.
 
-[See UX Research](/services/product-design/ux-research)
+[See UX Research →](/services/product-design/ux-research)

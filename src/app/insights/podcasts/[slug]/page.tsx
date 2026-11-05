@@ -191,7 +191,6 @@ export async function generateMetadata({ params }: PodcastPageProps): Promise<Me
   const title = podcast.seo?.title || podcast.title;
   const description = podcast.seo?.description || podcast.description;
   const canonical = podcast.seo?.canonical;
-  const image = podcast.socialImage;
 
   return {
     title,
@@ -204,22 +203,11 @@ export async function generateMetadata({ params }: PodcastPageProps): Promise<Me
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
       ...(podcast.publishedAt ? { publishedTime: podcast.publishedAt } : {}),
-      images: image
-        ? [
-            {
-              url: image.src,
-              width: image.width,
-              height: image.height,
-              alt: image.alt,
-            },
-          ]
-        : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }

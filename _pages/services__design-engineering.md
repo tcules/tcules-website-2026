@@ -4,12 +4,12 @@ slug: design-engineering
 page_name: Design Engineering
 page_type: service
 seo:
-  title: 'Design Engineering Services for SaaS Products | Tcules'
+  title: 'Design Engineering for SaaS: Design Built in Code | Tcules'
   description: 'Design engineering services for SaaS teams: designers who code explore, refine and build product behaviour, from coded prototypes to production and QA.'
   canonical: https://www.tcules.com/services/design-engineering
   robots: index,follow
 social:
-  og_title: 'Design Engineering Services for SaaS Products | Tcules'
+  og_title: 'Design Engineering for SaaS: Design Built in Code | Tcules'
   og_description: 'Design engineering services for SaaS teams: designers who code explore, refine and build product behaviour, from coded prototypes to production and QA.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Design Engineering connecting Product Design to working software.
@@ -18,7 +18,7 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Design Engineering Services for SaaS Products | Tcules'
+  twitter_title: 'Design Engineering for SaaS: Design Built in Code | Tcules'
   twitter_description: 'Design engineering services for SaaS teams: designers who code explore, refine and build product behaviour, from coded prototypes to production and QA.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
@@ -30,7 +30,7 @@ search_context:
   - Do you use AI coding tools in design engineering?
   - Can we hire a design engineer for one project?
   - Who offers design engineering services for SaaS?
-  primary_query: design engineering services
+  primary_query: 'design engineering'
   secondary_queries:
   - design in code
   - product design engineering services
@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -148,13 +148,11 @@ content_governance:
 
 # Design engineering services: designers who code, from prototype to production
 
-Design engineering is for the design review where an engineer tries the interaction in a browser and raises a build question while it is cheap to change. It is for the release that behaves as designed, down to the keyboard and the loading state.
-
-Tcules provides design engineering services for SaaS teams: designers who code, taking product behaviour from the first prototype to production.
+Our design engineering services put your product's behaviour in code early, so problems surface while they are cheap to fix and releases match the design.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)*
 
-[Start a design engineering enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -182,13 +180,11 @@ Related work: developers using Eden AI start a workflow from one search box, whe
 
 Our design engineers take one interaction, screen or component from an idea to working code, inside your product or beside it.
 
-**What you receive**
-
 - **A coded prototype** of the interaction in question, with real content and the awkward cases, tried in the browser. [Coded Prototyping](/services/design-engineering/coded-prototyping)
 
 - **Behaviour your developers can build from:** a spec, a working example or code taken from your Figma designs. [Design to Code](/services/design-engineering/design-to-code)
 
-- **Hard components built to hold up,** such as tables, editors and drag and drop, with keyboard use and every state. [Frontend Design Systems](/services/design-engineering/frontend-design-systems)
+- **Tables, editors and drag and drop, built to hold up,** with keyboard use and every state. [Frontend Design Systems](/services/design-engineering/frontend-design-systems)
 
 - **A check of what shipped** against the agreed behaviour, on real data and small screens, with the gaps fixed. [Implementation QA](/services/design-engineering/implementation-qa)
 
@@ -222,7 +218,7 @@ By the end we would know which version people read at a glance, and what the pro
 
 ## Design engineering vs frontend development and design systems {#compare}
 
-Each of these works in code. The choice depends on what you are trying to get right.
+Pick design engineering for one interaction that must feel right; the others cover shared components, a full build or testing with users.
 
 | Service | What you get | Best for |
 |---|---|---|
@@ -245,41 +241,57 @@ Each of these works in code. The choice depends on what you are trying to get ri
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For design engineering, a good first piece of work is one interaction you want to see working before anyone builds it, or a [Design-to-Code Audit](/audits/design-to-code-audit) of a screen that keeps shipping differently.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we began with a UX audit, designed the store mobile first and then built it on Magento.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** Our [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) redesign changed one listing action, Add to pipeline, and largely left view, comparable and pass as users already knew them.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Primelis has relied on us for three years, and in that time we have designed each of its products.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about design engineering services {#faq}
 
@@ -313,6 +325,6 @@ An idea you want to try in code, a prototype, or the part of your product that k
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -201,13 +201,15 @@ content_governance:
 
 # PropTech product design for deal teams, engineers and people on site
 
-Property software is used at a desk, in a review and on site: an acquisitions team shortlisting listings, an engineer signing off an AI-checked drawing, a site manager finding plot 14B. Tcules designs software for real estate, construction and field teams.
+From deal desk to building site, our PropTech product design puts everyone on one record of each property, with the source behind every sign-off.
 
-[Tell us about your property or field product](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What we design in PropTech, ConTech and field operations {#what-we-design}
+
+For software teams in real estate, construction and field operations, with a new product or an established platform.
 
 - **Acquisition and deal-pipeline software** for real estate acquisitions teams · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
@@ -221,11 +223,9 @@ Property software is used at a desk, in a review and on site: an acquisitions te
 
 - **Property management and tenant portals** · Tenant, manager and contractor on one job
 
-## Selected PropTech product design work {#selected-work}
+## PropTech and related product design work {#selected-work}
 
-Two from property and construction software, and one from a safety suite whose users work on site.
-
-### Dealpath: one step changed, three kept
+### Dealpath: find the existing deal before adding a new one
 
 Dealpath's acquisitions teams judge listings and track deals. Our audit found that Add to pipeline assumed every listing was a new deal, so the redesign searches for an existing deal first. Viewing, marking a comparable and passing stayed largely as users knew them, and implementation sat with Dealpath's team. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
@@ -233,13 +233,13 @@ Dealpath's acquisitions teams judge listings and track deals. Our audit found th
 
 A drawing in BuildTwin's structural-engineering software passes from detailer to quality engineer to approver, with new AI checks in the middle. We turned the result list into a review workspace where each check links to its source, and an overrule needs a reason that stays on record. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-### Benchmark Gensuite: Nearby, for finding a site from the car park
+### Benchmark Gensuite: find your site from the car park
 
 People using Benchmark Gensuite's safety and sustainability suite picked their site from the organisation's hierarchy, which suits a desk better than a site visit. Our redesign added Nearby, which lists sites by the user's location, as a coded prototype that Benchmark's engineers reviewed. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
 ## Construction software design for office, site and sign-off {#hard-parts}
 
-Property and site software serves people who rarely sit together: an acquisitions team at desks, an engineer reviewing drawings, a trade on site with gloves on. The hard parts come from keeping all of them on one record of each place.
+Property and site software serves people who rarely sit together: an acquisitions team at desks, an engineer reviewing drawings, a trade on site with gloves on. The difficulty is keeping all of them working from one record of each place.
 
 ### One property, one identity on every screen
 
@@ -247,7 +247,7 @@ A property, project or site keeps the same name, status and key figures wherever
 
 Example: on Dealpath's listing card we kept all the property data and changed the reading order into three zones: image, source and status; identity and highlights; the core values for comparison. In the redesign, the card shrinks to fit the dashboard, a row beside the map and a pin's details, keeping its order in each.
 
-### The source travels with the sign-off
+### Drawings and photos kept with each sign-off
 
 Drawings, documents, photos and notes stay attached to the finding they support, so nobody chases the source before acting. Whoever prepares, reviews and approves gets the actions and detail their step needs. When someone signs off work on a building, the product shows what they checked and why.
 
@@ -273,8 +273,6 @@ Property managers juggle tenants, contractors and owners around one building. Re
 
 We take on the workflow between office and site, in a new product or one your teams already rely on.
 
-**What you receive**
-
 - **An audit of the live product:** an audit of the live product: which parts cause trouble and which parts people rely on
 
 - **Research at desks and on site:** research at desks and on site, where signal, gloves and interruptions change the work
@@ -297,8 +295,6 @@ Field and inspection apps that need building sit with [Mobile App Development](/
 
 ## What clients say {#testimonials}
 
-Clients from other fields on working with us.
-
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
@@ -308,41 +304,57 @@ Clients from other fields on working with us.
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For a property or field product, a good first piece of work is one workflow where office and site records stop matching, or a [UX & Product Audit](/audits/ux-product-audit), as Dealpath's work began.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** We watched Gold Image Printing's staff at work and followed an order past checkout into production before redesigning either the store or the production system. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **Senior people do the work, and clients keep us for years.** Primelis has relied on us for three years to design each of its products.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **One studio can take it into working software, with the designers staying in the build.** For ConnectX's building-energy workspace, we went from a coded demo on sample data to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
 
-## Other industries we know {#industries}
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
+
+## Other industries {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about PropTech product design {#faq}
 
@@ -372,6 +384,6 @@ Share the product, who uses it on site and in the office, and one example of a m
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

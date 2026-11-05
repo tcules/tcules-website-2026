@@ -8,7 +8,7 @@ import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
 
 /**
- * /design/bento — linked tiles of two sizes on four tracks over one continuous texture per row
+ * /design/bento — linked tiles of two sizes on four tracks, each its drawing on the plate inside the card
  * (home "What we do", owner 19 Oct 2026, mocks S3). The six-tile diagonal home ships, the even
  * four-up row, a two-wide row, the tint, ink and blue grounds, and one tile on its own as a card in
  * another set (ServiceTile, 29 Oct 2026): a related service, a related expertise with its photo, and
@@ -23,7 +23,7 @@ const PD_SEVEN = (
     ['ui', 'Interaction & UI Design', 'Products whose structure works but whose screens confuse people', 'specialist-ui', '/services/product-design/interaction-ui-design'],
     ['dataviz', 'Data Visualisation', 'Dashboards that people export to a spreadsheet', 'specialist-dataviz', '/services/product-design/data-visualisation'],
     ['prototyping', 'Prototyping & Usability Testing', 'Choosing between directions before engineers start', 'specialist-prototype', '/services/product-design/prototyping-usability-testing'],
-    ['new-product', 'New Product Design & First Release', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/new-product-design-first-release'],
+    ['new-product', 'Design-led MVP Development', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/mvp-development'],
     ['audit', 'UX & Product Audit', 'Teams who know something is wrong but not yet what', 'specialist-audit', '/audits/ux-product-audit'],
   ] as const
 ).map(([id, title, body, scene, href]) => ({ id, title, body, href, scene })) satisfies BentoItem[];
@@ -122,6 +122,17 @@ const SIX: BentoItem[] = [
 
 const single: BentoItem[] = SIX.map((item) => ({ ...item, span: 1 }));
 
+/* Two split tiles, for the paper row and each surface ground: the panel has no ground of its own, so
+   its hairline is what has to read on every band. */
+const SPLIT: BentoItem[] = single.slice(0, 4).map((item) => ({
+  ...item,
+  detail: {
+    label: 'What you come away with',
+    text: 'Research, workflows, interface design and tested prototypes',
+    action: 'Explore the service',
+  },
+}));
+
 export default function BentoSpecimen() {
   return (
     <>
@@ -205,7 +216,7 @@ export default function BentoSpecimen() {
       <Variation
         id="seven-note"
         title="2c · Seven peers on four tracks, the closing words in the eighth cell"
-        note="`tracks={4}` with seven tiles is 4 + 3; `note` puts the band's closing paragraph in the cell the last row leaves, unframed and untextured, so it reads as the row's last word, never an eighth destination (owner, 29 Oct 2026, Q7, /services/product-design). Below 1024 the note takes a row of its own."
+        note="`tracks={4}` with seven tiles is 4 + 3; `note` puts the band's closing paragraph in the cell the last row leaves, without a plate, so it reads as the row's last word, never an eighth destination (owner, 29 Oct 2026, Q7, /services/product-design). Below 1024 the note takes a row of its own."
       />
       <Section>
         <Bento
@@ -251,7 +262,7 @@ export default function BentoSpecimen() {
               ],
               [
                 'new-product',
-                'New Product Design & First Release',
+                'Design-led MVP Development',
                 'Founders turning an idea or prototype into an MVP',
                 'specialist-new-product',
               ],
@@ -281,20 +292,145 @@ export default function BentoSpecimen() {
       <Variation
         id="detail"
         title="2d2 · Split tiles: a detail makes the tile two halves (a router table's third column)"
-        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; an inset panel in the second with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A). Two a row on four tracks; the panel under the named half below 768. Every tile or none."
+        note="`detail` makes a split tile, two tracks wide: drawing, title and body in the first half; a panel in the second, on the band's own ground behind a start-edge hairline inset 16 from the tile's edges, with the label, the text and the action at its foot (owner, 2 Nov 2026, /services mock A; panel restyled 4 Nov 2026). Two a row on four tracks; below 768 the panel sits under the named half and its hairline moves to its top edge. Every tile or none."
+      />
+      <Section>
+        <Bento items={SPLIT} tracks={4} />
+      </Section>
+
+      <Variation
+        id="detail-odd"
+        title="2d3 · An odd split tile takes the whole row"
+        note="A split tile left alone on the last row of four tracks takes every track from 1024, so the set ends on a full row (4 Nov 2026, /audits' five audits and an audit's three-option comparison). Its named half sets the drawing beside the words, as the wide tile does, so the plate keeps a single tile's size; the panel keeps its start-edge hairline and takes the last third. Below 1024 it is every split tile. Shortest and longest real copy: three tiles, then five."
+      />
+      <Section>
+        <Layout rowGap="column">
+          <Bento
+            items={[
+              ...SPLIT.slice(0, 2),
+              {
+                ...SPLIT[2]!,
+                title: 'Design System Implementation',
+                body: 'Teams that agree what needs building',
+                detail: {
+                  label: 'What you get',
+                  text: 'Shared components built in Figma and code',
+                  action: 'Explore the service',
+                },
+              },
+            ]}
+            tracks={4}
+          />
+          <Bento
+            items={[
+              ...SPLIT,
+              {
+                ...SPLIT[0]!,
+                id: 'pma',
+                title: 'Product Modernisation Assessment',
+                body: 'A team split between redesign, new platform and rebuild',
+                detail: {
+                  label: 'What you get',
+                  text: 'An answer and an order of work for each area',
+                  action: 'See the audit',
+                },
+              },
+            ]}
+            tracks={4}
+          />
+        </Layout>
+      </Section>
+
+      <Variation
+        id="detail-fields"
+        title="2d4 · A split tile with two labelled fields"
+        note="A router table with two value columns folds into ONE result panel (4 Nov 2026, /tools' AI tools: Best for, You leave with): each field its authored header in the mono label voice over its text, the action at the panel's foot. Two tiles of two tracks fill the row. Shortest and longest real copy: the readiness check's two cells, then the canvas's."
       />
       <Section>
         <Bento
-          items={single.slice(0, 4).map((item) => ({
-            ...item,
-            detail: {
-              label: 'What you come away with',
-              text: 'Research, workflows, interface design and tested prototypes',
-              action: 'Explore the service',
+          items={[
+            {
+              id: 'readiness',
+              title: 'AI feature readiness checklist: agree what the AI may do before launch',
+              body: 'The AI Product UX Readiness Check takes one AI use case through what the AI may do, what users can inspect and how mistakes get handled. You leave with the open questions and the tests to bring to your next product review.',
+              href: '#detail-fields',
+              detail: {
+                label: 'Best for',
+                text: 'One AI feature before you build or launch it',
+                fields: [
+                  { label: 'You leave with', text: 'Open questions, and the tests to run before launch' },
+                ],
+                action: 'Try the tool',
+              },
             },
-          }))}
+            {
+              id: 'canvas',
+              title: 'AI trust and control canvas: plan what people check, approve and undo',
+              body: 'The AI Trust and Control Canvas follows one AI output to the action it can trigger. It ends in a short brief listing what people can check, approve and undo before that action happens.',
+              href: '#detail-fields',
+              detail: {
+                label: 'Best for',
+                text: 'One AI output that can change a record, send a message or start an action',
+                fields: [
+                  { label: 'You leave with', text: 'A control brief your designer and engineer can build from' },
+                ],
+                action: 'Try the tool',
+              },
+            },
+          ]}
           tracks={4}
         />
+      </Section>
+
+      <Variation
+        id="half"
+        title="2d5 · Split tiles in half a row (tracks={2})"
+        note="Two headed groups of one tool each share a row as two halves (4 Nov 2026, /tools: the redesign worksheet and the prototype checklist). `tracks={2}` lays each group's set in its half: the split tile takes the half whole and keeps its two halves side by side, the width a split tile has on four tracks, never the whole-row form. Three labelled fields, the /tools compare table's columns. Below 1024 the halves stack."
+      />
+      <Section>
+        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="gutter" rowGap="section">
+          {[
+            {
+              id: 'rebuild',
+              title: 'Redesign or rebuild worksheet: compare every route before you commit',
+              body: 'The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. It ends in the case for and against each route, and the next test before you commit.',
+              fields: [
+                { label: 'Bring', text: 'A product owner, an engineer and someone who knows the daily use' },
+                { label: 'You leave with', text: 'The case for each route and the next test' },
+              ],
+              text: 'Choosing a route for one part of an established product',
+            },
+            {
+              id: 'prototype',
+              title: 'Prototype readiness checklist: show developers what is real and what is simulated',
+              body: 'The Prototype Readiness Checklist walks through one workflow of any prototype, AI-built ones included. It sorts what really works from what is simulated or still unknown.',
+              fields: [
+                { label: 'Bring', text: 'The prototype and sample data you may work with' },
+                { label: 'You leave with', text: 'A build brief: decisions, research and build work' },
+              ],
+              text: 'Handing a prototype to developers',
+            },
+          ].map((tool) => (
+            <Bento
+              key={tool.id}
+              tracks={2}
+              items={[
+                {
+                  id: tool.id,
+                  title: tool.title,
+                  body: tool.body,
+                  href: '#half',
+                  detail: {
+                    label: 'Best for',
+                    text: tool.text,
+                    fields: tool.fields,
+                    action: 'Try the tool',
+                  },
+                },
+              ]}
+            />
+          ))}
+        </Layout>
       </Section>
 
       <Variation
@@ -309,10 +445,13 @@ export default function BentoSpecimen() {
       <Variation
         id="tint"
         title="4 · Tint ground"
-        note="Every --bnt-* token restated on tint: the hairline steps to neutral-300 and the texture to neutral-600, so both still read on paper-deep."
+        note="Every --bnt-* token restated on tint: the hairline steps to neutral-300 and the texture to neutral-600, so both still read on paper-deep. The split tiles under it: the panel's start-edge rule is the tile's own hairline, so it reads wherever the frame does."
       />
       <Section surface="tint">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation
@@ -321,7 +460,10 @@ export default function BentoSpecimen() {
         note="Declared for self-containment: white titles, a neutral-800 hairline lifting to brandeis-700, a neutral-600 texture lifting to brandeis-300. Home sets the band on paper."
       />
       <Section surface="ink">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation
@@ -330,13 +472,16 @@ export default function BentoSpecimen() {
         note="Declared for self-containment: white titles, a brandeis-400 hairline, a brandeis-300 texture lifting to white."
       />
       <Section surface="blue">
-        <Bento items={SIX} />
+        <Layout rowGap="stack">
+          <Bento items={SIX} />
+          <Bento items={SPLIT.slice(0, 2)} tracks={4} />
+        </Layout>
       </Section>
 
       <Variation
         id="service-tile"
         title="7 · ServiceTile — a related service as a card in another set"
-        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, texture and hover, its wave fitted to itself. As a card (owner, 29 Oct 2026): the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, the flat drawing centred in the spare height, &ldquo;Explore the service&rdquo; at the foot."
+        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, plate and hover (owner, 3 Nov 2026: one plate for every flat drawing, no texture). As a card: the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, the drawing on its plate in the spare height, &ldquo;Explore the service&rdquo; at the foot."
       />
       <Section>
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
@@ -366,7 +511,7 @@ export default function BentoSpecimen() {
           />
           <li>
             <ServiceTile
-              title="New Product Design & First Release"
+              title="Design-led MVP Development"
               eyebrow="Our related service"
               href={ROUTES.services}
               scene="new-product"
@@ -476,6 +621,129 @@ export default function BentoSpecimen() {
         </Layout>
       </Section>
       <Variation
+        id="tile-body"
+        title="9b · ServiceTile wide with a body — a named offer on its own"
+        note="`body`: the line the copy sets beside the name, under the title in the bento body role (/audits `prototype`: the sixth audit, apart from the chooser). Shortest and longest real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype Readiness Review"
+              body="A senior designer and an engineer put one key flow through real use and show you what breaks before launch."
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the audit"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body="Shared components teams use."
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="Explore the service"
+              wide
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
+        id="tile-body-paragraphs"
+        title="9b2 · ServiceTile wide with several paragraphs — the sentences that lead to it"
+        note="`body` as a list: each string a paragraph, a `text` apart, in the words column over the action (a glossary term's close, 4 Nov 2026: the close's own sentences inside the tile, so its words half is not a title alone in an empty card). Plain text only — the tile is one anchor. One paragraph and two, real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Design-to-Code Audit"
+              body={[
+                'When intent and running code part ways, tracing one behaviour through both shows where and why.',
+                'Written intent matters more now that AI tools generate interface code from designs and prompts. A tool can copy a layout exactly and miss the reason behind it. Intent written as plain statements gives the tool and the reviewer the same thing to check against.',
+              ]}
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the Design-to-Code Audit"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body={['Shared components teams use.']}
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="See Design Systems"
+              wide
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
+        id="tile-visual-start"
+        title="9c · ServiceTile wide, visual on the start side — whole-row tiles alternate"
+        note="`visual=&quot;start&quot;`: from 768 the visual leads and the words and action sit on the end side, so two whole-row tiles in consecutive bands alternate (4 Nov 2026, /tools: the redesign worksheet's visual on the end, the prototype checklist's on the start). Below 768 the order is the card's: words, visual, action. Shortest and longest real copy."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Redesign or rebuild worksheet: compare every route before you commit"
+              body="The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. It ends in the case for and against each route, and the next test before you commit."
+              href={ROUTES.tools}
+              scene="specialist-rebuild-worksheet"
+              action="Try the tool"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype readiness checklist: show developers what is real and what is simulated"
+              body="The Prototype Readiness Checklist walks through one workflow of any prototype, AI-built ones included. It sorts what really works from what is simulated or still unknown, and leaves you with the questions and checks a development brief needs."
+              href={ROUTES.tools}
+              scene="specialist-prototype-readiness-checklist"
+              action="Try the tool"
+              wide
+              visual="start"
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
+        id="tile-bare"
+        title="9d · ServiceTile wide, no box — a lone offer on its own band"
+        note="`frame=&quot;none&quot;`: one item a row on the band's ground, no hairline and no inset, so the words and plate sit on the content column's edges as a media row does; it still lifts and its title takes the accent on hover, with no edge appearing (critic, audits run, 4 Nov 2026: /audits' Prototype Readiness Review under the chooser's full-row split tile). Wide only. Shortest and longest real copy, the visual at the end and at the start."
+      />
+      <Section>
+        <Layout as="ul" rowGap="column">
+          <li data-media-row="">
+            <ServiceTile
+              title="Prototype Readiness Review"
+              body="A senior designer and an engineer put one key flow through real use and show you what breaks before launch."
+              href={ROUTES.audits}
+              scene="specialist-prototype-review"
+              action="See the audit"
+              wide
+              frame="none"
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              body="Shared components teams use."
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="Explore the service"
+              wide
+              visual="start"
+              frame="none"
+            />
+          </li>
+        </Layout>
+      </Section>
+      <Variation
         id="cta"
         title="2c · Seven peers and two cards on three tracks (9 cells)"
         note="`cta`: one dotted card per question, each a normal cell: its question, its sentence, then its destinations as arrow links pinned to the foot; no fill, no drawing, no outline button. Tracks are chosen so tiles plus cards fill whole rows; where 3 and 4 both leave a hole, the last card takes what its row leaves. Seven tiles and two cards are nine cells: three full rows."
@@ -518,11 +786,11 @@ export default function BentoSpecimen() {
             routes: [
               {
                 question: 'Building a new AI product?',
-                answer: 'New Product Design & First Release takes it from idea to MVP.',
+                answer: 'Design-led MVP Development takes it from idea to MVP.',
                 actions: [
                   {
-                    label: 'New Product Design & First Release',
-                    href: '/services/new-product-design-first-release',
+                    label: 'Design-led MVP Development',
+                    href: '/services/mvp-development',
                   },
                 ],
               },

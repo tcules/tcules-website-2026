@@ -88,7 +88,7 @@ Two recorded episodes with product, engineering and design leaders. Each episode
 
 **[Product design decisions podcast: how product, engineering and design leaders agree](/insights/podcasts/mastering-design-decisions).** A panel with Medkart's founder, Contrado's head of engineering and the creative head of Knovos. They cover listening to customers, reading data, roadmap trade-offs and disagreement between teams.
 
-Watch the recordings on YouTube: [Eden AI's CPTO](https://www.youtube.com/watch?v=QNz1zr3U7Zo) and [the product calls panel](https://www.youtube.com/watch?v=44Nta0CkcOY).
+Watch the recordings on YouTube: [Eden AI's CPTO](https://www.youtube.com/watch?v=QNz1zr3U7Zo) and [the product decisions panel](https://www.youtube.com/watch?v=44Nta0CkcOY).
 
 ## Product design podcast FAQs {#faq}
 
@@ -110,4 +110,4 @@ Start with the panel episode, where a founder, a head of engineering and a creat
 
 ## Tell us about a product of your own {#talk}
 
-Want longer written pieces? Browse the [articles](/insights/articles), including the interview series. To talk through a product of your own, [start a conversation](/contact).
+[Book a call](/contact) about your product, or browse the [articles](/insights/articles) and interview series.

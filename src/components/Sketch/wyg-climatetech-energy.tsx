@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { ArrowLeft, ArrowRight, Copy, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched, TraceIn } from './scenes';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -390,6 +390,217 @@ function StopsClimatetech() {
   );
 }
 
+/* ── What we design in (tiles) ─────────────────────────────────────────────────────── */
+
+/**
+ * Building energy products with live data and a digital twin: the live reading's spike, traced into
+ * the building, lights the one floor drawing it. Rest: the meter's spike beside a building that says
+ * nothing; hover: the line draws across and that floor's windows fill, haloed (patterns 1 + 3).
+ */
+function KindBuildingLive() {
+  const bars = [
+    [42, 104],
+    [54, 100],
+    [66, 102],
+    [78, 98],
+  ] as const;
+  return (
+    <>
+      <Rect x={30} y={50} w={80} h={80} rx={8} className={styles.frame} />
+      <Glyph name="graph-up" cx={46} cy={66} size={14} className={styles.glyph} />
+      <Copy x={60} y={66} w={32} quiet />
+      {bars.map(([x, top]) => (
+        <Rect key={x} x={x} y={top} w={8} h={118 - top} rx={2} className={styles.tile} />
+      ))}
+      <Rect x={90} y={80} w={8} h={38} rx={2} className={styles.frame} />
+      {/* The building: three floors, a row of windows on each. */}
+      <Rect x={210} y={30} w={80} h={120} rx={4} className={styles.frame} />
+      <path className={styles.rule} d="M210,70 L290,70 M210,110 L290,110" />
+      <GrowIn>
+        <Rect x={220} y={78} w={60} h={24} rx={10} className={styles.halo} />
+      </GrowIn>
+      {[50, 90, 130].map((cy) =>
+        [226, 244, 262].map((x) => (
+          <Rect
+            key={`${cy}-${x}`}
+            x={x}
+            y={cy - 6}
+            w={12}
+            h={12}
+            rx={2}
+            className={cy === 90 ? styles.press : styles.tile}
+          />
+        )),
+      )}
+      <circle className={styles.node} cx="110" cy="90" r="2.5" />
+      <TraceIn d="M110,90 L203,90" />
+      <GrowIn>
+        <ArrowRight x={210} y={90} />
+      </GrowIn>
+    </>
+  );
+}
+
+/**
+ * Peak-price events and battery suggestions: the day's price spikes, and the suggestion the operator
+ * gets is the battery, charged, sent to cover it.
+ */
+function KindPeakBattery() {
+  const bars = [
+    [44, 108],
+    [58, 104],
+    [72, 106],
+    [86, 96],
+    [100, 62],
+    [114, 68],
+    [128, 100],
+    [142, 106],
+  ] as const;
+  return (
+    <>
+      <Rect x={30} y={40} w={140} h={100} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M40,124 L160,124" />
+      {bars.map(([x, top], i) => (
+        <Rect
+          key={x}
+          x={x}
+          y={top}
+          w={10}
+          h={124 - top}
+          rx={2}
+          className={i === 4 || i === 5 ? styles.frame : styles.tile}
+        />
+      ))}
+      <Glyph name="danger-triangle" cx={112} cy={50} size={12} className={styles.glyph} />
+      <Hop x1={170} x2={210} y={90} />
+      <Rect x={210} y={40} w={80} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={228} cy={56} size={14} className={styles.glyph} />
+      <Copy x={242} y={56} w={32} quiet />
+      <Rect x={220} y={74} w={60} h={36} rx={10} className={styles.halo} />
+      <Rect x={226} y={80} w={42} h={24} rx={4} className={styles.frame} />
+      <Rect x={268} y={86} w={4} h={12} rx={1.5} className={styles.frame} />
+      {[230, 242, 254].map((x) => (
+        <Rect key={x} x={x} y={84} w={10} h={16} rx={2} className={styles.solid} />
+      ))}
+      <Copy x={226} y={124} w={44} />
+    </>
+  );
+}
+
+/**
+ * Safety and sustainability software for large organisations: every site's record rises into the one
+ * view the organisation acts on. Rest: three sites, apart, under an empty view; hover: their lines
+ * draw up and join, and the view's shield grows (patterns 1 + 2).
+ */
+function KindSafetyLarge() {
+  return (
+    <>
+      <Rect x={90} y={30} w={140} h={50} rx={8} className={styles.frame} />
+      <Copy x={106} y={46} w={48} quiet />
+      <Copy x={106} y={58} w={60} />
+      <GrowIn>
+        <Focus x={200} y={55} glyph="shield-check" size={12} />
+      </GrowIn>
+      {[60, 160, 260].map((cx) => (
+        <g key={cx}>
+          <Rect x={cx - 30} y={110} w={60} h={40} rx={8} className={styles.frame} />
+          <Glyph name="map-point" cx={cx - 14} cy={130} size={14} className={styles.glyph} />
+          <Copy x={cx - 2} y={126} w={20} />
+          <Copy x={cx - 2} y={134} w={14} quiet />
+        </g>
+      ))}
+      <TraceIn d="M60,110 L60,96 A6,6 0 0 1 66,90 L160,90" />
+      <TraceIn d="M260,110 L260,96 A6,6 0 0 0 254,90 L160,90" />
+      <TraceIn d="M160,110 L160,80" />
+      <GrowIn>
+        <circle className={styles.node} cx="160" cy="90" r="3.5" />
+        <circle className={styles.nodeOpen} cx="160" cy="80" r="3" />
+      </GrowIn>
+      {[60, 160, 260].map((cx) => (
+        <circle key={`p${cx}`} className={styles.node} cx={cx} cy="110" r="2.5" />
+      ))}
+    </>
+  );
+}
+
+/**
+ * EV charging and fleet electrification: each vehicle's charge slotted into the hours the tariff
+ * dips, finished before its departure flag.
+ */
+function KindEvCharging() {
+  const rows = [
+    { cy: 84, x: 156, w: 56, flag: 244 },
+    { cy: 106, x: 164, w: 60, flag: 256 },
+    { cy: 128, x: 156, w: 40, flag: 238 },
+  ];
+  return (
+    <>
+      <Rect x={30} y={30} w={260} h={120} rx={8} className={styles.frame} />
+      <Rect x={150} y={40} w={80} h={102} rx={8} className={styles.halo} />
+      <path className={styles.rule} d="M70,46 L150,46 L150,58 L230,58 L230,46 L274,46" />
+      {rows.map(({ cy, x, w, flag }) => (
+        <g key={cy}>
+          <Glyph name="bolt-circle" cx={50} cy={cy} size={14} className={styles.glyph} />
+          <path className={styles.hair} d={`M70,${cy} L${flag - 12},${cy}`} />
+          <Rect x={x} y={cy - 6} w={w} h={12} rx={6} className={styles.solid} />
+          <Glyph name="flag" cx={flag} cy={cy} size={12} className={styles.glyph} />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Renewable and storage asset monitoring: one output line that tells its states apart: what was
+ * measured drawn solid, the forecast dashed on from now, and the fault where it dropped lit.
+ */
+function KindAssetMonitoring() {
+  return (
+    <>
+      <Rect x={30} y={30} w={260} h={120} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M46,134 L274,134" />
+      <path className={styles.hair} d="M170,70 L170,134" />
+      <path
+        className={styles.copy}
+        d="M50,108 L70,108 L70,96 L90,96 L90,90 L110,90 L110,126 L130,126 L130,94 L150,94 L150,86 L170,86"
+      />
+      <path
+        className={styles.trail}
+        d="M170,86 L190,86 L190,80 L210,80 L210,86 L230,86 L230,96 L250,96 L250,104 L270,104"
+      />
+      <Focus x={120} y={60} glyph="danger-triangle" size={12} />
+    </>
+  );
+}
+
+/**
+ * Carbon accounting and emissions reporting: the sources, the total built from them, and the person
+ * who approved it, in one chain the total can be traced back along.
+ */
+function KindCarbonTrace() {
+  return (
+    <>
+      <Rect x={38} y={42} w={60} h={72} rx={8} className={styles.frameQuiet} />
+      <Rect x={34} y={48} w={60} h={72} rx={8} className={styles.frameQuiet} />
+      <Rect x={30} y={54} w={60} h={72} rx={8} className={styles.frame} />
+      <Glyph name="document-text" cx={46} cy={72} size={14} className={styles.glyph} />
+      <Copy x={42} y={96} w={34} />
+      <Copy x={42} y={106} w={24} quiet />
+      <Hop x1={90} x2={130} y={90} />
+      <Rect x={130} y={40} w={80} h={100} rx={8} className={styles.frame} />
+      <Copy x={144} y={58} w={36} quiet />
+      <Copy x={144} y={70} w={24} />
+      <Rect x={144} y={86} w={24} h={12} rx={2} className={styles.tile} />
+      <Rect x={168} y={86} w={16} h={12} rx={2} className={styles.tile} />
+      <Rect x={184} y={86} w={12} h={12} rx={2} className={styles.tile} />
+      <Copy x={144} y={114} w={40} quiet />
+      <Copy x={144} y={124} w={28} quiet />
+      <Hop x1={210} x2={246} y={90} />
+      <Focus x={270} y={90} glyph="user" size={12} />
+    </>
+  );
+}
+
 /**
  * /expertise/climatetech-energy · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -415,4 +626,18 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-climatetech-energy': NeedsClimatetech,
   /* Where our part stops: Data pipelines, forecasting models and device integrations stay with your data and engineering teams. Which reporting rules apply is for you */
   'stops-climatetech-energy': StopsClimatetech,
+  /* MOVING: this tile links to /case-studies/ai-native-building-energy-product-connectx, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Building energy products with live data and a digital twin: ConnectX */
+  'kind-climatetech-energy-building-energy-products-live': KindBuildingLive,
+  /* What we design in, tile: Peak-price events and battery suggestions for building operators: ConnectX */
+  'kind-climatetech-energy-peak-price-events-battery': KindPeakBattery,
+  /* MOVING: this tile links to /case-studies/legacy-saas-modernisation-information-architecture, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Safety and sustainability software for large organisations: Benchmark Gensuite */
+  'kind-climatetech-energy-safety-sustainability-software-large': KindSafetyLarge,
+  /* What we design in, tile: EV charging and fleet electrification products: Charging plans for drivers and depots that weigh vehicle readiness against tariffs */
+  'kind-climatetech-energy-ev-charging-fleet-electrification': KindEvCharging,
+  /* What we design in, tile: Renewable and storage asset monitoring: Live output, forecasts and faults told apart at a glance */
+  'kind-climatetech-energy-renewable-storage-asset-monitoring': KindAssetMonitoring,
+  /* What we design in, tile: Carbon accounting and emissions reporting tools: Every total traceable to its sources and approver */
+  'kind-climatetech-energy-carbon-accounting-emissions-reporting': KindCarbonTrace,
 };

@@ -63,11 +63,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -153,25 +153,23 @@ content_governance:
 
 # Software product modernisation services: keep what customers value, build what's next
 
-Product modernisation is for the customer who knows your product by heart and the prospect who sees it beside newer software in a demo. It is also for a roadmap that needs a new market, a new way to charge or AI features.
-
-Tcules provides software product modernisation services for established SaaS and enterprise software, changing them part by part while customers keep working.
+With our product modernisation, an established SaaS or enterprise product gets ready for new markets, new pricing or AI features while current customers keep working.
 
 *Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)*
 
-[Start a modernisation enquiry](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Selected product modernisation work {#selected-work}
 
-### Benchmark Gensuite: current to prospects, familiar to customers
+### Benchmark Gensuite: a modern suite that keeps customers' habits
 
 Benchmark Gensuite's environment, health, safety and sustainability suite had to look like software built now without breaking the fast habits its users had formed. We began with the components every application shares, then proved them in one high-use control, the scope selector, as coded prototypes that Benchmark's engineers reviewed before wider implementation.
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Dealpath: one action changed, three kept
+### Dealpath: one step redesigned, the rest left familiar
 
 An audit of Dealpath's deal-management software traced the trouble to one action: Add to pipeline opened a new deal even when the team already tracked one. The redesign searches existing deals first and largely keeps the view, comparable and pass actions, so it asks people to relearn a single step.
 
@@ -183,13 +181,11 @@ Each online order at Gold Image Printing continues into artwork, scheduling, inv
 
 [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-## What you get from our product modernisation services {#what-you-get}
+## What you get from our software modernisation services {#what-you-get}
 
-Our software modernisation services move an established product forward in stages, each one scoped and priced before it starts.
+We move an established product forward in stages, each one scoped and priced before it starts.
 
-**What you receive**
-
-- **A call on every part of the product:** keep, simplify, redesign, move to a new platform, rebuild or retire, agreed with your product and engineering leads.
+- **A decision on every part of the product:** keep, simplify, redesign, move to a new platform, rebuild or retire, agreed with your product and engineering leads.
 
 - **A written record:** of what customers rely on: the habits, shortcuts, saved work and reports that must survive the change.
 
@@ -255,41 +251,57 @@ Example: [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) wanted its 
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For modernisation, a good first piece of work is one high-use workflow changed while customers carry on with the rest, or a [Product Modernisation Assessment](/audits/product-modernisation-assessment) when the route is unclear.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We know what to leave alone in a product people rely on.** Inside [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) existing component set, we kept standard interactions as they were and added new components only where the calendar and bookability work needed them.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** [ConnectX](/case-studies/ai-native-building-energy-product-connectx) tried its new workspace in our coded demo on sample data, before any live integration, and we later took that demo through to a production-ready module.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** For three years, Primelis has come back to us for every one of its products, as an ongoing partnership.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about software product modernisation services {#faq}
 
@@ -331,6 +343,6 @@ Share the product and the parts that slow customers down. We'll help you work ou
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

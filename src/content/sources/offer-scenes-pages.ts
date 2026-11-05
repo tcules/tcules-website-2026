@@ -23,6 +23,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-ai-products-developer-tools',
         'Where our part stops': 'stops-ai-products-developer-tools',
       }),
+      'what-we-design': by({
+        'Model and API platforms with workflow builders, search and documentation': 'kind-ai-products-developer-tools-model-api-platforms-workflow',
+        'AI review tools where an engineer signs off each result': 'kind-ai-products-developer-tools-ai-review-tools-engineer',
+        'AI-native products shaped from an early idea': 'kind-ai-products-developer-tools-ai-native-products-shaped',
+        'AI-assisted survey and research products': 'kind-ai-products-developer-tools-ai-assisted-survey-research',
+        'AI writing suggestions added to an existing product': 'kind-ai-products-developer-tools-ai-writing-suggestions-added',
+        'UX troubleshooting for an AI software firm': 'kind-ai-products-developer-tools-ux-troubleshooting-ai-software',
+      }),
     },
     stories: {},
   },
@@ -38,6 +46,14 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-b2b-saas-workflow-software',
         'What we need from you': 'needs-b2b-saas-workflow-software',
         'Where our part stops': 'stops-b2b-saas-workflow-software',
+      }),
+      'what-we-design': by({
+        'Deal and pipeline software for a single industry, such as real estate': 'kind-b2b-saas-workflow-software-deal-pipeline-software-single',
+        'Quoting, pricing and approvals (CPQ) shared by several specialists': 'kind-b2b-saas-workflow-software-quoting-pricing-approvals-cpq',
+        'Staffing and people operations linking clients, candidates and jobs': 'kind-b2b-saas-workflow-software-staffing-people-operations-linking',
+        'Scheduling across teams and companies': 'kind-b2b-saas-workflow-software-scheduling-across-teams-companies',
+        'Environment, health, safety and sustainability suites for large firms': 'kind-b2b-saas-workflow-software-environment-health-safety-sustainability',
+        'Back-office software for a single trade, such as tyre shops': 'kind-b2b-saas-workflow-software-back-office-software-single',
       }),
     },
     stories: {},
@@ -56,6 +72,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-climatetech-energy',
         'Where our part stops': 'stops-climatetech-energy',
       }),
+      'what-we-design': by({
+        'Building energy products with live data and a digital twin': 'kind-climatetech-energy-building-energy-products-live',
+        'Peak-price events and battery suggestions for building operators': 'kind-climatetech-energy-peak-price-events-battery',
+        'Safety and sustainability software for large organisations': 'kind-climatetech-energy-safety-sustainability-software-large',
+        'EV charging and fleet electrification products': 'kind-climatetech-energy-ev-charging-fleet-electrification',
+        'Renewable and storage asset monitoring': 'kind-climatetech-energy-renewable-storage-asset-monitoring',
+        'Carbon accounting and emissions reporting tools': 'kind-climatetech-energy-carbon-accounting-emissions-reporting',
+      }),
     },
     stories: {},
   },
@@ -72,6 +96,14 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-commerce-transactional-products',
         'What we need from you': 'needs-commerce-transactional-products',
         'Where our part stops': 'stops-commerce-transactional-products',
+      }),
+      'what-we-design': by({
+        'Specialist Shopify stores where buyers check fit before buying': 'kind-commerce-transactional-products-specialist-shopify-stores-buyers',
+        'Web-to-print and made-to-order ordering': 'kind-commerce-transactional-products-web-print-made-order',
+        'Production and fulfilment systems behind the store': 'kind-commerce-transactional-products-production-fulfilment-systems-behind',
+        'Listing-content tools for Amazon sellers': 'kind-commerce-transactional-products-listing-content-tools-amazon',
+        'B2B ordering and trade portals': 'kind-commerce-transactional-products-b2b-ordering-trade-portals',
+        'Subscriptions and repeat ordering': 'kind-commerce-transactional-products-subscriptions-repeat-ordering',
       }),
     },
     stories: {},
@@ -90,6 +122,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-content-knowledge-discovery-platforms',
         'Where our part stops': 'stops-content-knowledge-discovery-platforms',
       }),
+      'what-we-design': by({
+        'Search and documentation inside a developer platform': 'kind-content-knowledge-discovery-platforms-search-documentation-inside-developer',
+        'AI review feeds that keep each source beside its finding': 'kind-content-knowledge-discovery-platforms-ai-review-feeds-keep',
+        'Product discovery for specialist catalogues': 'kind-content-knowledge-discovery-platforms-product-discovery-specialist-catalogues',
+        'Internal knowledge bases and enterprise search': 'kind-content-knowledge-discovery-platforms-internal-knowledge-bases-enterprise',
+        'Policy and document libraries with versions and owners': 'kind-content-knowledge-discovery-platforms-policy-document-libraries-versions',
+        'Media and publishing products': 'kind-content-knowledge-discovery-platforms-media-publishing-products',
+      }),
     },
     stories: {},
   },
@@ -106,6 +146,13 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-data-analytics-decision-products',
         'What we need from you': 'needs-data-analytics-decision-products',
         'Where our part stops': 'stops-data-analytics-decision-products',
+      }),
+      'what-we-design': by({
+        'Customer-facing reports and dashboards inside a SaaS product': 'kind-data-analytics-decision-products-customer-facing-reports-dashboards',
+        'Scores that show what they are based on': 'kind-data-analytics-decision-products-scores-show-what-they',
+        'Multi-site data filtered to the right part of the organisation': 'kind-data-analytics-decision-products-multi-site-data-filtered',
+        'Operational dashboards for tyre shop software': 'kind-data-analytics-decision-products-operational-dashboards-tyre-shop',
+        'Ask-the-data analytics, where users type a question': 'kind-data-analytics-decision-products-ask-data-analytics-users',
       }),
     },
     stories: {},
@@ -124,6 +171,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-edtech-learning',
         'Where our part stops': 'stops-edtech-learning',
       }),
+      'what-we-design': by({
+        'LMS and Moodle course experiences, with custom themes and plugins': 'kind-edtech-learning-lms-moodle-course-experiences',
+        'Creative learning products for young people aged eight to eighteen': 'kind-edtech-learning-creative-learning-products-young',
+        'Growth projects inside a learning platform\'s product team': 'kind-edtech-learning-growth-projects-inside-learning',
+        'Workplace training and apprenticeship apps': 'kind-edtech-learning-workplace-training-apprenticeship-apps',
+        'Assessment and skills sign-off tools': 'kind-edtech-learning-assessment-skills-sign-off',
+        'Teacher dashboards and educator views': 'kind-edtech-learning-teacher-dashboards-educator-views',
+      }),
     },
     stories: {},
   },
@@ -141,6 +196,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-fintech',
         'Where our part stops': 'stops-fintech',
       }),
+      'what-we-design': by({
+        'Mobile lending apps, from sign-up to loan issuance': 'kind-fintech-mobile-lending-apps-sign',
+        'Payment apps for small shops and the people who run them': 'kind-fintech-payment-apps-small-shops',
+        'Business finance tools for spending, approvals and payouts, including finance inside SaaS products': 'kind-fintech-business-finance-tools-spending',
+        'Staff review screens for identity checks, credit approvals and fraud cases': 'kind-fintech-staff-review-screens-identity',
+        'Banking and money management apps for balances, transfers and savings goals': 'kind-fintech-banking-money-management-apps',
+        'Insurance quote, claims and underwriting tools': 'kind-fintech-insurance-quote-claims-underwriting',
+      }),
     },
     stories: {},
   },
@@ -157,6 +220,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-healthtech',
         'Where our part stops': 'stops-healthtech',
       }),
+      'what-we-design': by({
+        'Care platforms that connect families with carers at home': 'kind-healthtech-care-platforms-connect-families',
+        'Apps for carers on home visits, used on a phone': 'kind-healthtech-apps-carers-home-visits',
+        'Portals and admin tools for healthcare professionals\' congress travel': 'kind-healthtech-portals-admin-tools-healthcare',
+        'Clinician tools that sit beside the patient record': 'kind-healthtech-clinician-tools-sit-beside',
+        'Patient portals for results, appointments and messages': 'kind-healthtech-patient-portals-results-appointments',
+        'Remote check-in apps for care after a hospital stay': 'kind-healthtech-remote-check-apps-care',
+      }),
     },
     stories: {},
   },
@@ -172,6 +243,14 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-marketplaces-multi-sided-platforms',
         'What we need from you': 'needs-marketplaces-multi-sided-platforms',
         'Where our part stops': 'stops-marketplaces-multi-sided-platforms',
+      }),
+      'what-we-design': by({
+        'Care marketplaces matching families with self-employed carers': 'kind-marketplaces-multi-sided-platforms-care-marketplaces-matching-families',
+        'Separate apps for each side, joined by one web platform': 'kind-marketplaces-multi-sided-platforms-separate-apps-side-joined',
+        'Booking and rental marketplaces': 'kind-marketplaces-multi-sided-platforms-booking-rental-marketplaces',
+        'Freelance and talent marketplaces': 'kind-marketplaces-multi-sided-platforms-freelance-talent-marketplaces',
+        'Local service marketplaces for quotes, visits and reviews': 'kind-marketplaces-multi-sided-platforms-local-service-marketplaces-quotes',
+        'B2B marketplaces connecting trade buyers with suppliers': 'kind-marketplaces-multi-sided-platforms-b2b-marketplaces-connecting-trade',
       }),
     },
     stories: {},
@@ -190,6 +269,14 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-martech-salestech',
         'Where our part stops': 'stops-martech-salestech',
       }),
+      'what-we-design': by({
+        'Marketing automation and reporting for ecommerce brands': 'kind-martech-salestech-marketing-automation-reporting-ecommerce',
+        'Budget and listing-content tools for Amazon sellers': 'kind-martech-salestech-budget-listing-content-tools',
+        'Quoting (CPQ) tools shared by sales reps and pricing experts': 'kind-martech-salestech-quoting-cpq-tools-shared',
+        'AI-assisted survey and market research products': 'kind-martech-salestech-ai-assisted-survey-market',
+        'CRM, pipeline and commission tools': 'kind-martech-salestech-crm-pipeline-commission-tools',
+        'Lead management and sales enablement software': 'kind-martech-salestech-lead-management-sales-enablement',
+      }),
     },
     stories: {},
   },
@@ -206,13 +293,21 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-proptech-contech-field-operations',
         'Where our part stops': 'stops-proptech-contech-field-operations',
       }),
+      'what-we-design': by({
+        'Acquisition and deal-pipeline software for real estate acquisitions teams': 'kind-proptech-contech-field-operations-acquisition-deal-pipeline-software',
+        'Listing screens that show which property deserves a closer look': 'kind-proptech-contech-field-operations-listing-screens-show-property',
+        'AI drawing checks with an engineer who signs off each one': 'kind-proptech-contech-field-operations-ai-drawing-checks-engineer',
+        'Field apps for inspections and site visits': 'kind-proptech-contech-field-operations-field-apps-inspections-site',
+        'Defect and handover apps for new homes': 'kind-proptech-contech-field-operations-defect-handover-apps-new',
+        'Property management and tenant portals': 'kind-proptech-contech-field-operations-property-management-tenant-portals',
+      }),
     },
     stories: {},
   },
   '/services/ai-product-ux/ai-copilots-agents': {
     items: {
       'what-you-get': by({
-        'A level for each step.': 'wyg-ai-copilots-agents-level-each-step',
+        'How far the AI goes at each step.': 'wyg-ai-copilots-agents-level-each-step',
         'Screens for the start and the middle of a job.': 'wyg-ai-copilots-agents-screens-start-middle-job',
         'Screens for the pause and the finish.': 'wyg-ai-copilots-agents-screens-pause-finish',
         'Agent approval flows.': 'wyg-ai-copilots-agents-agent-approval-flows',
@@ -229,12 +324,12 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/ai-search-recommendation': {
     items: {
       'what-you-get': by({
-        'Search entry.': 'wyg-ai-search-recommendation-search-entry',
+        'The search box.': 'wyg-ai-search-recommendation-search-entry',
         'Results that show their source.': 'wyg-ai-search-recommendation-results-show-their-source',
         'AI answers with sources.': 'wyg-ai-search-recommendation-ai-answers-sources',
         'Recommendations that explain themselves.': 'wyg-ai-search-recommendation-recommendations-explain-themselves',
-        'Corrections.': 'wyg-ai-search-recommendation-corrections',
-        'The next step.': 'wyg-ai-search-recommendation-next-step',
+        'Ways to fix a bad answer.': 'wyg-ai-search-recommendation-corrections',
+        'Results that open where the work is.': 'wyg-ai-search-recommendation-next-step',
         'A test on your own content.': 'wyg-ai-search-recommendation-test-own-content',
         'Who does the work': 'team-ai-search-recommendation',
         'What we need from you': 'needs-ai-search-recommendation',
@@ -246,13 +341,13 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/human-in-the-loop-workflows': {
     items: {
       'what-you-get': by({
-        'Review triggers.': 'wyg-human-in-the-loop-workflows-review-triggers',
-        'The review card.': 'wyg-human-in-the-loop-workflows-review-card',
+        'What sends work to a person.': 'wyg-human-in-the-loop-workflows-review-triggers',
+        'What the reviewer sees.': 'wyg-human-in-the-loop-workflows-review-card',
         'What the reviewer can do.': 'wyg-human-in-the-loop-workflows-what-reviewer-can-do',
-        'Routing and the queue.': 'wyg-human-in-the-loop-workflows-routing-queue',
-        'The record.': 'wyg-human-in-the-loop-workflows-record',
-        'A day\'s workload.': 'wyg-human-in-the-loop-workflows-days-workload',
-        'A path to spot checks.': 'wyg-human-in-the-loop-workflows-path-spot-checks',
+        'Who picks up each item, and when.': 'wyg-human-in-the-loop-workflows-routing-queue',
+        'A record of every decision.': 'wyg-human-in-the-loop-workflows-record',
+        'How much one reviewer can handle.': 'wyg-human-in-the-loop-workflows-days-workload',
+        'When to move to spot checks.': 'wyg-human-in-the-loop-workflows-path-spot-checks',
         'A test on past cases.': 'wyg-human-in-the-loop-workflows-test-past-cases',
         'Who does the work': 'team-human-in-the-loop-workflows',
         'What we need from you': 'needs-human-in-the-loop-workflows',
@@ -264,8 +359,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/ai-product-ux/trust-control-recovery': {
     items: {
       'what-you-get': by({
-        'Five suggestion states.': 'wyg-trust-control-recovery-five-suggestion-states',
-        'One labelling rule.': 'wyg-trust-control-recovery-one-labelling-rule',
+        'What a suggestion shows at each stage.': 'wyg-trust-control-recovery-five-suggestion-states',
+        'One mark for AI, everywhere.': 'wyg-trust-control-recovery-one-labelling-rule',
         'Buttons for common fixes.': 'wyg-trust-control-recovery-buttons-common-fixes',
         'Overrides that keep a record.': 'wyg-trust-control-recovery-overrides-keep-record',
         'Recovery messages.': 'wyg-trust-control-recovery-recovery-messages',
@@ -281,7 +376,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'The question, agreed first.': 'wyg-coded-prototyping-question-agreed-first',
-        'The hard cases before the happy path.': 'wyg-coded-prototyping-hard-cases-before-happy',
+        'Awkward cases built first.': 'wyg-coded-prototyping-hard-cases-before-happy',
         'Real or representative data.': 'wyg-coded-prototyping-real-or-representative-data',
         'A working session.': 'wyg-coded-prototyping-working-session',
         'A short write-up.': 'wyg-coded-prototyping-short-writeup',
@@ -313,7 +408,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'The component, rebuilt in code.': 'wyg-frontend-design-systems-component-rebuilt-code',
-        'Its contract.': 'wyg-frontend-design-systems-its-contract',
+        'The component\'s rules, written down.': 'wyg-frontend-design-systems-its-contract',
         'Every state on show.': 'wyg-frontend-design-systems-every-state-show',
         'Automatic checks.': 'wyg-frontend-design-systems-automatic-checks',
         'Notes to extend it.': 'wyg-frontend-design-systems-notes-extend-it',
@@ -342,8 +437,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/design-system-implementation': {
     items: {
       'what-you-get': by({
-        'Design tokens named by meaning.': 'wyg-design-system-implementation-design-tokens-named-meaning',
-        'Components in both places.': 'wyg-design-system-implementation-components-both-places',
+        'Design tokens named by what they do.': 'wyg-design-system-implementation-design-tokens-named-meaning',
+        'Components in Figma and in code.': 'wyg-design-system-implementation-components-both-places',
         'Documentation.': 'wyg-design-system-implementation-documentation',
         'Versioning and releases.': 'wyg-design-system-implementation-versioning-releases',
         'The system on a real area of your product.': 'wyg-design-system-implementation-system-real-area-product',
@@ -357,8 +452,8 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/design-system-strategy': {
     items: {
       'what-you-get': by({
-        'An inventory.': 'wyg-design-system-strategy-inventory',
-        'A scope map.': 'wyg-design-system-strategy-scope-map',
+        'What you already have, listed.': 'wyg-design-system-strategy-inventory',
+        'What the system covers.': 'wyg-design-system-strategy-scope-map',
         'A structure for the system.': 'wyg-design-system-strategy-structure-system',
         'Owners and contribution rules.': 'wyg-design-system-strategy-owners-contribution-rules',
         'A design system roadmap.': 'wyg-design-system-strategy-design-system-roadmap',
@@ -374,7 +469,7 @@ export const PAGE_OFFER_SCENES = {
   '/services/design-systems/figma-storybook-alignment': {
     items: {
       'what-you-get': by({
-        'A correspondence map for each component family.': 'wyg-figma-storybook-alignment-correspondence-map-each-component',
+        'A side-by-side map of Figma and code.': 'wyg-figma-storybook-alignment-correspondence-map-each-component',
         'The gaps that matter, fixed.': 'wyg-figma-storybook-alignment-gaps-matter-fixed',
         'A Storybook entry for each case.': 'wyg-figma-storybook-alignment-storybook-entry-each-case',
         'Behaviour written where designers can see it.': 'wyg-figma-storybook-alignment-behaviour-written-where-designers',
@@ -391,7 +486,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'A map of where teams leave the system.': 'wyg-governance-adoption-map-where-teams-leave',
-        'Gaps told apart.': 'wyg-governance-adoption-gaps-told-apart',
+        'Each workaround\'s cause, named.': 'wyg-governance-adoption-gaps-told-apart',
         'Named owners.': 'wyg-governance-adoption-named-owners',
         'A path for every change.': 'wyg-governance-adoption-path-every-change',
         'A governance model.': 'wyg-governance-adoption-governance-model',
@@ -419,6 +514,8 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-data-visualisation',
         'Where our part stops': 'stops-data-visualisation',
       }),
+      /* The method's one figure beside its five steps (band {#every-number}). */
+      'every-number': by({ figure: 'wyg-data-visualisation-method' }),
     },
     stories: {},
   },
@@ -435,6 +532,24 @@ export const PAGE_OFFER_SCENES = {
         'Who does the work': 'team-information-architecture-workflow-design',
         'What we need from you': 'needs-information-architecture-workflow-design',
         'Where our part stops': 'stops-information-architecture-workflow-design',
+      }),
+    },
+    stories: {},
+  },
+  '/services/product-design/interaction-ui-design': {
+    items: {
+      'what-you-get': by({
+        'Every state.': 'wyg-interaction-ui-design-every-state',
+        'Interaction patterns.': 'wyg-interaction-ui-design-interaction-patterns',
+        'Visual design.': 'wyg-interaction-ui-design-visual-design',
+        'Small screens.': 'wyg-interaction-ui-design-small-screens',
+        'Accessibility.': 'wyg-interaction-ui-design-accessibility',
+        'Interface text.': 'wyg-interaction-ui-design-interface-text',
+        'Specifications.': 'wyg-interaction-ui-design-specifications',
+        'Handover and build review.': 'wyg-interaction-ui-design-handover-build-review',
+        'Who does the work': 'team-interaction-ui-design',
+        'What we need from you': 'needs-interaction-ui-design',
+        'Where our part stops': 'stops-interaction-ui-design',
       }),
     },
     stories: {},
@@ -462,7 +577,7 @@ export const PAGE_OFFER_SCENES = {
         'A plan that starts from what you hold.': 'wyg-ux-research-plan-starts-from-what',
         'Interviews and observation.': 'wyg-ux-research-interviews-observation',
         'Every source checked against the others.': 'wyg-ux-research-every-source-checked-against',
-        'A readout you can act on.': 'wyg-ux-research-readout-you-can-act',
+        'Findings you can act on.': 'wyg-ux-research-readout-you-can-act',
         'Who does the work': 'team-ux-research',
         'What we need from you': 'needs-ux-research',
         'Where our part stops': 'stops-ux-research',
@@ -474,7 +589,7 @@ export const PAGE_OFFER_SCENES = {
     items: {
       'what-you-get': by({
         'A map of what the system really does.': 'wyg-legacy-software-modernisation-map-what-system-really',
-        'A keep-or-change call on each rule.': 'wyg-legacy-software-modernisation-keeporchange-call-each-rule',
+        'A keep-or-change decision on each rule.': 'wyg-legacy-software-modernisation-keeporchange-call-each-rule',
         'A staged plan.': 'wyg-legacy-software-modernisation-staged-plan',
         'Designs for each stage.': 'wyg-legacy-software-modernisation-designs-each-stage',
         'Help through each rollout.': 'wyg-legacy-software-modernisation-help-through-each-rollout',
@@ -482,6 +597,8 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-legacy-software-modernisation',
         'Where our part stops': 'stops-legacy-software-modernisation',
       }),
+      /* The method's one figure beside its five places an old system hides (band {#discovery}). */
+      discovery: by({ figure: 'wyg-legacy-software-modernisation-method' }),
     },
     stories: {},
   },
@@ -499,14 +616,19 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-product-redesign',
         'Where our part stops': 'stops-product-redesign',
       }),
+      /* The comparison's two options that name no page: each a still plate (band {#compare}). */
+      compare: by({
+        'Visual refresh': 'wyg-product-redesign-visual-refresh',
+        'SaaS product redesign': 'wyg-product-redesign-saas-product-redesign',
+      }),
     },
     stories: {},
   },
   '/services/product-modernisation/replatforming-product-design': {
     items: {
       'what-you-get': by({
-        'Each feature\'s fate.': 'wyg-replatforming-product-design-each-features-fate',
-        'The months in between, designed.': 'wyg-replatforming-product-design-months-between-designed',
+        'What happens to each feature.': 'wyg-replatforming-product-design-each-features-fate',
+        'The changeover months, designed.': 'wyg-replatforming-product-design-months-between-designed',
         'A plan for saved work.': 'wyg-replatforming-product-design-plan-saved-work',
         'Names that still make sense.': 'wyg-replatforming-product-design-names-still-make-sense',
         'Risky interactions tried in code': 'wyg-replatforming-product-design-risky-interactions-tried-code',
@@ -526,7 +648,7 @@ export const PAGE_OFFER_SCENES = {
         'Tests you can rerun.': 'wyg-ai-product-engineering-tests-you-can-rerun',
         'A model chosen for each task.': 'wyg-ai-product-engineering-model-chosen-each-task',
         'Corrections that become tests.': 'wyg-ai-product-engineering-corrections-become-tests',
-        'A view after release.': 'wyg-ai-product-engineering-view-after-release',
+        'Usage, cost and failures after release.': 'wyg-ai-product-engineering-view-after-release',
         'Documented code in your codebase': 'wyg-ai-product-engineering-documented-code-codebase',
         'Who does the work': 'team-ai-product-engineering',
         'What we need from you': 'needs-ai-product-engineering',
@@ -548,6 +670,125 @@ export const PAGE_OFFER_SCENES = {
         'What we need from you': 'needs-backend-api-development',
         'Where our part stops': 'stops-backend-api-development',
       }),
+    },
+    stories: {},
+  },
+  '/audits/prototype-readiness-review': {
+    items: {
+      'gap-map': by({
+        'What\'s proven, what isn\'t.': 'wyg-prototype-readiness-review-whats-proven-what-isnt',
+        'Fixes customers will notice.': 'wyg-prototype-readiness-review-fixes-customers-will-notice',
+        'Code worth keeping.': 'wyg-prototype-readiness-review-code-worth-keeping',
+        'The work before launch.': 'wyg-prototype-readiness-review-work-before-launch',
+        'Who does the work': 'team-prototype-readiness-review',
+        'Where our part stops': 'stops-prototype-readiness-review',
+      }),
+      method: by({ figure: 'method-prototype-readiness-review' }),
+    },
+    stories: {},
+  },
+  '/audits/ux-product-audit': {
+    items: {
+      'deliverables': by({
+        'Findings ranked by harm.': 'wyg-ux-product-audit-findings-ranked-by-harm',
+        'A next step for each.': 'wyg-ux-product-audit-next-step-each',
+        'What each fix takes.': 'wyg-ux-product-audit-what-each-fix-takes',
+        'A walkthrough with your team.': 'wyg-ux-product-audit-walkthrough-with-team',
+        'Who does the work': 'team-ux-product-audit',
+        'Where our part stops': 'stops-ux-product-audit',
+      }),
+      method: by({ figure: 'method-ux-product-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/ai-product-ux-readiness': {
+    items: {
+      'deliverables': by({
+        'A ranked fix list.': 'wyg-ai-product-ux-readiness-ranked-fix-list',
+        'Fixes users would notice.': 'wyg-ai-product-ux-readiness-fixes-users-would-notice',
+        'Questions for your specialists.': 'wyg-ai-product-ux-readiness-questions-for-specialists',
+        'A walkthrough with your team.': 'wyg-ai-product-ux-readiness-walkthrough-with-team',
+        'Who does the work': 'team-ai-product-ux-readiness',
+        'Where our part stops': 'stops-ai-product-ux-readiness',
+      }),
+      method: by({ figure: 'method-ai-product-ux-readiness' }),
+    },
+    stories: {},
+  },
+  '/audits/design-system-audit': {
+    items: {
+      'deliverables': by({
+        'What to keep.': 'wyg-design-system-audit-what-to-keep',
+        'What to repair first.': 'wyg-design-system-audit-what-to-repair-first',
+        'Where requests stall.': 'wyg-design-system-audit-where-requests-stall',
+        'Early warnings.': 'wyg-design-system-audit-early-warnings',
+        'How widely it\'s used.': 'wyg-design-system-audit-how-widely-used',
+        'Who does the work': 'team-design-system-audit',
+        'Where our part stops': 'stops-design-system-audit',
+      }),
+      method: by({ figure: 'method-design-system-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/design-to-code-audit': {
+    items: {
+      'deliverables': by({
+        'Every gap, side by side.': 'wyg-design-to-code-audit-every-gap-side-by-side',
+        'A fix plan.': 'wyg-design-to-code-audit-fix-plan',
+        'Stop gaps coming back.': 'wyg-design-to-code-audit-stop-gaps-coming-back',
+        'Developer changes worth keeping.': 'wyg-design-to-code-audit-developer-changes-worth-keeping',
+        'Who does the work': 'team-design-to-code-audit',
+        'Where our part stops': 'stops-design-to-code-audit',
+      }),
+      method: by({ figure: 'method-design-to-code-audit' }),
+    },
+    stories: {},
+  },
+  '/audits/product-modernisation-assessment': {
+    items: {
+      'deliverables': by({
+        'Area-by-area answers.': 'wyg-product-modernisation-assessment-area-by-area-answers',
+        'What must survive.': 'wyg-product-modernisation-assessment-what-must-survive',
+        'The order of work.': 'wyg-product-modernisation-assessment-order-of-work',
+        'Questions to answer first.': 'wyg-product-modernisation-assessment-questions-to-answer-first',
+        'Ready for AI features.': 'wyg-product-modernisation-assessment-ready-for-ai-features',
+        'Who does the work': 'team-product-modernisation-assessment',
+        'Where our part stops': 'stops-product-modernisation-assessment',
+      }),
+      method: by({ figure: 'method-product-modernisation-assessment' }),
+    },
+    stories: {},
+  },
+  /* The lab artefact's "What's inside": the Matter file's three properties, each drawn from its title. */
+  '/matter-design-system': {
+    items: {
+      contents: by({
+        'Tokens named for their purpose.': 'wyg-matter-design-system-tokens-named-purpose',
+        'Components built from smaller parts.': 'wyg-matter-design-system-components-built-smaller-parts',
+        'Naming you can follow.': 'wyg-matter-design-system-naming-you-can-follow',
+      }),
+    },
+    stories: {},
+  },
+  /* The Lab's four internal tools for design work (drawn Bento tiles) and the promotion figure beside
+     its sentence; docs/page-build/pages/future-interfaces-lab.md. */
+  '/future-interfaces-lab': {
+    items: {
+      'design-work': by({
+        'Matter Design System': 'wyg-future-interfaces-lab-matter-design-system',
+        'AI Design Audit Agent': 'wyg-future-interfaces-lab-ai-design-audit-agent',
+        'UI Pattern Vision Labelling Tool': 'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
+        'Landing Page Audit Programme': 'wyg-future-interfaces-lab-landing-page-audit-programme',
+      }),
+      promotion: { figure: 'wyg-future-interfaces-lab-promotion' },
+    },
+    stories: {},
+  },
+  /* The method's one figure beside its steps; docs/page-build/pages/future-interfaces-lab-join.md. The
+     three role drawings went in pass 2 (owner, 4 Nov 2026): "Who we look for" is glyph-headed cards. */
+  '/future-interfaces-lab/join': {
+    items: {
+      'what-youll-do': { figure: 'wyg-future-interfaces-lab-join-method' },
     },
     stories: {},
   },

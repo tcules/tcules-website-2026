@@ -62,6 +62,15 @@ navigation:
     url: /tools
   - name: Figma to Storybook Fidelity Checklist
     url: /tools/figma-storybook-fidelity-checklist
+  section_labels:
+    how-to-use-it: How to use it
+    workspace: Component states
+    compare: Marking checks
+    example: Worked example
+    who-its-for: Who it suits
+    corrections: Corrections list
+    next: Next build review
+    faq: FAQs
 render:
   band_order:
   - how-to-use-it
@@ -149,7 +158,7 @@ The free Figma to Storybook Fidelity Checklist tests one component past its look
 
 Compare what the component should do with what it does, note what you saw, and leave with corrections someone else can check.
 
-[Start a component check](#workspace)
+[Use the checklist](#workspace)
 
 ## How to run a Storybook component review with this checklist {#how-to-use-it}
 

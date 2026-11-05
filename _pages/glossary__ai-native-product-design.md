@@ -45,6 +45,13 @@ navigation:
     url: /glossary
   - name: AI-native Product Design
     url: /glossary/ai-native-product-design
+  section_labels:
+    ai-assisted-vs-ai-native-product-design: The design process
+    examples: Examples
+    ai-native-vs-agentic: Where agents fit
+    ai-native-does-not-mean-autonomous-design: Principles
+    related-terms: Related terms
+    faq: FAQs
 conversion: {}
 render:
   band_order:
@@ -111,7 +118,7 @@ content_governance:
 
 # What is AI-native product design? Meaning, principles and examples
 
-**AI-native product design** is a way of working in which experienced designers direct AI agents, fixed automation and purpose-built tools through the work they suit. It runs from research through to implementation and checking. It changes how a project is run and keeps people responsible for the calls that shape the product.
+**AI-native product design** is a way of working in which experienced designers direct AI agents, fixed automation and purpose-built tools through the work they suit. It runs from research through to implementation and checking. It changes how a project is run and keeps people responsible for the decisions that shape the product.
 
 The term describes how the practice works, whatever the product, including products with no AI in them.
 
@@ -119,7 +126,7 @@ The term describes how the practice works, whatever the product, including produ
 
 In an AI-native practice the workflow itself changes. Suitable tasks go to AI agents or automation, which are given the product knowledge they need. Their output is reviewed against criteria agreed beforehand.
 
-Designers spend less of the project on repeat work and more on the calls only they can make. The brief, the checks and the final say stay with them.
+Designers spend less of the project on repeat work and more on the decisions only they can make. The brief, the checks and the final say stay with them.
 
 ## AI-native design examples across a project {#examples}
 
@@ -133,15 +140,15 @@ Design files can be compared with the live product, screen by screen, before a r
 
 An AI-native practice can use agents for that kind of work. It also uses fixed automation, direct human work and ordinary software, so agentic work is one mode within the practice.
 
-## AI-native product design principles: people make the calls {#ai-native-does-not-mean-autonomous-design}
+## AI-native product design principles: people make the decisions {#ai-native-does-not-mean-autonomous-design}
 
 Framing the problem, weighing trade-offs, interpreting findings and accepting the work stay with people. Which tasks go to software depends on how clear the goal is and whether the result can be checked. It also depends on how well the tool knows the product and what a mistake would cost.
 
 From there, a few principles hold. A task goes to software when its goal is clear and its result can be checked. The tool gets the same project material a designer would use. A result counts once it passes the agreed checks or a designer's review.
 
-The practice is moving quickly. As agents carry more of a product's history and rules, they take on longer stretches of research, comparison and checking, and designers spend more of the project on the calls that shape the product.
+The practice is moving quickly. As agents carry more of a product's history and rules, they take on longer stretches of research, comparison and checking, and designers spend more of the project on the decisions that shape the product.
 
-[See what Tcules designers cover with AI, and what people decide](/how-we-work/ai-native-product-design)
+[See how we use AI →](/how-we-work/ai-native-product-design)
 
 ## Terms related to AI-native product design {#related-terms}
 

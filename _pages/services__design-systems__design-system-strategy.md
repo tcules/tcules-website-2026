@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -150,11 +150,11 @@ content_governance:
 
 # Design system strategy for scope, ownership and what to build first
 
-Design system strategy is for the planning session where product, design and engineering leads agree what the system covers, and for every later request that needs a quick yes or no. Tcules provides design system strategy for SaaS companies with several products or teams: scope, owners and what to build first.
+Our design system strategy sets out what every product shares and who approves changes, so each new request gets a quick yes or no.
 
 *Selected work: [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)*
 
-[Name the products your system has to serve](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -162,11 +162,9 @@ Design system strategy is for the planning session where product, design and eng
 
 A plan your teams can build from, agreed with the people who will build it and the people who will live with it.
 
-**What you receive**
+- **What you already have, listed.** What already exists in Figma and in code, and which duplicates to merge.
 
-- **An inventory.** What already exists in Figma and in code, and which duplicates to merge.
-
-- **A scope map.** Every pattern your teams use, sorted into shared, product-specific, technical and still open, filled in for your products.
+- **What the system covers.** Every pattern your teams use, sorted into shared, product-specific, technical and still open, filled in for your products.
 
 - **A structure for the system.** How colours, type, spacing and components are organised, so the system grows without a reshuffle, and where a theme layer handles brand differences.
 
@@ -180,7 +178,7 @@ A plan your teams can build from, agreed with the people who will build it and t
 
 **Who does the work.** A senior designer leads the strategy and runs the conversations with every team, a design engineer reads the components already in your code, and an account lead keeps it moving.
 
-**What we need from you.** Product, design and frontend leads from each team that will use the system, someone who can make product calls, and access to your Figma files and code. Strategy goes wrong when engineering hears about it last.
+**What we need from you.** Product, design and frontend leads from each team that will use the system, someone who can make product decisions, and access to your Figma files and code. Strategy goes wrong when engineering hears about it last.
 
 **Where our part stops.** You get a plan, and the build is a separate choice. [Design System Implementation](/services/design-systems/design-system-implementation) builds it, [Governance & Adoption](/services/design-systems/governance-adoption) runs the owners and rules day to day, and a [Design System Audit](/audits/design-system-audit) looks at a system you already have.
 
@@ -213,7 +211,7 @@ We sort the patterns your teams use into four groups, argued out once with the p
 | Technical | Code choices that support the system without changing what users see | How components are packaged for your code |
 | Still open | Patterns that look shared but need more real use first | A filter two teams have built in different ways |
 
-The last group matters most. Standardise a pattern too early and every team inherits the wrong answer at once. Our article covers [matching a design system to the size of your product](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency).
+The last group matters most. Standardise a pattern too early and every team inherits the wrong answer at once. Our article covers [matching a design system to the size of your product](/insights/design-systems-for-saas-boosting-efficiency-and-ux-consistency).
 
 Approval follows the reach of a change. A shared colour touches every product; one product's layout touches one team.
 
@@ -224,7 +222,7 @@ Approval follows the reach of a change. A shared colour touches every product; o
 | A product exception | That product's design lead, recorded with an owner | Listed where other teams can see it |
 | A change that could break a product | The system owners, with each affected team | Announced ahead, with a migration guide and an end date for the old version |
 
-## Strategy, audit or implementation: where to start {#which-first}
+## Plan it, review it or build it first {#which-first}
 
 | Start with | When | Best for |
 |---|---|---|
@@ -247,41 +245,57 @@ Approval follows the reach of a change. A shared colour touches every product; o
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For design system strategy, a good first piece of work is one scoping round across your products, ending in a scope map and a plan for the first release.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We know what to leave alone in a product people rely on.** After auditing [Dealpath's](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) deal-management software, we redesigned one step, Add to pipeline, and kept the other three listing actions largely as users knew them.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** We started [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) modernisation at the shared component layer, in coded prototypes, where an engineer could raise a drag-and-drop question about Bootstrap 5 while the choice was still open.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** Primelis has had us design all of its products for three years, working as part of its product team.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [MarTech](/expertise/martech-salestech)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about design system strategy {#faq}
 
@@ -295,7 +309,7 @@ Yes, when the products share the same meaning underneath. In a multi-brand desig
 
 ### Who needs to be involved in a design system strategy?
 
-The product, design and frontend leads of every team that will use the system, and one person who can make product calls. Bring engineering in from the first conversation, because a plan they hear about last rarely survives the build.
+The product, design and frontend leads of every team that will use the system, and one person who can make product decisions. Bring engineering in from the first conversation, because a plan they hear about last rarely survives the build.
 
 ### How do we build the business case for a design system?
 
@@ -319,6 +333,6 @@ Name the products and teams, and where each one pulls a different way. We'll tel
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

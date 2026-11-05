@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Cluster, Layout, Section, Sketch, type SectionSurface } from '@/components';
+import { Cluster, Icon, Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
@@ -8,6 +8,7 @@ import styles from './EngagementOptions.module.css';
 /**
  * What an option's scope drawing shows. Each draws only what the option's name says:
  *   feature   one workflow: a single line through three screens
+ *   pilot     a pilot project: the fixed price agreed first, then one flow, alone in its region
  *   area      a product area or a whole product: a region holding several workflows
  *   embedded  a designer in your team: one blue node among your team's
  *   build     design and build: a drawn region becoming a built one
@@ -23,6 +24,7 @@ import styles from './EngagementOptions.module.css';
  */
 export type EngagementScope =
   | 'feature'
+  | 'pilot'
   | 'area'
   | 'embedded'
   | 'build'
@@ -32,6 +34,7 @@ export type EngagementScope =
   | 'overlap'
   | 'commercial'
   | 'own'
+  | 'yours'
   | 'who'
   | 'communication'
   | 'response'
@@ -40,6 +43,8 @@ export type EngagementScope =
   | 'hours';
 
 export type EngagementTerm = {
+  /** What the term is about ("Yours", "Working hours"), set as a mono key over its words. Optional. */
+  label?: string;
   /** The term's paragraph, inline content the caller renders. */
   body: ReactNode;
 };
@@ -72,8 +77,24 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /**
+   * `cards` only: the glyph that heads the option, composed by the caller (a pattern takes its
+   * sibling as a node): glyph, then label and name, then words, each on its own row. Set on every
+   * option or on none.
+   */
+  icon?: ReactNode;
   /** The option's terms as labelled blocks under its words, two across from 1024. */
   facts?: readonly EngagementFact[];
+  /**
+   * `plans` only: what the option includes, one short line an entry, each set behind the one shared
+   * tick (owner, 5 Nov 2026: "all icons are the same icon"). Inline content the caller renders.
+   */
+  checklist?: readonly ReactNode[];
+  /**
+   * `plans` only: the option's own way in, composed by the caller (in practice an outline Button),
+   * at the card's foot, the full width of the card.
+   */
+  action?: ReactNode;
 };
 
 /**
@@ -82,11 +103,21 @@ export type EngagementOption = {
  *         each card's image, then the name and what it is. THE BAND (product design).
  *   compare  the options three across, then each fact as one ruled row, its values aligned under
  *         their option (owner, 1 Nov 2026, /how-we-work). Below 1024, `rows`.
+ *   cards  each option a card that reads as one (owner, 4 Nov 2026, homepage pass: "these also need
+ *         to be cards that look like cards"): a hairline round it at the card radius, its label, its
+ *         name and what it is, no drawing; three across from 1024, one column below. Peers, so no
+ *         card is featured.
  *   rows  one alternating row per option, the drawing in 5 of [5, 7] beside its words, sides
  *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
  *         1440).
  */
-export type EngagementArrangement = 'grid' | 'rows' | 'compare';
+/*   plans  each option a plan card, a pricing table without prices (owner, 5 Nov 2026, the "Three ways
+ *         to work with us" band): its name and the line under it over a hairline, the checklist behind one shared
+ *         tick, the option's action at the foot. Three across from 1024 on shared rows, so the names,
+ *         the lists and the actions each start on one line; one column below. Peers: every action
+ *         takes the same emphasis, so no plan is featured.
+ */
+export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards' | 'plans';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -167,7 +198,13 @@ export function EngagementOptions({
   surface = 'paper',
   arrangement = 'grid',
 }: EngagementOptionsProps) {
-  const shown = options.filter((option) => option.title.trim().length > 0);
+  /* An option with no name is dropped, except as a card: a card may be its glyph and words alone, as
+     a set of one-line points (/how-we-work "How we use AI", owner 4 Nov 2026: "3 cards, one for each
+     line"). A set is named throughout or not at all; the caller decides. */
+  const shown = options.filter(
+    (option) =>
+      option.title.trim().length > 0 || (arrangement === 'cards' && option.body != null),
+  );
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
   const anyDrawn = shown.some((option) => option.scope);
@@ -193,97 +230,141 @@ export function EngagementOptions({
       aria-labelledby={headingId}
       data-band="engagement-options"
     >
-      <Layout rowGap="stack">
-        {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
+      {/* `cards`: the ask closes the band a `section` (96) under the set (owner, 4 Nov 2026: "so the
+          hierarchy is clear"); otherwise a `stack`, the head's own seam. */}
+      <Layout rowGap={arrangement === 'cards' || arrangement === 'plans' ? 'section' : 'stack'}>
+        <Layout rowGap="stack">
+          {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
             `actionsAt="end"`, the one rule for every head's end action), the lead under that row. */}
-        <Layout
-          columns={action ? { lg: [1, 'auto'] } : undefined}
-          colGap={action ? 'column' : undefined}
-          rowGap="block"
-          align={action ? 'center' : undefined}
-        >
-          <h2 id={headingId} className={styles.heading}>
-            {heading}
-          </h2>
-          {action ? <div>{action}</div> : null}
-          {leads.length > 0 ? (
-            <Layout rowGap="text">
-              {leads.map((paragraph, index) => (
-                <p key={index} className={styles.lead}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-          ) : null}
-        </Layout>
-        <Layout rowGap="column">
-          {arrangement === 'grid' ? (
-            /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
+          <Layout
+            columns={action ? { lg: [1, 'auto'] } : undefined}
+            colGap={action ? 'column' : undefined}
+            rowGap="block"
+            align={action ? 'center' : undefined}
+          >
+            <h2 id={headingId} className={styles.heading}>
+              {heading}
+            </h2>
+            {action ? <div>{action}</div> : null}
+            {leads.length > 0 ? (
+              <Layout rowGap="text">
+                {leads.map((paragraph, index) => (
+                  <p key={index} className={styles.lead}>
+                    {paragraph}
+                  </p>
+                ))}
+              </Layout>
+            ) : null}
+          </Layout>
+          <Layout
+            rowGap={arrangement === 'cards' || arrangement === 'plans' ? 'gutter' : 'column'}
+          >
+            {arrangement === 'plans' ? (
+              <Plans shown={shown} />
+            ) : arrangement === 'grid' ? (
+              /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
                column below: a borderless tile each (the drawing's plate is the image, the
                name and its words under it), 32 across and a `column` down the set — the row seam of
                every borderless card set. */
-            <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
-              {shown.map((option) => {
-                const card = (
-                  <Layout rowGap="block">
-                    {option.scope ? (
-                      <Drawing scope={option.scope} />
-                    ) : anyDrawn ? (
-                      /* Not drawn yet, in a set that is: the empty plate holds its place. */
-                      <Sketch />
-                    ) : null}
-                    <Layout rowGap="text">
-                      <OptionHead
-                        option={option}
-                        className={cx(styles.title, dense && styles.titleDense)}
-                      />
-                      <OptionBody
-                        option={option}
-                        className={cx(styles.body, dense && styles.bodyDense)}
-                      />
-                      {option.facts && option.facts.length > 0 ? (
-                        <Facts facts={option.facts} />
+              <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
+                {shown.map((option) => {
+                  const card = (
+                    <Layout rowGap="block">
+                      {option.scope ? (
+                        <Drawing scope={option.scope} />
+                      ) : anyDrawn ? (
+                        /* Not drawn yet, in a set that is: the empty plate holds its place. */
+                        <Sketch />
                       ) : null}
+                      <Layout rowGap="text">
+                        <OptionHead
+                          option={option}
+                          className={cx(styles.title, dense && styles.titleDense)}
+                        />
+                        <OptionBody
+                          option={option}
+                          className={cx(styles.body, dense && styles.bodyDense)}
+                        />
+                        {option.facts && option.facts.length > 0 ? (
+                          <Facts facts={option.facts} />
+                        ) : null}
+                      </Layout>
                     </Layout>
-                  </Layout>
-                );
-                return <li key={option.title}>{card}</li>;
-              })}
-            </Layout>
-          ) : arrangement === 'compare' ? (
-            <>
-              {/* From 1024: the options head the set three across, then each fact runs as one ruled
+                  );
+                  return <li key={option.title}>{card}</li>;
+                })}
+              </Layout>
+            ) : arrangement === 'cards' ? (
+              /* Each option its own card (owner, 4 Nov 2026: "make the boxes disjointed"), a `gutter`
+               apart, each headed by its glyph, then its label and name, then its words. */
+              <Layout
+                as="ul"
+                columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+                colGap="gutter"
+                rowGap="gutter"
+              >
+                {shown.map((option, index) => (
+                  <li key={option.title || index} className={styles.card}>
+                    <Layout rowGap="block">
+                      {option.icon ? (
+                        <span className={styles.cellIcon} aria-hidden="true">
+                          {option.icon}
+                        </span>
+                      ) : null}
+                      <Layout rowGap="text">
+                        <OptionHead option={option} className={styles.title} />
+                        <OptionBody option={option} className={styles.body} />
+                      </Layout>
+                    </Layout>
+                  </li>
+                ))}
+              </Layout>
+            ) : arrangement === 'compare' ? (
+              <>
+                {/* From 1024: the options head the set three across, then each fact runs as one ruled
                   row, its key over the three values aligned under their option, so a read across a
                   row compares the deals (owner, 1 Nov 2026, /how-we-work). Below 1024 there is no
                   across to read: the rows arrangement, one option a section. */}
-              <div className={styles.compareWide}>
-                <Compare shown={shown} />
-              </div>
-              <div className={styles.compareNarrow}>
-                <Rows shown={shown} />
-              </div>
-            </>
-          ) : (
-            <Rows shown={shown} />
-          )}
-          {closing ? (
-            <Layout rowGap="block">
-              <Layout rowGap="text">
-                <h3 className={styles.closingHeading}>{closing.heading}</h3>
-                <p className={styles.lead}>{closing.lead}</p>
+                <div className={styles.compareWide}>
+                  <Compare shown={shown} />
+                </div>
+                <div className={styles.compareNarrow}>
+                  <Rows shown={shown} />
+                </div>
+              </>
+            ) : (
+              <Rows shown={shown} />
+            )}
+            {closing ? (
+              <Layout rowGap="block">
+                <Layout rowGap="text">
+                  <h3 className={styles.closingHeading}>{closing.heading}</h3>
+                  <p className={styles.lead}>{closing.lead}</p>
+                </Layout>
+                {closing.proof}
               </Layout>
-              {closing.proof}
-            </Layout>
-          ) : null}
-          {terms.length > 0 ? (
-            <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
-              {terms.map((term, index) => (
-                <p key={index} className={styles.termText}>
-                  {term.body}
-                </p>
-              ))}
-            </Layout>
-          ) : null}
+            ) : null}
+            {terms.length > 0 ? (
+              <Layout
+                columns={{ base: 1, lg: termTracks }}
+                colGap="gutter"
+                rowGap={terms.some((term) => term.label) ? 'block' : 'text'}
+              >
+                {terms.map((term, index) =>
+                  term.label ? (
+                    <Layout key={index} rowGap="tight">
+                      <p className={styles.factKey}>{term.label}</p>
+                      <p className={styles.termText}>{term.body}</p>
+                    </Layout>
+                  ) : (
+                    <p key={index} className={styles.termText}>
+                      {term.body}
+                    </p>
+                  ),
+                )}
+              </Layout>
+            ) : null}
+          </Layout>
         </Layout>
         {note}
       </Layout>
@@ -407,9 +488,56 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
   );
 }
 
+/**
+ * The plan cards: each a hairline card on the plan ground, two parts on rows the set shares from
+ * 1024 (the head over its rule with the checklist a `block` under it, then the action a `stack`
+ * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
+ */
+function Plans({ shown }: { shown: readonly EngagementOption[] }) {
+  return (
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: Math.min(shown.length, 4) as 2 | 3 | 4 }}
+      colGap="gutter"
+      rowGap="gutter"
+      shareRows={2}
+    >
+      {shown.map((option, index) => (
+        /* The action stands a `stack` (48) under the list (owner, 5 Nov 2026: "more
+           space above the button"); the head and list keep their `block` inside their group. */
+        <Layout as="li" key={option.title || index} rowGap="stack" className={styles.plan}>
+          <Layout rowGap="block">
+            {/* The name, then the one line that says what the plan is for, a `tight` step under it
+                (owner, 5 Nov 2026, final copy), both over the head's hairline. */}
+            <Layout rowGap="tight" className={styles.planHead}>
+              <OptionHead option={option} className={styles.planTitle} />
+              {option.body != null ? <p className={styles.planBody}>{option.body}</p> : null}
+            </Layout>
+            {option.checklist && option.checklist.length > 0 ? (
+              <Layout as="ul" rowGap="text">
+                {option.checklist.map((item, i) => (
+                  <li key={i}>
+                    <Cluster colGap="tight" align="start" nowrap>
+                      <span className={styles.tick} aria-hidden="true">
+                        <Icon name="check-circle" size="lg" />
+                      </span>
+                      <span className={styles.planItem}>{item}</span>
+                    </Cluster>
+                  </li>
+                ))}
+              </Layout>
+            ) : null}
+          </Layout>
+          <Layout>{option.action ?? <div />}</Layout>
+        </Layout>
+      ))}
+    </Layout>
+  );
+}
+
 /** The option's name, with its eyebrow over it a `tight` step when it has one. */
 function OptionHead({ option, className }: { option: EngagementOption; className?: string }) {
-  const title = <h3 className={className}>{option.title}</h3>;
+  const title = option.title ? <h3 className={className}>{option.title}</h3> : null;
   if (!option.eyebrow) return title;
   return (
     <Layout rowGap="tight">

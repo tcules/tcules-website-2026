@@ -60,11 +60,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -161,19 +161,17 @@ content_governance:
 
 # Software workflow design for products where work changes hands
 
-Workflow design is for the hand-offs your customers live in: a quote passing from sales to pricing, an approval waiting on a manager, and the support ticket asking who has it now. Tcules provides software workflow design and information architecture for SaaS and enterprise products whose records several roles share.
+With software workflow design and clear information architecture, every role in your product can see who holds each task and what comes next.
 
 *Selected work: [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)*
 
-[Show us where work goes missing](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from workflow design and information architecture {#what-you-get}
 
 We design the structure under your screens: what the product tracks, who can act on it and how work moves between people. It is one part of our [Product Design](/services/product-design) work.
-
-**What you receive**
 
 - **A map of your records.** What the product tracks and how those things connect, such as clients, jobs and candidates, or listings and deals.
 
@@ -197,9 +195,9 @@ We design the structure under your screens: what the product tracks, who can act
 
 ## Selected workflow design work {#selected-work}
 
-Three structures, from staffing software with users still to come to an established deal pipeline and a specialist store.
+Three products: staffing software before launch, an established deal pipeline and a specialist store.
 
-### Scissors: one model under four staffing workflows
+### Scissors: four staffing workflows built on shared records
 
 Scissors needed onboarding, shortlisting, talent pools and job creation redesigned. We first modelled what they share: a client lasting across jobs, a candidate on several shortlists, a reusable talent pool. In the redesign, details entered once at onboarding carry into every job and candidate message. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -228,7 +226,7 @@ Example: for [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), sales 
 
 ## Workflow design, research or a redesign: which do you need? {#routes}
 
-Structure problems look like screen problems from the outside. Choose by where the trouble shows today.
+Pick by where the trouble shows: work lost between people, unclear user needs, confusing screens or an unknown cause.
 
 | Service | What it covers | Best for |
 |---|---|---|
@@ -249,41 +247,57 @@ Structure problems look like screen problems from the outside. Choose by where t
 > “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
 > **Clément Contamine, CPO, Primelis**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For workflow design, a good first piece of work is one workflow that passes between several roles, such as a quote or onboarding, mapped and prototyped.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We work out what the product has to know before we draw it.** For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that availability depended on a meeting's priority, so priority joined the product model before the scheduling interface was designed.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We know what to leave alone in a product people rely on.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), long-time customers' habits were treated as a constraint, and the redesigned scope selector gave familiar work a clearer structure.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we set out which data, modules and twin view each of eight scenarios brings up, then tested that structure in a coded demo on sample data.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about workflow design and information architecture {#faq}
 
@@ -317,6 +331,6 @@ Name the roles involved, the records they pass along and the step where someone 
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

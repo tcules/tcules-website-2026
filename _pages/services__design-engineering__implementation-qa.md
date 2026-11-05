@@ -61,11 +61,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -181,19 +181,17 @@ content_governance:
 
 # Design QA services that check your build against the design before release
 
-Design QA is for the days before a release. The product owner wants to know where the build differs from the design, and engineers want a fix list they can start on without a meeting. Tcules provides design QA for SaaS teams: every difference sorted, owned and retested.
+Your engineers get one sorted fix list from our design QA, and each fix is retested before customers see the release.
 
 *Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)*
 
-[Show us the build before your customers see it](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from design QA {#what-you-get}
 
 A check of the working product against the agreed design, starting with the tasks where a miss would cost your users most.
-
-**What you receive**
 
 - **The build checked screen by screen.** A Figma vs build comparison of layout and components, including your design system. Then the loading, empty, error and disabled states, each user role, and small or resized windows. Then keyboard use, focus order and screen-reader labels, and real content: long names, missing data, large numbers.
 
@@ -207,9 +205,9 @@ A check of the working product against the agreed design, starting with the task
 
 **Who does the work.** Design engineers who know why the design is the way it is, so a finding explains the reason as well as the bug. An account lead plans the order of checks around your release date.
 
-**What we need from you.** The agreed designs and rules for this release, a test environment, the release date, the areas you are least sure about, and someone who can make product calls on open questions.
+**What we need from you.** The agreed designs and rules for this release, a test environment, the release date, the areas you are least sure about, and someone who can make product decisions on open questions.
 
-**Where our part stops.** You choose who fixes what, and product calls on open questions stay with your product owner. When the same mismatches return release after release, the [Design-to-Code Audit](/audits/design-to-code-audit) looks at why.
+**Where our part stops.** You choose who fixes what, and product decisions on open questions stay with your product owner. When the same mismatches return release after release, the [Design-to-Code Audit](/audits/design-to-code-audit) looks at why.
 
 ## Selected design QA work {#selected-work}
 
@@ -227,7 +225,7 @@ We designed GT Tools' Shopify store and then developed it, with custom work wher
 
 We mapped shopper journeys against Magento's default workflow before building The Chain Hut's store. Magento's core purchase flow stayed intact, with clearer navigation and search and a simpler checkout around it. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
 
-## Our design QA process: one finding an engineer can act on {#finding}
+## Our design QA process: findings engineers can act on {#finding}
 
 Screenshot tools are good at spotting change and poor at judging it. A long list of pixel differences tells nobody which ones users will notice, so each difference gets a type and a next step.
 
@@ -238,7 +236,7 @@ Screenshot tools are good at spotting change and poor at judging it. A long list
 | Missing state | Nobody designed this case | Design it, then build it |
 | Open question | The build exposed a product question | Your product owner decides |
 
-If a shared component is wrong across the whole product, the finding says so and names who owns the fix. Our article explains [why interface regressions cost confidence before any metric shows it](/insights/articles/silent-ui-regression-debt).
+If a shared component is wrong across the whole product, the finding says so and names who owns the fix. Our article explains [why interface regressions cost confidence before any metric shows it](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows).
 
 *Illustration, not client work*
 
@@ -252,7 +250,7 @@ One entry from a fix list for a SaaS product's account settings release.
 | Why it matters | On a phone, the banner scrolls out of view and users cannot see which field failed |
 | Type and owner | Defect, frontend team |
 
-## Implementation QA vs design-to-code audit: which do you need? {#compare}
+## Design QA or a design-to-code audit: when each fits {#compare}
 
 | Check | What it covers | Best for |
 |---|---|---|
@@ -272,41 +270,57 @@ One entry from a fix list for a SaaS product's account settings release.
 > “Our developers enjoyed working on the platform with the right UI/UX specs.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For design QA, a good first piece of work is one release's riskiest workflow, checked, sorted and retested until every finding closes.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We prove the hard parts in code while they can still change.** [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers checked our coded prototypes in the browser, and one noted that Bootstrap 5 lacks native drag and drop while the choice was still open.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **One studio can take it into working software, with the designers staying in the build.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we took the AI workspace from a coded demo on sample data through to a production-ready module.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We know what to leave alone in a product people rely on.** In [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) scheduling MVP, standard interactions stayed with the components Doodle already had, and only the calendar and bookability work got new ones.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[AI products](/expertise/ai-products-developer-tools)
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [See all industries →](/expertise)
 
 ## Questions about design QA {#faq}
 
@@ -336,6 +350,6 @@ Send the product area, the agreed designs and the screens you're least sure abou
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

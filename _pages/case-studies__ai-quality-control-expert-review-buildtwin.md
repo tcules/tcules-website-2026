@@ -56,13 +56,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -169,7 +169,7 @@ content_governance:
 
 # BuildTwin AI quality control UX: engineers trace and overrule each check
 
-BuildTwin uses AI to check structural-engineering drawings, but a quality engineer still signs off each one and has to defend the call. Tcules redesigned the review so every AI check showed its source and said when information was missing. The engineer could overrule a check, with a reason that stayed on the record.
+BuildTwin uses AI to check structural-engineering drawings, but a quality engineer still signs off each one and has to defend the decision. Tcules redesigned the review so every AI check showed its source and said when information was missing. The engineer could overrule a check, with a reason that stayed on the record.
 
 The earlier review screen showed status. An accountable reviewer also needed to see what lay behind that status before trusting it.
 
@@ -273,7 +273,7 @@ The record shows what the system returned and why a person disagreed. That histo
 
 ### Who uses the AI review step in BuildTwin?
 
-Three roles meet it. Detailers prepare drawings, quality engineers review them along with the AI's checks, and approvers move them forward. The quality engineer signs off each drawing and has to defend the call, so the design gave that role the information and controls to do it.
+Three roles meet it. Detailers prepare drawings, quality engineers review them along with the AI's checks, and approvers move them forward. The quality engineer signs off each drawing and has to defend the decision, so the design gave that role the information and controls to do it.
 
 ## More AI case studies where people can overrule the model {#related}
 
@@ -283,11 +283,11 @@ In both, a person can reject or rewrite what the model produced, and the record 
 
 [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
 
-[See Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery)
+[See Trust, Control and Recovery →](/services/ai-product-ux/trust-control-recovery)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us who has to check your product's AI output {#enquiry}
 

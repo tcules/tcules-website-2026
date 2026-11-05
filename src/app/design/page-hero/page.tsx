@@ -820,6 +820,36 @@ export default async function PageHeroSpecimenPage() {
         note="The same row under a hero with no media; a unit sits on the figure's baseline in the mono label voice."
       />
 
+      {/* ── 5c · A redirect line after the ask (the six audits, 4 Nov 2026) ──────── */}
+      <PageHero
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={EYEBROW}
+        actions={ONE_ACTION}
+        arrangement="beside"
+        media={{
+          type: 'image',
+          image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+          ratio: '5/4',
+        }}
+        actionsNote={
+          <p>
+            <em>
+              Already live with customers? See the <a href="#actions-note">UX &amp; Product Audit</a>.
+            </em>
+          </p>
+        }
+        stats={[
+          { value: '2017', label: 'Founded' },
+          { value: '90+', label: 'Projects' },
+          { value: '19', label: 'Countries with clients' },
+        ]}
+      />
+      <Note
+        title="5c · actionsNote — a quiet line after the ask"
+        note="The copy's redirect for a reader on the wrong page, a block (24) under the actions in its authored place after the ask, before the figures. The caller's node: CorpusHero sets it in the muted body-sm proof-line voice, its link inline. Shortest real copy here; the longest is 'Only a few screens ship unlike the design? See the Design-to-Code Audit.'"
+      />
+
       {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} />
       <Section>

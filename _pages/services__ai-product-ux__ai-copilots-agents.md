@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -155,11 +155,11 @@ content_governance:
 
 # AI agent UX design that lets users pause, redirect or take over
 
-An agent earns its place in your customers' day when they can hand it a job, check progress between meetings and step in before anything costly goes out. Your support team needs to see what it did. Tcules provides AI agent UX design for SaaS teams adding copilots and agents to their product.
+Our AI agent UX design makes copilots and agents show their plan and ask before costly steps, so customers hand them real jobs.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)*
 
-[Describe the task you want to hand to AI](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
@@ -167,9 +167,7 @@ An agent earns its place in your customers' day when they can hand it a job, che
 
 Everything a person sees and controls while a copilot or agent works for them, from the brief to the undo.
 
-**What you receive**
-
-- **A level for each step.** Whether the AI suggests, prepares, acts after approval, acts within limits or hands back, agreed with you step by step through the task.
+- **How far the AI goes at each step.** Whether the AI suggests, prepares, acts after approval, acts within limits or hands back, agreed with you step by step through the task.
 
 - **Screens for the start and the middle of a job.** Before it starts, the goal it understood, the data it can read and the tools it may use. While it works, the plan and progress, with controls to pause, redirect, narrow the task or take over one step by hand.
 
@@ -236,41 +234,57 @@ The agent reads the brief back before it starts, and its questions arrive togeth
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For AI agents and copilots, a good first piece of work is one task designed end to end, from the brief the agent reads back to the undo after it finishes.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We design AI that people can check and correct.** In [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin)'s review design, an engineer who disagrees with an AI check changes its status and gives a reason, and the original result stays visible beside the correction.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We work out what the product has to know before we draw it.** For [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), eight interviews mapped who does what on a quotation across six roles before we designed a single component.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We prove the hard parts in code while they can still change.** Reviewing our coded prototypes for [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer asked how drag and drop would work in Bootstrap 5, and the team could act on it while the choice was still open.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech)
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [See all industries →](/expertise)
 
 ## Questions about AI agent UX design {#faq}
 
@@ -304,6 +318,6 @@ Describe the workflow, the action you want to hand to AI and the moments a perso
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

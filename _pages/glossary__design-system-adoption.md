@@ -43,6 +43,13 @@ navigation:
     url: /glossary
   - name: Design System Adoption
     url: /glossary/design-system-adoption
+  section_labels:
+    measure: Measuring it
+    practice: Why it fails
+    comparison: Vs component usage
+    related-terms: Related terms
+    faq: FAQs
+    next: Where to look
 render:
   band_order:
   - measure
@@ -172,4 +179,4 @@ Look in released products, where the shared system either shapes what users see 
 
 Adoption has a new kind of user. AI coding assistants build screens too, and a system they can read and apply correctly shows up in the screens they generate.
 
-[See the Design System Audit](/audits/design-system-audit)
+[See the Design System Audit →](/audits/design-system-audit)

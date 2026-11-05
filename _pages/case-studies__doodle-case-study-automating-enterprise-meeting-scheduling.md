@@ -56,13 +56,13 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   scheduling_label: See available times
   scheduling_behavior: lazy_secondary
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -272,12 +272,12 @@ Here too, the model had to come before the interface.
 
 [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
 
-[See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
+[See Information Architecture and Workflow Design →](/services/product-design/information-architecture-workflow-design)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us which choice your product is trying to automate {#enquiry}
 
-Describe the workflow, the records it moves and the call people keep having to make twice.
+Describe the workflow, the records it moves and the decision people keep having to make twice.

@@ -61,6 +61,14 @@ navigation:
     url: /tools
   - name: Design System Drift Checker
     url: /tools/design-system-drift-checker
+  section_labels:
+    who-its-for: Who it suits
+    how-to-use-it: How to use it
+    workspace: Four places
+    reading-your-results: Worked example
+    wider: A second product
+    next: Who owns fixes
+    faq: FAQs
 render:
   band_order:
   - who-its-for
@@ -148,7 +156,7 @@ The same field can be current in Figma, correct in Storybook and three releases 
 
 Bring the design file, the coded component and a running product that uses it. You leave with the differences you saw, their likely causes and the next check to tell those causes apart.
 
-[Open the checker](#workspace)
+[Use the checker](#workspace)
 
 ## A design system consistency check for teams sharing components {#who-its-for}
 
@@ -196,7 +204,7 @@ What you saw is a local copy. The likely cause is an interaction the shared comp
 
 Compare another product that uses the component before calling the problem widespread. One trace gives you a precise example; a wider review adds adoption figures, a search of the whole codebase and confirmed accessibility.
 
-Check keyboard use, labels, errors and content in the running workflow as well as in Storybook. The method looks separately at appearance, behaviour and where the component is used, drawing on [Storybook's UI testing guidance](https://storybook.js.org/docs/writing-tests). Download the record, and the people who can open the files make the final call.
+Check keyboard use, labels, errors and content in the running workflow as well as in Storybook. The method looks separately at appearance, behaviour and where the component is used, drawing on [Storybook's UI testing guidance](https://storybook.js.org/docs/writing-tests). Download the record, and the people who can open the files make the final decision.
 
 ## Who owns component drift fixes, and where to take the finding {#next}
 

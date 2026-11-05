@@ -60,11 +60,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -100,7 +100,7 @@ page_composition:
     role: demonstrate
     supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
-    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built. Check the cover shows the storefront before release; otherwise bind chain_hut_audit.
+    alt_intent: The Chain Hut case cover for the mobile-first Magento store Tcules designed and built.
     source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
@@ -188,19 +188,17 @@ content_governance:
 
 # Frontend development services for SaaS apps that look and behave as designed
 
-Frontend development is for the customer working through a long table on a slow connection, the prospect watching the demo, and the engineers who will inherit the code. Tcules provides frontend development services for SaaS and web apps: screens and components built from your designs, in every state, with tests and release.
+Your customers get accessible screens that handle every loading and error state, and your engineers get tested code from our frontend development.
 
 *Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)*
 
-[Show us the designs you need built](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from our frontend development services {#scope}
 
 The running interface of your product, built from approved designs inside your own codebase, for a new release or a live product.
-
-**What you receive**
 
 - **Screens and components.** Built with your design system, or extending it through your team's contribution process.
 
@@ -226,7 +224,7 @@ The running interface of your product, built from approved designs inside your o
 
 Three frontends we built from our own designs: a workspace in an AI product, a Shopify store and a Magento store.
 
-### ConnectX: a screen that assembles around a question
+### ConnectX: the question decides what the screen shows
 
 ConnectX's workspace has no fixed layout. A question decides which modules and digital-twin view appear, and the workspace then stays open for ordinary use. We built it first as a coded demo on sample data, then as the production-ready module ConnectX has run since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
@@ -238,7 +236,7 @@ Buyers read long compatibility, variant, shipping and warranty detail before the
 
 We designed The Chain Hut's store mobile first, with separate versions for mobile, tablet and desktop, then built it on Magento with a checkout free of distractions. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
 
-## Every state a user meets, built to match the design {#states}
+## Empty, slow and error screens, built to match the design {#states}
 
 The design file shows each screen at its best. Your users meet the rest: long names, empty lists, slow responses, expired sessions and a button their role cannot use, often all at once.
 
@@ -251,7 +249,7 @@ The design file shows each screen at its best. Your users meet the rest: long na
 | **Awkward content** | Long names, missing images, partial data and stale records |
 | **Every screen size** | Layouts that work from a phone to a wide monitor |
 
-These go in with the feature from the start, so real data meets a finished screen. Tests cover the tasks customers rely on, because a release that breaks a screen nobody touched costs trust before anyone files a ticket. Our article on [what quiet interface regressions cost before anyone complains](/insights/articles/silent-ui-regression-debt) explains why.
+These go in with the feature from the start, so real data meets a finished screen. Tests cover the tasks customers rely on, because a release that breaks a screen nobody touched costs trust before anyone files a ticket. Our article on [what quiet interface regressions cost before anyone complains](/insights/silent-ui-regression-debt-erodes-adoption-before-it-shows) explains why.
 
 ## Frontend development, design engineering or design QA: which do you need? {#routes}
 
@@ -277,41 +275,57 @@ These go in with the feature from the start, so real data meets a finished scree
 > “The finished product is intuitive and user-friendly. The site's unique look and feel is also noteworthy.”  
 > **Trishanya Raju, Founder, The Wandering Raven**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For frontend development, a good first piece of work is one designed flow built in your codebase with every state, through your own code review.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **One studio can take it into working software, with the designers staying in the build.** We designed [The Wandering Raven's](/case-studies/wandering-raven-edtech-moodle-experience) learning world for young writers, then installed and configured its Moodle plugins and created a custom theme, so the world we designed is the one learners meet.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **We prove the hard parts in code while they can still change.** [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers tried our shared-pattern prototypes in the browser, and one asked whether drag and drop needed an external library with Bootstrap 5 while the choice was open.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **Senior people do the work, and clients keep us for years.** For three years we have designed and kept improving all of Primelis' products, working as part of its product team.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[ClimateTech](/expertise/climatetech-energy) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about frontend and React development {#faq}
 
@@ -345,6 +359,6 @@ Share the product and the designs you're working from. No designs yet? Our desig
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

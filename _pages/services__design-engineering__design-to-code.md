@@ -59,11 +59,11 @@ conversion:
   - Product or company URL
   optional_fields:
   - Product or company URL
-  submit_label: Send enquiry
+  submit_label: Request a call
   hidden_context: origin_route, placement, family, service_or_audit, referrer, campaign
   on_success:
-    heading: Your enquiry has reached us.
-    body: We'll reply within one business day.
+    heading: Thanks. Your request has reached us.
+    body: We'll reply within one business day to arrange the call, sometimes with a question or two first.
     retain_entered_data: true
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
@@ -156,19 +156,17 @@ content_governance:
 
 # Design to code services: Figma screens developers can build without guessing
 
-Design to code is for the sprint where developers build from screens that answer the empty list, the failed save and the missing permission, and for the release review after it. Tcules provides design to code services for SaaS teams, in your own components.
+Our design to code service answers your developers' questions before the sprint starts, so they build each Figma screen once, in your own components.
 
 *Selected work: [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)*
 
-[Tell us where developers are guessing](#enquiry)
+[Book a call](#enquiry)
 
 **Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## What you get from design to code {#what-you-get}
 
 Every state and rule a Figma screen leaves out, resolved, then handed to your developers as a spec, a working example or code, or a mix of the three.
-
-**What you receive**
 
 - **The missing states, designed.** Empty, long, failed, slow, restricted and small-screen versions of each screen, before the build starts.
 
@@ -208,7 +206,7 @@ The AI workspace we designed for ConnectX was first proved in a coded demo on sa
 
 ## Design handoff checklist: what a finished-looking screen leaves out {#handoff}
 
-Designs show the happy path, and the product has to handle everything else. A screen can also match the design until a role or a slow connection changes what people see. Screens an AI tool generated raise the same problem from the other side: they look finished while the product rules underneath are missing.
+Designs usually show the screen when all goes well; the product has to handle everything else. A screen can also match the design until a role or a slow connection changes what people see. Screens an AI tool generated raise the same problem from the other side: they look finished while the product rules underneath are missing.
 
 This is the checklist we resolve for every screen before your developers start.
 
@@ -220,7 +218,7 @@ This is the checklist we resolve for every screen before your developers start.
 | Product rules | Roles, permissions and how people recover from mistakes |
 | Layout and access | How screens respond across devices, and the accessibility checks they meet |
 
-## Design to code, QA or an audit: which do you need? {#which-check}
+## Design to code before the build, or checks after it {#which-check}
 
 | Option | Covers | Best for |
 |---|---|---|
@@ -243,41 +241,57 @@ This is the checklist we resolve for every screen before your developers start.
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+**4.8 on Clutch.** [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## How we work together {#how-we-work-together}
+## Three ways to work with us {#how-we-work-together}
 
-For design to code, a good first piece of work is one feature's screens, with every missing state designed and handed over the way your developers prefer.
+**Pilot project.** Try us on one real problem
 
-Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+[Start with a pilot](#enquiry)
 
-**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+**Defined project.** One goal, one scope, one price
 
-**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+[Get your project scoped](#enquiry)
 
-Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+**Ongoing partnership.** A design team without the hiring
 
-[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
 
-## Why teams choose Tcules {#why-tcules}
+[Get your design team](#enquiry)
 
-Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+Not sure which suits you? Tell us about the product, and we'll suggest one.
 
-- **We prove the hard parts in code while they can still change.** When [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers reviewed our coded prototypes, one asked whether drag and drop needed an external library with Bootstrap 5, a feasibility question raised while the design could still change.
+[Book a call](#enquiry) · [See how we work →](/how-we-work)
 
-- **One studio can take it into working software, with the designers staying in the build.** We redesigned CuramCare's web platform and both its apps, and our developers coded the frontend for each one from those designs.
+## Why founders and product teams choose Tcules {#why-tcules}
 
-- **We know what to leave alone in a product people rely on.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we kept Magento's core purchase flow intact and improved the shopper journeys around it, then built the store.
+- **Fluent in SaaS.** Roles, permissions and data-heavy screens need no explaining to us.
 
-[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+- **Idea to launch.** Bring an idea or your own prototype. Designers lead it through to launch.
+
+- **Craft people notice.** Your product stands out from lookalike software and feels effortless to use.
+
+- **Evidence before screens.** We test your assumptions with real users before they become expensive mistakes.
+
+- **Seen your problem before.** Senior designers who've solved problems like yours lead your product and do the work.
+
+- **Start small.** An optional fixed-price pilot lets you try us first, and ongoing work has no minimum term.
+
+[See why teams choose Tcules →](/why-tcules)
 
 ## Industries we know well {#industries}
 
-[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms) · [See all industries →](/expertise)
 
 ## Questions about design to code services {#faq}
 
@@ -311,6 +325,6 @@ Share what's designed and the screens developers keep asking questions about.
 - What are you working on?
 - Product or company URL (optional)
 
-**Submit:** Send enquiry
+**Submit:** Request a call
 
-**After sending:** We'll reply within one business day.
+**After sending:** We'll reply within one business day to arrange the call.

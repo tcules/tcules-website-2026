@@ -26,10 +26,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = page.seo?.title || page.hero.heading;
   const description = page.seo?.description || page.hero.description;
   const canonical = page.seo?.canonical;
-  const image =
-    page.resources.items.find((item) => item.image && !item.image.standIn)?.image ??
-    page.formatCards.find((card) => card.image)?.image;
-
   return {
     title,
     description,
@@ -40,13 +36,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       type: 'website',
       ...(canonical ? { url: canonical } : {}),
-      images: image ? [{ url: image.src, alt: image.alt }] : [],
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image',
       title,
       description,
-      images: image ? [image.src] : [],
     },
   };
 }

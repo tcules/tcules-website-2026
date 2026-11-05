@@ -257,7 +257,7 @@ export default function ClientMarkSpecimenPage() {
 
           <Specimen
             title="Citation size (sm)"
-            note='size="sm" sets the same arithmetic on its own small step (target 40, height cap 24, width cap 120), one value at every width: Doodle about 70 × 16, Eden AI about 76 × 24. It is the mark in a claim&rsquo;s citation line, the case&rsquo;s own title beside it as the one link, with a moving arrow (decisions/2026-10-30-claim-citation, proposed).'
+            note='size="xs" sets the same arithmetic on its own small step (target 40, height cap 24, width cap 120), one value at every width: Doodle about 70 × 16, Eden AI about 76 × 24. It is the mark in a claim&rsquo;s citation line, the case&rsquo;s own title beside it as the one link, with a moving arrow (decisions/2026-10-30-claim-citation, proposed).'
           >
             <Layout rowGap="block">
               {[C.DOODLE, C.EDEN_AI].map((c) => (
@@ -268,7 +268,7 @@ export default function ClientMarkSpecimenPage() {
                     width={c.width}
                     height={c.height}
                     density={c.density}
-                    size="sm"
+                    size="xs"
                   />
                   <span className={s.specNote}>{c.name} · sm</span>
                 </Cluster>
@@ -280,7 +280,7 @@ export default function ClientMarkSpecimenPage() {
                   width={C.DOODLE.width}
                   height={C.DOODLE.height}
                   density={C.DOODLE.density}
-                  size="sm"
+                  size="xs"
                 />
                 <a href="#doodle-case">
                   Doodle enterprise scheduling UX: finding meeting times people will keep

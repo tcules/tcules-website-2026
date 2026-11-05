@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 import {
+  AUDIT_PATH_REDIRECTS,
   CASE_SLUG_REDIRECTS,
   EXPERTISE_SLUG_REDIRECTS,
   INSIGHT_PATH_REDIRECTS,
@@ -46,6 +47,12 @@ const nextConfig: NextConfig = {
         permanent: false,
       })),
       /* An insight the copy links at another path → its live path (routes.ts § INSIGHT_PATH_REDIRECTS). */
+      /* An audit the copy renamed → its new path (routes.ts § AUDIT_PATH_REDIRECTS). */
+      ...Object.entries(AUDIT_PATH_REDIRECTS).map(([from, to]) => ({
+        source: from,
+        destination: to,
+        permanent: false,
+      })),
       ...Object.entries(INSIGHT_PATH_REDIRECTS).map(([from, to]) => ({
         source: from,
         destination: to,

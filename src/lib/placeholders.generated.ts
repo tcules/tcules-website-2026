@@ -107,6 +107,22 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Product Design at the centre of the studio: Tcules designers and engineers modelling a product together at a wall in the Ahmedabad studio. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: three short paragraphs beside it).',
   },
+  '/audits/ai-product-ux-readiness#hero': {
+    src: '/placeholders/audits-ai-product-ux-readiness--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'An AI feature about to reach every user, pushed where it is unsure: its output, the source it should show, the check and the undo a person needs, and the places where the person cannot yet tell or reverse what the AI did, marked before launch.',
+  },
+  '/audits/design-system-audit#hero': {
+    src: '/placeholders/audits-design-system-audit--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One shared component followed from the product need through Figma, code and the live product, its local copies and workarounds beside it, the point where it first breaks marked and the reason teams go around it shown.',
+  },
   '/audits/design-to-code-audit#deliverables': {
     src: '/placeholders/audits-design-to-code-audit--deliverables.svg',
     width: 1280,
@@ -130,6 +146,30 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'studio photo',
     shows:
       'A Tcules design engineer with the Figma file and the repository open together, following a gap back to where it started.',
+  },
+  '/audits/product-modernisation-assessment#hero': {
+    src: '/placeholders/audits-product-modernisation-assessment--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'An established product split into its areas, each given one of five answers (keep, simplify, redesign, new platform, rebuild or retire), the workflows customers rely on held intact, and the order of work set by what depends on what.',
+  },
+  '/audits/prototype-readiness-review#hero': {
+    src: '/placeholders/audits-prototype-readiness-review--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "Fallback only: the page's hero is the worked-example film (storyboard v14c, `hero-clips.ts`). A prototype's one key flow, from sign-up to first payment, run the way real users will: the happy path holding, the cases a demo skips (a failed card, a double tap, a locked-out user) lit where they break, before the first paying customer.",
+  },
+  '/audits/ux-product-audit#hero': {
+    src: '/placeholders/audits-ux-product-audit--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "One workflow in a live product walked role by role, the places people stall marked, each traced to its cause and the causes ranked by harm, so a team that disagreed about why can agree what to fix first. Audits page set (4 Nov 2026): one illustration per audit, as the /audits hub's.",
   },
   '/case-studies#designed-and-built:the-wandering-raven': {
     src: '/placeholders/case-studies--designed-and-built--the-wandering-raven.svg',
@@ -180,21 +220,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
       shows:
         'A Tcules designer walking a client\'s team through a flow on screen, the client pointing at an open question while it is still cheap to change. Beside banner (11 Oct 2026, the home "why" pattern); the first reason uses the bound studio photograph.',
     },
-  '/insights/cpq-ux-design#design-for-the-revision-not-the-first-draft': {
-    src: '/placeholders/insights-cpq-ux-design--design-for-the-revision-not-the-first-draft.svg',
+  '/future-interfaces-lab#hero': {
+    src: '/placeholders/future-interfaces-lab--hero.svg',
     width: 1600,
-    height: 900,
-    kind: 'diagram',
+    height: 1280,
+    kind: 'illustration',
     shows:
-      'Two versions of one quote side by side: the lines that changed marked, the one change that moved the price called out, and which version the customer saw. Added in the critic pass.',
-  },
-  '/insights/cpq-ux-design#the-quote-is-the-shared-object': {
-    src: '/placeholders/insights-cpq-ux-design--the-quote-is-the-shared-object.svg',
-    width: 1600,
-    height: 900,
-    kind: 'diagram',
-    shows:
-      'The responsibility map: six roles (sales representative, sales manager, product, pricing, solution and maintenance experts) contributing to one quotation, with where information changes and where a hand-off or exit sits.',
+      "The Lab's bench: a few experiments in progress side by side (a canvas of connected steps, a voice prompt answered in Gujarati, a design library a machine reads), each being tried, and one carried off the bench into the studio's client work. Not the `direction` band's three shifts on one interface: this is the Lab at work, that is where software is heading.",
   },
   '/insights#lab': {
     src: '/placeholders/insights--lab.svg',
@@ -275,6 +307,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       'The Drift Checker record builder mid-trace: one select field recorded across Figma, Storybook and the shipped product, each finding marked aligned, difference found, unknown or intentional exception (`v11_tool_interface`).',
+  },
+  '/tools#hero': {
+    src: '/placeholders/tools--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One product question worked through to a brief: a checklist being filled in, each marked item carried into a short brief the team can act on, the open question closed by the end. Replaces the reused studio review photograph (owner, 4 Nov 2026).',
   },
   'case-cover:auxentios': {
     src: '/placeholders/case-cover--auxentios.svg',
@@ -388,6 +428,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'A design that is tried in code while it is still open: the drawn screen and its coded version side by side, real data and states running through the coded one.',
   },
+  'illustration:how-ai-fits-into-the-job': {
+    src: '/placeholders/illustration--how-ai-fits-into-the-job.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      "The split of the job between AI and judgement: on one light base plate, an agent's station turning out a run of drafts that travel along the plate's axis to a designer's desk, where one draft is lifted off the run and held up to be checked; the run is the repetitive work, the desk is where what is good gets decided. Left-facing, an object not a diagram, lines on the iso axes. /careers `ai-fluency`.",
+  },
   'illustration:keeping-teams-on-the-system-after-launch': {
     src: '/placeholders/illustration--keeping-teams-on-the-system-after-launch.svg',
     width: 1600,
@@ -461,6 +509,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The problems on a screen traced down to the one cause underneath them.',
   },
+  'illustration:what-a-working-design-system-adds-to-a-figma-file': {
+    src: '/placeholders/illustration--what-a-working-design-system-adds-to-a-figma-file.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The Figma file as one sheet in the centre, with the working system built around it: an owner, a coded component, a documentation page and a release, and a machine reader taking from the same names. /matter-design-system `beyond-the-file`.',
+  },
   'illustration:what-customers-do-without-looking': {
     src: '/placeholders/illustration--what-customers-do-without-looking.svg',
     width: 1600,
@@ -476,6 +532,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'The first move chosen underneath the product: the change that what customers use most depends on.',
+  },
+  'illustration:where-we-think-software-interfaces-are-heading': {
+    src: '/placeholders/illustration--where-we-think-software-interfaces-are-heading.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'Three shifts on one interface: software that acts across tools while a person approves and can undo, a voice and a local language speaking to it, and a machine reading the same design description a person does. /future-interfaces-lab `direction`.',
   },
   'illustration:work-that-happens-outside-the-product': {
     src: '/placeholders/illustration--work-that-happens-outside-the-product.svg',

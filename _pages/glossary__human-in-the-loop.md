@@ -42,6 +42,11 @@ navigation:
     url: /glossary
   - name: Human in the Loop
     url: /glossary/human-in-the-loop
+  section_labels:
+    practice: Example
+    comparison: Vs human on the loop
+    faq: FAQs
+    next: Related terms and help
 render:
   band_order:
   - practice
@@ -135,7 +140,7 @@ Human on the loop is a real design choice: the system acts and a person supervis
 
 ### What is human in the loop AI?
 
-Human in the loop AI is an AI system designed so a person reviews, corrects or approves its output before that output takes effect. The AI does the first pass, such as checking a drawing or drafting a reply. A person with the right authority then makes the call, with what they need to judge it in view.
+Human in the loop AI is an AI system designed so a person reviews, corrects or approves its output before that output takes effect. The AI does the first pass, such as checking a drawing or drafting a reply. A person with the right authority then makes the decision, with what they need to judge it in view.
 
 ### What are examples of human-in-the-loop systems?
 
@@ -151,4 +156,4 @@ Human review is useful when it carries a real choice, with the information and a
 
 Tcules designs review steps, overrides and recovery through Human-in-the-Loop Workflows and [Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery).
 
-[See Human-in-the-Loop Workflows](/services/ai-product-ux/human-in-the-loop-workflows)
+[See Human-in-the-Loop Workflows →](/services/ai-product-ux/human-in-the-loop-workflows)

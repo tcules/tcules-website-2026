@@ -2,6 +2,7 @@ import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
 import { CASE_STAGES } from './sources/fixtures/case-stages';
+import { CASE_COVERS } from './sources/fixtures/case-covers';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
@@ -12,7 +13,9 @@ import { OFFER_SCENES } from './sources/offer-scenes';
 import { CLAIM_FIGURES, CLAIM_FIGURE_SIZE } from './sources/claim-figures';
 import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
 import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
+import type { ContactChannel, ContactFollow } from '@/templates';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
+import { CONTACT_CHANNELS, CONTACT_FOLLOW } from './sources/fixtures/contact-channels';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { authorsSource } from './sources/strapi/authors';
@@ -118,8 +121,20 @@ export const listAuthors = authorPagesSource.listAuthors.bind(authorPagesSource)
 export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSource);
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
-export const getCaseStudyListingPage =
-  caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
+/* A case's V1 cover (fixtures/case-covers.ts) wins over its Strapi thumbnail; Strapi's alt stays. */
+export async function getCaseStudyListingPage(slug: string) {
+  const listing = await caseStudiesSource.getCaseStudyListingPage(slug);
+  if (!listing) return listing;
+  return {
+    ...listing,
+    items: listing.items.map((item) => {
+      const cover = CASE_COVERS[item.slug];
+      return cover
+        ? { ...item, thumbnail: { ...cover, alt: item.thumbnail?.alt ?? item.title } }
+        : item;
+    }),
+  };
+}
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
 
 /* The cases that have an ideal local copy, structured as a story (fixtures/ideal/case-studies). */
@@ -185,6 +200,16 @@ export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPage
  * (fixtures/testimonial-ratings.ts, owner 10 Oct 2026); each carries `placeholder: true` until a real
  * per-review rating replaces it. An id with no rating is absent, so its quote renders without stars.
  */
+/** The other ways to reach the studio, for the contact page's cards (tracker 2.56). Fixture today. */
+export async function getContactChannels(): Promise<readonly ContactChannel[]> {
+  return CONTACT_CHANNELS;
+}
+
+/** The studio's profiles and address, for the contact page's "Follow us on" island. Fixture today. */
+export async function getContactFollow(): Promise<ContactFollow> {
+  return CONTACT_FOLLOW;
+}
+
 export async function getTestimonialRatings(
   ids: readonly string[],
 ): Promise<Record<string, TestimonialRating>> {

@@ -284,3 +284,35 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* ── Link · a destination pill ────────────────────────────────────────────────
+   The small body size in the authored case, on round ends at the touch target's height, the copy a
+   `text` step in from each end. The edge is the filter's inset layer; on hover or focus the label and
+   edge take the accent at once (paint, not a fade: decisions/2026-10-19-hover-is-a-move). */
+.link {
+  min-block-size: var(--tag-size-lg);
+  padding-inline: var(--gap-text);
+  border-radius: var(--tag-link-radius);
+  font: var(--text-body-sm);
+  color: var(--tag-link-ink);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-link-edge);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--tag-filter-ink-hover);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-hover);
+}
+
+.link:focus {
+  outline: none;
+}
+
+.link:focus-visible {
+  box-shadow:
+    inset 0 0 0 var(--tag-edge-width) var(--tag-filter-edge-hover),
+    0 0 0 var(--tag-ring-offset) var(--tag-ring-gap-color),
+    0 0 0 calc(var(--tag-ring-offset) + var(--tag-ring-width)) var(--tag-ring-color);
+}

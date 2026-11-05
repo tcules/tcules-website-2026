@@ -156,6 +156,14 @@ export type LayoutProps = {
    */
   lead?: boolean | 'tall';
   /**
+   * The LAST child spans every track below 768, in a row of its own — `lead` at the other end, and on
+   * a phone only (4 Nov 2026, the studio collage). For a row of three that is two tracks on a phone,
+   * where the third child would otherwise sit alone in the first track beside a hole: the first two
+   * pair, the last runs across under them. From 768 nothing is placed. The span is the container's,
+   * as lead's is. Not in a scroll row.
+   */
+  trail?: 'until-md';
+  /**
    * Reverse the VISUAL order of the tracks, per breakpoint — the image/text pair whose image sits
    * right on desktop and first on a phone, or a band that alternates sides down the page. Bare
    * `true` applies from md up (see `Responsive`); `{ lg: true }` from 1024; `{ base: true, lg: false }`
@@ -219,6 +227,14 @@ export type LayoutProps = {
    * seam between them. Below lg nothing changes.
    */
   shareRows?: 2 | 3 | 4;
+  /**
+   * From lg (1024), THIS Layout spans this many rows of its parent's grid and takes them as its own
+   * (CSS subgrid), the other half of `shareRows` one level down: for an item that shares its
+   * parent's rows and holds a box round only some of them (home's door cards, 4 Nov 2026: the card
+   * spans the first two shared rows, its example the third, outside the box). Its own rowGap sets
+   * the seam between the rows it spans. Below lg nothing changes.
+   */
+  spanRows?: 2 | 3;
   /**
    * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
    * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
@@ -517,10 +533,12 @@ export function Layout({
   justify,
   equalRows = false,
   lead = false,
+  trail,
   reverse,
   offset,
   pinLast = false,
   shareRows,
+  spanRows,
   fillFirst = false,
   fillLast = false,
   stagger = false,
@@ -573,10 +591,12 @@ export function Layout({
           equalFrom &&
           styles[equalFrom === 'base' ? 'equal-rows' : `equal-rows-${equalFrom}`],
         leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
+        trail && scroll == null && styles['trail-until-md'],
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast === 'lg' ? styles['pin-last-lg'] : pinLast && styles['pin-last'],
         shareRows && styles[`share-rows-${shareRows}`],
+        spanRows && styles[`span-rows-${spanRows}`],
         fillFirst && styles['fill-first'],
         fillLast && styles['fill-last'],
         stagger && scroll !== 'always' && styles.stagger,

@@ -123,3 +123,11 @@ on the new tier-1 `Island` (docs/specs/Island.md).
   `paper` only when there is no island. `data-arrangement="island"` on the band.
 - Specimen: `/design/statement` J · 7 — start on a tint island with an action; centred on a paper island
   with `corner-pair`; start on a paper island with `end-fade`; the surface proof on ink.
+
+## Amendment · 4 Nov 2026 — `figure` (status proposed; owner to judge)
+
+An optional decorative drawing beside the sentence: from 1024 the sentence in one column and the figure in
+the other, a `section` (96) apart (a split: two regions of different kind); below 1024 the figure under
+the sentence. Start-aligned only; `aria-hidden`. Specimen J · 5b. The glossary term pages pass a
+term's own scene, and only to a Statement line of sixteen words or fewer with no link
+(`isStatementLine`); a longer paragraph stays body prose (a Statement holds one sentence).

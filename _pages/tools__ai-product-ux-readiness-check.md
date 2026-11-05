@@ -62,6 +62,15 @@ navigation:
     url: /tools
   - name: AI Product UX Readiness Check
     url: /tools/ai-product-ux-readiness-check
+  section_labels:
+    who-its-for: Who it suits
+    how-to-use-it: How to use it
+    workspace: Six areas
+    example: Worked example
+    marking: Marking checks
+    specialists: What it covers
+    next: After the checklist
+    faq: FAQs
 render:
   band_order:
   - who-its-for
@@ -145,15 +154,15 @@ content_governance:
 
 # AI feature readiness checklist: agree what the AI may do before launch
 
-The AI Product UX Readiness Check is a free AI feature readiness checklist. Take one AI use case through what the AI may do, what users can see and check, and how mistakes get put right. You end with a clear list of what stops your team explaining, checking and correcting what the feature does.
+A free checklist for one AI feature: what it may do, what users can check, how mistakes get fixed. You end with a clear list of what stops your team explaining, checking and correcting what the feature does.
 
 An AI feature that drafts a reply and one that sends it are different products to the person who answers for that customer.
 
 Bring someone who knows the task well and someone who can say what the feature does. You leave with the open questions and the tests to take to your next product review.
 
-[Check one AI use case](#workspace)
+[Use the checklist](#workspace)
 
-## Who the AI feature launch checklist suits {#who-its-for}
+## Who the AI feature readiness checklist suits {#who-its-for}
 
 It suits a product team adding AI to software people already rely on: a product manager, a designer and an engineer, joined by someone who knows the task well. Run it before the build, while answers are still cheap to change, or before launch, to see what is still open.
 
@@ -161,7 +170,7 @@ One record covers one use case. A product with several AI features gets a record
 
 AI features are moving from drafting to acting: agents that update records, send messages and chain steps across tools. Each step up in authority adds weight to the Authority and Recovery areas below, so run the check again whenever the feature is given more to do.
 
-## How to use the AI product readiness checklist {#how-to-use-it}
+## How to use the AI feature readiness checklist {#how-to-use-it}
 
 1. **Choose one use case.** Pick the one where a wrong output would cost the most, such as a reply that reaches a customer or a change to an account. One use case per record keeps every question answerable.
 
@@ -173,7 +182,7 @@ AI features are moving from drafting to acting: agents that update records, send
 
 5. **Download the record and hand out the questions.** Give each open question one owner, then bring the list to the meeting where launch gets agreed.
 
-## AI use case worksheet: six areas to answer for one feature {#workspace}
+## Six areas to answer for one AI feature {#workspace}
 
 Start by naming the user, the task and the change the AI is meant to make. Write down how the person does that work today. Then go through each area.
 
@@ -188,7 +197,7 @@ Start by naming the user, the task and the change the AI is meant to make. Write
 
 Write each open question on its own line. Then the permission rule can go to one owner and the recovery test to another.
 
-## AI feature risk assessment: a support assistant on an old record {#example}
+## AI feature risk assessment: an assistant using an out-of-date record {#example}
 
 *Illustration, not client work.* A support assistant drafts a reply from a customer's account record. The record may be out of date, and the screen gives no sign of when it was last refreshed.
 
@@ -202,17 +211,17 @@ Leave an unknown open until someone can answer it, and note what would close it:
 
 Then choose where to start. Resolve open questions about authority and recovery before the AI can take actions that change things. Purpose questions need a task comparison, missing sources need typical inputs to test with, and a decision without a test joins the queue for evaluation.
 
-## What this AI product UX checklist covers, and what goes to specialists {#specialists}
+## What the checklist covers, and what goes to specialists {#specialists}
 
 The questions draw on [Microsoft's human-AI interaction guidelines](https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/) and on the measurement and responsibility concerns in the [NIST AI RMF playbook](https://airc.nist.gov/airmf-resources/playbook/).
 
-This check owns the interaction around the model: the part users see and answer for. Model performance, security, privacy and regulatory compliance run their own reviews, and what they find can change what the feature may do. The launch call brings both together, so take your finished record into that product review.
+This check owns the interaction around the model: the part users see and answer for. Model performance, security, privacy and regulatory compliance run their own reviews, and what they find can change what the feature may do. The launch decision brings both together, so take your finished record into that product review.
 
 ## After the checklist: test the live feature or get design help {#next}
 
 For the output that could do the most harm, the [AI Trust and Control Canvas](/tools/ai-trust-control-canvas) sets out what people can check, approve and undo.
 
-If the feature is live or in beta, the [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) tests it on real tasks and gives you a ranked list of what to fix first. For help answering the questions in your own product, talk to us about [AI Product UX](/services/ai-product-ux).
+If the feature is live or in beta, the [AI UX Audit](/audits/ai-product-ux-readiness) tests it on real tasks and gives you a ranked list of what to fix first. For help answering the questions in your own product, talk to us about [AI Product UX](/services/ai-product-ux).
 
 ## AI feature readiness checklist FAQs {#faq}
 

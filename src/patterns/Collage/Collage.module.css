@@ -1,0 +1,57 @@
+/* Collage — the tiles' boxes only. Every arrangement is Layout's; nothing here places a tile.
+
+   A tile is a rounded clipping frame. Its MINIMUM shape is a block-start padding on ::before (a
+   percentage of its own width), and the row it sits in may stretch it taller: that is how the lead
+   grows with its copy and the tall frames take the middle third's height, with no height written
+   anywhere. The photograph fills an absolute frame inside it (Media fit="fill"), cut and zoomed by
+   the tile's focus and zoom, and the tile's own corner clips it — Media draws none (edge="placement").
+
+   The corner is the photograph radius (8), read from the primitive: --media-photo-radius is Media's
+   own token and a pattern does not read another component's tokens. The @media queries swap a
+   minimum shape, never a distance. */
+
+.tile {
+  position: relative;
+  min-inline-size: 0;
+  overflow: hidden;
+  border-radius: var(--radius-8);
+}
+
+.tile::before {
+  content: '';
+  display: block;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* The lead: at least 3:2, taller when the copy beside it is. */
+.lead::before {
+  padding-block-start: 66.667%;
+}
+
+/* The tall ends: no shape of their own beside the middle pair, whose height they take (the start
+   frame on a phone, both from 768); 4:3 is the floor the end frame keeps where it runs across under
+   the pair on a phone. */
+.tall::before {
+  padding-block-start: 75%;
+}
+
+/* The middle third's wide frame, 3:2 at every width. */
+.wide::before {
+  padding-block-start: 66.667%;
+}
+
+/* The two small frames: 3:4 at every width. */
+.small::before {
+  padding-block-start: 133.333%;
+}
+
+@media (min-width: 768px) {
+  .tall::before {
+    padding-block-start: 0;
+  }
+}
