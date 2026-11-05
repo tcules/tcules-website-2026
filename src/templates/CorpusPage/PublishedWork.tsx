@@ -97,22 +97,41 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
           {...head}
           surface={s.surface}
           arrangement={s.presentation}
+          lead={
+            s.lead
+              ? [<span key="lead" dangerouslySetInnerHTML={{ __html: s.lead }} />]
+              : undefined
+          }
+          action={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
           options={s.options.map((option) => {
             const [body, ...more] = (option.html ?? '').split('<br><br>');
             const inline = (html: string) => (
               <span dangerouslySetInnerHTML={{ __html: html }} />
             );
+            // The CMS illustration: its image, else its scene.
+            const art = option.illustration?.image ? (
+              <Media image={option.illustration.image} sizes="(min-width: 1024px) 25vw, 90vw" />
+            ) : option.illustration?.scene ? (
+              <Sketch name={option.illustration.scene} />
+            ) : undefined;
             return {
+              eyebrow: option.eyebrow,
               title: option.title,
               body: inline(body ?? ''),
               more: more.map(inline),
-              art: option.illustration?.scene ? (
-                <Sketch name={option.illustration.scene} />
-              ) : undefined,
+              scope: option.scope,
+              facts: option.facts.map((fact) => ({
+                label: fact.label,
+                body: fact.html ? inline(fact.html) : undefined,
+              })),
+              art,
               icon: option.icon ? <Icon name={option.icon} size="xl" /> : undefined,
             };
           })}
-          terms={[]}
+          terms={s.terms.map((term) => ({
+            label: term.label,
+            body: <span dangerouslySetInnerHTML={{ __html: term.html }} />,
+          }))}
         />
       );
     case 'cta': {

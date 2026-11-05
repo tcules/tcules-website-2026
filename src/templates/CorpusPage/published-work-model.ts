@@ -2,7 +2,7 @@ import type { DataTableProps, GatewayPath, LogoGridMark, OfferSheetItem } from '
 import type { HomeHero, HomeSection, HomeAction } from './published-home-model';
 type Head = {
   key: string;
-  id: string;
+  id?: string;
   heading: string;
   headingId: string;
   surface?: 'paper' | 'tint';

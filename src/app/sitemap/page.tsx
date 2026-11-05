@@ -5,14 +5,13 @@ import { Layout, Section } from '@/components';
 import { TableOfContents, type TocItem } from '@/patterns';
 
 import { getSitemapMasterPage, getPageSeo } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { notFound } from 'next/navigation';
 import { PublishedHero } from '@/templates/CorpusPage/PublishedHome';
 type SitemapEntry = { path: string; title: string; parentPath?: string };
 
 /** Render the published Sitemap Master in the existing outline and link layout. */
 export const revalidate = 300;
-
-const anchorId = (key: string) => `sitemap-${key}`;
 
 /**
  * A group's pages, with any page that has sub-pages pulled out as a branch of its own: a service and
@@ -74,25 +73,34 @@ export async function generateMetadata(): Promise<Metadata> {
   return (await getPageSeo('/sitemap')).metadata;
 }
 export default async function SitemapPage() {
-  const page = await getSitemapMasterPage();
+  const [page, { structuredData }] = await Promise.all([
+    getSitemapMasterPage(),
+    getPageSeo('/sitemap'),
+  ]);
   if (!page) notFound();
   const groups = page.groups;
   const outline: TocItem[] = groups.map((group) => ({
     label: group.label,
-    href: `#${anchorId(group.key)}` as const,
+    href: `#${group.anchorId}` as const,
   }));
 
   return (
     <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
       <PublishedHero hero={page.hero} />
       <Section as="div" surface="paper">
         <Layout columns={{ base: 1, lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
           <TableOfContents items={outline} />
           <Layout as="article" rowGap="section">
             {groups.map((group) => (
-              <section key={group.key} aria-labelledby={anchorId(group.key)}>
+              <section key={group.key} aria-labelledby={group.anchorId}>
                 <Layout rowGap="block">
-                  <h2 id={anchorId(group.key)}>{group.label}</h2>
+                  <h2 id={group.anchorId}>{group.label}</h2>
                   <SitemapGroupBody entries={group.entries} />
                 </Layout>
               </section>
