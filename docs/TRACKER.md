@@ -287,7 +287,7 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       (content-changes), studio-at-work heroes, alternating grounds; rulings 2026-11-04-claims-carry-no-quotes,
       -studio-pages-alternate-grounds, -studio-heroes-show-people-at-work, -no-heading-row-over-a-split,
       -no-case-images-in-sections. The article URL scheme is set aside by the owner (4 Nov), still open.
-- [ ] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
+- [x] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
       isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
       Works alongside 2.59's banners.
       Scope set 5 Nov 2026 (owner): only drawings a page shows. In: the 12 expertise heroes (new ideas built
@@ -296,6 +296,10 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       Out for now: the 25 service sub-page heroes (words only, no placeholder:
       decisions/2026-11-05-service-subpage-heroes-no-placeholder) and the audit heroes (see 2.66). All older
       illustration rules are loose; consistency with the 10 approved heroes is the standard. Owner signs off.
+      Done 5 Nov 2026 (design/illustration-run): the twelve industry heroes, the /services, /tools and Lab heroes,
+      the /why-tcules band as one drawing, the ten approved heroes brought to the figure rules; rulings
+      2026-11-05-*. Left: where the redrawn designer's desk goes (docs/illustrations/run-2026-11-05/designer-desk/,
+      owner to place: /careers or the Lab), and the audit heroes (2.66).
 - [ ] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
