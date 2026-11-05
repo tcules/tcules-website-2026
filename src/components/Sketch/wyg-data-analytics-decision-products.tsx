@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
-import { ArrowUp, Copy, Cursor, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched, TraceIn } from './scenes';
+import { ArrowRight, ArrowUp, Copy, Cursor, Hop, Rect } from './offer';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -342,6 +342,203 @@ function StopsDataAnalytics() {
 }
 
 /**
+ * Customer-facing reports, inside the product (moving): the customer's own data is routed into the
+ * product they are signed in to (their avatar in its bar), and the report there lights. At rest the
+ * report's bars are empty.
+ */
+function CustomerFacingReports() {
+  const bars: readonly [number, number][] = [
+    [188, 104],
+    [208, 92],
+    [228, 98],
+    [248, 80],
+  ];
+  return (
+    <>
+      <Rect x={30} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="database" cx={50} cy={90} size={16} className={styles.glyph} />
+      <Rect x={110} y={30} w={180} h={120} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M110,54 L290,54" />
+      <Copy x={126} y={42} w={32} quiet />
+      <Glyph name="user" cx={274} cy={42} size={12} className={styles.glyph} />
+      <GrowIn>
+        <Rect x={164} y={62} w={116} h={80} rx={10} className={styles.halo} />
+      </GrowIn>
+      <Rect x={170} y={68} w={104} h={68} rx={4} className={styles.tile} />
+      {bars.map(([x, y]) => (
+        <Rect key={x} x={x} y={y} w={14} h={124 - y} rx={2} className={styles.press} />
+      ))}
+      <circle className={styles.node} cx="70" cy="90" r="2.5" />
+      <TraceIn d="M70,90 L163,90" />
+      <GrowIn>
+        <ArrowRight x={170} y={90} />
+      </GrowIn>
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="110" cy="90" r="3" />
+      </GrowIn>
+    </>
+  );
+}
+
+/**
+ * Scores that show what they are based on (moving): the score's ring alone at rest; on hover the
+ * route opens from it to the factors behind it, each weighed by its bar, and the weights fill.
+ */
+function ScoresShowBasis() {
+  return (
+    <>
+      <Rect x={30} y={50} w={100} h={80} rx={8} className={styles.frame} />
+      <path className={styles.rule} d="M80,62 A18,18 0 1 1 79.99,62" />
+      <path className={styles.copy} d="M80,62 A18,18 0 1 1 62,80" />
+      <Copy x={62} y={114} w={36} quiet />
+      <circle className={styles.node} cx="130" cy="90" r="2.5" />
+      <TraceIn d="M130,90 L144,90 A6,6 0 0 0 150,84 L150,56 A6,6 0 0 1 156,50 L183,50" />
+      <TraceIn d="M130,90 L183,90" />
+      <TraceIn d="M130,90 L144,90 A6,6 0 0 1 150,96 L150,124 A6,6 0 0 0 156,130 L183,130" />
+      {[50, 90, 130].map((y) => (
+        <GrowIn key={y}>
+          <ArrowRight x={190} y={y} />
+        </GrowIn>
+      ))}
+      {(
+        [
+          [50, 64],
+          [90, 40],
+          [130, 22],
+        ] as const
+      ).map(([y, w]) => (
+        <g key={y}>
+          <Rect x={190} y={y - 12} w={100} h={24} rx={4} className={styles.frame} />
+          <Rect x={202} y={y - 4} w={w} h={8} rx={4} className={styles.press} />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Multi-site data, filtered to the right part (moving): three sites; on hover only one is routed into
+ * the view and its pin fills, the others left out.
+ */
+function MultiSiteFiltered() {
+  return (
+    <>
+      {[50, 90].map((y) => (
+        <g key={y}>
+          <circle className={styles.frameQuiet} cx="58" cy={y} r="12" />
+          <Glyph name="map-point" cx={58} cy={y} size={14} className={styles.glyphQuiet} />
+        </g>
+      ))}
+      <GrowIn>
+        <circle className={styles.halo} cx="58" cy="130" r="18" />
+      </GrowIn>
+      <circle className={styles.release} cx="58" cy="130" r="12" />
+      <Glyph name="map-point" cx={58} cy={130} size={14} className={styles.releaseMark} />
+      <circle className={styles.node} cx="70" cy="130" r="2.5" />
+      <TraceIn d="M70,130 L164,130 A6,6 0 0 0 170,124 L170,96 A6,6 0 0 1 176,90 L183,90" />
+      <GrowIn>
+        <ArrowRight x={190} y={90} />
+      </GrowIn>
+      <Rect x={190} y={30} w={100} h={120} rx={8} className={styles.frame} />
+      <Copy x={206} y={50} w={40} quiet />
+      <Rect x={206} y={62} w={36} h={12} rx={6} className={styles.tile} />
+      <Copy x={206} y={94} w={56} />
+      {[
+        [206, 120],
+        [222, 110],
+        [238, 116],
+        [254, 104],
+      ].map(([x, y]) => (
+        <Rect key={x} x={x ?? 0} y={y ?? 0} w={10} h={134 - (y ?? 0)} rx={2} className={styles.tile} />
+      ))}
+    </>
+  );
+}
+
+/**
+ * Operational dashboards for a tyre shop (still): the shop's bays side by side on one screen, each
+ * with its tyre and a live status dot; the bay to act on lit, under a stock count in the header.
+ */
+function TyreShopDashboard() {
+  const at = (cx: number, cy: number, a: number, r1: number, r2: number) => {
+    const t = (a * Math.PI) / 180;
+    const c = Math.cos(t);
+    const s = Math.sin(t);
+    return `M${(cx + r1 * c).toFixed(2)},${(cy + r1 * s).toFixed(2)} L${(cx + r2 * c).toFixed(2)},${(cy + r2 * s).toFixed(2)}`;
+  };
+  return (
+    <>
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      {/* The stock board's header: a three-bar count of tyres in, and its label. */}
+      {[
+        [66, 6],
+        [75, 10],
+        [84, 14],
+      ].map(([x, h]) => (
+        <Rect key={x} x={x ?? 0} y={62 - (h ?? 0)} w={6} h={h ?? 0} rx={1.5} className={styles.quietMark} />
+      ))}
+      <Copy x={96} y={56} w={40} quiet />
+      {/* The live board's status strip across the header. */}
+      <Rect x={66} y={72} w={40} h={6} rx={3} className={styles.quietMark} />
+      <Rect x={110} y={72} w={24} h={6} rx={3} className={styles.frameQuiet} />
+      <Rect x={138} y={72} w={16} h={6} rx={3} className={styles.frameQuiet} />
+      {[66, 115, 164, 213].map((x, i) => {
+        const lit = i === 2;
+        const cx = x + 20.5;
+        const cy = 108;
+        return (
+          <g key={x}>
+            <Rect x={x} y={86} w={41} h={52} rx={4} className={lit ? styles.region : styles.tile} />
+            {/* The tyre side-on: its tread band with twelve blocks, the hub and five spokes. */}
+            <circle className={styles.frame} cx={cx} cy={cy} r="15" />
+            <circle className={styles.frame} cx={cx} cy={cy} r="12" />
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((a) => (
+              <path key={a} className={styles.rule} d={at(cx, cy, a, 12, 15)} />
+            ))}
+            {[-90, -18, 54, 126, 198].map((a) => (
+              <path key={a} className={styles.rule} d={at(cx, cy, a, 6, 10)} />
+            ))}
+            <circle className={styles.rule} cx={cx} cy={cy} r="6" />
+            {/* Its live status: a dot and a line. */}
+            <circle className={lit ? styles.mark : styles.quietMark} cx={x + 9} cy={130} r="3" />
+            <path className={lit ? styles.line : styles.copyQuiet} d={`M${x + 16},130 L${x + 30},130`} />
+          </g>
+        );
+      })}
+    </>
+  );
+}
+
+/**
+ * Ask-the-data analytics (still): a typed question, answered with a proper chart (its scale and its
+ * definition under it), held to the standard any chart is (the shield, lit).
+ */
+function AskTheData() {
+  return (
+    <>
+      <Rect x={30} y={76} w={120} h={28} rx={14} className={styles.frame} />
+      <Glyph name="question-circle" cx={48} cy={90} size={12} className={styles.glyph} />
+      <Copy x={62} y={90} w={52} />
+      <path className={styles.hair} d="M124,84 L124,96" />
+      <Hop x1={150} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={186} y={48} w={40} quiet />
+      {[
+        [190, 80],
+        [206, 70],
+        [222, 76],
+        [238, 62],
+      ].map(([x, y]) => (
+        <Rect key={x} x={x ?? 0} y={y ?? 0} w={10} h={100 - (y ?? 0)} rx={2} className={styles.tile} />
+      ))}
+      <path className={styles.rule} d="M186,100 L274,100" />
+      <Copy x={186} y={124} w={40} quiet />
+      <Focus x={264} y={124} glyph="shield-check" size={12} />
+    </>
+  );
+}
+
+/**
  * /expertise/data-analytics-decision-products · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
  */
@@ -366,4 +563,17 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-data-analytics-decision-products': NeedsDataAnalytics,
   /* Where our part stops: Pipelines, warehouses, metric calculations and models stay with your data team or BI vendor.One dashboard or chart set people misread may ne */
   'stops-data-analytics-decision-products': StopsDataAnalytics,
+  /* MOVING: this tile links to /case-studies/ux-revamp-for-a-saas-product-in-marketing-automation-vertical, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Customer-facing reports and dashboards inside a SaaS product: Ryzeo */
+  'kind-data-analytics-decision-products-customer-facing-reports-dashboards': CustomerFacingReports,
+  /* MOVING: this tile links to /case-studies/doodle-case-study-automating-enterprise-meeting-scheduling, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Scores that show what they are based on: Doodle */
+  'kind-data-analytics-decision-products-scores-show-what-they': ScoresShowBasis,
+  /* MOVING: this tile links to /case-studies/legacy-saas-modernisation-information-architecture, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Multi-site data filtered to the right part of the organisation: Benchmark Gensuite */
+  'kind-data-analytics-decision-products-multi-site-data-filtered': MultiSiteFiltered,
+  /* What we design in, tile: Operational dashboards for tyre shop software: TreadCommand */
+  'kind-data-analytics-decision-products-operational-dashboards-tyre-shop': TyreShopDashboard,
+  /* What we design in, tile: Ask-the-data analytics, where users type a question: Answers held to the same standard as any chart */
+  'kind-data-analytics-decision-products-ask-data-analytics-users': AskTheData,
 };

@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { ArrowRight, Copy, Hop, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched } from './scenes';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -376,6 +376,225 @@ function StopsFintech() {
   );
 }
 
+/* ── What we design in ──────────────────────────────────────────────────────────── */
+
+/** MOVING. The phone's sign-up steps join up and run on to the loan, which is paid out. */
+function KindLending() {
+  const steps: [number, IconName][] = [
+    [50, 'user'],
+    [90, 'shield-check'],
+    [130, 'document-text'],
+  ];
+  return (
+    <>
+      <Rect x={50} y={30} w={60} h={120} rx={8} className={styles.frame} />
+      {steps.map(([cy, glyph]) => (
+        <g key={cy}>
+          <Rect x={62} y={cy - 8} w={16} h={16} rx={4} className={styles.tile} />
+          <Glyph name={glyph} cx={70} cy={cy} size={10} className={styles.glyph} />
+          <Copy x={84} y={cy} w={14} />
+        </g>
+      ))}
+      <circle className={styles.node} cx="110" cy="90" r="2.5" />
+      <TraceIn d="M70,58 L70,82 M70,98 L70,122 M110,90 L219,90" />
+      <GrowIn>
+        <circle className={styles.halo} cx="230" cy="90" r="18" />
+      </GrowIn>
+      <circle className={styles.release} cx="230" cy="90" r="11" />
+      <Glyph name="wallet" cx={230} cy={90} size={12} className={styles.releaseMark} />
+    </>
+  );
+}
+
+/** MOVING. The customer pays the shop, and the payment lands at the top of the shopkeeper's ledger. */
+function KindShopPayments() {
+  return (
+    <>
+      {/* The customer's phone. */}
+      <Rect x={50} y={50} w={40} h={80} rx={8} className={styles.frame} />
+      <Copy x={60} y={70} w={20} quiet />
+      <Copy x={60} y={82} w={14} />
+      <Rect x={58} y={108} w={24} h={12} rx={6} className={styles.tile} />
+      <circle className={styles.node} cx="90" cy="90" r="2.5" />
+      <TraceIn d="M90,90 L144,90 A6,6 0 0 0 150,84 L150,76 A6,6 0 0 1 156,70 L183,70" />
+      <GrowIn>
+        <path className={styles.solid} d="M190,70 L183,74 L183,66 Z" />
+      </GrowIn>
+      {/* The shopkeeper's ledger: the shop, then the payments, newest first. */}
+      <Rect x={190} y={30} w={80} h={120} rx={8} className={styles.frame} />
+      <Rect x={202} y={38} w={16} h={16} rx={4} className={styles.tile} />
+      <Glyph name="cart" cx={210} cy={46} size={10} className={styles.glyph} />
+      <Copy x={224} y={46} w={28} quiet />
+      <GrowIn>
+        <Rect x={196} y={58} w={68} h={24} rx={8} className={styles.halo} />
+      </GrowIn>
+      <Rect x={202} y={64} w={56} h={12} rx={4} className={styles.press} />
+      {[100, 126].map((y) => (
+        <g key={y}>
+          <Rect x={202} y={y - 6} w={56} h={12} rx={4} className={styles.tile} />
+          <Copy x={208} y={y} w={24} quiet />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** The spend goes to the first signer whose limit covers its amount: the one who signs next, lit. */
+function KindBusinessFinance() {
+  const signers: [number, number][] = [
+    [50, 20],
+    [90, 36],
+    [130, 52],
+  ];
+  return (
+    <>
+      {/* The spend request, its amount against the scale the limits use. */}
+      <Rect x={40} y={60} w={70} h={60} rx={8} className={styles.frame} />
+      <C cx={56} cy={76} glyph="wallet" />
+      <Copy x={70} y={76} w={26} quiet />
+      <Rect x={50} y={98} w={48} h={8} rx={4} className={styles.tile} />
+      <Rect x={50} y={98} w={30} h={8} rx={4} className={styles.knob} />
+      <Hop x1={110} x2={150} y={90} />
+      {/* The signers, each with a limit on the same scale: the first that covers the amount is lit. */}
+      <Rect x={150} y={30} w={130} h={120} rx={8} className={styles.frame} />
+      {signers.map(([cy, w]) => (
+        <g key={cy}>
+          {cy === 90 ? (
+            <Focus x={180} y={cy} glyph="user" size={12} />
+          ) : (
+            <Glyph name="user" cx={180} cy={cy} size={16} className={styles.glyph} />
+          )}
+          <Rect x={210} y={cy - 4} w={56} h={8} rx={4} className={styles.tile} />
+          <Rect
+            x={210}
+            y={cy - 4}
+            w={w}
+            h={8}
+            rx={4}
+            className={cy === 90 ? styles.solid : styles.knob}
+          />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** The identity case, open beside its evidence: the ID and the face it should match, matched. */
+function KindStaffReview() {
+  const cases: [number, IconName][] = [
+    [60, 'user'],
+    [90, 'graph-up'],
+    [120, 'danger-triangle'],
+  ];
+  return (
+    <>
+      <Rect x={30} y={30} w={260} h={120} rx={8} className={styles.frame} />
+      {/* The queue: identity, credit, fraud; the identity case open. */}
+      <Rect x={38} y={48} w={64} h={24} rx={4} className={styles.tile} />
+      {cases.map(([cy, glyph]) => (
+        <g key={cy}>
+          {cy === 60 ? (
+            <C cx={54} cy={cy} glyph={glyph} />
+          ) : (
+            <>
+              <Rect x={46} y={cy - 8} w={16} h={16} rx={4} className={styles.tile} />
+              <Glyph name={glyph} cx={54} cy={cy} size={10} className={styles.glyph} />
+            </>
+          )}
+          <Copy x={68} y={cy} w={24} quiet={cy !== 60} />
+        </g>
+      ))}
+      <path className={styles.rule} d="M110,30 L110,150" />
+      {/* The evidence: the ID document and the selfie, matched. */}
+      <Rect x={126} y={70} w={60} h={40} rx={4} className={styles.frame} />
+      <Glyph name="user" cx={142} cy={90} size={16} className={styles.glyph} />
+      <Copy x={156} y={86} w={20} />
+      <Copy x={156} y={96} w={14} quiet />
+      <path className={styles.line} d="M186,90 L199,90 M221,90 L240,90" />
+      <Focus x={210} y={90} glyph="check-circle" size={13} />
+      <Rect x={240} y={62} w={40} h={56} rx={4} className={styles.frame} />
+      <Glyph name="user" cx={260} cy={90} size={24} className={styles.glyph} />
+    </>
+  );
+}
+
+/** Each status is defined once, and the app shows it the same way wherever it appears. */
+function KindBanking() {
+  /* One vocabulary: the key and the app list the same three marks, in the same order. */
+  const key: [number, IconName, number][] = [
+    [80, 'check-circle', 24],
+    [100, 'clock-circle', 20],
+    [120, 'close-circle', 22],
+  ];
+  return (
+    <>
+      {/* The key: one mark, one meaning. */}
+      <Rect x={70} y={60} w={60} h={80} rx={8} className={styles.frame} />
+      {key.map(([cy, glyph, w]) => (
+        <g key={cy}>
+          <Glyph
+            name={glyph}
+            cx={84}
+            cy={cy}
+            size={12}
+            className={cy === 100 ? styles.glyphAccent : styles.glyph}
+          />
+          <Copy x={96} y={cy} w={w} quiet={cy !== 100} />
+        </g>
+      ))}
+      <Hop x1={130} x2={190} y={100} />
+      {/* The app: the balance, then the transfers, each carrying the same mark the key defines. */}
+      <Rect x={190} y={30} w={60} h={120} rx={8} className={styles.frame} />
+      <Copy x={202} y={46} w={20} quiet />
+      <Copy x={202} y={58} w={36} />
+      {key.map(([cy, glyph]) => (
+        <g key={cy}>
+          <Copy x={202} y={cy} w={18} quiet={cy !== 100} />
+          <Glyph
+            name={glyph}
+            cx={236}
+            cy={cy}
+            size={12}
+            className={cy === 100 ? styles.glyphAccent : styles.glyph}
+          />
+        </g>
+      ))}
+    </>
+  );
+}
+
+/** On the quote, a line of cover opens to say what it means, above the pay button nobody has pressed. */
+function KindInsurance() {
+  return (
+    <>
+      <Rect x={80} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      <C cx={104} cy={50} glyph="shield-check" />
+      <Copy x={120} y={50} w={48} />
+      {/* The cover, line by line: the second opened. */}
+      {[70, 90].map((cy) => (
+        <g key={cy}>
+          <Glyph name="check-circle" cx={104} cy={cy} size={10} className={styles.glyph} />
+          <Copy x={116} y={cy} w={cy === 70 ? 64 : 52} quiet={cy === 70} />
+          <Glyph
+            name={cy === 70 ? 'alt-arrow-down' : 'alt-arrow-up'}
+            cx={216}
+            cy={cy}
+            size={10}
+            className={styles.glyph}
+          />
+        </g>
+      ))}
+      {/* What it means, in plain words. */}
+      <Rect x={96} y={100} w={128} h={24} rx={4} className={styles.region} />
+      <Glyph name="info-circle" cx={108} cy={112} size={10} className={styles.glyphAccent} />
+      <Copy x={120} y={108} w={80} quiet />
+      <Copy x={120} y={116} w={56} quiet />
+      {/* Pay, still to come. */}
+      <Rect x={176} y={130} w={48} h={12} rx={6} className={styles.tile} />
+    </>
+  );
+}
+
 /**
  * /expertise/fintech · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -401,4 +620,18 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-fintech': NeedsFintech,
   /* Where our part stops: Lending policy, credit models, fraud rules and regulatory sign-off stay with your compliance, risk and legal teams; our designs present thei */
   'stops-fintech': StopsFintech,
+  /* MOVING: this tile links to /case-studies/optimising-microlending-fintech-app-for-a-y-combinator-batch-startup, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Mobile lending apps, from sign-up to loan issuance: OctiFi */
+  'kind-fintech-mobile-lending-apps-sign': KindLending,
+  /* MOVING: this tile links to /case-studies/ux-research-for-kirana-store-payment-app, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: Payment apps for small shops and the people who run them: Researched for a merchant payments client */
+  'kind-fintech-payment-apps-small-shops': KindShopPayments,
+  /* What we design in, tile: Business finance tools for spending, approvals and payouts, including finance inside SaaS products: Each approval shows its limit and who signs next */
+  'kind-fintech-business-finance-tools-spending': KindBusinessFinance,
+  /* What we design in, tile: Staff review screens for identity checks, credit approvals and fraud cases: Each case with its evidence and the reviewer's limit in view */
+  'kind-fintech-staff-review-screens-identity': KindStaffReview,
+  /* What we design in, tile: Banking and money management apps for balances, transfers and savings goals: One meaning for every status */
+  'kind-fintech-banking-money-management-apps': KindBanking,
+  /* What we design in, tile: Insurance quote, claims and underwriting tools: Cover explained before anyone pays */
+  'kind-fintech-insurance-quote-claims-underwriting': KindInsurance,
 };

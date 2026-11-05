@@ -4,7 +4,7 @@ import type { IconName } from '@/lib/icon-glyphs';
 import type { PageSceneName } from '@/lib/page-scenes';
 
 import { Copy, Hop, Lens, Rect } from './offer';
-import { Chip, Focus, Glyph, Hatched } from './scenes';
+import { Chip, Focus, Glyph, GrowIn, Hatched, TraceIn } from './scenes';
 import styles from './Sketch.module.css';
 
 /* Helpers come from ../offer and ../scenes (Rect, Copy, Hop, Glyph, Focus, Hatched, TraceIn, GrowIn ...)
@@ -81,12 +81,31 @@ function AuditPlainVerdict() {
       <Copy x={86} y={46} w={48} quiet />
       {cells.map(({ x, y, glyph, fails }) => (
         <g key={glyph}>
-          <Rect x={x} y={y} w={70} h={36} rx={4} className={fails ? styles.region : styles.tile} />
+          <Rect
+            x={x}
+            y={y}
+            w={70}
+            h={36}
+            rx={4}
+            className={fails ? styles.region : styles.tile}
+          />
           <Glyph name={glyph} cx={x + 14} cy={y + 13} size={14} className={styles.glyph} />
           {fails ? (
-            <Glyph name="danger-triangle" cx={x + 56} cy={y + 13} size={14} className={styles.glyphAccent} />
+            <Glyph
+              name="danger-triangle"
+              cx={x + 56}
+              cy={y + 13}
+              size={14}
+              className={styles.glyphAccent}
+            />
           ) : (
-            <Glyph name="check-circle" cx={x + 56} cy={y + 13} size={14} className={styles.glyphQuiet} />
+            <Glyph
+              name="check-circle"
+              cx={x + 56}
+              cy={y + 13}
+              size={14}
+              className={styles.glyphQuiet}
+            />
           )}
           <path
             className={fails ? styles.regionCopy : styles.copyQuiet}
@@ -312,6 +331,193 @@ function StopsEdtechLearning() {
   );
 }
 
+/* ── What we design in ──────────────────────────────────────────────────────────── */
+
+/**
+ * LMS and Moodle course experiences (moving): the custom plugin is routed into the course page and fills
+ * the empty slot it was built for. At rest the slot is dashed and the route undrawn.
+ */
+function KindLmsMoodle() {
+  return (
+    <>
+      {/* The plugin. */}
+      <Rect x={30} y={70} w={40} h={40} rx={8} className={styles.frame} />
+      <Glyph name="widget" cx={50} cy={90} size={20} className={styles.glyph} />
+      <circle className={styles.node} cx="70" cy="90" r="2.5" />
+      <TraceIn d="M70,90 L170,90" />
+      {/* The course page: its sections, and the slot left for the plugin. */}
+      <Rect x={170} y={40} w={120} h={100} rx={8} className={styles.frame} />
+      <GrowIn>
+        <circle className={styles.nodeOpen} cx="170" cy="90" r="3" />
+      </GrowIn>
+      <Rect x={184} y={52} w={92} h={16} rx={4} className={styles.tile} />
+      <Copy x={194} y={60} w={44} quiet />
+      <Rect x={184} y={80} w={92} h={20} rx={4} className={styles.trailFrame} />
+      <GrowIn>
+        <Rect x={178} y={74} w={104} h={32} rx={10} className={styles.halo} />
+        <Rect x={184} y={80} w={92} h={20} rx={4} className={styles.solid} />
+        <Glyph name="widget" cx={230} cy={90} size={12} className={styles.glyphOn} />
+      </GrowIn>
+      <Rect x={184} y={112} w={92} h={16} rx={4} className={styles.tile} />
+      <Copy x={194} y={120} w={56} quiet />
+    </>
+  );
+}
+
+/** Creative learning products for young people: a young learner makes something of their own on a tablet. */
+function KindCreativeYoung() {
+  return (
+    <>
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      {/* The tools, the palette in hand. */}
+      <Rect x={78} y={42} w={16} h={16} rx={4} className={styles.tile} />
+      <Glyph name="ruler-pen" cx={86} cy={50} size={10} className={styles.glyphQuiet} />
+      <Focus x={86} y={90} glyph="palette" size={12} />
+      <Rect x={78} y={122} w={16} h={16} rx={4} className={styles.tile} />
+      <Glyph name="star" cx={86} cy={130} size={10} className={styles.glyphQuiet} />
+      {/* The canvas, and what the learner has made on it. */}
+      <Rect x={118} y={42} w={140} h={96} rx={4} className={styles.tile} />
+      <circle className={styles.frame} cx="158" cy="76" r="16" />
+      <Rect x={194} y={60} w={44} h={32} rx={4} className={styles.frame} />
+      <path className={styles.frame} d="M176,124 L198,102 L220,124 Z" />
+    </>
+  );
+}
+
+/** Growth projects inside a learning platform: the variant that wins the test lifts the growth line. */
+function KindGrowthInside() {
+  return (
+    <>
+      {/* The two variants of one lesson screen; the winner in full ink. */}
+      <Rect x={30} y={54} w={60} h={32} rx={8} className={styles.frameQuiet} />
+      <Glyph name="play" cx={46} cy={70} size={12} className={styles.glyphQuiet} />
+      <Copy x={60} y={70} w={18} quiet />
+      <Rect x={30} y={94} w={60} h={32} rx={8} className={styles.frame} />
+      <Glyph name="play" cx={46} cy={110} size={12} className={styles.glyph} />
+      <Copy x={60} y={110} w={18} />
+      <Hop x1={90} x2={150} y={110} />
+      {/* The growth it makes. */}
+      <Rect x={150} y={40} w={140} h={100} rx={8} className={styles.frame} />
+      <Copy x={166} y={58} w={40} quiet />
+      {(
+        [
+          [176, 16],
+          [202, 22],
+          [228, 28],
+        ] as const
+      ).map(([x, h]) => (
+        <Rect key={x} x={x} y={124 - h} w={16} h={h} rx={3} className={styles.tile} />
+      ))}
+      <Rect x={254} y={72} w={16} h={52} rx={3} className={styles.solid} />
+      <path className={styles.rule} d="M166,124 L274,124" />
+    </>
+  );
+}
+
+/** Workplace training and apprenticeship apps: a short practice on the phone fits between two shifts. */
+function KindWorkplaceTraining() {
+  return (
+    <>
+      {[30, 210].map((x) => (
+        <g key={x}>
+          <Rect x={x} y={70} w={80} h={40} rx={8} className={styles.tile} />
+          <Glyph
+            name="clock-circle"
+            cx={x + 20}
+            cy={90}
+            size={16}
+            className={styles.glyphQuiet}
+          />
+          <Copy x={x + 36} y={90} w={30} quiet />
+        </g>
+      ))}
+      <Rect x={130} y={40} w={60} h={100} rx={8} className={styles.frame} />
+      <Focus x={160} y={78} glyph="checklist" size={12} />
+      <Copy x={144} y={112} w={32} />
+      <Copy x={144} y={122} w={20} quiet />
+    </>
+  );
+}
+
+/** Assessment and skills sign-off: one record holds the evidence, the witness and the assessor's sign-off (lit). */
+function KindAssessmentSignOff() {
+  return (
+    <>
+      <Rect x={70} y={30} w={180} h={120} rx={8} className={styles.frame} />
+      {/* The evidence. */}
+      <Rect x={86} y={42} w={48} h={32} rx={4} className={styles.tile} />
+      <Glyph
+        name="videocamera-record"
+        cx={110}
+        cy={58}
+        size={16}
+        className={styles.glyphQuiet}
+      />
+      <Copy x={146} y={52} w={60} />
+      <Copy x={146} y={64} w={40} quiet />
+      {/* The witness, then the assessor, who signs. */}
+      <Glyph name="user" cx={98} cy={98} size={16} className={styles.glyph} />
+      <Copy x={118} y={98} w={52} quiet />
+      <Glyph name="user" cx={98} cy={126} size={16} className={styles.glyph} />
+      <Copy x={118} y={126} w={44} />
+      <Focus x={222} y={122} glyph="check-circle" size={12} />
+    </>
+  );
+}
+
+/** Teacher dashboards: across the class, the one learner who has stalled is flagged in time to help. */
+function KindTeacherDashboards() {
+  const cells: readonly { x: number; y: number; p: number; stuck?: boolean }[] = [
+    { x: 66, y: 46, p: 34 },
+    { x: 132, y: 46, p: 8, stuck: true },
+    { x: 198, y: 46, p: 28 },
+    { x: 66, y: 94, p: 24 },
+    { x: 132, y: 94, p: 40 },
+    { x: 198, y: 94, p: 30 },
+  ];
+  return (
+    <>
+      <Rect x={50} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      {cells.map(({ x, y, p, stuck }) => (
+        <g key={`${x}-${y}`}>
+          <Rect
+            x={x}
+            y={y}
+            w={56}
+            h={40}
+            rx={4}
+            className={stuck ? styles.region : styles.tile}
+          />
+          <Glyph
+            name="user"
+            cx={x + 14}
+            cy={y + 14}
+            size={14}
+            className={stuck ? styles.glyphAccent : styles.glyphQuiet}
+          />
+          {stuck ? (
+            <Glyph
+              name="flag"
+              cx={x + 42}
+              cy={y + 14}
+              size={12}
+              className={styles.glyphAccent}
+            />
+          ) : null}
+          <path
+            className={stuck ? styles.regionCopy : styles.copy}
+            d={`M${x + 8},${y + 30} L${x + 48},${y + 30}`}
+          />
+          <path
+            className={stuck ? styles.line : styles.copyQuiet}
+            d={`M${x + 8},${y + 30} L${x + 8 + p},${y + 30}`}
+          />
+        </g>
+      ))}
+    </>
+  );
+}
+
 /**
  * /expertise/edtech-learning · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -337,4 +543,17 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-edtech-learning': NeedsEdtechLearning,
   /* Where our part stops: Course content, assessment standards and accreditation stay with your instructional designers and subject experts. Privacy requirements for  */
   'stops-edtech-learning': StopsEdtechLearning,
+  /* MOVING: this tile links to /case-studies/transforming-an-edtech-platform-into-an-engaging-learning-experience, so the drawing makes one move on hover (S.7 on /design/sketch). */
+  /* What we design in, tile: LMS and Moodle course experiences, with custom themes and plugins: The Wandering Raven */
+  'kind-edtech-learning-lms-moodle-course-experiences': KindLmsMoodle,
+  /* What we design in, tile: Creative learning products for young people aged eight to eighteen: The Wandering Raven */
+  'kind-edtech-learning-creative-learning-products-young': KindCreativeYoung,
+  /* What we design in, tile: Growth projects inside a learning platform's product team: JoVE */
+  'kind-edtech-learning-growth-projects-inside-learning': KindGrowthInside,
+  /* What we design in, tile: Workplace training and apprenticeship apps: Practice that fits between shifts */
+  'kind-edtech-learning-workplace-training-apprenticeship-apps': KindWorkplaceTraining,
+  /* What we design in, tile: Assessment and skills sign-off tools: Evidence, witness and assessor on one record */
+  'kind-edtech-learning-assessment-skills-sign-off': KindAssessmentSignOff,
+  /* What we design in, tile: Teacher dashboards and educator views: Who is stuck, seen early enough to help */
+  'kind-edtech-learning-teacher-dashboards-educator-views': KindTeacherDashboards,
 };

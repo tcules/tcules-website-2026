@@ -311,7 +311,7 @@ function StopsReplatforming() {
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
  */
 export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
-  /* Each feature's fate.: Moved as it is, fixed on the way, moved later or left behind, decided feature by feature with a reason. */
+  /* What happens to each feature.: Moved as it is, fixed on the way, moved later or left behind, decided feature by feature with a reason. */
   'wyg-replatforming-product-design-each-features-fate': EachFeaturesFate,
   /* The months in between, designed.: Who sees which version, where their records live and how support tells the versions apart. */
   'wyg-replatforming-product-design-months-between-designed': MonthsBetweenDesigned,

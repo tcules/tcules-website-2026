@@ -27,6 +27,7 @@ import { SCENES as P_FIGMA_STORYBOOK_ALIGNMENT } from './wyg-figma-storybook-ali
 import { SCENES as P_GOVERNANCE_ADOPTION } from './wyg-governance-adoption';
 import { SCENES as P_DATA_VISUALISATION } from './wyg-data-visualisation';
 import { SCENES as P_INFORMATION_ARCHITECTURE_WORKFLOW_DESIGN } from './wyg-information-architecture-workflow-design';
+import { SCENES as P_INTERACTION_UI_DESIGN } from './wyg-interaction-ui-design';
 import { SCENES as P_PROTOTYPING_USABILITY_TESTING } from './wyg-prototyping-usability-testing';
 import { SCENES as P_UX_RESEARCH } from './wyg-ux-research';
 import { SCENES as P_LEGACY_SOFTWARE_MODERNISATION } from './wyg-legacy-software-modernisation';
@@ -52,11 +53,13 @@ import { SCENES as P_AUDIT_PRODUCT_MODERNISATION_ASSESSMENT } from './wyg-produc
 import { SCENES as P_MATTER_DESIGN_SYSTEM } from './wyg-matter-design-system';
 import { SCENES as P_FUTURE_INTERFACES_LAB } from './wyg-future-interfaces-lab';
 import { SCENES as P_FUTURE_INTERFACES_LAB_JOIN } from './wyg-future-interfaces-lab-join';
+import { SCENES as P_HOW_WE_WORK } from './wyg-how-we-work';
 import { SCENES as P_HOME } from './wyg-home';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_HOME,
+  ...P_HOW_WE_WORK,
   ...P_AI_PRODUCTS_DEVELOPER_TOOLS,
   ...P_B2B_SAAS_WORKFLOW_SOFTWARE,
   ...P_CLIMATETECH_ENERGY,
@@ -83,6 +86,7 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_GOVERNANCE_ADOPTION,
   ...P_DATA_VISUALISATION,
   ...P_INFORMATION_ARCHITECTURE_WORKFLOW_DESIGN,
+  ...P_INTERACTION_UI_DESIGN,
   ...P_PROTOTYPING_USABILITY_TESTING,
   ...P_UX_RESEARCH,
   ...P_LEGACY_SOFTWARE_MODERNISATION,

@@ -126,7 +126,10 @@ function ComparisonEveryFigure() {
       {/* Last month, dashed; this month, lit, over the target. */}
       <Rect x={116} y={90} w={24} h={40} rx={3} className={styles.trailFrame} />
       {/* Its halo stops 6 above the baseline, open at the foot, where the bar stands on the rule. */}
-      <path className={styles.halo} d="M154,124 L154,60 A8,8 0 0 1 162,52 L182,52 A8,8 0 0 1 190,60 L190,124 Z" />
+      <path
+        className={styles.halo}
+        d="M154,124 L154,60 A8,8 0 0 1 162,52 L182,52 A8,8 0 0 1 190,60 L190,124 Z"
+      />
       <Rect x={160} y={58} w={24} h={72} rx={3} className={styles.solid} />
     </>
   );
@@ -248,7 +251,15 @@ function ViewsTriedRealNumbers() {
       <Chip x={142} y={42} glyph="code" />
       <path className={styles.rule} d="M146,130 L274,130" />
       {bars.map((h, k) => (
-        <Rect key={k} x={150 + k * 16} y={130 - h} w={10} h={h} rx={2} className={styles.tile} />
+        <Rect
+          key={k}
+          x={150 + k * 16}
+          y={130 - h}
+          w={10}
+          h={h}
+          rx={2}
+          className={styles.tile}
+        />
       ))}
       <Focus x={262} y={56} glyph="check-circle" size={12} />
     </>
@@ -361,6 +372,54 @@ function StopsDataVisualisation() {
   );
 }
 
+/* ── The method ───────────────────────────────────────────────────────────────── */
+
+/**
+ * Dashboard UX design, the method's figure: the five things settled for one view, in order down one
+ * route: the question, the measure (with when it last updated), the comparison, the explanation, and
+ * last the next step (lit).
+ */
+function DataVisualisationMethod() {
+  const rows: [number, IconName | null, number][] = [
+    [54, 'question-circle', 64],
+    [72, 'info-circle', 40],
+    [90, null, 56],
+    [108, 'flag', 48],
+  ];
+  return (
+    <>
+      <Rect x={90} y={30} w={140} h={120} rx={8} className={styles.frame} />
+      {/* The route through the five, in order. */}
+      <path className={styles.line} d="M100,54 L100,120 A6,6 0 0 0 106,126 L107,126" />
+      <ArrowRight x={114} y={126} />
+      {[54, 72, 90, 108].map((y) => (
+        <circle key={y} className={styles.node} cx="100" cy={y} r="2.5" />
+      ))}
+      {rows.map(([y, glyph, w]) => (
+        <g key={y}>
+          <Rect x={114} y={y - 6} w={12} h={12} rx={3} className={styles.tile} />
+          {glyph ? (
+            <Glyph name={glyph} cx={120} cy={y} size={9} className={styles.glyph} />
+          ) : (
+            <path
+              className={styles.copyQuiet}
+              d={`M118,${y + 3} L118,${y} M122,${y + 3} L122,${y - 3}`}
+            />
+          )}
+          <Copy x={134} y={y} w={w} quiet={y !== 54} />
+        </g>
+      ))}
+      {/* When the measure last updated. */}
+      <Glyph name="clock-circle" cx={190} cy={72} size={10} className={styles.glyphQuiet} />
+      <Copy x={200} y={72} w={14} quiet />
+      {/* The next step: the one action. */}
+      <Rect x={114} y={120} w={12} h={12} rx={3} className={styles.solid} />
+      <Glyph name="arrow-right" cx={120} cy={126} size={9} className={styles.glyphOn} />
+      <Rect x={134} y={120} w={44} h={12} rx={6} className={styles.solid} />
+    </>
+  );
+}
+
 /**
  * /services/product-design/data-visualisation · What you get. One drawing per item, each from that item's own words
  * (docs/research/flat-graphics/drawing-brief.md). An item left undefined shows the empty plate.
@@ -386,4 +445,6 @@ export const SCENES: Partial<Record<PageSceneName, () => ReactNode>> = {
   'needs-data-visualisation': NeedsDataVisualisation,
   /* Where our part stops: Pipelines, data models and one-off analysis stay with your data team or BI tool. We design what people see and do with the data, and your en */
   'stops-data-visualisation': StopsDataVisualisation,
+  /* Dashboard UX design: every number defined, compared and time-stamped (the method's one figure, beside its five steps): A good-looking chart can't rescue a metric nobody has defined. So for each view we work through five things, and the first three come before any chart is drawn. 1. The question. What is this person trying to find out, and what will they do about it? 2. The measure. What each number means, how it is calculated and when it was last updated. 3. The comparison. Whatever makes the number mean something to this role. 4. The explanation. What might have caused a change, and how sure the product can be about it. 5. The next step. A filter, a drill-down or an action, so people act inside the product. */
+  'wyg-data-visualisation-method': DataVisualisationMethod,
 };
