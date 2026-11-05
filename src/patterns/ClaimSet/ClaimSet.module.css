@@ -213,10 +213,6 @@
     background: var(--clm-panel-ground);
   }
 
-  .panel[data-moving] {
-    transition: block-size var(--clm-slide-duration) var(--clm-slide-easing);
-  }
-
   .track {
     position: relative;
   }
@@ -225,7 +221,9 @@
      never changes height when a claim is chosen. A panel that resized pushed everything below it,
      footer included, on every autoplay step and hover choice — layout shift a reader never caused,
      which Google counts (performance pass, 6 Nov 2026). Hidden slides keep their box but leave the
-     accessibility tree, as display: none did. */
+     accessibility tree, as display: none did. A slide that moves (leaving, or the peek's next slide)
+     stays in the cell and moves by transform only: taken out of flow, a tallest slide stopped
+     counting and the panel fell to the first claim's own height as the band came into view. */
   .slide {
     grid-area: 1 / 1;
     visibility: hidden;
@@ -237,12 +235,6 @@
     visibility: visible;
   }
 
-  .slide[data-leaving] {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline: 0;
-  }
-
   .panel[data-moving] .slide {
     transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
   }
@@ -251,10 +243,6 @@
      first, inside the panel's clip; the first eases aside by the peek's travel and the next's edge
      shows in the space it leaves, then both come back. The tab row never moves. */
   .slide[data-peek] {
-    display: block;
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline: 0;
     transform: translateX(calc(100% + var(--gap-stack)));
   }
 
@@ -277,7 +265,6 @@
   .arrow,
   .tabTitle,
   .panel[data-peek] .slide,
-  .panel[data-moving],
   .panel[data-moving] .slide {
     transition: none;
   }

@@ -38,7 +38,7 @@ const toMs = (value: string) => {
 /**
  * The tabs layout: the claims as tabs along the top of a paper-deep stage, the chosen claim's slide
  * on paper below: its title and words beside its example, with no drawing (owner, 31 Oct 2026). The slide is ONE piece and moves as one, out toward one side and in from the other,
- * in the direction of the chosen claim; the panel's height follows the slide on the same curve.
+ * in the direction of the chosen claim; the panel is as tall as the tallest claim and never resizes.
  *
  * Autoplay has no control of its own (owner, 31 Oct 2026); the reader's behaviour is the control. It
  * runs only where there is a mouse, while the band is on screen; the pointer over the stage or focus
@@ -126,15 +126,10 @@ export function ClaimTabs({
 
     const direction = active > from ? 1 : -1;
     const travel = box.clientWidth;
-    const startHeight = box.offsetHeight;
     leaving.dataset.leaving = '';
-    box.style.blockSize = 'auto';
-    const endHeight = box.offsetHeight;
-    box.style.blockSize = `${startHeight}px`;
     entering.style.transform = `translateX(${direction * travel}px)`;
     void box.offsetHeight;
     box.dataset.moving = '';
-    box.style.blockSize = `${endHeight}px`;
     entering.style.transform = 'translateX(0)';
     leaving.style.transform = `translateX(${-direction * travel}px)`;
 
@@ -144,10 +139,9 @@ export function ClaimTabs({
       delete box.dataset.moving;
       leaving.style.transform = '';
       entering.style.transform = '';
-      box.style.blockSize = '';
       finish.current = null;
     };
-    const duration = parseFloat(getComputedStyle(box).transitionDuration) * 1000 || 360;
+    const duration = parseFloat(getComputedStyle(entering).transitionDuration) * 1000 || 360;
     const timer = setTimeout(done, duration + 40);
     finish.current = done;
   }, [active, placePiece]);
