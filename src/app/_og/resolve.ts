@@ -4,6 +4,7 @@ import { join } from 'node:path';
 
 import {
   getBlogPage,
+  getCaseStudyListingPage,
   getCaseStudyPage,
   getCorpusPage,
   listAuthors,
@@ -15,6 +16,7 @@ import {
   auditPath,
   authorPath,
   blogPath,
+  CASE_SLUG_REDIRECTS,
   caseStudyPath,
   eventPath,
   expertisePath,
@@ -86,11 +88,36 @@ function author(path: string) {
 }
 
 /**
+ * Each case's V1 cover by live slug, read once per build: the listing carries it over the Strapi
+ * thumbnail (fixtures/case-covers.ts, owner 3 Nov 2026). Only a delivered V1 cover is taken here; a case
+ * without one keeps its Strapi banner.
+ */
+let caseCovers: Promise<Map<string, { src: string; width: number; height: number }>> | undefined;
+function caseCover(slug: string) {
+  caseCovers ??= getCaseStudyListingPage(ROUTES.caseStudies.slice(1))
+    .then((listing) => {
+      const covers = new Map<string, { src: string; width: number; height: number }>();
+      for (const item of listing?.items ?? []) {
+        const image = item.thumbnail;
+        if (image?.src.startsWith('/case-covers/') && image.width && image.height) {
+          covers.set(item.slug, { src: image.src, width: image.width, height: image.height });
+        }
+      }
+      return covers;
+    })
+    .catch((error: unknown) => {
+      console.error('share cards: case covers unavailable', error);
+      return new Map<string, { src: string; width: number; height: number }>();
+    });
+  return caseCovers.then((covers) => covers.get(CASE_SLUG_REDIRECTS[slug] ?? slug));
+}
+
+/**
  * The page's picture (owner, 4 Nov 2026):
  * - its own hero drawing, where it has one;
  * - else its family hub's drawing until its own lands: a service's line, /audits for an audit,
  *   /expertise for an expertise page (expertise pages take illustrations, never photographs);
- * - a case study's banner from Strapi (its UI cut-outs replace it when Strapi carries them);
+ * - a case study's V1 cover (owner, 5 Nov 2026), else its banner from Strapi;
  * - an article's cover from Strapi.
  * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
  * read the CMS leaves the card without a picture rather than without an image.
@@ -125,7 +152,7 @@ async function mediaFor(path: string): Promise<{ media: ShareMedia; source: Shar
   });
   try {
     if (family === 'case-studies' && slug && rest.length === 0) {
-      const image = (await getCaseStudyPage(slug))?.heroImage;
+      const image = (await caseCover(slug)) ?? (await getCaseStudyPage(slug))?.heroImage;
       if (image) return { media: capture(image), source: 'banner' };
     }
     if (family === 'insights' && slug && !['authors', 'events', 'podcasts', 'videos'].includes(slug)) {
