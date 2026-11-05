@@ -502,10 +502,12 @@
      BREAKPOINT STEP, deliberately, as h6 has none: it already IS the phone size, so a phone column
      and a desktop tile, being the same measure, set the same quote. Chosen by measure, never by how
      important the quote is. Italic in the composite like every quote role; no tracking companion,
-     as the 28 reading quote has none. In the SANS italic (owner, 16 Oct 2026: under 28px is Public
-     Sans); the larger quote roles keep the serif. */
+     as the 28 reading quote has none. In the SERIF italic, as the larger quote roles are (owner,
+     5 Nov 2026; the sans from 16 Oct): at 22 it is a display quote, not a card's, and in the sans one
+     quote changed its face between a desktop track and a phone one. The testimonial cards' 18 and 16
+     quotes stay in the sans (testimonial.css). */
   --text-quote-sm: italic var(--font-weight-regular)
-    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-sans);
+    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
   /* The summary paragraph: h4's size and its title-fine tracking, at regular weight, because it is
