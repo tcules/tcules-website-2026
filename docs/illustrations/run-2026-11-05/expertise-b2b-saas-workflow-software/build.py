@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Writes hero.svg for /expertise/b2b-saas-workflow-software.
 
-One deal file, a tabbed divider for every role, and one record handed on. A solid blue expanding file
-(pleated gusset) stands on the floor, its dividers tabbed for the roles that share it: a person, a person,
-an AI agent. The deal record has been taken out of its slot (a dashed ghost marks where it stood) and is
-carried along the floor's x axis from a Tcules designer to a client, both hands on its edges. The record
-shows an owner, a stage stepper with the current stage in lime, and a value field; its lime tab points the
-way it is going.
+One deal file, a tabbed divider for every role, and one record handed from one role to the next.
+A solid blue expanding file (pleated gusset) stands on the floor at hub scale, its dividers tabbed for the
+roles that share it: a person, a person, an AI agent. One sheet, the deal record with a lime tab, has been
+taken out of its slot (a dashed lime tab marks where it stood) and is passed hand to hand, along the floor's
+x axis, from the person who took it out (beside the file) to the next person (further out on the floor).
+The record is the drawing's one screen-like surface: an owner line and a stage stepper.
+
+Scale and people follow the healthtech hero (the family standard): same projection, dot pitch, pawn size
+(R 22, H 62, head 16) and arm (11 thick including its 1.6 blue outline, hand 0.8 x arm).
 Run: python3 build.py  (writes hero.svg beside it)
 """
 from pathlib import Path
@@ -19,6 +22,10 @@ P_ = "bs"  # id prefix
 
 def P(x, y, z=0.0):
     return (round(0.9 * x - 0.9 * y, 1), round(0.45 * x + 0.45 * y - z, 1))
+
+
+def f(n):
+    return round(n, 1)
 
 
 def pts(*p):
@@ -36,7 +43,7 @@ def xz(x0, y, ztop):
     return f'matrix(0.9 0.45 0 1 {tx} {ty})'
 
 
-def tabbed(w, h, a, tw, th, r=9, tr=7):
+def tabbed(w, h, a, tw, th, r=8, tr=6):
     """Sheet outline with a tab on its top edge, local coords: top-left at (0,0), tab rising to -th."""
     return (f"M0 {r} A{r} {r} 0 0 1 {r} 0 H{a} V{-th + tr} A{tr} {tr} 0 0 1 {a + tr} {-th} "
             f"H{a + tw - tr} A{tr} {tr} 0 0 1 {a + tw} {-th + tr} V0 H{w - r} A{r} {r} 0 0 1 {w} {r} "
@@ -47,7 +54,7 @@ out = []
 add = out.append
 
 # ---------------------------------------------------------------- floor (healthtech's plate)
-FX0, FY0, FW, FH = -160, -40, 395, 260
+FX0, FY0, FW, FH = -34, -46, 278, 426
 fx, fy = P(FX0, FY0)
 add(f'<defs><pattern id="{P_}-dots" width="22" height="22" patternUnits="userSpaceOnUse">'
     f'<circle cx="11" cy="11" r="1.6" fill="{B5}" fill-opacity="0.38"/></pattern></defs>')
@@ -56,53 +63,52 @@ add(f'<g transform="matrix(0.9 0.45 -0.9 0.45 {fx} {fy})"><rect width="{FW}" hei
     f'<rect width="{FW}" height="{FH}" fill="none" stroke="{B5}" stroke-width="1.8" stroke-dasharray="10 8"/>'
     f'<rect x="45" y="45" width="{FW - 90}" height="{FH - 90}" fill="{B5}" fill-opacity="0.07"/></g>')
 
-# ---------------------------------------------------------------- the expanding file
-X0, X1 = 0, 200          # width along x
-YB, YF = 0, 62           # back board, front pocket depth
-HB, HF = 186, 72         # back board height, front pocket height
-T = 7                    # pocket board thickness
+# ---------------------------------------------------------------- the expanding file, hub scale
+X0, X1 = 0, 150          # width along x
+YB, YF = 0, 54           # back board, front pocket depth
+HB, HF = 138, 60         # back board height, front pocket height
+T = 6                    # pocket board thickness
 SW = X1 - X0 - 14        # sheet width
-HD = 146                 # divider height
+HD = 108                 # divider height
+TW, TH = 30, 22          # tab width, height
+GU = 116                 # centre of the empty slot's tab (and of the handed record's tab)
 
 add('<!-- The deal file: a solid blue expanding file. Back board: one shape, top corners rounded -->')
-add(f'<g transform="{xz(X0, YB, HB)}"><path d="M0 {HB} V12 A12 12 0 0 1 12 0 H{X1 - X0 - 12} '
-    f'A12 12 0 0 1 {X1 - X0} 12 V{HB} Z" fill="{B5}" stroke="{B6}" stroke-width="1.6" stroke-linejoin="round"/></g>')
+add(f'<g transform="{xz(X0, YB, HB)}"><path d="M0 {HB} V11 A11 11 0 0 1 11 0 H{X1 - X0 - 11} '
+    f'A11 11 0 0 1 {X1 - X0} 11 V{HB} Z" fill="{B5}" stroke="{B6}" stroke-width="1.6" stroke-linejoin="round"/></g>')
 
-# the empty slot the record came out of: a dashed ghost of its top edge and tab
-YG = 9
-GTA, GTW = 16, 50
-add('<!-- The slot the record left: the dashed top edge and tab of the missing sheet -->')
-gr, gtr, gth, gd = 9, 7, 22, 26
-ghost = (f"M0 {gd} V{gr} A{gr} {gr} 0 0 1 {gr} 0 H{GTA} V{-gth + gtr} A{gtr} {gtr} 0 0 1 {GTA + gtr} {-gth} "
-         f"H{GTA + GTW - gtr} A{gtr} {gtr} 0 0 1 {GTA + GTW} {-gth + gtr} V0 H{SW - gr} A{gr} {gr} 0 0 1 {SW} {gr} V{gd}")
-add(f'<g transform="{xz(X0 + 7, YG, HD + 18)}"><path d="{ghost}" fill="none" stroke="{LIME}" stroke-width="1.8" '
-    f'stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/></g>')
+# the empty slot the record came out of: the dashed lime tab of the missing sheet
+YG = 8
+add('<!-- The slot the record left: a dashed lime outline of its tab, standing empty behind the dividers -->')
+gtr, gth = 6, 20
+ghost = (f"M{GU - TW / 2} 6 V{-gth + gtr} A{gtr} {gtr} 0 0 1 {GU - TW / 2 + gtr} {-gth} "
+         f"H{GU + TW / 2 - gtr} A{gtr} {gtr} 0 0 1 {GU + TW / 2} {-gth + gtr} V6")
+add(f'<g transform="{xz(X0 + 7, YG, HD + 6)}"><path d="{ghost}" fill="none" stroke="{LIME}" stroke-width="1.8" '
+    f'stroke-dasharray="4.5 3.5" stroke-linecap="round" stroke-linejoin="round"/></g>')
 
 # dividers: one per role, equal tabs evenly spaced so every role shows
-TW, TH = 40, 24
-dividers = [(22, 60, "person"), (35, 103, "person"), (48, 146, "ai")]   # depth y, tab centre u, mark
+dividers = [(18, 24, "person"), (30, 56, "person"), (42, 88, "ai")]   # depth y, tab centre u, mark
 add('<!-- Dividers, one tabbed for each role: a person, a person, an AI agent -->')
 for (yd, cx, mark) in dividers:
     g = [f'<g transform="{xz(X0 + 7, yd, HD)}">',
          f'<path d="{tabbed(SW, HD, cx - TW / 2, TW, TH)}" fill="{W}" stroke="{B5}" stroke-width="1.6" stroke-linejoin="round"/>']
     if mark == "person":
-        g.append(f'<circle cx="{cx}" cy="-15.5" r="4.4" fill="{B5}"/>'
-                 f'<path d="M{cx - 7.5} -4.5 a7.5 6.6 0 0 1 15 0 Z" fill="{B5}"/>')
+        g.append(f'<circle cx="{cx}" cy="-14" r="4" fill="{B5}"/>'
+                 f'<path d="M{cx - 6.8} -4 a6.8 6 0 0 1 13.6 0 Z" fill="{B5}"/>')
     else:
-        g.append(f'<rect x="{cx - 14}" y="-19.5" width="28" height="15" rx="7.5" fill="{B5}"/>'
-                 f'<path d="M{cx - 7} -7.6 l3.3 -8.2 l3.3 8.2 M{cx - 5.7} -10.4 h4 M{cx + 4} -15.8 v8.2" fill="none" '
-                 f'stroke="{W}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>')
-    g.append(f'<rect x="16" y="12" width="{SW - 120}" height="7" rx="3.5" fill="{B2}"/>')
+        g.append(f'<rect x="{cx - 12.5}" y="-17.5" width="25" height="13.5" rx="6.75" fill="{B5}"/>'
+                 f'<path d="M{cx - 6.3} -6.9 l3 -7.4 l3 7.4 M{cx - 5.1} -9.4 h3.6 M{cx + 3.6} -14.3 v7.4" fill="none" '
+                 f'stroke="{W}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>')
     g.append('</g>')
     add("".join(g))
 
 # pleated gusset on the right: an accordion of folds, a V notch at the top of each pleat
 add('<!-- The gusset: an accordion of folds -->')
-K, NOTCH = 4, 16
+K, NOTCH = 3, 13
 
 
 def top(y):
-    return (HB - 34) + (HF - (HB - 34)) * (y / YF)
+    return (HB - 28) + (HF - (HB - 28)) * (y / YF)
 
 
 edge = [P(X1, 0, 0), P(X1, 0, top(0))]
@@ -116,103 +122,113 @@ for i in range(K):
 edge.append(P(X1, YF, 0))
 add(poly(edge, B6, B7, 1.2))
 for y in valleys:
-    add(f'<path d="M{pts(P(X1, y, top(y) - NOTCH), P(X1, y, 0))}" stroke="{B7}" stroke-width="1.6" stroke-linecap="round"/>')
+    add(f'<path d="M{pts(P(X1, y, top(y) - NOTCH), P(X1, y, 0))}" stroke="{B7}" stroke-width="1.5" stroke-linecap="round"/>')
 for y in ridges:
-    add(f'<path d="M{pts(P(X1, y, top(y) - 1.5), P(X1, y, 0))}" stroke="{B5}" stroke-width="1.4" stroke-linecap="round"/>')
+    add(f'<path d="M{pts(P(X1, y, top(y) - 1.5), P(X1, y, 0))}" stroke="{B5}" stroke-width="1.3" stroke-linecap="round"/>')
 
-# front pocket: top edge, front face, label
-add('<!-- Front pocket and its label: the account, with a count of open records -->')
-add(poly([P(X0 + 10, YF - T, HF), P(X1, YF - T, HF), P(X1, YF, HF), P(X0 + 10, YF, HF)], B7, B7, 1.2))
-add(f'<g transform="{xz(X0, YF, HF)}"><path d="M10 0 H{X1 - X0} V{HF} H10 A10 10 0 0 1 0 {HF - 10} V10 A10 10 0 0 1 10 0 Z" fill="{B5}" '
+# front pocket: top edge, front face, a plain label slip (not a screen)
+add('<!-- Front pocket with a plain label slip -->')
+add(poly([P(X0 + 9, YF - T, HF), P(X1, YF - T, HF), P(X1, YF, HF), P(X0 + 9, YF, HF)], B7, B7, 1.2))
+add(f'<g transform="{xz(X0, YF, HF)}"><path d="M9 0 H{X1 - X0} V{HF} H9 A9 9 0 0 1 0 {HF - 9} V9 A9 9 0 0 1 9 0 Z" fill="{B5}" '
     f'stroke="{B6}" stroke-width="1.6" stroke-linejoin="round"/>'
-    f'<rect x="22" y="18" width="104" height="34" rx="8" fill="{W}"/>'
-    f'<rect x="34" y="31.5" width="48" height="8" rx="4" fill="{B5}"/>'
-    f'<rect x="92" y="28" width="24" height="15" rx="7.5" fill="{B1}"/>'
-    f'<circle cx="99" cy="35.5" r="2.4" fill="{B5}"/><circle cx="109" cy="35.5" r="2.4" fill="{B5}"/>'
+    f'<rect x="20" y="17" width="64" height="20" rx="5" fill="{W}"/>'
+    f'<rect x="29" y="24" width="36" height="6" rx="3" fill="{B2}"/>'
     f'</g>')
 
-# ---------------------------------------------------------------- the record, being handed on
-PX0, PW, PH, PY = -112, 168, 100, 168   # left edge x, width, height, depth y
-PZ = 126                                 # top edge height
-add('<!-- The deal record, carried out along the x axis from the Tcules designer to the client -->')
-g = [f'<g transform="{xz(PX0, PY, PZ)}">',
-     # lime tab on the leading (left) end, arrow pointing -u, the way the record is going
-     f'<path d="M14 4 V-19 A7 7 0 0 1 21 -26 H71 A7 7 0 0 1 78 -19 V4 Z" fill="{LIME}" '
-     f'stroke="{LIMED}" stroke-width="1.6" stroke-linejoin="round"/>',
-     f'<path d="M62 -12.5 H30 M37 -18.5 L30 -12.5 L37 -6.5" fill="none" stroke="{INK}" stroke-width="2.4" '
-     f'stroke-linecap="round" stroke-linejoin="round"/>',
-     f'<rect width="{PW}" height="{PH}" rx="9" fill="{W}" stroke="{B5}" stroke-width="1.6"/>',
+
+# ---------------------------------------------------------------- people (healthtech's pawn and arm)
+R, H, HEAD = 22, 62, 16
+ARM, OUT = 11, 1.6
+HAND = ARM * 0.8
+mask_n = [0]
+
+
+def body_path(x, y):
+    return (f"M{f(x - R)} {f(y)} V{f(y - H)} A{R} {R} 0 0 1 {f(x + R)} {f(y - H)} V{f(y)} "
+            f"A{R} {f(R * 0.45)} 0 0 1 {f(x - R)} {f(y)} Z")
+
+
+def pawn(x, y):
+    return (f'<path d="{body_path(x, y)}" fill="{W}" stroke="{B5}" stroke-width="1.6" stroke-linejoin="round"/>'
+            f'<circle cx="{f(x)}" cy="{f(y - H - R - 4 - HEAD)}" r="{HEAD}" fill="{W}" stroke="{B5}" stroke-width="1.6"/>')
+
+
+def client_arm(x, y, ax, ay, hx, hy):
+    """A light arm outlined in blue, growing out of the body (its outline masked inside the body)."""
+    mid = f"{P_}-arm{mask_n[0]}"
+    mask_n[0] += 1
+    return (f'<mask id="{mid}" maskUnits="userSpaceOnUse" x="-500" y="-300" width="1100" height="800">'
+            f'<rect x="-500" y="-300" width="1100" height="800" fill="{W}"/><path d="{body_path(x, y)}" fill="#000000"/></mask>'
+            f'<g mask="url(#{mid})"><path d="M{f(ax)} {f(ay)} L{f(hx)} {f(hy)}" stroke="{B5}" stroke-width="{ARM}" '
+            f'stroke-linecap="round"/><circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND)}" fill="{B5}"/></g>'
+            f'<path d="M{f(ax)} {f(ay)} L{f(hx)} {f(hy)}" stroke="{W}" stroke-width="{f(ARM - 2 * OUT)}" stroke-linecap="round"/>'
+            f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND - OUT)}" fill="{W}"/>')
+
+
+def hand_on_sheet(hx, hy):
+    """A hand drawn over the sheet's edge, so it grips it."""
+    return (f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND)}" fill="{B5}"/>'
+            f'<circle cx="{f(hx)}" cy="{f(hy)}" r="{f(HAND - OUT)}" fill="{W}"/>')
+
+
+# ---------------------------------------------------------------- the record, passed hand to hand
+PW, PH = SW, 74                  # the same sheet as the dividers, cut short
+SXP, SY1, PZ = 198, 290, 100     # the sheet's plane x, its front end y, top edge height
+LU = 30                          # the record's lime tab, near its front end
+GAP = 44                         # pawn centre to the sheet's end, along y
+ZH = 64                          # hand height
+
+
+def yz(x, y_front, ztop):
+    """Transform for flat content in a y-z plane at x, u running from the front end toward the back (-y)."""
+    tx, ty = P(x, y_front, ztop)
+    return f'matrix(0.9 -0.45 0 1 {tx} {ty})'
+
+
+# the giver stands just past the sheet's back end (near the file), the receiver past its front end
+gx, gy = P(SXP, SY1 - PW - GAP)
+rx, ry = P(SXP, SY1 + GAP)
+gh = P(SXP, SY1 - PW + 3, ZH)
+rh = P(SXP, SY1 - 3, ZH)
+
+add('<!-- The person who drew the record from the file (back) hands it to the next person (front) -->')
+add(pawn(gx, gy))
+add(client_arm(gx, gy, gx - 8, gy - H + 22, gh[0], gh[1]))
+
+add('<!-- The deal record: the sheet missing from the file, its tab lime -->')
+g = [f'<g transform="{yz(SXP, SY1, PZ)}">',
+     # lime tab on the leading end, toward the person taking it
+     f'<path d="M{LU - TW / 2 - 7} 4 V{-TH + 6} A6 6 0 0 1 {LU - TW / 2 - 1} {-TH} H{LU + TW / 2 + 1} '
+     f'A6 6 0 0 1 {LU + TW / 2 + 7} {-TH + 6} V4 Z" fill="{LIME}" stroke="{LIMED}" stroke-width="1.4" stroke-linejoin="round"/>',
+     f'<rect x="{LU - 9}" y="{-TH / 2 - 3}" width="18" height="5" rx="2.5" fill="{INK}"/>',
+     f'<rect width="{PW}" height="{PH}" rx="8" fill="{W}" stroke="{B5}" stroke-width="1.6"/>',
      # owner: a small avatar and the deal's title
-     f'<circle cx="24" cy="23" r="9" fill="{B5}"/><circle cx="24" cy="20.4" r="3.2" fill="{W}"/>'
-     f'<path d="M18.6 28.6 a5.4 4.8 0 0 1 10.8 0 Z" fill="{W}"/>',
-     f'<rect x="40" y="16" width="78" height="8" rx="4" fill="{B5}"/><rect x="40" y="28" width="46" height="6" rx="3" fill="{B2}"/>',
-     # stage stepper: done, done, current (lime), to come
-     f'<path d="M22 54 H146" stroke="{B2}" stroke-width="2.2" stroke-linecap="round"/>'
-     f'<path d="M22 54 H84" stroke="{B5}" stroke-width="2.2" stroke-linecap="round"/>'
-     f'<circle cx="22" cy="54" r="5.5" fill="{B5}"/><circle cx="53" cy="54" r="5.5" fill="{B5}"/>'
-     f'<circle cx="115" cy="54" r="5.5" fill="{W}" stroke="{B3}" stroke-width="1.4"/>'
-     f'<circle cx="146" cy="54" r="5.5" fill="{W}" stroke="{B3}" stroke-width="1.4"/>'
-     f'<circle cx="84" cy="54" r="7.5" fill="{LIME}" stroke="{LIMED}" stroke-width="1.4"/>',
-     # value field
-     f'<rect x="16" y="74" width="{PW - 32}" height="24" rx="6" fill="{B05}" stroke="{B1}" stroke-width="1.2"/>'
-     f'<rect x="26" y="83" width="22" height="6" rx="3" fill="{B3}"/><rect x="84" y="81.5" width="58" height="9" rx="4.5" fill="{B5}"/>',
+     f'<circle cx="22" cy="21" r="8.5" fill="{B5}"/><circle cx="22" cy="18.6" r="3" fill="{W}"/>'
+     f'<path d="M17 26.4 a5 4.4 0 0 1 10 0 Z" fill="{W}"/>',
+     f'<rect x="37" y="15" width="64" height="7.5" rx="3.75" fill="{B5}"/><rect x="37" y="26" width="38" height="6" rx="3" fill="{B2}"/>',
+     # stage stepper: done, done, here, to come
+     f'<path d="M24 53 H112" stroke="{B2}" stroke-width="2.2" stroke-linecap="round"/>'
+     f'<path d="M24 53 H82.7" stroke="{B5}" stroke-width="2.2" stroke-linecap="round"/>'
+     f'<circle cx="24" cy="53" r="5" fill="{B5}"/><circle cx="53.3" cy="53" r="5" fill="{B5}"/>'
+     f'<circle cx="82.7" cy="53" r="6.5" fill="{W}" stroke="{B5}" stroke-width="2.4"/>'
+     f'<circle cx="112" cy="53" r="5" fill="{W}" stroke="{B3}" stroke-width="1.4"/>',
      '</g>']
 add("".join(g))
-# the way it came: a dashed arc from the empty slot's tab to the record's tab
-a0 = P(X0 + 7 + GTA + GTW / 2, YG, HD + 18 + 22 + 2)
-a1 = P(PX0 + 46, PY, PZ + 26 + 6)
-LIFT_ARC = 54
-add(f'<path d="M{a1[0]} {a1[1]} C{a1[0]} {a1[1] - LIFT_ARC} {a0[0]} {a0[1] - LIFT_ARC} {a0[0]} {a0[1]}" fill="none" stroke="{B5}" '
-    f'stroke-width="1.5" stroke-dasharray="4 4" stroke-linecap="round"/>')
+add(hand_on_sheet(*gh))
 
-
-# ---------------------------------------------------------------- people
-def pawn(cx, by, client):
-    if client:
-        return (f'<path d="M{cx - 18} {by} V{by - 42} A18 18 0 0 1 {cx + 18} {by - 42} V{by} A18 8.5 0 0 1 {cx - 18} {by} Z" '
-                f'fill="{W}" stroke="{B5}" stroke-width="1.6" stroke-linejoin="round"/>'
-                f'<circle cx="{cx}" cy="{by - 78}" r="13" fill="{W}" stroke="{B5}" stroke-width="1.6"/>')
-    return (f'<path d="M{cx - 18} {by} V{by - 42} A18 18 0 0 1 {cx + 18} {by - 42} V{by} A18 8.5 0 0 1 {cx - 18} {by} Z" '
-            f'fill="{B5}" stroke="{W}" stroke-width="3.6" paint-order="stroke" stroke-linejoin="round"/>'
-            f'<circle cx="{cx}" cy="{by - 78}" r="13" fill="{B5}" stroke="{W}" stroke-width="3.6" paint-order="stroke"/>')
-
-
-def arm(x1, y1, x2, y2, client):
-    if client:
-        return (f'<path d="M{x1} {y1} L{x2} {y2}" stroke="{B5}" stroke-width="8.5" stroke-linecap="round"/>'
-                f'<circle cx="{x2}" cy="{y2}" r="6.8" fill="{B5}"/>'
-                f'<path d="M{x1} {y1} L{x2} {y2}" stroke="{W}" stroke-width="5.3" stroke-linecap="round"/>'
-                f'<circle cx="{x2}" cy="{y2}" r="5.2" fill="{W}"/>')
-    return (f'<path d="M{x1} {y1} L{x2} {y2}" stroke="{W}" stroke-width="12" stroke-linecap="round"/>'
-            f'<circle cx="{x2}" cy="{y2}" r="8.6" fill="{W}"/>'
-            f'<path d="M{x1} {y1} L{x2} {y2}" stroke="{B5}" stroke-width="8.5" stroke-linecap="round"/>'
-            f'<circle cx="{x2}" cy="{y2}" r="6.8" fill="{B5}"/>')
-
-
-ZH = 64  # hand height on the record's edges
-add('<!-- A client (white, left) receives the record; a Tcules designer (blue, right) passes it -->')
-# each stands just past an edge of the record, a step in front of it, its hand on that edge
-hx, hy = P(PX0 + 2, PY, ZH)
-cx1, by1 = P(PX0 - 40, PY + 4)
-add(pawn(cx1, by1, True))
-add(arm(cx1 + 10, by1 - 50, hx, hy, True))
-hx2, hy2 = P(PX0 + PW - 2, PY, ZH)
-cx2, by2 = P(PX0 + PW + 40, PY + 12)
-add(pawn(cx2, by2, False))
-add(arm(cx2 - 10, by2 - 50, hx2, hy2, False))
+add(pawn(rx, ry))
+add(client_arm(rx, ry, rx + 8, ry - H + 22, rh[0], rh[1]))
 
 svg = "\n".join(out)
-corners = [P(FX0, FY0), P(FX0 + FW, FY0), P(FX0, FY0 + FH), P(FX0 + FW, FY0 + FH), P(X0, YB, HB),
-           P(PX0, PY, PZ + 26),
-           (a0[0], min(a0[1], a1[1]) - 0.75 * LIFT_ARC)]
+corners = [P(FX0, FY0), P(FX0 + FW, FY0), P(FX0, FY0 + FH), P(FX0 + FW, FY0 + FH), P(X0, YB, HB)]
 xs = [c[0] for c in corners]; ys = [c[1] for c in corners]
-pad = 6
+pad = 4
 vb = (min(xs) - pad, min(ys) - pad, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad)
 alt = ("Isometric illustration for B2B SaaS and workflow software design. A solid blue expanding file stands on a "
-       "dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. The deal "
-       "record has been taken out of its slot, where a dashed outline remains, and is being handed on: a Tcules "
-       "designer passes it to a client, both holding its edges. The record shows its owner, a row of stages with "
-       "the current one in lime and a value field, and its lime tab carries an arrow pointing the way it is going.")
+       "dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. One "
+       "sheet, the deal record with a lime tab, has been taken out, leaving a dashed outline of its tab in the "
+       "file, and is being handed on: the person beside the file passes it to the next person, both holding its "
+       "edges. The record shows its owner and a row of stages, with the current one ringed.")
 doc = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{" ".join(str(round(v)) for v in vb)}" role="img" '
        f'aria-label="{alt}">\n{svg}\n</svg>\n')
 Path(__file__).with_name("hero.svg").write_text(doc)

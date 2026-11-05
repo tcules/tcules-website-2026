@@ -1,7 +1,7 @@
 # /expertise/edtech-learning · hero
 
 Slot: the hero beside the copy, on paper, rendered about 600px wide, and the card cover on /expertise at about 360px.
-`hero.svg`, viewBox 724.4 × 487.3 (about 1.49:1), written by `build.mjs` beside it (`node build.mjs`).
+`hero.svg`, viewBox 860.3 × 579.1 (1.49:1), written by `build.mjs` beside it (`node build.mjs`).
 
 ## Candidate ideas (all built on the hub's books and graduation cap)
 
@@ -12,7 +12,7 @@ Slot: the hero beside the copy, on paper, rendered about 600px wide, and the car
 3. **The teacher's shelf.** On a teacher's laptop each learner is a pile of books growing toward a cap, and the one
    short pile that has stalled is flagged, so the teacher sees who is stuck.
 
-## The pick: idea 1, polished (v6)
+## The pick: idea 1, polished (v7)
 
 It is the most literal reading of the page's lead ("learners get a clear next step, even on a phone"), and it answers
 Jatin's note on round 3 ("you can't see that a student is learning"): the learner stands mid-climb on the second step,
@@ -29,26 +29,32 @@ line runs from behind that row to the lime book, so the next lesson in the app i
   hero standing beside it.
 - **Accent:** lime twice, as the two halves of one idea joined by the dashed line: the next book and the tablet's
   next-lesson row (a rounded row, not a pill button).
-- **Family (§9a):** healthtech's floor exactly (22-pitch brandeis-500 dots at 0.38, the 0.07 inset 45 in, the 10/8
-  dashed edge at 1.8), the whole staircase on it with air on every side; the learner at healthtech's people scale
-  (body about 19, head 13.5, one arm weight); one screen; 1.49:1; reads at 360.
+- **Family (§9a):** healthtech's plate exactly (545 × 402, 22-pitch brandeis-500 dots at 0.38, the 0.07 inset 45 in,
+  the 10/8 dashed edge at 1.8), turned a quarter so its long side runs along the climb; the staircase at the scale of
+  healthtech's open case (about 400 px of a 860 px drawing, 4 × 46 tall plus the cap) with at least 50 of plate on
+  every side; the learner built exactly as healthtech's pawns (body radius 22, body 62, head 16, arm 11 with its
+  outline); nothing floats (the tablet is in the learner's hand, over the learner's own step); one screen; 1.49:1;
+  reads at 360.
 
 ## Parts
 
-- The family floor, as healthtech's (pattern id `ed-dots`).
-- Four piles of books (one, two, three and four books, 40 tall each), climbing along −y toward the back right. Each
-  book is built as in `expertise.svg`: light covers (brandeis-100 top, 200 and 300 sides), a white page block with two
-  page lines on the front face. The piles stagger slightly so they read as books, not slabs.
+- The family floor: healthtech's plate (pattern id `ed-dots`), 402 along x and 545 along y.
+- Four piles of books (one, two, three and four books, 46 tall each, 130 × 64 footprint, 70 apart), climbing along −y
+  toward the back right, each pile also stepping 12 along −x so the stair sits centred on the plate. Each book is built
+  as in `expertise.svg`: light covers (brandeis-100 top, 200 and 300 sides), a white page block with two page lines on
+  the front face. The books in a pile stagger slightly so they read as books, not slabs.
 - The next step: the top book of the third pile, with lime covers (lime top and front, the darker lime only on the
-  right side), seated square on the book below it, so nothing reads as a gap or a shadow under it.
+  right side), seated square on the book below it.
 - The hub's graduation cap on the fourth (top) pile: a dark blue crown, a solid blue board, a white button and tassel.
-- The learner (a client's user): a white pawn with a blue outline, standing on the second step. The arm is light with
-  a blue outline (the family's one arm weight), and its hand holds the tablet's left edge.
-- The tablet: solid blue with a dark blue side, held upright in front of the learner, its white screen facing the
-  viewer: a title bar, two ticked lesson rows and one lime next-lesson row with a dark bar.
-- The tie: a dashed brandeis-500 line (4/4) along −y from behind the lime row to the lime book's top cover, ending in a
-  small dot on the cover's front edge. It is drawn under the tablet, so it leaves the tablet from behind and never
-  crosses the screen.
+- The learner (a client's user): a white pawn with a blue outline at healthtech's size, standing on the second step.
+- The tablet: solid blue with a dark blue side, 56 × 42, its white screen facing the viewer: a title bar, two ticked
+  lesson rows and one lime next-lesson row with a dark bar. It is held at the learner's right at chest height, over
+  the learner's own step (the generator refuses a tablet that runs past the step's side or front).
+- The arm: healthtech's client arm (light core, blue outline, one weight), short, from the shoulder to the tablet's
+  left edge, the hand closing over the bezel and clear of the screen's ticks.
+- The tie: a dashed brandeis-500 line (4/4) along −y from behind the tablet's lime row to the lime book's top front
+  edge, ending in a small dot. It leaves from the tablet's right part, so most of it shows between the tablet and the
+  book, and it is drawn under the tablet, so it never crosses the screen.
 - No Tcules figure: the idea is about what the learner gets (STYLE §5).
 
 ## Alt
@@ -83,3 +89,13 @@ Isometric illustration for EdTech product design. Piles of books rise as a stair
   at the family's scale; the learner is at healthtech's people scale. Joins checked at 2000px: the arm into the body,
   the hand on the tablet's edge, the line leaving the tablet from behind and its dot on the cover's front corner, the
   cap seated on its pile. Seen beside healthtech at 600 and 360.
+- v7 (family fix; before: `preview/v6-before-family-fix.png` and `.at-360.png`): the family check found the book
+  stacks several times the hub's scale and filling a narrow strip of floor edge to edge, and the tablet floating past
+  the step. Now: healthtech's plate exactly (545 × 402), turned so its long side runs along the climb; the staircase
+  cut to the scale of healthtech's case (books 130 × 64 × 46, piles 70 apart, a little drift along −x) and set on the
+  plate with at least 50 of air on every side; the learner and arm rebuilt at healthtech's people scale; the tablet
+  moved beside the learner, over the learner's own step, with a short visible arm whose hand closes over its left edge.
+  The tie now leaves from the tablet's right part, so it shows. The stair sits toward the back of the plate because the
+  box must stay within 3:2 with only the cap rising above the plate; the open plate in front is the approach to the
+  climb. Joins checked at 4–9×: the arm into the body, the hand on the bezel (clear of the ticks), the tie's dot on the
+  lime book's top front edge, the cap seated on its pile. Seen beside healthtech and the hub at 600 and 360.

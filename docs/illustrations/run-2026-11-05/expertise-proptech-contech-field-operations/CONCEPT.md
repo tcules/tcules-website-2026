@@ -1,7 +1,7 @@
 # /expertise/proptech-contech-field-operations · hero
 
 Slot: hero beside the copy, paper ground, renders about 600px wide; also the card cover on /expertise at about
-360px. `hero.svg`, viewBox 755 × 508 (1.49:1, inside the family's 5:4 to 3:2). Generator: `build.py` (run `python3 build.py`).
+360px. `hero.svg`, viewBox 860 × 574 (1.50:1, the top of the family's 5:4 to 3:2). Generator: `build.py` (run `python3 build.py`).
 
 No earlier draft existed in this folder; this is a fresh drawing.
 
@@ -23,37 +23,35 @@ visitor coming from /expertise recognises their field at once.
 
 Buyer's sentence: "They put the deal team and the people on site on one record of each property."
 
-## Parts (round 6, the family polish)
+## Parts (round 7, the family check)
 
-- **The family floor, healthtech's:** dotted brandeis-300 plate, dashed brandeis-500 edge, brandeis-50 inset 45 in
-  from the edge. One floor, no second dashed outline. Its back edge sits behind the record and clear of the roof.
-- **The property's record, solid blue: the one screen and the hero object.** 210 × 236, upright, standing on a
-  low white foot on the floor (nothing floats). Top: a house mark and the property's name, then a map with the
-  hub's pin. Below, two columns: on the left the **deal's stages**, two done (brandeis-200) and the current one in
-  white with the house mark; on the right the **sign-offs**, two ticked (white disc, blue tick 2.2) and one still
-  open (brandeis-200 ring), each beside its source; the middle source is a drawing sheet with a floor plan (the
-  ConTech drawing check).
-- **The site: the house from the hub on its lime tile** (the one accent), right of and in front of the record.
-  White walls, brandeis-200 gable end with its round window, white roof, blue door, one window.
-- **Two clients, on that one record** (healthtech's pawn at the same scale: body 44 wide, head r16; the client
-  arm, 11 with its blue outline, light core 7.8, hand 8.8 / 7.2):
-  - **the deal desk:** a white pawn with a small blue tie, on the floor at the record's left edge, a hand on the
-    current deal stage;
-  - **on site:** a white pawn in a hard hat (dome, ridge, brim), standing on the lime tile by the house, a hand
-    at the record's right edge on the open sign-off.
-- No laptop, no phone, no connectors: the two people touch the same screen, so nothing needs a line.
-- No Tcules figure: the idea is the client's two sides sharing one record.
-- Distinct from healthtech's formula: no phone and no lime button; the screen stands at the back-left, the hub
-  object sits front-right, and the people stand between and beside them.
+- **The family floor, healthtech's plate exactly:** 545 × 402, dotted brandeis-300, dashed brandeis-500 edge,
+  brandeis-50 inset 45 in from the edge. Nothing crops it; every object sits inside the inset with air around it.
+- **The property's record: a portrait tablet on a stand, at hub scale.** 130 × 172, light body (white bezel,
+  brandeis-200 thickness, blue outline) with only the screen solid blue, the one hero object (STYLE §3 devices). It
+  stands at the back-left on a white neck and base plate on the floor, its screen facing +x, toward the house. Its
+  top reaches the house's ridge plus a head; it no longer dwarfs the house. Screen: a house mark and the property's
+  name, a map with the hub card's pin, then the sign-offs, two ticked (white disc, blue tick 2.2) and the last still
+  open (brandeis-200 ring). The deal-stage column and the source glyphs were cut: they did not read at 360.
+- **The site: the hub's house on its lime tile** (the one accent), in front of and right of the tablet, now the
+  largest volume (footprint 144 × 124, walls 82, roof 58) so the hub object leads, as the case does on healthtech.
+- **Two clients, on that one record, both fully on the floor** (healthtech's pawn: body 44 wide, head r16; the
+  client arm 11 with its blue outline, light core 7.8, hand 8.8 / 7.2):
+  - **the deal desk:** a white pawn with a small blue tie at the tablet's back end, a short arm to its far edge;
+  - **on site:** a white pawn in a hard hat (dome, ridge, brim) at the tablet's front end, beside the house and
+    off the tile, a short arm to the open sign-off.
+- One screen, no connectors, no Tcules figure: the idea is the client's two sides sharing one record.
+- Distinct from every sibling: no phone and no lime pill (healthtech), no flat tablet lying on the floor (commerce,
+  data), no monitor fed by objects (climatetech); an upright tablet on a stand facing the hub object across the floor.
 
 ## Alt
 
 Isometric illustration for PropTech, ConTech and field operations product design. On a dotted floor the property's
-one record stands as a solid blue screen: the house's map pin at the top, the deal's stages on the left with the
-current one picked out by a house, and its sign-offs on the right, two ticked and one still open, each beside its
-source document or drawing. Beside it the white house from the expertise hub stands on its lime tile. Two people
-work on that one record: someone from the deal desk in a tie rests a hand on the deal's stage, and a person on
-site in a hard hat, standing on the lime tile by the house, rests a hand by the sign-offs.
+one record stands as a tablet on a stand, its screen solid blue: the property's name, a map with its pin, and its
+sign-offs below, two ticked and one still open. In front of the screen the white house from the expertise hub stands
+on its lime tile. Two people share that one record from either end of the tablet: someone from the deal desk in a tie
+rests a hand on its far edge, and a person on site in a hard hat, standing on the floor by the house, rests a hand on
+the open sign-off.
 
 ## Rounds
 
@@ -80,3 +78,13 @@ site in a hard hat, standing on the lime tile by the house, rests a hand by the 
    back edge pushed clear of the roof). Pawns and arms set to healthtech's scale. Box 1.63 to 1.49. Checked at
    600 and 360 beside the hub and healthtech; zoom-checked both hands on the screen, the hat against the slab's
    side, the record's foot, the roof and gable, the tile's front corner against the floor edge.
+7. Family check fixes. (1) The record was a 210 × 236 wall display dwarfing the house: now a 130 × 172 portrait
+   tablet on a stand with a light body and a blue screen, and the house enlarged to lead. (2) The floor was narrow
+   and cropped: now healthtech's 545 × 402 plate exactly, uncropped. (3) The worker stood half on the tile's rim: now
+   fully on the floor at the tablet's front end, beside the house. The tablet turned to face +x (toward the house)
+   and moved to the back-left so it rises past the plate's top corner, which brings the box to 1.50 with the full
+   plate. Tried and dropped on the way: a landscape monitor along the back (1.85 wide, the front half of the plate
+   empty, the worker inside the roof line), and a landscape monitor facing the house (1.53, the worker's hat on the
+   monitor's corner, long arms). Checked at 600 and 360 beside healthtech and the hub; zoom-checked both hands on
+   the screen, the hat clear of the tablet's corner and stand, the deal person's feet clear of the ridge, the roof's
+   gable overhang, the tablet's foot and neck.

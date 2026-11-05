@@ -1,7 +1,7 @@
 # B2B SaaS and workflow software: hero
 
 Route `/expertise/b2b-saas-workflow-software`. Also the card cover on `/expertise`. Source: `build.py` writes
-`hero.svg` (viewBox 602 × 420, about 1.43:1). Previews: `preview/hero.png`, `preview/hero.at-600.png`,
+`hero.svg` (viewBox 642 × 427, 1.50:1). Previews: `preview/hero.png`, `preview/hero.at-600.png`,
 `preview/hero.at-360.png`.
 
 ## The object
@@ -70,23 +70,48 @@ head (white edge intact against the record); both hands sit on the record's edge
 Checked at 360: the file with its accordion side, the three role tabs, the record held between two people,
 the lime tab and the lime stage, and the arc back to the empty slot all read.
 
+7. Family-check fix (5 Nov). The check found four faults; each fixed at its cause:
+   - **The record floated and ran off the plate.** It was a large panel at head height past the floor's left
+     edge, so arms reaching it read as pointing at a floating screen. Now it is a sheet the size of the file's
+     own dividers, gripped at both ends at hand height, wholly inside the plate. Nothing floats.
+   - **Two screen-like surfaces.** The pocket's white card (title bar and count chip) is now a plain label slip
+     with one bar. The record is the drawing's one UI surface: owner line and a four-stop stage stepper (the
+     current stop ringed in blue, so lime stays on the tab alone).
+   - **The dashed arc is gone** (a second idea). Where the record came from is said by the empty slot alone:
+     the dashed lime outline of its tab standing in the file, matching the record's lime tab.
+   - **Hub scale.** The file is 150 wide and 138 tall in healthtech's units (was 200 × 186): a little taller
+     than a pawn, as the hub's medical case is. People are healthtech's pawn (R 22, H 62, head 16) and arm
+     (11 including its 1.6 blue outline, hand 0.8 of that), and the plate is healthtech's.
+   - **The handover is the action** (the blind reader saw HR/CRM "filing"). The scene now runs on one line
+     along the floor's y axis: the file at the back, the person standing at its pocket who drew the record
+     out, the record held between two hands, the next person further out taking it, the lime tab leading.
+     Both people are client figures (white, light arms outlined in blue): the handover is between two roles
+     of the client's own team, which is what workflow software carries; no Tcules figure is needed for that
+     idea. Arms grow from the shoulder (the outline masked inside the body), same weight both sides.
+   - **Arrangement.** No sibling shares it: object at the back-right, a pair in a line coming forward from it,
+     the product held by people rather than standing as a device.
+
+   Zoom-checked at 1800px: the giver's hand sits over the record's back edge, the receiver's over its front
+   edge, each arm meets its body with no outline seam; the lime tab sits behind the record's top edge; the
+   ghost tab lies inside the back board; the giver's head stands clear in front of the pocket's corner.
+   At 360: the file with its three role tabs, the record between two people, and the lime tab all read.
+
 ## Parts
 
 - Floor: healthtech's plate, dotted, brandeis-50 inset, dashed brandeis-500 edge.
-- The hero object: a solid brandeis-500 expanding file, an accordion gusset in brandeis-600 with brandeis-700
-  valley folds, a white label (account bar, count chip) on its pocket.
+- The hero object: a solid brandeis-500 expanding file at hub scale, an accordion gusset in brandeis-600 with
+  brandeis-700 valley folds, a plain white label slip on its pocket.
 - Three white dividers with equal tabs: a person, a person, an AI badge.
-- The empty slot: a dashed lime outline of the missing sheet's top and tab; a dashed brandeis-500 arc from it
-  to the record.
-- The record: white page, owner avatar and title, stage stepper (current stage lime), value field; lime tab
-  with an ink arrow in the page's plane, pointing toward the client.
-- One client (white pawn, blue outline, light arm) receiving and one Tcules designer (blue pawn, white edge,
-  solid arm) passing, same arm weight, each hand on an edge of the record.
+- The empty slot: a dashed lime outline of the missing sheet's tab, standing in the file.
+- The record: a white sheet the size of a divider, owner avatar and title, stage stepper (current stop ringed);
+  a lime tab with one ink bar on its leading end.
+- Two clients (white pawns, blue outline, light arms outlined in blue, one arm weight): the one at the file
+  hands the record on, the next one takes it, each hand on one end.
 
 ## Alt
 
 Isometric illustration for B2B SaaS and workflow software design. A solid blue expanding file stands on a
-dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. The deal
-record has been taken out of its slot, where a dashed outline remains, and is being handed on: a Tcules
-designer passes it to a client, both holding its edges. The record shows its owner, a row of stages with the
-current one in lime and a value field, and its lime tab carries an arrow pointing the way it is going.
+dotted floor, its dividers tabbed for the roles that share one deal: two people and one marked AI. One sheet,
+the deal record with a lime tab, has been taken out, leaving a dashed outline of its tab in the file, and is
+being handed on: the person beside the file passes it to the next person, both holding its edges. The record
+shows its owner and a row of stages, with the current one ringed.

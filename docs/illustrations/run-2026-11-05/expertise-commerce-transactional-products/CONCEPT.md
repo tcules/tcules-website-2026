@@ -1,7 +1,7 @@
 # /expertise/commerce-transactional-products · hero
 
 Slot: hero beside the copy, paper ground, renders about 600px wide, and the industry's card cover on /expertise
-(about 360px). `hero.svg`, viewBox 693 × 509 (1.36:1). Generator: `gen.mjs`
+(about 360px). `hero.svg`, viewBox 865 × 575 (1.50:1). Generator: `gen.mjs`
 (`node docs/illustrations/run-2026-11-05/expertise-commerce-transactional-products/gen.mjs`).
 
 Jatin, 30 Oct, on the earlier round: "the concept's title itself is wrong and needs changing." The old title was
@@ -24,42 +24,47 @@ It draws the lead literally: "buyers can check fit, stock and delivery on the pr
 emailing support first". A visitor names it in three seconds: a shop page, a part, three ticks, a buy button and a
 bag. The bag is the hub's object, drawn the way the hub draws it.
 
-How it differs from the siblings: every other expertise hero so far stands its product upright on the right (a
-phone in healthtech, fintech and edtech, a wall screen in climatetech, a tablet in proptech). Here the product
-lies flat, the way the hub's own app lies flat, and the hub object stands tall at the back. The bag is not a
-container the product rises out of (that is healthtech's arrangement).
+How it differs from the siblings (family check, 5 Nov): the earlier rounds laid the product page flat as a blue
+tablet, which data also uses, so the product is now an **open laptop**, the only laptop in the family (light body,
+white faces, brandeis-200 sides, only the screen dark blue, per STYLE §3). Arrangement: the laptop stands at the
+back right with its screen facing front-left, the bag stands on the floor at the left, the buyer between them, and
+one dashed arc joins the add button to the bag. No hub-object-left / phone-right (healthtech), no flat tablet
+(data), no upright tablet beside the object (proptech), no device beside a turbine (climatetech).
 
 ## The drawing
 
 - **Idea:** "They design the product page so a buyer can check the part fits, is in stock and will arrive, then
   order it straight away."
-- **Drawn:** the family's dotted floor with a dashed edge and a soft inset. A solid blue tablet lies flat across
-  the front as the product page. On its picture panel (left) stands a machined flange with four bolt holes and a
-  collar with a bore; one dimension bracket with end ticks spans its diameter just in front of its base, with a
-  lime check badge on it ("it fits"). The right-hand column holds a plain blue add button nearest the buyer, then
-  three facts each with its own white glyph on a blue tile (a fit bracket, an in-stock dot, a delivery van) and,
-  a full row below, the price. A buyer (white client pawn) stands at the page's right corner with a hand on the add
-  button. A dashed line leaves the far end of the button, crosses the bezel (cased in white), drops behind the page
-  edge and runs along the floor axes into the side of the white shopping bag standing at the back. In the bag
-  stands a parcel with the flange's ring, bore and bolt holes printed on its lid: this part, ordered. The bag's
-  price tag hangs plumb from the handle.
-- **Alt:** Isometric illustration for ecommerce UX design for technical parts. A product page lies flat on a dotted
-  floor as a solid blue tablet: a machined flange stands on its picture with a bracket across its width and a lime
-  check on it, and beside it three facts with their own marks (it fits, it is in stock, it arrives) sit under a
-  blue add button. A buyer stands at the corner of the page with a hand on that button, and a dashed line runs from
-  the button over the page edge and across the floor into a white shopping bag, where a parcel printed with the
-  same flange stands ready.
+- **Drawn:** healthtech's floor (545 x 402, the dotted plate, the brandeis-50 inset, the dashed edge 1.8 / 10 8).
+  An open laptop stands at the back right: a white deck with a key grid and a trackpad, the lid leaning back with
+  a white bezel and a dark blue screen showing the product page. On the right of the page, a white picture panel
+  holds the part drawn as a plain elevation (a flange with a collar and a dashed bore) and a fit bracket under it
+  with the one lime check. On the left, three facts with their own marks on white tiles (a fit bracket, an
+  in-stock dot, a delivery van), the price, and a white add button. A buyer (white client pawn, healthtech's size)
+  stands on the floor at the laptop's front-left corner, clear of the device, with a short arm from the shoulder
+  and the hand on the deck. A dashed line leaves the add button's near end and arcs over into the white shopping
+  bag standing on the floor at the left, landing in its mouth behind the front rim, beside a parcel printed with
+  the flange's mark. The bag's price tag hangs plumb from the handle.
+- **Alt:** Isometric illustration for ecommerce UX design for technical parts. An open laptop stands on a dotted
+  floor showing a product page: a machined flange drawn in elevation with a bracket across its width and a lime
+  check on it, three facts with their own marks (it fits, it is in stock, it arrives), the price and an add
+  button. A buyer stands at the corner of the laptop with a hand on it, and a dashed line arcs from the add button
+  down into a white shopping bag beside the laptop, where a parcel printed with the same flange stands ready.
 
 ## Construction
 
-All points are projected on the family's 2:1 iso, `(0.9u − 0.9v, 0.45u + 0.45v − z)`, the same as healthtech.
-The page UI is drawn in a `matrix(0.9 0.45 -0.9 0.45)` group laid on the tablet; the tag in a
-`matrix(0.9 0.45 0 1)` group on the bag's front face. Extruded shapes (the tablet's rounded body, the flange and
-collar) are the convex hull of the top and bottom outlines in one side tone, then the top face: no stacked
-copies. Outlines 1.6 on objects and the fit bracket, 1.2 on detail. One lime fill (the fit check on the bracket); the add button is plain blue. The buyer is a
-client: white body and arm, the arm a 5.3 white core inside a blue edge to 8.5 overall, the healthtech weight.
-The connector runs along v from the button's back edge, then along u into the bag's side face at mid depth; its floor run is drawn before the tablet so the slab hides the drop behind the page edge, and the bezel crossing is drawn after, over a 5.2 white casing. Connector 1.8, dash 7 5. Ids are
-prefixed `ctp-`.
+All points are projected on the family's 2:1 iso, `(0.9u - 0.9v, 0.45u + 0.45v - z)`, the same as healthtech.
+Floor 545 x 402. Laptop base u 196-492, v 18-204, 11 thick (rounded-rect prism, brandeis-200 side, white top),
+the key grid and trackpad in a `matrix(0.9 0.45 -0.9 0.45)` group on the deck. The lid is 296 x 214, hinged at
+the deck's back edge and leaning back 24 along v; its thickness is the hull of the front and a copy 7 behind, in
+brandeis-200, then the white front, then the screen UI in the lid's own matrix
+`(0.9 0.45 -0.101 1.05)`. Bag u 48-154, v 252-316, 168 tall; the parcel stands at the back left of the mouth so
+the arc lands free of it. The arc is one cubic from the button's near end to a point inside the mouth, cased
+white (5.2) under the 1.8 / 7 5 dash, drawn after the bag's mouth and parcel and before its front and side faces,
+so the faces hide its end: the order drops into the bag. Buyer: healthtech's pawn (r 22, body 62, head 16), the
+arm 11 overall with a 7.8 white core inside a 1.6 blue edge, hand 8.8, masked inside the body so it grows from the
+shoulder. Outlines 1.6 on objects, 1.2 on detail. One lime fill (the fit check). Ids prefixed `ctp-`. The
+generator takes `LAP`, `BAG`, `BUYER`, `HAND` and `OUT` env overrides for trying placements.
 
 ## Rounds
 
@@ -82,3 +87,10 @@ prefixed `ctp-`.
   the bag; the parcel carries the flange's mark and stands forward and taller so its back edge clears the bag's back
   rim (no doubled stroke); the tape line is gone; the tag hangs plumb; the price sits a full row below the facts.
   1.36:1; checked at 600 and 360 and at zoom on the bag top, the button and bezel, and the bracket.
+- v10 (family check, 5 Nov): the flat tablet was data's arrangement, so the product page moved onto an open
+  laptop at the back right (light body, only the screen blue); the floor and the buyer went up to healthtech's
+  plate and pawn; the buyer stands clear on the floor at the laptop's front-left corner (no longer over a rim),
+  hand on the deck; the bag came out of the back corner to stand on the floor at the left, in the composition,
+  and the order now reaches it as one dashed arc from the add button into its mouth. The part on the page is a
+  flat elevation (a 3D part on an upright screen would float). 1.50:1; checked at 600 and 360 and at zoom on the
+  bag mouth and arc landing, the button start, and the hand on the deck.

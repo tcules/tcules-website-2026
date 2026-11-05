@@ -1,7 +1,7 @@
 # ClimateTech and energy: hero
 
 Route `/expertise/climatetech-energy`. Also the card cover on `/expertise`. Source: `gen.mjs` writes `hero.svg`
-(viewBox 865 × 680, about 1.27:1, the same width as healthtech's 865). Previews: `preview/hero.png`, `preview/hero.at-600.png`, `preview/hero.at-360.png`.
+(viewBox 865 × 578, 1.50:1, the same width as healthtech's 865 and shorter than its 651). Previews: `preview/hero.png`, `preview/hero.at-600.png`, `preview/hero.at-360.png`.
 
 ## Three ideas (all built around the hub's wind turbine)
 
@@ -70,18 +70,39 @@ target. What changed, from the family check (STYLE.md §9a):
 - Checked at 600 and 360 beside healthtech: floors match, pawn heights match, the monitor is smaller than the
   phone, and the lime target, the forecast over it and the peak ring still read at 360.
 
+## Family fix (5 Nov, second family check)
+
+Two findings, both fixed; the idea is unchanged.
+
+- **No pointer stick (§5).** The arm reached about twice the body height (152 px) to touch the peak: it read as
+  a stick. The figure now stands at the screen, just in front of its left edge, and the arm is a short reach
+  from the shoulder (35 px, the healthtech patient's length), up and to the right. To bring the chart into a
+  pawn's reach the monitor lost its neck and sits on a low console plinth (16 high), the screen is 150 tall,
+  and the hand rests on the start of the lime target, the level the forecast must stay under. The dotted ring
+  still marks tonight's peak on its own. The generator places the figure from the hand (`RX`/`RY` reach), so
+  the arm cannot grow back. The figure's white edge holds it apart from the blue bezel it stands in front of.
+- **Turbine at hub scale.** Tower 286 → 242, blades 124 → 96; the box is 865 × 578 (1.50:1), no taller than
+  healthtech (651) or any sibling. The turbine and battery moved forward on the floor (TY 322) and the
+  monitor came forward to y 150, so the group sits in the middle of the plate instead of its back half.
+- The console's front carries the feed's end node (a port); the feed no longer climbs a neck.
+- The measured readings sit lower (×0.55) so the line, the now marker and the dashed forecast stay clearly
+  under the lime target until the forecast climbs over it.
+- Checked at 600 and 360 against healthtech and the hub: one floor, matching pawn height, the monitor smaller
+  than the healthtech phone, no float, joins zoom-checked (hand on the card edge, figure edge on the bezel,
+  feed node on the console, battery and turbine nodes).
+
 ## Parts
 
 - Floor: healthtech's plate (545 × 402, inset 45, dashed edge 10/8 at 1.8, dots), the family standard.
 - Wind turbine, the lead (white, blue outline, three slim blades, blue hub on a small iso nacelle), as on `expertise.svg`.
 - Battery block on the feed (white, brandeis-200 side, two terminals, a charge gauge, a bolt on its side).
-- One dashed feed (5/4, 1.8) with nodes and two chevrons: turbine foot, through the battery, a corner, the stand's
-  foot, up the neck into the screen.
-- The hero object: a light monitor (224 × 168) with a blue screen on a neck and foot; a white chart card with
+- One dashed feed (5/4, 1.8) with nodes and two chevrons: turbine foot, through the battery, a corner, a port
+  on the console's front.
+- The hero object: a light monitor (224 × 150) with a blue screen on a low console plinth with a feed port; a white chart card with
   gridlines, measured line and area to a now ring, dashed forecast over the lime target to a dotted peak ring,
   a sun-to-moon day axis.
-- One Tcules designer (solid blue pawn, white edge, one arm) beside the monitor, pointing at tonight's peak.
+- One Tcules designer (solid blue pawn, white edge, one short arm) at the screen's left edge, a hand on the lime target.
 
 ## Alt
 
-Isometric illustration for ClimateTech and energy product design. A tall white wind turbine, as on the expertise hub, stands on a dotted floor. One dashed line runs from its foot through a battery with a charge gauge and a lightning bolt, then on, with arrows, into the stand of a small monitor and up into its blue screen. The screen holds one day chart running from a sun to a moon: a solid line of measured readings stops at a now marker, and a dashed forecast climbs over a flat lime target line to a peak tonight, ringed in dots. A solid blue Tcules designer stands beside the monitor and points at that peak.
+Isometric illustration for ClimateTech and energy product design. A white wind turbine, as on the expertise hub, stands on a dotted floor. One dashed line runs from its foot through a battery with a charge gauge and a lightning bolt, then on, with arrows, into a port on the low console of a monitor with a blue screen. The screen holds one day chart running from a sun to a moon: a solid line of measured readings stops at a now marker, and a dashed forecast climbs over a flat lime target line to a peak tonight, ringed in dots. A solid blue Tcules designer stands at the screen with a short arm raised, a hand resting on the lime target.

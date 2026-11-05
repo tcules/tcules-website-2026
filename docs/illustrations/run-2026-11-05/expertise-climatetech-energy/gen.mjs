@@ -42,14 +42,14 @@ const FW = 545, FH = 402;
 // ── Layout (world) ─────────────────────────────────────────────────
 // The turbine leads at the front left; the battery stands on the feed in front of it; the feed runs on to a
 // modest monitor at the back right, turns into its stand and climbs the neck into the screen.
-const MON = { x0: E('MX0', 206), x1: E('MX1', 430), y0: 136, y1: 150, z0: E('MZ0', 36), z1: E('MZ0', 36) + E('MH', 168) };
-const NECK = { x: (MON.x0 + MON.x1) / 2, y0: 122, y1: 134 };
-const FOOT = { x0: NECK.x - 46, x1: NECK.x + 46, y0: 84, y1: NECK.y1, h: 8 };
-const TUR = { x: E('TX', 112), y: E('TY', 256), h: E('TH', 286), blade: E('TB', 124) };
+const MON = { x0: E('MX0', 206), x1: E('MX1', 430), y0: E('MY', 150), y1: E('MY', 150) + 14, z0: E('MZ0', 16), z1: E('MZ0', 16) + E('MH', 150) };
+// The monitor rests on a low console plinth (no neck), so its screen sits low enough for a pawn to reach.
+const FOOT = { x0: MON.x0 + 26, x1: MON.x1 - 26, y0: MON.y0 - 8, y1: MON.y1 + 18, h: MON.z0 };
+const NECK = { x: (MON.x0 + MON.x1) / 2 };
+const TUR = { x: E('TX', 112), y: E('TY', 322), h: E('TH', 242), blade: E('TB', 96) };
 const LINE_Y = TUR.y;
-const BAT = { x0: E('BX', 196), x1: E('BX', 196) + 76, y0: LINE_Y - 27, y1: LINE_Y + 27, h: 56 };
+const BAT = { x0: E('BX', 236), x1: E('BX', 236) + 76, y0: LINE_Y - 27, y1: LINE_Y + 27, h: 56 };
 const TURN = { x: NECK.x, y: LINE_Y };
-const FIG = { x: E('FX', 474), y: E('FY', 148) };
 const dashD = (a) => `M${a.map(([x, y, z]) => P(x, y, z).map(f).join(' ')).join(' L')}`;
 const feed = (a) => `<path d="${dashD(a)}" fill="none" stroke="${C.b500}" stroke-width="1.8" stroke-dasharray="5 4" stroke-linecap="round" stroke-linejoin="round"/>`;
 const node = (x, y, z, r = 4.6) => { const [sx, sy] = P(x, y, z); return `<circle cx="${f(sx)}" cy="${f(sy)}" r="${r}" fill="${C.b500}" stroke="${C.w}" stroke-width="1.6"/>`; };
@@ -88,7 +88,7 @@ const chev = (x, y, dir) => {
 {
   out.push(`<!-- Feed: one line from the turbine, through the battery, into the monitor -->`);
   out.push(feed([[TUR.x + 30, LINE_Y, 0], [BAT.x0, LINE_Y, 0]]));
-  out.push(feed([[BAT.x1, LINE_Y, 0], [TURN.x, TURN.y, 0], [TURN.x, FOOT.y1, 0]]));
+  out.push(feed([[BAT.x1, LINE_Y, 0], [TURN.x, TURN.y, 0], [TURN.x, FOOT.y1, 0], [TURN.x, FOOT.y1, FOOT.h / 2]]));
   out.push(chev(TURN.x, TURN.y - 34, '-y'));
   out.push(chev(TURN.x, FOOT.y1 + 40, '-y'));
   out.push(node(TUR.x + 30, LINE_Y, 0));
@@ -117,11 +117,9 @@ const chev = (x, y, dir) => {
 // ── The monitor: light body, blue screen, on a stand ───────────────
 let CHART = null;
 {
-  out.push(`<!-- The energy product: a light monitor with a blue screen, on a stand; the feed climbs its neck -->`);
+  out.push(`<!-- The energy product: a light monitor with a blue screen on a low console; the feed ends in a port on its front -->`);
   out.push(box(FOOT.x0, FOOT.y0, FOOT.x1, FOOT.y1, 0, FOOT.h, { left: C.w, right: C.b200, top: C.b100 }));
-  out.push(node(TURN.x, FOOT.y1, 3.5, 4.2));
-  out.push(box(NECK.x - 10, NECK.y0, NECK.x + 10, NECK.y1, FOOT.h, MON.z0 + 4, { left: C.w, right: C.b200, top: C.b100 }));
-  out.push(feed([[NECK.x, NECK.y1, FOOT.h + 6], [NECK.x, NECK.y1, MON.z0 + 4]]));
+  out.push(node(TURN.x, FOOT.y1, FOOT.h / 2, 4.2));
   out.push(box(MON.x0, MON.y0, MON.x1, MON.y1, MON.z0, MON.z1, { left: C.w, right: C.b200, top: C.b100 }));
   const W = MON.x1 - MON.x0, H = MON.z1 - MON.z0;
   const pad = 10;
@@ -132,17 +130,20 @@ let CHART = null;
   const base = cardY + cardH - 26;
   const k = (cardH - 52) / 100;
   const yv = (v) => base - v * k;
-  const day = [[0, 18], [0.12, 12], [0.24, 32], [0.34, 46], [0.44, 32], [0.56, 42]];
-  const fc = [[0.56, 42], [0.7, 52], [0.84, 96], [0.93, 82], [1, 56]];
-  const targetV = 64;
+  const DS = E('DS', 0.55);
+  const day = [[0, 18], [0.12, 12], [0.24, 32], [0.34, 46], [0.44, 32], [0.56, 42]].map(([t, v]) => [t, v * DS]);
+  const PK = E('PK', 0.84), PV = E('PV', 92);
+  const fc = [[0.56, 42 * DS], [0.7, 52 * DS], [PK, PV], [Math.min(0.99, PK + 0.09), PV - 14], [1, 56]];
+  const targetV = E('TV', 46);
+  const TSTART = cardX + E('TE', 8); // the target starts at the card's left edge, where the designer's hand rests
   const smooth = (a) => a.map(([t, v], i) => {
     const x = gx(t), y = yv(v);
     if (!i) return `M${f(x)} ${f(y)}`;
     const [pt, pv] = a[i - 1], px = gx(pt), py = yv(pv), mx = (px + x) / 2;
     return `C${f(mx)} ${f(py)} ${f(mx)} ${f(y)} ${f(x)} ${f(y)}`;
   }).join(' ');
-  const nowX = gx(0.56), nowY = yv(42);
-  const peak = [gx(0.84), yv(96)];
+  const nowX = gx(0.56), nowY = yv(42 * DS);
+  const peak = [gx(PK), yv(PV)];
   const area = `${smooth(day)} L${f(nowX)} ${f(base)} L${f(gx(0))} ${f(base)} Z`;
   const gyy = base + 13;
   const sun = (cx, cy) => {
@@ -159,7 +160,7 @@ let CHART = null;
     grid,
     `<path d="M${f(gx(0) - 6)} ${f(base)} H${f(gx(1) + 6)}" stroke="${C.b200}" stroke-width="1.2" stroke-linecap="round"/>`,
     `<path d="${area}" fill="${C.b100}"/>`,
-    `<path d="M${f(gx(0) - 6)} ${f(yv(targetV))} H${f(gx(1) + 6)}" stroke="${C.lime}" stroke-width="3.6" stroke-linecap="round"/>`,
+    `<path d="M${f(TSTART)} ${f(yv(targetV))} H${f(gx(1) + 6)}" stroke="${C.lime}" stroke-width="3.6" stroke-linecap="round"/>`,
     `<path d="${smooth(fc)}" fill="none" stroke="${C.b500}" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="butt"/>`,
     `<path d="${smooth(day)}" fill="none" stroke="${C.b500}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`,
     `<path d="M${f(nowX)} ${f(yv(86))} V${f(base)}" stroke="${C.b500}" stroke-width="1.2" stroke-dasharray="2 4" stroke-linecap="round"/>`,
@@ -171,17 +172,22 @@ let CHART = null;
   out.push(faceL(MON.x0, MON.y1, MON.z1, inner));
   const [ox, oy] = P(MON.x0, MON.y1, MON.z1);
   const toS = ([u, v]) => [ox + 0.9 * (u + pad), oy + 0.45 * (u + pad) + v + pad];
-  CHART = { peak: toS(peak), ring: 10, right: P(MON.x1, MON.y1, MON.z0) };
+  CHART = { peak: toS(peak), ring: 10, right: P(MON.x1, MON.y1, MON.z0), targetStart: toS([TSTART, yv(targetV)]) };
 }
 
-// ── The Tcules designer, pointing where the forecast breaks the target ──
+// ── The Tcules designer, at the screen, a hand on the lime target ──
 {
-  out.push(`<!-- A Tcules designer points where tonight's forecast breaks the target -->`);
+  out.push(`<!-- A Tcules designer stands at the screen, a short arm and a hand on the lime target -->`);
   // the hand lands just below the dotted ring on tonight's peak, so the ring stays readable
-  const hxT = CHART.peak[0] + E('HDX', 4), hyT = CHART.peak[1] + CHART.ring + E('HDY', 10);
-  const [px, py] = P(FIG.x, FIG.y, 0);
+  // §5: a short arm from the shoulder. The hand rests on the right end of the lime target, the level the
+  // forecast must stay under; the figure stands at the screen's right edge, its shoulder a short reach away.
+  const hxT = CHART.targetStart[0] + E('HDX', 0), hyT = CHART.targetStart[1] + E('HDY', 0);
+  const REACH = [E('RX', 26), E('RY', 24)];
+  const px = hxT - REACH[0] - 6, py = hyT + REACH[1] + 56;
+  const wx = (px / 0.9 + py / 0.45) / 2, wy = (py / 0.45 - px / 0.9) / 2;
+  console.log('figure world', f(wx), f(wy));
   const rw = 22, top = py - 62;
-  const sx = px - 6, sy = top + 6, ex = hxT, ey = hyT;
+  const sx = px + 6, sy = top + 6, ex = hxT, ey = hyT;
   console.log('arm length', f(Math.hypot(ex - sx, ey - sy)), 'hand', f(ex), f(ey), 'figure', f(px), f(py));
   const bodyD = `M${f(px - rw)} ${f(py)} V${f(top)} A${rw} ${rw} 0 0 1 ${f(px + rw)} ${f(top)} V${f(py)} Z`;
   const armD = `M${f(sx)} ${f(sy)} L${f(ex)} ${f(ey)}`;
@@ -201,7 +207,7 @@ let CHART = null;
 
 const m = 6;
 const vb = [Math.floor(bb.x0 - m), Math.floor(bb.y0 - m), Math.ceil(bb.x1 - bb.x0 + 2 * m), Math.ceil(bb.y1 - bb.y0 + 2 * m)];
-const alt = 'Isometric illustration for ClimateTech and energy product design. A tall white wind turbine, as on the expertise hub, stands on a dotted floor. One dashed line runs from its foot through a battery with a charge gauge and a lightning bolt, then on, with arrows, into the stand of a small monitor and up into its blue screen. The screen holds one day chart running from a sun to a moon: a solid line of measured readings stops at a now marker, and a dashed forecast climbs over a flat lime target line to a peak tonight, ringed in dots. A solid blue Tcules designer stands beside the monitor and points at that peak.';
+const alt = 'Isometric illustration for ClimateTech and energy product design. A white wind turbine, as on the expertise hub, stands on a dotted floor. One dashed line runs from its foot through a battery with a charge gauge and a lightning bolt, then on, with arrows, into a port on the low console of a monitor with a blue screen. The screen holds one day chart running from a sun to a moon: a solid line of measured readings stops at a now marker, and a dashed forecast climbs over a flat lime target line to a peak tonight, ringed in dots. A solid blue Tcules designer stands at the screen with a short arm raised, a hand resting on the lime target.';
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" role="img" aria-label="${alt}">
 <defs><pattern id="cte-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="${C.b300}"/></pattern></defs>
 ${out.join('\n')}

@@ -1,10 +1,10 @@
 """Generator for the /expertise/proptech-contech-field-operations hero. Run: python3 build.py (writes hero.svg).
 
 Idea: from deal desk to building site, everyone works on one record of each property.
-The property's record stands on the floor as the one solid blue screen (the hero object). Beside it, the hub's
-house stands on its lime tile: the site. The deal person (client, tie) stands at the record's left edge, a hand on
-the deal's stages; the person on site (client, hard hat) stands on the lime tile by the house, a hand on the
-record's right edge by the sign-offs.
+The property's record is a portrait tablet on a stand at the back-left, its screen the one solid blue thing (the
+hero object), facing the house. In front of it the hub's house stands on its lime tile: the site. The deal person
+(client, tie) stands at the tablet's back end, a hand on its edge; the person on site (client, hard hat) stands on
+the floor at its front end by the house, a hand on the open sign-off.
 
 World: x runs right-down, y runs left-down, z is up. screen = (0.9x - 0.9y, 0.45x + 0.45y - z).
 Upright faces facing +y use matrix(0.9 0.45 0 1); facing +x use matrix(0.9 -0.45 0 1) with u along -y.
@@ -76,6 +76,26 @@ def face_y(x0, y0, ztop):
     return f"matrix(0.9 0.45 0 1 {f(sx)} {f(sy)})"
 
 
+def face_x(x0, y0, ztop):
+    """Upright face in the plane x = x0, facing +x; local u runs back along -y from y0, v down."""
+    sx, sy = iso(x0, y0, ztop)
+    return f"matrix(0.9 -0.45 0 1 {f(sx)} {f(sy)})"
+
+
+def upright_slab_x(x0, y0, ztop, w, h, r, depth, top_fill, side_fill, edge):
+    """Thickness of an upright rounded plate facing +x; thickness runs back along -x."""
+    loc = rr_outline(w, h, r)
+
+    def scr(u, v, d):
+        return iso(x0 - d, y0 - u, ztop - v)
+
+    allp = [scr(u, v, d) for (u, v) in loc for d in (0, depth)]
+    end = [scr(u, v, d) for (u, v) in loc if u <= r + 0.01 for d in (0, depth)]
+    track(allp)
+    out.append(f'<polygon points="{P(hull(allp))}" fill="{top_fill}" stroke="{edge}" stroke-width="1.6" stroke-linejoin="round"/>')
+    out.append(f'<polygon points="{P(hull(end))}" fill="{side_fill}"/>')
+
+
 def flat(x0, y0, z):
     sx, sy = iso(x0, y0, z)
     return f"matrix(0.9 0.45 -0.9 0.45 {f(sx)} {f(sy)})"
@@ -120,23 +140,25 @@ def tick(cx, cy, s, colour, sw):
 
 
 # ================================================================ geometry
-# the record: the one screen, solid blue, upright on a low white foot
-RX, RY, RW, RH, RD, RF = 0, 0, 210, 236, 12, 8
-RZT = RF + RH
-# lime tile (the site) right of the record, the house at its back-right
-TX0, TX1, TY0, TY1, TZ = 228, 418, -86, 66, 12
-HX0, HX1, HY0, HY1 = 308, 406, -74, 20
-HW, HR = 62, 48
-# the two clients
-DX, DY = 6, 28             # deal person, on the floor at the record's left edge
-WX, WY = 262, 20           # person on site, on the lime tile
-# floor: healthtech's plate (dots, dashed edge, inset 45)
-FX0, FY0, FW, FH = -60, -200, 520, 310
+# floor: healthtech's plate exactly (545 x 402, dots, dashed edge, inset 45)
+FX0, FY0, FW, FH = 0, 0, 545, 402
+# the record: a portrait tablet on a stand at the back-left, light body, the screen solid blue, facing +x
+# (toward the house); hub scale, about as tall as the house's ridge plus a head
+MXP, MYF, MW, MH, MD = 100, 190, 130, 172, 9    # screen plane x = MXP, from y = MYF (front end) back to MYF - MW
+MZ0 = 40                                        # bottom of the tablet body
+MZT = MZ0 + MH
+# lime tile (the site) in front of the screen, the hub's house on it
+TX0, TX1, TY0, TY1, TZ = 274, 474, 150, 350, 12
+HX0, HX1, HY0, HY1 = 302, 446, 180, 304
+HW, HR = 82, 58
+# the two clients, both on the floor
+DX, DY = 124, 38           # deal desk, at the screen's back end
+WX, WY = 122, 252          # on site, at the screen's front end, by the house
 
 # ================================================================ floor
 corners = [iso(FX0, FY0), iso(FX0 + FW, FY0), iso(FX0 + FW, FY0 + FH), iso(FX0, FY0 + FH)]
 track(corners)
-out.append("<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->")
+out.append("<!-- Floor: healthtech's plate, dotted, with a dashed edge and a soft inset under the objects -->")
 out.append(
     f'<g transform="{flat(FX0, FY0, 0)}">'
     f'<rect width="{FW}" height="{FH}" fill="url(#{PFX}-dots)"/>'
@@ -144,48 +166,35 @@ out.append(
     f'<rect x="45" y="45" width="{FW - 90}" height="{FH - 90}" fill="{B500}" fill-opacity="0.07"/></g>'
 )
 
-# ================================================================ the record
-out.append("<!-- The property's one record: a solid blue screen standing on a low foot -->")
-box(RX - 8, RX + RW + 8, RY - RD - 10, RY + 12, 0, RF, WHITE, B100, B200)
-upright_slab(RX, RY, RZT, RW, RH, 16, RD, B600, B700, B600)
-g = [f'<g transform="{face_y(RX, RY, RZT)}">']
-g.append(f'<rect width="{RW}" height="{RH}" rx="16" fill="{B500}" stroke="{B600}" stroke-width="1.6"/>')
+# ================================================================ the record: a tablet on a stand
+out.append("<!-- The property's one record: a portrait tablet on a stand, light body, its screen solid blue -->")
+SY = MYF - MW / 2
+box(MXP - MD - 50, MXP - MD + 4, SY - 30, SY + 30, 0, 5, WHITE, B100, B200)
+box(MXP - MD - 26, MXP - MD - 12, SY - 8, SY + 8, 5, MZ0 + 70, WHITE, B100, B200)
+upright_slab_x(MXP, MYF, MZT, MW, MH, 12, MD, WHITE, B200, B500)
+g = [f'<g transform="{face_x(MXP, MYF, MZT)}">']
+g.append(f'<rect width="{MW}" height="{MH}" rx="12" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
+g.append(f'<rect x="8" y="8" width="{MW-16}" height="{MH-16}" rx="7" fill="{B500}"/>')
 # title: a house mark and the property's name
-g.append(f'<rect x="16" y="16" width="26" height="22" rx="5" fill="{WHITE}"/>'
-         f'<path d="M22 29 l7 -6 l7 6 v5 h-14 Z" fill="{B500}"/>'
-         f'<rect x="52" y="18" width="78" height="9" rx="4.5" fill="{WHITE}"/>'
-         f'<rect x="52" y="31" width="46" height="6" rx="3" fill="{WHITE}" fill-opacity="0.5"/>')
-# map with the property's pin, as on the hub's card
-g.append(f'<rect x="16" y="50" width="{RW-32}" height="66" rx="8" fill="{WHITE}"/>'
-         f'<path d="M30 104 L72 78 L114 96 L180 64" fill="none" stroke="{B100}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
-         f'<path d="M104 58 c-8 0 -12 5.6 -12 11.4 c0 8 12 18.6 12 18.6 s12 -10.6 12 -18.6 c0 -5.8 -4 -11.4 -12 -11.4 Z" fill="{B500}"/>'
-         f'<circle cx="104" cy="69.6" r="4.2" fill="{WHITE}"/>')
-# left column: the deal's stages, the current one (this property) in white, under the deal person's hand
-for j, vy in enumerate((126, 158, 190)):
-    if j == 2:
-        g.append(f'<rect x="16" y="{vy}" width="78" height="28" rx="6" fill="{WHITE}"/>'
-                 f'<path d="M50 {vy+18} l7 -6 l7 6 v6 h-14 Z" fill="{B500}"/>')
-    else:
-        g.append(f'<rect x="16" y="{vy}" width="78" height="28" rx="6" fill="{B200}" fill-opacity="{0.85 if j == 0 else 0.6}"/>'
-                 f'<rect x="26" y="{vy+11}" width="{[36, 28][j]}" height="6" rx="3" fill="{WHITE}" fill-opacity="0.8"/>')
-# right column: sign-offs, each with its source; the middle source is a drawing, the last is still open
-for i, yy in enumerate((140, 172, 204)):
+g.append(f'<rect x="18" y="18" width="22" height="19" rx="4.5" fill="{WHITE}"/>'
+         f'<path d="M23 29.5 l6 -5.2 l6 5.2 v4.4 h-12 Z" fill="{B500}"/>'
+         f'<rect x="48" y="19" width="56" height="7.5" rx="3.75" fill="{WHITE}"/>'
+         f'<rect x="48" y="30.5" width="34" height="5.5" rx="2.75" fill="{WHITE}" fill-opacity="0.5"/>')
+# the map with the property's pin, the hub card's pin
+g.append(f'<rect x="18" y="46" width="{MW-36}" height="54" rx="7" fill="{WHITE}"/>'
+         f'<path d="M28 90 L50 70 L72 82 L102 58" fill="none" stroke="{B100}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'
+         f'<path d="M65 52 c-6.8 0 -10.4 4.8 -10.4 9.8 c0 6.8 10.4 16 10.4 16 s10.4 -9.2 10.4 -16 c0 -5 -3.6 -9.8 -10.4 -9.8 Z" fill="{B500}"/>'
+         f'<circle cx="65" cy="62" r="3.8" fill="{WHITE}"/>')
+# the sign-offs, two ticked and the last one still open (by the site worker's hand)
+for i, yy in enumerate((114, 136, 158)):
     done = i < 2
-    tx = 114
+    tx = 28
     if done:
-        g.append(f'<circle cx="{tx}" cy="{yy}" r="9.5" fill="{WHITE}"/>' + tick(tx, yy, 0.95, B500, 2.2))
+        g.append(f'<circle cx="{tx}" cy="{yy}" r="7.8" fill="{WHITE}"/>' + tick(tx, yy, 0.8, B500, 2.2))
     else:
-        g.append(f'<circle cx="{tx}" cy="{yy}" r="8.6" fill="none" stroke="{B200}" stroke-width="2"/>')
-    g.append(f'<rect x="130" y="{yy-7}" width="{[38, 32, 36][i]}" height="7" rx="3.5" fill="{WHITE}" fill-opacity="{1 if done else 0.6}"/>'
-             f'<rect x="130" y="{yy+3}" width="{[26, 30, 22][i]}" height="5" rx="2.5" fill="{WHITE}" fill-opacity="0.45"/>')
-    sx = 174
-    if i == 1:
-        g.append(f'<rect x="{sx-3}" y="{yy-10}" width="22" height="20" rx="2.5" fill="{WHITE}"/>'
-                 f'<path d="M{sx+1} {yy-6} h14 v12 h-14 Z M{sx+8} {yy-6} v7 M{sx+8} {yy+2} h7" fill="none" stroke="{B500}" stroke-width="1.2" stroke-linejoin="round"/>')
-    else:
-        op = 1 if done else 0.6
-        g.append(f'<path d="M{sx} {yy-10} h10 l6 6 v14 h-16 Z" fill="none" stroke="{WHITE}" stroke-width="1.4" stroke-linejoin="round" stroke-opacity="{op}"/>'
-                 f'<path d="M{sx+10} {yy-10} v6 h6" fill="none" stroke="{WHITE}" stroke-width="1.2" stroke-linejoin="round" stroke-opacity="{op}"/>')
+        g.append(f'<circle cx="{tx}" cy="{yy}" r="7" fill="none" stroke="{B200}" stroke-width="2"/>')
+    g.append(f'<rect x="44" y="{yy-6}" width="{[54, 46, 50][i]}" height="6" rx="3" fill="{WHITE}" fill-opacity="{1 if done else 0.6}"/>'
+             f'<rect x="44" y="{yy+2.5}" width="{[36, 40, 30][i]}" height="4.4" rx="2.2" fill="{WHITE}" fill-opacity="0.45"/>')
 g.append("</g>")
 out.extend(g)
 
@@ -197,17 +206,17 @@ ym = (HY0 + HY1) / 2
 zt = HZ0 + HW
 poly([iso(HX0, HY1, HZ0), iso(HX1, HY1, HZ0), iso(HX1, HY1, zt), iso(HX0, HY1, zt)], WHITE)
 poly([iso(HX1, HY1, HZ0), iso(HX1, HY0, HZ0), iso(HX1, HY0, zt), iso(HX1, ym, zt + HR), iso(HX1, HY1, zt)], B200)
-OV = 5
-poly([iso(HX0 - OV, HY1 + 4, zt - 2), iso(HX1 + OV, HY1 + 4, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX0 - OV, ym, zt + HR)], WHITE)
-poly([iso(HX1 + OV, HY1 + 4, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX1 + OV, ym, zt + HR - 5), iso(HX1 + OV, HY1 + 4, zt - 7)], B100)
+OV = 6
+poly([iso(HX0 - OV, HY1 + 5, zt - 2), iso(HX1 + OV, HY1 + 5, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX0 - OV, ym, zt + HR)], WHITE)
+poly([iso(HX1 + OV, HY1 + 5, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX1 + OV, ym, zt + HR - 6), iso(HX1 + OV, HY1 + 5, zt - 8)], B100)
 g = [f'<g transform="{face_y(HX0, HY1, zt)}">']
-g.append(f'<rect x="14" y="20" width="17" height="32" rx="2" fill="{B500}"/>')
-g.append(f'<rect x="44" y="13" width="30" height="20" rx="3" fill="{B50}" stroke="{B500}" stroke-width="1.6"/>'
-         f'<path d="M59 13 V33" stroke="{B500}" stroke-width="1.2"/>')
+g.append(f'<rect x="24" y="34" width="24" height="48" rx="3" fill="{B500}"/>')
+g.append(f'<rect x="72" y="22" width="44" height="30" rx="4" fill="{B50}" stroke="{B500}" stroke-width="1.6"/>'
+         f'<path d="M94 22 V52" stroke="{B500}" stroke-width="1.2"/>')
 g.append("</g>")
 out.extend(g)
-gc = iso(HX1, ym, zt + 13)
-out.append(f'<g transform="matrix(0.9 -0.45 0 1 {f(gc[0])} {f(gc[1])})"><circle r="5.6" fill="{WHITE}" stroke="{B500}" stroke-width="1.4"/></g>')
+gc = iso(HX1, ym, zt + 18)
+out.append(f'<g transform="matrix(0.9 -0.45 0 1 {f(gc[0])} {f(gc[1])})"><circle r="7.5" fill="{WHITE}" stroke="{B500}" stroke-width="1.4"/></g>')
 
 # ================================================================ the two clients (healthtech's pawn and arm)
 R, BH, HRAD, HEADZ = 22, 84, 16, 104
@@ -234,20 +243,20 @@ def arm(name, body, s, h):
     )
 
 
-out.append("<!-- The deal desk: a client in a tie, a hand on the deal's stage -->")
+out.append("<!-- The deal desk: a client in a tie, a hand on the record's back edge -->")
 cx, cy, body = pawn(DX, DY, 0)
 ty = cy - BH
 out.append(f'<path d="M{f(cx-4)} {f(ty+3)} h8 l-2 5 l3.5 16 l-5.5 6 l-5.5 -6 l3.5 -16 Z" fill="{B500}"/>')
-arm("deal", body, (cx + 6, cy - BH + 30), iso(RX + 30, RY + 4, RF + 34))
+arm("deal", body, (cx - 6, cy - BH + 30), iso(MXP + 2, MYF - MW + 12, MZ0 + 52))
 
-out.append("<!-- On site: a client in a hard hat on the lime tile, a hand on the sign-offs -->")
-cx, cy, body = pawn(WX, WY, TZ)
+out.append("<!-- On site: a client in a hard hat on the floor by the house, a hand on the open sign-off -->")
+cx, cy, body = pawn(WX, WY, 0)
 hy = cy - HEADZ
 HB = hy - 5
 out.append(f'<path d="M{f(cx-17)} {f(HB)} A17 15 0 0 1 {f(cx+17)} {f(HB)} Z" fill="{B100}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>'
            f'<path d="M{f(cx)} {f(HB-15)} V{f(HB)}" stroke="{B500}" stroke-width="1.4"/>'
            f'<rect x="{f(cx-23)}" y="{f(HB-2.4)}" width="46" height="6" rx="3" fill="{B100}" stroke="{B500}" stroke-width="1.6"/>')
-arm("site", body, (cx - 6, cy - BH + 30), iso(RX + RW - 5, RY + 3, RF + 50))
+arm("site", body, (cx + 6, cy - BH + 30), iso(MXP + 2, MYF - 12, MZ0 + 30))
 
 # ================================================================ write
 svg_body = "\n".join(out)
@@ -255,12 +264,7 @@ xs = [p[0] for p in pts_all]
 ys = [p[1] for p in pts_all]
 pad = 4
 vb = (min(xs) - pad, min(ys) - pad, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad)
-ALT = ("Isometric illustration for PropTech, ConTech and field operations product design. On a dotted floor the "
-       "property's one record stands as a solid blue screen: the house's map pin at the top, the deal's stages on the "
-       "left with the current one picked out by a house, and its sign-offs on the right, two ticked and one still open, "
-       "each beside its source document or drawing. Beside it the white house from the expertise hub stands on its "
-       "lime tile. Two people work on that one record: someone from the deal desk in a tie rests a hand on the deal's "
-       "stage, and a person on site in a hard hat, standing on the lime tile by the house, rests a hand by the sign-offs.")
+ALT = ("Isometric illustration for PropTech, ConTech and field operations product design. On a dotted floor the property's one record stands as a tablet on a stand, its screen solid blue: the property's name, a map with its pin, and its sign-offs below, two ticked and one still open. In front of the screen the white house from the expertise hub stands on its lime tile. Two people share that one record from either end of the tablet: someone from the deal desk in a tie rests a hand on its far edge, and a person on site in a hard hat, standing on the floor by the house, rests a hand on the open sign-off.")
 svg = (
     f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{f(vb[0])} {f(vb[1])} {f(vb[2])} {f(vb[3])}" role="img" aria-label="{ALT}">\n'
     f'<defs><pattern id="{PFX}-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="{B500}" fill-opacity="0.38"/></pattern></defs>\n'
