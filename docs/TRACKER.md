@@ -321,6 +321,8 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
       (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
       `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
+      No video came (owner, 5 Nov 2026): the five audit heroes drawn on design/audit-heroes
+      (docs/illustrations/run-2026-11-05/audits/), waiting on the owner's verdict. The prototype review keeps its film.
 - [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
       Its unused path is removed from `src/lib/routes.ts`.
 
