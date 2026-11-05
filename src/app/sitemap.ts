@@ -2,16 +2,15 @@ import type { MetadataRoute } from 'next';
 
 import { SITE_ORIGIN } from '@/lib/routes';
 
-import { listSitemapGroups } from './_sitemap/pages';
+import { getSitemapMasterPage } from '@/content';
 
-/**
- * `/sitemap.xml`, generated from the same list the `/sitemap` page renders (`_sitemap/pages.ts`),
- * rebuilt from the CMS every five minutes so a page published in Strapi appears without a deploy.
- */
+/** XML and HTML both use the published Sitemap Master groups. */
 export const revalidate = 300;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const groups = await listSitemapGroups();
+  const page = await getSitemapMasterPage();
+  if (!page) return [];
+  const groups = page.groups;
   return groups
     .flatMap((group) => group.entries)
     .map(({ path, lastModified }) => ({

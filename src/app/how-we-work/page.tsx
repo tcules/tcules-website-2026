@@ -1,16 +1,27 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
-import { ROUTES } from '@/lib/routes';
-
-/**
- * `/how-we-work` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedWorkMasterPage } from '@/content';
+import { PublishedWork } from '@/templates/CorpusPage/PublishedWork';
+import { jsonLdMarkup } from '@/lib/json-ld';
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.howWeWork)) ?? { title: 'Tcules' };
+  return (await getPageSeo('/how-we-work')).metadata;
 }
-
-export default function HowWeWorkPage() {
-  return <ComposedRoute route={ROUTES.howWeWork} />;
+export default async function WorkPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedWorkMasterPage(),
+    getPageSeo('/how-we-work'),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedWork page={page} />
+    </>
+  );
 }

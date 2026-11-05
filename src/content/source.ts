@@ -1,3 +1,4 @@
+import { getPublishedWorkMaster, getPublishedWorkDetail, getPublishedSitemap } from './sources/strapi/published-work';
 import{getPublishedWhy}from'./sources/strapi/published-why';
 import { getPublishedMatter } from './sources/strapi/published-matter';
 import { getPublishedCareers } from './sources/strapi/published-careers';
@@ -544,3 +545,7 @@ export const getPublishedCareersPage = getPublishedCareers;
 export const getPublishedMatterPage = getPublishedMatter;
 
 export const getPublishedWhyPage=getPublishedWhy;
+
+export const getPublishedWorkMasterPage = getPublishedWorkMaster;
+export const getPublishedWorkPage = getPublishedWorkDetail;
+export const getSitemapMasterPage = getPublishedSitemap;
