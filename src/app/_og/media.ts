@@ -8,10 +8,10 @@ import sharp from 'sharp';
  * lands in at export resolution, and handed over as a PNG data URL. Satori decodes neither WebP nor
  * AVIF — the formats the CMS and the kit photo catalogue serve — so every picture passes through here.
  *
- * An illustration is fitted whole (decisions/2026-10-16-drawing-never-cropped-faces-its-form). A case
- * banner or an article cover FILLS the card's right half, cropped from the centre: the owner chose
- * the filled half over a whole banner shown small (4 Nov 2026), an exception to ruling H3 that holds
- * for the share card only.
+ * An illustration is fitted whole (decisions/2026-10-16-drawing-never-cropped-faces-its-form). Every
+ * other picture fills the card's one 16:9 frame (owner, 5 Nov 2026): a case cover and a video thumbnail
+ * are 16:9 already and fill it whole; a Strapi banner or an article cover of another ratio is cropped
+ * from its centre, a portrait from the face.
  */
 export type ShareMedia = {
   kind: 'illustration' | 'capture' | 'portrait';

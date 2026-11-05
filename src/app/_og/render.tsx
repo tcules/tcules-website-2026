@@ -76,8 +76,10 @@ async function inks(): Promise<Ink> {
     mark: get('color-neutral-950'),
     /* The sans title roles' tracking (--text-h4 reads -title-fine; at card size -title holds it). */
     tracking: get('letter-spacing-title'),
-    /* --media-radius is --radius-8 (media.css; decisions/2026-11-01-every-image-rounded). */
-    mediaRadius: Number.parseInt(get('radius-8'), 10),
+    /* Every image is rounded (decisions/2026-11-01-every-image-rounded), the site at --radius-8. A
+       card is read at about 39% of its drawn size, where 8 shows as 3 and the corner is lost, so the
+       card draws --radius-24: about 9 on a 500px feed card, the site's 8 as the eye gets it. */
+    mediaRadius: Number.parseInt(get('radius-24'), 10),
   };
 }
 
@@ -127,13 +129,21 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
   const [ink, fontData] = await Promise.all([inks(), fonts()]);
   const media = card.media;
 
-  /* A person's face: a square at the half's far edge, centred on the height, rounded like every
-     image — their photograph from the face's focus, or their initials on the byline's tint. */
-  const FACE = 440;
-  const face = { left: px(W - M - FACE), top: px((H - FACE) / 2), width: px(FACE), height: px(FACE) };
-  const faceBox: CSSProperties = {
+  /* One frame for every framed picture (owner, 5 Nov 2026: "keep them all the same size"): the
+     half's full width at 16:9, centred on the height, rounded like every image. A case cover and a
+     video thumbnail are 16:9 and fill it whole; a photograph fills it from the face's focus; a person
+     without one has their initials on the byline's tint. A drawing takes no frame (below). */
+  const FRAME_W = W - SPLIT - M;
+  const FRAME_H = Math.round((FRAME_W * 9) / 16);
+  const frame = {
+    left: px(SPLIT),
+    top: px((H - FRAME_H) / 2),
+    width: px(FRAME_W),
+    height: px(FRAME_H),
+  };
+  const frameBox: CSSProperties = {
     position: 'absolute',
-    ...face,
+    ...frame,
     display: 'flex',
     borderRadius: px(ink.mediaRadius),
     overflow: 'hidden',
@@ -144,13 +154,13 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
     picture = (
       <div
         style={{
-          ...faceBox,
+          ...frameBox,
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: ink.portraitGround,
           fontFamily: 'Public Sans',
           fontWeight: 500,
-          fontSize: px(160),
+          fontSize: px(128),
           letterSpacing: ink.tracking,
           color: ink.title,
         }}
@@ -158,26 +168,22 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
         {card.initials}
       </div>
     );
-  } else if (media?.kind === 'portrait') {
+  } else if (media && media.kind !== 'illustration') {
     const prepared = await preparedMedia(
       media,
-      { width: face.width, height: face.height },
+      { width: frame.width, height: frame.height },
       'cover',
-      ink.portraitGround,
+      media.kind === 'portrait' ? ink.portraitGround : undefined,
     );
     picture = (
-      <div style={faceBox}>
+      <div style={frameBox}>
         {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
-        <img src={prepared.src} width={face.width} height={face.height} alt="" />
+        <img src={prepared.src} width={frame.width} height={frame.height} alt="" />
       </div>
     );
   } else if (media) {
     const box = { x: SPLIT, y: M, w: W - SPLIT - M, h: H - 2 * M };
-    /* A banner or a cover fills the half, cropped. A video's thumbnail is shown whole at its own 16:9:
-       YouTube frames carry their own words, and a crop cuts them mid-word (5 Nov 2026). */
-    const rounded = media.kind !== 'illustration';
-    const fill = rounded && card.source !== 'video';
-    const prepared = await preparedMedia(media, { width: px(box.w), height: px(box.h) }, fill ? 'cover' : 'contain');
+    const prepared = await preparedMedia(media, { width: px(box.w), height: px(box.h) }, 'contain');
     const w = prepared.width / SCALE;
     const h = prepared.height / SCALE;
     /* A drawing sits at the half's far edge, centred on the height, facing the words. */
@@ -190,8 +196,6 @@ export async function renderShareCard(card: ShareCard): Promise<Response> {
           width: px(w),
           height: px(h),
           display: 'flex',
-          borderRadius: rounded ? px(ink.mediaRadius) : 0,
-          overflow: 'hidden',
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- Satori draws <img>, not next/image */}
