@@ -7,6 +7,7 @@ import {
   getCaseStudyListingPage,
   getCaseStudyPage,
   getCorpusPage,
+  getEventPage,
   listAuthors,
   listSitePages,
   type SitePageFamily,
@@ -90,6 +91,17 @@ function author(path: string) {
 }
 
 /**
+ * A drawing a page's card carries that is not its hero's: the hero table (HERO_ILLUSTRATIONS) answers
+ * first, and this only for a page whose hero has no drawing.
+ * - /contact: clients around the world calling Ahmedabad (owner, 5 Nov 2026), Bhumika's drawing for
+ *   the contact island, parked on design/contact-illustration (the island took no drawing). The same
+ *   file at the same path, so that branch landing changes nothing here.
+ */
+const CARD_DRAWINGS: Readonly<Record<string, { src: string; width: number; height: number }>> = {
+  [ROUTES.contact]: { src: '/illustrations/enquiry/contact-call.png', width: 1200, height: 620 },
+};
+
+/**
  * Each case's V1 cover by live slug, read once per build: the listing carries it over the Strapi
  * thumbnail (fixtures/case-covers.ts, owner 3 Nov 2026). Only a delivered V1 cover is taken here; a case
  * without one keeps its Strapi banner.
@@ -122,7 +134,7 @@ function caseCover(slug: string) {
  *   for a tool;
  * - a case study's V1 cover (owner, 5 Nov 2026), else its banner from Strapi;
  * - a video's YouTube thumbnail, else its cover from Strapi;
- * - an article's cover from Strapi.
+ * - an article's or an event's cover from Strapi.
  * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
  * read the CMS leaves the card without a picture rather than without an image.
  */
@@ -137,8 +149,10 @@ function drawingFor(path: string): { media: ShareMedia; source: ShareSource } | 
           ? ROUTES.expertise
           : family === 'tools'
             ? ROUTES.tools
-            : null;
-  const own = serviceIllustration(path);
+            : path.startsWith(`${ROUTES.futureInterfacesLab}/`)
+              ? ROUTES.futureInterfacesLab
+              : null;
+  const own = serviceIllustration(path) ?? CARD_DRAWINGS[path];
   const drawing = own ?? (hub ? serviceIllustration(hub) : undefined);
   if (!drawing) return null;
   const { src, width, height } = drawing;
@@ -176,6 +190,10 @@ async function mediaFor(path: string): Promise<{ media: ShareMedia; source: Shar
     if (family === 'case-studies' && slug && rest.length === 0) {
       const image = (await caseCover(slug)) ?? (await getCaseStudyPage(slug))?.heroImage;
       if (image) return { media: capture(image), source: 'banner' };
+    }
+    if (family === 'insights' && slug === 'events' && rest[0]) {
+      const image = (await getEventPage(rest[0]))?.featureImage;
+      if (image) return { media: capture(image), source: 'cover' };
     }
     if (family === 'insights' && slug === 'videos' && rest.length > 0) {
       const blog = await getBlogPage([slug, ...rest].join('/'));
