@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-405.4 -216.8 692 423.3" role="img" aria-label="Isometric illustration for PropTech, ConTech and field operations product design. The white house from the expertise hub stands on its lime tile, and behind it rises the property's one record, a solid blue screen with the house's map pin and a list of sign-offs, two ticked and one still open, each beside its source document or drawing. On the left a deal team's laptop shows the same property picked out in a pipeline board; in front on the right a person on site in a hard hat holds up a phone with the same pin and a saved tick. Dashed lines tie the laptop and the phone to the one record.">
+<defs><pattern id="pt-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="#0048FF" fill-opacity="0.38"/></pattern></defs>
+<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->
+<g transform="matrix(0.9 0.45 -0.9 0.45 -185.4 -139.5)"><rect width="520" height="240" fill="url(#pt-dots)"/><rect width="520" height="240" fill="none" stroke="#0048FF" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="48" y="48" width="424" height="144" fill="#0048FF" fill-opacity="0.07"/></g>
+<!-- One record: the deal desk and the site both tie to it, along the iso axes -->
+<path d="M-74.7 -130.2 L13.5 -86.1" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- The hub's lime tile -->
+<polygon points="-189,49.5 10.8,149.4 10.8,135.4 -189,35.5" fill="#A1B71F" stroke="#A1B71F" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="10.8,149.4 189,60.3 189,46.3 10.8,135.4" fill="#A1B71F" stroke="#A1B71F" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-10.8,-53.6 189,46.3 10.8,135.4 -189,35.5" fill="#D7F04A" stroke="#A1B71F" stroke-width="1.6" stroke-linejoin="round"/>
+<!-- The property's record: solid blue, standing on the back of the tile -->
+<polygon points="10.8,-198.4 11,-201 11.8,-203.3 12.9,-205.1 14.5,-206.4 25.3,-211.8 27.2,-212.6 29.4,-212.8 31.7,-212.5 34.2,-211.5 153,-152.1 155.5,-150.6 157.8,-148.6 160,-146.2 161.9,-143.5 163.5,-140.6 164.6,-137.6 165.4,-134.7 165.6,-131.8 165.6,24.2 165.4,26.8 164.6,29.1 163.5,30.9 161.9,32.2 151.1,37.6 149.2,38.4 147,38.6 144.7,38.3 142.2,37.3 23.4,-22.1 20.9,-23.6 18.6,-25.6 16.4,-28 14.5,-30.7 12.9,-33.6 11.8,-36.6 11,-39.5 10.8,-42.4" fill="#003EE0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="142.2,-146.7 153,-152.1 155.5,-150.6 157.8,-148.6 160,-146.2 161.9,-143.5 163.5,-140.6 164.6,-137.6 165.4,-134.7 165.6,-131.8 165.6,24.2 165.4,26.8 164.6,29.1 163.5,30.9 161.9,32.2 151.1,37.6 149.2,38.4 147,38.6 144.7,38.3 142.2,37.3" fill="#0031B0"/>
+<g transform="matrix(0.9 0.45 0 1 10.8 -212.4)">
+<rect width="160" height="184" rx="14" fill="#0048FF" stroke="#003EE0" stroke-width="1.6"/>
+<rect x="16" y="16" width="26" height="22" rx="5" fill="#FFFFFF"/><path d="M22 29 l7 -6 l7 6 v5 h-14 Z" fill="#0048FF"/>
+<rect x="52" y="18" width="72" height="9" rx="4.5" fill="#FFFFFF"/><rect x="52" y="31" width="44" height="6" rx="3" fill="#FFFFFF" fill-opacity="0.5"/>
+<rect x="16" y="48" width="128" height="50" rx="8" fill="#FFFFFF"/><path d="M28 88 L62 66 L98 80 L132 58" fill="none" stroke="#DBE4FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M80 54 c-7 0 -10.5 5 -10.5 10 c0 7 10.5 16 10.5 16 s10.5 -9 10.5 -16 c0 -5 -3.5 -10 -10.5 -10 Z" fill="#0048FF"/><circle cx="80" cy="64" r="3.6" fill="#FFFFFF"/>
+<circle cx="28" cy="119" r="9.5" fill="#FFFFFF"/><path d="M23.7 119 l3 3.2 l5.7 -6.3" fill="none" stroke="#0048FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="46" y="112" width="64" height="7" rx="3.5" fill="#FFFFFF" fill-opacity="1"/><rect x="46" y="122" width="40" height="5" rx="2.5" fill="#FFFFFF" fill-opacity="0.45"/>
+<path d="M124 109 h11 l6 6 v14 h-17 Z" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linejoin="round" stroke-opacity="1"/><path d="M135 109 v6 h6" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linejoin="round" stroke-opacity="1"/>
+<circle cx="28" cy="143" r="9.5" fill="#FFFFFF"/><path d="M23.7 143 l3 3.2 l5.7 -6.3" fill="none" stroke="#0048FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="46" y="136" width="54" height="7" rx="3.5" fill="#FFFFFF" fill-opacity="1"/><rect x="46" y="146" width="44" height="5" rx="2.5" fill="#FFFFFF" fill-opacity="0.45"/>
+<rect x="121" y="133" width="24" height="20" rx="2.5" fill="#FFFFFF"/><path d="M125 137 h16 v12 h-16 Z M133 137 v7 M133 145 h8" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-linejoin="round"/>
+<circle cx="28" cy="167" r="8.6" fill="none" stroke="#B8C8FF" stroke-width="2"/>
+<rect x="46" y="160" width="60" height="7" rx="3.5" fill="#FFFFFF" fill-opacity="0.6"/><rect x="46" y="170" width="34" height="5" rx="2.5" fill="#FFFFFF" fill-opacity="0.45"/>
+<path d="M124 157 h11 l6 6 v14 h-17 Z" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linejoin="round" stroke-opacity="0.6"/><path d="M135 157 v6 h6" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linejoin="round" stroke-opacity="0.6"/>
+</g>
+<!-- The house from the hub: white, gable end to the right, a blue door -->
+<polygon points="-140.4,41.8 -28.8,97.6 -28.8,31.6 -140.4,-24.2" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-28.8,97.6 55.8,55.3 55.8,-10.7 13.5,-39.5 -28.8,31.6" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-149.4,-23.1 -27,38.1 18.9,-36.8 -103.5,-98" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-27,38.1 18.9,-36.8 18.9,-30.8 -27,44.1" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 0 1 -140.4 -24.2)">
+<rect x="20" y="26" width="21" height="40" rx="2" fill="#0048FF"/>
+<rect x="60" y="18" width="44" height="26" rx="3" fill="#EEF2FF" stroke="#0048FF" stroke-width="1.6"/><path d="M82 18 V44" stroke="#0048FF" stroke-width="1.2"/>
+</g>
+<g transform="matrix(0.9 -0.45 0 1 13.5 -5.5)"><circle r="7" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.4"/></g>
+<!-- The deal desk: a light laptop, its screen a deal pipeline with the property's card picked out -->
+<polygon points="-257.4,-80.1 -145.8,-24.3 -145.8,-31.3 -257.4,-87.1" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-145.8,-24.3 -77.4,-58.5 -77.4,-65.5 -145.8,-31.3" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-189,-121.3 -77.4,-65.5 -145.8,-31.3 -257.4,-87.1" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 -189 -121.3)">
+<rect x="10" y="14" width="104" height="42" rx="5" fill="#EEF2FF" stroke="#8AA5FF" stroke-width="1.2"/><rect x="46.0" y="60" width="32" height="10" rx="3" fill="#EEF2FF" stroke="#8AA5FF" stroke-width="1.2"/>
+</g>
+<polygon points="-189,-201.3 -188.9,-202.8 -188.4,-204.1 -187.8,-205.1 -186.9,-205.9 -181.5,-208.6 -180.4,-209.1 -179.2,-209.2 -177.8,-208.9 -176.4,-208.4 -79.2,-159.8 -77.8,-158.9 -76.4,-157.8 -75.2,-156.4 -74.1,-154.9 -73.2,-153.2 -72.5,-151.5 -72.1,-149.8 -72,-148.2 -72,-76.2 -72.1,-74.7 -72.5,-73.4 -73.2,-72.4 -74.1,-71.6 -79.5,-68.9 -80.6,-68.5 -81.8,-68.3 -83.2,-68.5 -84.6,-69.1 -181.8,-117.7 -183.2,-118.6 -184.6,-119.7 -185.8,-121 -186.9,-122.6 -187.8,-124.2 -188.4,-126 -188.9,-127.7 -189,-129.3" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-84.6,-157.1 -79.2,-159.8 -77.8,-158.9 -76.4,-157.8 -75.2,-156.4 -74.1,-154.9 -73.2,-153.2 -72.5,-151.5 -72.1,-149.8 -72,-148.2 -72,-76.2 -72.1,-74.7 -72.5,-73.4 -73.2,-72.4 -74.1,-71.6 -79.5,-68.9 -80.6,-68.5 -81.8,-68.3 -83.2,-68.5 -84.6,-69.1" fill="#B8C8FF"/>
+<g transform="matrix(0.9 0.45 0 1 -189 -209.3)">
+<rect width="124" height="88" rx="8" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
+<rect x="7" y="7" width="110" height="74" rx="5" fill="#0048FF"/>
+<rect x="15" y="15" width="16" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.8"/><rect x="49" y="15" width="16" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.8"/><rect x="83" y="15" width="16" height="4" rx="2" fill="#FFFFFF" fill-opacity="0.8"/>
+<rect x="15" y="25" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="15" y="43" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="15" y="61" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="49" y="25" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="83" y="25" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="83" y="43" width="26" height="14" rx="3" fill="#B8C8FF"/>
+<rect x="47" y="42" width="30" height="20" rx="4" fill="#FFFFFF"/><path d="M51 54 l6 -5 l6 5 v5 h-12 Z" fill="#0048FF"/><rect x="65" y="49" width="8" height="3" rx="1.5" fill="#8AA5FF"/>
+</g>
+<circle cx="-74.7" cy="-130.2" r="3.2" fill="#0048FF"/>
+<!-- On site: a client in a hard hat, the same record on a phone -->
+<path d="M43.2 142.2 V103 A25.2 25.2 0 0 1 93.6 103 V142.2 A25.2 11.9 0 0 1 43.2 142.2 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<circle cx="68.4" cy="52.6" r="18.2" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
+<path d="M49.5 44.2 A18.9 16.8 0 0 1 87.3 44.2 Z" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/><path d="M68.4 27.4 V44.2" stroke="#0048FF" stroke-width="1.4"/><rect x="42.5" y="42" width="51.8" height="5.6" rx="2.8" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6"/>
+<mask id="pt-arm" maskUnits="userSpaceOnUse" x="-700" y="-500" width="1600" height="1100"><rect x="-700" y="-500" width="1600" height="1100" fill="#FFFFFF"/><path d="M43.2 142.2 V103 A25.2 25.2 0 0 1 93.6 103 V142.2 A25.2 11.9 0 0 1 43.2 142.2 Z" fill="#000000"/></mask>
+<g transform="matrix(0.9 0.45 0 1 91.8 49.5)"><rect width="36" height="60" rx="7" fill="#0048FF" stroke="#003EE0" stroke-width="1.6"/><rect x="5" y="7" width="26" height="42" rx="4" fill="#FFFFFF"/><path d="M18 12 c-4.6 0 -6.8 3.3 -6.8 6.4 c0 4.6 6.8 10.4 6.8 10.4 s6.8 -5.8 6.8 -10.4 c0 -3.1 -2.2 -6.4 -6.8 -6.4 Z" fill="#0048FF"/><circle cx="18" cy="18.4" r="2.4" fill="#FFFFFF"/><circle cx="18" cy="36" r="6.4" fill="#0048FF"/><path d="M15.2 36 l2 2.1 l3.7 -4.1" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g mask="url(#pt-arm)"><path d="M72.4 99.8 L97.2 107.2" stroke="#0048FF" stroke-width="12.4" stroke-linecap="round"/><circle cx="97.2" cy="107.2" r="9.6" fill="#0048FF"/></g><path d="M72.4 99.8 L97.2 107.2" stroke="#FFFFFF" stroke-width="9.2" stroke-linecap="round"/><circle cx="97.2" cy="107.2" r="8.0" fill="#FFFFFF"/>
+<path d="M108 57.6 L242.1 -9.5 L157.5 -51.8" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="108" cy="57.6" r="3.2" fill="#0048FF"/>
+</svg>
