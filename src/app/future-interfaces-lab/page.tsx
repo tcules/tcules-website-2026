@@ -1,16 +1,28 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedLabPage } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-
-/**
- * `/future-interfaces-lab` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+import { PublishedLab } from '@/templates/CorpusPage/PublishedLab';
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.futureInterfacesLab)) ?? { title: 'Tcules' };
+  return (await getPageSeo(ROUTES.futureInterfacesLab)).metadata;
 }
-
-export default function FutureInterfacesLabPage() {
-  return <ComposedRoute route={ROUTES.futureInterfacesLab} />;
+export default async function LabPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedLabPage(),
+    getPageSeo(ROUTES.futureInterfacesLab),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedLab page={page} />
+    </>
+  );
 }

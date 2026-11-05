@@ -8,6 +8,8 @@
  * route independent of the source answering it.
  */
 export {
+  getPublishedLabPage,
+  getPublishedLabJoinPage,
   getPage,
   getHomePage,
   getPublishedClientMasterPage,

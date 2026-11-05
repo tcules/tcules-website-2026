@@ -1,3 +1,4 @@
+import { getPublishedLab, getPublishedLabJoin } from './sources/strapi/published-lab';
 import { getPublishedClientMaster } from './sources/strapi/published-client-master';
 import { getPublishedAuthorMaster } from './sources/strapi/published-author-master';
 import { fixtureSource } from './sources/fixtures';
@@ -528,3 +529,6 @@ export const getPublishedAuthorMasterPage = getPublishedAuthorMaster;
 
 /** The /clients page and its ordered native Client relationships. */
 export const getPublishedClientMasterPage = getPublishedClientMaster;
+
+export const getPublishedLabPage = getPublishedLab;
+export const getPublishedLabJoinPage = getPublishedLabJoin;
