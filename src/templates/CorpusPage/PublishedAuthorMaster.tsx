@@ -1,4 +1,5 @@
 import { Icon, Layout, Media, Section } from '@/components';
+import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, CtaSection, EnquiryForm, PageHero, ProfileCard } from '@/patterns';
@@ -45,7 +46,8 @@ function Close({ section }: { section: Extract<AuthorMasterSection, { type: 'cta
         island={section.island ?? 'blue'}
         islandArrangement="halves"
         islandTexture="flow"
-        art={section.image ? <Media image={section.image} sizes="300px" /> : undefined}
+        /* The close's CMS illustration; else the drawing the insights family's close has always had. */
+        art={<Media image={section.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
         eyebrow={section.eyebrow}
         heading={section.heading}
         body={section.lead ? [section.lead] : undefined}

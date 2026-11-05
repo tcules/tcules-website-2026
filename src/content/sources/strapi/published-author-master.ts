@@ -50,21 +50,42 @@ type Listing = {
   anchorId?: string | null;
   authors: Entries<Person>;
 };
-type CmsPage = { hero?: CmsHero | null; content: Entries<Listing | CmsHomeSection> };
+type CmsPage = {
+  routePath?: string | null;
+  hero?: CmsHero | null;
+  content: Entries<Listing | CmsHomeSection>;
+};
+const warn = (message: string) => console.warn(`New CMS ${ROUTES.authors}: ${message}`);
 const surname = (name: string) => name.trim().split(/\s+/).at(-1) ?? name;
 
 export function mapAuthorMaster(page: CmsPage | null | undefined): AuthorMasterPage | null {
-  const hero = mapHero(page?.hero);
-  if (!page || !hero) return null;
+  if (!page) return null;
+  if (page.routePath !== ROUTES.authors)
+    throw new Error(
+      `New CMS ${ROUTES.authors}: published entry reports route ${page.routePath}`,
+    );
+  const hero = mapHero(page.hero);
+  if (!hero) throw new Error(`New CMS ${ROUTES.authors}: published entry has no hero title`);
   const sections: AuthorMasterSection[] = [];
   for (const section of rows(page.content)) {
     if (section.__typename === 'ComponentSharedAuthorListing') {
+      const seen = new Set<string>();
       const people = rows(section.authors).flatMap((person) => {
         const name = text(person.name);
         const slug = text(person.slug);
-        if (!name || !slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return [];
+        if (!name || !slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+          warn(`Author ${person.documentId} has no name or a valid slug; not listed`);
+          return [];
+        }
+        if (seen.has(slug)) {
+          warn(`listing ${section.id} relates Author ${slug} twice; listed once`);
+          return [];
+        }
+        seen.add(slug);
         const firstName = name.split(/\s+/)[0];
         const linkedin = text(person.linkedInProfile);
+        if (linkedin && !/^https:\/\/([a-z]+\.)?linkedin\.com\//i.test(linkedin))
+          warn(`Author ${slug} has a LinkedIn profile that is not a LinkedIn URL; not linked`);
         return [
           {
             slug,
@@ -97,6 +118,8 @@ export function mapAuthorMaster(page: CmsPage | null | undefined): AuthorMasterP
     } else if (section.__typename === 'ComponentSharedCta') {
       const mapped = mapBand(section, ROUTES.authors);
       if (mapped?.type === 'cta') sections.push(mapped);
+    } else {
+      warn(`${section.__typename} has no place on the authors index; not shown`);
     }
   }
   return { hero, sections };

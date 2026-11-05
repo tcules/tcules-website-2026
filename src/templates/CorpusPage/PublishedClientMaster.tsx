@@ -8,6 +8,7 @@ import {
   ListCard,
   LogoGrid,
   OfferSheet,
+  type HeroMedia,
 } from '@/patterns';
 import { PublishedHero, PublishedSection } from './PublishedHome';
 import type { ClientMasterPage, ClientMasterSection } from './published-client-master-model';
@@ -97,10 +98,21 @@ function ClientSection({ section }: { section: ClientMasterSection }) {
       );
   }
 }
-export function PublishedClientMaster({ page }: { page: ClientMasterPage }) {
+/**
+ * TIER 3 — the Client Master (`/clients`) from the new CMS: the hero, then every section in the
+ * editor's order. The hero's drawing falls back to the frontend's own; words never do.
+ */
+export function PublishedClientMaster({
+  page,
+  fallbackMedia,
+}: {
+  page: ClientMasterPage;
+  /** The page's own hero drawing, for a hero whose CMS entry has no media. */
+  fallbackMedia?: HeroMedia;
+}) {
   return (
     <>
-      <PublishedHero hero={page.hero} />
+      <PublishedHero hero={page.hero} fallbackMedia={fallbackMedia} />
       {page.sections.map((section) => (
         <ClientSection key={section.key} section={section} />
       ))}

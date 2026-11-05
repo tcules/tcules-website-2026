@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { ROUTES } from '@/lib/routes';
+import { caseStudyPath, ROUTES } from '@/lib/routes';
 import type {
   ClientMasterPage,
   ClientMasterSection,
@@ -131,19 +131,33 @@ type SharedSection = Exclude<
   CmsHomeSection,
   { __typename: 'ComponentSharedOfferSheetSection' | 'ComponentSharedCaseStudyCards' }
 >;
-type CmsPage = { hero?: CmsHero | null; content: Entries<CustomSection | SharedSection> };
+type CmsPage = {
+  routePath?: Text;
+  hero?: CmsHero | null;
+  content: Entries<CustomSection | SharedSection>;
+};
+
+function warn(message: string) {
+  console.warn(`New CMS ${ROUTES.clients}: ${message}`);
+}
 
 export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterPage | null {
-  const hero = mapHero(page?.hero);
-  if (!hero || !page) return null;
+  if (!page) return null;
+  if (page.routePath && page.routePath !== ROUTES.clients)
+    warn(`the published entry reports route ${page.routePath}`);
+  const hero = mapHero(page.hero);
+  if (!hero) throw new Error(`New CMS ${ROUTES.clients}: published entry has no hero title`);
   const sections: ClientMasterSection[] = [];
   for (const section of rows(page.content)) {
     const heading = text(
       section.__typename === 'ComponentSharedClientGrid' ? section.title : section.heading,
     );
-    if (!heading) continue;
-    const id = text(section.anchorId);
     const key = `${section.__typename}-${section.id}`;
+    if (!heading) {
+      warn(`${key} has no heading; not shown`);
+      continue;
+    }
+    const id = text(section.anchorId);
     const head = { key, id, heading, headingId: `${id ?? key}-heading` };
     switch (section.__typename) {
       case 'ComponentSharedClientGrid': {
@@ -158,6 +172,10 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
             const name = text(client.name),
               override = overrides.get(client.documentId);
             const media = mapUploadImage(override?.media ?? client.media, publicGraphqlUrl());
+            if (!name || !media)
+              warn(
+                `${key} client ${client.documentId} has no name or no usable logo; not shown`,
+              );
             return name && media
               ? [
                   {
@@ -194,6 +212,10 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
                 : [];
             }),
           });
+        } else {
+          warn(
+            `${key} has presentation ${section.offerPresentation ?? 'unset'}; only rows renders here`,
+          );
         }
         break;
       case 'ComponentSharedClientWorkTable':
@@ -213,7 +235,7 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
               {
                 header: name,
                 headerHtml: slug
-                  ? `<a href="/case-studies/${escapeHtml(slug)}">${escapeHtml(name)}</a>`
+                  ? `<a href="${escapeHtml(caseStudyPath(slug))}">${escapeHtml(name)}</a>`
                   : undefined,
                 cellsHtml: [
                   escapeHtml(text(entry.product) ?? ''),
@@ -231,6 +253,8 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
           entries: rows(section.entries).flatMap((entry) => {
             const title = text(entry.client?.name),
               bodyHtml = markdownInlineToHtml(entry.body);
+            if (!title || !bodyHtml)
+              warn(`${key} entry ${entry.id} has no client name or no words; not shown`);
             return title && bodyHtml ? [{ key: entry.id, title, bodyHtml }] : [];
           }),
         });
@@ -246,18 +270,25 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
               const selected = card.caseStudy,
                 title = text(card.title) ?? text(selected?.title),
                 slug = text(selected?.slug);
-              if (!title || !slug) return [];
+              if (!title || !slug) {
+                warn(`${key} card ${card.id} selects no published case study; not shown`);
+                return [];
+              }
               const cover = image(card.image ?? selected?.thumbnail?.image);
               return [
                 {
                   id: card.id,
                   title,
-                  href: '/case-studies/' + slug,
+                  href: caseStudyPath(slug),
                   media: cover ? { type: 'image' as const, image: cover } : undefined,
                 },
               ];
             }),
           });
+        } else {
+          warn(
+            `${key} has presentation ${section.casePresentation ?? 'unset'}; only title_linked renders here`,
+          );
         }
         break;
       default: {
@@ -276,10 +307,22 @@ export function mapClientMaster(page: CmsPage | null | undefined): ClientMasterP
           }));
         }
         if (mapped) sections.push(mapped);
+        else warn(`${key} cannot render here; not shown`);
       }
     }
   }
-  return { hero, sections };
+  /* A band with nothing in it is left out rather than drawn empty. */
+  const filled = sections.filter((section) => {
+    const empty =
+      (section.type === 'client-logos' && section.marks.length === 0) ||
+      ((section.type === 'client-offer' || section.type === 'client-cases') &&
+        section.items.length === 0) ||
+      (section.type === 'client-work' && section.rows.length === 0) ||
+      (section.type === 'client-stories' && section.entries.length === 0);
+    if (empty) warn(`${section.key} has nothing to show; not shown`);
+    return !empty;
+  });
+  return { hero, sections: filled };
 }
 
 export const getPublishedClientMaster = cache(async () => {
