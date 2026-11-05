@@ -315,14 +315,14 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
 - [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
       the header still needs work. Done 4 Nov 2026 (#215, #216, #217).
 - [ ] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
-- [ ] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
+- [x] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
       wire them in as they land.
       The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
       placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
       (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
       `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
       No video came (owner, 5 Nov 2026): the five audit heroes drawn on design/audit-heroes
-      (docs/illustrations/run-2026-11-05/audits/), waiting on the owner's verdict. The prototype review keeps its film.
+      (docs/illustrations/run-2026-11-05/audits/), approved by the owner 5 Nov 2026. The prototype review keeps its film.
 - [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
       Its unused path is removed from `src/lib/routes.ts`.
 
