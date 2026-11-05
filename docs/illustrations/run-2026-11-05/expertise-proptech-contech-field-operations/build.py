@@ -1,8 +1,10 @@
 """Generator for the /expertise/proptech-contech-field-operations hero. Run: python3 build.py (writes hero.svg).
 
 Idea: from deal desk to building site, everyone works on one record of each property.
-The hub's house stands on its lime tile; behind it rises the property's record (solid blue, the hero object).
-A deal-desk laptop on the left and a site worker's phone on the right are both tied to that one record.
+The property's record stands on the floor as the one solid blue screen (the hero object). Beside it, the hub's
+house stands on its lime tile: the site. The deal person (client, tie) stands at the record's left edge, a hand on
+the deal's stages; the person on site (client, hard hat) stands on the lime tile by the house, a hand on the
+record's right edge by the sign-offs.
 
 World: x runs right-down, y runs left-down, z is up. screen = (0.9x - 0.9y, 0.45x + 0.45y - z).
 Upright faces facing +y use matrix(0.9 0.45 0 1); facing +x use matrix(0.9 -0.45 0 1) with u along -y.
@@ -115,8 +117,23 @@ def tick(cx, cy, s, colour, sw):
             f'stroke="{colour}" stroke-width="{sw}" stroke-linecap="round" stroke-linejoin="round"/>')
 
 
+
+
+# ================================================================ geometry
+# the record: the one screen, solid blue, upright on a low white foot
+RX, RY, RW, RH, RD, RF = 0, 0, 210, 236, 12, 8
+RZT = RF + RH
+# lime tile (the site) right of the record, the house at its back-right
+TX0, TX1, TY0, TY1, TZ = 228, 418, -86, 66, 12
+HX0, HX1, HY0, HY1 = 308, 406, -74, 20
+HW, HR = 62, 48
+# the two clients
+DX, DY = 6, 28             # deal person, on the floor at the record's left edge
+WX, WY = 262, 20           # person on site, on the lime tile
+# floor: healthtech's plate (dots, dashed edge, inset 45)
+FX0, FY0, FW, FH = -60, -200, 520, 310
+
 # ================================================================ floor
-FX0, FY0, FW, FH = -258, -52, 520, 240
 corners = [iso(FX0, FY0), iso(FX0 + FW, FY0), iso(FX0 + FW, FY0 + FH), iso(FX0, FY0 + FH)]
 track(corners)
 out.append("<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->")
@@ -124,158 +141,113 @@ out.append(
     f'<g transform="{flat(FX0, FY0, 0)}">'
     f'<rect width="{FW}" height="{FH}" fill="url(#{PFX}-dots)"/>'
     f'<rect width="{FW}" height="{FH}" fill="none" stroke="{B500}" stroke-width="1.8" stroke-dasharray="10 8"/>'
-    f'<rect x="48" y="48" width="{FW - 96}" height="{FH - 96}" fill="{B500}" fill-opacity="0.07"/></g>'
+    f'<rect x="45" y="45" width="{FW - 90}" height="{FH - 90}" fill="{B500}" fill-opacity="0.07"/></g>'
 )
 
-# ================================================================ geometry
-# lime tile under the house (from the hub), deep enough at the back to carry the record's foot
-TX0, TX1, TY0, TY1, TZ = -50, 172, -38, 160, 14
-# the record: solid blue, upright, its foot on the tile's back edge, right of the roof where it shows
-RX, RY, RW, RH, RD = -10, -22, 160, 184, 12
-RZT = TZ + RH
-# house
-HX0, HX1, HY0, HY1 = -16, 108, 46, 140
-HZ0, HW, HR = TZ, 66, 50
-# laptop (deal desk): its lid in the record's plane, so its link runs straight along x
-LX0, LW, LY, LDK = -232, 124, RY, 76
-LH = 88
-# site worker, front-right of the tile on the inset; scale 1.4 of the earlier pawn
-WX, WY = 196, 120
-K = 1.4
-
-# ================================================================ connectors (drawn first: objects sit over them)
-out.append("<!-- One record: the deal desk and the site both tie to it, along the iso axes -->")
-LZ = 7 + LH * 0.72
-la = iso(LX0 + LW, LY - 3, LZ)
-dashed([la, iso(RX, RY - 3, LZ)])
-
-# ================================================================ lime tile
-out.append("<!-- The hub's lime tile -->")
-box(TX0, TX1, TY0, TY1, 0, TZ, LIME, LIMED, LIMED, stroke=LIMED)
-
-# ================================================================ the record (hero, solid blue)
-out.append("<!-- The property's record: solid blue, standing on the back of the tile -->")
-upright_slab(RX, RY, RZT, RW, RH, 14, RD, B600, B700, B600)
+# ================================================================ the record
+out.append("<!-- The property's one record: a solid blue screen standing on a low foot -->")
+box(RX - 8, RX + RW + 8, RY - RD - 10, RY + 12, 0, RF, WHITE, B100, B200)
+upright_slab(RX, RY, RZT, RW, RH, 16, RD, B600, B700, B600)
 g = [f'<g transform="{face_y(RX, RY, RZT)}">']
-g.append(f'<rect width="{RW}" height="{RH}" rx="14" fill="{B500}" stroke="{B600}" stroke-width="1.6"/>')
-# title row: a small house mark and the title
+g.append(f'<rect width="{RW}" height="{RH}" rx="16" fill="{B500}" stroke="{B600}" stroke-width="1.6"/>')
+# title: a house mark and the property's name
 g.append(f'<rect x="16" y="16" width="26" height="22" rx="5" fill="{WHITE}"/>'
-         f'<path d="M22 29 l7 -6 l7 6 v5 h-14 Z" fill="{B500}"/>')
-g.append(f'<rect x="52" y="18" width="72" height="9" rx="4.5" fill="{WHITE}"/>'
-         f'<rect x="52" y="31" width="44" height="6" rx="3" fill="{WHITE}" fill-opacity="0.5"/>')
-# map with the property's pin (as on the hub's card)
-g.append(f'<rect x="16" y="48" width="{RW-32}" height="50" rx="8" fill="{WHITE}"/>'
-         f'<path d="M28 88 L62 66 L98 80 L132 58" fill="none" stroke="{B100}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>')
-g.append(f'<path d="M80 54 c-7 0 -10.5 5 -10.5 10 c0 7 10.5 16 10.5 16 s10.5 -9 10.5 -16 c0 -5 -3.5 -10 -10.5 -10 Z" fill="{B500}"/>'
-         f'<circle cx="80" cy="64" r="3.6" fill="{WHITE}"/>')
-# sign-offs, each with its source; the middle source is a drawing (a plan), the third is still open
-for i, yy in enumerate((119, 143, 167)):
-    done = i < 2
-    if done:
-        g.append(f'<circle cx="28" cy="{yy}" r="9.5" fill="{WHITE}"/>' + tick(28, yy, 0.95, B500, 2.2))
+         f'<path d="M22 29 l7 -6 l7 6 v5 h-14 Z" fill="{B500}"/>'
+         f'<rect x="52" y="18" width="78" height="9" rx="4.5" fill="{WHITE}"/>'
+         f'<rect x="52" y="31" width="46" height="6" rx="3" fill="{WHITE}" fill-opacity="0.5"/>')
+# map with the property's pin, as on the hub's card
+g.append(f'<rect x="16" y="50" width="{RW-32}" height="66" rx="8" fill="{WHITE}"/>'
+         f'<path d="M30 104 L72 78 L114 96 L180 64" fill="none" stroke="{B100}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
+         f'<path d="M104 58 c-8 0 -12 5.6 -12 11.4 c0 8 12 18.6 12 18.6 s12 -10.6 12 -18.6 c0 -5.8 -4 -11.4 -12 -11.4 Z" fill="{B500}"/>'
+         f'<circle cx="104" cy="69.6" r="4.2" fill="{WHITE}"/>')
+# left column: the deal's stages, the current one (this property) in white, under the deal person's hand
+for j, vy in enumerate((126, 158, 190)):
+    if j == 2:
+        g.append(f'<rect x="16" y="{vy}" width="78" height="28" rx="6" fill="{WHITE}"/>'
+                 f'<path d="M50 {vy+18} l7 -6 l7 6 v6 h-14 Z" fill="{B500}"/>')
     else:
-        g.append(f'<circle cx="28" cy="{yy}" r="8.6" fill="none" stroke="{B200}" stroke-width="2"/>')
-    g.append(f'<rect x="46" y="{yy-7}" width="{[64, 54, 60][i]}" height="7" rx="3.5" fill="{WHITE}" fill-opacity="{1 if done else 0.6}"/>'
-             f'<rect x="46" y="{yy+3}" width="{[40, 44, 34][i]}" height="5" rx="2.5" fill="{WHITE}" fill-opacity="0.45"/>')
-    sx = RW - 36
+        g.append(f'<rect x="16" y="{vy}" width="78" height="28" rx="6" fill="{B200}" fill-opacity="{0.85 if j == 0 else 0.6}"/>'
+                 f'<rect x="26" y="{vy+11}" width="{[36, 28][j]}" height="6" rx="3" fill="{WHITE}" fill-opacity="0.8"/>')
+# right column: sign-offs, each with its source; the middle source is a drawing, the last is still open
+for i, yy in enumerate((140, 172, 204)):
+    done = i < 2
+    tx = 114
+    if done:
+        g.append(f'<circle cx="{tx}" cy="{yy}" r="9.5" fill="{WHITE}"/>' + tick(tx, yy, 0.95, B500, 2.2))
+    else:
+        g.append(f'<circle cx="{tx}" cy="{yy}" r="8.6" fill="none" stroke="{B200}" stroke-width="2"/>')
+    g.append(f'<rect x="130" y="{yy-7}" width="{[38, 32, 36][i]}" height="7" rx="3.5" fill="{WHITE}" fill-opacity="{1 if done else 0.6}"/>'
+             f'<rect x="130" y="{yy+3}" width="{[26, 30, 22][i]}" height="5" rx="2.5" fill="{WHITE}" fill-opacity="0.45"/>')
+    sx = 174
     if i == 1:
-        # a drawing sheet: white, with a small floor plan in blue
-        g.append(f'<rect x="{sx-3}" y="{yy-10}" width="24" height="20" rx="2.5" fill="{WHITE}"/>'
-                 f'<path d="M{sx+1} {yy-6} h16 v12 h-16 Z M{sx+9} {yy-6} v7 M{sx+9} {yy+2} h8" fill="none" stroke="{B500}" stroke-width="1.2" stroke-linejoin="round"/>')
+        g.append(f'<rect x="{sx-3}" y="{yy-10}" width="22" height="20" rx="2.5" fill="{WHITE}"/>'
+                 f'<path d="M{sx+1} {yy-6} h14 v12 h-14 Z M{sx+8} {yy-6} v7 M{sx+8} {yy+2} h7" fill="none" stroke="{B500}" stroke-width="1.2" stroke-linejoin="round"/>')
     else:
         op = 1 if done else 0.6
-        g.append(f'<path d="M{sx} {yy-10} h11 l6 6 v14 h-17 Z" fill="none" stroke="{WHITE}" stroke-width="1.4" stroke-linejoin="round" stroke-opacity="{op}"/>'
-                 f'<path d="M{sx+11} {yy-10} v6 h6" fill="none" stroke="{WHITE}" stroke-width="1.2" stroke-linejoin="round" stroke-opacity="{op}"/>')
+        g.append(f'<path d="M{sx} {yy-10} h10 l6 6 v14 h-16 Z" fill="none" stroke="{WHITE}" stroke-width="1.4" stroke-linejoin="round" stroke-opacity="{op}"/>'
+                 f'<path d="M{sx+10} {yy-10} v6 h6" fill="none" stroke="{WHITE}" stroke-width="1.2" stroke-linejoin="round" stroke-opacity="{op}"/>')
 g.append("</g>")
 out.extend(g)
 
-# ================================================================ the house (from the hub)
-out.append("<!-- The house from the hub: white, gable end to the right, a blue door -->")
+# ================================================================ lime tile and the house (from the hub)
+out.append("<!-- The site: the hub's lime tile, the house on it -->")
+box(TX0, TX1, TY0, TY1, 0, TZ, LIME, LIMED, LIMED, stroke=LIMED)
+HZ0 = TZ
 ym = (HY0 + HY1) / 2
 zt = HZ0 + HW
 poly([iso(HX0, HY1, HZ0), iso(HX1, HY1, HZ0), iso(HX1, HY1, zt), iso(HX0, HY1, zt)], WHITE)
 poly([iso(HX1, HY1, HZ0), iso(HX1, HY0, HZ0), iso(HX1, HY0, zt), iso(HX1, ym, zt + HR), iso(HX1, HY1, zt)], B200)
-OV = 6
+OV = 5
 poly([iso(HX0 - OV, HY1 + 4, zt - 2), iso(HX1 + OV, HY1 + 4, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX0 - OV, ym, zt + HR)], WHITE)
-poly([iso(HX1 + OV, HY1 + 4, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX1 + OV, ym, zt + HR - 6), iso(HX1 + OV, HY1 + 4, zt - 8)], B100)
+poly([iso(HX1 + OV, HY1 + 4, zt - 2), iso(HX1 + OV, ym, zt + HR), iso(HX1 + OV, ym, zt + HR - 5), iso(HX1 + OV, HY1 + 4, zt - 7)], B100)
 g = [f'<g transform="{face_y(HX0, HY1, zt)}">']
-g.append(f'<rect x="20" y="26" width="21" height="40" rx="2" fill="{B500}"/>')
-g.append(f'<rect x="60" y="18" width="44" height="26" rx="3" fill="{B50}" stroke="{B500}" stroke-width="1.6"/>'
-         f'<path d="M82 18 V44" stroke="{B500}" stroke-width="1.2"/>')
+g.append(f'<rect x="14" y="20" width="17" height="32" rx="2" fill="{B500}"/>')
+g.append(f'<rect x="44" y="13" width="30" height="20" rx="3" fill="{B50}" stroke="{B500}" stroke-width="1.6"/>'
+         f'<path d="M59 13 V33" stroke="{B500}" stroke-width="1.2"/>')
 g.append("</g>")
 out.extend(g)
-gc = iso(HX1, ym, zt + 16)
-out.append(f'<g transform="matrix(0.9 -0.45 0 1 {f(gc[0])} {f(gc[1])})"><circle r="7" fill="{WHITE}" stroke="{B500}" stroke-width="1.4"/></g>')
+gc = iso(HX1, ym, zt + 13)
+out.append(f'<g transform="matrix(0.9 -0.45 0 1 {f(gc[0])} {f(gc[1])})"><circle r="5.6" fill="{WHITE}" stroke="{B500}" stroke-width="1.4"/></g>')
 
-# ================================================================ laptop (deal desk): light body, blue screen
-out.append("<!-- The deal desk: a light laptop, its screen a deal pipeline with the property's card picked out -->")
-box(LX0, LX0 + LW, LY, LY + LDK, 0, 7, WHITE, B100, B200)
-g = [f'<g transform="{flat(LX0, LY, 7)}">']
-g.append(f'<rect x="10" y="14" width="{LW-20}" height="{LDK-34}" rx="5" fill="{B50}" stroke="{B300}" stroke-width="1.2"/>'
-         f'<rect x="{LW/2-16}" y="{LDK-16}" width="32" height="10" rx="3" fill="{B50}" stroke="{B300}" stroke-width="1.2"/>')
-g.append("</g>")
-out.extend(g)
-upright_slab(LX0, LY, 7 + LH, LW, LH, 8, 6, B100, B200, B500)
-g = [f'<g transform="{face_y(LX0, LY, 7 + LH)}">']
-g.append(f'<rect width="{LW}" height="{LH}" rx="8" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
-g.append(f'<rect x="7" y="7" width="{LW-14}" height="{LH-14}" rx="5" fill="{B500}"/>')
-# kanban: three columns, a header bar each, pale cards; the property's card in white with the house mark
-cols = [15, 49, 83]
-g.append("".join(f'<rect x="{c}" y="15" width="16" height="4" rx="2" fill="{WHITE}" fill-opacity="0.8"/>' for c in cols))
-cards = {15: [25, 43, 61], 49: [25], 83: [25, 43]}
-for c, ys in cards.items():
-    for cy_ in ys:
-        g.append(f'<rect x="{c}" y="{cy_}" width="26" height="14" rx="3" fill="{B200}"/>')
-g.append(f'<rect x="47" y="42" width="30" height="20" rx="4" fill="{WHITE}"/>'
-         f'<path d="M51 54 l6 -5 l6 5 v5 h-12 Z" fill="{B500}"/>'
-         f'<rect x="65" y="49" width="8" height="3" rx="1.5" fill="{B300}"/>')
-g.append("</g>")
-out.extend(g)
-dot(la, 3.2)
+# ================================================================ the two clients (healthtech's pawn and arm)
+R, BH, HRAD, HEADZ = 22, 84, 16, 104
+AW, AC, HO, HC = 11, 7.8, 8.8, 7.2
 
-# ================================================================ site worker: client pawn, hard hat, phone
-out.append("<!-- On site: a client in a hard hat, the same record on a phone -->")
-cx, cy = iso(WX, WY)
-R, BH, HRAD = 18 * K, 46 * K, 13 * K
-body = f"M{f(cx-R)} {f(cy)} V{f(cy-BH+R)} A{f(R)} {f(R)} 0 0 1 {f(cx+R)} {f(cy-BH+R)} V{f(cy)} A{f(R)} {f(8.5*K)} 0 0 1 {f(cx-R)} {f(cy)} Z"
-hy = cy - BH - 18 * K
-out.append(f'<path d="{body}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>')
-out.append(f'<circle cx="{f(cx)}" cy="{f(hy)}" r="{f(HRAD)}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
-# hard hat: dome, ridge and brim
-HB = hy - 6 * K
-out.append(f'<path d="M{f(cx-13.5*K)} {f(HB)} A{f(13.5*K)} {f(12*K)} 0 0 1 {f(cx+13.5*K)} {f(HB)} Z" fill="{B100}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>'
-           f'<path d="M{f(cx)} {f(HB-12*K)} V{f(HB)}" stroke="{B500}" stroke-width="1.4"/>'
-           f'<rect x="{f(cx-18.5*K)}" y="{f(HB-2.2)}" width="{f(37*K)}" height="5.6" rx="2.8" fill="{B100}" stroke="{B500}" stroke-width="1.6"/>')
-# the phone, held out to the right in front of the body, facing +y like the record
-PHW, PHH = 36, 60
-PHX, PHY, PHZT = WX + 30, WY + 4, 108
-ph = iso(PHX, PHY, PHZT)
-track([ph, iso(PHX + PHW, PHY, PHZT - PHH)])
-hx, hy2 = iso(PHX + 6, PHY, PHZT - PHH + 5)
-sx0, sy0 = cx + 4, cy - BH + 22
-AW, AC = 12.4, 9.2          # arm with its outline, and its light core (outline 1.6 each side)
-HO, HC = 9.6, 8.0           # hand with its outline, and its light core
-out.append(
-    f'<mask id="{PFX}-arm" maskUnits="userSpaceOnUse" x="-700" y="-500" width="1600" height="1100">'
-    f'<rect x="-700" y="-500" width="1600" height="1100" fill="#FFFFFF"/><path d="{body}" fill="#000000"/></mask>'
-)
-out.append(f'<g transform="matrix(0.9 0.45 0 1 {f(ph[0])} {f(ph[1])})"><rect width="{PHW}" height="{PHH}" rx="7" fill="{B500}" stroke="{B600}" stroke-width="1.6"/>'
-           f'<rect x="5" y="7" width="26" height="42" rx="4" fill="{WHITE}"/>'
-           f'<path d="M18 12 c-4.6 0 -6.8 3.3 -6.8 6.4 c0 4.6 6.8 10.4 6.8 10.4 s6.8 -5.8 6.8 -10.4 c0 -3.1 -2.2 -6.4 -6.8 -6.4 Z" fill="{B500}"/>'
-           f'<circle cx="18" cy="18.4" r="2.4" fill="{WHITE}"/>'
-           f'<circle cx="18" cy="36" r="6.4" fill="{B500}"/>' + tick(18, 36, 0.62, WHITE, 1.8) + '</g>')
-out.append(
-    f'<g mask="url(#{PFX}-arm)"><path d="M{f(sx0)} {f(sy0)} L{f(hx)} {f(hy2)}" stroke="{B500}" stroke-width="{AW}" stroke-linecap="round"/>'
-    f'<circle cx="{f(hx)}" cy="{f(hy2)}" r="{HO}" fill="{B500}"/></g>'
-    f'<path d="M{f(sx0)} {f(sy0)} L{f(hx)} {f(hy2)}" stroke="{WHITE}" stroke-width="{AC}" stroke-linecap="round"/>'
-    f'<circle cx="{f(hx)}" cy="{f(hy2)}" r="{HC}" fill="{WHITE}"/>'
-)
-track([(cx - R - 4, cy + 10), (cx + R, hy - 20)])
-# connector: from the phone's top, back along -y to the record's plane, then along -x into its right edge
-p1 = iso(PHX + PHW / 2, PHY, PHZT)
-CZ = PHZT
-dashed([p1, iso(PHX + PHW / 2, RY - 3, CZ), iso(RX + RW, RY - 3, CZ)])
-dot(p1, 3.2)
+
+def pawn(wx, wy, wz):
+    cx, cy = iso(wx, wy, wz)
+    body = f"M{f(cx-R)} {f(cy)} V{f(cy-BH+R)} A{R} {R} 0 0 1 {f(cx+R)} {f(cy-BH+R)} V{f(cy)} A{R} 9.9 0 0 1 {f(cx-R)} {f(cy)} Z"
+    track([(cx - R, cy + 10), (cx + R, cy - HEADZ - HRAD - 16)])
+    out.append(f'<path d="{body}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>')
+    out.append(f'<circle cx="{f(cx)}" cy="{f(cy-HEADZ)}" r="{HRAD}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
+    return cx, cy, body
+
+
+def arm(name, body, s, h):
+    out.append(
+        f'<mask id="{PFX}-{name}" maskUnits="userSpaceOnUse" x="-900" y="-600" width="2000" height="1400">'
+        f'<rect x="-900" y="-600" width="2000" height="1400" fill="#FFFFFF"/><path d="{body}" fill="#000000"/></mask>'
+        f'<g mask="url(#{PFX}-{name})"><path d="M{f(s[0])} {f(s[1])} L{f(h[0])} {f(h[1])}" stroke="{B500}" stroke-width="{AW}" stroke-linecap="round"/>'
+        f'<circle cx="{f(h[0])}" cy="{f(h[1])}" r="{HO}" fill="{B500}"/></g>'
+        f'<path d="M{f(s[0])} {f(s[1])} L{f(h[0])} {f(h[1])}" stroke="{WHITE}" stroke-width="{AC}" stroke-linecap="round"/>'
+        f'<circle cx="{f(h[0])}" cy="{f(h[1])}" r="{HC}" fill="{WHITE}"/>'
+    )
+
+
+out.append("<!-- The deal desk: a client in a tie, a hand on the deal's stage -->")
+cx, cy, body = pawn(DX, DY, 0)
+ty = cy - BH
+out.append(f'<path d="M{f(cx-4)} {f(ty+3)} h8 l-2 5 l3.5 16 l-5.5 6 l-5.5 -6 l3.5 -16 Z" fill="{B500}"/>')
+arm("deal", body, (cx + 6, cy - BH + 30), iso(RX + 30, RY + 4, RF + 34))
+
+out.append("<!-- On site: a client in a hard hat on the lime tile, a hand on the sign-offs -->")
+cx, cy, body = pawn(WX, WY, TZ)
+hy = cy - HEADZ
+HB = hy - 5
+out.append(f'<path d="M{f(cx-17)} {f(HB)} A17 15 0 0 1 {f(cx+17)} {f(HB)} Z" fill="{B100}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>'
+           f'<path d="M{f(cx)} {f(HB-15)} V{f(HB)}" stroke="{B500}" stroke-width="1.4"/>'
+           f'<rect x="{f(cx-23)}" y="{f(HB-2.4)}" width="46" height="6" rx="3" fill="{B100}" stroke="{B500}" stroke-width="1.6"/>')
+arm("site", body, (cx - 6, cy - BH + 30), iso(RX + RW - 5, RY + 3, RF + 50))
 
 # ================================================================ write
 svg_body = "\n".join(out)
@@ -283,12 +255,12 @@ xs = [p[0] for p in pts_all]
 ys = [p[1] for p in pts_all]
 pad = 4
 vb = (min(xs) - pad, min(ys) - pad, max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad)
-ALT = ("Isometric illustration for PropTech, ConTech and field operations product design. The white house from the "
-       "expertise hub stands on its lime tile, and behind it rises the property's one record, a solid blue screen "
-       "with the house's map pin and a list of sign-offs, two ticked and one still open, each beside its source "
-       "document or drawing. On the left a deal team's laptop shows the same property picked out in a pipeline board; "
-       "in front on the right a person on site in a hard hat holds up a phone with the same pin and a saved tick. "
-       "Dashed lines tie the laptop and the phone to the one record.")
+ALT = ("Isometric illustration for PropTech, ConTech and field operations product design. On a dotted floor the "
+       "property's one record stands as a solid blue screen: the house's map pin at the top, the deal's stages on the "
+       "left with the current one picked out by a house, and its sign-offs on the right, two ticked and one still open, "
+       "each beside its source document or drawing. Beside it the white house from the expertise hub stands on its "
+       "lime tile. Two people work on that one record: someone from the deal desk in a tie rests a hand on the deal's "
+       "stage, and a person on site in a hard hat, standing on the lime tile by the house, rests a hand by the sign-offs.")
 svg = (
     f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{f(vb[0])} {f(vb[1])} {f(vb[2])} {f(vb[3])}" role="img" aria-label="{ALT}">\n'
     f'<defs><pattern id="{PFX}-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="{B500}" fill-opacity="0.38"/></pattern></defs>\n'

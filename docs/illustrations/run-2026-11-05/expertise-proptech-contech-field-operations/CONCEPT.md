@@ -1,7 +1,7 @@
 # /expertise/proptech-contech-field-operations · hero
 
 Slot: hero beside the copy, paper ground, renders about 600px wide; also the card cover on /expertise at about
-360px. `hero.svg`, viewBox 692 × 423 (about 1.63:1). Generator: `build.py` (run `python3 build.py`).
+360px. `hero.svg`, viewBox 755 × 508 (1.49:1, inside the family's 5:4 to 3:2). Generator: `build.py` (run `python3 build.py`).
 
 No earlier draft existed in this folder; this is a fresh drawing.
 
@@ -23,40 +23,37 @@ visitor coming from /expertise recognises their field at once.
 
 Buyer's sentence: "They put the deal team and the people on site on one record of each property."
 
-## Parts
+## Parts (round 6, the family polish)
 
-- The family floor: dashed brandeis-500 edge, brandeis-300 dot field, soft brandeis-50 inset.
-- **The house from the hub** (white walls, brandeis-200 gable end with a round window, white roof, blue door and a
-  window) standing on the **lime tile** (the one accent, peridot side faces). The house leads: it is the largest
-  white shape and sits in the middle.
-- **The property's record, solid blue (the hero object)**, the hub's pin card grown into the record but kept at
-  card height (184, about 27% shorter than round 4) and standing on the back of the lime tile, its foot visible on
-  the lime right of the gable: a small house mark and a title, a map with the property's pin, and three sign-offs:
-  two ticked (white disc, blue tick at 2.2), one still open (a brandeis-200 ring, empty), each with its source
-  beside it. The middle source is a **drawing sheet** (white, with a small floor plan in blue): the AI
-  drawing-check item and the ConTech foothold.
-- **The deal desk:** a light laptop with a blue screen showing a **kanban pipeline**: three columns, a white header
-  bar each, brandeis-200 deal cards, and the property's card picked out in white with the house mark.
-- **On site:** a client pawn (white, blue outline) at 1.4x, in a hard hat, standing on the inset in front of the
-  tile's front-right corner, clear of the floor edge. It holds out a solid blue phone (1.5x) showing one white pin
-  and one white tick in a blue disc ("saved"). Its arm is the client arm (light core in a blue outline), growing
-  from the shoulder, hand at the phone's foot.
-- **Two dashed connectors (4/4), on the iso axes, no risers:** the laptop's lid lies in the record's plane, so its
-  link runs straight along x from the lid's side (dot) into the record's left edge, just above the roof line. The
-  phone's link leaves the phone's top (dot), runs back along -y to the record's plane, turns once and runs along -x
-  into the record's right edge, where the slab's side face closes it.
-- No Tcules figure: the idea is about the client's people sharing one record, not about who designs it.
-- Not added: a flat plan or scaffold on the tile (the critic's optional ConTech cue). The tile's free corner is
-  where the worker stands, and a second plan would crowd the house at 360; the drawing sheet in the record carries it.
+- **The family floor, healthtech's:** dotted brandeis-300 plate, dashed brandeis-500 edge, brandeis-50 inset 45 in
+  from the edge. One floor, no second dashed outline. Its back edge sits behind the record and clear of the roof.
+- **The property's record, solid blue: the one screen and the hero object.** 210 × 236, upright, standing on a
+  low white foot on the floor (nothing floats). Top: a house mark and the property's name, then a map with the
+  hub's pin. Below, two columns: on the left the **deal's stages**, two done (brandeis-200) and the current one in
+  white with the house mark; on the right the **sign-offs**, two ticked (white disc, blue tick 2.2) and one still
+  open (brandeis-200 ring), each beside its source; the middle source is a drawing sheet with a floor plan (the
+  ConTech drawing check).
+- **The site: the house from the hub on its lime tile** (the one accent), right of and in front of the record.
+  White walls, brandeis-200 gable end with its round window, white roof, blue door, one window.
+- **Two clients, on that one record** (healthtech's pawn at the same scale: body 44 wide, head r16; the client
+  arm, 11 with its blue outline, light core 7.8, hand 8.8 / 7.2):
+  - **the deal desk:** a white pawn with a small blue tie, on the floor at the record's left edge, a hand on the
+    current deal stage;
+  - **on site:** a white pawn in a hard hat (dome, ridge, brim), standing on the lime tile by the house, a hand
+    at the record's right edge on the open sign-off.
+- No laptop, no phone, no connectors: the two people touch the same screen, so nothing needs a line.
+- No Tcules figure: the idea is the client's two sides sharing one record.
+- Distinct from healthtech's formula: no phone and no lime button; the screen stands at the back-left, the hub
+  object sits front-right, and the people stand between and beside them.
 
 ## Alt
 
-Isometric illustration for PropTech, ConTech and field operations product design. The white house from the expertise
-hub stands on its lime tile, and behind it rises the property's one record, a solid blue screen with the house's map
-pin and a list of sign-offs, two ticked and one still open, each beside its source document or drawing. On the left
-a deal team's laptop shows the same property picked out in a pipeline board; in front on the right a person on site
-in a hard hat holds up a phone with the same pin and a saved tick. Dashed lines tie the laptop and the phone to the
-one record.
+Isometric illustration for PropTech, ConTech and field operations product design. On a dotted floor the property's
+one record stands as a solid blue screen: the house's map pin at the top, the deal's stages on the left with the
+current one picked out by a house, and its sign-offs on the right, two ticked and one still open, each beside its
+source document or drawing. Beside it the white house from the expertise hub stands on its lime tile. Two people
+work on that one record: someone from the deal desk in a tie rests a hand on the deal's stage, and a person on
+site in a hard hat, standing on the lime tile by the house, rests a hand by the sign-offs.
 
 ## Rounds
 
@@ -75,3 +72,11 @@ one record.
    screen redrawn as a kanban; open sign-off a brandeis-200 ring; one source a plan sheet; ticks 2.2. Floor's back
    edge moved so the laptop link no longer runs beside it. Checked at 600 and 360; zoom-checked the lid dot and the
    link's end at the record, the phone link's end at the slab's side, the hat brim, the hand on the phone.
+6. Family polish (owner, 5 Nov: "A is good", polish, keep the idea; STYLE §9a). Laptop and phone removed, so the
+   record is the one screen; it now stands on its own white foot on the floor instead of on the tile. The deal
+   side became a client in a tie with a hand on the record's deal stages (the kanban moved onto the record as a
+   stage column); the site worker stands on the lime tile by the house with a hand on the open sign-off. Both
+   connectors gone, so nothing runs behind the roof. Floor rebuilt as healthtech's (one dashed edge, inset 45,
+   back edge pushed clear of the roof). Pawns and arms set to healthtech's scale. Box 1.63 to 1.49. Checked at
+   600 and 360 beside the hub and healthtech; zoom-checked both hands on the screen, the hat against the slab's
+   side, the record's foot, the roof and gable, the tile's front corner against the floor edge.

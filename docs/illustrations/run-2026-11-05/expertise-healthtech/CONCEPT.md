@@ -1,48 +1,80 @@
 # /expertise/healthtech · hero
 
-Slot: hero beside the copy, paper ground, renders about 600px wide. `hero.svg`, viewBox 865 × 651 (about 1.33:1).
+Slot: hero beside the copy, paper ground, renders about 600px wide and as the /expertise card cover at 360.
+`hero.svg`, viewBox 865 × 651 (about 1.33:1), built by `gen.mjs` (`node gen.mjs` rewrites `hero.svg`).
 
-## Candidate ideas
+This drawing is the family standard (STYLE §9a): its floor and its scale are the ones the other industry heroes
+match, and it owns the "hub object + blue phone + lime pill" arrangement.
 
-1. **One clear next step for everyone around the patient.** A health app shows one plain consent request and one
-   next-step button, and that same step reaches the patient, the carer and the clinician.
-2. **The care kit becomes an app.** The hub's medical case opens and the phone rises out of it.
-3. **Safety reviewed early.** A clinical safety lead ticks the screens of a health app before it ships.
+## Candidate ideas (5 Nov rework)
 
-## The pick: ideas 2 and 1 as one picture
+1. **The care kit becomes an app, and the people it serves stand beside it.** The phone rises from the hub's open
+   medical case; the clinician, the carer and the patient stand by it, the patient holding the same app.
+2. **One next step, reached by wires.** The pilot as it was: a dashed line from the lime button drops to each person.
+3. **Safety reviewed early.** A Tcules designer and the client's clinical safety lead stand at the phone together,
+   the lead ticking a screen.
 
-Fix pass (5 Nov): the blind reader found the first version generic. The medical case stood beside the phone as a
-label with nothing tying them together, and the connectors fanned into one point like puppet strings. Now the case
-does the work. The hub's white medical case stands open with its lid up, and the blue phone (the hero object)
-rises out of it, so the picture reads as "the care kit, now an app". The cross on the case's front face carries
-the health subject, so the cross on the screen shrinks to a small badge. Idea 1 stays as the action. One dashed
-line leaves the lime button, runs out of the phone's side along the iso axes and passes over the three people,
-then drops to each of them, ending in a dot.
+**Pick: 1.** It keeps the pilot's idea and arrangement (the owner: "blue phone is fine") and says the copy's
+"each person gets a clear next step" without wiring: the lime step on the big screen comes back on the patient's
+own phone. Idea 2 is the version Jatin found "not very clear" (the lines looped over the people like wiring).
+Idea 3 adds a second idea on top of the first and would need a fourth figure.
+
+Checked against the siblings drawn so far: fintech (blue card beside a light phone, no people), climatetech
+(turbine and battery wired to a wall screen, a blue figure at it), edtech (book stairs, a figure climbing,
+a phone beside), proptech (house on a lime tile, laptop and a tablet, a site worker). None stands the product inside
+the object or puts a group of the product's users beside it.
 
 ## The drawing
 
 - **Idea:** "They turn care into an app that gives the patient, the carer and the clinician each a clear next step."
-- **Drawn:** the family's dotted floor with a dashed edge and a soft inset. A white medical case with a blue cross on
-  its front stands open, its lid up behind. A solid blue phone stands inside it and rises out of it, showing a small
-  cross badge and a title bar, a consent card with one large ticked box and two short bars, and one lime next-step
-  button. A dashed line leaves the button along the iso axes and drops to three white pawns in a row: a patient
-  holding a small phone (arm and hand), a carer marked with a heart and a clinician marked with a cross.
+- **Drawn:** the family's dotted floor with a dashed edge and a soft inset. A white medical case with a blue cross
+  on its front stands open, its lid up behind. A solid blue phone stands inside it and rises out of it, showing a
+  small cross badge and a title bar, a consent card with one ticked box and two short bars, and one lime next-step
+  button. Around the case stand three white client pawns, not in a line: the patient by
+  the case's front-left face holding a small blue phone that shows the same cross and the same lime step, the carer
+  (a large blue heart on the body) at the patient's shoulder, a pair as on a home visit, and the clinician (a large
+  blue cross) across from them by the case's front corner. The lid's inner face is plain white with a solid
+  brandeis-200 rim and a small blue clasp, so it reads as a case lid.
 - **Alt:** Isometric illustration for HealthTech product design. A white medical case with a blue cross stands open
   on a dotted floor, its lid up, and a solid blue phone rises out of it showing a care app: a cross badge, a plain
-  consent request with a ticked box, and one lime next-step button. A dashed line runs from that button to three
-  people standing in a row, a patient holding the same app on a small phone, a carer marked with a heart and a
-  clinician marked with a cross, and drops to each of them.
+  consent request with a ticked box, and one lime next-step button. Around the case stand the three people the app
+  serves: a patient holding the same app on a small phone with the same lime next step, a carer marked with a heart
+  at the patient's shoulder, and a clinician marked with a cross across from them.
 
-## Construction
+## What changed from the pilot
 
-Everything is projected on the family's true 2:1 iso: `matrix(0.9 0.45 -0.9 0.45)` for the floor and
-`matrix(0.9 0.45 0 1)` for upright faces (phone, case front, cross, the patient's phone). Outlines are 1.6 on
-objects and 1.2 on inner detail and connectors. The case has a 10-unit rim. Its inside (back wall, left wall and
-floor) is drawn before the phone, and its front rim, front face and side face after, so the phone visibly stands
-inside it. The connector gets a white casing where it crosses the blue bezel, so the blue dash does not vanish
-there.
+- **No wiring.** The dashed line from the button and its three drops over the people are gone. The link between the
+  big screen and the people is now the patient's own phone showing the same lime step (a second lime is allowed
+  under STYLE §4 when both halves of one idea need it).
+- **Badges read at 600 and 360.** Pawns are larger (body 44 wide, 62 high, head r16, up from 36 / 42 / r13) and the
+  cross and heart are about 22 units, up from about 15.
+- **People rules (§5).** All three are clients, so they are white with a blue outline. The patient's arm grows from
+  the shoulder: a white core inside a blue outline, 11 units thick overall (a quarter of the body), round cap and a
+  round hand (r 8.8). The hand grips the phone's lower bezel and leaves the lime step visible. No Tcules figure:
+  the idea is who the app is for, not how Tcules works with the client, so §9a's "at least one person" is met by
+  the three users.
+- **Placement.** The row stands on the inset in front-left of the case, clear of the case's cross face, so the
+  floor's front is no longer empty.
+- **Unchanged:** the floor, the open case and the blue phone are the approved pilot geometry, kept verbatim in
+  `gen.mjs` (`BASE`). The projection is the family's 2:1 iso, `x = -144 + 0.9(u - v)`, `y = 27 + 0.45(u + v) - h`.
 
-Rounds: v1–v6 put the case beside the phone, with a fan of lines from the button to three people. v7 (this fix pass) stands the
-phone in the open case, re-projects everything on 0.45, brings the strokes down to 1.6 / 1.2, replaces the fan
-with one axis-aligned line and three drops, lines the pawns up beside the case facing the screen, gives the
-patient a small phone, and cuts the consent card to a ticked box and two bars.
+Rounds (5 Nov rework): r1 removed the wiring and enlarged the pawns (the patient's hand hid behind the phone);
+r2 put the hand in front (it covered the lime step); r3 lengthened the arm; r4 raised the phone so the hand grips
+the bezel; r5 moved the row forward onto the inset and checked at 600 and 360.
+
+## Fix pass (5 Nov, after the blind read and the critic)
+
+- **Not a queue.** The blind reader saw three pawns in single file as people waiting, the opposite of the page.
+  Now the carer stands at the patient's shoulder (a pair by the case's front-left face) and the clinician stands
+  across from them at the case's front corner, so the three surround the care. Floor positions (u, v): carer
+  (130, 285), patient (215, 272), clinician (420, 345); all on the brandeis-50 inset, none over the case's cross
+  or the lime pill. Sizes, badges and the patient's arm and hand on the small phone are unchanged.
+- **The lid reads as a lid, not glass.** The pale inner inset panel is gone; the inner face is white, the top edge
+  and its thickness are solid brandeis-200, and a small blue clasp hangs from the rim right of the phone. The lid's
+  angle and size are unchanged. Applied in `gen.mjs` as a checked replacement on `BASE` (it throws if the pilot
+  geometry ever moves).
+- **Unchanged:** the case, the blue phone, its screen (cross badge, ticked consent card, lime next-step pill), the
+  floor and the viewBox (865 × 651, about 1.33): every pawn stays inside the old extent. No connectors.
+- **Checked:** 600 and 360 (heart, cross, the small phone's lime bar all read at 360); joins zoomed at 2400: the
+  rim corners, the clasp against the rim, the patient's hand on the small phone's lower bezel, and the clinician's
+  head clear of the case's lower edge (no blue line crosses a white body).

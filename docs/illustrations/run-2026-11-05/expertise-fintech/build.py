@@ -1,17 +1,19 @@
 """Generator for the /expertise/fintech hero. Run: python3 build.py  (writes hero.svg beside it).
 
-Idea: the hub's bank card pays, and the app says plainly what happened and what to do next.
+Idea: the hub's bank card pays, and the customer's app says plainly why it was declined and what to try next.
+
+r10 (family polish, 5 Nov): the card at the family scale, standing on a full healthtech floor; a light phone (not
+the family's solid blue one); the way forward is the lime retry step in the payment's own track (not a pill
+button); the customer, a client pawn, stands at the phone's right and reaches for it.
 
 World: floor x runs right-down, floor y runs left-down, z is up. True 2:1 iso, the family's projection:
-screen = (0.9x - 0.9y, 0.45x + 0.45y - z). Upright faces face +y (toward the viewer, left); their
-thickness goes back along -y, so the top and right edges show.
+screen = (0.9x - 0.9y, 0.45x + 0.45y - z).
 """
 import math, os
 
 B500, B600, B700 = "#0048FF", "#003EE0", "#0031B0"
 B300, B200, B100, B50 = "#8AA5FF", "#B8C8FF", "#DBE4FF", "#EEF2FF"
 WHITE, LIME, LIMED, INK = "#FFFFFF", "#D7F04A", "#A1B71F", "#1B1B18"
-NS = ''  # strokes scale with the drawing, as in the family
 
 out = []
 pts_all = []
@@ -64,8 +66,7 @@ def hull(points):
 
 
 def upright_slab(x0, y0, ztop, w, h, r, depth, top_fill, side_fill, edge):
-    """Thickness of an upright rounded plate (face in the plane y=y0, depth going back along -y).
-    Two tones: the top edge lighter, the right edge deeper."""
+    """Thickness of an upright rounded plate (face in the plane y=y0, depth going back along -y)."""
     loc = rr_outline(w, h, r)
 
     def scr(u, v, d):
@@ -78,9 +79,25 @@ def upright_slab(x0, y0, ztop, w, h, r, depth, top_fill, side_fill, edge):
     out.append(f'<polygon points="{P(hull(right))}" fill="{side_fill}" stroke="{edge}" stroke-width="1.6" stroke-linejoin="round"/>')
 
 
-def face(x0, y0, ztop):
+def flat_slab(x0, y0, w, h, r, t, front_fill, side_fill, edge):
+    """Thickness of a rounded plate lying flat (top at z=t). The +y edge (lower left) in front_fill,
+    the +x edge (lower right) in side_fill."""
+    loc = rr_outline(w, h, r)
+    allp = [iso(x0 + u, y0 + v, z) for (u, v) in loc for z in (0, t)]
+    right = [iso(x0 + u, y0 + v, z) for (u, v) in loc if u >= w - r - 0.01 for z in (0, t)]
+    track(allp)
+    out.append(f'<polygon points="{P(hull(allp))}" fill="{front_fill}" stroke="{edge}" stroke-width="1.6" stroke-linejoin="round"/>')
+    out.append(f'<polygon points="{P(hull(right))}" fill="{side_fill}" stroke="{edge}" stroke-width="1.6" stroke-linejoin="round"/>')
+
+
+def upright(x0, y0, ztop):
     sx, sy = iso(x0, y0, ztop)
     return f'matrix(0.9 0.45 0 1 {f(sx)} {f(sy)})'
+
+
+def flat(x0, y0, z):
+    sx, sy = iso(x0, y0, z)
+    return f'matrix(0.9 0.45 -0.9 0.45 {f(sx)} {f(sy)})'
 
 
 def dashed(points, cased=False):
@@ -91,125 +108,156 @@ def dashed(points, cased=False):
 
 
 # ================================================================ layout (world units)
-# the phone: the client's app, light body, standing upright at the back
-PX, PY, PW, PH, PR, PD = 96, 0, 196, 392, 30, 16
+# the phone: the customer's app, light body, standing upright; its face in the plane y=PY
+PX, PY, PW, PH, PR, PD = 96, 0, 196, 372, 30, 16
 PZ = PH
-# the bank card: the hub's object, solid blue, standing on its long edge in front
-CW, CH, CR, CD = 340, 214, 20, 12   # a real card's 1.59:1, larger so the hero object fills the frame
-CX, CY = -172, 116
-K = CW / 292                        # the card's printed detail is laid out at 292 wide, then scaled
-CZ = CH
+# the bank card: the hub's object, solid blue, standing on its long edge in front of the app, to the left
+CW, CH, CR, CD = 206, 130, 13, 9      # a real card's 1.59:1, at the family scale (about the phone's width)
+CX, CY = -40, 124
+K = CW / 292                          # the card's printed detail is laid out at 292 wide, then scaled
+# the customer: a client pawn standing at the app's right, reaching for it
+MX, MY = 332, -12
 
-# ================================================================ floor (drawn first; sized to the objects)
-FX0, FY0, FX1, FY1 = -210, -50, 330, 156
+# ================================================================ floor: healthtech's, the family standard
+FX0, FY0, FX1, FY1 = -180, -150, 400, 210
 fx, fy = iso(FX0, FY0)
 FW, FH = FX1 - FX0, FY1 - FY0
 track([iso(FX0, FY0), iso(FX1, FY0), iso(FX1, FY1), iso(FX0, FY1)])
-INS = 36
+INS = 45
 out.append('<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->')
 out.append(
     f'<g transform="matrix(0.9 0.45 -0.9 0.45 {f(fx)} {f(fy)})">'
     f'<rect width="{FW}" height="{FH}" fill="url(#fintech-dots)"/>'
-    f'<rect width="{FW}" height="{FH}" fill="none" stroke="{B500}" stroke-width="1.2" stroke-dasharray="6 5" {NS}/>'
+    f'<rect width="{FW}" height="{FH}" fill="none" stroke="{B500}" stroke-width="1.8" stroke-dasharray="10 8"/>'
     f'<rect x="{INS}" y="{INS}" width="{FW - 2 * INS}" height="{FH - 2 * INS}" fill="{B500}" fill-opacity="0.07"/></g>'
 )
 
-# ================================================================ the phone
-out.append('<!-- The app: a light phone standing upright, its screen saying what happened and what to do next -->')
+# ================================================================ the phone, upright
+out.append('<!-- The app: a light phone standing upright, its screen saying what happened and what to try next -->')
 upright_slab(PX, PY, PZ, PW, PH, PR, PD, B100, B200, B500)
-g = [f'<g transform="{face(PX, PY, PZ)}">']
-g.append(f'<rect width="{PW}" height="{PH}" rx="{PR}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6" {NS}/>')
-SX, SYT, SW, SH = 13, 38, PW - 26, PH - 51
-g.append(f'<rect x="{SX}" y="{SYT}" width="{SW}" height="{SH}" rx="18" fill="{B50}" stroke="{B500}" stroke-width="1.2" {NS}/>')
-g.append(f'<rect x="{PW/2-22}" y="17" width="44" height="7" rx="3.5" fill="{B200}"/>')
-# header: the payment, with a small copy of the card beside its amount
-MC = (28, 52, 60, 40)  # mini card x, y, w, h
-CHIP = (MC[0] + 7, MC[1] + 8, 15, 11)
+g = [f'<g transform="{upright(PX, PY, PZ)}">']
+g.append(f'<rect width="{PW}" height="{PH}" rx="{PR}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
+SX, SYT, SW, SH = 13, 34, PW - 26, PH - 47
+g.append(f'<rect x="{SX}" y="{SYT}" width="{SW}" height="{SH}" rx="18" fill="{B50}" stroke="{B500}" stroke-width="1.2"/>')
+g.append(f'<rect x="{PW/2-22}" y="15" width="44" height="7" rx="3.5" fill="{B200}"/>')
+# header: the payment, a small copy of the card beside its amount
+MC = (28, 50, 58, 38)
+CHIP = (MC[0] + 8, MC[1] + 8, 15, 11)
 g.append(f'<rect x="{MC[0]}" y="{MC[1]}" width="{MC[2]}" height="{MC[3]}" rx="6" fill="{B500}"/>'
          f'<rect x="{CHIP[0]}" y="{CHIP[1]}" width="{CHIP[2]}" height="{CHIP[3]}" rx="2.5" fill="{B100}"/>'
-         f'<rect x="{MC[0]+8}" y="{MC[1]+26}" width="44" height="5" rx="2.5" fill="{WHITE}"/>')
-g.append(f'<rect x="96" y="59" width="70" height="11" rx="5.5" fill="{B500}"/>'
-         f'<rect x="96" y="77" width="44" height="7" rx="3.5" fill="{B300}"/>')
-# status track: two ticked steps, then the one that stopped (the loudest mark after the button),
-# its reason hanging from it, and the step it has not reached yet, faded
+         f'<rect x="{MC[0]+8}" y="{MC[1]+25}" width="40" height="5" rx="2.5" fill="{WHITE}"/>')
+g.append(f'<rect x="98" y="57" width="70" height="11" rx="5.5" fill="{B500}"/>'
+         f'<rect x="98" y="74" width="44" height="7" rx="3.5" fill="{B300}"/>')
+# the payment's track: two steps done, the one that stopped with its reason, and the retry step in lime
 TX = 44
-steps = [124, 164, 204]
-SR = 13                       # the stop disc, 1.3x the tick discs
-NEXT = 300                    # the step not reached
-BY = PH - 64                  # the way forward: one lime button
-g.append(f'<path d="M{TX} {steps[0]} V{steps[2]}" stroke="{B500}" stroke-width="2" {NS}/>')
-g.append(f'<path d="M{TX} {steps[2]+SR+3} V{NEXT-10-3} M{TX} {NEXT+10+3} V{BY-2}" stroke="{B300}" stroke-width="2" stroke-dasharray="4 4" {NS}/>')
-for sy in steps[:2]:
+S1, S2, S3 = 120, 156, 194
+RY, RH = 272, 40                     # the retry step
+DONE = 330                           # the last step, not reached yet
+g.append(f'<path d="M{TX} {S1} V{S3}" stroke="{B500}" stroke-width="2"/>')
+g.append(f'<path d="M{TX} {S3 + 15} V{DONE}" stroke="{B300}" stroke-width="2" stroke-dasharray="4 4"/>')
+for sy in (S1, S2):
     g.append(f'<circle cx="{TX}" cy="{sy}" r="10" fill="{B500}"/>'
-             f'<path d="M{TX-4.5} {sy} l3.2 3.4 l6 -6.6" fill="none" stroke="{WHITE}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" {NS}/>')
-    g.append(f'<rect x="64" y="{sy-8}" width="72" height="7" rx="3.5" fill="{B300}"/>'
-             f'<rect x="64" y="{sy+3}" width="44" height="6" rx="3" fill="{B200}"/>')
-sy = steps[2]
-g.append(f'<circle cx="{TX}" cy="{sy}" r="{SR}" fill="{B700}"/>'
-         f'<path d="M{TX} {sy-6.5} v6.5" stroke="{WHITE}" stroke-width="3" stroke-linecap="round" {NS}/>'
-         f'<circle cx="{TX}" cy="{sy+5.6}" r="1.9" fill="{WHITE}"/>')
-g.append(f'<rect x="64" y="{sy-3.5}" width="72" height="7" rx="3.5" fill="{B300}"/>')
+             f'<path d="M{TX-4.6} {sy+0.2} l3.2 3.4 l6.2 -6.6" fill="none" stroke="{WHITE}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
+             f'<rect x="64" y="{sy-3.5}" width="{86 if sy == S1 else 70}" height="7" rx="3.5" fill="{B300}"/>')
+SR = 13
+g.append(f'<circle cx="{TX}" cy="{S3}" r="{SR}" fill="{B700}"/>'
+         f'<path d="M{TX} {S3-6.5} v6.5" stroke="{WHITE}" stroke-width="3" stroke-linecap="round"/>'
+         f'<circle cx="{TX}" cy="{S3+5.6}" r="1.9" fill="{WHITE}"/>')
+g.append(f'<rect x="64" y="{S3-3.5}" width="72" height="7" rx="3.5" fill="{B300}"/>')
 # the reason, in a white note hanging from the stopped step, its tail pointing at the stop
-NX, NY, NW, NH = 64, sy + 13, 106, 50
+NX, NY, NW, NH = 64, S3 + 14, 106, 50
 note = (f'M{NX+16} {NY} H{NX+NW-10} a10 10 0 0 1 10 10 V{NY+NH-10} a10 10 0 0 1 -10 10 H{NX+10} '
-        f'a10 10 0 0 1 -10 -10 V{NY+14} L{TX+SR+2} {sy+5} Z')
-g.append(f'<path d="{note}" fill="{WHITE}" stroke="{B500}" stroke-width="1.2" stroke-linejoin="round" {NS}/>'
+        f'a10 10 0 0 1 -10 -10 V{NY+14} L{TX+SR+2} {S3+5} Z')
+g.append(f'<path d="{note}" fill="{WHITE}" stroke="{B500}" stroke-width="1.2" stroke-linejoin="round"/>'
          f'<rect x="{NX+12}" y="{NY+12}" width="80" height="6" rx="3" fill="{B300}"/>'
          f'<rect x="{NX+12}" y="{NY+24}" width="64" height="6" rx="3" fill="{B200}"/>'
          f'<rect x="{NX+12}" y="{NY+36}" width="40" height="6" rx="3" fill="{B200}"/>')
-# the step not reached: a faded ring and faded bars
-g.append(f'<circle cx="{TX}" cy="{NEXT}" r="10" fill="{B50}" stroke="{B300}" stroke-width="2" {NS}/>'
-         f'<rect x="64" y="{NEXT-8}" width="72" height="7" rx="3.5" fill="{B200}"/>'
-         f'<rect x="64" y="{NEXT+3}" width="44" height="6" rx="3" fill="{B100}"/>')
-# the way forward: one lime button
-g.append(f'<rect x="26" y="{BY}" width="{PW-52}" height="38" rx="19" fill="{LIME}" stroke="{LIMED}" stroke-width="1.2" {NS}/>'
-         f'<rect x="46" y="{BY+15}" width="60" height="8" rx="4" fill="{INK}"/>'
-         f'<path d="M{PW-50} {BY+11.5} l7.5 7.5 l-7.5 7.5" fill="none" stroke="{INK}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" {NS}/>')
+# the way forward: the retry step itself, lit in lime, its node a retry arrow on the track
+g.append(f'<rect x="24" y="{RY}" width="{PW-48}" height="{RH}" rx="12" fill="{LIME}" stroke="{LIMED}" stroke-width="1.2"/>')
+cy = RY + RH / 2
+import math as _m
+_r = 6.2
+_p = lambda deg: (TX + _r * _m.cos(_m.radians(deg)), cy + _r * _m.sin(_m.radians(deg)))
+_a0, _a1 = _p(-60), _p(220)           # a clockwise arc with its gap at the top
+_t = (-_m.sin(_m.radians(220)), _m.cos(_m.radians(220)))   # the clockwise tangent at the arc's end
+_n = (-_t[1], _t[0])
+_tip = (_a1[0] + _t[0] * 4.2, _a1[1] + _t[1] * 4.2)
+_hb = [(_a1[0] + _n[0] * 3.6 - _t[0] * 0.6, _a1[1] + _n[1] * 3.6 - _t[1] * 0.6),
+       (_a1[0] - _n[0] * 3.6 - _t[0] * 0.6, _a1[1] - _n[1] * 3.6 - _t[1] * 0.6)]
+RET = (f'<circle cx="{TX}" cy="{cy}" r="12" fill="{WHITE}"/>'
+       f'<path d="M{f(_a0[0])} {f(_a0[1])} A{_r} {_r} 0 1 1 {f(_a1[0])} {f(_a1[1])}" fill="none" stroke="{INK}" stroke-width="2.2" stroke-linecap="round"/>'
+       f'<path d="M{f(_tip[0])} {f(_tip[1])} L{f(_hb[0][0])} {f(_hb[0][1])} L{f(_hb[1][0])} {f(_hb[1][1])} Z" fill="{INK}" stroke="{INK}" stroke-width="1" stroke-linejoin="round"/>')
+g.append(RET + f'<rect x="64" y="{cy-3.5}" width="72" height="7" rx="3.5" fill="{INK}"/>')
+# the last step, paid, not reached yet: a faded ring and faded bars
+g.append(f'<circle cx="{TX}" cy="{DONE}" r="10" fill="{B50}" stroke="{B300}" stroke-width="2"/>'
+         f'<rect x="64" y="{DONE-3.5}" width="64" height="7" rx="3.5" fill="{B200}"/>')
 g.append('</g>')
 out.extend(g)
+RETRY_RIGHT = (PX + PW - 24, PY, PZ - (RY + RH / 2))   # world point: the retry step's right end
 
-# ================================================================ the payment: the card to its row in the app
-MCX = PX + CHIP[0] + CHIP[2] / 2       # world x of the mini card's chip
-MCZ = PZ - (CHIP[1] + CHIP[3] / 2)      # world z of the same point
-
-# ================================================================ the bank card (hero, solid blue)
-out.append('<!-- The bank card from the hub: solid blue, standing on its long edge in front -->')
-upright_slab(CX, CY, CZ, CW, CH, CR, CD, B600, B700, B600)
-g = [f'<g transform="{face(CX, CY, CZ)}">']
-g.append(f'<rect width="{CW}" height="{CH}" rx="{CR}" fill="{B500}" stroke="{B600}" stroke-width="1.6" {NS}/>')
+# ================================================================ the bank card (hero, solid blue), in front
+out.append('<!-- The bank card from the hub: solid blue, standing on its long edge in front of the app -->')
+upright_slab(CX, CY, CH, CW, CH, CR, CD, B600, B700, B600)
+g = [f'<g transform="{upright(CX, CY, CH)}">']
+g.append(f'<rect width="{CW}" height="{CH}" rx="{CR}" fill="{B500}" stroke="{B600}" stroke-width="1.6"/>')
 g.append(f'<g transform="scale({K:.4f})">')
-g.append(f'<rect x="28" y="42" width="46" height="35" rx="7" fill="{B100}"/>'
-         f'<path d="M28 59.5 H74 M51 42 V77" stroke="{B300}" stroke-width="{1.2/K:.2f}" {NS}/>')
-for i, rad in enumerate((8, 15, 22)):
-    g.append(f'<path d="M{292-62 + rad*0.55:.1f} {59.5 - rad} a{rad} {rad} 0 0 1 0 {2*rad}" fill="none" stroke="{WHITE}" '
-             f'stroke-width="{2.6/K:.2f}" stroke-linecap="round" stroke-opacity="{0.95 - i*0.22:.2f}" {NS}/>')
-g.append(f'<rect x="28" y="104" width="204" height="12" rx="6" fill="{WHITE}"/>'
-         f'<rect x="28" y="131" width="82" height="8" rx="4" fill="{WHITE}" fill-opacity="0.55"/>'
-         f'<rect x="{292-76}" y="129" width="48" height="12" rx="6" fill="{B300}"/>')
-g.append('</g>')
-g.append('</g>')
+g.append(f'<rect x="28" y="38" width="50" height="38" rx="8" fill="{B100}"/>'
+         f'<path d="M28 57 H78 M53 38 V76" stroke="{B300}" stroke-width="{1.2/K:.2f}"/>')
+for i, rad in enumerate((9, 17, 25)):
+    g.append(f'<path d="M{292-66 + rad*0.55:.1f} {57 - rad} a{rad} {rad} 0 0 1 0 {2*rad}" fill="none" stroke="{WHITE}" '
+             f'stroke-width="{2.6/K:.2f}" stroke-linecap="round" stroke-opacity="{0.95 - i*0.22:.2f}"/>')
+g.append(f'<rect x="28" y="108" width="204" height="14" rx="7" fill="{WHITE}"/>'
+         f'<rect x="28" y="140" width="86" height="10" rx="5" fill="{WHITE}" fill-opacity="0.55"/>'
+         f'<rect x="{292-80}" y="138" width="52" height="14" rx="7" fill="{B300}"/>')
+g.append('</g></g>')
 out.extend(g)
 
-# the payment line: from the card's top edge, straight up, then back along -y into the app's header
-a = iso(MCX, CY - CD / 2, CZ)
-b = iso(MCX, CY - CD / 2, MCZ)
-c = iso(MCX, PY, MCZ)
-out.append('<!-- The payment: a dashed line from the card to its row in the app -->')
-dashed([a, b, c], cased=True)
+# ================================================================ the payment line: card to its row in the app
+mx = PX + CHIP[0] + CHIP[2] / 2       # world x of the mini card's chip
+mz = PZ - (CHIP[1] + CHIP[3] / 2)     # world z of the same point
+cx_line = mx                          # rises straight out of the card's top edge
+a = iso(cx_line, CY - CD / 2, CH)
+b = iso(cx_line, CY - CD / 2, mz)
+b2 = iso(mx, CY - CD / 2, mz)
+c = iso(mx, PY, mz)
+out.append('<!-- The payment: a dashed line out of the card, up and back into its row in the app -->')
+pts_line = [a, b, b2, c] if abs(mx - cx_line) > 0.5 else [a, b, c]
+dashed(pts_line, cased=True)
 for p in (a, c):
     out.append(f'<circle cx="{f(p[0])}" cy="{f(p[1])}" r="3.4" fill="{B500}" stroke="{WHITE}" stroke-width="1.5"/>')
-track([a, b, c])
+track(pts_line)
+
+# ================================================================ the customer: a client pawn reaching for the retry
+bx, by = iso(MX, MY)
+body = (f'M{f(bx-18)} {f(by)} V{f(by-42)} A18 18 0 0 1 {f(bx+18)} {f(by-42)} V{f(by)} '
+        f'A18 8.5 0 0 1 {f(bx-18)} {f(by)} Z')
+out.append('<!-- The customer: a client figure beside the app, reaching for the retry step -->')
+sh = (bx - 8, by - 34)
+tgt = iso(*RETRY_RIGHT)
+dx, dy = tgt[0] - sh[0], tgt[1] - sh[1]
+n = math.hypot(dx, dy)
+L = 34
+hand = (sh[0] + dx / n * L, sh[1] + dy / n * L)
+out.append(f'<path d="{body}" fill="{WHITE}" stroke="{B500}" stroke-width="1.6" stroke-linejoin="round"/>')
+out.append(f'<circle cx="{f(bx)}" cy="{f(by-78)}" r="13" fill="{WHITE}" stroke="{B500}" stroke-width="1.6"/>')
+out.append(f'<mask id="fintech-arm" maskUnits="userSpaceOnUse" x="{f(bx-200)}" y="{f(by-200)}" width="400" height="400">'
+           f'<rect x="{f(bx-200)}" y="{f(by-200)}" width="400" height="400" fill="{WHITE}"/><path d="{body}" fill="#000000"/></mask>'
+           f'<g mask="url(#fintech-arm)"><path d="M{f(sh[0])} {f(sh[1])} L{f(hand[0])} {f(hand[1])}" stroke="{B500}" stroke-width="8.5" stroke-linecap="round"/>'
+           f'<circle cx="{f(hand[0])}" cy="{f(hand[1])}" r="6.8" fill="{B500}"/></g>'
+           f'<path d="M{f(sh[0])} {f(sh[1])} L{f(hand[0])} {f(hand[1])}" stroke="{WHITE}" stroke-width="5.3" stroke-linecap="round"/>'
+           f'<circle cx="{f(hand[0])}" cy="{f(hand[1])}" r="5.2" fill="{WHITE}"/>')
+track([(bx - 18, by + 9), (bx + 18, by - 91), (hand[0] - 7, hand[1] - 7)])
 
 svg_body = "\n".join(out)
 xs = [p[0] for p in pts_all]
 ys = [p[1] for p in pts_all]
 pad = 3
 vb = (math.floor(min(xs) - pad), math.floor(min(ys) - pad), math.ceil(max(xs) - min(xs) + 2 * pad), math.ceil(max(ys) - min(ys) + 2 * pad))
-ALT = ("Isometric illustration for FinTech product design. A solid blue bank card with a chip and a contactless mark "
-       "stands on its edge on a dotted floor. A dashed line runs from the card up and into a light phone standing beside it, "
-       "ending on the chip of the same card at the head of the screen. Below it a payment's steps: two ticked, the third "
-       "stopped with a solid warning mark and a note hanging from it giving the reason, a faded step not yet reached, and "
-       "one lime button with an arrow, the way forward.")
+ALT = ("Isometric illustration for FinTech product design. A solid blue bank card with a chip and a contactless "
+       "mark stands on its edge on a dotted floor. A dashed line runs from the card up and into a light phone standing "
+       "behind it, ending on the same card at the head of the screen. Below it the payment's steps: two ticked, the "
+       "third stopped with a solid warning mark and a note giving the reason, then the retry step lit in lime and a "
+       "faded last step not yet reached. A customer stands beside the phone, reaching for it.")
 svg = (
     f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb[0]} {vb[1]} {vb[2]} {vb[3]}" role="img" aria-label="{ALT}">\n'
     f'<defs><pattern id="fintech-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="{B500}" fill-opacity="0.38"/></pattern></defs>\n'

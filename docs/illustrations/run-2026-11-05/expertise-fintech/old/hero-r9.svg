@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-333 -349 678 571" role="img" aria-label="Isometric illustration for FinTech product design. A solid blue bank card with a chip and a contactless mark stands on its edge on a dotted floor. A dashed line runs from the card up and into a light phone standing beside it, ending on the chip of the same card at the head of the screen. Below it a payment's steps: two ticked, the third stopped with a solid warning mark and a note hanging from it giving the reason, a faded step not yet reached, and one lime button with an arrow, the way forward.">
+<defs><pattern id="fintech-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="#0048FF" fill-opacity="0.38"/></pattern></defs>
+<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->
+<g transform="matrix(0.9 0.45 -0.9 0.45 -144 -117)"><rect width="540" height="206" fill="url(#fintech-dots)"/><rect width="540" height="206" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="6 5" /><rect x="36" y="36" width="468" height="134" fill="#0048FF" fill-opacity="0.07"/></g>
+<!-- The app: a light phone standing upright, its screen saying what happened and what to do next -->
+<polygon points="86.4,-318.8 86.7,-323.3 87.7,-327.4 89.3,-330.9 91.6,-333.9 94.3,-336.1 108.7,-343.3 111.9,-344.7 115.5,-345.4 119.5,-345.2 123.6,-344.2 127.8,-342.5 250.2,-281.3 254.4,-278.8 258.5,-275.7 262.5,-271.9 266.1,-267.6 269.3,-263 272,-258 274.3,-252.9 275.9,-247.7 276.9,-242.7 277.2,-237.8 277.2,94.2 276.9,98.7 275.9,102.8 274.3,106.3 272,109.3 269.3,111.5 254.9,118.7 251.7,120.1 248.1,120.8 244.1,120.6 240,119.6 235.8,117.9 113.4,56.7 109.2,54.2 105.1,51.1 101.1,47.3 97.5,43 94.3,38.4 91.6,33.4 89.3,28.3 87.7,23.1 86.7,18.1 86.4,13.2" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="235.8,-274.1 250.2,-281.3 254.4,-278.8 258.5,-275.7 262.5,-271.9 266.1,-267.6 269.3,-263 272,-258 274.3,-252.9 275.9,-247.7 276.9,-242.7 277.2,-237.8 277.2,94.2 276.9,98.7 275.9,102.8 274.3,106.3 272,109.3 269.3,111.5 254.9,118.7 251.7,120.1 248.1,120.8 244.1,120.6 240,119.6 235.8,117.9" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 0 1 86.4 -348.8)">
+<rect width="196" height="392" rx="30" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" />
+<rect x="13" y="38" width="170" height="341" rx="18" fill="#EEF2FF" stroke="#0048FF" stroke-width="1.2" />
+<rect x="76.0" y="17" width="44" height="7" rx="3.5" fill="#B8C8FF"/>
+<rect x="28" y="52" width="60" height="40" rx="6" fill="#0048FF"/><rect x="35" y="60" width="15" height="11" rx="2.5" fill="#DBE4FF"/><rect x="36" y="78" width="44" height="5" rx="2.5" fill="#FFFFFF"/>
+<rect x="96" y="59" width="70" height="11" rx="5.5" fill="#0048FF"/><rect x="96" y="77" width="44" height="7" rx="3.5" fill="#8AA5FF"/>
+<path d="M44 124 V204" stroke="#0048FF" stroke-width="2" />
+<path d="M44 220 V287 M44 313 V326" stroke="#8AA5FF" stroke-width="2" stroke-dasharray="4 4" />
+<circle cx="44" cy="124" r="10" fill="#0048FF"/><path d="M39.5 124 l3.2 3.4 l6 -6.6" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="64" y="116" width="72" height="7" rx="3.5" fill="#8AA5FF"/><rect x="64" y="127" width="44" height="6" rx="3" fill="#B8C8FF"/>
+<circle cx="44" cy="164" r="10" fill="#0048FF"/><path d="M39.5 164 l3.2 3.4 l6 -6.6" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+<rect x="64" y="156" width="72" height="7" rx="3.5" fill="#8AA5FF"/><rect x="64" y="167" width="44" height="6" rx="3" fill="#B8C8FF"/>
+<circle cx="44" cy="204" r="13" fill="#0031B0"/><path d="M44 197.5 v6.5" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" /><circle cx="44" cy="209.6" r="1.9" fill="#FFFFFF"/>
+<rect x="64" y="200.5" width="72" height="7" rx="3.5" fill="#8AA5FF"/>
+<path d="M80 217 H160 a10 10 0 0 1 10 10 V257 a10 10 0 0 1 -10 10 H74 a10 10 0 0 1 -10 -10 V231 L59 209 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2" stroke-linejoin="round" /><rect x="76" y="229" width="80" height="6" rx="3" fill="#8AA5FF"/><rect x="76" y="241" width="64" height="6" rx="3" fill="#B8C8FF"/><rect x="76" y="253" width="40" height="6" rx="3" fill="#B8C8FF"/>
+<circle cx="44" cy="300" r="10" fill="#EEF2FF" stroke="#8AA5FF" stroke-width="2" /><rect x="64" y="292" width="72" height="7" rx="3.5" fill="#B8C8FF"/><rect x="64" y="303" width="44" height="6" rx="3" fill="#DBE4FF"/>
+<rect x="26" y="328" width="144" height="38" rx="19" fill="#D7F04A" stroke="#A1B71F" stroke-width="1.2" /><rect x="46" y="343" width="60" height="8" rx="4" fill="#1B1B18"/><path d="M146 339.5 l7.5 7.5 l-7.5 7.5" fill="none" stroke="#1B1B18" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+</g>
+<!-- The bank card from the hub: solid blue, standing on its long edge in front -->
+<polygon points="-259.2,-219.2 -259,-222.2 -258.3,-224.9 -257.2,-227.3 -255.8,-229.2 -253.9,-230.7 -243.1,-236.1 -241,-237.1 -238.6,-237.5 -236,-237.4 -233.2,-236.8 -230.4,-235.6 39.6,-100.6 42.4,-99 45.2,-96.8 47.8,-94.3 50.2,-91.5 52.3,-88.4 54.2,-85.1 55.6,-81.7 56.7,-78.2 57.4,-74.8 57.6,-71.6 57.6,102.4 57.4,105.4 56.7,108.1 55.6,110.5 54.2,112.4 52.3,113.9 41.5,119.3 39.4,120.3 37,120.7 34.4,120.6 31.6,120 28.8,118.8 -241.2,-16.2 -244,-17.9 -246.8,-20 -249.4,-22.5 -251.8,-25.3 -253.9,-28.4 -255.8,-31.7 -257.2,-35.1 -258.3,-38.6 -259,-42 -259.2,-45.2" fill="#003EE0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="28.8,-95.2 39.6,-100.6 42.4,-99 45.2,-96.8 47.8,-94.3 50.2,-91.5 52.3,-88.4 54.2,-85.1 55.6,-81.7 56.7,-78.2 57.4,-74.8 57.6,-71.6 57.6,102.4 57.4,105.4 56.7,108.1 55.6,110.5 54.2,112.4 52.3,113.9 41.5,119.3 39.4,120.3 37,120.7 34.4,120.6 31.6,120 28.8,118.8" fill="#0031B0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 0 1 -259.2 -239.2)">
+<rect width="340" height="214" rx="20" fill="#0048FF" stroke="#003EE0" stroke-width="1.6" />
+<g transform="scale(1.1644)">
+<rect x="28" y="42" width="46" height="35" rx="7" fill="#DBE4FF"/><path d="M28 59.5 H74 M51 42 V77" stroke="#8AA5FF" stroke-width="1.03" />
+<path d="M234.4 51.5 a8 8 0 0 1 0 16" fill="none" stroke="#FFFFFF" stroke-width="2.23" stroke-linecap="round" stroke-opacity="0.95" />
+<path d="M238.2 44.5 a15 15 0 0 1 0 30" fill="none" stroke="#FFFFFF" stroke-width="2.23" stroke-linecap="round" stroke-opacity="0.73" />
+<path d="M242.1 37.5 a22 22 0 0 1 0 44" fill="none" stroke="#FFFFFF" stroke-width="2.23" stroke-linecap="round" stroke-opacity="0.51" />
+<rect x="28" y="104" width="204" height="12" rx="6" fill="#FFFFFF"/><rect x="28" y="131" width="82" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.55"/><rect x="216" y="129" width="48" height="12" rx="6" fill="#8AA5FF"/>
+</g>
+</g>
+<!-- The payment: a dashed line from the card to its row in the app -->
+<path d="M25.7 -102.2 L25.7 -214.7 L124.7 -264.2" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.7 -102.2 L25.7 -214.7 L124.7 -264.2" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<circle cx="25.7" cy="-102.2" r="3.4" fill="#0048FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="124.7" cy="-264.2" r="3.4" fill="#0048FF" stroke="#FFFFFF" stroke-width="1.5"/>
+</svg>

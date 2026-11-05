@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-551 -118 975 505" role="img" aria-label="Isometric illustration for FinTech product design. A solid blue bank card with a chip and a contactless mark stands on its edge on a dotted floor, behind a light phone lying face up. A dashed line runs out of the card and drops onto the same card at the head of the phone's screen. Below it the payment's steps: two ticked, the third stopped with a solid warning mark and a note giving the reason, and the next step, retry, lit in lime. A customer stands at the foot of the phone, reaching for it.">
+<defs><pattern id="fintech-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.6" fill="#0048FF" fill-opacity="0.38"/></pattern></defs>
+<!-- Floor: dotted, with a dashed edge and a soft inset under the objects -->
+<g transform="matrix(0.9 0.45 -0.9 0.45 27 -99.9)"><rect width="438" height="638" fill="url(#fintech-dots)"/><rect width="438" height="638" fill="none" stroke="#0048FF" stroke-width="1.8" stroke-dasharray="10 8"/><rect x="45" y="45" width="348" height="548" fill="#0048FF" fill-opacity="0.07"/></g>
+<!-- The bank card from the hub: solid blue, standing on its long edge behind the app -->
+<polygon points="95.4,-101.7 95.5,-103.7 96,-105.4 96.7,-107 97.6,-108.2 98.8,-109.2 106.9,-113.2 108.3,-113.9 109.9,-114.1 111.6,-114.1 113.4,-113.7 115.2,-112.9 277.2,-31.9 279,-30.8 280.8,-29.5 282.5,-27.8 284.1,-26 285.5,-24 286.7,-21.8 287.6,-19.6 288.3,-17.4 288.8,-15.2 288.9,-13.1 288.9,91 288.8,92.9 288.3,94.7 287.6,96.2 286.7,97.5 285.5,98.4 277.4,102.5 276,103.1 274.4,103.4 272.7,103.3 270.9,102.9 269.1,102.2 107.1,21.1 105.3,20.1 103.5,18.7 101.8,17.1 100.2,15.2 98.8,13.2 97.6,11.1 96.7,8.8 96,6.6 95.5,4.4 95.4,2.3" fill="#003EE0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="269.1,-27.9 277.2,-31.9 279,-30.8 280.8,-29.5 282.5,-27.8 284.1,-26 285.5,-24 286.7,-21.8 287.6,-19.6 288.3,-17.4 288.8,-15.2 288.9,-13.1 288.9,91 288.8,92.9 288.3,94.7 287.6,96.2 286.7,97.5 285.5,98.4 277.4,102.5 276,103.1 274.4,103.4 272.7,103.3 270.9,102.9 269.1,102.2" fill="#0031B0" stroke="#003EE0" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 0 1 95.4 -114.7)">
+<rect width="206" height="130" rx="13" fill="#0048FF" stroke="#003EE0" stroke-width="1.6"/>
+<g transform="scale(0.7055)">
+<rect x="28" y="38" width="50" height="38" rx="8" fill="#DBE4FF"/><path d="M28 57 H78 M53 38 V76" stroke="#8AA5FF" stroke-width="1.70"/>
+<path d="M230.9 48 a9 9 0 0 1 0 18" fill="none" stroke="#FFFFFF" stroke-width="3.69" stroke-linecap="round" stroke-opacity="0.95"/>
+<path d="M235.3 40 a17 17 0 0 1 0 34" fill="none" stroke="#FFFFFF" stroke-width="3.69" stroke-linecap="round" stroke-opacity="0.73"/>
+<path d="M239.8 32 a25 25 0 0 1 0 50" fill="none" stroke="#FFFFFF" stroke-width="3.69" stroke-linecap="round" stroke-opacity="0.51"/>
+<rect x="28" y="108" width="204" height="14" rx="7" fill="#FFFFFF"/><rect x="28" y="140" width="86" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.55"/><rect x="212" y="138" width="52" height="14" rx="7" fill="#8AA5FF"/>
+</g></g>
+<!-- The app: a light phone lying face up, its screen saying what happened and what to try next -->
+<polygon points="-319,153.4 -318.5,150.4 -317.1,147.5 -314.8,144.7 -311.7,142.2 -307.8,139.9 -27,-0.5 -22.4,-2.5 -17.3,-4 -11.8,-5.2 -6,-5.9 0,-6.1 6,-5.9 11.8,-5.2 17.3,-4 22.4,-2.5 27,-0.5 149.4,60.7 153.3,63 156.4,65.5 158.7,68.3 160.1,71.2 160.6,74.2 160.6,88.2 160.1,91.2 158.7,94.1 156.4,96.9 153.3,99.4 149.4,101.7 -131.4,242.1 -136,244.1 -141.1,245.6 -146.6,246.8 -152.4,247.5 -158.4,247.7 -164.4,247.5 -170.2,246.8 -175.7,245.6 -180.8,244.1 -185.4,242.1 -307.8,180.9 -311.7,178.6 -314.8,176.1 -317.1,173.3 -318.5,170.4 -319,167.4" fill="#DBE4FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<polygon points="-185.4,228.1 149.4,60.7 153.3,63 156.4,65.5 158.7,68.3 160.1,71.2 160.6,74.2 160.6,88.2 160.1,91.2 158.7,94.1 156.4,96.9 153.3,99.4 149.4,101.7 -131.4,242.1 -136,244.1 -141.1,245.6 -146.6,246.8 -152.4,247.5 -158.4,247.7 -164.4,247.5 -170.2,246.8 -175.7,245.6 -180.8,244.1 -185.4,242.1" fill="#B8C8FF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<g transform="matrix(0.9 0.45 -0.9 0.45 0 -14)">
+<rect width="196" height="372" rx="30" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
+<rect x="13" y="34" width="170" height="325" rx="18" fill="#EEF2FF" stroke="#0048FF" stroke-width="1.2"/>
+<rect x="76.0" y="15" width="44" height="7" rx="3.5" fill="#B8C8FF"/>
+<rect x="28" y="48" width="58" height="38" rx="6" fill="#0048FF"/><rect x="36" y="56" width="15" height="11" rx="2.5" fill="#DBE4FF"/><rect x="36" y="73" width="40" height="5" rx="2.5" fill="#FFFFFF"/>
+<rect x="98" y="55" width="70" height="11" rx="5.5" fill="#0048FF"/><rect x="98" y="72" width="44" height="7" rx="3.5" fill="#8AA5FF"/>
+<path d="M44 118 V196" stroke="#0048FF" stroke-width="2"/>
+<path d="M44 210 V290" stroke="#8AA5FF" stroke-width="2" stroke-dasharray="4 4"/>
+<circle cx="44" cy="118" r="10" fill="#0048FF"/><path d="M39.4 118.2 l3.2 3.4 l6.2 -6.6" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="64" y="114.5" width="86" height="7" rx="3.5" fill="#8AA5FF"/>
+<circle cx="44" cy="156" r="10" fill="#0048FF"/><path d="M39.4 156.2 l3.2 3.4 l6.2 -6.6" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="64" y="152.5" width="70" height="7" rx="3.5" fill="#8AA5FF"/>
+<circle cx="44" cy="196" r="13" fill="#0031B0"/><path d="M44 189.5 v6.5" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="201.6" r="1.9" fill="#FFFFFF"/>
+<rect x="64" y="192.5" width="72" height="7" rx="3.5" fill="#8AA5FF"/>
+<path d="M80 210 H160 a10 10 0 0 1 10 10 V250 a10 10 0 0 1 -10 10 H74 a10 10 0 0 1 -10 -10 V224 L59 201 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.2" stroke-linejoin="round"/><rect x="76" y="222" width="80" height="6" rx="3" fill="#8AA5FF"/><rect x="76" y="234" width="64" height="6" rx="3" fill="#B8C8FF"/><rect x="76" y="246" width="40" height="6" rx="3" fill="#B8C8FF"/>
+<rect x="24" y="290" width="148" height="48" rx="14" fill="#D7F04A" stroke="#A1B71F" stroke-width="1.2"/>
+<circle cx="44" cy="314.0" r="11" fill="#FFFFFF" stroke="#1B1B18" stroke-width="1.2"/><path d="M49.2 311.6 A5.8 5.8 0 1 0 49.4 316.6" fill="none" stroke="#1B1B18" stroke-width="2" stroke-linecap="round"/><path d="M45.6 310.8 L49.6 311.8 L50.4 307.6" fill="none" stroke="#1B1B18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="66" y="310.0" width="76" height="8" rx="4" fill="#1B1B18"/>
+</g>
+<!-- The payment: a dashed line out of the card, dropping onto its row in the app -->
+<path d="M71.5 -42.6 L-16.2 1.2 L-16.2 33.2" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M71.5 -42.6 L-16.2 1.2 L-16.2 33.2" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
+<circle cx="71.5" cy="-42.6" r="3.4" fill="#0048FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<circle cx="-16.2" cy="33.2" r="3.4" fill="#0048FF" stroke="#FFFFFF" stroke-width="1.5"/>
+<!-- The customer: a client figure at the foot of the app, reaching for the retry step -->
+<path d="M-288 253.8 V211.8 A18 18 0 0 1 -252 211.8 V253.8 A18 8.5 0 0 1 -288 253.8 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
+<circle cx="-270" cy="175.8" r="13" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
+<mask id="fintech-arm" maskUnits="userSpaceOnUse" x="-470" y="53.8" width="400" height="400"><rect x="-470" y="53.8" width="400" height="400" fill="#FFFFFF"/><path d="M-288 253.8 V211.8 A18 18 0 0 1 -252 211.8 V253.8 A18 8.5 0 0 1 -288 253.8 Z" fill="#000000"/></mask><g mask="url(#fintech-arm)"><path d="M-264 223.8 L-237.2 210.4" stroke="#0048FF" stroke-width="8.5" stroke-linecap="round"/><circle cx="-237.2" cy="210.4" r="6.8" fill="#0048FF"/></g><path d="M-264 223.8 L-237.2 210.4" stroke="#FFFFFF" stroke-width="5.3" stroke-linecap="round"/><circle cx="-237.2" cy="210.4" r="5.2" fill="#FFFFFF"/>
+</svg>
