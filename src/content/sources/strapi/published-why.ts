@@ -5,6 +5,7 @@ import type { CmsHero, CmsHomeSection, CmsImage, CmsAction } from './home-types'
 import { mapUploadImage, type StrapiUploadFile } from './image';
 import { markdownToHtml, markdownInlineToHtml } from './markdown';
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
+import { richTextToPlainText } from './rich-text';
 import { WHY_QUERY } from './published-why-query';
 type Base = {
   __typename: string;
@@ -48,6 +49,9 @@ export function mapWhy(page: WhyRecord | null): WhyPageModel | null {
   if (!page) return null;
   const hero = mapHero(page.hero);
   if (!hero) throw Error('Why Tcules hero missing');
+  hero.stats = (page.hero.stats ?? [])
+    .filter((stat) => stat != null)
+    .map((stat) => ({ value: richTextToPlainText(stat.body), label: stat.label ?? '' }));
   const sections: WhySection[] = page.content.map((value, index) => {
     const s = value as Custom;
     const head = {
@@ -167,7 +171,7 @@ export function mapWhy(page: WhyRecord | null): WhyPageModel | null {
           );
           section.items = section.items.map((item) => ({
             ...item,
-            rating: ratings.get(item.id) ?? undefined,
+            rating: item.id ? (ratings.get(item.id) ?? undefined) : undefined,
           }));
         }
         return section;
