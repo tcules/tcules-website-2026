@@ -15,9 +15,7 @@
  *   components/index.d.ts                  the declarations, as documentation
  *   components/<Name>/README.md            the component's own doc comment + its props
  *   components/<Name>/<Name>.d.ts · spec.md
- *   components/<Name>/preview.html         its design/ SPECIMEN, compiled against window.Tcules —
- *                                         the proving ground is the preview, so there is no
- *                                         second set of hand-written stories to keep current
+ *   components/<Name>/preview.html         its standalone preview, compiled against window.Tcules
  *   tokens.json                            generated from src/styles/tokens (tokens.mjs)
  *   README.md                              .design-sync/conventions.md + a generated roster
  *   vocabulary.md                          docs/vocabulary.md
@@ -57,7 +55,6 @@ const BATCH_BYTES = 14 * 1024 * 1024;
 
 const rel = (p) => relative(ROOT, p);
 const sha = (buf) => createHash('sha256').update(buf).digest('hex');
-const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 const write = (path, data) => {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, data);
@@ -230,11 +227,9 @@ const docComment = (u) => {
 for (const u of cards) {
   const doc = docComment(u) || `${u.name} — a ${u.group.toLowerCase().replace(/s$/, '')} of the Tcules site.`;
   const specPath = join(ROOT, 'docs/specs', `${u.name}.md`);
-  const specimen = existsSync(join(ROOT, 'src/app/design', kebab(u.name), 'page.tsx'));
   let md = `# ${u.name}\n\n${doc}\n`;
   if (u.dts) md += `\n## Props\n\n\`\`\`ts\n${u.dts}\n\`\`\`\n`;
   md += `\n## Source\n\n- \`src/${u.tier}/${u.name}/\` — ${u.group.toLowerCase()} tier, \`window.${NAMESPACE}.${u.name}\`\n`;
-  if (specimen) md += `- Specimen: \`/design/${kebab(u.name)}\` — every arrangement; the preview is this route\n`;
   if (existsSync(specPath)) {
     md += `- Spec: \`spec.md\` beside this file (\`docs/specs/${u.name}.md\`)\n`;
     cpSync(specPath, join(PROJECT, 'components', u.name, 'spec.md'));
@@ -243,7 +238,7 @@ for (const u of cards) {
   write(join(PROJECT, 'components', u.name, 'README.md'), md);
 }
 
-/* ── 5 · previews: each specimen, compiled against window.Tcules ──────────────── */
+/* ── 5 · previews: standalone stories, compiled against window.Tcules ──────────────── */
 
 const SITE_REWRITE = `(function(){var P=${JSON.stringify(PUBLIC_DIRS)},B='../../site';
 function f(u){if(typeof u!=='string')return u;for(var i=0;i<P.length;i++){if(u.indexOf('/'+P[i]+'/')===0)return B+u}return u}
@@ -259,8 +254,8 @@ function fail(e){R.textContent='\\u26a0 '+(e&&e.message||e)}
 try{Promise.resolve(typeof P==='function'?P({params:Promise.resolve({}),searchParams:Promise.resolve({})}):null)
 .then(function(el){ReactDOM.createRoot(R).render(el)},fail)}catch(e){fail(e)}})();`;
 
-/* The compiled specimen goes in preview.js beside the card (a preview may load ./x.js), so the
-   html stays far under the type's 256 KB cap however much fixture data a specimen carries. */
+/* The compiled preview goes in preview.js beside the card (a preview may load ./x.js), so the
+   html stays far under the type's 256 KB cap however much fixture data a preview carries. */
 const previewHtml = ({ group, height, css, corpus }) =>
   `<!-- @dsCard group="${group}" height=${height} width=1280 -->
 <!doctype html>
@@ -306,32 +301,14 @@ write(join(PROJECT, 'components/corpus.js'), scriptSafe(`window.__dsCorpus = ${J
 let live = 0;
 const floor = [];
 for (const u of cards) {
-  /* A folder exporting several components (Testimonial, CorpusPage) has one specimen, named for
-     the folder: it previews on the folder's first card, and the siblings point at that card. */
-  const first = cards.find((c) => c.folder === u.folder);
-  const route = [kebab(u.name), ...(u.name !== u.folder && first === u ? [kebab(u.folder)] : [])].find((r) =>
-    existsSync(join(ROOT, 'src/app/design', r, 'page.tsx')),
-  );
-  const specimen = join(ROOT, 'src/app/design', route ?? kebab(u.name), 'page.tsx');
-  const owned = join(ownedPreviews, `${u.name}.tsx`);
-  /* The specimen is the preview. An owned story file is the fallback for a unit with no route. */
-  const source = existsSync(specimen) ? specimen : existsSync(owned) ? owned : null;
+  const source = join(ownedPreviews, `${u.name}.tsx`);
   let html;
-  if (source) {
-    const isSpecimen = source === specimen;
-    /* A specimen whose index only links out to [slug] routes (service-page) previews a child route
-       instead — the stress story where there is one, since it renders every block. */
-    const childDir = isSpecimen && readdirSync(dirname(source)).find((d) => /^\[\w+\]$/.test(d) && existsSync(join(dirname(source), d, 'page.tsx')));
-    const child = childDir && /generateStaticParams/.test(readFileSync(join(dirname(source), childDir, 'page.tsx'), 'utf8')) ? join(dirname(source), childDir, 'page.tsx') : null;
-    const contents = child
-      ? `import Page, { generateStaticParams } from ${JSON.stringify(child)};\n` +
-        `window.__dsPage = async (props) => { const all = await generateStaticParams(); ` +
-        `const pick = all.find((p) => Object.values(p).some((v) => /stress/i.test(String(v)))) ?? all[0]; ` +
-        `return Page({ ...props, params: Promise.resolve(pick) }); };\n`
-      : isSpecimen
-      ? `import Page from ${JSON.stringify(source)};\nwindow.__dsPage = Page;\n`
-      : `import * as S from ${JSON.stringify(source)};\nimport { createElement as h, Fragment } from 'react';\n` +
-        `window.__dsPage = () => h('div', { style: { display: 'grid', gap: 48, padding: 32 } }, ...Object.keys(S).filter((k) => /^[A-Z]/.test(k)).map((k) => h(S[k], { key: k })));\n`;
+  if (existsSync(source)) {
+    const contents = `import * as S from ${JSON.stringify(source)};
+import { createElement as h } from 'react';
+` +
+      `window.__dsPage = () => h('div', { style: { display: 'grid', gap: 48, padding: 32 } }, ...Object.keys(S).filter((k) => /^[A-Z]/.test(k)).map((k) => h(S[k], { key: k })));
+`;
     usesCorpus = false;
     try {
       const r = await esbuild.build({
@@ -350,7 +327,7 @@ for (const u of cards) {
       });
       const js = r.outputFiles.find((f) => f.path.endsWith('.js')).text;
       const css = r.outputFiles.find((f) => f.path.endsWith('.css'))?.text ?? '';
-      html = previewHtml({ group: u.group, height: isSpecimen ? 1200 : 640, css, corpus: usesCorpus });
+      html = previewHtml({ group: u.group, height: 640, css, corpus: usesCorpus });
       if (Buffer.byteLength(html) > 256 * 1024) {
         notes.push(`${u.name}: preview css is ${Math.round(Buffer.byteLength(html) / 1024)} KB, over the 256 KB cap — floor card instead`);
         html = undefined;
@@ -367,7 +344,7 @@ for (const u of cards) {
     html = `<!-- @dsCard group="${u.group}" height=120 floor=static -->
 <!doctype html>
 <html><head><meta charset="utf-8"></head><body style="margin:0;padding:24px;font:14px/1.5 system-ui;color:#504f49">
-<p style="margin:0"><strong>${u.name}</strong> ${first !== u && existsSync(join(ROOT, 'src/app/design', kebab(u.folder), 'page.tsx')) ? `is rendered in the <strong>${first.name}</strong> card, with the rest of <code>src/${u.tier}/${u.folder}/</code>.` : `has no <code>/design</code> specimen yet, so no live preview.`} It is on <code>window.${NAMESPACE}.${u.name}</code>; its README lists its props.</p>
+<p style="margin:0"><strong>${u.name}</strong> has no standalone preview. It is on <code>window.${NAMESPACE}.${u.name}</code>; its README lists its props.</p>
 </body></html>
 `;
   }
@@ -387,7 +364,7 @@ const byGroup = (g) => cards.filter((u) => u.group === g).map((u) => `\`${u.name
 const roster =
   `## What is on \`window.${NAMESPACE}\`\n\n` +
   TIERS.map((t) => `- **${t.group}** — ${byGroup(t.group)}`).join('\n') +
-  `\n\nEach has a folder under \`components/\`: its README (doc comment and props), its declarations, its spec where one exists, and a live preview built from its \`/design\` specimen.\n`;
+  `\n\nEach has a folder under \`components/\`: its README (doc comment and props), its declarations, its spec where one exists, and a standalone preview where one exists.\n`;
 const conventions = readFileSync(join(ROOT, '.design-sync/conventions.md'), 'utf8');
 write(join(PROJECT, 'README.md'), conventions.replace('<!-- ROSTER -->', roster.trim()));
 cpSync(join(ROOT, 'docs/vocabulary.md'), join(PROJECT, 'vocabulary.md'));

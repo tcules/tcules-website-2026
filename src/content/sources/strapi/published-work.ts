@@ -386,6 +386,7 @@ export const getPublishedSitemap = cache(async () => {
         warn(`group ${key} has an entry with no title or route (${entry.path ?? 'none'})`);
         return [];
       }
+      if (/^\/design(?:[/?#]|$)/i.test(path)) return [];
       if (seen.has(path)) {
         warn(`${path} is listed twice; kept in its first group`);
         return [];

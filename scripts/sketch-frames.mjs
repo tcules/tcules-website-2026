@@ -2,7 +2,7 @@
 /**
  * Capture a tile drawing's move, so a drawing can be judged without a browser.
  *
- *   npm run sketch:frames -- specialist-research specialist-ui     these scenes
+ *   npm run sketch:frames -- --page=/services/ux-research specialist-research     these scenes
  *   npm run sketch:frames -- --base=http://localhost:3000 ...      an explicit server
  *   npm run sketch:frames -- --surface=ink ...                     on another surface (default paper)
  *   npm run sketch:frames -- --page=/services/x/y ...              a still scene from the page it sits on
@@ -10,7 +10,7 @@
  *                                                                  @1x, in the order named, numbered from 1
  *                                                                  (.shots/frames/sheet-<name>.png)
  *
- * For each scene it hovers that scene's live tile on /design/sketch (S.7, paper) and writes to
+ * For each scene it captures that scene on the requested site page and writes to
  * `.shots/frames/` (gitignored):
  *   <scene>.png   one strip: rest | mid-move | moved, at 2x, the size a critic reads
  *   <scene>@1x.png   the moved state at 1x, the size the tile really renders, for the one-second test
@@ -50,15 +50,15 @@ if (!base) {
   console.error('No server: start `npm run dev` in this checkout, or pass --base=.');
   process.exit(1);
 }
-if (!names.length) {
-  console.error('Name at least one scene.');
+if (!names.length || !pageArg?.startsWith('/') || pageArg.startsWith('//')) {
+  console.error('Pass a site path with --page and name at least one scene.');
   process.exit(1);
 }
 mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 2 });
-await page.goto(`${base}${pageArg ?? '/design/sketch'}`, { waitUntil: 'networkidle' });
+await page.goto(`${base}${pageArg}`, { waitUntil: 'networkidle' });
 
 async function shot(el) {
   return el.screenshot({ animations: 'allow' });
@@ -71,11 +71,9 @@ for (const name of names) {
   if (!(await link.count())) link = page.locator(`#story-${surface}-${name}`);
   if (!(await link.count())) {
     /* A still scene (a plate: cards, What you get): no move to measure, one capture of it as drawn. */
-    const plate = pageArg
-      ? page.locator(`svg[data-scene="${name}"]`).first()
-      : page.locator(`[data-surface="${surface}"] svg[data-scene="${name}"]`).first();
+    const plate = page.locator(`svg[data-scene="${name}"]`).first();
     if (!(await plate.count())) {
-      console.log(JSON.stringify({ scene: name, error: 'not on /design/sketch' }));
+      console.log(JSON.stringify({ scene: name, error: `not on ${pageArg}` }));
       failed = true;
       continue;
     }

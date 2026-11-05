@@ -2,7 +2,7 @@
  * fold:check — every band fits the fold (visual-direction § 1.3).
  *
  *   npm run fold:check                                   every route in fold.config.json
- *   npm run fold:check -- /design/kit/media-split        only these (e.g. /design/kit/hero)
+ *   npm run fold:check -- /about /services              only these public pages
  *   npm run fold:check -- --base=http://localhost:4123   an explicit server, trusted as given
  *
  * A BAND is a Section: the full-width, isolated box Section renders (`isolation: isolate` at the
@@ -70,7 +70,7 @@ function freePort() {
 
 let server = null;
 let base = baseArg ? baseArg.slice('--base='.length) : ownDevServer();
-if (!base || !(await answers(`${base}/design`))) {
+if (!base || !(await answers(`${base}/`))) {
   if (baseArg) {
     console.error(`--base ${base} does not answer.`);
     process.exit(1);
@@ -83,7 +83,7 @@ if (!base || !(await answers(`${base}/design`))) {
   base = `http://localhost:${port}`;
   let up = false;
   for (let i = 0; i < 120 && !up; i++) {
-    up = await answers(`${base}/design`);
+    up = await answers(`${base}/`);
     if (!up) await new Promise((r) => setTimeout(r, 1000));
   }
   if (!up) {

@@ -265,28 +265,11 @@ reason. `src/lib/cx.ts` joins class names; it is three lines and needs no packag
 Re-export from the tier barrel (`src/components/index.ts`) so call sites import
 `@/components`, not a deep path.
 
-## Nothing gets a page route before it has a `design/` route
+## Component previews
 
-`src/app/design/**` is the proving ground: one route per component, **every** arrangement
-rendered. It holds `page.tsx` files only, with one exception: **`design/_specimen/`**, the harness
-the specimens are built out of — `Specimen`, `Box` and their CSS. That is route-local scaffolding
-for the proving ground itself, underscore-prefixed so Next does not route it, and nothing outside
-`src/app/design/**` may import it. The rule it is an exception to still holds everywhere else: no
-component the *site* could use is ever defined under `design/`. If something here starts looking
-useful to a page, that is the signal to build it properly in `src/components/`.
-
-This is the highest-leverage rule in the file. In the previous codebase the components that had
-sandbox routes are in good shape and the 111 that did not are the reason for this rebuild.
-
-Register the specimen in the `SPECIMENS` list in `src/app/design/page.tsx` by hand, so the index
-stays honest about what is actually covered.
-
-**A kind of section is not a component, and gets no `design/` route.** Each kind on the corpus pages
-(hard parts, What you get, a method …) renders through ONE approved component, registered in
-`src/templates/CorpusPage/kinds.ts`; a missing drawing is a placeholder inside it, never a fallback to an
-older design (owner, 31 Oct 2026; decisions/2026-10-31-one-kind-one-component). A kind is reviewed on the
-real pages listed under "Review list" in `npm run corpus:census`, not on a specimen (owner, 31 Oct 2026;
-decisions/2026-10-31-kinds-approved-on-real-pages).
+Keep component previews outside the website router. Add standalone previews in
+`.design-sync/previews/` and verify components on the public pages that use them.
+For corpus bands, use the review list from `npm run corpus:census`.
 
 ## Routes are named once
 
@@ -328,8 +311,8 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
 
 **Most of the time the answer is that nothing new is needed.**
 - The **Design System artifact** (https://claude.ai/artifact/Ait8sArmESntEWeu5zhryj) carries the real
-  components as a live library — every primitive, pattern and template on `window.Tcules`, each previewed
-  by its own `/design` specimen — so a page can be composed out of actual shipped components, correct on
+  components as a live library — every primitive, pattern and template on `window.Tcules`, with standalone
+  previews where available — so a page can be composed out of actual shipped components, correct on
   every surface and in every state, without anyone describing them.
 - Reach for the steps below only when the thing genuinely does not exist. Establishing that it already
   does is the more valuable outcome, and the last codebase never reached it, 111 times over.
@@ -353,16 +336,14 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
    - Run `npm run verify`, then `npm run build && npm run aria:check`.
    - Run `/audit-component <Name>`, an independent read-only pass that reports and does not fix. Fix what
      it reports.
-   - Run `npm run shots -- <specimen>`: each specimen block at 1440 and 390, horizontal overflow and page
-     errors. The crops are for Claude's own check; the owner reviews the routes in the browser
-     (owner, 9 Oct 2026; decisions/2026-10-09-no-screenshots-to-owner).
+   - Run `npm run shots -- --routes=/path` on the public pages that use the component. Check horizontal
+     overflow and page errors at 1440 and 390.
 5. **Approve (owner), then ship (Claude).** On approval Claude opens the PR, and the owner merges.
 6. **Sync.** When a component lands, `/ds-publish` regenerates the Design System artifact from `main`:
-   `npm run ds:build` writes the bundle, React 19, the declarations, a README and preview per unit (the
-   preview IS its `/design` specimen), `tokens.json` from the token layer, the conventions README, the
+   `npm run ds:build` writes the bundle, React 19, the declarations, a README per unit and standalone previews where available, `tokens.json` from the token layer, the conventions README, the
    vocabulary and the brand chapters; `ds:check` renders every preview headless; Claude publishes only
    what changed. **The repo is the source of truth** (owner, 20 Oct 2026; decisions/2026-10-20-ds-artifact-from-repo):
-   a generated file edited on the artifact page is overwritten by the next sync. A unit with no specimen
+   a generated file edited on the artifact page is overwritten by the next sync. A unit with no standalone preview
    ships a floor card, so a missing specimen shows up in the library too. The old Claude Design project
    and the built-in `/design-sync` are retired; what the artifact held before is archived in the private
    repo `devagya-tc/tcules-design-archive`.
@@ -371,8 +352,8 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
 the chain. `docs/briefs/` is the record of what was asked for under the old workflow; `docs/briefs/README.md`
 indexes it.
 
-**`npm run verify`** chains seven checks: `lint`, `typecheck`, `tokens:check`, `classes:check`,
-`specimens:check`, `design:check` and `photos:check` (the kit photo catalogue's measured tone tags,
+**`npm run verify`** includes `lint`, `typecheck`, `tokens:check`, `classes:check`,
+`design:check` and `photos:check` (the kit photo catalogue's measured tone tags,
 derived widths and generated registry are current; `npm run photos:tone && npm run photos:derive`
 refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that

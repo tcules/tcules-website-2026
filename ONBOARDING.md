@@ -1,5 +1,7 @@
 # Onboarding — tcules-website-2026
 
+> The former in-app component previews have been retired. Use standalone previews and public-page checks as described in [CLAUDE.md](CLAUDE.md#component-previews). References to the old preview routes below describe the previous workflow.
+
 Orientation, not law. `CLAUDE.md` is the law; it is long and you should read all of it before you
 write anything. This file tells you what the repo *is*, what shape it has, how to get it running,
 how work moves through it, and which file owns the detail for each rule — so when they disagree,

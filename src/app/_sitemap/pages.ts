@@ -44,8 +44,7 @@ import { PASS_1_TOOL_ROUTES } from '../_corpus/tool';
  * A page is named by its nav label where the header or footer links to it ("Fintech and InsurTech"),
  * and by its CMS title otherwise. The nav is preferred because several Strapi titles are the hero's
  * headline ("The happy path is the easy part."), which names nothing in a list.
- * `/design/**` is the proving ground and is never listed. `_sitemap` is underscore-prefixed, so Next
- * does not route it.
+ * Only public site routes are listed.
  */
 
 export type SitemapGroupKey =

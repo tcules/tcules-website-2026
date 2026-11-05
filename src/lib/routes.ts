@@ -109,24 +109,6 @@ export const ROUTES = {
   terms: '/terms-of-use',
   cookiePolicy: '/cookie-policy',
   sitemap: '/sitemap',
-
-  /* The proving ground. Not linked from the site; named so a specimen can cross-link. */
-  design: '/design',
-  designCtaSection: '/design/cta-section',
-  designEnquiryForm: '/design/enquiry-form',
-  designChip: '/design/chip',
-  designIsland: '/design/island',
-  designKitForm: '/design/kit/form',
-  designProof: '/design/proof',
-  designKitTestimonials: '/design/kit/testimonials',
-  designKitFacts: '/design/kit/facts',
-  designCallout: '/design/callout',
-  designKitProcess: '/design/kit/process',
-  designSteps: '/design/steps',
-  designKitHome: '/design/kit/home',
-  designKitAbout: '/design/kit/about',
-  designKitServicesIndex: '/design/kit/services-index',
-  designListingIndex: '/design/listing-index',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
@@ -175,16 +157,6 @@ export const ANCHORS = {
 /** The fragment href for an in-page anchor: `#enquiry`. */
 export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${string}` {
   return `#${id}`;
-}
-
-/** A corpus page through its template in the proving ground: `/design/corpus-page/<file-slug>`. */
-export function designCorpusPagePath(fileSlug: string): string {
-  return `${ROUTES.design}/corpus-page/${encodeURIComponent(fileSlug)}`;
-}
-
-/** The designed service page in the proving ground: `/design/service-page/<slug>`. */
-export function designServicePagePath(slug: string): string {
-  return `${ROUTES.design}/service-page/${encodeURIComponent(slug)}`;
 }
 
 /** Build one canonical audit-detail path without duplicating the route family at call sites. */
@@ -436,5 +408,4 @@ export const ENDPOINTS = {
   newsletter: '/api/newsletter',
   contact: '/api/contact',
   enquiry: '/api/enquiry',
-  enquiryDesign: '/api/design/enquiry',
 } as const;
