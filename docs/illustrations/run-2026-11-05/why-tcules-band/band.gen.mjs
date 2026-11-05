@@ -136,32 +136,45 @@ add(`<path d="${d2([P(FX0, FY0), P(FX0 + FX, FY0), P(FX0 + FX, FY0 + FY), P(FX0,
 // ---------- people ----------
 // Blue = a Tcules person; white, outlined = the client's people (owner, 5 Nov 2026). One client fill for all three.
 const BODY_R = 19.6, BODY_H = 50, HEAD = 13.6;
-const ARM = 8.4, HAND = 6.6, RIM = 1.5;   // a client arm is the same shape, light, with a RIM-wide blue outline
+const ARM = 8.4, HAND = 6.6;   // one arm weight for both (owner, 5 Nov 2026): overall stroke width and hand radius
+const RIM = 1.6;                // a client arm's blue outline, the weight of the client body's outline
+const EDGE = 1.8;               // the white edge round a Tcules figure (owner, 5 Nov 2026)
+let figN = 0;
 function pawn(x, y, tone) {
   const [bx, by] = P(x, y, 0);
   const r = BODY_R, h = BODY_H;
   const solid = tone === 'tcules';
   const fill = solid ? B[500] : tone;
   const st = solid ? '' : ` stroke="${B[500]}" stroke-width="1.6"`;
-  let s = `<path d="M${f(bx - r)} ${f(by)} V${f(by - h)} A${r} ${r} 0 0 1 ${f(bx + r)} ${f(by - h)} V${f(by)} A${r} 9.3 0 0 1 ${f(bx - r)} ${f(by)} Z" fill="${fill}"${st}/>`;
-  s += `<circle cx="${f(bx)}" cy="${f(by - h - r - 5 - HEAD)}" r="${HEAD}" fill="${fill}"${st}/>`;
+  const bodyD = `M${f(bx - r)} ${f(by)} V${f(by - h)} A${r} ${r} 0 0 1 ${f(bx + r)} ${f(by - h)} V${f(by)} A${r} 9.3 0 0 1 ${f(bx - r)} ${f(by)} Z`;
+  const hy = f(by - h - r - 5 - HEAD);
+  let s = '';
+  // A Tcules figure is edged in white: its white silhouette first, a little larger, then the blue on top
+  if (solid) s += `<path d="${bodyD}" fill="${W}" stroke="${W}" stroke-width="${2 * EDGE}"/><circle cx="${f(bx)}" cy="${hy}" r="${f(HEAD + EDGE)}" fill="${W}"/>`;
+  s += `<path d="${bodyD}" fill="${fill}"${st}/>`;
+  s += `<circle cx="${f(bx)}" cy="${hy}" r="${HEAD}" fill="${fill}"${st}/>`;
   grow(bx - r, by - h - r - 5 - 2 * HEAD); grow(bx + r, by + 9.3);
   const inside = ([X, Y]) => Math.abs(X - bx) < r && Y < by && (Y > by - h || Math.hypot(X - bx, Y - (by - h)) < r);
-  return { s, bx, by, solid, fill, inside, headTop: by - h - r - 5 - 2 * HEAD, shoulder: (side) => [bx + side * 8, by - h - 2] };
+  return { s, bx, by, solid, fill, inside, bodyD, hy, id: `wtFig${++figN}`, headTop: by - h - r - 5 - 2 * HEAD, shoulder: (side) => [bx + side * 8, by - h - 2] };
 }
-// The arm grows from inside the shoulder. A Tcules arm is one solid blue stroke and a round hand. A client arm
-// is the same stroke in the client's own light colour inside a blue outline; the outline starts at the body's
-// edge, so the light sleeve runs over the body's own line and the arm reads attached.
+// The arm grows from inside the shoulder. A Tcules arm is one solid blue stroke and a round hand, with the
+// figure's white edge along it; that edge is masked off the body so no white line crosses the shoulder, and
+// the blue arm covers the body's own edge where it leaves. A client arm is the same overall width: a blue
+// outline, masked off the body so it meets the body's own line, the client's light colour inside it, thinner by twice the outline, running from
+// the shoulder over the body's own line so the arm reads attached.
 function arm(p, side, to) {
   const from = p.shoulder(side);
   const d = `M${f(from[0])} ${f(from[1])} L${f(to[0])} ${f(to[1])}`;
-  if (p.solid) return `<path d="${d}" stroke="${B[500]}" stroke-width="${ARM}"/><circle cx="${f(to[0])}" cy="${f(to[1])}" r="${HAND}" fill="${B[500]}"/>`;
-  let e = from;
-  for (let t = 0; t <= 1; t += 0.005) { const q = [from[0] + (to[0] - from[0]) * t, from[1] + (to[1] - from[1]) * t]; if (!p.inside(q)) { e = q; break; } }
-  let s = `<path d="M${f(e[0])} ${f(e[1])} L${f(to[0])} ${f(to[1])}" stroke="${B[500]}" stroke-width="${f(ARM + 2 * RIM)}" stroke-linecap="butt"/>`;
-  s += `<circle cx="${f(to[0])}" cy="${f(to[1])}" r="${f(HAND + RIM)}" fill="${B[500]}"/>`;
-  s += `<path d="${d}" stroke="${p.fill}" stroke-width="${ARM}"/>`;
-  s += `<circle cx="${f(to[0])}" cy="${f(to[1])}" r="${HAND}" fill="${p.fill}"/>`;
+  if (p.solid) {
+    let s = `<mask id="${p.id}" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="5000" height="5000"><rect x="-2000" y="-2000" width="5000" height="5000" fill="${W}"/><path d="${p.bodyD}" fill="#000000"/><circle cx="${f(p.bx)}" cy="${p.hy}" r="${HEAD}" fill="#000000"/></mask>`;
+    s += `<g mask="url(#${p.id})"><path d="${d}" stroke="${W}" stroke-width="${f(ARM + 2 * EDGE)}"/><circle cx="${f(to[0])}" cy="${f(to[1])}" r="${f(HAND + EDGE)}" fill="${W}"/></g>`;
+    s += `<path d="${d}" stroke="${B[500]}" stroke-width="${ARM}"/><circle cx="${f(to[0])}" cy="${f(to[1])}" r="${HAND}" fill="${B[500]}"/>`;
+    return s;
+  }
+  const mask = `<mask id="${p.id}" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="5000" height="5000"><rect x="-2000" y="-2000" width="5000" height="5000" fill="${W}"/><path d="${p.bodyD}" fill="#000000"/></mask>`;
+  let s = mask + `<g mask="url(#${p.id})"><path d="${d}" stroke="${B[500]}" stroke-width="${ARM}"/><circle cx="${f(to[0])}" cy="${f(to[1])}" r="${HAND}" fill="${B[500]}"/></g>`;
+  s += `<path d="${d}" stroke="${p.fill}" stroke-width="${f(ARM - 2 * RIM)}"/>`;
+  s += `<circle cx="${f(to[0])}" cy="${f(to[1])}" r="${f(HAND - RIM)}" fill="${p.fill}"/>`;
   return s;
 }
 

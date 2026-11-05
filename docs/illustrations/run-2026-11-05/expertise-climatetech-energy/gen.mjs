@@ -169,11 +169,21 @@ const BAT = { x0: 170, x1: 260, y0: 290, y1: 350, h: 70 };
   out.push(`<!-- A Tcules designer points at the target line -->`);
   const [px, py] = P(470, 230, 0);
   const rw = 17, top = py - 54;
-  out.push(`<path d="M${f(px - rw)} ${f(py)} V${f(top)} A${rw} ${rw} 0 0 1 ${f(px + rw)} ${f(top)} V${f(py)} Z" fill="${C.b500}"/>`);
+  const sx = px + 6, sy = top + 10, ex = px + 40, ey = top - 46;
+  const bodyD = `M${f(px - rw)} ${f(py)} V${f(top)} A${rw} ${rw} 0 0 1 ${f(px + rw)} ${f(top)} V${f(py)} Z`;
+  const armD = `M${f(sx)} ${f(sy)} L${f(ex)} ${f(ey)}`;
+  // Edged in white (owner, 5 Nov 2026): the white silhouette of body, head and arm first, a little larger,
+  // then the blue shapes on top at their own size, so no white line crosses the shoulder.
+  const E = 1.7;
+  out.push(`<path d="${bodyD}" fill="${C.w}" stroke="${C.w}" stroke-width="${2 * E}" stroke-linejoin="round"/>`);
+  out.push(`<ellipse cx="${f(px)}" cy="${f(py)}" rx="${rw + E}" ry="${8 + E}" fill="${C.w}"/>`);
+  out.push(`<circle cx="${f(px)}" cy="${f(top - 30)}" r="${12 + E}" fill="${C.w}"/>`);
+  out.push(`<path d="${armD}" stroke="${C.w}" stroke-width="${8 + 2 * E}" stroke-linecap="round"/>`);
+  out.push(`<circle cx="${f(ex)}" cy="${f(ey)}" r="${6.4 + E}" fill="${C.w}"/>`);
+  out.push(`<path d="${bodyD}" fill="${C.b500}"/>`);
   out.push(`<ellipse cx="${f(px)}" cy="${f(py)}" rx="${rw}" ry="8" fill="${C.b500}"/>`);
   out.push(`<circle cx="${f(px)}" cy="${f(top - 30)}" r="12" fill="${C.b500}"/>`);
-  const sx = px + 6, sy = top + 10, ex = px + 40, ey = top - 46;
-  out.push(`<path d="M${f(sx)} ${f(sy)} L${f(ex)} ${f(ey)}" stroke="${C.b500}" stroke-width="8" stroke-linecap="round"/>`);
+  out.push(`<path d="${armD}" stroke="${C.b500}" stroke-width="8" stroke-linecap="round"/>`);
   out.push(`<circle cx="${f(ex)}" cy="${f(ey)}" r="6.4" fill="${C.b500}"/>`);
   grow(px - rw, top - 42);
 }

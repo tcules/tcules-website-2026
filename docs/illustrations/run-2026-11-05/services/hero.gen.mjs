@@ -100,7 +100,11 @@ function cylinder(x, y, z0, r, h, { fill = W, side = B[100], stroke = B[500], sw
   s += `<ellipse cx="${f(cx)}" cy="${f(cyT)}" rx="${f(rx)}" ry="${f(ry)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
   return s;
 }
-// a pawn at world (x, y, z): the solid arm grows out of the shoulder (owner, 5 Nov; as on the home hero)
+// a pawn at world (x, y, z): the solid arm grows out of the shoulder (owner, 5 Nov; as on the home hero).
+// A Tcules (solid) pawn is edged in white (owner, 5 Nov 2026): the white silhouette of body, head and arm is
+// drawn first, a little larger, and the blue shapes go on top at their own size, so the edge runs round the
+// whole figure and never across the shoulder where the arm leaves the body.
+const EDGE = 1.7; // the white edge on a Tcules pawn
 function pawn(x, y, z = 0, { solid = true, reach = null, from = 'right' } = {}) {
   const [bx, by] = P(x, y, z);
   const r = 17, h = 46, head = 12;
@@ -108,13 +112,27 @@ function pawn(x, y, z = 0, { solid = true, reach = null, from = 'right' } = {}) 
   const sw = solid ? 0 : 1.6;
   const st = solid ? '' : `stroke="${B[500]}" stroke-width="${sw}"`;
   track([[bx - r, by - h - 2 * r - 2 * head], [bx + r, by + 9]]);
-  let s = `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${r}" ry="8" fill="${fill}" ${st}/>`;
-  s += `<path d="M${f(bx - r)} ${f(by)} V${f(by - h)} A${r} ${r} 0 0 1 ${f(bx + r)} ${f(by - h)} V${f(by)}" fill="${fill}" ${st}/>`;
+  const bodyD = `M${f(bx - r)} ${f(by)} V${f(by - h)} A${r} ${r} 0 0 1 ${f(bx + r)} ${f(by - h)} V${f(by)}`;
+  const hy = f(by - h - r - 4 - head);
+  const sx = bx + (from === 'right' ? 7 : -7), sy = by - h - 4;
+  const armD = reach ? `M${f(sx)} ${f(sy)} L${f(reach[0])} ${f(reach[1])}` : '';
+  let s = '';
+  if (solid) {
+    const we = `fill="${W}" stroke="${W}" stroke-width="${2 * EDGE}"`;
+    s += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${r}" ry="8" ${we}/>`;
+    s += `<path d="${bodyD}" ${we}/>`;
+    s += `<circle cx="${f(bx)}" cy="${hy}" r="${head + EDGE}" fill="${W}"/>`;
+    if (reach) {
+      s += `<path d="${armD}" stroke="${W}" stroke-width="${f(6.4 + 2 * EDGE)}"/>`;
+      s += `<circle cx="${f(reach[0])}" cy="${f(reach[1])}" r="${f(5.2 + EDGE)}" fill="${W}"/>`;
+    }
+  }
+  s += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${r}" ry="8" fill="${fill}" ${st}/>`;
+  s += `<path d="${bodyD}" fill="${fill}" ${st}/>`;
   if (solid) s += `<ellipse cx="${f(bx)}" cy="${f(by)}" rx="${r}" ry="8" fill="${fill}"/>`;
-  s += `<circle cx="${f(bx)}" cy="${f(by - h - r - 4 - head)}" r="${head}" fill="${fill}" ${st}/>`;
+  s += `<circle cx="${f(bx)}" cy="${hy}" r="${head}" fill="${fill}" ${st}/>`;
   if (reach) {
-    const sx = bx + (from === 'right' ? 7 : -7), sy = by - h - 4;
-    s += `<path d="M${f(sx)} ${f(sy)} L${f(reach[0])} ${f(reach[1])}" stroke="${B[500]}" stroke-width="6.4"/>`;
+    s += `<path d="${armD}" stroke="${B[500]}" stroke-width="6.4"/>`;
     s += `<circle cx="${f(reach[0])}" cy="${f(reach[1])}" r="5.2" fill="${B[500]}"/>`;
   }
   return s;

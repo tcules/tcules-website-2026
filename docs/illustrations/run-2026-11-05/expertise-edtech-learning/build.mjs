@@ -93,17 +93,23 @@ function pawn(x, y, z, { r = 15, h = 40, head = 10.5, fill = C.w, stroke = C.b50
   const [sx, sy] = P(x, y, z);
   grow([[sx - r, sy - h - head * 2 - 8], [sx + r, sy + r * 0.5]]);
   const ry = r * 0.5;
-  path(`M${f(sx - r)} ${f(sy)} V${f(sy - h)} A${r} ${r} 0 0 1 ${f(sx + r)} ${f(sy - h)} V${f(sy)} A${r} ${f(ry)} 0 0 1 ${f(sx - r)} ${f(sy)} Z`,
+  const bodyD = `M${f(sx - r)} ${f(sy)} V${f(sy - h)} A${r} ${r} 0 0 1 ${f(sx + r)} ${f(sy - h)} V${f(sy)} A${r} ${f(ry)} 0 0 1 ${f(sx - r)} ${f(sy)} Z`;
+  path(bodyD,
     `fill="${fill}" stroke="${stroke}" stroke-width="${SW}" stroke-linejoin="round"`);
   out.push(`<circle cx="${f(sx)}" cy="${f(sy - h - r - head + 2)}" r="${head}" fill="${fill}" stroke="${stroke}" stroke-width="${SW}"/>`);
-  return { sx, sy, top: sy - h - r };
+  return { sx, sy, top: sy - h - r, r, bodyD };
 }
-// Client arm: light stroke inside a blue outline, round cap, round hand.
-function clientArm(a, b, w = 7) {
-  const d = `M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}`;
-  path(d, `stroke="${C.b500}" stroke-width="${w + 3.2}" stroke-linecap="round" fill="none"`);
-  path(d, `stroke="${C.w}" stroke-width="${w}" stroke-linecap="round" fill="none"`);
-  out.push(`<circle cx="${f(b[0])}" cy="${f(b[1])}" r="${f(w * 0.85)}" fill="${C.w}" stroke="${C.b500}" stroke-width="${SW}"/>`);
+// Client arm: light stroke inside a blue outline, round cap, round hand. One arm weight across the set (owner,
+// 5 Nov 2026): overall, outline included, the arm is as thick as a Tcules arm on a pawn this size (8 on a 34-wide
+// body, the ClimateTech hero's designer, a sibling in this slot) and the hand as large; the light core is
+// thinner by twice the outline. The outline is masked off the body so it meets the body's own line; the core runs from the shoulder, so the light
+// sleeve runs over the body's own line and the arm reads attached.
+function clientArm(p, a, b) {
+  const W = (8 / 34) * 2 * p.r, HAND = 0.8 * W;
+  out.push(`<mask id="edArmMask" maskUnits="userSpaceOnUse" x="-2000" y="-2000" width="5000" height="5000"><rect x="-2000" y="-2000" width="5000" height="5000" fill="${C.w}"/><path d="${p.bodyD}" fill="#000000"/></mask>`);
+  out.push(`<g mask="url(#edArmMask)"><path d="M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}" stroke="${C.b500}" stroke-width="${f(W)}" stroke-linecap="round" fill="none"/><circle cx="${f(b[0])}" cy="${f(b[1])}" r="${f(HAND)}" fill="${C.b500}"/></g>`);
+  path(`M${f(a[0])} ${f(a[1])} L${f(b[0])} ${f(b[1])}`, `stroke="${C.w}" stroke-width="${f(W - 2 * SW)}" stroke-linecap="round" fill="none"`);
+  out.push(`<circle cx="${f(b[0])}" cy="${f(b[1])}" r="${f(HAND - SW)}" fill="${C.w}"/>`);
 }
 
 // Graduation cap centred on world (cx, cy) sitting at z.
@@ -181,7 +187,7 @@ for (let p = piles.length - 1; p >= 0; p--) {
   if (p === 1) {
     // the learner stands on step two
     const pw = pawn(BX + BW / 2 + 6, y + BD / 2 + 4, z);
-    clientArm([pw.sx + 8, pw.sy - 34], [pw.sx + 30, pw.sy - 56]);
+    clientArm(pw, [pw.sx + 8, pw.sy - 34], [pw.sx + 30, pw.sy - 56]);
   }
 }
 

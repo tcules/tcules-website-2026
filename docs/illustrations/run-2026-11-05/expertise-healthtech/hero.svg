@@ -39,7 +39,7 @@
 <path d="M-232.2 189.9 V147.9 A18 18 0 0 1 -196.2 147.9 V189.9 A18 8.5 0 0 1 -232.2 189.9 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
 <circle cx="-214.2" cy="111.9" r="13" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6"/>
 <circle cx="-214.2" cy="93.9" r="3.2" fill="#0048FF"/>
-<path d="M-201.2 163.9 L-183.2 145.9" stroke="#0048FF" stroke-width="2.2" stroke-linecap="round"/><circle cx="-183.2" cy="145.9" r="3" fill="#0048FF"/>
+<mask id="ht-arm" maskUnits="userSpaceOnUse" x="-600" y="-300" width="1100" height="900"><rect x="-600" y="-300" width="1100" height="900" fill="#FFFFFF"/><path d="M-232.2 189.9 V147.9 A18 18 0 0 1 -196.2 147.9 V189.9 A18 8.5 0 0 1 -232.2 189.9 Z" fill="#000000"/></mask><g mask="url(#ht-arm)"><path d="M-201.2 163.9 L-183.2 145.9" stroke="#0048FF" stroke-width="8.5" stroke-linecap="round"/><circle cx="-183.2" cy="145.9" r="6.8" fill="#0048FF"/></g><path d="M-201.2 163.9 L-183.2 145.9" stroke="#FFFFFF" stroke-width="5.3" stroke-linecap="round"/><circle cx="-183.2" cy="145.9" r="5.2" fill="#FFFFFF"/>
 <g transform="matrix(0.9 0.45 0 1 -187.2 117.9)"><rect width="20" height="34" rx="5" fill="#0048FF" stroke="#003EE0" stroke-width="1.2"/><rect x="3" y="5" width="14" height="24" rx="3" fill="#FFFFFF"/><rect x="5.5" y="18" width="9" height="5" rx="2.5" fill="#0048FF"/></g>
 <path d="M-281.7 33.7 V127.7" fill="none" stroke="#0048FF" stroke-width="1.2" stroke-dasharray="4 4" stroke-linecap="round"/>
 <path d="M-299.7 223.7 V181.7 A18 18 0 0 1 -263.7 181.7 V223.7 A18 8.5 0 0 1 -299.7 223.7 Z" fill="#FFFFFF" stroke="#0048FF" stroke-width="1.6" stroke-linejoin="round"/>
