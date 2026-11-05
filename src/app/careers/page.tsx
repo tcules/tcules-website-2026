@@ -1,16 +1,28 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedCareersPage } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-
-/**
- * `/careers` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+import { PublishedCareers } from '@/templates/CorpusPage/PublishedCareers';
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.careers)) ?? { title: 'Tcules' };
+  return (await getPageSeo(ROUTES.careers)).metadata;
 }
-
-export default function CareersPage() {
-  return <ComposedRoute route={ROUTES.careers} />;
+export default async function CareersPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedCareersPage(),
+    getPageSeo(ROUTES.careers),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedCareers page={page} />
+    </>
+  );
 }
