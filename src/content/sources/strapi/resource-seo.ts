@@ -52,7 +52,7 @@ export type ResourceSeoSettings = {
   defaultImage: StrapiUploadFile | null;
 };
 
-function socialImage(file: StrapiUploadFile | null | undefined, alt: Text) {
+export function socialImage(file: StrapiUploadFile | null | undefined, alt: Text) {
   const url = absoluteAssetUrl(file?.url, publicGraphqlUrl());
   return url
     ? [

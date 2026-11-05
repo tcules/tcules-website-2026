@@ -52,7 +52,7 @@ import { getPublishedGlossaryMaster } from './sources/strapi/published-glossary-
 import { getPublishedToolsMaster } from './sources/strapi/published-tools-master';
 import { getPublishedTool, listPublishedToolSlugs } from './sources/strapi/published-tool';
 import { getPublishedAuthor } from './sources/strapi/published-author';
-import { getPublishedResource } from './sources/strapi/published-resource';
+import { getPublishedResource, getPublishedResourceSocialImages } from './sources/strapi/published-resource';
 import {
   getPublishedCookiePolicy,
   getPublishedPrivacyPolicy,
@@ -192,6 +192,7 @@ export async function getCaseStudyListingPage(slug: string) {
   };
 }
 export const getResourceDetail = getPublishedResource;
+export const getResourceSocialImages = getPublishedResourceSocialImages;
 /** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
 export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;
 export const getTermsOfUseDocument = getPublishedTermsOfUse;

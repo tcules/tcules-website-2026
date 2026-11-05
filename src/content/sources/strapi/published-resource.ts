@@ -14,7 +14,7 @@ import {
 } from './published-resource-query';
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
 import { resourceMarkdownToHtml } from './resource-markdown';
-import { resourceSeo, type ResourceSeo, type ResourceSeoSettings } from './resource-seo';
+import { resourceSeo, socialImage, type ResourceSeo, type ResourceSeoSettings } from './resource-seo';
 import { escapeHtml, richTextToHtml } from './rich-text';
 
 type Text = string | null | undefined;
@@ -444,6 +444,27 @@ export const getPublishedResource = cache(async (slug: string) => {
         modificationDate,
       },
       authors,
+    ),
+  };
+});
+
+/** Social images for event routes whose page content still comes from the legacy source. */
+export const getPublishedResourceSocialImages = cache(async (slug: string) => {
+  const image = 'imageAlt image { url width height alternativeText }';
+  const query = `query ResourceSocialImages($slug: String!) {
+    resources(status: PUBLISHED, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
+      seo { openGraph { ${image} } twitter { ${image} } }
+    }
+  }`;
+  const { resources } = await publicGraphql<{
+    resources: { seo: Pick<ResourceSeo, 'openGraph' | 'twitter'> | null }[];
+  }>(query, 'ResourceSocialImages', { slug });
+  const seo = resources[0]?.seo;
+  return {
+    openGraph: socialImage(seo?.openGraph?.image, seo?.openGraph?.imageAlt),
+    twitter: socialImage(
+      seo?.twitter?.image ?? seo?.openGraph?.image,
+      seo?.twitter?.imageAlt ?? seo?.openGraph?.imageAlt,
     ),
   };
 });

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Media, Prose, Section, Tag } from '@/components';
-import { getEventPage, type EventBlock, type EventImage } from '@/content';
+import { getEventPage, getResourceSocialImages, type EventBlock, type EventImage } from '@/content';
 import { eventPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -195,7 +195,12 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   const title = event.seo?.title || event.title;
   const description = event.seo?.description || event.description;
   const canonical = event.seo?.canonical;
+  const social = await getResourceSocialImages(`events/${slug}`).catch(() => undefined);
   const image = event.socialImage;
+  const openGraphImages = social?.openGraph ?? (image && [
+    { url: image.src, width: image.width, height: image.height, alt: image.alt },
+  ]);
+  const twitterImages = social?.twitter ?? (image && [image.src]);
 
   return {
     title,
@@ -208,15 +213,13 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
       ...(event.publishedAt ? { publishedTime: event.publishedAt } : {}),
-      ...(image
-        ? { images: [{ url: image.src, width: image.width, height: image.height, alt: image.alt }] }
-        : {}),
+      ...(openGraphImages ? { images: openGraphImages } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      ...(image ? { images: [image.src] } : {}),
+      ...(twitterImages ? { images: twitterImages } : {}),
     },
   };
 }

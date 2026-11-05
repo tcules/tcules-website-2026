@@ -42,6 +42,7 @@ export {
   getCaseStudyPage,
   getCaseStudyDetail,
   getResourceDetail,
+  getResourceSocialImages,
   getPrivacyPolicyDocument,
   getTermsOfUseDocument,
   getCookiePolicyDocument,
