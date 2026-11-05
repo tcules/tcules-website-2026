@@ -239,8 +239,7 @@ export function getIdealServiceStory(slug: string) {
   return IDEAL_SERVICE_STORIES[slug] ?? null;
 }
 export const getContactPage = contactPagesSource.getContactPage.bind(contactPagesSource);
-export const createClientContact =
-  contactPagesSource.createClientContact.bind(contactPagesSource);
+export { createClientContact } from './sources/strapi/client-contact';
 export const getEventPage = eventsSource.getEventPage.bind(eventsSource);
 export const getExpertisePage = expertisesSource.getExpertisePage.bind(expertisesSource);
 export const getFutureInterfacesLabJoinPage =

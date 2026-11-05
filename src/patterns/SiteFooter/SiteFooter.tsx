@@ -5,25 +5,21 @@ import {
   Button,
   Cluster,
   Icon,
-  Input,
   Layout,
   Logo,
   RatingBadge,
   Section,
 } from '@/components';
 
+import { NewsletterForm } from './NewsletterForm';
 import styles from './SiteFooter.module.css';
 import type { SiteFooterProps } from './types';
 
 /**
  * SiteFooter — the closing band: brand, directory, newsletter, studio, legal.
  *
- * A SERVER component, and worth keeping that way. Nothing here is stateful, nothing reads the URL,
- * and the newsletter posts as a plain form rather than through JavaScript — so the footer ships no
- * client bundle at all. That is why `'use client'` is confined to SiteNav, which genuinely needs
- * it: a footer on every page of the site is the wrong place to hand the browser a hydration cost
- * for nothing. The mobile accordions below are native `<details>`, chosen so that constraint
- * survives them.
+ * The newsletter handles submission in a client component. The rest of the footer is rendered
+ * on the server, including the native mobile accordions.
  *
  * ── Five bands, five shapes ─────────────────────────────────────────────────────────────────────
  * The one decision worth defending. A footer is the easiest place in a site to end up with four
@@ -223,36 +219,7 @@ export function SiteFooter({
               <p className={styles.body}>{newsletter.description}</p>
             </Layout>
 
-            {/* A plain POST, no JavaScript. NOTHING SERVES THIS ENDPOINT YET — see ENDPOINTS in
-              @/lib/routes. `align="end"` so a field and button that have wrapped onto two lines
-              still sit on one baseline. */}
-            <form action={newsletter.action} method="post" className={styles.newsletterForm}>
-              <Cluster rowGap="tight" colGap="tight" align="end">
-                {/* The input is WRAPPED by its label rather than wired to it with an id. A real
-                  label is required — a placeholder is not one, it disappears the moment anyone
-                  types — and wrapping means the pattern needs no generated id, which is what keeps
-                  it a server component and lets four of them coexist on the proving ground without
-                  three broken `for` references. */}
-                <label className={styles.fieldLabel}>
-                  <span className={styles.fieldLabelText}>{newsletter.fieldLabel}</span>
-                  <Input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder={newsletter.placeholder}
-                    required
-                  />
-                </label>
-                {/* Ghost rather than solid: the page already has one primary action, two bands up,
-                  and a second solid button here would split the ask. extendHitArea because this
-                  one has nothing to help it — the field beside it is wrapped in a label that
-                  forwards taps, and this Button is not. 40px box, 44px target, row height
-                  unchanged. */}
-                <Button type="submit" emphasis="ghost" extendHitArea>
-                  {newsletter.cta.label}
-                </Button>
-              </Cluster>
-            </form>
+            <NewsletterForm {...newsletter} />
           </Layout>
         ) : null}
         {/* ── 4 · Studio ──────────────────────────────────────────────────────────────

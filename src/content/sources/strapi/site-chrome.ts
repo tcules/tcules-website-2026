@@ -1,6 +1,7 @@
 import { cache } from 'react';
 
 import type { BrandMarkName, SectionSurface } from '@/components';
+import { ENDPOINTS } from '@/lib/routes';
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
 import type { Navigation } from '../../types';
 
@@ -67,7 +68,6 @@ type FooterConfiguration = {
     fieldLabel: Text;
     placeholder: Text;
     submitLabel: Text;
-    action: Text;
     eyebrow: Text;
   } | null;
   meta: Entries<{ key: Text; value: Text; href: Text }>;
@@ -202,11 +202,10 @@ function mapFooter(config: FooterConfiguration | null | undefined): SiteFooterPr
       ? [config.address!.trim()]
       : [];
   const newsletter = config.newsletter;
-  const formAction = actionHref(newsletter?.action);
   const fieldLabel = text(newsletter?.fieldLabel);
   const submitLabel = text(newsletter?.submitLabel);
-  if (newsletter && (!formAction || !fieldLabel || !submitLabel))
-    warn('footer newsletter is missing its action or labels');
+  if (newsletter && (!fieldLabel || !submitLabel))
+    warn('footer newsletter is missing its labels');
   return {
     brand: {
       tagline: text(config.tagline) ?? '',
@@ -221,14 +220,14 @@ function mapFooter(config: FooterConfiguration | null | undefined): SiteFooterPr
       links: rows(group.links).flatMap((link) => footerLink(link) ?? []),
     })),
     newsletter:
-      newsletter && formAction && fieldLabel && submitLabel
+      newsletter && fieldLabel && submitLabel
         ? {
             title: text(newsletter.title) ?? '',
             description: text(newsletter.description) ?? '',
             fieldLabel,
             placeholder: text(newsletter.placeholder) ?? '',
             cta: { label: submitLabel },
-            action: formAction,
+            action: ENDPOINTS.newsletter,
             eyebrow: text(newsletter.eyebrow),
           }
         : undefined,

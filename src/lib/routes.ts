@@ -397,13 +397,7 @@ export const EXTERNAL = {
   x: 'https://x.com/tculesux',
 } as const;
 
-/**
- * Endpoints, which are not routes. Named here anyway so a form action is not a literal in a
- * pattern's fixture. NOTHING SERVES `newsletter` OR `enquiry` YET — the newsletter field posts to a
- * 404 until an `app/api/newsletter/route.ts` exists, and the corpus pages' enquiry form posts to a
- * 404 until `app/api/enquiry/route.ts` does (FORM_ENDPOINT_VERIFICATION, a release dependency on
- * every corpus page).
- */
+/** Same-origin form submission endpoints. */
 export const ENDPOINTS = {
   newsletter: '/api/newsletter',
   contact: '/api/contact',

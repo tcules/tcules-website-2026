@@ -32,7 +32,7 @@ export const SITE_FOOTER_QUERY = `
         rating { score platform mark href detail }
         groups { id title links { ${FOOTER_LINK} } }
         social { id label href mark isExternal }
-        newsletter { title description fieldLabel placeholder submitLabel action eyebrow }
+        newsletter { title description fieldLabel placeholder submitLabel eyebrow }
         meta { key value href }
         utility { ${FOOTER_LINK} }
         addressLines { text }

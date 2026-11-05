@@ -307,9 +307,6 @@ const FOOTER: SiteFooterProps = {
     description:
       'A deep dive into the intersection of design, strategy, and product innovation.',
     cta: { label: 'Subscribe' },
-    /* NOTHING SERVES THIS YET. There is no app/api/newsletter/route.ts, so a real submission is a
-       404 — the field is in place ahead of the endpoint, deliberately, and this is the note that
-       says so. See ENDPOINTS in @/lib/routes. */
     action: ENDPOINTS.newsletter,
     fieldLabel: 'Email address',
     placeholder: 'you@company.com',

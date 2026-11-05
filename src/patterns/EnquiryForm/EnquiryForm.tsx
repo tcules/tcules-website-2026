@@ -543,6 +543,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
   const successRef = useRef<HTMLDivElement>(null);
   const submittedCallbackFired = useRef(false);
+  const submissionInFlight = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
@@ -682,7 +683,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (submitting) return;
+    if (submissionInFlight.current) return;
 
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
@@ -710,16 +711,21 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
     (submitter instanceof HTMLElement ? submitter : fallbackSubmitter)?.focus();
 
+    const body = new FormData(form);
+    body.set('destination_page', window.location.pathname);
+    submissionInFlight.current = true;
     setLifecycle('submitting');
 
     try {
       const response = await fetch(props.action, {
         method: 'POST',
-        body: new FormData(event.currentTarget),
+        body,
       });
       setLifecycle(response.ok ? 'success' : 'error');
     } catch {
       setLifecycle('error');
+    } finally {
+      submissionInFlight.current = false;
     }
   }
 

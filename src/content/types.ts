@@ -300,11 +300,14 @@ export type ContactPage = {
 };
 
 export type ContactFormSubmission = {
-  clientName: string;
-  clientCompany: string;
   clientEmail: string;
-  clientContact: string;
   clientComments: string;
+  destinationPage: string;
+  clientName?: string;
+  clientCompany?: string;
+  clientContact?: string;
+  clientWebsite?: string;
+  services?: string;
 };
 
 export type ContactSubmissionResult = {
@@ -315,7 +318,6 @@ export type ContactSubmissionResult = {
 
 export type ContactContentSource = {
   getContactPage(slug: string): Promise<ContactPage | null>;
-  createClientContact(data: ContactFormSubmission): Promise<ContactSubmissionResult>;
 };
 
 export type CareerAction = {

@@ -59,27 +59,3 @@ export const CONTACT_QUERY = /* GraphQL */ `
     }
   }
 `;
-
-export const CREATE_CLIENT_CONTACT_MUTATION = /* GraphQL */ `
-  mutation CreateClientContact(
-    $data: ClientContactInput!
-    $status: PublicationStatus = PUBLISHED
-  ) {
-    createClientContact(data: $data, status: $status) {
-      documentId
-      clientName
-      clientCompany
-      clientEmail
-      clientContact
-      clientComments
-      clientProfilePicture {
-        documentId
-        url
-        alternativeText
-      }
-      createdAt
-      updatedAt
-      publishedAt
-    }
-  }
-`;
