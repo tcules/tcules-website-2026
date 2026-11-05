@@ -10,16 +10,20 @@ import type { CorpusBand } from '@/lib/corpus-types';
  * later takes the rule without an edit. A page with only one of the two, or with the form already
  * above the FAQ, comes back unchanged (the same array).
  *
- * The form band is the band that carries the form block; the FAQ band is named by the id the content
- * team gives it (`faq`, or About's `frequently-asked-questions`).
+ * The form band is the band that carries the form block, or the application band (`apply`), which
+ * the page takes on the enquiry form though the copy authors no form block (owner, 4 Nov 2026: "reuse
+ * the existing enquiry form"; /careers, /future-interfaces-lab/join). The FAQ band is named by the id
+ * the content team gives it (`faq`, or About's `frequently-asked-questions`).
  */
 
 const FAQ_IDS: ReadonlySet<string> = new Set(['faq', 'frequently-asked-questions']);
 
 export const isFaqBand = (band: CorpusBand): boolean => FAQ_IDS.has(band.id);
 
+const APPLICATION_IDS: ReadonlySet<string> = new Set(['apply']);
+
 export const isFormBand = (band: CorpusBand): boolean =>
-  band.blocks.some((block) => block.type === 'form');
+  APPLICATION_IDS.has(band.id) || band.blocks.some((block) => block.type === 'form');
 
 export function formBeforeFaq(bands: readonly CorpusBand[]): readonly CorpusBand[] {
   const faq = bands.findIndex(isFaqBand);

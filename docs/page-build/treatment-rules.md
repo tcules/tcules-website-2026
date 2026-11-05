@@ -266,6 +266,74 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - Logged as proposed: decisions/2026-11-04-glossary-hub-is-a-listing, -statement-holds-one-short-line,
   -term-page-closes-in-one-shape, -comparison-picks-its-term.
 
+## Added 4 Nov 2026 (/matter-design-system; proposed until the owner sees the page)
+
+- **A page about one artefact shows the artefact itself in its hero**, where the live site holds the real one
+  and the page binds no hero asset: a route-keyed cut-out (`ARTEFACT_HERO`, CorpusPage/images.ts), read after
+  the page's own binding and before a studio reuse. White product frames on paper take the `paper-deep`
+  contrast panel (ink is reserved); an artefact that carries its own shadows takes no Media `shadow`.
+- **A wide artefact (about 1.8:1 or wider) takes the centred hero**, media below (`CENTRED_HERO_ROUTES`): in
+  the beside split's half column it renders about 500 wide and its detail is lost.
+- **Three properties of a product, each a concrete mechanism** ("how tokens are named", "how components are
+  assembled"), are the drawn offer sheet across 3: one still flat drawing per property, heading its title and
+  words. Never the blue-marker ruled cell, which is for figures.
+
+## Added 4 Nov 2026 (/future-interfaces-lab; proposed until the owner sees the page)
+
+- **A set of experiments or artefacts takes each item's real image as its cover when every item has one**
+  (route-keyed `ITEM_COVERS`, CorpusPage/images.ts): vertical covered cards, three across, linked only where
+  the item links. Where any item lacks a usable image, the whole set is drawn instead (one still flat drawing
+  per item on Bento's plates, a tile linked only where the item has a page). Never a set of captures mixed
+  with plates: one register per band.
+- **An item whose paragraph ends on its own "→" link is a destination**: the link becomes the tile's or
+  card's href, the sentence before it its words (DestinationsBand).
+- **A close that is one sentence with several inline links** (a mechanism, not an ask) stays prose and, where
+  the page draws it (`figure` scene), sits beside one flat figure from 1024 (`CloseFigureBand`), as a method
+  sits beside its graphic. Its links stay inline; nothing is lifted into an action.
+- **Two closing asks for two readers, each one sentence with one link, share one ink island in two peer
+  halves** (`PAIRED_CLOSES` in plan.ts, CtaSection `second`): two islands would touch, and as prose they make
+  a run of text bands after the FAQ. The first ask keeps the solid, the second the outline partner; the
+  moved band is listed in `BANDS_ELSEWHERE`.
+
+## Added 4 Nov 2026 (/future-interfaces-lab/join; proposed until the owner sees the page)
+
+- **A set of abstract qualities** (reasons to join, what a programme is like) is the offer sheet headed by
+  glyphs: one Solar glyph per item over its title and words, no hairline or blue mark (those are for figures),
+  no card, no disc; 3 + 2 for five (OfferBands `SHEET_GLYPHS`, `arrangement: 'grid'`). A flat drawing would read
+  as a mechanism; an isometric set would be five placeholders.
+- **Roles or peers a reader places themselves among** are the drawn sheet across 3, one still flat drawing per
+  role drawing its title's idea, equal weight, no lead item.
+- **A method told as `###` steps is a method**: MethodBand reads each item as a numbered step beside the one
+  figure, exactly as bold-led paragraphs.
+- **An application the page takes itself** (the owner's 4 Nov answer) is the enquiry island in the application
+  wording (`APPLICATION_FORMS`, blocks.tsx): the band's selection steps as the island's numbered points and the
+  success view's next steps, its own link words as the submit, the programme's address as "or write to", no
+  reply promise unless authored. The hero's ask to the same external form lands on the band (`#apply`).
+- **A closing line filed under the last FAQ answer** ("Still got questions? Drop us a note: …") closes the band,
+  centred under the accordion, never hidden inside an answer.
+- **An island footnote's glyph names its kind**: a shield for an NDA or confidentiality line, the info mark for
+  any other.
+- **A close whose inline links all go to one place** is the ink island, its sentences whole as the lede, the
+  first link's words as one LINK action (never a solid when the page's main action is elsewhere). Opt-in by
+  route and band (`ISLAND_CLOSES`, plan.ts) until the owner rules it for every such close.
+
+## Added 4 Nov 2026 (/careers; proposed until the owner sees the page)
+
+- **A band that shows the studio itself is the studio collage** on any page (`STUDIO_COLLAGE`, CorpusPage/images.ts;
+  studio-collage), with each tile matched to a sentence of its copy. It takes no side in the media alternation.
+- **A page whose first band is the studio collage takes a words-only centred hero** (`TEXT_HERO_ROUTES`), so two
+  photograph bands never touch at the top of the page. High-traffic routes are never on that list.
+- **Two prose paragraphs that are peers of one kind** (what the work is, how it grows) sit as two columns under
+  the full-width head from 1024, `column` apart (`PEER_PARAGRAPHS`), and never leave a half-empty band.
+- **A checklist a reader checks themselves against** is the head beside glyph-led bodiless rows, one item per
+  row, with the closing line under the list (`list-beside`). Never the blue-marker cells.
+- **Peers a reader picks from (open roles)** are the glyph-headed offer sheet, as many across as keep no tile
+  alone on a row (up to four). The glyph is by discipline, read from the item's meta line. Never ruled rows in
+  two columns.
+- **An application band is always the enquiry island**, placed before the FAQ (order.ts). Its form asks only what
+  the copy asks for: a role chip group read from the page's roles band, the address, the link. Without selection
+  steps it keeps the island's drawing.
+
 ## Added 4 Nov 2026 (/why-tcules and /how-we-work, the 3 Nov copy; proposed until the owner sees the pages)
 
 - **A claim never carries a quote under it** (owner, 4 Nov 2026: "the embedded testimonials make the designs

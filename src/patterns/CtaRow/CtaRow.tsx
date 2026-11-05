@@ -1,5 +1,6 @@
 import { Button, Cluster, Icon, Layout } from '@/components';
 import { cx } from '@/lib/cx';
+import { leavesSite } from '@/lib/href';
 
 import styles from './CtaRow.module.css';
 
@@ -113,7 +114,7 @@ export function CtaRow(props: CtaRowProps) {
       emphasis="link"
       size="md"
       extendHitArea
-      icon={<Icon name="arrow-right" />}
+      icon={<Icon name={leavesSite(to.href) ? 'arrow-right-up' : 'arrow-right'} />}
     >
       {to.label}
     </Button>

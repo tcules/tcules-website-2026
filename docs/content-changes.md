@@ -900,6 +900,26 @@ that the Dealpath example still renders where it should once the line is gone.
 
 **Found in.** Review with Jatin, 2 Nov 2026.
 
+## /future-interfaces-lab/join: "How selection works" split from the application heading (4 Nov 2026, owner)
+
+**Page / section.** `/future-interfaces-lab/join`, the application band `apply`.
+
+**What's needed.** The heading "Apply to the Future Interfaces Lab (FIL): how selection works" is split in
+two, every other word kept: the band `apply` is headed **"Apply to the Future Interfaces Lab (FIL)"** and keeps
+its lead ("Applications for the next cohort are now open."), the italic "FIL is a selective fellowship…" and
+the "Apply to the Lab" link. A new band `how-selection-works`, headed **"How selection works"**, follows it
+with the three steps (Send your application, We review, Shortlisting), titles and sentences verbatim. Applied
+in `_pages/future-interfaces-lab__join.md` (band order and composition map updated); Strapi needs the same
+split.
+
+**Why.** Owner's review, 4 Nov: "how selection works as a new section after the form", then, on the built
+page: "just under the form is fine. In a section of its own the gap is too much". On the site the steps sit
+under the form inside the apply band (plan.ts `STEPS_UNDER_FORM`); in Strapi they are still their own
+section with that heading. The form's sent view still repeats
+them (`APPLICATION_FORMS` `stepsBand`).
+
+**Found in.** /future-interfaces-lab/join pass 2 (tracker 2.35).
+
 ## /why-tcules and /how-we-work: cut for the design (4 Nov 2026, owner)
 
 **Page / section.** `/why-tcules` and `/how-we-work`, the 3 Nov copy (tracker 2.60).

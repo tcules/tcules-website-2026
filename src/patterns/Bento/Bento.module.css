@@ -115,6 +115,7 @@
   padding: var(--gap-block);
   border: var(--bnt-rule-width) solid var(--bnt-rule-ink);
   border-radius: var(--bnt-radius);
+  background: var(--bnt-tile-ground);
   color: inherit;
   text-decoration: none;
   transition:

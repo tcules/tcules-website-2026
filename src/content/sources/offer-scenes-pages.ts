@@ -637,4 +637,37 @@ export const PAGE_OFFER_SCENES = {
     },
     stories: {},
   },
+  /* The lab artefact's "What's inside": the Matter file's three properties, each drawn from its title. */
+  '/matter-design-system': {
+    items: {
+      contents: by({
+        'Tokens named for their purpose.': 'wyg-matter-design-system-tokens-named-purpose',
+        'Components built from smaller parts.': 'wyg-matter-design-system-components-built-smaller-parts',
+        'Naming you can follow.': 'wyg-matter-design-system-naming-you-can-follow',
+      }),
+    },
+    stories: {},
+  },
+  /* The Lab's four internal tools for design work (drawn Bento tiles) and the promotion figure beside
+     its sentence; docs/page-build/pages/future-interfaces-lab.md. */
+  '/future-interfaces-lab': {
+    items: {
+      'design-work': by({
+        'Matter Design System': 'wyg-future-interfaces-lab-matter-design-system',
+        'AI Design Audit Agent': 'wyg-future-interfaces-lab-ai-design-audit-agent',
+        'UI Pattern Vision Labelling Tool': 'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
+        'Landing Page Audit Programme': 'wyg-future-interfaces-lab-landing-page-audit-programme',
+      }),
+      promotion: { figure: 'wyg-future-interfaces-lab-promotion' },
+    },
+    stories: {},
+  },
+  /* The method's one figure beside its steps; docs/page-build/pages/future-interfaces-lab-join.md. The
+     three role drawings went in pass 2 (owner, 4 Nov 2026): "Who we look for" is glyph-headed cards. */
+  '/future-interfaces-lab/join': {
+    items: {
+      'what-youll-do': { figure: 'wyg-future-interfaces-lab-join-method' },
+    },
+    stories: {},
+  },
 } as unknown as Readonly<Record<string, OfferScenes>>;

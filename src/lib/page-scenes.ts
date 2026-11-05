@@ -450,6 +450,18 @@ export const PAGE_SCENE_NAMES = [
   'tool-figma-storybook-fidelity-checklist-corrections',
   'tool-prototype-readiness-checklist-example',
   'tool-prototype-readiness-checklist-brief',
+  /* /matter-design-system: "What's inside", the file's three properties (components/Sketch/wyg-matter-design-system.tsx) */
+  'wyg-matter-design-system-tokens-named-purpose',
+  'wyg-matter-design-system-components-built-smaller-parts',
+  'wyg-matter-design-system-naming-you-can-follow',
+  /* /future-interfaces-lab: the four design-work tiles and the promotion figure (components/Sketch/wyg-future-interfaces-lab.tsx) */
+  'wyg-future-interfaces-lab-matter-design-system',
+  'wyg-future-interfaces-lab-ai-design-audit-agent',
+  'wyg-future-interfaces-lab-ui-pattern-vision-labelling-tool',
+  'wyg-future-interfaces-lab-landing-page-audit-programme',
+  'wyg-future-interfaces-lab-promotion',
+  /* /future-interfaces-lab/join: the method's figure (components/Sketch/wyg-future-interfaces-lab-join.tsx) */
+  'wyg-future-interfaces-lab-join-method',
   /* Home, "How our designers use AI" (owner, 4 Nov 2026, direction A): one plate per step. */
   'home-ai-check',
   'home-ai-decide',

@@ -26,6 +26,7 @@ import {
   ClaimSet,
   OfferParts,
   OfferSheet,
+  ProcessFlow,
   ReadDown,
   Steps,
   type BentoItem,
@@ -43,20 +44,34 @@ import {
   type EngagementOption,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
-import { corpusImage } from '@/lib/corpus-images';
+import { corpusImage, type CorpusImage } from '@/lib/corpus-images';
 import { glyphForRoute } from '@/lib/glyphs';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 import { placeholderIllustration } from '@/lib/placeholders';
-import { FULL_COLUMN, MEDIA_SPLIT } from '@/lib/image-sizes';
+import { FULL_COLUMN, MEDIA_SPLIT, MEDIA_SPLIT_HALVES } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
-import { caseCover, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
-import { isCardSet, isClaimList, isIllustratedProse, isSituationProse, isWhatYouGet, signature } from './plan';
+import {
+  bandArtefact,
+  slotImage,
+  slugOf,
+  studioBandPhoto,
+  type SlotImage,
+} from './images';
+import {
+  isCardSet,
+  isClaimList,
+  isIllustratedProse,
+  isIslandClose,
+  isSituationProse,
+  isWhatYouGet,
+  signature,
+} from './plan';
 import {
   boldLead,
   isExample,
@@ -721,19 +736,34 @@ function bandTerms(rest: readonly CorpusBlock[]): {
  */
 export function SheetBand({
   band,
+  surface,
   scenes,
   arrangement,
   icons,
+  images,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   scenes?: (title: string) => OfferSheetItem['scene'];
-  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_ROWS`). */
-  arrangement?: 'grid' | 'rows';
-  /** A rows sheet's glyph per item title (OfferBands `SHEET_ROWS`). */
+  /**
+   * An image per item title, a detail of the page's own artefact (images.ts `ITEM_CUT_OUTS`), shown in
+   * place of the drawings when every item has one.
+   */
+  images?: Readonly<Record<string, NonNullable<OfferSheetItem['image']>>>;
+  /** OfferSheet's `arrangement`; the band's, chosen by the page (OfferBands `SHEET_GLYPHS`). */
+  arrangement?: 'grid' | 'rows' | 'list';
+  /** A glyph per item title, rows, list or grid (OfferBands `SHEET_GLYPHS`). */
   icons?: Readonly<Record<string, IconName>>;
 }) {
   const parts = sheetParts(band);
+  /* An item's image by its title as authored, with or without its full stop. */
+  const imageOf = (title?: string) =>
+    title ? (images?.[title] ?? images?.[title.replace(/\.\s*$/, '')]) : undefined;
+  const shown = images !== undefined && parts.items.every((item) => imageOf(item.title));
   const items = parts.items.map((item) => {
+    const image = shown ? imageOf(item.title) : undefined;
+    if (image) return { ...item, image };
     /* A statement's scene is filed under its words, or under the words before its colon. */
     const key = item.title ?? item.id ?? '';
     const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);
@@ -764,7 +794,7 @@ export function SheetBand({
         : { title: item.body ?? item.id ?? '' },
     );
     return (
-      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
+      <ContentSection surface={surface} {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
         <Layout rowGap="block">
           <ReadDown rows={rows} columns={2} />
         </Layout>
@@ -772,7 +802,7 @@ export function SheetBand({
     );
   }
   return (
-    <OfferSheet
+    <OfferSheet surface={surface}
       {...head(band)}
       lead={parts.lead}
       items={items}
@@ -1318,16 +1348,28 @@ function stepOf(runs: readonly InlineRun[]): Step {
 }
 
 /**
+ * Methods set as a light flow, by band id: a few one-sentence steps read across, each stage's title and
+ * its sentence, an arrow to the next, no rules and no drawing (ProcessFlow `ruled={false}`). For a short
+ * sequence that follows a heavy band and should not repeat the page's own method beside its figure:
+ * /future-interfaces-lab/join "How selection works", right after the blue application island (owner,
+ * 4 Nov 2026: "how selection works as a new section after the form"). New arrangement, owner to confirm.
+ */
+const FLOW_METHODS: ReadonlySet<string> = new Set(['how-selection-works']);
+
+/**
  * A method: the ordered steps (a list, or a run of labelled claims) as Steps under the head; the
  * opening paragraph as the lead; everything else, a table included, in order around them.
  */
 export function MethodBand({
   band,
+  surface,
   scenario,
   figure,
   noteIcon,
 }: {
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   scenario?: SketchName;
   figure?: { sketch: SketchName } | { image: SlotImage };
   /** A glyph that heads the sentences after the steps, which then stand as callouts, not prose. */
@@ -1342,11 +1384,39 @@ export function MethodBand({
   const rest = leadText ? blocks.slice(1) : blocks;
   const listAt = rest.findIndex((block) => block.type === 'list');
   const claimAt = rest.findIndex((block) => leadOf(block) !== null && !isBareLabel(block));
+  /* A step authored as a `###` item (its heading the title, its paragraphs the body) is the same step
+     as a bold-led paragraph, read the same way (4 Nov 2026, /future-interfaces-lab/join "How the
+     fellowship works": five `###` steps rendered no steps at all). */
+  const itemAt = rest.findIndex(
+    (block) =>
+      block.type === 'item' && block.blocks.every((inner) => inner.type === 'paragraph'),
+  );
   let steps: Step[] = [];
   const trailingNotes: Step[] = [];
   let from = 0;
   let to = 0;
-  if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
+  const firstOf = (...at: number[]) => Math.min(...at.filter((n) => n >= 0));
+  if (itemAt >= 0 && itemAt === firstOf(itemAt, claimAt, listAt)) {
+    from = itemAt;
+    to = itemAt;
+    for (
+      let block = rest[to];
+      block?.type === 'item' && block.blocks.every((inner) => inner.type === 'paragraph');
+      block = rest[to]
+    ) {
+      const paras = block.blocks.flatMap((inner) =>
+        inner.type === 'paragraph' ? [inner.runs] : [],
+      );
+      steps.push(
+        paras.length === 1
+          ? { title: block.headingText, ...rowBody(paras[0] ?? []) }
+          : paras.length > 1
+            ? { title: block.headingText, bodyHtml: paras.map((runs) => inlineToHtml(runs)) }
+            : { title: block.headingText },
+      );
+      to += 1;
+    }
+  } else if (claimAt >= 0 && (listAt < 0 || claimAt < listAt)) {
     from = claimAt;
     to = claimAt;
     /* A step authored as a bold-led paragraph keeps the plain paragraphs that follow it as more of
@@ -1402,13 +1472,35 @@ export function MethodBand({
       return match ? { title: match[1] ?? text, body: match[2] ?? '' } : { title: text };
     });
     return (
-      <ContentSection {...head(band)} data-band="F">
+      <ContentSection surface={surface} {...head(band)} data-band="F">
         <Steps steps={steps} />
       </ContentSection>
     );
   }
   const before = rest.slice(0, from);
   const parts = scenarioParts(rest.slice(to));
+  if (
+    FLOW_METHODS.has(band.id) &&
+    steps.length >= 2 &&
+    steps.length <= 5 &&
+    steps.every((step) => step.body) &&
+    before.length === 0 &&
+    parts.before.length === 0 &&
+    !parts.label &&
+    trailingNotes.length === 0
+  ) {
+    return (
+      <ContentSection surface={surface} {...head(band)} data-band="process-flow" lead={leadText}>
+        <ProcessFlow
+          ruled={false}
+          stages={steps.map((step) => ({
+            label: step.title,
+            items: [step.body ?? ''],
+          }))}
+        />
+      </ContentSection>
+    );
+  }
   const after = parts.before;
   const stepsNode =
     steps.length === 0 ? null : figure ? (
@@ -1435,7 +1527,7 @@ export function MethodBand({
       </Layout>
     );
   return (
-    <ContentSection {...head(band)} data-band="F" lead={leadText}>
+    <ContentSection surface={surface} {...head(band)} data-band="F" lead={leadText}>
       <Layout rowGap="stack">
         {before.length > 0 ? (
           <BandBody blocks={before} labelledBy={head(band).headingId} />
@@ -1973,8 +2065,25 @@ export function IndustriesBand({ band }: { page?: CorpusPage; band: CorpusBand }
  * Items that each lead to a page: `###` items with a link line, or a link row alone. Where every
  * destination has its service scene, the approved Bento (four tracks for four or eight, else three);
  * otherwise one icon card each, under the full-width head (component-map G16).
+ *
+ * Two variants a page opts into (4 Nov 2026, /future-interfaces-lab; owner to judge):
+ *   - `covers`: every item's own image, by title (images.ts `ITEM_COVERS`). The set is vertical covered
+ *     cards, three across, linked only where the item links (C-image).
+ *   - `sceneOf`: every item drawn by the page (offer-scenes `items[band]`). Bento's drawn tiles, still
+ *     where an item has no page; an item's closing "→" link is its tile's destination (C-icon).
  */
-export function DestinationsBand({ band }: { band: CorpusBand }) {
+export function DestinationsBand({
+  band,
+  surface,
+  sceneOf,
+  covers,
+}: {
+  band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
+  sceneOf?: (title: string) => SketchName | undefined;
+  covers?: Readonly<Record<string, CorpusImage>>;
+}) {
   const blocks = content(band);
   const items = blocks.filter((block): block is ItemBlock => block.type === 'item');
   const firstOther = blocks.findIndex((block) => block.type !== 'paragraph');
@@ -1991,15 +2100,39 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
           const link = item.blocks.flatMap((inner) =>
             inner.type === 'links' ? inner.links : [],
           )[0];
-          const paras = item.blocks.filter((inner) => inner.type === 'paragraph');
+          const paras = item.blocks.filter(
+            (inner): inner is Extract<CorpusBlock, { type: 'paragraph' }> =>
+              inner.type === 'paragraph',
+          );
+          /* An item paragraph that ends on its "→" link (/future-interfaces-lab's Matter): the link is
+             the item's destination, the sentence before it its words. */
+          const lastRuns = paras.length > 0 ? trimEnd(paras[paras.length - 1]!.runs) : [];
+          const arrow = lastRuns.at(-1);
+          const trailing =
+            !link && arrow?.type === 'link' && /[→➝➔⟶]\s*$/u.test(plain(arrow.children))
+              ? arrow
+              : undefined;
+          const bodyRuns = paras.map((inner, index) =>
+            trailing && index === paras.length - 1
+              ? trimEnd(lastRuns.slice(0, -1))
+              : inner.runs,
+          );
           return [
             {
               title: item.headingText,
-              href: link?.href,
-              ctaLabel: link?.labelText,
-              bodyHtml: paras.map((inner) =>
-                inner.type === 'paragraph' ? inlineToHtml(inner.runs) : '',
-              ),
+              href: link?.href ?? trailing?.href,
+              ctaLabel:
+                link?.labelText ??
+                (trailing ? plain(trailing.children).replace(/\s*[→➝➔⟶]\s*$/u, '') : undefined),
+              /* The trailing link's words, which the body no longer carries: printed as the tile's
+                 foot action, so the copy reaches the page whole (critic, 4 Nov 2026). */
+              action: trailing
+                ? plain(trailing.children)
+                    .replace(/\s*[→➝➔⟶]\s*$/u, '')
+                    .trim()
+                : undefined,
+              bodyHtml: bodyRuns.map((runs) => inlineToHtml(runs)),
+              bodyText: bodyRuns.map((runs) => plain(runs).trim()).join(' '),
             },
           ];
         })
@@ -2007,24 +2140,70 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
           .flatMap((block) => (block.type === 'links' ? block.links : []))
           .map((link) => ({
             title: link.labelText,
-            href: link.href,
-            ctaLabel: undefined,
+            href: link.href as string | undefined,
+            ctaLabel: undefined as string | undefined,
+            action: undefined as string | undefined,
             bodyHtml: [] as string[],
+            bodyText: '',
           }));
-  const scenes = dest.map((d) => (d.href ? serviceSceneFor(d.href) : undefined));
   const introNode = intro.length > 0 ? <BandBody blocks={intro} /> : null;
+  const covered = covers && dest.length > 0 && dest.every((d) => covers[d.title]);
+  const drawn = sceneOf && dest.length >= 3 ? dest.map((d) => sceneOf(d.title)) : undefined;
+  const scenes = drawn?.every(Boolean)
+    ? drawn
+    : dest.map((d) => (d.href ? serviceSceneFor(d.href) : undefined));
   let set: ReactNode;
-  if (dest.length >= 3 && scenes.every(Boolean) && dest.every((d) => d.href)) {
-    const tiles: BentoItem[] = dest.map((d, index) => ({
-      id: d.href as string,
+  if (covered) {
+    /* Each item shown by its own artefact: the vertical covered card, three across, the whole set
+       visible at every width (scroll never: a phone stacks them). */
+    const cards: BlockCardSetItem[] = dest.map((d) => ({
+      id: d.title,
       title: d.title,
-      href: d.href as string,
-      scene: scenes[index]!,
-      ...(d.bodyHtml.length > 0
-        ? { body: d.bodyHtml.map((h) => h.replace(/<[^>]+>/g, '')).join(' ') }
-        : {}),
+      media: { type: 'image', image: covers[d.title] as CorpusImage },
+      ...(d.bodyHtml.length > 0 ? { bodyHtml: d.bodyHtml } : {}),
+      ...(d.href ? { href: d.href } : {}),
     }));
-    set = <Bento items={tiles} tracks={dest.length % 4 === 0 ? 4 : 3} />;
+    const node = (
+      /* `sm`: the drawn set's title step (Bento's h5), so two halves of one list on one page carry
+         equal weight (critic, 4 Nov 2026, /future-interfaces-lab). */
+      <BlockCardSet items={cards} lead="none" across={3} size="sm" cue="title" scroll="never" />
+    );
+    return (
+      <ContentSection surface={surface} {...head(band)} data-band="C-image" lead={leadText}>
+        {introNode ? (
+          <Layout rowGap="stack">
+            {introNode}
+            {node}
+          </Layout>
+        ) : (
+          node
+        )}
+      </ContentSection>
+    );
+  }
+  if (
+    dest.length >= 3 &&
+    scenes.every(Boolean) &&
+    (drawn?.every(Boolean) || dest.every((d) => d.href))
+  ) {
+    const tiles: BentoItem[] = dest.map((d, index) => ({
+      id: d.href ?? d.title,
+      title: d.title,
+      ...(d.href ? { href: d.href } : {}),
+      scene: scenes[index]!,
+      ...(d.bodyText ? { body: d.bodyText } : {}),
+      ...(d.href && d.action ? { action: d.action } : {}),
+    }));
+    /* A set the page draws (`sceneOf`) reads drawing first, then title and body, as the covered set
+       it sits beside does; the service bento keeps its words over the drawing. */
+    set = (
+      <Bento
+        items={tiles}
+        tracks={dest.length % 4 === 0 ? 4 : 3}
+        visual={drawn?.every(Boolean) ? 'start' : 'end'}
+        panels={surface === 'tint'}
+      />
+    );
   } else {
     const cards: BlockCardSetItem[] = dest.map((d) => ({
       id: d.href ?? d.title,
@@ -2045,7 +2224,7 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
     );
   }
   return (
-    <ContentSection {...head(band)} data-band="C-icon" lead={leadText}>
+    <ContentSection surface={surface} {...head(band)} data-band="C-icon" lead={leadText}>
       {introNode ? (
         <Layout rowGap="stack">
           {introNode}
@@ -2393,16 +2572,16 @@ export function DirectoryBand({ page, band }: { page?: CorpusPage; band: CorpusB
 export function TextBand({
   page,
   band,
+  surface,
   side = 'start',
   scenario,
-  surface,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** The band's ground, from the page's plan (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   side?: 'start' | 'end';
   scenario?: SketchName;
-  /** The ground the plan gives the band, for the shapes that take one (claim lists, card sets, situations). */
-  surface?: 'paper' | 'tint';
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
@@ -2426,13 +2605,41 @@ export function TextBand({
   );
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   /* A section head is one size down the page: a media split's head takes the `lg` (h2) role, as a
-     plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller"). */
+     plain prose band's does (owner, 1 Nov 2026: "this section's title is suddenly smaller").
+     The band's links follow the words they close, a `block` under the last paragraph: the media
+     split places its `actions` after the body (owner, 4 Nov 2026, /careers "How AI fits into the
+     job": "cta below the body?"; decisions/2026-11-04-prose-band-link-follows-its-body). */
   if (isSituationProse(band.id)) return <SituationsBand band={band} surface={surface} />;
   if (isClaimList(band.id)) return <ClaimListBand band={band} surface={surface} />;
   if (isCardSet(band.id)) return <CardSetBand band={band} surface={surface} />;
+  /* The page's own artefact beside its words (images.ts `ARTEFACT_BAND`), ahead of any illustration
+     slot: a real picture of the thing the page is about replaces a placeholder (owner, 4 Nov 2026,
+     /matter-design-system). Cropped as the split's photograph, or whole at its own ratio in a half. */
+  const artefact = bandArtefact(page.route, band.id);
+  if (artefact) {
+    return (
+      <ContentSection surface={surface}
+        {...head(band)}
+        data-band="B"
+        arrangement="media"
+        media={
+          artefact.fit === 'crop'
+            ? { image: artefact.image, side, weight: 'photo', head: 'lg', pin: false }
+            : {
+                drawing: <Media image={artefact.image} sizes={MEDIA_SPLIT_HALVES} />,
+                side,
+                head: 'lg',
+              }
+        }
+        actions={actions}
+      >
+        {text}
+      </ContentSection>
+    );
+  }
   if (isIllustratedProse(band.id)) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2441,6 +2648,7 @@ export function TextBand({
           side,
           weight: 'photo',
           head: 'lg',
+          pin: false,
         }}
         actions={actions}
       >
@@ -2504,11 +2712,11 @@ export function TextBand({
   }
   if (bound) {
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
-        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg' }}
+        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg', pin: false }}
         actions={actions}
       >
         {text}
@@ -2538,20 +2746,49 @@ export function TextBand({
       : [];
     const all = [...liftedLinks, ...links];
     return (
-      <ContentSection
+      <ContentSection surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
         media={{ image: corpusImage(studio), side, weight: 'photo', head: 'lg' }}
+        actions={all.length > 0 ? <LinkActions links={all} /> : undefined}
       >
-        {all.length > 0 ? (
-          <Layout rowGap="block">
-            <BandBody blocks={words} />
-            <LinkActions links={all} />
-          </Layout>
-        ) : (
-          <BandBody blocks={words} />
-        )}
+        <BandBody blocks={words} />
+      </ContentSection>
+    );
+  }
+  /* Two paragraphs that are peers, set side by side under the full-width head (PEER_PARAGRAPHS). */
+  const peers = PEER_PARAGRAPHS.has(`${page.route}#${band.id}`)
+    ? (body as readonly CorpusBlock[]).flatMap((block) =>
+        block.type === 'paragraph' ? [block] : [],
+      )
+    : [];
+  if (peers.length === 2 && peers.length === body.length) {
+    return (
+      <ContentSection surface={surface} {...head(band)} data-band="C-text" footer={actions}>
+        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="text">
+          {peers.map((block, index) => (
+            <Prose key={index} html={`<p>${inlineToHtml(block.runs)}</p>`} />
+          ))}
+        </Layout>
+      </ContentSection>
+    );
+  }
+  /* A short prose band set head beside body (HEAD_BESIDE_PROSE), in halves: the head in the first
+     half, the words from the column's middle, on the line the page's other beside bands (the lists,
+     the FAQ) share (decisions/2026-09-28-content-section-head-beside-body; 2026-11-04-faq-beside-in-
+     halves). In the narrow head track the heading wrapped to four lines over a three-line paragraph
+     (/careers critic, 4 Nov 2026). */
+  if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
+    return (
+      <ContentSection surface={surface}
+        {...head(band)}
+        data-band="C-text"
+        arrangement="beside"
+        split="halves"
+        footer={actions}
+      >
+        {text}
       </ContentSection>
     );
   }
@@ -2601,11 +2838,33 @@ export function TextBand({
     );
   }
   return (
-    <ContentSection {...head(band)} data-band="C-text" footer={actions}>
+    <ContentSection surface={surface} {...head(band)} data-band="C-text" footer={actions}>
       {text}
     </ContentSection>
   );
 }
+
+/**
+ * Short prose bands set head beside body, by route and band. /careers "Tcules internships, residencies
+ * and Future Interfaces Lab places": one paragraph under its head hung in 60% of the column with the
+ * rest of the band empty, and read as a stray between the roles and the application (critic, 4 Nov
+ * 2026). Beside, the head and its paragraph fill the row as one object and the band's shape differs
+ * from the full-width roles above it. Words unchanged; owner to confirm.
+ */
+const HEAD_BESIDE_PROSE: ReadonlySet<string> = new Set([`${ROUTES.careers}#lab`]);
+
+/**
+ * Prose bands whose two paragraphs are peers of one kind, set as two columns under the full-width head
+ * from 1024 (`column` apart: two halves of the same kind), by route and band; one column below, the
+ * paragraphs a `text` apart. /careers "The work": what the work is, and how the job grows. As one column
+ * at the measure it left the right half of the band empty between two picture bands (4 Nov 2026, owner
+ * to confirm). Words unchanged.
+ */
+const PEER_PARAGRAPHS: ReadonlySet<string> = new Set([
+  `${ROUTES.careers}#product-work`,
+  /* /matter-design-system `use` left 4 Nov 2026 (pass 2): the band now carries Matter's own components
+     beside its words (images.ts ARTEFACT_BAND). */
+]);
 
 /**
  * Starting situations (plan `SITUATION_PROSE`, /how-we-work "Every project starts from your product
@@ -2856,9 +3115,12 @@ export function CloseBand({
   page,
   band,
   island,
+  surface,
 }: {
   page: CorpusPage;
   band: CorpusBand;
+  /** The ground when the close is prose, not an island (alternating grounds, plan.ts). */
+  surface?: 'paper' | 'tint';
   /** The close's island, ink unless the page closes on blue (About: owner, 31 Oct 2026). */
   island?: 'blue' | 'ink';
 }) {
@@ -2905,6 +3167,44 @@ export function CloseBand({
       />
     );
   }
+  /* A close whose inline links all go to ONE place (4 Nov 2026, /future-interfaces-lab/join "Ask to
+     see work from an experiment": "the contact page … contact Tcules", both /contact): the ink island,
+     its words kept whole as the lede, and that place its one action, labelled with the first link's own
+     words. The lede is PLAIN text: the action is the link, so the sentence does not carry it again
+     (critic, 4 Nov 2026, pass 2: two underlined inline links and an action, all to /contact, read as
+     a paragraph of links with a button echoing one of them, and the links broke across lines in the
+     centred island on a phone). Every link goes where the action goes, so no reader loses a way on. A
+     LINK action, never a solid: a side door for another reader, and the page's one main
+     action is elsewhere. Opted in per band (plan.ts `ISLAND_CLOSES`) until the owner rules it for every such
+     close, because it would also turn /how-we-work/ai-native-product-design's "your rules", the
+     /insights hubs' "talk" bands and /careers' "apply" into islands. */
+  const inline = paras.flatMap((block) =>
+    block.runs.flatMap((run) => (run.type === 'link' ? [run] : [])),
+  );
+  const [lead] = inline;
+  if (
+    isIslandClose(page.route, band.id) &&
+    lead &&
+    links.length === 0 &&
+    !others &&
+    paras.length > 0 &&
+    paras.length <= 2 &&
+    inline.every((run) => run.href === lead.href)
+  ) {
+    const words = plain(lead.children);
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        arrangement="open"
+        intent="onward"
+        {...(island ? { island } : {})}
+        heading={band.headingText}
+        body={paras.map((block) => plain(block.runs)) as [string] | [string, string]}
+        actions={[{ label: words.charAt(0).toUpperCase() + words.slice(1), href: lead.href }]}
+      />
+    );
+  }
   const [first, second] = links;
   if (first && simple && !others) {
     const body = paras.map((block) => plain(block.runs));
@@ -2927,7 +3227,91 @@ export function CloseBand({
       />
     );
   }
-  return <TextBand page={page} band={band} />;
+  return <TextBand page={page} band={band} surface={surface} />;
+}
+
+/**
+ * A close the page draws (4 Nov 2026, /future-interfaces-lab `promotion`): its head AND its words in
+ * one column beside ONE flat figure from 1024, the figure after the words below it (ContentSection
+ * `media.drawing`). Owner, 4 Nov 2026: "why isn't the title simply in the left side area with the
+ * body?" The head used to span the band with the sentence and the figure under it, which left the
+ * sentence alone low-left under an empty top-right. The sentence keeps every inline link as authored,
+ * so nothing is lifted into an action. It stays prose (C-text): the figure illustrates the sentence,
+ * it is not an island. The head keeps the band's h2 step (`lg`): a close is not the page's argument.
+ */
+export function CloseFigureBand({
+  band,
+  scene,
+  surface,
+}: {
+  band: CorpusBand;
+  scene: SketchName;
+  surface?: 'paper' | 'tint';
+}) {
+  return (
+    <ContentSection surface={surface}
+      {...head(band)}
+      data-band="C-text"
+      arrangement="media"
+      media={{ drawing: <Sketch name={scene} />, head: 'lg' }}
+    >
+      <BandBody blocks={content(band)} labelledBy={head(band).headingId} />
+    </ContentSection>
+  );
+}
+
+/** A one-sentence close split for its island: the sentence as the lede (its link's words kept as words) and the link as the action. */
+function closeAsk(
+  band: CorpusBand,
+): { lede: string; action: { label: string; href: string } } | null {
+  const paras = content(band).filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const links = paras.flatMap((block) =>
+    block.runs.flatMap((run) => (run.type === 'link' ? [run] : [])),
+  );
+  const [link] = links;
+  if (paras.length !== 1 || links.length !== 1 || !link) return null;
+  return {
+    lede: plain(paras[0]!.runs).trim(),
+    action: { label: plain(link.children), href: link.href },
+  };
+}
+
+/**
+ * Two closes a route pairs on ONE ink island (plan.ts `PAIRED_CLOSES`, 4 Nov 2026): each a heading,
+ * its one sentence as the lede, word for word, and that sentence's link as the action, never
+ * rewritten. The first keeps the page's solid; the second takes the outline partner and keeps its own
+ * anchor on its half. Falls back to the first close alone where either is not one sentence and one link.
+ */
+export function PairedCloseBand({
+  page,
+  band,
+  second,
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  second: CorpusBand;
+}) {
+  const first = closeAsk(band);
+  const next = closeAsk(second);
+  if (!first || !next) return <CloseBand page={page} band={band} />;
+  return (
+    <CtaSection
+      id={band.id}
+      data-band="L"
+      arrangement="open"
+      heading={band.headingText}
+      body={[first.lede]}
+      actions={[first.action]}
+      second={{
+        id: second.id,
+        heading: second.headingText,
+        body: [next.lede],
+        action: next.action,
+      }}
+    />
+  );
 }
 
 /* ── The ask: a band's link to the page's enquiry form, as its own ink island ───── */

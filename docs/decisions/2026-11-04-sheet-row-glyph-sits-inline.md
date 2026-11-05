@@ -7,7 +7,7 @@ source: "Owner, building /clients \"What clients have asked us to do\", 4 Nov 20
 supersedes: []
 dbf: [ch04 Choosing a glyph]
 dbf_status: pending
-enforced_by: "structure (OfferSheet `arrangement=\"rows\"`, item `icon`; OfferBands SHEET_ROWS)"
+enforced_by: "structure (OfferSheet `arrangement=\"rows\"`, item `icon`; OfferBands SHEET_GLYPHS)"
 ---
 
 OfferSheet's `rows` arrangement (each title beside its words, a hairline under each row, no blue mark)
@@ -23,5 +23,5 @@ title would make each row three lines tall for no gain and break the left edge t
 which still holds for every card: glyph, then title, then body, each on its own row.
 
 **How to apply.** Rows only, never the grid arrangement or a card. The map of title → glyph is
-`SHEET_ROWS` in `src/templates/CorpusPage/OfferBands.tsx`, keyed by band id; a band with no entry
+`SHEET_GLYPHS` in `src/templates/CorpusPage/OfferBands.tsx`, keyed by band id; a band with no entry
 renders the grid as before.

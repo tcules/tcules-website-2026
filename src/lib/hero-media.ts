@@ -38,7 +38,29 @@ export const heroNeedsMedia = (route: string): boolean => HERO_MEDIA_ROUTES.has(
 export const CENTRED_HERO_ROUTES: ReadonlySet<string> = new Set([
   ROUTES.services,
   ROUTES.expertise,
+  /* The hero's picture is the real Matter file, a 1.8:1 collage of three Figma frames: in the beside
+     split's half column it renders about 500 wide and its detail is lost; centred it takes the 860 cap
+     (docs/page-build/pages/matter-design-system.md, 4 Nov 2026). */
+  ROUTES.matterDesignSystem,
+  /* A 73-character title that ran to five display lines in the beside split's half column at 1440
+     (docs/page-build/pages/future-interfaces-lab-join.md, 4 Nov 2026). The studio photograph takes the
+     content width under the copy. */
+  ROUTES.futureInterfacesLabJoin,
 ]);
 
 /** Whether a route's hero is the centred stack with its media below. */
 export const heroIsCentred = (route: string): boolean => CENTRED_HERO_ROUTES.has(route);
+
+/**
+ * Heroes set as words alone, centred, with no picture of their own: a page whose first picture is the
+ * band directly under the hero (the /contact precedent, contact-hero-centred-form-below). /careers'
+ * first band is the studio collage; a studio photograph in the hero as well would put two photographs
+ * side by side down the page (adjacent-bands-change-visual-register) and stack two "words beside a
+ * photograph" shapes at the top (docs/page-build/pages/careers.md, 4 Nov 2026, owner to confirm).
+ * A route here is never in `HERO_MEDIA_ROUTES`: a high-traffic hero always carries media.
+ */
+export const TEXT_HERO_ROUTES: ReadonlySet<string> = new Set([ROUTES.careers]);
+
+/** Whether a route's hero is the centred text stack with no media (`TEXT_HERO_ROUTES`). */
+export const heroIsText = (route: string): boolean =>
+  TEXT_HERO_ROUTES.has(route) && !HERO_MEDIA_ROUTES.has(route);
