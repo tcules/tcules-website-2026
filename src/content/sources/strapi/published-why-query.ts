@@ -15,6 +15,6 @@ export const WHY_QUERY = `query PublishedWhy {page:whyTcules(status:PUBLISHED){d
       ... on ComponentSharedReasonsSection { heading description anchorId reasonsSurface: surface entries { title body illustration { source scene image { ...PublishedImage } } } actions { name href } }
       ... on ComponentSharedComparisonSection { heading description anchorId comparisonSurface: surface action { name href } blocks { kind prose { body } table { columns { heading } rows { heading cells { body } } } } }
 
- ... on ComponentSharedOfferSheetSection { heading anchorId description sheetSurface: surface sheetPresentation:presentation listEntries{title body icon} }
+ ... on ComponentSharedOfferSheetSection { heading anchorId description sheetSurface: surface sheetPresentation:presentation listEntries{title body icon} sheetCards: cards { title description descriptionRich scene } }
  ${PUBLISHED_CTA}${PUBLISHED_TESTIMONIALSECTION}${PUBLISHED_ENGAGEMENTOPTIONS}${PUBLISHED_FAQSECTION}
 }}}${PUBLISHED_FIELDS}`;

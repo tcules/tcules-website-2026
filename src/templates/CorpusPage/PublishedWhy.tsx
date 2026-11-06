@@ -11,6 +11,7 @@ import {
   EnquiryForm,
   DataTable,
   LogoGrid,
+  OfferSheet,
   Reasons,
 } from '@/patterns';
 import { PublishedHero, PublishedSection } from './PublishedHome';
@@ -102,6 +103,17 @@ function WhyBand({
         />
       );
     }
+    case 'why-sheet':
+      /* The drawn grid, a plate heading each card, three across (two for four), as main's corpus
+         render of the same band. A sheet drawn on some cards and not others draws none (OfferSheet). */
+      return (
+        <OfferSheet
+          {...head}
+          lead={s.lead}
+          items={s.cards}
+          across={s.cards.length === 4 ? 2 : 3}
+        />
+      );
     case 'why-comparison':
       return (
         <ContentSection
