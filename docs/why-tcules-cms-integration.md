@@ -77,5 +77,6 @@ page-locally (`why-sheet` in `PublishedWhy`), so the shared Offer Sheet renderer
 `split_list` sheets render exactly as before. Ruling: decisions/2026-11-06-why-tcules-principles-flat-drawings.
 
 Order: this code ships first; then the CMS swaps the section (anchor `principles`, surface `tint`). Until then the
-page renders as before, keeping its wide band drawing (`images.ts` `BAND_ILLUSTRATION`). Merging `main` into
-`new-cms` empties that entry, so hold that merge until the CMS swap is published.
+page renders as before, keeping its wide band drawing (`images.ts` `BAND_ILLUSTRATION`). After the swap the page
+has no Reasons band, so that entry is unused; it can be removed here in a later cleanup (`main` is never merged
+into `new-cms`).
