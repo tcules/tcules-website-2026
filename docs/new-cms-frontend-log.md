@@ -44,7 +44,7 @@ service pages, `/why-tcules` and `/how-we-work` had CLS of 0.69–0.74.
 - **Tried and rejected:** self-hosting the fonts measured worse (mobile FCP +0.2–1 s), so the Google
   Fonts link stays.
 
-**Status:** `new-cms` only.
+**Status:** ClaimTabs half ported to `main` in PR #246. The `loading.tsx` half has nothing to port, because `main` never had those files.
 
 ### 2. TextureFlow holds still where the machine can't keep up — `08c01466`
 
@@ -58,7 +58,7 @@ WebGL renders on the CPU, so each frame of the island's texture field took ~140 
 - On a real GPU it moves as before (checked on Apple M4 Metal). The same guard covers CtaSection's
   close, which uses the same field.
 
-**Status:** `new-cms` only.
+**Status:** ported to `main` in PR #246.
 
 ### 3. Favicon from the logomark; internal links stop prefetching — `eb991c7c`
 
@@ -70,7 +70,7 @@ WebGL renders on the CPU, so each frame of the island's texture field took ~140 
   full server render on every page load. Links now fetch on click. **Revisit once pages are cached
   again.**
 
-**Status:** `new-cms` only.
+**Status:** favicon ported to `main` in PR #246. Prefetch stays on `new-cms` only, since `main` prerenders its pages and prefetching is cheap there.
 
 ### 4. Layout: `justifyItems` per breakpoint; the footer's action uses it — `2248877a`
 
@@ -83,8 +83,7 @@ on `main`, stretched to full width on the `new-cms` production build.
 - `SiteFooter` drops its class override and passes the prop instead.
 - A specimen was added on `/design/layout`.
 
-**Status:** not on `main` yet. The same change is commit `c1ed8739` on the local branch
-`fix/layout-justify-responsive`, which isn't pushed.
+**Status:** ported to `main` in PR #244 (`c1ed8739` on `fix/layout-justify-responsive`).
 
 ### 5. ClaimTabs: a moving slide stays in the cell — `8af0f600`
 
@@ -97,11 +96,11 @@ the panel's height, so the panel still jumped (`/services/design-systems`: 255 �
 - Measured at 1440 on `/services/design-systems`, `product-design` and `product-modernisation`: the
   panel height stays the same through the peek and through switches in both directions.
 
-**Status:** `new-cms` only.
+**Status:** ported to `main` in PR #246, together with entry 1.
 
 ---
 
 ## Still to carry to `main`
 
-Entries 1, 2, 3 and 5 are frontend fixes that `main` needs too, except the prefetch half of entry 3,
-which only applies while pages render on request. Entry 4 waits on `fix/layout-justify-responsive`.
+Nothing. Everything that applies to `main` is in PR #244 and PR #246. Once they merge, change
+"ported … in PR" to "on `main`".
