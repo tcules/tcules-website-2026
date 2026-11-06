@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- The Tcules logomark for the browser tab, neutral-950 on paper with rounded corners. The paths are the owner's "Tcules Logomark" artwork (6 Nov 2026), 75 × 115, scaled to about 70% of the tile's height and centred. -->
+  <rect width="512" height="512" rx="112" fill="#fffefa"/>
+  <g transform="translate(256 256) scale(3.1) translate(-37.5 -57.5)" fill="#1b1b18">
+    <path d="M74.8329 40.1986H46.8049V114.698H28.4903V40.1986H0.336426V24.1875H74.8329V40.1986Z"/>
+    <path d="M66.4046 0.0371094H8.77002V14.1507H66.4046V0.0371094Z"/>
+  </g>
+</svg>
