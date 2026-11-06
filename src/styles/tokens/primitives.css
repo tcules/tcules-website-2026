@@ -152,9 +152,9 @@
    Three faces, each with a fixed job, and no two vertically adjacent elements
    share one: the canonical stack is mono eyebrow → serif title → sans body.    */
 :root {
-  --font-family-display: 'Newsreader', Georgia, 'Times New Roman', serif;
-  --font-family-sans: 'Public Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-family-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-family-display: 'Newsreader', 'Newsreader Fallback', Georgia, 'Times New Roman', serif;
+  --font-family-sans: 'Public Sans', 'Public Sans Fallback', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-family-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ── Type · size ladder ───────────────────────────────────────────────────────

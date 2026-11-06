@@ -37,6 +37,10 @@ export const metadata: Metadata = {
  * main content" and a landmark list both depend on exactly one main region per document, and a
  * page that renders its own would make two.
  */
+/** The Google Fonts stylesheet, attached by script so it never blocks the first paint (perf A/B, 6 Nov). */
+const FONTS_CSS =
+  'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap';
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -68,10 +72,15 @@ export default async function RootLayout({
             Pages Router (it wants fonts in pages/_document.js so they are not per-page). This IS
             the App Router root layout, so a link here already applies to every route, which is
             exactly what the rule is asking for. */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap"
+        <link rel="preload" as="style" href={FONTS_CSS} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href=${JSON.stringify(FONTS_CSS)};document.head.appendChild(l)})()`,
+          }}
         />
+        <noscript>
+          <link rel="stylesheet" href={FONTS_CSS} />
+        </noscript>
       </head>
       <body data-tracking-enabled={trackingEnabled ? 'true' : undefined}>
         {trackingEnabled ? (

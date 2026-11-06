@@ -18,7 +18,8 @@
    requests to fonts.googleapis.com, and all three families falling through to
    Georgia / -apple-system / ui-monospace.
 
-   The working request is a <link> in <head> in src/app/layout.tsx. The family names
+   The working request is attached from <head> in src/app/layout.tsx (by script since
+   6 Nov 2026, so it does not block the first paint; see the fallback faces below). The family names
    in primitives.css are untouched and remain the only thing any consumer reads, so
    the contract this file describes still holds.
 
@@ -26,3 +27,43 @@
    @font-face is not @import and is not position-sensitive, so it works here — and
    delete the <link> from layout.tsx.
    ─────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Fallback faces: the page paints before the fonts arrive ─────────────────────
+   layout.tsx attaches the Google Fonts stylesheet by script, so it no longer blocks
+   the first paint (6 Nov 2026: −0.3 to −0.8 s FCP on a mobile Lighthouse run). Text
+   therefore paints in a local face first and swaps when the web font lands. Each
+   face below is that local font resized and re-spaced to the web font's metrics, so
+   the swap changes the letterforms and not the layout: lines keep their length and
+   boxes their height.
+
+   The numbers are the formula next/font uses (next/dist/server/font-utils.js) over
+   the capsize metrics Next ships (capsize-font-metrics.json): size-adjust is the
+   ratio of average character widths; ascent and descent are the web font's, divided
+   by unitsPerEm × size-adjust. Recompute them if a family changes.
+   ─────────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Newsreader Fallback';
+  src: local('Georgia');
+  size-adjust: 96.12%;
+  ascent-override: 76.47%;
+  descent-override: 27.57%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Public Sans Fallback';
+  src: local('Arial');
+  size-adjust: 104.87%;
+  ascent-override: 90.59%;
+  descent-override: 21.46%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Geist Mono Fallback';
+  src: local('Courier New');
+  size-adjust: 99.98%;
+  ascent-override: 100.52%;
+  descent-override: 29.5%;
+  line-gap-override: 0%;
+}
