@@ -129,6 +129,16 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="justifyItems={{ base: 'start', md: 'end' }} rowGap='block'"
+          note="Inline placement per breakpoint: each item shrinks to its content, at the start on a phone and at the end from 768. The footer's action. A caller's class setting justify-items would tie .layout and lose or win by CSS chunk order."
+        >
+          <Layout rowGap="block" justifyItems={{ base: 'start', md: 'end' }}>
+            <Box>a wider item</Box>
+            <Box>short</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={{ base: 1, md: 2, xl: 4 }}"
           note="Per-breakpoint object. Each breakpoint falls back to the nearest smaller defined template, so lg inherits md's two tracks."
         >

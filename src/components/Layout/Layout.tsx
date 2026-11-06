@@ -281,8 +281,14 @@ export type LayoutProps = {
    * Inline-axis placement of each item WITHIN its own track. Default "stretch" (fill the
    * track); "center" shrinks each item to its content and centres it — how a centred copy
    * stack works. This is per-item. To move the tracks themselves, use `justify`.
+   *
+   * Per breakpoint as an object — `{ base: 'start', md: 'end' }`, an unnamed breakpoint inheriting
+   * the nearest smaller one. Unlike `Responsive`, a BARE value applies at every width, base
+   * included: inline placement acts on a one-track stack as much as on a row. Use this rather than
+   * a `justify-items` in the caller's class, which ties `.layout` on specificity and is settled
+   * by CSS chunk order — different per build.
    */
-  justifyItems?: Place;
+  justifyItems?: Place | Partial<Record<Breakpoint, Place>>;
   /**
    * Inline-axis distribution of the TRACKS within the container — the counterpart to
    * `justifyItems`. Same meaning as Cluster's `justify`, `between` included. Omit for the
@@ -353,6 +359,23 @@ function track(spec: ColumnSpec): string {
   return typeof spec === 'number'
     ? `repeat(${spec}, minmax(0, 1fr))`
     : spec.map((weight) => (weight === 'auto' ? 'auto' : `minmax(0, ${weight}fr)`)).join(' ');
+}
+
+/**
+ * `justifyItems` as classes. A bare value is base (every width); an object emits base — stretch
+ * when unnamed — then one class per breakpoint it names, which the stylesheet's media queries
+ * order after base.
+ */
+function justifyItemsClasses(
+  value: Place | Partial<Record<Breakpoint, Place>>,
+): (string | undefined)[] {
+  if (typeof value === 'string') return [styles[`justifyitems-${value}`]];
+  return [
+    styles[`justifyitems-${value.base ?? 'stretch'}`],
+    ...(['md', 'lg', 'xl'] as const).flatMap((bp) =>
+      value[bp] ? [styles[`justifyitems-${bp}-${value[bp]}`]] : [],
+    ),
+  ];
 }
 
 /**
@@ -585,7 +608,7 @@ export function Layout({
         colGap && styles[`colgap-${colGap}`],
         (columns === 'fit' || columns === 'tile') && styles[`mintrack-${minTrack}`],
         styles[`align-${align}`],
-        styles[`justifyitems-${justifyItems}`],
+        ...justifyItemsClasses(justifyItems),
         justify && styles[`justify-${justify}`],
         equalRows &&
           equalFrom &&
