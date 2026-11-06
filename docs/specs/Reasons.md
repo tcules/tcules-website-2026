@@ -41,8 +41,7 @@ One per page.
 | action | optional | slot; in practice a link Button with an arrow |
 | set | required | `ul` of 4 items (3 or 6 accepted) |
 | item | required | `li`: figure + title + body |
-| figure | required unless `bandFigure` or `scene` | MediaImage, kind `illustration`, decorative |
-| scene | optional, on every item or none | `SketchName`: a flat drawing on its 16:9 plate at the track's full width, in place of the figure (owner, 6 Nov 2026; decisions/2026-11-06-why-tcules-principles-flat-drawings). A set with only some scenes draws none and warns in development |
+| figure | required unless `bandFigure` | MediaImage, kind `illustration`, decorative |
 | band figure | optional | `bandFigure`: one drawing for the whole set at the content width, between the head and the set; the items then draw no figure or proof (owner, 5 Nov 2026; decisions/2026-11-05-why-tcules-principles-one-drawing). `open` and `boxed` only |
 | title | required | h3 |
 | body | required | one sentence, plain text |
@@ -54,7 +53,6 @@ One per page.
 `items: { title; body; figure: MediaImage }[]`, `action?: ReactNode`,
 `arrangement?: 'open' | 'boxed' | 'beside'` (default `open`), `surface?: 'paper' | 'tint'` (default `paper`; the type rules out ink and blue),
 `figureSize?: 'sm' | 'lg'`, item `proof?` and `example?`, `note?`, `lead?`,
-`scene?: SketchName` per item (a flat drawing per reason; every item or none).
 `bandFigure?: MediaImage` (one drawing for the set; items then words only; warns in development when items also carry figures or proofs, or under `beside`).
 Any count other than 3, 4 or 6 warns in development.
 
@@ -141,8 +139,7 @@ interactive, and motion on a non-control reads as clickable.)
 7. six reasons, beside
 8. boxed with a bare head
 9. tint, open
-10. 14b · `bandFigure`: one drawing for the set, open and boxed, on tint (parked on /why-tcules since 6 Nov 2026)
-11. 14d–e · `scene` on every item: /why-tcules principles, open on tint and boxed on paper
+10. 14b · `bandFigure`: one drawing for the set (/why-tcules principles), open and boxed, on tint
 10. tint, boxed
 
 ## 16 · New token requests

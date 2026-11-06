@@ -541,7 +541,7 @@ export default async function ReasonsSpecimen() {
 
       <Variation
         id="band-figure"
-        title="14b · One drawing for the band, on tint (owner, 5 Nov 2026; parked on /why-tcules 6 Nov, see 14d)"
+        title="14b · One drawing for the band: /why-tcules principles, on tint (owner, 5 Nov 2026)"
         note="`bandFigure`: one scene for the whole set at the content width, between the head and the reasons, so the reasons under it are words only (any figure or proof an item carries is not drawn). /why-tcules' three principles: three Tcules–client pairs at one studio table, one pair per principle. The drawing is transparent, made for the tint band's paper-deep ground."
       />
       <Reasons
@@ -600,62 +600,6 @@ export default async function ReasonsSpecimen() {
           {
             title: 'Design that pays back',
             body: 'Every design decision is tied to the adoption, renewals or revenue it should move.',
-          },
-        ]}
-      />
-
-      <Variation
-        id="scenes"
-        title="14d · A flat drawing per reason: /why-tcules principles, on tint (owner, 6 Nov 2026)"
-        note="`scene` on every item: each reason heads its words with its own Sketch plate, 16:9 at the track's full width, drawn from its sentence (components/Sketch/wyg-why-tcules.tsx). Set on every item or on none; a set with only some scenes draws none and warns in development."
-      />
-      <Reasons
-        heading="Better product decisions, before you build"
-        headingId="rsn-scenes"
-        surface="tint"
-        items={[
-          {
-            title: 'Evidence before screens',
-            body: 'We test your assumptions with real users before they become expensive mistakes.',
-            scene: 'why-principles-evidence',
-          },
-          {
-            title: 'What to build first',
-            body: 'You leave knowing what to build, what can wait, and why.',
-            scene: 'why-principles-build-first',
-          },
-          {
-            title: 'Design that pays back',
-            body: 'Every design decision is tied to the adoption, renewals or revenue it should move.',
-            scene: 'why-principles-pays-back',
-          },
-        ]}
-      />
-
-      <Variation
-        id="scenes-boxed"
-        title="14e · A flat drawing per reason, boxed, on paper"
-        note="The same three plates in the boxed frame on paper: each cell holds its plate and words at the gutter inset."
-      />
-      <Reasons
-        heading="Better product decisions, before you build"
-        headingId="rsn-scenes-boxed"
-        arrangement="boxed"
-        items={[
-          {
-            title: 'Evidence before screens',
-            body: 'We test your assumptions with real users before they become expensive mistakes.',
-            scene: 'why-principles-evidence',
-          },
-          {
-            title: 'What to build first',
-            body: 'You leave knowing what to build, what can wait, and why.',
-            scene: 'why-principles-build-first',
-          },
-          {
-            title: 'Design that pays back',
-            body: 'Every design decision is tied to the adoption, renewals or revenue it should move.',
-            scene: 'why-principles-pays-back',
           },
         ]}
       />

@@ -7,7 +7,7 @@ source: "Devagya, 6 Nov 2026, CMS review of /why-tcules: \"we'll draw flat graph
 supersedes: [2026-11-05-why-tcules-principles-one-drawing]
 dbf: []
 dbf_status: none
-enforced_by: "structure (Reasons `scene` per item; offer-scenes.ts '/why-tcules' principles; images.ts BAND_ILLUSTRATION empty)"
+enforced_by: "structure (OfferBands draws a reasons band as OfferSheet's drawn grid when every reason has a scene; offer-scenes.ts '/why-tcules' principles; images.ts BAND_ILLUSTRATION empty)"
 ---
 
 The `/why-tcules` band "Better product decisions, before you build" goes back to three cards: each principle heads
@@ -20,10 +20,13 @@ kept for a later placement such as the page's hero.
 the hero, not this band.
 
 **The mistake it prevents.** The 5 Nov band figure: one wide drawing over three words-only principles, which
-replaced the three cards. Also a set that mixes styles: Reasons draws scenes only when every reason has one.
+replaced the three cards. Also adding a scene slot to Reasons when OfferSheet already draws a plate per item: a
+second component for one shape.
 
-**How to apply.** Reasons takes `scene` per item (specimens 14d–e on `/design/reasons`); OfferBands passes a scene
-when every reason in the band has one, assigned by title in `content/sources/offer-scenes.ts`. On the CMS
-(`new-cms`) the reasons' illustration `scene` field carries the same names once that branch reads it; nothing has
-changed in the CMS yet. This is a flat exception to the isometric reason figures of
-2026-10-30-reasons-take-illustrations, for this band only. Proposed until the owner has seen the drawn band.
+**How to apply.** The band renders through OfferSheet's drawn grid (a plate heading each principle, three across,
+the "What you get" shape), an approved component of the `reasons` kind (kinds.ts); the scenes are assigned by title
+in `content/sources/offer-scenes.ts`. Reasons is unchanged and stays the isometric set. On the CMS (`new-cms`) the
+same shape is the Offer Sheet section with a `scene` per card or list item, as home's "How our designers use AI"
+already uses; the band would move from a Reasons section to an Offer Sheet section there. Nothing has changed in the
+CMS yet. This is a flat exception to the isometric reason figures of 2026-10-30-reasons-take-illustrations, for
+this band only. Proposed until the owner has seen the drawn band.

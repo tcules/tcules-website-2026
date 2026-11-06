@@ -6,11 +6,9 @@ import {
   Layout,
   Media,
   Section,
-  Sketch,
   type ClientMarkProps,
   type MediaImage,
   type SectionSurface,
-  type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
 
@@ -70,14 +68,6 @@ export type ReasonsItem = {
    * level. It restates the sentence below it, so it is hidden from assistive technology.
    */
   proof?: ReasonsProof;
-  /**
-   * The reason's FLAT drawing, a Sketch scene drawn for this reason from its own sentence, on its
-   * 16:9 plate at the track's full width (owner, 6 Nov 2026, /why-tcules "Better product decisions,
-   * before you build": "we'll draw flat graphics for each"). In place of an isometric `figure`; set it
-   * on every item or on none, so the set never mixes the two drawing styles. Decorative, as the
-   * figure is: the words under it say what it shows.
-   */
-  scene?: SketchName;
   /**
    * The reason's example, set apart from the argument under its words (owner, 2 Nov 2026: a claim and
    * its example are one pattern site-wide). A slot: in practice the ClaimProof panel the hard parts use.
@@ -422,19 +412,9 @@ export function Reasons({
     items.some((i) => i.proof?.kind === 'cover') &&
     !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const allProof = !bandFigure && shown.length > 0 && shown.every((i) => i.proof);
-  /* Flat drawings only when every reason has one: the set never mixes a plate with an isometric figure. */
-  const sceneSet = !bandFigure && shown.length > 0 && shown.every((i) => i.scene);
-  if (process.env.NODE_ENV !== 'production' && !sceneSet && shown.some((i) => i.scene)) {
-    console.warn('Reasons: some reasons carry a scene and some do not; drawing no scene.');
-  }
-  /* A reason's picture: its flat drawing when the whole set has one, else its proof, else its drawing
-     at the set's figure size; none under a band figure. */
+  /* A reason's picture: its proof, else its drawing at the set's figure size; none under a band figure. */
   const visualOf = (item: (typeof shown)[number]) =>
-    bandFigure ? null : sceneSet && item.scene ? (
-      <div className={styles.scene}>
-        <Sketch name={item.scene} />
-      </div>
-    ) : item.proof ? (
+    bandFigure ? null : item.proof ? (
       <Proof proof={item.proof} flat={flatProofs} />
     ) : item.figure ? (
       /* A figure that is not a drawing (`kind` other than `illustration`) is the register's labelled
