@@ -19,7 +19,7 @@ Every claim carries a client's quote (treatment rules, "Added 4 Nov 2026 (/why-t
 | Band | Kind / component | Notes |
 |---|---|---|
 | selected-work | cases · M | "Craft people notice" leads the set (words start, quote beside); Eden AI, Omny AI, Phoenix as cards. Phoenix has no case file in the copy, so its card shows the placeholder cover (its page is live from Strapi) |
-| principles | reasons · Reasons | isometric slots (illustration workstream); each quote under its reason |
+| principles | reasons · OfferSheet (drawn, three across) | one flat drawing per principle (wyg-why-tcules.tsx), 6 Nov 2026; the 5 Nov wide drawing parked (decisions/2026-11-06-why-tcules-principles-flat-drawings) |
 | complex-software | text · B | the team photo (why_team) as the 3:1 banner; four claims two by two; the sectors as one dotted line |
 | design-to-code | text · B | ConnectX coded demo beside, two claims with quotes |
 | ai-products | text · B | AI Product UX's own flat drawing beside the words; "See AI Product UX" the action |
@@ -31,7 +31,7 @@ Every claim carries a client's quote (treatment rules, "Added 4 Nov 2026 (/why-t
 |---|---|---|
 | hero | CorpusHero beside, work-wall photo, record figures | |
 | client-recognition | recognition · LogoGrid | 5 of 7 named clients have no mark yet |
-| principles | reasons · Reasons + ClaimProof examples | |
+| principles | reasons · OfferSheet, a flat drawing per principle | 6 Nov 2026 |
 | signature-work | record · CaseSpread strip | on tint |
 | studio | text · B + team photo, ClaimProof example | |
 | alternatives | table · DataTable, Tcules row `pick` | owner, 2 Nov: stays a table; the Tcules row reads as the suggestion |

@@ -300,6 +300,8 @@ checklist or straight to the build?") and turns About's "How Tcules compares" in
       the /why-tcules band as one drawing, the ten approved heroes brought to the figure rules; rulings
       2026-11-05-*. Left: where the redrawn designer's desk goes (docs/illustrations/run-2026-11-05/designer-desk/,
       owner to place: /careers or the Lab), and the audit heroes (2.66). Closed 5 Nov 2026 (owner).
+      6 Nov 2026 (owner): the /why-tcules principles went back to three cards, one flat drawing each
+      (decisions/2026-11-06-why-tcules-principles-flat-drawings); the band's wide drawing is parked for the hero.
 - [x] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
       dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
       plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).

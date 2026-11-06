@@ -1444,6 +1444,32 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                 block.type === 'quote',
             );
         const wide = bandIllustration(page.route, band.id);
+        /* A set drawn flat (owner, 6 Nov 2026, /why-tcules principles): when every reason has a Sketch
+           scene by its title, the band is OfferSheet's drawn grid, each plate heading its words, three
+           across (the "What you get" shape; the CMS's Offer Sheet with a scene per card). Reasons
+           stays the isometric set. */
+        const scenes = titled.map((item) => sceneFor(ctx, band, item.title!));
+        if (
+          !wide &&
+          titled.length === parts.items.length &&
+          scenes.length > 0 &&
+          scenes.every(Boolean)
+        ) {
+          return (
+            <OfferSheet
+              {...head(band)}
+              surface={unit.surface}
+              lead={parts.lead}
+              items={titled.map((item, index) => ({
+                title: item.title!,
+                ...(item.bodyHtml ? { bodyHtml: item.bodyHtml } : { body: item.body }),
+                scene: scenes[index] as SketchName,
+              }))}
+              across={parts.items.length === 4 ? 2 : 3}
+              note={action}
+            />
+          );
+        }
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
