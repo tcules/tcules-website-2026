@@ -190,7 +190,7 @@ export type CmsHomeSection = Band &
         engagementSurface: Surface;
         engagementSide: Side;
         engagementDescription: Text;
-        engagementPresentation: Maybe<'grid' | 'compare' | 'cards'>;
+        engagementPresentation: Maybe<'grid' | 'rows' | 'compare' | 'cards' | 'plans'>;
         action: Maybe<CmsAction>;
         options: Entries<{
           id: string;
@@ -202,6 +202,8 @@ export type CmsHomeSection = Band &
           anchorId: Text;
           illustration: Maybe<CmsIllustration>;
           facts: Entries<{ title: Text; body: Text }>;
+          checklist: Entries<{ body: Text }>;
+          action: Maybe<CmsAction>;
         }>;
         terms: Entries<{ body: Text }>;
         closing: Maybe<{

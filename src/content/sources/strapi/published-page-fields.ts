@@ -21,7 +21,8 @@ export const PUBLISHED_ENGAGEMENTOPTIONS = `
       ... on ComponentSharedEngagementOptions {
         id heading anchorId engagementSurface: surface engagementSide: mediaSide engagementDescription: description engagementPresentation: presentation
         action { ...PublishedAction }
-        options { id title eyebrow body icon scope anchorId facts { title body } illustration { source scene image { ...PublishedImage } } }
+        options { id title eyebrow body icon scope anchorId facts { title body } illustration { source scene image { ...PublishedImage } }
+          checklist { body } action { ...PublishedAction } }
         terms { body }
         closing { heading body actions { ...PublishedAction } proof { eyebrow card { resolved } } }
       }

@@ -287,7 +287,13 @@ function Testimonials({ section }: { section: Extract<Section, { type: 'testimon
   );
 }
 
-function Engagement({ section }: { section: Extract<Section, { type: 'engagement' }> }) {
+export function PublishedEngagement({
+  section,
+  imageSizes = '(min-width: 1024px) 33vw, 90vw',
+}: {
+  section: Extract<Section, { type: 'engagement' }>;
+  imageSizes?: string;
+}) {
   const { id, heading, headingId, surface, lead, closing } = section;
   const proof = closing?.proof;
   const proofCard = proof ? (
@@ -310,21 +316,46 @@ function Engagement({ section }: { section: Extract<Section, { type: 'engagement
     <EngagementOptions
       {...{ id, heading, headingId, surface }}
       arrangement={section.presentation}
-      lead={lead ? [inline(lead)] : undefined}
+      mediaSide={section.mediaSide}
+      lead={lead?.split('<br><br>').map(inline)}
       action={link(section.action)}
-      options={section.options.map((option) => ({
-        title: option.title,
-        eyebrow: option.eyebrow,
-        body: inline(option.html),
-        scope: option.scope,
-        art: option.illustration?.image ? (
-          <Media image={option.illustration.image} sizes="(min-width: 1024px) 33vw, 90vw" />
-        ) : option.illustration?.scene ? (
-          <Sketch name={option.illustration.scene} />
-        ) : undefined,
-        icon: option.icon ? <Icon name={option.icon} size="xl" /> : undefined,
-        facts: option.facts.map((fact) => ({ label: fact.label, body: inline(fact.html) })),
-      }))}
+      options={section.options.map((option) => {
+        const [body, ...more] = option.html?.split('<br><br>') ?? [];
+        const button = option.action;
+        return {
+          title: option.title,
+          eyebrow: option.eyebrow,
+          anchorId: option.anchorId,
+          body: inline(body),
+          more: more.map(inline),
+          scope: option.scope,
+          art: option.illustration?.image ? (
+            <Media image={option.illustration.image} sizes={imageSizes} />
+          ) : option.illustration?.scene ? (
+            <Sketch name={option.illustration.scene} />
+          ) : undefined,
+          icon: option.icon ? <Icon name={option.icon} size="xl" /> : undefined,
+          facts: option.facts.map((fact) => ({
+            label: fact.label,
+            body: inline(fact.html),
+            items: fact.items?.map(inline),
+          })),
+          checklist: option.checklist.map(inline),
+          action: button ? (
+            <Button
+              as="a"
+              href={button.href}
+              target={button.external ? '_blank' : undefined}
+              rel={button.external ? 'noopener noreferrer' : undefined}
+              emphasis="outline"
+              size="md"
+              icon={<Icon name={button.icon ?? 'arrow-right'} />}
+            >
+              {button.label}
+            </Button>
+          ) : undefined,
+        };
+      })}
       terms={section.terms.map((term) => ({ label: term.label, body: inline(term.html) }))}
       note={
         primary && closingHeading ? (
@@ -510,7 +541,7 @@ export function PublishedSection({
     case 'testimonials':
       return <Testimonials section={section} />;
     case 'engagement':
-      return <Engagement section={section} />;
+      return <PublishedEngagement section={section} />;
     case 'industries':
       return (
         <ContentSection

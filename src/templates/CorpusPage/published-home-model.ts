@@ -110,14 +110,18 @@ export type HomeSection = SectionHead &
         lead?: string;
         action?: HomeAction;
         presentation?: EngagementArrangement;
+        mediaSide?: 'start' | 'end';
         options: {
           title: string;
           eyebrow?: string;
+          anchorId?: string;
           html?: string;
           icon?: IconName;
           illustration?: { scene?: SketchName; image?: MediaImage };
           scope?: EngagementScope;
-          facts: { label: string; html?: string }[];
+          facts: { label: string; html?: string; items?: string[] }[];
+          checklist: string[];
+          action?: HomeAction & { external: boolean };
         }[];
         terms: { label?: string; html: string }[];
         closing?: {

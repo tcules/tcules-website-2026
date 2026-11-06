@@ -280,8 +280,6 @@ function mapSection(
           rating: item.id ? (ratings.get(item.id) ?? undefined) : undefined,
         }));
       }
-      if (mapped.type === 'engagement' && mapped.closing)
-        warn(`${key} has a closing block, which this page's engagement band does not show`);
       return mapped;
     }
   }

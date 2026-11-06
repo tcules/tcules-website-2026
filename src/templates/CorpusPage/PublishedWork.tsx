@@ -1,4 +1,4 @@
-import { Icon, Layout, Media, Prose, Section, Sketch } from '@/components';
+import { Layout, Media, Prose, Section } from '@/components';
 import {
   ContentSection,
   ContentSectionText,
@@ -6,14 +6,13 @@ import {
   CtaRow,
   DataTable,
   EnquiryForm,
-  EngagementOptions,
   GatewayPaths,
   LogoGrid,
   OfferSheet,
 } from '@/patterns';
 import { ENDPOINTS } from '@/lib/routes';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
-import { PublishedHero, PublishedSection } from './PublishedHome';
+import { PublishedEngagement, PublishedHero, PublishedSection } from './PublishedHome';
 import type { WorkPageModel, WorkSection } from './published-work-model';
 function WorkBand({ s, route }: { s: WorkSection; route: string }) {
   const head = { id: s.id, heading: s.heading, headingId: s.headingId };
@@ -92,48 +91,7 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
       );
     }
     case 'engagement':
-      return (
-        <EngagementOptions
-          {...head}
-          surface={s.surface}
-          arrangement={s.presentation}
-          lead={
-            s.lead
-              ? [<span key="lead" dangerouslySetInnerHTML={{ __html: s.lead }} />]
-              : undefined
-          }
-          action={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
-          options={s.options.map((option) => {
-            const [body, ...more] = (option.html ?? '').split('<br><br>');
-            const inline = (html: string) => (
-              <span dangerouslySetInnerHTML={{ __html: html }} />
-            );
-            // The CMS illustration: its image, else its scene.
-            const art = option.illustration?.image ? (
-              <Media image={option.illustration.image} sizes="(min-width: 1024px) 25vw, 90vw" />
-            ) : option.illustration?.scene ? (
-              <Sketch name={option.illustration.scene} />
-            ) : undefined;
-            return {
-              eyebrow: option.eyebrow,
-              title: option.title,
-              body: inline(body ?? ''),
-              more: more.map(inline),
-              scope: option.scope,
-              facts: option.facts.map((fact) => ({
-                label: fact.label,
-                body: fact.html ? inline(fact.html) : undefined,
-              })),
-              art,
-              icon: option.icon ? <Icon name={option.icon} size="xl" /> : undefined,
-            };
-          })}
-          terms={s.terms.map((term) => ({
-            label: term.label,
-            body: <span dangerouslySetInnerHTML={{ __html: term.html }} />,
-          }))}
-        />
-      );
+      return <PublishedEngagement section={s} imageSizes="(min-width: 1024px) 25vw, 90vw" />;
     case 'cta': {
       if (s.variant === 'form' && s.form) {
         const f = s.form;

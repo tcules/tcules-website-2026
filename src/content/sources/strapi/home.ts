@@ -286,6 +286,7 @@ const scopeNames: readonly EngagementScope[] = [
   'overlap',
   'commercial',
   'own',
+  'yours',
   'who',
   'communication',
   'response',
@@ -481,28 +482,39 @@ export function mapBand(
         ...head,
         type: 'engagement',
         surface: section.engagementSurface ?? undefined,
+        mediaSide: section.engagementSide ?? undefined,
         presentation: section.engagementPresentation ?? undefined,
         action: action(section.action),
         lead: markdownInlineToHtml(section.engagementDescription) || undefined,
         options: rows(section.options).flatMap((option) => {
           const title = text(option.title);
+          const optionAction = action(option.action);
           return title
             ? [
                 {
                   title,
                   eyebrow: text(option.eyebrow),
+                  anchorId: text(option.anchorId),
                   html: markdownInlineToHtml(option.body) || undefined,
                   icon: icon(option.icon),
                   illustration: illustration(option.illustration),
                   scope: scopeNames.find(
                     (scope) => scope === option.scope?.replaceAll('_', '-'),
                   ),
-                  facts: rows(option.facts).flatMap((fact) => {
+                  facts: rows(option.facts).flatMap<{ label: string; html?: string; items?: string[] }>((fact) => {
                     const label = text(fact.title);
-                    return label
-                      ? [{ label, html: markdownInlineToHtml(fact.body) || undefined }]
-                      : [];
+                    if (!label) return [];
+                    const lines = fact.body?.trim().split(/\r?\n/u) ?? [];
+                    const items = lines.map((line) => /^\s*[-*+]\s+(.+)$/u.exec(line)?.[1]);
+                    return items.length && items.every((item) => item !== undefined)
+                      ? [{ label, items: items.map(markdownInlineToHtml) }]
+                      : [{ label, html: markdownInlineToHtml(fact.body) || undefined }];
                   }),
+                  checklist: rows(option.checklist).flatMap((entry) => {
+                    const html = markdownInlineToHtml(entry.body);
+                    return html ? [html] : [];
+                  }),
+                  action: optionAction && { ...optionAction, external: option.action?.isExternal === true },
                 },
               ]
             : [];
