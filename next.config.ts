@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 
+import legacyRedirects from './src/lib/legacy-redirects.json';
 import {
   AUDIT_PATH_REDIRECTS,
   CASE_SLUG_REDIRECTS,
@@ -63,6 +64,7 @@ const nextConfig: NextConfig = {
         destination: to,
         permanent: false,
       })),
+      ...legacyRedirects,
     ];
   },
 };
