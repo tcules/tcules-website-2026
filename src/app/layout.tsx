@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 import { getNavigation } from '@/content';
 import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
 import './globals.css';
+import { TrackingScripts } from './tracking-scripts';
 
 // Navigation and footer are read from the CMS for every page request.
 export const revalidate = 0;
@@ -34,17 +36,32 @@ export const metadata: Metadata = {
  * `<main>` wraps the page so the header and footer are outside it — a screen reader's "skip to
  * main content" and a landmark list both depend on exactly one main region per document, and a
  * page that renders its own would make two.
- *
- * Still absent on purpose: analytics, which is added at launch rather than during scaffolding.
  */
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { nav, footer } = await getNavigation();
+  const trackingEnabled = process.env.RAILWAY_ENVIRONMENT_NAME === 'live';
 
   return (
     <html lang="en">
       <head>
+        {trackingEnabled ? (
+          <Script id="gtm-script" strategy="beforeInteractive">
+            {`
+              (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                var first = d.getElementsByTagName(s)[0];
+                var tag = d.createElement(s);
+                var layer = l !== 'dataLayer' ? '&l=' + l : '';
+                tag.async = true;
+                tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
+                first.parentNode.insertBefore(tag, first);
+              })(window, document, 'script', 'dataLayer', 'GTM-KMJSP983');
+            `}
+          </Script>
+        ) : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- the rule targets the
@@ -56,7 +73,21 @@ export default async function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap"
         />
       </head>
-      <body>
+      <body data-tracking-enabled={trackingEnabled ? 'true' : undefined}>
+        {trackingEnabled ? (
+          <>
+            <noscript>
+              <iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KMJSP983"
+                height="0"
+                width="0"
+                style={{ border: 0, display: 'none', visibility: 'hidden' }}
+                title="Google Tag Manager"
+              />
+            </noscript>
+            <TrackingScripts />
+          </>
+        ) : null}
         {nav.available !== false ? <SiteNav {...nav} /> : null}
         <main>{children}</main>
         {footer.available !== false ? <SiteFooter {...footer} /> : null}
