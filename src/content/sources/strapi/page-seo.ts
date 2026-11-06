@@ -122,12 +122,12 @@ export function mapPublishedSeo(
   };
 }
 
-export const getPublishedPageSeo = cache(async (path: string) => {
+export const getPublishedPageSeo = cache(async (path: string, revalidate?: number) => {
   let resolved: ResolvedSeo | null | undefined;
   try {
     const { seoPages } = await publicGraphql<{
       seoPages: { pagePath: string; resolved: ResolvedSeo | null }[];
-    }>(PAGE_SEO_QUERY, 'PublishedPageSeo', { path });
+    }>(PAGE_SEO_QUERY, 'PublishedPageSeo', { path }, { revalidate });
     resolved = seoPages.find((page) => page.pagePath === path)?.resolved;
   } catch (error) {
     console.error(error);

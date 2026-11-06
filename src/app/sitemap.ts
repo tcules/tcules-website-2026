@@ -4,13 +4,13 @@ import { SITE_ORIGIN } from '@/lib/routes';
 
 import { getSitemapMasterPage } from '@/content';
 
-import { listSitemapGroups } from './_sitemap/pages';
+import { listSitemapFallbackEntries } from './_sitemap/pages';
 
 /**
  * `/sitemap.xml`, from the published Sitemap Master's resolved groups (the same list the `/sitemap`
  * page renders), read from Strapi on each request.
- * When the Sitemap Master cannot be read or lists nothing, the generator the site used before
- * (`_sitemap/pages.ts`) answers instead, so the XML is never empty and never an error.
+ * If the master cannot be read or lists nothing, use the published route inventory.
+ * Fixed public routes keep the XML available during a CMS outage.
  */
 export const revalidate = 0;
 
@@ -26,7 +26,7 @@ async function entries() {
       error,
     );
   }
-  return (await listSitemapGroups()).flatMap((group) => group.entries);
+  return listSitemapFallbackEntries();
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

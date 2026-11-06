@@ -30,8 +30,8 @@ import * as esbuild from 'esbuild';
 
 const ROOT = process.cwd();
 const OUT_DIR = join(ROOT, 'docs/page-build');
-const STRAPI =
-  process.env.STRAPI_GRAPHQL_URL || 'https://tcules-server-production.up.railway.app/graphql';
+const { publicGraphqlUrl } = await import('../src/content/sources/strapi/public-graphql.ts');
+const STRAPI = publicGraphqlUrl();
 
 /* ── the site's own parser, plan and route names ─────────────────────────────────────── */
 
@@ -66,7 +66,7 @@ async function liveCases() {
     const res = await fetch(STRAPI, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ query: '{ caseStudies(pagination: { limit: 200 }) { slug } }' }),
+      body: JSON.stringify({ query: '{ caseStudies(status: PUBLISHED, pagination: { limit: 200 }) { slug } }' }),
       signal: AbortSignal.timeout(15000),
     });
     const json = await res.json();

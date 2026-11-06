@@ -8,6 +8,7 @@ query PublishedResource($slug: String!) {
     additionalParagraphs { text }
     breadcrumbs { label href }
     resourceType { name slug }
+    eventListing { startsAt place }
     author { ...ResourceAuthor }
     coAuthors { ...ResourceAuthor }
     industries { documentId name slug }

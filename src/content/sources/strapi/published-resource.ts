@@ -14,7 +14,7 @@ import {
 } from './published-resource-query';
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
 import { resourceMarkdownToHtml } from './resource-markdown';
-import { resourceSeo, socialImage, type ResourceSeo, type ResourceSeoSettings } from './resource-seo';
+import { resourceSeo, type ResourceSeo, type ResourceSeoSettings } from './resource-seo';
 import { escapeHtml, richTextToHtml } from './rich-text';
 
 type Text = string | null | undefined;
@@ -90,6 +90,7 @@ type Resource = RelatedResource & {
   bylineText: Text;
   breadcrumbs: Entries<{ label: Text; href: Text }>;
   additionalParagraphs: Entries<TextItem>;
+  eventListing: { startsAt: Text; place: Text } | null;
   banner: { variant: 'image' | 'youtube'; image?: CmsImage | null; youtubeUrl?: Text } | null;
   author: Author | null;
   coAuthors: Entries<Author>;
@@ -120,6 +121,7 @@ const KINDS = {
   videos: 'video',
   research: 'research',
   events: 'event',
+  podcasts: 'podcast',
 } as const;
 function resourceKind(value: Text) {
   return Object.entries(KINDS).find(([slug]) => slug === value)?.[1];
@@ -305,19 +307,21 @@ function relatedItems(section: Resource['otherResources'], current: Resource) {
   });
 }
 
-export const getPublishedResource = cache(async (slug: string) => {
+export const getPublishedResource = cache(async (slug: string, revalidate?: number) => {
   if (
     !/^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/.test(slug) ||
-    /^(?:authors?|events|podcasts)(?:\/|$)/.test(slug)
+    /^authors?(?:\/|$)/.test(slug)
   )
     return null;
   const { resources, seoSettings } = await publicGraphql<{
     resources: Resource[];
     seoSettings: ResourceSeoSettings | null;
-  }>(PUBLISHED_RESOURCE_QUERY, 'PublishedResource', { slug });
+  }>(PUBLISHED_RESOURCE_QUERY, 'PublishedResource', { slug }, { revalidate });
   const record = resources.find((entry) => entry.slug === slug);
   const kind = resourceKind(record?.resourceType?.slug);
-  if (!record || !kind || kind === 'event') return null;
+  if (!record || !kind) return null;
+  if (slug.startsWith('events/') !== (kind === 'event')) return null;
+  if (slug.startsWith('podcasts/') !== (kind === 'podcast')) return null;
   if (record.routePath !== blogPath(slug))
     throw new Error(`New CMS Resource ${slug}: unexpected routePath`);
   const title = text(record.title);
@@ -333,6 +337,7 @@ export const getPublishedResource = cache(async (slug: string) => {
         query,
         operation,
         { slug },
+        { revalidate },
       );
       banner = result.resources.find((entry) => entry.slug === slug)?.banner ?? null;
     } catch (error) {
@@ -388,6 +393,9 @@ export const getPublishedResource = cache(async (slug: string) => {
     : undefined;
   const publicationDate = text(record.publicationDate);
   const modificationDate = text(record.modificationDate);
+  const startsAt = text(record.eventListing?.startsAt);
+  const place = text(record.eventListing?.place);
+  const eventDate = startsAt && Number.isFinite(Date.parse(startsAt)) ? startsAt : undefined;
 
   return {
     documentId: record.documentId,
@@ -397,6 +405,7 @@ export const getPublishedResource = cache(async (slug: string) => {
     kind,
     eyebrow: text(record.eyebrow) ?? text(record.resourceType?.name),
     body,
+    event: kind === 'event' && (eventDate || place) ? { startsAt: eventDate, place } : undefined,
     bannerImage: media,
     heroVideo: videoId ? { type: 'youtube' as const, id: videoId, title } : undefined,
     thumbnail: image(record.thumbnail?.image),
@@ -444,27 +453,6 @@ export const getPublishedResource = cache(async (slug: string) => {
         modificationDate,
       },
       authors,
-    ),
-  };
-});
-
-/** Social images for event routes whose page content still comes from the legacy source. */
-export const getPublishedResourceSocialImages = cache(async (slug: string) => {
-  const image = 'imageAlt image { url width height alternativeText }';
-  const query = `query ResourceSocialImages($slug: String!) {
-    resources(status: PUBLISHED, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
-      seo { openGraph { ${image} } twitter { ${image} } }
-    }
-  }`;
-  const { resources } = await publicGraphql<{
-    resources: { seo: Pick<ResourceSeo, 'openGraph' | 'twitter'> | null }[];
-  }>(query, 'ResourceSocialImages', { slug });
-  const seo = resources[0]?.seo;
-  return {
-    openGraph: socialImage(seo?.openGraph?.image, seo?.openGraph?.imageAlt),
-    twitter: socialImage(
-      seo?.twitter?.image ?? seo?.openGraph?.image,
-      seo?.twitter?.imageAlt ?? seo?.openGraph?.imageAlt,
     ),
   };
 });

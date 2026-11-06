@@ -118,6 +118,31 @@ function mapResource(resource: Resource, slug: string) {
   };
 }
 
+export const getPublishedAuthorShareProfile = cache(async (slug: string, revalidate: number) => {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
+  const { authors } = await publicGraphql<{
+    authors: Pick<Author, 'name' | 'routePath' | 'designation' | 'profilePicture'>[];
+  }>(
+    `query PublishedAuthorShareProfile($slug: String!) {
+      authors(status: PUBLISHED, filters: { slug: { eq: $slug } }, pagination: { limit: 1 }) {
+        name routePath designation profilePicture { url alternativeText width height }
+      }
+    }`,
+    'PublishedAuthorShareProfile',
+    { slug },
+    { revalidate },
+  );
+  const author = authors[0];
+  if (!author || author.routePath !== authorPath(slug)) return null;
+  const name = text(author.name);
+  if (!name) return null;
+  return {
+    name,
+    role: text(author.designation),
+    image: mapUploadImage(author.profilePicture, publicGraphqlUrl(), { fallbackAlt: name }),
+  };
+});
+
 export const getPublishedAuthor = cache(async (slug: string) => {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
   const data = await publicGraphql<{

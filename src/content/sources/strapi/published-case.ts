@@ -283,13 +283,14 @@ const dateOnly = (value: Text) => text(value)?.slice(0, 10);
 const names = (values: Entries<Relation>) =>
   rows(values).flatMap(({ name }) => text(name) ?? []);
 
-export const getPublishedCaseStudy = cache(async (slug: string) => {
+export const getPublishedCaseStudy = cache(async (slug: string, revalidate?: number) => {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
 
   const { caseStudies } = await publicGraphql<{ caseStudies: CmsCase[] }>(
     PUBLISHED_CASE_QUERY,
     'PublishedCaseStudy',
     { slug },
+    { revalidate },
   );
   const record = caseStudies.find((entry) => entry.slug === slug);
   if (!record) return null;

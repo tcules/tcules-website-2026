@@ -4,18 +4,20 @@ export function publicGraphqlUrl(): string {
   return process.env.NEW_CMS_GRAPHQL_URL?.trim() || PRODUCTION_URL;
 }
 
-/** Read published content and SEO from the new CMS on each server request. */
+/** Read published content and SEO from the new CMS. Callers can opt into revalidation. */
 export async function publicGraphql<T>(
   query: string,
   operationName: string,
   variables?: Record<string, string>,
-  options?: { optionalImagePaths: readonly string[] },
+  options?: { optionalImagePaths?: readonly string[]; revalidate?: number },
 ): Promise<T> {
   const response = await fetch(publicGraphqlUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, operationName, variables }),
-    cache: 'no-store',
+    ...(options?.revalidate
+      ? { cache: 'force-cache', next: { revalidate: options.revalidate } }
+      : { cache: 'no-store' }),
     signal: AbortSignal.timeout(8_000),
   });
   const result = (await response.json()) as {
@@ -31,7 +33,7 @@ export async function publicGraphql<T>(
     // Other image slots are explicitly allowed by the query. Match any array index, and
     // only recover if the response kept the containing card or relationship intact.
     const pattern = path.map((part) => (typeof part === 'number' ? '*' : part)).join('.');
-    if (!options?.optionalImagePaths.includes(pattern)) return true;
+    if (!options?.optionalImagePaths?.includes(pattern)) return true;
     const image = path.slice(0, -1).reduce<unknown>((parent, part) => {
       return parent && typeof parent === 'object'
         ? (parent as Record<string | number, unknown>)[part]
