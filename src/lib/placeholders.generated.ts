@@ -491,7 +491,7 @@ export const PLACEHOLDER_SLOTS: Readonly<
     height: 1333,
     kind: 'illustration',
     shows:
-      "Several directions explored side by side, one carried to finish: a screen that reads at a glance, responds, and shows a considered empty and error state. /why-tcules principles; the band's other two reuse the offer set's known-before-drawn and proved-in-code, so this is drawn in that set's world box.",
+      'Several directions explored side by side, one carried to finish: a screen that reads at a glance, responds, and shows a considered empty and error state. **Unused from 4 Nov 2026:** written for the 26 Oct /why-tcules principles; the 3 Nov copy retitled them, and since 6 Nov they take one flat drawing each (components/Sketch/wyg-why-tcules.tsx). Keep the brief for a future placement.',
   },
   'illustration:we-know-what-to-leave-alone-in-a-product-people-rely-on': {
     src: '/placeholders/illustration--we-know-what-to-leave-alone-in-a-product-people-rely-on.svg',
