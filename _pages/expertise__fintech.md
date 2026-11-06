@@ -372,7 +372,7 @@ Yes. Balances, transfers, cards and savings goals need what lending and payments
 
 ### Can a designer work inside our FinTech team?
 
-Yes, as an ongoing partnership: a senior Tcules designer works in your tools and channels next to your product and engineering people. OctiFi's first design assignment grew into continuing design work on its app. [See how ongoing work is set up](/how-we-work#ongoing)
+Yes, as an ongoing partnership: a senior Tcules designer works in your tools and channels next to your product and engineering people. OctiFi's first design assignment grew into continuing design work on its app. [See how ongoing work is set up](/how-we-work#engagement-shapes)
 
 ## Tell us which status sends customers to support {#enquiry}
 

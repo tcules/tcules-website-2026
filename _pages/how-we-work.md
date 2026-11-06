@@ -170,21 +170,35 @@ Bring an idea, a prototype or a product with years behind it. We learn it first,
 
 Your product managers, engineers and domain specialists bring the context, and customers join when the question calls for it.
 
-## Three ways to work with us: our product design engagement models {#engagement-shapes}
+## Three ways to work with us {#engagement-shapes}
 
-### A pilot project, at a fixed price
+**Pilot project.** Try us on one real problem
 
-Optional: one flow, one hard question or an audit, with the price agreed up front.
+- One flow, one feature or an audit
+- Fixed price, agreed up front
+- The work is yours, whatever you decide
 
-OctiFi's first design pilot grew into continuing work on onboarding, loan issuance, new features and a second market.
+[Start with a pilot](#enquiry)
 
-### A defined project, scoped and priced first
+**Defined project.** One goal, one scope, one price
 
-A first release, a redesign or a design system, with roles and milestones set before we start.
+- A first release, a redesign or a design system
+- Scope and price fixed before we start
+- Designers and engineers work on it together
 
-### An ongoing partnership, at a fixed monthly fee {#ongoing}
+[Get your project scoped](#enquiry)
 
-A senior designer leads, specialists join as the work needs, and you can change the team with two weeks' notice.
+**Ongoing partnership.** A design team without the hiring
+
+- A senior designer leads your product
+- Specialists join when the work needs them
+- Month to month, two weeks' notice
+
+[Get your design team](#enquiry)
+
+Not sure which suits you? Tell us about the product, and we'll suggest one.
+
+[Book a call](#enquiry)
 
 ## Who you work with {#your-team}
 
