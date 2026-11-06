@@ -276,21 +276,15 @@ const ARTEFACT_BAND: Readonly<Record<string, BandArtefact>> = {
 };
 
 /**
- * A band drawn as ONE scene instead of one drawing per item (owner, 5 Nov 2026, /why-tcules: "one wide
- * drawing for the band"; three Tcules–client pairs, one per principle). Keyed `<route>#<band>`; the
- * band's component takes it as its band figure (Reasons `bandFigure`). Drawn on the tint band's
- * paper-deep ground; the SVG itself is transparent.
+ * A band drawn as ONE scene instead of one drawing per item (Reasons `bandFigure`). Keyed
+ * `<route>#<band>`. Empty since 6 Nov 2026: /why-tcules' principles went back to one drawing per
+ * principle, drawn flat (owner, 6 Nov 2026). Its wide drawing, three Tcules–client pairs, is PARKED,
+ * not deleted: `/illustrations/why-tcules/principles.svg` (813 × 442, drawn on the tint band's
+ * paper-deep ground), kept for a later placement such as the page's hero.
  */
 const BAND_ILLUSTRATION: Readonly<
   Record<string, { src: string; width: number; height: number; kind: 'illustration' }>
-> = {
-  '/why-tcules#principles': {
-    src: '/illustrations/why-tcules/principles.svg',
-    width: 813,
-    height: 442,
-    kind: 'illustration',
-  },
-};
+> = {};
 
 /** The one drawing a band shows for all its items, if any (`BAND_ILLUSTRATION`). */
 export function bandIllustration(route: string, bandId: string) {

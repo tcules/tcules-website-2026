@@ -558,6 +558,11 @@ export const PAGE_SCENE_NAMES = [
   'home-ai-fix',
   /* /how-we-work, the terms band (components/Sketch/wyg-how-we-work.tsx): "What we make is yours". */
   'scope-yours',
+  /* /why-tcules, "Better product decisions, before you build" (components/Sketch/wyg-why-tcules.tsx):
+     one plate per principle (owner, 6 Nov 2026). */
+  'why-principles-evidence',
+  'why-principles-build-first',
+  'why-principles-pays-back',
 ] as const;
 
 export type PageSceneName = (typeof PAGE_SCENE_NAMES)[number];

@@ -1444,6 +1444,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                 block.type === 'quote',
             );
         const wide = bandIllustration(page.route, band.id);
+        /* A set drawn flat (owner, 6 Nov 2026, /why-tcules principles): each reason's Sketch scene, by
+           its title, when every reason has one; otherwise the isometric figures as before. */
+        const scenes = titled.map((item) => sceneFor(ctx, band, item.title!));
+        const flat = !wide && scenes.length > 0 && scenes.every(Boolean);
         if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
@@ -1453,9 +1457,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               figureSize="lg"
               lead={parts.lead}
               action={action}
-              items={titled.map((item) => {
+              items={titled.map((item, index) => {
                 /* Under a band figure the reasons are words only: no per-reason drawing. */
-                const drawn = wide ? undefined : ctx.reasonFigure?.(item.title!, ground);
+                const drawn = wide || flat ? undefined : ctx.reasonFigure?.(item.title!, ground);
                 const parted = split(item.title!);
                 const bodyHtml = parted ? parted.bodyHtml : item.bodyHtml;
                 return {
@@ -1472,11 +1476,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                       : {}),
                   ...(wide
                     ? {}
-                    : {
+                    : flat
+                      ? { scene: scenes[index] as SketchName }
+                      : {
                         figure: drawn
                           ? { ...drawn, alt: '', kind: 'illustration' as const }
                           : { ...placeholderIllustration(item.title!), alt: '' },
-                      }),
+                        }),
                 };
               })}
             />

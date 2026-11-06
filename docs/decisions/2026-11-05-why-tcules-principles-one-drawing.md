@@ -1,7 +1,7 @@
 ---
 title: "/why-tcules' principles take one drawing for the band, three Tcules–client pairs"
 date: 2026-11-05
-status: active
+status: superseded
 area: [illustration, layout]
 source: "Devagya, 5 Nov 2026, illustration run: \"one wide drawing for the band\"; \"we can have 3 pairs so it shows that we work directly with the client\"; approved as drawn"
 supersedes: []

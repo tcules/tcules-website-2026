@@ -198,7 +198,15 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
   /* The ConnectX snippet, as the Dealpath strip: the thinking and the craft drawn, the code the real
      capture (owner, 2 Nov 2026: "a snippet of the case study, presented like that"). */
   '/why-tcules': {
-    items: {},
+    /* "Better product decisions, before you build": one flat drawing per principle (owner, 6 Nov
+       2026), drawn in components/Sketch/wyg-why-tcules.tsx. */
+    items: {
+      principles: by({
+        'Evidence before screens': 'why-principles-evidence',
+        'What to build first': 'why-principles-build-first',
+        'Design that pays back': 'why-principles-pays-back',
+      }),
+    },
     stories: {
       'signature-work': ['case-connectx-thinking', 'case-connectx-craft'],
     },

@@ -74,6 +74,12 @@
   block-size: auto;
 }
 
+/* A flat drawing heading its words (owner, 6 Nov 2026, /why-tcules principles): the Sketch plate at the
+   track's full width, its 16:9 setting the height, as a What you get plate does. */
+.scene {
+  inline-size: 100%;
+}
+
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────
    The frame draws the outer edge once; inside it a cell rules only an edge it SHARES with a
    neighbour — its block-start under another cell, its inline-start beside one — so no cell ever

@@ -55,11 +55,13 @@ import { SCENES as P_FUTURE_INTERFACES_LAB } from './wyg-future-interfaces-lab';
 import { SCENES as P_FUTURE_INTERFACES_LAB_JOIN } from './wyg-future-interfaces-lab-join';
 import { SCENES as P_HOW_WE_WORK } from './wyg-how-we-work';
 import { SCENES as P_HOME } from './wyg-home';
+import { SCENES as P_WHY_TCULES } from './wyg-why-tcules';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_HOME,
   ...P_HOW_WE_WORK,
+  ...P_WHY_TCULES,
   ...P_AI_PRODUCTS_DEVELOPER_TOOLS,
   ...P_B2B_SAAS_WORKFLOW_SOFTWARE,
   ...P_CLIMATETECH_ENERGY,
