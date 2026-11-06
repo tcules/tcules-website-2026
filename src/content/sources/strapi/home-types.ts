@@ -115,7 +115,7 @@ export type CmsHomeSection = Band &
           id: string;
           eyebrow: Text;
           title: Text;
-          body: Entries<TextItem>;
+          body?: Entries<TextItem>;
           glyph: Text;
           exampleLabel: Text;
           example: Text;

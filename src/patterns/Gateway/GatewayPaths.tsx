@@ -13,8 +13,8 @@ export type GatewayPath = {
   id: string;
   /** The situation in the reader's words ("Creating a new product"). A label over its words. */
   title: string;
-  /** Its sentences, one string per paragraph, as authored. */
-  body: readonly string[];
+  /** Optional sentences, one string per paragraph, as authored. */
+  body?: readonly string[];
   /**
    * Where it leads, in the authored order: each a service, as a graphic card. `label` is the
    * action's authored words ("Design and launch your MVP"), never the service's name; `scene` is the
@@ -144,7 +144,7 @@ export function GatewayPaths({
                   ) : null}
                   {path.eyebrow ? <p className={styles.doorEyebrow}>{path.eyebrow}</p> : null}
                   <Title className={styles.doorTitle}>{path.title}</Title>
-                  {path.body.map((paragraph, index) => (
+                  {path.body?.map((paragraph, index) => (
                     <p key={index} className={styles.doorBody}>
                       {paragraph}
                     </p>
@@ -219,7 +219,7 @@ export function GatewayPaths({
           <Layout columns={{ lg: [1, 2] }} colGap="section" rowGap="block">
             <Layout rowGap="text">
               <Title className={styles.pathTitle}>{path.title}</Title>
-              {path.body.map((paragraph, index) => (
+              {path.body?.map((paragraph, index) => (
                 <p key={index} className={styles.pathBody}>
                   {paragraph}
                 </p>
