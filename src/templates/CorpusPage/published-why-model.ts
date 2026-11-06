@@ -1,4 +1,4 @@
-import type { MediaImage } from '@/components';
+import type { MediaImage, SketchName } from '@/components';
 import type { BlockCardSet, DataTableProps, LogoGridMark } from '@/patterns';
 import type { ComponentProps } from 'react';
 import type { HomeHero, HomeSection, HomeAction } from './published-home-model';
@@ -23,6 +23,12 @@ export type WhySection =
         | {
             type: 'why-reasons';
             entries: { title: string; html: string; figure?: MediaImage }[];
+          }
+        | {
+            /* An illustrated Offer Sheet: cards each led by a flat drawing, three across. */
+            type: 'why-sheet';
+            lead?: string;
+            cards: { title: string; body?: string; bodyHtml?: string; scene?: SketchName }[];
           }
         | {
             type: 'why-comparison';

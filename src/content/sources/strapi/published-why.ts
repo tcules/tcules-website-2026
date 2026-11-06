@@ -9,6 +9,8 @@ import type { CmsAction, CmsHero, CmsHomeSection, CmsImage, Entries } from './ho
 import { mapUploadImage, type StrapiUploadFile } from './image';
 import { markdownInlineToHtml, markdownToHtml } from './markdown';
 import { WHY_QUERY } from './published-why-query';
+import { isSketchName } from '@/components/Sketch';
+
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
 import { richTextToPlainText } from './rich-text';
 
@@ -69,6 +71,12 @@ type Custom = {
   }>;
   sheetPresentation?: Text;
   listEntries?: Entries<{ title: Text; body: Text; icon?: Text }>;
+  sheetCards?: Entries<{
+    title: Text;
+    description: Text;
+    descriptionRich?: Text;
+    scene?: Text;
+  }>;
 };
 
 export type WhyRecord = {
@@ -247,6 +255,36 @@ function mapSection(value: CmsHomeSection | Custom, index: number): WhySection |
 
     case 'ComponentSharedOfferSheetSection': {
       if (!needsHeading()) return;
+      /* An illustrated sheet: its cards, each led by its flat drawing (owner, 6 Nov 2026, the
+         principles band; decisions/2026-11-06-why-tcules-principles-flat-drawings). */
+      if (s.sheetPresentation === 'illustrated') {
+        const cards = rows(s.sheetCards).flatMap((card) => {
+          const title = text(card.title);
+          if (!title) return [];
+          const scene = text(card.scene);
+          if (scene && !isSketchName(scene))
+            warn(`${key} card "${title}" names an unknown scene "${scene}"`);
+          return [
+            {
+              title,
+              bodyHtml: markdownInlineToHtml(card.descriptionRich) || undefined,
+              body: text(card.description),
+              scene: scene && isSketchName(scene) ? scene : undefined,
+            },
+          ];
+        });
+        if (!cards.length) {
+          warn(`${key} has no cards; not shown`);
+          return;
+        }
+        return {
+          ...head,
+          type: 'why-sheet',
+          surface: surface(s.sheetSurface),
+          lead: text(s.description),
+          cards,
+        };
+      }
       if (s.sheetPresentation && s.sheetPresentation !== 'split_list')
         warn(`${key} presentation "${s.sheetPresentation}" renders as the list`);
       const items = rows(s.listEntries).flatMap((entry) => {

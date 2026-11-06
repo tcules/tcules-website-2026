@@ -22,6 +22,7 @@ hardening pass of 5 Nov 2026. Frontend only: the CMS was read through its public
 | Reasons (entries + illustration)                                       | `Reasons`, large figures                                   | reasons            |
 | Engagement Options                                                     | shared `PublishedSection`                                  | engagement-options |
 | Offer Sheet (`split_list`, list entries + icons)                       | `OfferSheet` list                                          | offer-sheet        |
+| Offer Sheet (`illustrated`, cards + `scene`)                          | `OfferSheet` drawn grid, three across (two for four)       | offer-sheet        |
 | CTA (`button_island` / `form_island`)                                  | `CtaSection` open / blue enquiry island with `EnquiryForm` | L                  |
 | Testimonials (wall, ratings)                                           | shared `PublishedSection`                                  | G                  |
 | Comparison (prose + table blocks)                                      | `DataTable` beside its head, the Tcules row picked         | E                  |
@@ -65,3 +66,17 @@ Reasons keeps its tint default when none is set.
   illustration, the studio photo slot in Selected work is captioned "Image to come: studio photo", and
   the first testimonial's rating and avatar are flagged `ratingIsPlaceholder` / `avatarIsPlaceholder`.
 - Reason illustrations have empty alt text.
+
+## Illustrated Offer Sheet (6 Nov 2026)
+
+The principles band ("Better product decisions, before you build") moves from a Reasons section to an **Offer Sheet
+with presentation `illustrated`**: three cards, each `title`, `description` and `scene`, where `scene` names a flat
+drawing in the site's code (`why-principles-evidence`, `why-principles-build-first`, `why-principles-pays-back` in
+`src/components/Sketch/wyg-why-tcules.tsx`). An unknown scene is dropped with a warning. The mapper renders it
+page-locally (`why-sheet` in `PublishedWhy`), so the shared Offer Sheet renderer other pages use is unchanged.
+`split_list` sheets render exactly as before. Ruling: decisions/2026-11-06-why-tcules-principles-flat-drawings.
+
+Order: this code ships first; then the CMS swaps the section (anchor `principles`, surface `tint`). Until then the
+page renders as before, keeping its wide band drawing (`images.ts` `BAND_ILLUSTRATION`). After the swap the page
+has no Reasons band, so that entry is unused; it can be removed here in a later cleanup (`main` is never merged
+into `new-cms`).
