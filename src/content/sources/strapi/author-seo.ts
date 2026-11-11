@@ -69,11 +69,11 @@ export function authorSeo(
       : [];
   }
   const robots: Metadata['robots'] = {
+    /* Indexed unless something says noindex, as an insight is (see entrySeo). */
     index:
       settings?.allowIndexing === true &&
       technical?.index !== 'noindex' &&
-      !directives.has('noindex') &&
-      (technical?.index === 'index' || directives.has('index')),
+      !directives.has('noindex'),
     follow: technical?.follow !== 'nofollow' && !directives.has('nofollow'),
     nosnippet: technical?.noSnippet || directives.has('nosnippet') || undefined,
     noimageindex: technical?.noImageIndex || directives.has('noimageindex') || undefined,

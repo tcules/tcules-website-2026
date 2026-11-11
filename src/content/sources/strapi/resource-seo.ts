@@ -109,11 +109,12 @@ export function entrySeo(
       .map((part) => part.trim()),
   );
   const technical = seo?.technical;
+  /* An entry is indexed unless something says noindex: an unset index field is not a reason to hide
+     a page, and every other page type reads it the same way. The CMS-wide gate still applies. */
   const index =
     settings?.allowIndexing === true &&
     technical?.index !== 'noindex' &&
-    !directives.has('noindex') &&
-    (technical?.index === 'index' || directives.has('index'));
+    !directives.has('noindex');
   const follow = technical?.follow !== 'nofollow' && !directives.has('nofollow');
   const authoredCanonical = text(seo?.canonicalURL);
   let canonical =

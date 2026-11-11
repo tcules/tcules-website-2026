@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { cache } from 'react';
 
+import { SITE_ORIGIN } from '@/lib/routes';
+
 import { absoluteAssetUrl } from './image';
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
 
@@ -46,19 +48,23 @@ export type ResolvedSeo = {
   structuredData?: Record<string, unknown> | unknown[];
 };
 
-function siteUrl(value: string | undefined): string | undefined {
-  if (!value || !/^https?:\/\//i.test(value)) return undefined;
-  return absoluteAssetUrl(value, publicGraphqlUrl());
-}
-
+/**
+ * The page's canonical, always absolute on the site's own origin. The CMS may hold it relative
+ * (`/expertise/fintech`) or on another host (`https://tcules.com/...`): both name this page, so only
+ * the path is read and the origin is the site's. A canonical naming a different path is refused, as
+ * before; a relative one used to be refused too, and a page with no canonical is kept out of the index.
+ */
 function canonicalUrl(value: string | undefined, path: string): string | undefined {
-  const href = siteUrl(value);
-  if (!href) return undefined;
-  const url = new URL(href);
-  url.hash = '';
-  url.search = '';
-  url.pathname = url.pathname.replace(/\/+$/, '') || '/';
-  return url.pathname === path && !url.username && !url.password ? url.href : undefined;
+  if (!value?.trim()) return undefined;
+  let url: URL;
+  try {
+    url = new URL(value.trim(), SITE_ORIGIN);
+  } catch {
+    return undefined;
+  }
+  if (!/^https?:$/.test(url.protocol) || url.username || url.password) return undefined;
+  const pathname = url.pathname.replace(/\/+$/, '') || '/';
+  return pathname === path ? new URL(pathname, SITE_ORIGIN).href : undefined;
 }
 
 /** The CMS resolves a social image as an object, or (Twitter) as its bare URL: both are read. */
