@@ -294,9 +294,33 @@ export function caseStudyPlaceholderPath(slug: string): string {
 }
 
 /**
+ * The insights formats, each kind's plural name: the name a reader sees in the hub's Type group and
+ * in an insight's breadcrumb, and (lower-cased) its value in the finder's `?type=`.
+ */
+export const INSIGHT_FORMAT_NAMES = {
+  article: 'Articles',
+  guide: 'Guides',
+  research: 'Research',
+  podcast: 'Podcasts',
+  video: 'Videos',
+  event: 'Events',
+  interview: 'Interviews',
+} as const;
+
+/**
+ * A format's listing: the insights hub with that format picked (`/insights?type=articles`). The hub
+ * is the one listing (owner, 28 Oct 2026; decisions/2026-10-29-insights-hub-is-the-finder) and the
+ * format path under it redirects here, so a link names this URL directly rather than the redirect.
+ */
+export function insightsFormatPath(kind: keyof typeof INSIGHT_FORMAT_NAMES): string {
+  return `${ROUTES.insights}?type=${INSIGHT_FORMAT_NAMES[kind].toLowerCase()}`;
+}
+
+/**
  * The retired format pages, each to the insights hub with its type picked (`/insights/articles` →
- * `/insights?type=articles`): the breadcrumbs of a podcast's or an event's page and any old link
- * still land. The type's value is the path's last segment, the slug the hub's Type group uses.
+ * `/insights?type=articles`): any old link or bookmark still lands. Permanent (next.config.ts): the
+ * pages were retired for good, so a search engine moves what it holds for them to the hub. The type's
+ * value is the path's last segment, the slug the hub's Type group uses.
  */
 export const FORMAT_PAGE_REDIRECTS: readonly { from: string; to: string }[] = [
   ROUTES.articles,

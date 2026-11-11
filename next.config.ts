@@ -32,8 +32,8 @@ const nextConfig: NextConfig = {
    */
   allowedDevOrigins: ['192.168.1.*', '*.local'],
   /** The corpus's planned case slugs → the live Strapi slugs (routes.ts § CASE_SLUG_REDIRECTS), and
-      the retired format pages → the insights finder (§ FORMAT_PAGE_REDIRECTS). Temporary, so nothing
-      caches either as moved for good. */
+      the retired format pages → the insights finder (§ FORMAT_PAGE_REDIRECTS). The slug redirects are
+      temporary, so nothing caches them as moved for good; the format pages' are permanent (below). */
   async redirects() {
     return [
       ...Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => ({
@@ -59,10 +59,12 @@ const nextConfig: NextConfig = {
         destination: to,
         permanent: false,
       })),
+      /* Permanent (308): the format pages are retired for good (owner, 28 Oct 2026), so a search
+         engine should move whatever it holds for them to the hub rather than keep the old URL. */
       ...FORMAT_PAGE_REDIRECTS.map(({ from, to }) => ({
         source: from,
         destination: to,
-        permanent: false,
+        permanent: true,
       })),
       ...legacyRedirects,
     ];
