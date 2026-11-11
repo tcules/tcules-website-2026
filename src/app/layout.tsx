@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 
-import { getNavigation } from '@/content';
+import { getNavigation, getSiteIdentity } from '@/content';
+import { siteGraphMarkup } from '@/lib/json-ld';
 import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
@@ -44,7 +45,7 @@ const FONTS_CSS =
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { nav, footer } = await getNavigation();
+  const [{ nav, footer }, identity] = await Promise.all([getNavigation(), getSiteIdentity()]);
   const trackingEnabled = process.env.RAILWAY_ENVIRONMENT_NAME === 'live';
 
   return (
@@ -100,6 +101,14 @@ export default async function RootLayout({
         {nav.available !== false ? <SiteNav {...nav} /> : null}
         <main>{children}</main>
         {footer.available !== false ? <SiteFooter {...footer} /> : null}
+        {/* The site-wide Organization and WebSite nodes, once per page from SEO Settings. Each
+            page's own graph refers to them by @id (lib/json-ld.ts strips the copies it carries). */}
+        {identity ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: siteGraphMarkup(identity) }}
+          />
+        ) : null}
       </body>
     </html>
   );

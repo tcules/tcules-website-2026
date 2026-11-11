@@ -1924,3 +1924,30 @@ export type ContentSource = {
 
 /* The `_pages/` corpus view models (corpus-types.ts), re-exported so callers import `@/content`. */
 export type * from './corpus-types';
+
+/**
+ * Who the site is: the SEO Settings single type's organisation and site name, the one place those
+ * facts are kept. The root layout renders it as the site-wide Organization and WebSite nodes.
+ */
+export type SiteIdentity = {
+  siteName: string;
+  siteUrl: string;
+  language?: string;
+  organization: {
+    name: string;
+    legalName?: string;
+    url: string;
+    description?: string;
+    email?: string;
+    telephone?: string;
+    logo?: { url: string; width?: number; height?: number };
+    sameAs: string[];
+    address?: {
+      streetAddress?: string;
+      addressLocality?: string;
+      addressRegion?: string;
+      postalCode?: string;
+      addressCountry?: string;
+    };
+  };
+};
