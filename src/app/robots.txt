@@ -1,51 +1,90 @@
 # tcules.com — one group per agent, no duplicates
+# A crawler obeys only its most specific group, so every Allow group repeats the two Disallow lines:
+# ?_rsc= is a client prefetch payload, not a page, and /api/ is the form endpoints.
 User-agent: *
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Perplexity-User
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Claude-SearchBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Applebot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: meta-externalagent
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: CCBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: AhrefsBot
 Allow: /
+Disallow: /*?_rsc=
+Disallow: /api/
 
 User-agent: Bytespider
 Disallow: /
