@@ -14,6 +14,16 @@ export function siteGraphMarkup(input: SiteGraphInput): string {
   return serialise(siteGraph(input));
 }
 
+/** Whether a url is on the site's domain, with or without the www. */
+function onSiteDomain(url: unknown): boolean {
+  try {
+    const host = new URL(String(url)).hostname.replace(/^www\./, '');
+    return host === new URL(SCHEMA_ID_ORIGIN).hostname.replace(/^www\./, '');
+  } catch {
+    return false;
+  }
+}
+
 function serialise(data: unknown): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
@@ -29,15 +39,20 @@ function serialise(data: unknown): string {
 type JsonLd = Record<string, unknown> | unknown[];
 
 export function withoutSiteNodes(data: JsonLd): JsonLd {
-  const owned = (value: unknown): value is Record<string, unknown> =>
-    Boolean(value) &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    SITE_NODE_IDS.has(String((value as Record<string, unknown>)['@id']));
+  const owned = (value: unknown): value is Record<string, unknown> => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+    const node = value as Record<string, unknown>;
+    if (SITE_NODE_IDS.has(String(node['@id']))) return true;
+    /* An unnamed copy of the organisation (an author's `worksFor` typed out in full, with no @id):
+       an Organization on the site's own domain is this one. */
+    return (
+      node['@id'] === undefined && node['@type'] === 'Organization' && onSiteDomain(node.url)
+    );
+  };
   const reference = (value: unknown): unknown => {
     if (Array.isArray(value)) return value.map(reference);
     if (!value || typeof value !== 'object') return value;
-    if (owned(value)) return { '@id': value['@id'] };
+    if (owned(value)) return { '@id': value['@id'] ?? ORGANIZATION_ID };
     return Object.fromEntries(
       Object.entries(value).map(([key, item]) => [key, reference(item)]),
     );
