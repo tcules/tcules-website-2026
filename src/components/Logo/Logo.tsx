@@ -88,14 +88,14 @@ export function Logo({
     <svg
       className={cx(styles.logo, styles[size], className)}
       viewBox="0 0 675 177"
-      /* Same convention as Icon: a mark that carries the name gets a role and a <title>, a mark
+      /* Same convention as Icon: a mark that carries the name gets a role and an aria-label (never an SVG <title>, see Icon), a mark
          whose name is already on the link that wraps it is hidden. focusable="false" keeps legacy
          Edge from making an inline SVG a tab stop. */
       role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : title}
       aria-hidden={decorative ? true : undefined}
       focusable="false"
     >
-      {decorative ? null : <title>{title}</title>}
       {WORDMARK_PATHS.map((d) => (
         <path key={d} className={styles.mark} d={d} />
       ))}

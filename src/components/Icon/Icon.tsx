@@ -74,13 +74,15 @@ export function Icon({ name, size = 'md', label, className }: IconProps) {
       className={cx(styles.icon, styles[size], className)}
       viewBox="0 0 24 24"
       /* A glyph beside a label is decoration and is hidden; a glyph that IS the content gets a
-         role and a <title>. focusable="false" is for IE/legacy Edge, where an inline SVG is a
+         role and an aria-label. Not a <title>: an SVG <title> in the body is a second <title>
+         element on the page, and some parsers read the first one they meet as the page's title.
+         focusable="false" is for IE/legacy Edge, where an inline SVG is a
          tab stop by default — cheap to keep and invisible everywhere else. */
       role={named ? 'img' : undefined}
+      aria-label={named ? label : undefined}
       aria-hidden={named ? undefined : true}
       focusable="false"
     >
-      {named ? <title>{label}</title> : null}
       {glyphs[name].map((d) => (
         <path key={d} d={d} />
       ))}

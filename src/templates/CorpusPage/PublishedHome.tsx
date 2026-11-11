@@ -551,8 +551,10 @@ export function PublishedSection({
           actions={link(section.action)}
         >
           <Cluster as="ul" colGap="tight" rowGap="tight">
-            {section.links.map(({ label, href }, index) => (
-              <li key={`${href}-${index}`}>
+            {section.links.map(({ label, href }) => (
+              /* Keyed by label, never by href: a key is serialised into the page payload and a
+                 path-shaped key is crawled as a URL (/expertise/fintech-5 404s in Search Console). */
+              <li key={label}>
                 <Tag variant="link" href={href}>
                   {label}
                 </Tag>
