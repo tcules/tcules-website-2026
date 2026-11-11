@@ -26,7 +26,9 @@ function serialise(data: unknown): string {
  * nested copy becomes a bare `{"@id"}` reference, which is what every other mention already is, so
  * the page's nodes still join the layout's by id.
  */
-export function withoutSiteNodes<T extends Record<string, unknown> | unknown[]>(data: T): T {
+type JsonLd = Record<string, unknown> | unknown[];
+
+export function withoutSiteNodes(data: JsonLd): JsonLd {
   const owned = (value: unknown): value is Record<string, unknown> =>
     Boolean(value) &&
     typeof value === 'object' &&
@@ -42,14 +44,14 @@ export function withoutSiteNodes<T extends Record<string, unknown> | unknown[]>(
   };
   const nodes = (list: unknown[]) => list.filter((node) => !owned(node)).map(reference);
 
-  if (Array.isArray(data)) return nodes(data) as T;
+  if (Array.isArray(data)) return nodes(data);
   if (Array.isArray(data['@graph'])) {
     return {
       ...(reference(data) as Record<string, unknown>),
       '@graph': nodes(data['@graph']),
-    } as T;
+    };
   }
-  return reference(data) as T;
+  return reference(data) as JsonLd;
 }
 
 /**
