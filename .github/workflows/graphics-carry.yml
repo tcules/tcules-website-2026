@@ -1,0 +1,108 @@
+# A merged graphics PR on main is carried to new-cms, and merged there when its checks pass.
+#
+# main is never merged into new-cms (owner, 6 Nov 2026): each change both branches need gets its own
+# new-cms PR. This job makes that PR from the merged change alone, by cherry-picking it onto a branch off
+# new-cms. It then runs `npm run verify` there and merges if green. If verify fails, the PR stays open and
+# Devagya is tagged. If the change doesn't apply cleanly, Claude carries it by hand on that branch, and the
+# PR is left open for Devagya to merge.
+#
+# new-cms's lockfile is out of step with its package.json (11 Nov 2026), so this uses `npm install`, not
+# `npm ci`, and restores the lockfile afterwards.
+name: graphics-carry
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+concurrency:
+  group: graphics-carry
+  cancel-in-progress: false
+
+jobs:
+  carry:
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.name, 'graphics')
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number }}
+      SHA: ${{ github.event.pull_request.merge_commit_sha }}
+      BRANCH: graphics/carry-${{ github.event.pull_request.number }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: new-cms
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Apply the merged change on a branch off new-cms
+        id: pick
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          # A merge commit needs -m 1 to pick the PR's whole diff; a squash commit has one parent.
+          if [ "$(git rev-list --parents -n1 "$SHA" | wc -w)" -gt 2 ]; then m='-m 1'; else m=''; fi
+          if git cherry-pick $m -x "$SHA"; then
+            echo "clean=true" >> "$GITHUB_OUTPUT"
+          else
+            git cherry-pick --abort
+            echo "clean=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install
+        run: |
+          npm install --no-audit --no-fund
+          git checkout -- package-lock.json
+
+      - name: Carry by hand (did not apply cleanly)
+        if: steps.pick.outputs.clean == 'false'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            You are on branch ${{ env.BRANCH }}, cut from new-cms. PR #${{ env.PR }} was merged to main
+            (merge commit ${{ env.SHA }}) and didn't cherry-pick cleanly here. Carry the same change by hand:
+            `git show -m --first-parent ${{ env.SHA }}` is the diff. new-cms reads Strapi, so keep its own
+            structure and apply only what the PR changed in the drawing seam (see
+            .claude/commands/graphics-issue.md, "Stay inside the drawing seam"). Run `npm run verify`, then
+            commit on this branch. Don't push, and don't open a PR: the next step does.
+          claude_args: >-
+            --model claude-opus-5-5
+            --max-turns 120
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(git show:*),Bash(git diff:*),Bash(git status:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(npm run:*)"
+
+      - name: Check
+        id: check
+        continue-on-error: true
+        run: npm run verify
+
+      - name: Open the new-cms PR, and merge it when it's clean and green
+        run: |
+          if [ "$(git rev-list --count origin/new-cms..HEAD)" = 0 ]; then
+            gh pr comment "$PR" --body "@devagya-tc Couldn't carry this to \`new-cms\`: no change was made on the branch. It needs a look."
+            exit 1
+          fi
+          git push -u origin "$BRANCH"
+          url=$(gh pr create --base new-cms --head "$BRANCH" --label graphics \
+            --title "Carry #$PR to new-cms: $PR_TITLE" \
+            --body "The change from #$PR, merged to \`main\`, carried to \`new-cms\` by \`graphics-carry.yml\`.")
+          if [ "${{ steps.pick.outputs.clean }}" = true ] && [ "${{ steps.check.outcome }}" = success ]; then
+            gh pr merge "$url" --merge --delete-branch
+            gh pr comment "$PR" --body "Carried to \`new-cms\` and merged: $url"
+          else
+            reason=$([ "${{ steps.pick.outputs.clean }}" = true ] && echo "\`npm run verify\` failed on new-cms" || echo "it didn't apply cleanly, so Claude carried it by hand")
+            gh pr comment "$url" --body "@devagya-tc Left open because $reason. Merge when it looks right."
+            gh pr comment "$PR" --body "Carried to \`new-cms\`, waiting for your merge: $url"
+          fi
