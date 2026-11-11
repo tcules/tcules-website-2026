@@ -26,9 +26,10 @@ private detail, an email address, a price, a contract term, or anything Jatin ha
 The drawings live in the code, **not in Strapi**. You can't change a drawing from Strapi, and you never try
 to. Your job is to notice when an edit leaves a drawing wrong, and tell Devagya.
 
-## 2. Which blocks carry a graphic
+## 2. Which blocks this covers
 
-Any band whose items each carry a picture. On a service, expertise or audit page:
+Only bands where **each item has its own drawing that shows what that item's words say**. On a service,
+expertise or audit page:
 
 | Band on the page | Graphic | Matched to the copy by |
 |---|---|---|
@@ -37,8 +38,10 @@ Any band whose items each carry a picture. On a service, expertise or audit page
 | Outcomes, how it runs, starting points, other itemised bands | flat drawing, one per item | item title |
 | **Hard parts** (claims) | isometric drawing, one per claim | claim title |
 | **Why Tcules** (reasons) | isometric drawing, one per reason | reason title |
-| **Hero** at the top of the page | isometric illustration | the page |
-| Home, enquiry form, case covers | illustration or cover | the page or case |
+
+**Not covered:** hero illustrations at the top of a page, the home and enquiry illustrations, and case
+covers. They show an industry or an area of expertise rather than the words beside them, and they rarely
+change. Leave them alone, and don't raise an issue about them.
 
 **A drawing finds its item by the item's title, letter for letter.** Capitals, quote marks, final full stops
 and extra spaces don't matter. Any other change to a title, even a single word, **unlinks the drawing**.
@@ -128,13 +131,12 @@ naming objects to draw)
 If the link is too long for the browser (very long copy), open the template without `&body=` and give
 Jatin the body to paste.
 
-## 6. What Devagya does with it
+## 6. What happens after Jatin presses Submit
 
-Devagya picks up the issue and, in the repo:
-- **relink:** points the drawing at the new title;
-- **reuse:** checks the candidate by eye and relinks, or turns it into a redraw;
-- **redraw:** draws it with the flat-drawings workflow (isometric drawings go to the illustrators);
-- **remove:** retires the row.
+Nothing more is needed from Jatin. Within the hour:
+- the issue is picked up automatically. A Claude in GitHub relinks, reuses or redraws the drawing, checks
+  it, and opens a pull request that closes the issue;
+- Devagya looks at it on the pull request's preview link and merges;
+- the same change is then carried to the live CMS site and goes out on its next deploy.
 
-The pull request closes the issue, and the site shows the change on its next deploy. Jatin needs to do
-nothing more. If Devagya has a question, it comes as a comment on the issue.
+If something in the issue is unclear, a comment appears on it. Jatin's Claude can answer there, or Jatin can.

@@ -10,11 +10,15 @@ dbf_status: none
 enforced_by: review
 ---
 
-When an item that carries a drawing (a flat drawing or an isometric figure) is changed in Strapi, the
+When an item whose drawing shows what its words say (a flat drawing per item, a hard-parts claim or a Why Tcules reason) is changed in Strapi, the
 editor's Claude checks whether the drawing still fits. "Meaning changed? needs an appropriate drawing.
 Drawing exists? pick from the existing drawings. Drawing doesn't exist? redraw." A changed title always
 needs relinking, even when the meaning holds. Jatin doesn't keep a copy of the repo: Jatin raises a
-`graphic-needs-review` issue, and Devagya does the relink, reuse or redraw in the frontend.
+`graphic-needs-review` issue. A GitHub Action has Claude do the relink, reuse or redraw and open the PR,
+and once Devagya merges it to main, the change is carried to new-cms on its own PR, which merges itself
+when green. "I don't really need to do anything other than merging the PR at the end." Heroes, home and enquiry
+illustrations, and case covers, are out: "they simply show a specific industry or expertise and they will
+rarely change."
 
 **Why.** Drawings are bound to items by title (`offerSceneKey`). An edit in Strapi never passes through
 git, so nothing in the build notices when a title changes or an item's meaning moves away from its drawing.
@@ -23,5 +27,6 @@ git, so nothing in the build notices when a title changes or an item's meaning m
 drawing left beside copy that now says something else.
 
 **How to apply.** `docs/guides/content-edits-with-graphics.md` (Jatin's Claude reads it from GitHub),
+`.claude/commands/graphics-issue.md` (the runbook), `.github/workflows/graphics-issue.yml` and `graphics-carry.yml`,
 `.github/ISSUE_TEMPLATE/graphic-needs-review.md`, `team/roles/approver.md`. Reuse is limited to a drawing
 made for the same idea, never a keyword match: the per-item drawing rulings still stand.
