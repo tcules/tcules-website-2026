@@ -4,7 +4,7 @@ import type {
   InsightResourceKind,
   InsightsPage,
 } from '@/content';
-import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
+import { blogPath, ENDPOINTS, INSIGHT_FORMAT_NAMES, ROUTES } from '@/lib/routes';
 import { Media } from '@/components';
 import { EnquiryForm } from '@/patterns';
 import {
@@ -47,15 +47,8 @@ const KINDS: readonly InsightResourceKind[] = [
   'interview',
 ];
 
-const FORMAT_NAME: Record<InsightResourceKind, string> = {
-  article: 'Articles',
-  guide: 'Guides',
-  research: 'Research',
-  podcast: 'Podcasts',
-  video: 'Videos',
-  event: 'Events',
-  interview: 'Interviews',
-};
+/* One list with the breadcrumbs an insight carries (lib/routes.ts § INSIGHT_FORMAT_NAMES). */
+const FORMAT_NAME: Record<InsightResourceKind, string> = INSIGHT_FORMAT_NAMES;
 
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');

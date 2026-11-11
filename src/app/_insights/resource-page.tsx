@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { Icon, Layout, Media, Prose, Section } from '@/components';
 import { getResourceDetail } from '@/content';
+import { withBreadcrumbList } from '@/lib/breadcrumb-json-ld';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -97,7 +98,8 @@ export async function resourceMetadata(slug: string): Promise<Metadata> {
   try {
     const resource = await getResourceDetail(slug);
     if (resource) {
-      if (resource.kind === 'event' || resource.kind === 'podcast') return resource.seo.metadata;
+      if (resource.kind === 'event' || resource.kind === 'podcast')
+        return resource.seo.metadata;
       return await withShareImage(resource.seo.metadata, resource.path);
     }
     return {
@@ -141,12 +143,15 @@ export async function renderResourcePage(slug: string) {
 
   return (
     <>
-      {resource.seo.structuredData ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(resource.seo.structuredData) }}
-        />
-      ) : null}
+      {/* The entry's graph, its BreadcrumbList rebuilt from the same trail the hero shows. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdMarkup(
+            withBreadcrumbList(resource.seo.structuredData, resource.breadcrumbs),
+          ),
+        }}
+      />
       <PageHero
         trail={
           resource.breadcrumbs.length

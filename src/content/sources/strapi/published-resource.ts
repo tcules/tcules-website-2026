@@ -1,6 +1,12 @@
 import { cache } from 'react';
 
-import { authorPath, blogPath } from '@/lib/routes';
+import {
+  authorPath,
+  blogPath,
+  INSIGHT_FORMAT_NAMES,
+  insightsFormatPath,
+  ROUTES,
+} from '@/lib/routes';
 import type { ArticleSceneName } from '@/lib/sketches';
 
 import { actionHref, icon, image, mapBand, rows, text } from './home';
@@ -409,11 +415,15 @@ export const getPublishedResource = cache(async (slug: string, revalidate?: numb
     bannerImage: media,
     heroVideo: videoId ? { type: 'youtube' as const, id: videoId, title } : undefined,
     thumbnail: image(record.thumbnail?.image),
-    breadcrumbs: rows(record.breadcrumbs).flatMap((crumb) => {
-      const label = text(crumb.label);
-      const href = actionHref(crumb.href);
-      return label && href ? [{ label, href }] : [];
-    }),
+    /* Built from the entry's type, not read from its hand-typed breadcrumbs: those named the retired
+       format pages (/insights/articles), which redirect, and they can only ever say what the type
+       already does. The page's JSON-LD BreadcrumbList is built from this same list. */
+    breadcrumbs: [
+      { label: 'Home', href: ROUTES.home },
+      { label: 'Insights', href: ROUTES.insights },
+      { label: INSIGHT_FORMAT_NAMES[kind], href: insightsFormatPath(kind) },
+      { label: title, href: record.routePath },
+    ],
     authors,
     labels,
     bylineText,
