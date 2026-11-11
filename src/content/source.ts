@@ -70,6 +70,7 @@ import { getPublishedCaseStudy } from './sources/strapi/published-case';
 import { getPublishedHome } from './sources/strapi/home';
 import { getPublishedPageSeo } from './sources/strapi/page-seo';
 import { getPublishedNavigation } from './sources/strapi/site-chrome';
+import { getPublishedSiteIdentity } from './sources/strapi/site-identity';
 import type {
   CaseStory,
   IdealAboutPage,
@@ -148,6 +149,8 @@ export const getPageSeo = getPublishedPageSeo;
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
 export const getNavigation = getPublishedNavigation;
+/** The organisation and site name from SEO Settings, for the site-wide structured data. */
+export const getSiteIdentity = getPublishedSiteIdentity;
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
