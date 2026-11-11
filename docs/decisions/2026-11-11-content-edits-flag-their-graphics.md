@@ -15,8 +15,8 @@ editor's Claude checks whether the drawing still fits. "Meaning changed? needs a
 Drawing exists? pick from the existing drawings. Drawing doesn't exist? redraw." A changed title always
 needs relinking, even when the meaning holds. Jatin doesn't keep a copy of the repo: Jatin raises a
 `graphic-needs-review` issue. A GitHub Action has Claude do the relink, reuse or redraw and open the PR,
-and once Devagya merges it to main, the change is carried to new-cms on its own PR, which merges itself
-when green. "I don't really need to do anything other than merging the PR at the end." Heroes, home and enquiry
+and once Devagya merges it to main, the change is carried to new-cms on its own PR, which waits for
+Devagya's merge, since new-cms is the live site and there are no preview environments (owner, 11 Nov 2026). "I don't really need to do anything other than merging the PR at the end." Heroes, home and enquiry
 illustrations, and case covers, are out: "they simply show a specific industry or expertise and they will
 rarely change."
 

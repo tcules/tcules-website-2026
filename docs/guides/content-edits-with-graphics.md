@@ -136,7 +136,7 @@ Jatin the body to paste.
 Nothing more is needed from Jatin. Within the hour:
 - the issue is picked up automatically. A Claude in GitHub relinks, reuses or redraws the drawing, checks
   it, and opens a pull request that closes the issue;
-- Devagya looks at it on the pull request's preview link and merges;
-- the same change is then carried to the live CMS site and goes out on its next deploy.
+- Devagya looks at the pictures of the drawing in the pull request and merges;
+- the same change is then prepared for the live site, and goes live when Devagya approves it there.
 
 If something in the issue is unclear, a comment appears on it. Jatin's Claude can answer there, or Jatin can.

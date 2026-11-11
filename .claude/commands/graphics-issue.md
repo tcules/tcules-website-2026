@@ -8,7 +8,7 @@ argument-hint: the issue number
 Issue **#$ARGUMENTS** in `tcules/tcules-website-2026`. It was raised by Jatin's Claude after a copy edit in
 Strapi (`docs/guides/content-edits-with-graphics.md`). This normally runs unattended in GitHub Actions
 (`.github/workflows/graphics-issue.yml`), and Devagya can also run it locally. The only person who acts on
-the result is Devagya, and the only thing Devagya does is merge the PR. So finish the job, or explain on the
+the result is Devagya, and the only thing Devagya does is look at the pictures in the PR and merge it. So finish the job, or explain on the
 issue why you can't. Never leave half the work for someone else.
 
 ## Ground rules
@@ -57,17 +57,30 @@ issue why you can't. Never leave half the work for someone else.
      `illustrations:reasons`) to export both grounds.
    - **remove:** delete the item's row. Delete its scene only if nothing else maps to it.
 4. Run `npm run verify` and fix what it reports. If `npm run build` is affordable, run it too.
-5. **Branch, commit, PR.**
+5. **Pictures for the PR** (owner, 11 Nov 2026; decisions/2026-11-11-graphics-prs-carry-pictures). Devagya
+   judges the drawing from the PR alone, with no preview environment, so the PR shows it. With the dev
+   server running on 3100:
+   - each flat drawing: `npm run sketch:frames -- --base=http://localhost:3100 --page=<route> <scene...>`
+     gives `.shots/frames/<scene>@1x.png` (the drawing as it renders) and `<scene>.png`;
+   - each claim or reason drawing:
+     `npx playwright screenshot public/illustrations/<set>/<name>.paper.svg .shots/<name>.png` (pass it as a
+     `file://` URL);
+   - the page: `npm run shots -- --base=http://localhost:3100 --routes=<route> --widths=1440,390`.
+   For a relink or remove, capture the page too, so the item is seen with its drawing (or without the plate).
+   Commit the pictures to their own orphan branch, never to the PR branch: `git worktree add --orphan -b
+   graphics-shots-issue-$ARGUMENTS ../shots`, copy the PNGs in, commit, `git push origin
+   graphics-shots-issue-$ARGUMENTS`, then `git worktree remove ../shots`. Embed each one in the PR body
+   as `![<scene or page>](https://raw.githubusercontent.com/tcules/tcules-website-2026/graphics-shots-issue-$ARGUMENTS/<file>.png)`.
+6. **Branch, commit, PR.**
    - `git switch -c graphics/issue-$ARGUMENTS`, commit with a message naming the page and band, and push.
    - Run `gh pr create --base main --label graphics`, titled `Graphics: <page> · <band>`.
    - Put the PR last, because a project hook moves the checkout back to `main` afterwards.
    - The PR body has:
      - `Closes #$ARGUMENTS`;
      - one line per item: action → what was done, and for a redraw, the idea in one sentence;
-     - **Where to look:** the page route, plus `/design/sketch` for flat drawings, written as paths to open
-       on the PR's preview link;
-     - "On merge this is carried to `new-cms` automatically (`graphics-carry.yml`)."
-6. Comment on the issue with the PR link. If anything couldn't be done, give a one-line reason per item.
+     - **Pictures:** each drawing, then the page at 1440 and 390, embedded from step 5;
+     - "On merge, `graphics-carry.yml` opens the same change as a PR to `new-cms` for Devagya to merge."
+7. Comment on the issue with the PR link. If anything couldn't be done, give a one-line reason per item.
 
 ## When to stop without a PR
 

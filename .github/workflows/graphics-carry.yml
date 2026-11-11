@@ -1,10 +1,10 @@
-# A merged graphics PR on main is carried to new-cms, and merged there when its checks pass.
+# A merged graphics PR on main is carried to new-cms as a PR that waits for Devagya's merge.
 #
 # main is never merged into new-cms (owner, 6 Nov 2026): each change both branches need gets its own
 # new-cms PR. This job makes that PR from the merged change alone, by cherry-picking it onto a branch off
-# new-cms. It then runs `npm run verify` there and merges if green. If verify fails, the PR stays open and
-# Devagya is tagged. If the change doesn't apply cleanly, Claude carries it by hand on that branch, and the
-# PR is left open for Devagya to merge.
+# new-cms, and runs `npm run verify` there. new-cms is the live site, so the PR never merges itself
+# (owner, 11 Nov 2026): Devagya checks the change on main's deployment and then merges. If the change
+# doesn't apply cleanly, Claude carries it by hand on that branch first.
 #
 # new-cms's lockfile is out of step with its package.json (11 Nov 2026), so this uses `npm install`, not
 # `npm ci`, and restores the lockfile afterwards.
@@ -88,21 +88,16 @@ jobs:
         continue-on-error: true
         run: npm run verify
 
-      - name: Open the new-cms PR, and merge it when it's clean and green
+      - name: Open the new-cms PR for Devagya to merge
         run: |
           if [ "$(git rev-list --count origin/new-cms..HEAD)" = 0 ]; then
             gh pr comment "$PR" --body "@devagya-tc Couldn't carry this to \`new-cms\`: no change was made on the branch. It needs a look."
             exit 1
           fi
           git push -u origin "$BRANCH"
+          how=$([ "${{ steps.pick.outputs.clean }}" = true ] && echo "applied cleanly" || echo "didn't apply cleanly, so Claude carried it by hand: read the diff")
+          checks=$([ "${{ steps.check.outcome }}" = success ] && echo "\`npm run verify\` passes on new-cms" || echo "**\`npm run verify\` fails on new-cms**: see the run")
           url=$(gh pr create --base new-cms --head "$BRANCH" --label graphics \
             --title "Carry #$PR to new-cms: $PR_TITLE" \
-            --body "The change from #$PR, merged to \`main\`, carried to \`new-cms\` by \`graphics-carry.yml\`.")
-          if [ "${{ steps.pick.outputs.clean }}" = true ] && [ "${{ steps.check.outcome }}" = success ]; then
-            gh pr merge "$url" --merge --delete-branch
-            gh pr comment "$PR" --body "Carried to \`new-cms\` and merged: $url"
-          else
-            reason=$([ "${{ steps.pick.outputs.clean }}" = true ] && echo "\`npm run verify\` failed on new-cms" || echo "it didn't apply cleanly, so Claude carried it by hand")
-            gh pr comment "$url" --body "@devagya-tc Left open because $reason. Merge when it looks right."
-            gh pr comment "$PR" --body "Carried to \`new-cms\`, waiting for your merge: $url"
-          fi
+            --body "The change from #$PR (merged to \`main\`), carried to \`new-cms\` by \`graphics-carry.yml\`. It $how; $checks. The pictures are on #$PR. Merging this puts it on the live site.")
+          gh pr comment "$PR" --body "@devagya-tc Carried to \`new-cms\`, ready for your merge when you're happy with it on main: $url"
