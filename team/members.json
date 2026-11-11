@@ -7,5 +7,5 @@
     "bhumika": { "name": "Bhumika", "github": null, "role": "designer" },
     "shoghi": { "name": "Shoghi", "github": null, "role": "designer" }
   },
-  "approver": { "id": "jatin", "name": "Jatin", "approves": "final approval in feedback sessions; Devagya logs those rulings on Jatin's behalf" }
+  "approver": { "id": "jatin", "name": "Jatin", "role": "approver", "github": null, "approves": "final approval in feedback sessions; Devagya logs those rulings on Jatin's behalf", "repo": "no copy: Claude reads the public repo on GitHub and raises graphics issues (docs/guides/content-edits-with-graphics.md)" }
 }
