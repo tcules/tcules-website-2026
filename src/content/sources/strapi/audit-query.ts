@@ -1,5 +1,5 @@
 export const AUDIT_BY_SLUG_QUERY = /* GraphQL */ `
-  query GetAuditBySlug($slug: String!, $status: PublicationStatus = DRAFT) {
+  query GetAuditBySlug($slug: String!, $status: PublicationStatus = PUBLISHED) {
     auditPage: audits(
       status: $status
       filters: { slug: { eq: $slug } }

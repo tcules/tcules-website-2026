@@ -1,5 +1,5 @@
 export const SERVICE_BY_SLUG_QUERY = /* GraphQL */ `
-  query GetServiceBySlug($slug: String!, $status: PublicationStatus = DRAFT) {
+  query GetServiceBySlug($slug: String!, $status: PublicationStatus = PUBLISHED) {
     servicePage: services(
       status: $status
       filters: { slug: { eq: $slug } }

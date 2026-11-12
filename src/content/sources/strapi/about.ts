@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   AboutAction,
   AboutCard,
@@ -18,17 +19,13 @@ import type {
   StrapiAboutSeo,
 } from './about-types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const ABOUT_SLUG = 'about';
-const ABOUT_REVALIDATE_SECONDS = 300;
+const ABOUT_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function mapImage(
   file: StrapiAboutFile | null | undefined,
@@ -299,7 +296,7 @@ function mapAbout(
 
 async function fetchAbout(): Promise<{ graphqlUrl: string; page: StrapiAbout | null }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

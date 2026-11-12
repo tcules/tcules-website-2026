@@ -1,5 +1,5 @@
 export const GLOSSARY_BY_SLUG_QUERY = /* GraphQL */ `
-  query GetGlossaryBySlug($slug: String!, $status: PublicationStatus = DRAFT) {
+  query GetGlossaryBySlug($slug: String!, $status: PublicationStatus = PUBLISHED) {
     glossaryPage: glossaries(
       status: $status
       filters: { slug: { eq: $slug } }

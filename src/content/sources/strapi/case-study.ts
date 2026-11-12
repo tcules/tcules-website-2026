@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   CaseStudyAction,
   CaseStudyBlock,
@@ -24,9 +25,8 @@ import type {
 import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const CASE_STUDIES_SLUG = 'case-studies';
-const CASE_STUDY_REVALIDATE_SECONDS = 300;
+const CASE_STUDY_REVALIDATE_SECONDS = false;
 
 function value(value: string | null | undefined): string {
   return typeof value === 'string' ? value.trim() : '';
@@ -44,9 +44,6 @@ function normaliseSlug(candidate: string | null | undefined): string {
   return value(candidate).replace(/^\/+|\/+$/gu, '');
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function absoluteUrl(url: string | null | undefined, baseUrl: string): string | undefined {
   const candidate = value(url);
@@ -361,7 +358,7 @@ function jsonLd(candidate: unknown): Record<string, unknown> | unknown[] | undef
 }
 
 function canonicalUrl(candidate: string | null | undefined): string | undefined {
-  const url = absoluteUrl(candidate, DEFAULT_STRAPI_GRAPHQL_URL);
+  const url = absoluteUrl(candidate, getStrapiGraphqlUrl());
   return value(candidate).startsWith('http') ? url : undefined;
 }
 
@@ -542,7 +539,7 @@ function mapCaseStudyListing(
 
 async function fetchCaseStudyBySlug(slug: string): Promise<StrapiCaseStudy | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -577,7 +574,7 @@ async function fetchCaseStudyListing(): Promise<{
   payload: StrapiCaseStudyListingResponse;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

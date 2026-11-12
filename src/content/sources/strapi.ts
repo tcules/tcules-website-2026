@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './strapi/public-graphql';
 import type {
   AuditAction,
   AuditBlock,
@@ -31,9 +32,8 @@ import type {
   StrapiLink,
 } from './strapi/types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const AUDIT_REVALIDATE_SECONDS = 300;
-const HOW_WE_WORK_REVALIDATE_SECONDS = 300;
+const AUDIT_REVALIDATE_SECONDS = false;
+const HOW_WE_WORK_REVALIDATE_SECONDS = false;
 const HOW_WE_WORK_SLUG = 'how-we-work';
 
 function value(value: string | null | undefined): string {
@@ -47,9 +47,6 @@ function joinCopy(parts: Array<string | undefined>, separator = ' '): string {
     .join(separator);
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function mapAction(link: StrapiLink | null | undefined): AuditAction | undefined {
   const label = value(link?.name);
@@ -575,7 +572,7 @@ function mapHowWeWork(
 
 async function fetchAuditBySlug(slug: string): Promise<StrapiAudit | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -583,7 +580,7 @@ async function fetchAuditBySlug(slug: string): Promise<StrapiAudit | null> {
     },
     body: JSON.stringify({
       query: AUDIT_BY_SLUG_QUERY,
-      variables: { slug, status: 'DRAFT' },
+      variables: { slug, status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
     next: {
@@ -610,7 +607,7 @@ async function fetchHowWeWork(): Promise<{
   page: StrapiHowWeWork | null;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

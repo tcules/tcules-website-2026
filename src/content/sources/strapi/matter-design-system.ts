@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ContentSeo,
   MatterDesignSystemAction,
@@ -19,17 +20,13 @@ import type {
 } from './matter-design-system-types';
 import type { StrapiFile, StrapiLink } from './types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const MATTER_DESIGN_SYSTEM_SLUG = 'matter-design-system';
-const MATTER_DESIGN_SYSTEM_REVALIDATE_SECONDS = 300;
+const MATTER_DESIGN_SYSTEM_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function absoluteAssetUrl(path: string | null | undefined, graphqlUrl: string): string {
   const candidate = value(path);
@@ -362,7 +359,7 @@ function mapMatterDesignSystem(
 }
 
 async function fetchMatterDesignSystem(): Promise<StrapiMatterDesignSystem | null> {
-  const response = await fetch(getStrapiGraphqlUrl(), {
+  const response = await cachedCmsFetch(getStrapiGraphqlUrl(), {
     method: 'POST',
     headers: {
       accept: 'application/json',

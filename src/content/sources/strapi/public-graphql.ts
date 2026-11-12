@@ -1,23 +1,63 @@
-const PRODUCTION_URL = 'https://tcules-cms-2026-production.up.railway.app/graphql';
+import { unstable_cache } from 'next/cache';
 
-export function publicGraphqlUrl(): string {
-  return process.env.NEW_CMS_GRAPHQL_URL?.trim() || PRODUCTION_URL;
+import { publicGraphqlUrl } from './cms-url';
+export { publicGraphqlUrl } from './cms-url';
+
+import { modelTag, queryTags, relationDependencies } from '../../../lib/cms/cache-policy';
+
+const inFlight = new Map<string, Promise<unknown>>();
+
+async function coalesce<T>(key: string, read: () => Promise<T>): Promise<T> {
+  const pending = inFlight.get(key);
+  if (pending) return pending as Promise<T>;
+  const promise = read();
+  inFlight.set(key, promise);
+  try {
+    return await promise;
+  } finally {
+    inFlight.delete(key);
+  }
 }
 
-/** Read published content and SEO from the new CMS. Callers can opt into revalidation. */
+/** Cache only validated published data; webhook tags control its lifetime. */
 export async function publicGraphql<T>(
   query: string,
   operationName: string,
   variables?: Record<string, string>,
   options?: { optionalImagePaths?: readonly string[]; revalidate?: number },
 ): Promise<T> {
-  const response = await fetch(publicGraphqlUrl(), {
+  if (/\bmutation\s/.test(query))
+    throw new Error('CMS mutations must not use the content cache');
+  const url = publicGraphqlUrl();
+  const key = JSON.stringify([
+    url,
+    query,
+    operationName,
+    variables,
+    options?.optionalImagePaths,
+  ]);
+  return coalesce(
+    key,
+    unstable_cache(
+      () => readPublicGraphql<T>(url, query, operationName, variables, options),
+      ['cms-graphql-v1', key],
+      { tags: queryTags(query, operationName, variables), revalidate: false },
+    ),
+  );
+}
+
+async function readPublicGraphql<T>(
+  url: string,
+  query: string,
+  operationName: string,
+  variables?: Record<string, string>,
+  options?: { optionalImagePaths?: readonly string[]; revalidate?: number },
+): Promise<T> {
+  const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, operationName, variables }),
-    ...(options?.revalidate
-      ? { cache: 'force-cache', next: { revalidate: options.revalidate } }
-      : { cache: 'no-store' }),
+    cache: 'no-store',
     signal: AbortSignal.timeout(8_000),
   });
   const result = (await response.json()) as {
@@ -26,7 +66,10 @@ export async function publicGraphql<T>(
   };
   // Strapi can null an optional image whose required file is missing.
   const hasUnexpectedError = result.errors?.some(({ message, path }) => {
-    if (message !== 'Cannot return null for non-nullable field ComponentContentImage.file.' || !path)
+    if (
+      message !== 'Cannot return null for non-nullable field ComponentContentImage.file.' ||
+      !path
+    )
       return true;
     if (path.slice(-3).join('.') === 'illustration.image.file') return false;
 
@@ -51,4 +94,57 @@ export async function publicGraphql<T>(
     );
   }
   return result.data;
+}
+
+/** Compatibility for the older GraphQL envelopes. Keep their queries and mappers intact. */
+const LEGACY_MODELS: Record<string, string> = {
+  audits: 'audit',
+  services: 'service',
+  'services-master': 'service-master',
+  expertise: 'expertise',
+  glossary: 'glossary',
+  tools: 'tool',
+  blogs: 'resource',
+  events: 'resource',
+  podcasts: 'resource',
+  interviews: 'resource',
+  insights: 'resource-listing',
+  authors: 'author',
+  careers: 'career-master',
+  'case-studies': 'case-study',
+};
+export async function cachedCmsFetch(
+  url: string,
+  init: RequestInit & { next?: { tags?: string[]; revalidate?: number | false } },
+) {
+  if (url !== publicGraphqlUrl()) throw new Error('CMS requests must use NEW_CMS_GRAPHQL_URL');
+  const body = JSON.parse(String(init.body)) as { query: string };
+  if (/\bmutation\s/.test(body.query)) throw new Error('CMS mutations must not be cached');
+  const tags = new Set(
+    (init.next?.tags ?? []).map((tag) =>
+      modelTag(LEGACY_MODELS[tag.split(':')[0]!] ?? tag.split(':')[0]!),
+    ),
+  );
+  for (const model of relationDependencies(body.query, false)) tags.add(modelTag(model));
+  const key = JSON.stringify([url, init.body]);
+  const data = await coalesce(
+    key,
+    unstable_cache(
+      async () => {
+        const response = await fetch(url, {
+          ...init,
+          next: undefined,
+          cache: 'no-store',
+          signal: AbortSignal.timeout(8_000),
+        });
+        const payload = (await response.json()) as { data?: unknown; errors?: unknown[] };
+        if (!response.ok || payload.errors?.length || !payload.data)
+          throw new Error(`CMS legacy query failed (HTTP ${response.status})`);
+        return payload;
+      },
+      ['cms-legacy-v1', key],
+      { tags: [...tags], revalidate: false },
+    ),
+  );
+  return Response.json(data);
 }

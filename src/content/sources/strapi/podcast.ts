@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ContentSeo,
   PageOutlineEntry,
@@ -24,17 +25,13 @@ import { COVER_SCENES } from '../cover-scenes';
 import { blogKind } from './insights';
 import { authoredDate } from './published-line';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const PODCAST_REVALIDATE_SECONDS = 300;
+const PODCAST_REVALIDATE_SECONDS = false;
 const PODCAST_RESOURCE_LIMIT = 3;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function absoluteUrl(
   candidate: string | null | undefined,
@@ -282,7 +279,7 @@ function structuredData(candidate: unknown): ContentSeo['structuredData'] {
 function canonicalUrl(candidate: string | null | undefined): string | undefined {
   const source = value(candidate);
   return source.startsWith('http://') || source.startsWith('https://')
-    ? absoluteUrl(source, DEFAULT_STRAPI_GRAPHQL_URL)
+    ? absoluteUrl(source, getStrapiGraphqlUrl())
     : undefined;
 }
 
@@ -406,7 +403,7 @@ async function fetchPodcastBySlug(slug: string): Promise<{
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
   const cmsSlug = cmsPodcastSlug(slug);
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

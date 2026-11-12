@@ -9,7 +9,7 @@ import { SiteFooter, SiteNav } from '@/patterns';
 import './globals.css';
 import { TrackingScripts } from './tracking-scripts';
 
-// Navigation and footer are read from the CMS for every page request.
+// Render the shell per request; published CMS data persists in the tagged Data Cache.
 export const revalidate = 0;
 
 const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();

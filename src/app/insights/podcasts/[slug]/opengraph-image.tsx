@@ -6,4 +6,4 @@ const og = shareImage(under('/insights/podcasts'));
 export const generateImageMetadata = og.generateImageMetadata;
 export default og.Image;
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 0;

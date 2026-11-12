@@ -30,7 +30,7 @@ import * as esbuild from 'esbuild';
 
 const ROOT = process.cwd();
 const OUT_DIR = join(ROOT, 'docs/page-build');
-const { publicGraphqlUrl } = await import('../src/content/sources/strapi/public-graphql.ts');
+const { publicGraphqlUrl } = await import('../src/content/sources/strapi/cms-url.ts');
 const STRAPI = publicGraphqlUrl();
 
 /* ── the site's own parser, plan and route names ─────────────────────────────────────── */

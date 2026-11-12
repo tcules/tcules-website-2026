@@ -39,7 +39,9 @@
     "illustrations:reasons": "node scripts/illustrations/reasons.mjs",
     "illustrations:claims": "node scripts/illustrations/claims.mjs",
     "sketch:frames": "node scripts/sketch-frames.mjs",
-    "responsive:census": "node --no-warnings scripts/responsive-census.mjs"
+    "responsive:census": "node --no-warnings scripts/responsive-census.mjs",
+    "test:cms-cache": "node --test tests/cms-cache.test.mjs",
+    "test:cms-cache:integration": "node tests/cms-cache.integration.mjs"
   },
   "engines": {
     "node": ">=20.11.1"
