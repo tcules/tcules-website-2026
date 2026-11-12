@@ -69,6 +69,9 @@ choice can be made and checked without taste. Without the fields it is made ad h
 
 ## 6. Upload breakpoints match the site's widths, and serve WebP
 
+> **Superseded 11 Nov 2026** (decisions/2026-11-11-images-resized-by-own-server): the site resizes CMS images
+> itself at the ladder, losslessly, so nothing in this entry needs doing in Strapi.
+
 **What.** Set the Strapi upload plugin's responsive breakpoints to **1240, 652 and 320**. The original is the
 2560 master and is served as the largest size. Enable WebP output for generated formats. Cut-outs keep alpha.
 

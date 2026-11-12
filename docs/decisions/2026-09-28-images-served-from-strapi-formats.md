@@ -1,7 +1,7 @@
 ---
 title: "Responsive images are Strapi's own formats as a native srcset"
 date: 2026-09-28
-status: active
+status: superseded
 area: [imagery]
 source: "docs/phase-2-decisions.md, owner rulings for Phase 2 (28 Sep 2026), M1"
 supersedes: []

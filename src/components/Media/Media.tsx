@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 
 import { cx } from '@/lib/cx';
+import { RESIZE_WIDTHS, resizedSrc } from '@/lib/image-resize';
 
 import styles from './Media.module.css';
 
@@ -271,6 +272,14 @@ export function mediaSrcSet(image: MediaImage): string | undefined {
     if (src && Number.isFinite(width) && width > 0) byWidth.set(Math.round(width), src);
   };
   for (const source of image.sources ?? []) add(source.src, source.width);
+  /* A CMS image is also resized by the site's own route at the ladder widths below the master
+     (decisions/2026-11-11-images-resized-by-own-server). The ladder is added after the CMS's own
+     formats so it wins a shared width; a CMS format narrower than the ladder (Strapi's 245
+     thumbnail) stays, so a slot that small still takes the file it takes today. */
+  for (const width of RESIZE_WIDTHS) {
+    const src = width < image.width ? resizedSrc(image.src, width) : undefined;
+    if (src) add(src, width);
+  }
   /* The master last, so it wins a tie: if Strapi hands back a format as wide as the original,
      the original is the better file at that width. It passes the same check as a source, so a
      zero or fractional width can never write an invalid `w` descriptor. */
