@@ -43,6 +43,7 @@ export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFoo
 
   return (
     <form
+      data-hs-do-not-collect="true"
       action={action}
       method="post"
       className={styles.newsletterForm}

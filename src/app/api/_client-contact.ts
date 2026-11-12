@@ -2,6 +2,7 @@ import { createClientContact, type ContactFormSubmission } from '@/content';
 import { ROUTES } from '@/lib/routes';
 
 import { verifyTurnstile } from './_turnstile';
+import { sendHubSpotEnquiry } from './_hubspot';
 
 type FormKind = 'contact' | 'enquiry' | 'newsletter';
 
@@ -51,7 +52,8 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
   const get = (name: string) => text(form.get(name));
   const postedKind = get('formKind');
   const kind =
-    endpointKind ?? (postedKind === 'contact' || postedKind === 'enquiry' ? postedKind : undefined);
+    endpointKind ??
+    (postedKind === 'contact' || postedKind === 'enquiry' ? postedKind : undefined);
   if (!kind) return error('Unknown form.');
   const contact = kind === 'contact';
   const clientEmail = get(contact ? 'clientEmail' : 'email');
@@ -141,6 +143,7 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
 
   try {
     const { documentId } = await createClientContact(submission);
+    await sendHubSpotEnquiry(request, form, kind, submission, documentId);
     return Response.json(
       { ok: true, documentId },
       { status: 201, headers: { 'Cache-Control': 'no-store' } },

@@ -630,9 +630,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const value = link?.getAttribute(ENQUIRY_ROLE_ATTRIBUTE);
       const form = formRef.current;
       if (!value || !form) return;
-      const chip = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="role"]')).find(
-        (input) => input.value === value,
-      );
+      const chip = Array.from(
+        form.querySelectorAll<HTMLInputElement>('input[name="role"]'),
+      ).find((input) => input.value === value);
       if (!chip) return;
       chip.checked = true;
       saveDraft(form);
@@ -1194,6 +1194,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   if (dress) {
     const noteId = idFor('note');
     const formAttrs = {
+      'data-hs-do-not-collect': 'true',
       className: cx(styles.form, bounds),
       action: props.action,
       method: 'post',
@@ -1490,6 +1491,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   return (
     <form
+      data-hs-do-not-collect="true"
       className={cx(styles.form, bounds)}
       action={props.action}
       method="post"

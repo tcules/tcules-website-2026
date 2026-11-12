@@ -1,8 +1,11 @@
 import Script from 'next/script';
 
+import { HubSpotTracking } from './hubspot-tracking';
+
 export function TrackingScripts() {
   return (
     <>
+      <HubSpotTracking />
       <Script id="openai-pixel" strategy="afterInteractive">
         {`
           !(function (w, d, s, u) {

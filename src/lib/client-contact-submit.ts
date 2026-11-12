@@ -1,4 +1,5 @@
 import { ENDPOINTS } from './routes';
+import { appendHubSpotAttribution } from './hubspot-attribution';
 
 type OpenAiPixel = (
   command: 'measure',
@@ -53,6 +54,11 @@ export async function submitProtectedForm(
 ) {
   body.set('formKind', kind);
   body.set('turnstileToken', token);
+  try {
+    appendHubSpotAttribution(body);
+  } catch {
+    // Browser storage or attribution failures must not block the enquiry.
+  }
   const response = await fetch(ENDPOINTS.clientContact, { method: 'POST', body });
   if (response.ok) {
     try {
