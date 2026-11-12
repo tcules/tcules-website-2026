@@ -23,7 +23,8 @@ const RASTER = /\.(png|jpe?g|webp)$/i;
 /**
  * The path a resized copy is served at, or `undefined` when this image is not ours to resize.
  * It ends in `.webp` because Cloudflare caches a response by its extension, which is what keeps a
- * width from being resized again on every request (and across deploys).
+ * width from being resized again on every request (and across deploys). An original that is
+ * already a WebP keeps its own name rather than gaining a second `.webp`.
  */
 export function resizedSrc(src: string, width: number): string | undefined {
   if (!RESIZE_WIDTHS.includes(width)) return undefined;
@@ -34,7 +35,8 @@ export function resizedSrc(src: string, width: number): string | undefined {
     return undefined;
   }
   if (url.origin !== ORIGIN || url.search || !RASTER.test(url.pathname)) return undefined;
-  return `/img/${width}${url.pathname}.webp`;
+  const path = /\.webp$/i.test(url.pathname) ? url.pathname : `${url.pathname}.webp`;
+  return `/img/${width}${path}`;
 }
 
 /**
@@ -46,7 +48,8 @@ export function originalFor(width: number, key: readonly string[]): string | und
   if (key.some((part) => !part || part === '.' || part === '..')) return undefined;
   const path = key.join('/');
   if (!path.endsWith('.webp')) return undefined;
-  const original = path.slice(0, -'.webp'.length);
-  if (!RASTER.test(original)) return undefined;
+  /* `photo.png.webp` names `photo.png`; `cover.webp` names itself (see `resizedSrc`). */
+  const stripped = path.slice(0, -'.webp'.length);
+  const original = RASTER.test(stripped) ? stripped : path;
   return `${ORIGIN}/${original.split('/').map(encodeURIComponent).join('/')}`;
 }
