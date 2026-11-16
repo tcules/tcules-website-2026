@@ -67,23 +67,21 @@
 }
 
 /* ── tone="summary" ──────────────────────────────────────────────────────────────
-   An article's TL;DR (owner, 2 Nov 2026). The one tone with a ground: a bounded panel the reader
+   An article's TL;DR (owner, 2 Nov 2026; one full-width panel at body size, 16 Nov 2026). The one tone with a ground: a bounded panel the reader
    meets before the article, the accent drawn across its top edge. The key is the mono label; the
-   paragraph is set large (--text-summary) in the surface's full ink, so scale carries the weight.
-   The panel is as wide as its text and stops at the lead measure, so a short summary is never a
-   wide empty box. The gutter inset is the panel's own air, not outer spacing. */
+   text is body size in the surface's full ink, so the ground and the rule carry the weight. The
+   panel takes the article column's full width, edge to edge with the body below it, and its text
+   runs the same measure as the body. The inset is the panel's own air, not outer spacing, and steps
+   down on a phone (--call-summary-inset-*). */
 .summary {
-  inline-size: fit-content;
-  max-inline-size: 100%;
-  padding: var(--gap-gutter);
+  padding: var(--call-summary-inset-block) var(--call-summary-inset-inline);
   background: var(--call-summary-ground);
   border-block-start: var(--call-summary-rule-width) solid var(--call-summary-rule-ink);
 }
 
 .summary .content {
-  max-inline-size: var(--measure-lead);
-  font: var(--text-summary);
-  letter-spacing: var(--text-summary-tracking);
+  max-inline-size: none; /* the root's note measure does not apply: the body below it has none */
+  font: var(--text-body);
   color: var(--call-summary-content-ink);
 }
 

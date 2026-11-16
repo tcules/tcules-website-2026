@@ -1,7 +1,7 @@
 ---
 title: "An insight's summary is a panel with a blue top, its paragraph set large"
 date: 2026-11-02
-status: active
+status: superseded
 area: [components, type]
 source: "Owner, 2 Nov 2026, picking direction D on the Insight summary canvas (https://claude.ai/artifact/WyE7jPCfHurxZoCwNcLRcb): \"i like a's hierarchy, but B's box design with the blue highlight\", then \"cool build D\""
 supersedes: []
