@@ -18,6 +18,19 @@
   --call-example-rule-width: var(--border-width-2);
   /* The summary tone's top rule (2 Nov 2026): the same 2px mark weight, across the top edge. */
   --call-summary-rule-width: var(--border-width-2);
+  /* The summary panel's inset: its own air against its edge, a bounded ground's padding answering
+     to the viewport as Island's does (CLAUDE.md gap-scale rule 4). 32 on every side from 768. */
+  --call-summary-inset-block: var(--gap-gutter);
+  --call-summary-inset-inline: var(--gap-gutter);
+}
+
+/* Phone: 24 above and below, 16 at the sides, so the panel's text keeps the narrow column's width
+   (owner, 16 Nov 2026; decisions/2026-11-16-insight-summary-is-one-full-width-panel). */
+@media (max-width: 767px) {
+  :root {
+    --call-summary-inset-block: var(--gap-block);
+    --call-summary-inset-inline: var(--gap-text);
+  }
 }
 
 /* ── Surfaces ─────────────────────────────────────────────────────────────────

@@ -124,6 +124,15 @@ export async function renderResourcePage(slug: string) {
     href: `#${anchorId}`,
   }));
   const hasOutline = outline.length >= 2;
+  /* One summary per piece, never two boxes. Strapi carries it in two places: a callout that opens
+     the body (the "Insights" box) and the key-takeaways list. Whichever exist meet in one panel,
+     the paragraph before the list, keyed by the callout's label, else the list's. */
+  const opening = resource.blocks[0]?.type === 'callout' ? resource.blocks[0] : undefined;
+  const bodyBlocks = opening ? resource.blocks.slice(1) : resource.blocks;
+  const summaryHtml = [opening?.html, resource.takeaways?.html].filter(Boolean).join('');
+  const summary = summaryHtml
+    ? { label: opening?.label || resource.takeaways?.label, html: summaryHtml }
+    : undefined;
   const people: HeroPerson[] = resource.authors.map(({ name, href, portrait }) => ({
     name,
     href,
@@ -218,10 +227,10 @@ export async function renderResourcePage(slug: string) {
           >
             {hasOutline ? <TableOfContents items={outline} /> : null}
             <Layout as="article" rowGap="stack">
-              {resource.takeaways ? (
-                <Callout label={resource.takeaways.label} html={resource.takeaways.html} />
+              {summary ? (
+                <Callout tone="summary" label={summary.label} html={summary.html} />
               ) : null}
-              {resource.blocks.map((block) => (
+              {bodyBlocks.map((block) => (
                 <Fragment key={block.key}>{renderBlock(block)}</Fragment>
               ))}
               <Contributors
