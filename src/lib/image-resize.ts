@@ -40,6 +40,20 @@ export function resizedSrc(src: string, width: number): string | undefined {
 }
 
 /**
+ * Where a raster client mark is drawn from: its 1240 copy on this origin, or `undefined` when the mark
+ * is not a CMS raster (an SVG, a data URI, another host), which is then drawn from its own src.
+ *
+ * Same-origin because a mark is a CSS mask, and a mask from another origin needs CORS; the marks were
+ * inlined into the HTML as base64 to dodge it (17 Nov 2026: 839 KB of /case-studies' 1.35 MB HTML).
+ * 1240, not 652, because almost every mark is narrower than 1240, so the copy is the original's
+ * pixels losslessly re-encoded and the mark renders identically; at 652 the browser scales from a
+ * different source and every edge's anti-aliasing shifts.
+ */
+export function markSrc(src: string): string | undefined {
+  return resizedSrc(src, 1240);
+}
+
+/**
  * The original a resize request names, or `undefined` when the request is not one `resizedSrc`
  * could have produced: an unlisted width, another store, a path that climbs, or a non-raster file.
  */

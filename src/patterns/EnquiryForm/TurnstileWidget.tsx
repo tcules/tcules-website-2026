@@ -38,6 +38,22 @@ export function TurnstileWidget({ ref }: { ref: Ref<TurnstileWidgetHandle> }) {
   const widget = useRef<{ api: TurnstileApi; id: string } | null>(null);
   const pending = useRef<((result: string | Error) => void) | null>(null);
   const [ready, setReady] = useState(false);
+  /* The script loads on the visitor's first touch of the form, not with the page: it is 240 KB
+     the page does not need until somebody submits (17 Nov 2026, PageSpeed). */
+  const [armed, setArmed] = useState(false);
+  /* A submit that arrives before the widget exists waits for it rather than failing. */
+  const waiting = useRef<(() => void)[]>([]);
+
+  useEffect(() => {
+    const form = container.current?.closest('form');
+    if (!form || armed) return;
+    const arm = () => setArmed(true);
+    const events = ['focusin', 'pointerdown', 'keydown'] as const;
+    for (const type of events) form.addEventListener(type, arm, { once: true, passive: true });
+    return () => {
+      for (const type of events) form.removeEventListener(type, arm);
+    };
+  }, [armed]);
 
   useEffect(() => {
     const api = (window as Window & { turnstile?: TurnstileApi }).turnstile;
@@ -62,6 +78,7 @@ export function TurnstileWidget({ ref }: { ref: Ref<TurnstileWidgetHandle> }) {
       return;
     }
     widget.current = { api, id };
+    for (const resume of waiting.current.splice(0)) resume();
     return () => {
       pending.current?.(new Error(unavailable));
       widget.current = null;
@@ -72,9 +89,19 @@ export function TurnstileWidget({ ref }: { ref: Ref<TurnstileWidgetHandle> }) {
   useImperativeHandle(
     ref,
     () => ({
-      requestToken() {
+      async requestToken() {
+        if (!widget.current) {
+          setArmed(true);
+          await new Promise<void>((resume, fail) => {
+            const timer = window.setTimeout(() => fail(new Error(unavailable)), 15_000);
+            waiting.current.push(() => {
+              window.clearTimeout(timer);
+              resume();
+            });
+          });
+        }
         const current = widget.current;
-        if (!current || pending.current) return Promise.reject(new Error(unavailable));
+        if (!current || pending.current) throw new Error(unavailable);
 
         return new Promise((resolve, reject) => {
           const timer = window.setTimeout(() => pending.current?.(new Error(expired)), 120_000);
@@ -99,13 +126,15 @@ export function TurnstileWidget({ ref }: { ref: Ref<TurnstileWidgetHandle> }) {
   if (!sitekey) return null;
   return (
     <>
-      <Script
-        id={`cloudflare-turnstile-${scriptId}`}
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-        strategy="afterInteractive"
-        onLoad={() => setReady(true)}
-        onReady={() => setReady(true)}
-      />
+      {armed && (
+        <Script
+          id={`cloudflare-turnstile-${scriptId}`}
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+          onLoad={() => setReady(true)}
+          onReady={() => setReady(true)}
+        />
+      )}
       <div ref={container} />
     </>
   );
