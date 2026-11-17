@@ -52,6 +52,7 @@ const JS_INJECTED = new Set([
   '--toc-marker-size',
   '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
   '--slider-progress',
+  '--lgrid-ticker-count', // LogoGrid ticker: the mark count, which sets the loop's duration
   '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
   '--blockcardset-count', // BlockCardSet: the card count, for the phone scroll row's rail thumb
   '--cmark-src',

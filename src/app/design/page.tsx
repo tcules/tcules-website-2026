@@ -410,12 +410,12 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'Kit · Client logos',
-        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces',
+        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces; the ticker (one moving row, pauses on hover or focus)',
       },
       {
         href: '/design/kit/logos',
         name: 'LogoGrid',
-        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks; arrangement="ticker": one slow looping row, no boxes, hover or focus pauses, hovered mark in full ink, still under reduced motion',
       },
       {
         href: '/design/kit/gateway',

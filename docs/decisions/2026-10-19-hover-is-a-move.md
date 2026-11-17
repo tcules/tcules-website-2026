@@ -1,7 +1,7 @@
 ---
 title: "Hover is one smooth move, there and back"
 date: 2026-10-19
-status: active
+status: superseded
 area: [motion]
 source: "Owner, 19 Oct 2026 (gateway round 11, v5 and curve editor)"
 supersedes: []

@@ -18,7 +18,8 @@
    token; this file states no distance and no colour.
 
    What this file does NOT do, by ch05 §10 "never": no box, no tile, no border, no shadow, no
-   radius, no transition, no animation, and no crop — the mask is `contain`, so a mark whose
+   radius, no animation, and no crop (the one transition is `highlight="hover"`'s colour ease,
+   decisions/2026-11-17-client-logos-may-run-as-a-ticker) — the mask is `contain`, so a mark whose
    stated ratio is slightly off letterboxes inside its box rather than losing an edge. */
 .mark {
   /* Equal AREA first — of INK, not of box (r7-logos fix round, 9 Oct 2026): the side is scaled
@@ -81,6 +82,23 @@
      otherwise. A client wall printed as an empty row is a blank where a name was. */
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+}
+
+/* `highlight="hover"`: the mark takes the ground's full ink while its cell (the parent) is hovered.
+   A colour change, so it eases; decisions/2026-11-17-hover-is-a-move-for-drawn-cards governs
+   drawn cards, not marks (owner, 17 Nov 2026). */
+.highlight {
+  transition: background-color var(--duration-medium) var(--easing-ease);
+}
+
+:hover > .highlight {
+  background-color: var(--cmark-ink-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight {
+    transition: none;
+  }
 }
 
 /* Forced colours (Windows High Contrast). The UA replaces every background-color with the
