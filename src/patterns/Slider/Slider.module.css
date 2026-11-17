@@ -14,7 +14,8 @@
 
      --slider-bleed     the slider's end edge to the viewport's, measured by Slider.tsx (`bleed`)
      --slider-step-progress  0 → 1 across the current slide's hold with `autoplay`, written on the
-                        root by Slider.tsx's clock each frame; declared 0 here, so a step that has
+                        current step's fill by Slider.tsx's clock each frame (not the root: that
+                        restyled the whole slider per frame); declared 0 here, so a step that has
                         not started to fill is empty rather than unresolved
 
    Classes: .slider .view1 .view2 .view3 .view4 .bleed .row .rail .thumb .status .playing .control .progress
@@ -133,7 +134,7 @@
    the numerals went — bars only). The current step's line is FULL — the selected state, at rest
    and once a press has stopped the rotation — and while rotating it EMPTIES from its start to its
    end over the hold, a countdown (owner, 29 Oct 2026; decisions/2026-10-29-slider-bar-counts-down):
-   scaleX from --slider-step-progress, which the clock writes on the root each frame (the thumb's
+   scaleX from --slider-step-progress, which the clock writes on the current fill each frame (the thumb's
    technique), so the motion is a transform and nothing else. A hover or focus hold stops the
    writes, so the bar freezes where it was: the hold is visible. Under reduced motion the bar never
    drains: it is simply full. The arrangement — steps in a row — is Cluster's; this module sizes the parts and paints them. */
