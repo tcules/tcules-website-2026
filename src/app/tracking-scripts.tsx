@@ -1,11 +1,44 @@
+'use client';
+
 import Script from 'next/script';
+
+import { useTrackingStarted } from '@/lib/tracking-start';
 
 import { HubSpotTracking } from './hubspot-tracking';
 
+/**
+ * Every third-party tag on the live site, rendered only once tracking has started (lib/tracking-start:
+ * the visitor's first scroll, tap or keypress, or 5 s after load). Marketing, Jatin, 17 Nov 2026:
+ * Tag Manager no longer loads before the page; of the three visitor-identification tools only RB2B
+ * stays (Vector, which brought LiveIntent, and Snitcher are gone).
+ */
 export function TrackingScripts() {
+  const started = useTrackingStarted();
   return (
     <>
-      <HubSpotTracking />
+      <HubSpotTracking started={started} />
+      {started ? <TrackingTags /> : null}
+    </>
+  );
+}
+
+function TrackingTags() {
+  return (
+    <>
+      <Script id="gtm-script" strategy="afterInteractive">
+        {`
+          (function(w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var first = d.getElementsByTagName(s)[0];
+            var tag = d.createElement(s);
+            var layer = l !== 'dataLayer' ? '&l=' + l : '';
+            tag.async = true;
+            tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
+            first.parentNode.insertBefore(tag, first);
+          })(window, document, 'script', 'dataLayer', 'GTM-KMJSP983');
+        `}
+      </Script>
       <Script id="openai-pixel" strategy="afterInteractive">
         {`
           !(function (w, d, s, u) {
@@ -58,59 +91,6 @@ export function TrackingScripts() {
             reb2b.SNIPPET_VERSION = '1.0.1';
             reb2b.load('5NRP9HQEWWO1');
           })();
-        `}
-      </Script>
-      <Script id="snitcher-script" strategy="afterInteractive">
-        {`
-          !(function (s, n, i, t, c, h) {
-            s.SnitchObject = i;
-            s[i] ||
-              (s[i] = function () {
-                (s[i].q = s[i].q || []).push(arguments);
-              });
-            s[i].l = +new Date();
-            c = n.createElement(t);
-            h = n.getElementsByTagName(t)[0];
-            c.src = 'https://snid.snitcher.com/8433359.js';
-            h.parentNode.insertBefore(c, h);
-          })(window, document, 'snid', 'script');
-          snid('verify', '8433359');
-        `}
-      </Script>
-      <Script id="vector-script" strategy="afterInteractive">
-        {`
-          !(function (e, r) {
-            try {
-              if (e.vector) return;
-              var t = {};
-              t.q = t.q || [];
-              for (
-                var m = ['load', 'identify', 'on'],
-                  f = function (k) {
-                    return function () {
-                      var a = [].slice.call(arguments);
-                      t.q.push([k, a]);
-                    };
-                  },
-                  i = 0;
-                i < m.length;
-                i++
-              ) {
-                t[m[i]] = f(m[i]);
-              }
-              e.vector = t;
-              if (!t.loaded) {
-                var s = r.createElement('script');
-                s.type = 'text/javascript';
-                s.async = !0;
-                s.src = 'https://cdn.vector.co/pixel.js';
-                var x = r.getElementsByTagName('script')[0];
-                x.parentNode.insertBefore(s, x);
-                t.loaded = !0;
-              }
-            } catch (err) {}
-          })(window, document);
-          vector.load('0b1be0ff-60a0-45b9-aedc-c4bd1ea5b95c');
         `}
       </Script>
       <Script id="clarity-script" strategy="afterInteractive">
