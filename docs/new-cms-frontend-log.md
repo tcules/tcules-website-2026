@@ -20,6 +20,10 @@ Check whether an entry has reached `main` (a `-` means an equivalent patch is al
 git cherry -v origin/main origin/new-cms
 ```
 
+**Since 17 Nov 2026 `main` carries all of `new-cms`** (decisions/2026-11-17-new-cms-is-production-main-is-staging):
+`new-cms` is production, `main` is staging, and `new-cms-sync.yml` brings every new `new-cms` commit down to
+`main` by PR. The entries below are history; a change made on `new-cms` reaches `main` through that sync.
+
 This file lives on `main`, so the shared context reaches everyone, while the commits it describes
 are on `new-cms`. After pushing a frontend change to `new-cms`, add it here as an entry, newest last,
 in a small PR to `main`. When an entry is ported to `main`, update its Status line in the same PR.

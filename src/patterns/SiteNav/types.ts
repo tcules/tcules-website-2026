@@ -125,6 +125,8 @@ export type SiteNavItem = {
 };
 
 export type SiteNavProps = {
+  /** False when the published configuration cannot be read. */
+  available?: boolean;
   items: readonly SiteNavItem[];
   /**
    * The offer. Solid primary, always — it is the one thing the bar asks for.
@@ -132,7 +134,7 @@ export type SiteNavProps = {
    * Rendered in the bar above the breakpoint and at the right of the sheet's sticky foot below it,
    * where the primary belongs under the right thumb.
    */
-  cta: SiteNavLink;
+  cta?: SiteNavLink;
   /**
    * An optional lighter way in, ghost neutral, MOBILE ONLY — beside the offer in the sheet's foot.
    *

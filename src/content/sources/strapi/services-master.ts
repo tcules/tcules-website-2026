@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ContentSeo,
   ServicesMasterAction,
@@ -19,17 +20,13 @@ import type {
 } from './services-master-types';
 import { escapeHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const SERVICES_MASTER_SLUG = 'services';
-const SERVICES_MASTER_REVALIDATE_SECONDS = 300;
+const SERVICES_MASTER_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function isRecord(candidate: unknown): candidate is Record<string, unknown> {
   return typeof candidate === 'object' && candidate !== null && !Array.isArray(candidate);
@@ -324,7 +321,7 @@ async function fetchServicesMaster(): Promise<{
   page: StrapiServicesMaster | null;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -332,7 +329,7 @@ async function fetchServicesMaster(): Promise<{
     },
     body: JSON.stringify({
       query: SERVICES_MASTER_QUERY,
-      variables: { status: 'DRAFT' },
+      variables: { status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
     next: {

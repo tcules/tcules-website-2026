@@ -1,56 +1,31 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import {
-  getCaseRefs,
-  getCorpusPage,
-  getInsightRefs,
-  getPlaceholderReasons,
-  getProposedEyebrows,
-  getTestimonialAvatars,
-  getTestimonialRatings,
-} from '@/content';
-import { caseRoutesIn, insightRoutesIn } from '@/lib/corpus-cases';
-import { corpusMetadata } from '@/lib/corpus-metadata';
+import { getHomePage, getPageSeo } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-import { HomePage } from '@/templates';
+import { PublishedHome } from '@/templates/CorpusPage/PublishedHome';
 
-import { landedReasonFigure } from './_corpus/reason-figure';
-
-/**
- * `/` — read from the `_pages/` corpus and composed by the home template. Composition only: the
- * route reads the page and passes it down; every arrangement decision is the template's.
- */
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getCorpusPage(ROUTES.home);
-  return page ? corpusMetadata(page) : { title: 'Tcules' };
+  return (await getPageSeo(ROUTES.home)).metadata;
 }
 
 export default async function Home() {
-  const page = await getCorpusPage(ROUTES.home);
-  if (!page) notFound();
-  const ids = page.composition.testimonialIds;
-  /* "Why teams choose Tcules" shows stand-in reasons (PLACEHOLDER, P48) until the content team
-     writes the six the Reasons band is built for. */
-  /* Bands the owner asked to carry an eyebrow the corpus does not author (PROPOSED, P49). */
-  const [ratings, avatars, reasons, eyebrows, caseRefs, insightRefs] = await Promise.all([
-    getTestimonialRatings(ids),
-    getTestimonialAvatars(ids),
-    getPlaceholderReasons(page.route),
-    getProposedEyebrows(page.route),
-    getCaseRefs(caseRoutesIn(page)),
-    getInsightRefs(insightRoutesIn(page)),
+  const [page, { structuredData }] = await Promise.all([
+    getHomePage(),
+    getPageSeo(ROUTES.home),
   ]);
+  if (!page) notFound();
+
   return (
-    <HomePage
-      page={page}
-      ratings={ratings}
-      avatars={avatars}
-      reasons={reasons}
-      eyebrows={eyebrows}
-      caseRefs={caseRefs}
-      insightRefs={insightRefs}
-      reasonFigure={landedReasonFigure}
-    />
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedHome page={page} />
+    </>
   );
 }

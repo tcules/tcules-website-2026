@@ -18,6 +18,7 @@ export {
   caseViews,
   glossaryIndex,
   insightFinder,
+  publishedGlossaryIndex,
   insightViews,
 } from './ListingIndex';
 export type {
@@ -28,6 +29,9 @@ export type {
   FinderOption,
   FinderPick,
   GlossaryIndex,
+  PublishedGlossaryGroup,
+  PublishedGlossaryLead,
+  PublishedGlossaryTerm,
   InsightFormat,
   InsightItem,
   InsightKind,

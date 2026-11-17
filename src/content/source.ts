@@ -1,3 +1,10 @@
+import { getPublishedWorkMaster, getPublishedWorkDetail, getPublishedSitemap } from './sources/strapi/published-work';
+import{getPublishedWhy}from'./sources/strapi/published-why';
+import { getPublishedMatter } from './sources/strapi/published-matter';
+import { getPublishedCareers } from './sources/strapi/published-careers';
+import { getPublishedLab, getPublishedLabJoin } from './sources/strapi/published-lab';
+import { getPublishedClientMaster } from './sources/strapi/published-client-master';
+import { getPublishedAuthorMaster } from './sources/strapi/published-author-master';
 import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
@@ -18,39 +25,60 @@ import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { CONTACT_CHANNELS, CONTACT_FOLLOW } from './sources/fixtures/contact-channels';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
-import { authorsSource } from './sources/strapi/authors';
-import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
-import { caseStudySource } from './sources/strapi/case-study';
-import { contactSource } from './sources/strapi/contact';
-import { eventSource } from './sources/strapi/event';
+import { getPublishedCaseIndex } from './sources/strapi/case-index';
 import { expertiseSource } from './sources/strapi/expertise';
 import { futureInterfacesLabJoinSource } from './sources/strapi/future-interfaces-lab-join';
 import { futureInterfacesLabSource } from './sources/strapi/future-interfaces-lab';
 import { glossarySource } from './sources/strapi/glossary';
-import { insightsSource } from './sources/strapi/insights';
+import { getPublishedResourceListing } from './sources/strapi/published-resource-listing';
 import { matterDesignSystemSource } from './sources/strapi/matter-design-system';
-import { podcastSource } from './sources/strapi/podcast';
 import { privacyPolicySource } from './sources/strapi/privacy-policy';
 import { serviceSource } from './sources/strapi/service';
 import { servicesMasterSource } from './sources/strapi/services-master';
 import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
-import { sitePageSource } from './sources/strapi/site-pages';
+import { getPublishedAbout } from './sources/strapi/published-about';
+import { getPublishedServicesMaster } from './sources/strapi/published-services-master';
+import { getPublishedGlossaryMaster } from './sources/strapi/published-glossary-master';
+import { getPublishedToolsMaster } from './sources/strapi/published-tools-master';
+import { getPublishedTool, listPublishedToolSlugs } from './sources/strapi/published-tool';
+import { getPublishedAuthor, getPublishedAuthorShareProfile } from './sources/strapi/published-author';
+import { getPublishedResource } from './sources/strapi/published-resource';
+import {
+  getPublishedCookiePolicy,
+  getPublishedPrivacyPolicy,
+  getPublishedTermsOfUse,
+} from './sources/strapi/published-legal';
+import {
+  getPublishedGlossary,
+  getPublishedGlossarySeo,
+} from './sources/strapi/published-glossary';
+import { getPublishedExpertiseMaster } from './sources/strapi/published-expertise-master';
+import { getPublishedAuditMaster } from './sources/strapi/published-audit-master';
+import { getPublishedAudit, listPublishedAuditSlugs } from './sources/strapi/published-audit';
+import {
+  getPublishedExpertise,
+  listPublishedExpertiseSlugs,
+} from './sources/strapi/published-expertise';
+import {
+  getPublishedService,
+  listPublishedServiceSlugs,
+} from './sources/strapi/published-service';
+import { getPublishedCaseStudy } from './sources/strapi/published-case';
+import { getPublishedHome } from './sources/strapi/home';
+import { getPublishedPageSeo } from './sources/strapi/page-seo';
+import { getPublishedNavigation } from './sources/strapi/site-chrome';
+import { getPublishedSiteIdentity } from './sources/strapi/site-identity';
 import type {
   CaseStory,
   IdealAboutPage,
   AboutContentSource,
   CorpusContentSource,
   AuditContentSource,
-  AuthorsContentSource,
-  BlogContentSource,
   CareerContentSource,
-  CaseStudyContentSource,
-  ContactContentSource,
   ContentSource,
-  EventContentSource,
   ExpertiseContentSource,
   FutureInterfacesLabJoinContentSource,
   FutureInterfacesLabContentSource,
@@ -59,13 +87,11 @@ import type {
   InsightsContentSource,
   InsightsPage,
   MatterDesignSystemContentSource,
-  PodcastContentSource,
   PrivacyPolicyContentSource,
   ServiceContentSource,
   ServicesMasterContentSource,
   TermsOfUseContentSource,
   ToolContentSource,
-  SitePagesContentSource,
 } from './types';
 import type {
   CaseIndustry,
@@ -79,63 +105,82 @@ import type {
 /**
  * THE SEAM.
  *
- * Pages import from here and from nowhere else in @/content/sources. The general page and chrome
- * collections remain on fixtures while the audit, case-study, glossary and privacy-policy
- * families are assigned to Strapi. Neither route nor pattern code knows which source answered any
+ * Pages import from here and from nowhere else in @/content/sources. General pages remain on
+ * fixtures while Navigation and Footer use the public CMS. The audit, case-study, glossary and
+ * privacy-policy families are assigned to Strapi. Neither route nor pattern code knows which source answered any
  * reader.
  */
 const source: ContentSource = fixtureSource;
 const aboutPagesSource: AboutContentSource = aboutSource;
 const auditSource: AuditContentSource = strapiSource;
-/* Derived from the bylines until the CMS carries an author collection; that swap is this line. */
-const authorPagesSource: AuthorsContentSource = authorsSource;
-const blogsSource: BlogContentSource = blogSource;
 const careersPagesSource: CareerContentSource = careersSource;
-const caseStudiesSource: CaseStudyContentSource = caseStudySource;
-const contactPagesSource: ContactContentSource = contactSource;
-const eventsSource: EventContentSource = eventSource;
 const expertisesSource: ExpertiseContentSource = expertiseSource;
 const futureInterfacesLabJoinPagesSource: FutureInterfacesLabJoinContentSource =
   futureInterfacesLabJoinSource;
 const futureInterfacesLabsSource: FutureInterfacesLabContentSource = futureInterfacesLabSource;
 const glossariesSource: GlossaryContentSource = glossarySource;
 const howWeWorkPagesSource: HowWeWorkContentSource = howWeWorkSource;
-const insightsPagesSource: InsightsContentSource = insightsSource;
+/** `/insights`: the Resource Listing single type on the new CMS, its pieces through the Resource Index. */
+const insightsPagesSource: InsightsContentSource = {
+  getInsightsPage: async (slug) =>
+    slug.replace(/^\/+|\/+$/g, '') === 'insights' ? getPublishedResourceListing() : null,
+};
 const matterDesignSystemsSource: MatterDesignSystemContentSource = matterDesignSystemSource;
-const podcastsSource: PodcastContentSource = podcastSource;
 const privacyPoliciesSource: PrivacyPolicyContentSource = privacyPolicySource;
 const servicesSource: ServiceContentSource = serviceSource;
 const servicesMastersSource: ServicesMasterContentSource = servicesMasterSource;
 const termsOfUsePagesSource: TermsOfUseContentSource = termsOfUseSource;
 const toolsSource: ToolContentSource = toolSource;
-const sitePagesSource: SitePagesContentSource = sitePageSource;
 /** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
 const corpusPagesSource: CorpusContentSource = corpusSource;
 
+export const getPublishedAboutPage = getPublishedAbout;
+export const getPublishedServicesMasterPage = getPublishedServicesMaster;
+/** `/glossary`: the Glossary Master single type on the new CMS, its terms through their relations. */
+export const getGlossaryMasterPage = getPublishedGlossaryMaster;
+/** `/tools`: the Tool Master single type on the new CMS, its tools through their relations. */
+export const getToolsMasterPage = getPublishedToolsMaster;
+/** A Tool record (`/tools/{slug}`) from the new CMS, by its presentation, and the published slugs. */
+export const getToolDetail = getPublishedTool;
+export const listToolSlugs = listPublishedToolSlugs;
+export const getHomePage = getPublishedHome;
+export const getPageSeo = getPublishedPageSeo;
+
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
-export const getNavigation = source.getNavigation.bind(source);
+export const getNavigation = getPublishedNavigation;
+/** The organisation and site name from SEO Settings, for the site-wide structured data. */
+export const getSiteIdentity = getPublishedSiteIdentity;
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
-export const listAuthors = authorPagesSource.listAuthors.bind(authorPagesSource);
-export const getAuthorPage = authorPagesSource.getAuthorPage.bind(authorPagesSource);
-export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
-/* A case's V1 cover (fixtures/case-covers.ts) wins over its Strapi thumbnail; Strapi's alt stays. */
-export async function getCaseStudyListingPage(slug: string) {
-  const listing = await caseStudiesSource.getCaseStudyListingPage(slug);
-  if (!listing) return listing;
-  return {
-    ...listing,
-    items: listing.items.map((item) => {
-      const cover = CASE_COVERS[item.slug];
-      return cover
-        ? { ...item, thumbnail: { ...cover, alt: item.thumbnail?.alt ?? item.title } }
-        : item;
-    }),
-  };
-}
-export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
+export const getCaseStudyIndex = getPublishedCaseIndex;
+export const getCaseCoverFallback = (slug: string) => CASE_COVERS[slug];
+export const getResourceDetail = getPublishedResource;
+/** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
+export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;
+export const getTermsOfUseDocument = getPublishedTermsOfUse;
+/** `/cookie-policy`: the Cookie Policy single type on the new CMS, with its SEO. */
+export const getCookiePolicyDocument = getPublishedCookiePolicy;
+export const getAuthorDetail = getPublishedAuthor;
+export const getAuthorShareProfile = getPublishedAuthorShareProfile;
+/** A Glossary record (`/glossary/{slug}`) as the term page's view model, and its CMS SEO. */
+export const getGlossaryDetail = getPublishedGlossary;
+export const getGlossaryDetailSeo = getPublishedGlossarySeo;
+/** A Service detail page (`/services/{slug}`) and the published slugs, from the new CMS. */
+export const getServiceDetail = getPublishedService;
+export const listServiceSlugs = listPublishedServiceSlugs;
+/** The Expertise Master (`/expertise`) from the new CMS. */
+export const getExpertiseMasterPage = getPublishedExpertiseMaster;
+/** The Audit Master (`/audits`) from the new CMS, its audit cards through their Audit relations. */
+export const getAuditMasterPage = getPublishedAuditMaster;
+/** An Audit detail page (`/audits/{slug}`) and the published slugs, from the new CMS. */
+export const getAuditDetail = getPublishedAudit;
+export const listAuditSlugs = listPublishedAuditSlugs;
+/** An Expertise detail page (`/expertise/{slug}`) and the published slugs, from the new CMS. */
+export const getExpertiseDetail = getPublishedExpertise;
+export const listExpertiseSlugs = listPublishedExpertiseSlugs;
+export const getCaseStudyDetail = getPublishedCaseStudy;
 
 /* The cases that have an ideal local copy, structured as a story (fixtures/ideal/case-studies). */
 const CASE_STORIES: ReadonlyMap<string, CaseStory> = new Map([
@@ -157,10 +202,7 @@ export const idealServiceSlugs = Object.keys(IDEAL_SERVICE_STORIES);
 export function getIdealServiceStory(slug: string) {
   return IDEAL_SERVICE_STORIES[slug] ?? null;
 }
-export const getContactPage = contactPagesSource.getContactPage.bind(contactPagesSource);
-export const createClientContact =
-  contactPagesSource.createClientContact.bind(contactPagesSource);
-export const getEventPage = eventsSource.getEventPage.bind(eventsSource);
+export { createClientContact } from './sources/strapi/client-contact';
 export const getExpertisePage = expertisesSource.getExpertisePage.bind(expertisesSource);
 export const getFutureInterfacesLabJoinPage =
   futureInterfacesLabJoinPagesSource.getFutureInterfacesLabJoinPage.bind(
@@ -174,14 +216,13 @@ export const getHowWeWorkPage =
 export const getInsightsPage = insightsPagesSource.getInsightsPage.bind(insightsPagesSource);
 /**
  * The insights hub as DESIGNED, with stress content (sources/fixtures/insights.ts) — for the
- * ListingIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
+ * ListingIndex specimen only, never a live route: /insights reads the new CMS's Resource Listing.
  */
 export async function getInsightsFixturePage(): Promise<InsightsPage> {
   return INSIGHTS_FIXTURE;
 }
 export const getMatterDesignSystemPage =
   matterDesignSystemsSource.getMatterDesignSystemPage.bind(matterDesignSystemsSource);
-export const getPodcastPage = podcastsSource.getPodcastPage.bind(podcastsSource);
 export const getPrivacyPolicyPage =
   privacyPoliciesSource.getPrivacyPolicyPage.bind(privacyPoliciesSource);
 export const getServicePage = servicesSource.getServicePage.bind(servicesSource);
@@ -190,7 +231,6 @@ export const getServicesMasterPage =
 export const getTermsOfUsePage =
   termsOfUsePagesSource.getTermsOfUsePage.bind(termsOfUsePagesSource);
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
-export const listSitePages = sitePagesSource.listSitePages.bind(sitePagesSource);
 export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
 export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
 export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPagesSource);
@@ -256,7 +296,10 @@ export function getReasonFigure(
 ): { src: string; width: number; height: number } | undefined {
   const ref = REASON_FIGURES[offerSceneKey(title)];
   if (!ref) return undefined;
-  return { src: `/illustrations/reasons/${ref.name}.${ground}.svg`, ...REASON_FIGURE_SIZE[ref.set] };
+  return {
+    src: `/illustrations/reasons/${ref.name}.${ground}.svg`,
+    ...REASON_FIGURE_SIZE[ref.set],
+  };
 }
 
 /**
@@ -460,3 +503,24 @@ export type {
 export async function getIdealAboutPage(): Promise<IdealAboutPage> {
   return idealAbout;
 }
+
+/** The published Authors Master and its ordered native author relations. */
+export const getPublishedAuthorMasterPage = getPublishedAuthorMaster;
+
+/** The /clients page and its ordered native Client relationships. */
+export const getPublishedClientMasterPage = getPublishedClientMaster;
+
+export const getPublishedLabPage = getPublishedLab;
+export const getPublishedLabJoinPage = getPublishedLabJoin;
+
+export const getPublishedCareersPage = getPublishedCareers;
+
+export const getPublishedMatterPage = getPublishedMatter;
+
+export const getPublishedWhyPage=getPublishedWhy;
+
+export const getPublishedWorkMasterPage = getPublishedWorkMaster;
+export const getPublishedWorkPage = getPublishedWorkDetail;
+export const getSitemapMasterPage = getPublishedSitemap;
+
+export { listPublishedSitemapInventory } from './sources/strapi/published-sitemap-inventory';

@@ -122,13 +122,19 @@ const common = {
   charset: 'utf8',
   logLevel: 'silent',
   /* The bundle runs in a browser frame, where `process` does not exist: every `process.env` read the
-     library makes is defined here. SITE_URL is unset, so routes.ts takes its own default origin. */
-  define: { 'process.env.NODE_ENV': '"production"', 'process.env.SITE_URL': 'undefined' },
+     library makes is defined here. SITE_URL is unset, so routes.ts takes its own default origin; the
+     Turnstile site key is unset, so the enquiry form's check renders nothing (shims/next-script.tsx). */
+  define: {
+    'process.env.NODE_ENV': '"production"',
+    'process.env.SITE_URL': 'undefined',
+    'process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY': 'undefined',
+  },
   tsconfig: join(ROOT, 'tsconfig.json'),
   alias: {
     'next/link': join(SHIMS, 'next-link.tsx'),
     'next/navigation': join(SHIMS, 'next-navigation.tsx'),
     'next/form': join(SHIMS, 'next-form.tsx'),
+    'next/script': join(SHIMS, 'next-script.tsx'),
   },
   loader: { '.svg': 'dataurl', '.png': 'dataurl', '.webp': 'dataurl', '.jpg': 'dataurl' },
 };

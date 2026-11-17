@@ -300,11 +300,14 @@ export type ContactPage = {
 };
 
 export type ContactFormSubmission = {
-  clientName: string;
-  clientCompany: string;
   clientEmail: string;
-  clientContact: string;
   clientComments: string;
+  destinationPage: string;
+  clientName?: string;
+  clientCompany?: string;
+  clientContact?: string;
+  clientWebsite?: string;
+  services?: string;
 };
 
 export type ContactSubmissionResult = {
@@ -315,7 +318,6 @@ export type ContactSubmissionResult = {
 
 export type ContactContentSource = {
   getContactPage(slug: string): Promise<ContactPage | null>;
-  createClientContact(data: ContactFormSubmission): Promise<ContactSubmissionResult>;
 };
 
 export type CareerAction = {
@@ -500,6 +502,10 @@ export type ToolPage = {
     eyebrow?: string;
     highlightedText?: string;
     description: string;
+    /** The hero's further paragraphs, after the description. */
+    paragraphs?: string[];
+    /** The hero's calls to action, in saved order. */
+    actions?: { label: string; href: string }[];
   };
   sections: ToolSection[];
   seo?: ToolSeo;
@@ -1411,6 +1417,8 @@ export type InsightsPage = {
     heading: string;
     description: string;
     action?: InsightAction;
+    /** The offer's own picture, where the source has one. */
+    image?: InsightImage;
   };
   resources: {
     id: string;
@@ -1423,6 +1431,8 @@ export type InsightsPage = {
     heading: string;
     description: string;
     action?: InsightAction;
+    /** The close's own illustration, where the source has one; else the page's own drawing. */
+    image?: InsightImage;
   };
   seo?: ContentSeo;
 };
@@ -1914,3 +1924,30 @@ export type ContentSource = {
 
 /* The `_pages/` corpus view models (corpus-types.ts), re-exported so callers import `@/content`. */
 export type * from './corpus-types';
+
+/**
+ * Who the site is: the SEO Settings single type's organisation and site name, the one place those
+ * facts are kept. The root layout renders it as the site-wide Organization and WebSite nodes.
+ */
+export type SiteIdentity = {
+  siteName: string;
+  siteUrl: string;
+  language?: string;
+  organization: {
+    name: string;
+    legalName?: string;
+    url: string;
+    description?: string;
+    email?: string;
+    telephone?: string;
+    logo?: { url: string; width?: number; height?: number };
+    sameAs: string[];
+    address?: {
+      streetAddress?: string;
+      addressLocality?: string;
+      addressRegion?: string;
+      postalCode?: string;
+      addressCountry?: string;
+    };
+  };
+};

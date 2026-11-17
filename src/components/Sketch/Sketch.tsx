@@ -37,6 +37,23 @@ import type { SketchName } from '@/lib/sketches';
  */
 export type { SketchName };
 
+const sceneRegistries = [
+  STORY,
+  STILL,
+  KIT,
+  OFFER,
+  L1_BANDS,
+  L1_OUTCOMES,
+  L1_SPECIALISTS,
+  L1_TERMS,
+  TERMS,
+  PAGES,
+];
+
+export function isSketchName(name: string): name is SketchName {
+  return sceneRegistries.some((registry) => Object.hasOwn(registry, name));
+}
+
 export type SketchProps = {
   /**
    * The scene. Absent: the EMPTY PLATE, its dot field and nothing drawn on it, where a set of scenes

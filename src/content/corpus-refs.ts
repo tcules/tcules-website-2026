@@ -1,9 +1,8 @@
 import type { CorpusCaseRef, CorpusInsightRef, CorpusMediaBinding } from './corpus-types';
-import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS, caseStudyPath } from '@/lib/routes';
-import { CASE_COVERS } from './sources/fixtures/case-covers';
+import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS } from '@/lib/routes';
 
 import {
-  getCaseStudyListingPage,
+  getCaseStudyIndex,
   getCorpusPage,
   getCorpusRecord,
   listCorpusPages,
@@ -33,10 +32,12 @@ export async function getCaseRefs(
   /* The live list, by live route: a case's thumbnail is its cover wherever its corpus page binds
      none, the same picture the /case-studies listing shows. Without the list, refs carry none. */
   const listing = routes.length
-    ? await getCaseStudyListingPage('case-studies').catch(() => null)
+    ? await getCaseStudyIndex().catch(() => null)
     : null;
   const live = new Map(
-    (listing?.items ?? []).map((record) => [caseStudyPath(record.slug), record] as const),
+    (listing?.listing?.cases ?? []).flatMap((record) =>
+      record.href ? [[record.href, record] as const] : [],
+    ),
   );
   const liveSlug = new Map(
     Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [
@@ -49,14 +50,14 @@ export async function getCaseRefs(
     const page = (await getCorpusPage(route)) ?? (alias ? await getCorpusPage(alias) : null);
     if (!page) continue;
     const record = live.get(route) ?? live.get(liveSlug.get(route) ?? '');
-    const thumb = record?.thumbnail;
+    const thumb = record?.cover;
     refs[route] = {
       route,
       title: page.hero.titleText,
       /* A V1 cover (fixtures/case-covers.ts) is the case's cover everywhere it is cited, so the case
          page's first in-page image no longer stands in for one (owner, 3 Nov 2026). */
       cover:
-        record && record.slug in CASE_COVERS
+        thumb?.src.startsWith('/case-covers/')
           ? null
           : (page.composition.mediaBindings.find((b) => b.bound) ?? null),
       thumbnail: thumb?.src

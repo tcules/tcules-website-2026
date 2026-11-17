@@ -22,6 +22,7 @@ export type CaseItem = {
       soon"): its card is shown, unlinked, and it never leads a group. */
   href?: string;
   title: string;
+  eyebrow?: string;
   /** The one line under the title: 8–15 words (strapi-changes.md §13). */
   description: string;
   cover?: BlockCardImage;
@@ -30,8 +31,9 @@ export type CaseItem = {
    * with `description`, which it replaces where a card carries more than a line ("Our role: …").
    */
   bodyHtml?: readonly string[];
-  /** The cta wording on a featured card ("Read the Doodle case"). Absent, the card's default. */
   ctaLabel?: string;
+  /** An explicit CMS setting overrides the lead card’s default cue. */
+  showCta?: boolean;
   /**
    * A case the page features: the group's FIRST featured case leads it as the listing's horizontal
    * card (the insights hub's lead: cover across two thirds, copy in the third, no ground); without
@@ -66,7 +68,7 @@ export type CaseView = {
  * group's id, position or count any more: the varied shapes (a featured set, two columns of
  * thumbnail rows, 2-up large covers) were the problem, not a feature.
  */
-export function caseViews(views: readonly CaseView[]): ListingView[] {
+export function caseViews(views: readonly CaseView[], preserveOrder = false): ListingView[] {
   return views.map((view) => ({
     id: view.id,
     label: view.label,
@@ -76,7 +78,7 @@ export function caseViews(views: readonly CaseView[]): ListingView[] {
         id: group.id,
         heading: group.heading,
         count: group.items.length,
-        content: <CaseRun items={group.items} />,
+        content: <CaseRun items={group.items} preserveOrder={preserveOrder} />,
       })),
   }));
 }
@@ -106,22 +108,31 @@ const sized = (cover: BlockCardImage) => ({
 function CaseRun({
   items,
   titleAs = 'h3',
+  preserveOrder = false,
 }: {
   items: readonly CaseItem[];
   titleAs?: 'h2' | 'h3';
+  preserveOrder?: boolean;
 }) {
   const canLead = (item: CaseItem) => Boolean(item.cover && item.href);
   const lead = items.find((item) => item.featured && canLead(item)) ?? items.find(canLead);
-  const rest = items.filter((item) => item !== lead);
+  const leadIndex = lead ? items.indexOf(lead) : 0;
+  const leadCta = lead?.showCta !== false;
+  const before = preserveOrder ? items.slice(0, leadIndex) : [];
+  const rest =
+    preserveOrder && lead ? items.slice(leadIndex + 1) : items.filter((item) => item !== lead);
 
   return (
     <Layout rowGap="column">
+      {before.length > 0 ? <CaseCards items={before} titleAs={titleAs} /> : null}
       {lead ? (
         /* The hub's lead exactly: the cover leading, so a phone stacks it cover-first. Not compact
            on a phone: a case card's words are the copy's, and the compact row drops its body. */
         <ul>
           <BlockCard
-            {...splitClaim(lead.title)}
+            {...(lead.eyebrow
+              ? { title: lead.title, eyebrow: lead.eyebrow }
+              : splitClaim(lead.title))}
             {...bodyOf(lead)}
             {...coverOf(lead)}
             href={lead.href}
@@ -129,8 +140,8 @@ function CaseRun({
             size="lg"
             tracks={2}
             titleAs={titleAs}
-            cue="cta"
-            ctaLabel={lead.ctaLabel ?? 'Read the case'}
+            cue={leadCta ? 'cta' : 'title'}
+            ctaLabel={leadCta ? (lead.ctaLabel ?? 'Read the case') : undefined}
             split="grid"
           />
         </ul>
@@ -158,13 +169,15 @@ function CaseCards({
         <BlockCard
           key={item.id}
           title={item.title}
+          eyebrow={item.eyebrow}
           {...bodyOf(item)}
           {...coverOf(item)}
           href={item.href}
           size="sm"
           tracks={3}
           titleAs={titleAs}
-          cue="title"
+          cue={item.showCta ? 'cta' : 'title'}
+          ctaLabel={item.ctaLabel}
         />
       ))}
     </ListingGrid>
@@ -179,16 +192,20 @@ function CaseCards({
 export function caseFinder({
   items,
   shown,
+  preserveOrder,
   ...rest
 }: Omit<FinderArgs, 'total' | 'results'> & {
   /** Every case the picks let through, in the page's order. */
   items: readonly CaseItem[];
+  preserveOrder?: boolean;
 }): ListingFinder {
   return listingFinder({
     ...rest,
     shown,
     total: items.length,
     /* The results take the groups' shape: the first horizontal, the rest in the grid. */
-    results: <CaseRun items={items.slice(0, shown)} titleAs="h2" />,
+    results: (
+      <CaseRun items={items.slice(0, shown)} titleAs="h2" preserveOrder={preserveOrder} />
+    ),
   });
 }

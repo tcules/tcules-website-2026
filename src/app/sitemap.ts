@@ -2,18 +2,35 @@ import type { MetadataRoute } from 'next';
 
 import { SITE_ORIGIN } from '@/lib/routes';
 
-import { listSitemapGroups } from './_sitemap/pages';
+import { getSitemapMasterPage } from '@/content';
+
+import { listSitemapFallbackEntries } from './_sitemap/pages';
 
 /**
- * `/sitemap.xml`, generated from the same list the `/sitemap` page renders (`_sitemap/pages.ts`),
- * rebuilt from the CMS every five minutes so a page published in Strapi appears without a deploy.
+ * `/sitemap.xml`, from the published Sitemap Master's resolved groups (the same list the `/sitemap`
+ * page renders), read from Strapi on each request.
+ * If the master cannot be read or lists nothing, use the published route inventory.
+ * Fixed public routes keep the XML available during a CMS outage.
  */
-export const revalidate = 300;
+export const revalidate = 0;
+
+async function entries() {
+  try {
+    const page = await getSitemapMasterPage();
+    const listed = page?.groups.flatMap((group) => group.entries) ?? [];
+    if (listed.length) return listed;
+    console.warn('sitemap.xml: the Sitemap Master lists no pages; using the route list');
+  } catch (error) {
+    console.error(
+      'sitemap.xml: the Sitemap Master could not be read; using the route list',
+      error,
+    );
+  }
+  return listSitemapFallbackEntries();
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const groups = await listSitemapGroups();
-  return groups
-    .flatMap((group) => group.entries)
+  return (await entries())
     .map(({ path, lastModified }) => ({
       url: `${SITE_ORIGIN}${path === '/' ? '' : path}`,
       ...(lastModified ? { lastModified } : {}),

@@ -1,16 +1,40 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { heroFallback } from '@/app/_corpus/hero-fallback';
+import { getPageSeo, getPublishedClientMasterPage } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
+import { PublishedClientMaster } from '@/templates/CorpusPage/PublishedClientMaster';
 
 /**
- * `/clients` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only. Treatment record: docs/page-build/pages/clients.md.
+ * `/clients`: the Client Master from the new CMS (its hero and sections, in the editor's order), each
+ * client, case study, testimonial and FAQ read through its relation, and the published SEO Page for
+ * `/clients`. Composition only.
  */
-export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.clients)) ?? { title: 'Tcules' };
-}
+export const revalidate = 300;
 
-export default function ClientsPage() {
-  return <ComposedRoute route={ROUTES.clients} />;
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getPageSeo(ROUTES.clients)).metadata;
+}
+export default async function ClientsPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedClientMasterPage(),
+    getPageSeo(ROUTES.clients),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedClientMaster
+        page={page}
+        fallbackMedia={page.hero.media ? undefined : heroFallback(ROUTES.clients)}
+      />
+    </>
+  );
 }

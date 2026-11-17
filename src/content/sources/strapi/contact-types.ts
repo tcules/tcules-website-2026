@@ -49,20 +49,3 @@ export type StrapiContactResponse = {
   data?: { contactUs?: StrapiContactPage | null } | null;
   errors?: Array<{ message?: string | null }> | null;
 };
-
-export type StrapiClientContact = {
-  documentId?: string | null;
-  clientName?: string | null;
-  clientCompany?: string | null;
-  clientEmail?: string | null;
-  clientContact?: string | null;
-  clientComments?: string | null;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-  publishedAt?: string | null;
-};
-
-export type StrapiClientContactResponse = {
-  data?: { createClientContact?: StrapiClientContact | null } | null;
-  errors?: Array<{ message?: string | null }> | null;
-};

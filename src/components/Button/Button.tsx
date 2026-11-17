@@ -88,6 +88,9 @@ type ButtonBase = Omit<
   as?: ElementType;
   /** Destination, when rendering as an anchor. Ignored by a native button. */
   href?: string;
+  /** Optional anchor attributes for links that open in a separate tab. */
+  target?: ComponentPropsWithoutRef<'a'>['target'];
+  rel?: ComponentPropsWithoutRef<'a'>['rel'];
   /** Height, label size and icon size together. Defaults to `md` (40). */
   size?: ButtonSize;
   /**

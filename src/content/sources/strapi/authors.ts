@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   Author,
   AuthorPage,
@@ -26,8 +27,7 @@ import { insightsSource } from './insights';
  * none, exactly as the byline falls back (`teamPortrait`), so the byline and the page show one face.
  */
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const AUTHORS_REVALIDATE_SECONDS = 300;
+const AUTHORS_REVALIDATE_SECONDS = false;
 /* The hub's limit (insights.ts): above every live count, so no byline is dropped. */
 const BLOG_LIMIT = 500;
 const INSIGHTS_SLUG = 'insights';
@@ -95,12 +95,9 @@ function normaliseSlug(candidate: string | null | undefined): string {
     .join('/');
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 async function fetchBylines(graphqlUrl: string): Promise<StrapiBylinesResponse> {
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: { accept: 'application/json', 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -132,7 +129,7 @@ async function fetchProfiles(
 ): Promise<Map<string, { bio?: string; linkedin?: string }>> {
   const profiles = new Map<string, { bio?: string; linkedin?: string }>();
   try {
-    const response = await fetch(graphqlUrl, {
+    const response = await cachedCmsFetch(graphqlUrl, {
       method: 'POST',
       headers: { accept: 'application/json', 'content-type': 'application/json' },
       body: JSON.stringify({ query: PROFILES_QUERY }),

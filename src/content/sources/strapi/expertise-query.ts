@@ -1,5 +1,5 @@
 export const EXPERTISE_BY_SLUG_QUERY = /* GraphQL */ `
-  query GetExpertiseBySlug($slug: String!, $status: PublicationStatus = DRAFT) {
+  query GetExpertiseBySlug($slug: String!, $status: PublicationStatus = PUBLISHED) {
     expertisePage: expertises(
       status: $status
       filters: { slug: { eq: $slug } }

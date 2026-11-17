@@ -56,13 +56,7 @@ import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 import { ListTiles, head, headingIdOf, testimonialItem } from './blocks';
 import styles from './CorpusPage.module.css';
 import { StatusMark } from './StatusMark';
-import {
-  bandArtefact,
-  slotImage,
-  slugOf,
-  studioBandPhoto,
-  type SlotImage,
-} from './images';
+import { bandArtefact, slotImage, slugOf, studioBandPhoto, type SlotImage } from './images';
 import {
   isCardSet,
   isClaimList,
@@ -313,7 +307,7 @@ function inlineLabel(block: CorpusBlock): { label: string; rest: InlineRun[] } |
 }
 
 /** A scenario's label and words, with its drawing on the end side (copy beside a drawing is a split). */
-function ScenarioSplit({
+export function ScenarioSplit({
   label,
   blocks,
   scene,
@@ -708,7 +702,7 @@ export function sheetParts(band: CorpusBand): SheetParts {
 }
 
 /** Promises per row: two for two or four, three for three, five or six (component-map § A). */
-const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
+export const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
 
 /**
  * A band's terms ("**Who does the work.** …") are the labelled claims after its items; every other
@@ -794,7 +788,13 @@ export function SheetBand({
         : { title: item.body ?? item.id ?? '' },
     );
     return (
-      <ContentSection surface={surface} {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
+      <ContentSection
+        surface={surface}
+        {...head(band)}
+        data-band="D"
+        lead={parts.lead}
+        footer={combined}
+      >
         <Layout rowGap="block">
           <ReadDown rows={rows} columns={2} />
         </Layout>
@@ -802,7 +802,8 @@ export function SheetBand({
     );
   }
   return (
-    <OfferSheet surface={surface}
+    <OfferSheet
+      surface={surface}
       {...head(band)}
       lead={parts.lead}
       items={items}
@@ -1482,7 +1483,12 @@ export function MethodBand({
     trailingNotes.length === 0
   ) {
     return (
-      <ContentSection surface={surface} {...head(band)} data-band="process-flow" lead={leadText}>
+      <ContentSection
+        surface={surface}
+        {...head(band)}
+        data-band="process-flow"
+        lead={leadText}
+      >
         <ProcessFlow
           ruled={false}
           stages={steps.map((step) => ({
@@ -1671,7 +1677,8 @@ export function DrawnTableBand({
   scenario,
   arrangement = 'grid',
 }: {
-  page: CorpusPage;
+  /** The corpus page, for a photograph it binds beside the words after the table. */
+  page?: CorpusPage;
   band: CorpusBand;
   sceneOf: (key: string) => SketchName | undefined;
   scenario?: SketchName;
@@ -1784,9 +1791,9 @@ export function DrawnTableBand({
         </Layout>
       </Layout>
     );
-  const bound = page.composition.mediaBindings.some(
-    (b) => b.bound && b.supportsSection === band.id,
-  );
+  const bound =
+    page?.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id) ??
+    false;
   return (
     <ContentSection {...head(band)} data-band="drawn-table" lead={leadText}>
       <Layout rowGap="stack">
@@ -1803,7 +1810,7 @@ export function DrawnTableBand({
               align="center"
             >
               <BandBody blocks={after} />
-              <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
+              {page ? <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} /> : null}
             </Layout>
           ) : (
             <BandBody blocks={after} />
@@ -2610,7 +2617,8 @@ export function TextBand({
   const artefact = bandArtefact(page.route, band.id);
   if (artefact) {
     return (
-      <ContentSection surface={surface}
+      <ContentSection
+        surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2631,7 +2639,8 @@ export function TextBand({
   }
   if (isIllustratedProse(band.id)) {
     return (
-      <ContentSection surface={surface}
+      <ContentSection
+        surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2704,11 +2713,18 @@ export function TextBand({
   }
   if (bound) {
     return (
-      <ContentSection surface={surface}
+      <ContentSection
+        surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
-        media={{ image: slotImage(page, band.id), side, weight: 'photo', head: 'lg', pin: false }}
+        media={{
+          image: slotImage(page, band.id),
+          side,
+          weight: 'photo',
+          head: 'lg',
+          pin: false,
+        }}
         actions={actions}
       >
         {text}
@@ -2738,7 +2754,8 @@ export function TextBand({
       : [];
     const all = [...liftedLinks, ...links];
     return (
-      <ContentSection surface={surface}
+      <ContentSection
+        surface={surface}
         {...head(band)}
         data-band="B"
         arrangement="media"
@@ -2773,7 +2790,8 @@ export function TextBand({
      (/careers critic, 4 Nov 2026). */
   if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
     return (
-      <ContentSection surface={surface}
+      <ContentSection
+        surface={surface}
         {...head(band)}
         data-band="C-text"
         arrangement="beside"
@@ -2965,7 +2983,9 @@ function onwardLinks(blocks: readonly CorpusBlock[]): CorpusLink[] {
 /** A claim's words: its paragraphs, a link line left out. */
 const claimText = (claim: Extract<CorpusBlock, { type: 'item' }>): string =>
   claim.blocks
-    .flatMap((block) => (block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : []))
+    .flatMap((block) =>
+      block.type === 'paragraph' && !loneLink(block) ? [plain(block.runs)] : [],
+    )
     .join(' ');
 
 /**
@@ -3031,8 +3051,7 @@ const CARD_GLYPHS: Readonly<Record<string, IconName>> = {
 };
 
 const glyphFor = (key: string): IconName | undefined =>
-  CARD_GLYPHS[key] ??
-  Object.entries(CARD_GLYPHS).find(([lead]) => key.startsWith(lead))?.[1];
+  CARD_GLYPHS[key] ?? Object.entries(CARD_GLYPHS).find(([lead]) => key.startsWith(lead))?.[1];
 
 /**
  * A set of cards under the head (plan `CARD_SETS`): the three-ways cards, each led by its glyph. Titled
@@ -3241,7 +3260,8 @@ export function CloseFigureBand({
   surface?: 'paper' | 'tint';
 }) {
   return (
-    <ContentSection surface={surface}
+    <ContentSection
+      surface={surface}
       {...head(band)}
       data-band="C-text"
       arrangement="media"

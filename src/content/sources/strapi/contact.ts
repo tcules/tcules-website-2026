@@ -1,16 +1,14 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ContactAction,
   ContactContentSource,
-  ContactFormSubmission,
   ContactImage,
   ContactPage,
-  ContactSubmissionResult,
   ContentSeo,
 } from '../../types';
 import { absoluteAssetUrl, imageSources, positiveDimension } from './image';
-import { CONTACT_QUERY, CREATE_CLIENT_CONTACT_MUTATION } from './contact-query';
+import { CONTACT_QUERY } from './contact-query';
 import type {
-  StrapiClientContactResponse,
   StrapiContactImage,
   StrapiContactLink,
   StrapiContactPage,
@@ -18,17 +16,13 @@ import type {
   StrapiContactSeo,
 } from './contact-types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const CONTACT_SLUG = 'contact';
-const CONTACT_REVALIDATE_SECONDS = 300;
+const CONTACT_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function mapImage(
   file: StrapiContactImage | null | undefined,
@@ -186,7 +180,7 @@ async function fetchContactPage(): Promise<{
   page: StrapiContactPage | null;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -216,44 +210,6 @@ async function fetchContactPage(): Promise<{
   return { graphqlUrl, page: payload.data?.contactUs ?? null };
 }
 
-async function createClientContact(
-  submission: ContactFormSubmission,
-): Promise<ContactSubmissionResult> {
-  const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
-    method: 'POST',
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: CREATE_CLIENT_CONTACT_MUTATION,
-      variables: { data: submission, status: 'PUBLISHED' },
-    }),
-    cache: 'no-store',
-  });
-
-  if (!response.ok) {
-    throw new Error(`Strapi contact mutation failed with HTTP ${response.status}.`);
-  }
-
-  const payload = (await response.json()) as StrapiClientContactResponse;
-  const errors = payload.errors?.map((error) => value(error.message)).filter(Boolean) ?? [];
-  if (errors.length > 0) {
-    throw new Error(`Strapi contact mutation failed: ${errors.join('; ')}`);
-  }
-
-  const created = payload.data?.createClientContact;
-  const documentId = value(created?.documentId);
-  if (!documentId) throw new Error('Strapi contact mutation returned no created record.');
-
-  return {
-    documentId,
-    ...(value(created?.createdAt) ? { createdAt: value(created?.createdAt) } : {}),
-    ...(value(created?.publishedAt) ? { publishedAt: value(created?.publishedAt) } : {}),
-  };
-}
-
 export const contactSource: ContactContentSource = {
   async getContactPage(slug) {
     const requestedSlug = value(slug);
@@ -262,5 +218,4 @@ export const contactSource: ContactContentSource = {
     const { graphqlUrl, page } = await fetchContactPage();
     return page ? mapContactPage(page, requestedSlug, graphqlUrl) : null;
   },
-  createClientContact,
 };

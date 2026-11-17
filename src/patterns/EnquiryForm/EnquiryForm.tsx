@@ -4,10 +4,12 @@ import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
+import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 
 import styles from './EnquiryForm.module.css';
+import { TurnstileWidget, type TurnstileWidgetHandle } from './TurnstileWidget';
 
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */
@@ -100,7 +102,7 @@ type SharedProps = {
    * CALLER's copy, as `success` is. Absent, the form's own line. The status of a send replaces it in
    * the same live region.
    */
-  caption?: string;
+  caption?: string | null;
   /**
    * The fields' size step, passed to every Input (`scale`). `md` (default); `lg` (48, the value at
    * the lead role) where the form is the band's primary object — the enquiry close (home round 3).
@@ -543,6 +545,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const instanceId = useId();
   const successRef = useRef<HTMLDivElement>(null);
   const submittedCallbackFired = useRef(false);
+  const submissionInFlight = useRef(false);
+  const turnstile = useRef<TurnstileWidgetHandle>(null);
+  const [verificationError, setVerificationError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
@@ -625,9 +630,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const value = link?.getAttribute(ENQUIRY_ROLE_ATTRIBUTE);
       const form = formRef.current;
       if (!value || !form) return;
-      const chip = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="role"]')).find(
-        (input) => input.value === value,
-      );
+      const chip = Array.from(
+        form.querySelectorAll<HTMLInputElement>('input[name="role"]'),
+      ).find((input) => input.value === value);
       if (!chip) return;
       chip.checked = true;
       saveDraft(form);
@@ -682,7 +687,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (submitting) return;
+    if (submissionInFlight.current) return;
 
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
@@ -710,16 +715,32 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
     (submitter instanceof HTMLElement ? submitter : fallbackSubmitter)?.focus();
 
+    const body = new FormData(form);
+    body.set('destination_page', window.location.pathname);
+    submissionInFlight.current = true;
+    setVerificationError('');
     setLifecycle('submitting');
 
     try {
-      const response = await fetch(props.action, {
-        method: 'POST',
-        body: new FormData(event.currentTarget),
+      const token = await turnstile.current?.requestToken().catch((error: Error) => {
+        setVerificationError(error.message);
+        return undefined;
       });
+      if (!token) {
+        setLifecycle('error');
+        return;
+      }
+      const response = await submitProtectedForm(
+        body,
+        variant === 'contact' ? 'contact' : 'enquiry',
+        token,
+      );
+      if (response.verificationError) setVerificationError(response.verificationError);
       setLifecycle(response.ok ? 'success' : 'error');
     } catch {
       setLifecycle('error');
+    } finally {
+      submissionInFlight.current = false;
     }
   }
 
@@ -1054,7 +1075,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? 'Sending your message.'
         : 'Sending your enquiry.'
       : lifecycle === 'error'
-        ? 'That did not send. Your answers are still here — try again.'
+        ? verificationError || 'That did not send. Your answers are still here — try again.'
         : lifecycle === 'invalid' && invalidCount > 0
           ? invalidCount === 1
             ? 'One answer needs a look before this can send'
@@ -1097,18 +1118,21 @@ export function EnquiryForm(props: EnquiryFormProps) {
      promise about time — and the danger triangle when the line has become an error. The
      paragraph is the live region, so the status is announced where the reassurance sat. */
   const error = lifecycle === 'error' || (lifecycle === 'invalid' && invalidCount > 0);
+  const caption = props.caption === null ? '' : props.caption?.trim() || CAPTION;
   const captionLine = (
     <Cluster nowrap colGap="tight" align="start" className={styles.note}>
-      <span className={cx(styles.noteMark, error && styles.statusError)}>
-        <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
-      </span>
+      {status || caption ? (
+        <span className={cx(styles.noteMark, error && styles.statusError)}>
+          <Icon name={error ? 'danger-triangle' : 'clock-circle'} />
+        </span>
+      ) : null}
       <p
         className={cx(styles.noteText, error && styles.statusError)}
         id={statusId}
         role="status"
         aria-live="polite"
       >
-        {status || (props.caption?.trim() ? props.caption : CAPTION)}
+        {status || caption}
       </p>
     </Cluster>
   );
@@ -1170,6 +1194,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   if (dress) {
     const noteId = idFor('note');
     const formAttrs = {
+      'data-hs-do-not-collect': 'true',
       className: cx(styles.form, bounds),
       action: props.action,
       method: 'post',
@@ -1322,6 +1347,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
               </Layout>
             </div>
           </Layout>
+          <TurnstileWidget ref={turnstile} />
           {hiddenContext}
         </form>
       );
@@ -1374,6 +1400,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
               </Layout>
             </div>
           </Layout>
+          <TurnstileWidget ref={turnstile} />
           {hiddenContext}
         </form>
       );
@@ -1456,6 +1483,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             </div>
           </div>
         </Layout>
+        <TurnstileWidget ref={turnstile} />
         {hiddenContext}
       </form>
     );
@@ -1463,6 +1491,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
   return (
     <form
+      data-hs-do-not-collect="true"
       className={cx(styles.form, bounds)}
       action={props.action}
       method="post"
@@ -1489,6 +1518,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         {actions}
       </Layout>
 
+      <TurnstileWidget ref={turnstile} />
       {hiddenContext}
     </form>
   );

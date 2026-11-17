@@ -1,15 +1,22 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
-import { getNavigation } from '@/content';
+import { getNavigation, getSiteIdentity } from '@/content';
+import { siteGraphMarkup } from '@/lib/json-ld';
 import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
 import './globals.css';
+import { TrackingScripts } from './tracking-scripts';
+
+// Render the shell per request; published CMS data persists in the tagged Data Cache.
+export const revalidate = 0;
+
+const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();
 
 export const metadata: Metadata = {
-  /* Resolves every relative metadata URL — the share cards above all — to the live origin: an
-     og:image must be absolute or the first unfurl renders without it (ch10 C1). */
-  metadataBase: new URL(SITE_ORIGIN),
+  /* Generated cards are served by this deployment. Absolute URLs from Strapi keep their origin. */
+  metadataBase: new URL(publicDomain ? `https://${publicDomain}` : SITE_ORIGIN),
   title: 'Tcules',
   description: 'Tcules website',
 };
@@ -30,32 +37,78 @@ export const metadata: Metadata = {
  * `<main>` wraps the page so the header and footer are outside it — a screen reader's "skip to
  * main content" and a landmark list both depend on exactly one main region per document, and a
  * page that renders its own would make two.
- *
- * Still absent on purpose: analytics, which is added at launch rather than during scaffolding.
  */
+/** The Google Fonts stylesheet, attached by script so it never blocks the first paint (perf A/B, 6 Nov). */
+const FONTS_CSS =
+  'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap';
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { nav, footer } = await getNavigation();
+  const [{ nav, footer }, identity] = await Promise.all([getNavigation(), getSiteIdentity()]);
+  const trackingEnabled = process.env.RAILWAY_ENVIRONMENT_NAME === 'live';
 
   return (
     <html lang="en">
       <head>
+        {trackingEnabled ? (
+          <Script id="gtm-script" strategy="beforeInteractive">
+            {`
+              (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+                var first = d.getElementsByTagName(s)[0];
+                var tag = d.createElement(s);
+                var layer = l !== 'dataLayer' ? '&l=' + l : '';
+                tag.async = true;
+                tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
+                first.parentNode.insertBefore(tag, first);
+              })(window, document, 'script', 'dataLayer', 'GTM-KMJSP983');
+            `}
+          </Script>
+        ) : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- the rule targets the
             Pages Router (it wants fonts in pages/_document.js so they are not per-page). This IS
             the App Router root layout, so a link here already applies to every route, which is
             exactly what the rule is asking for. */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap"
+        <link rel="preload" as="style" href={FONTS_CSS} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var l=document.createElement('link');l.rel='stylesheet';l.href=${JSON.stringify(FONTS_CSS)};document.head.appendChild(l)})()`,
+          }}
         />
+        <noscript>
+          <link rel="stylesheet" href={FONTS_CSS} />
+        </noscript>
       </head>
-      <body>
-        <SiteNav {...nav} />
+      <body data-tracking-enabled={trackingEnabled ? 'true' : undefined}>
+        {trackingEnabled ? (
+          <>
+            <noscript>
+              <iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-KMJSP983"
+                height="0"
+                width="0"
+                style={{ border: 0, display: 'none', visibility: 'hidden' }}
+                title="Google Tag Manager"
+              />
+            </noscript>
+            <TrackingScripts />
+          </>
+        ) : null}
+        {nav.available !== false ? <SiteNav {...nav} /> : null}
         <main>{children}</main>
-        <SiteFooter {...footer} />
+        {footer.available !== false ? <SiteFooter {...footer} /> : null}
+        {/* The site-wide Organization and WebSite nodes, once per page from SEO Settings. Each
+            page's own graph refers to them by @id (lib/json-ld.ts strips the copies it carries). */}
+        {identity ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: siteGraphMarkup(identity) }}
+          />
+        ) : null}
       </body>
     </html>
   );

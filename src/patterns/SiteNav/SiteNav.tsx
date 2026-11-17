@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+
+/* The chrome's links never prefetch (performance pass, 6 Nov 2026): every page renders on request
+   from the CMS, so each link in view cost a full server render on every page load, competing with
+   the page itself. A click fetches the page then. Revisit once pages are cached again. */
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
@@ -548,6 +552,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
             that positions anything. The three groups are pushed apart by the distribution. */}
         <Cluster className={styles.barRow} justify="between" colGap="block" nowrap>
           <Link
+            prefetch={false}
             href={ROUTES.home}
             className={styles.brand}
             aria-label="Tcules — home"
@@ -620,15 +625,19 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           </Cluster>
 
           <Cluster colGap="tight" nowrap>
-            <Button
-              as={Link}
-              href={cta.href}
-              size="sm"
-              data-nav-control=""
-              className={styles.cta}
-            >
-              {cta.label}
-            </Button>
+            {cta ? (
+              <Button
+                as={Link}
+                href={cta.href}
+                title={cta.description}
+                {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                size="sm"
+                data-nav-control=""
+                className={styles.cta}
+              >
+                {cta.label}
+              </Button>
+            ) : null}
             <Button
               id={toggleId}
               className={styles.toggle}
@@ -748,6 +757,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                       </button>
                     ) : (
                       <Link
+                        prefetch={false}
                         href={item.href ?? ROUTES.home}
                         className={styles.sheetControl}
                         aria-current={pathname === item.href ? 'page' : undefined}
@@ -809,6 +819,10 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
               <Button
                 as={Link}
                 href={ctaSecondary.href}
+                title={ctaSecondary.description}
+                {...(ctaSecondary.external
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
                 emphasis="ghost"
                 tone="neutral"
                 extendHitArea
@@ -816,9 +830,17 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 {ctaSecondary.label}
               </Button>
             ) : null}
-            <Button as={Link} href={cta.href} extendHitArea>
-              {cta.label}
-            </Button>
+            {cta ? (
+              <Button
+                as={Link}
+                href={cta.href}
+                title={cta.description}
+                {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                extendHitArea
+              >
+                {cta.label}
+              </Button>
+            ) : null}
           </Layout>
         </div>
       </div>
@@ -848,6 +870,8 @@ function PlatePane({ item }: { item: SiteNavItem }) {
       <Button
         as={Link}
         href={item.hub.href}
+        title={item.hub.description}
+        {...(item.hub.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         emphasis="link"
         tone="primary"
         size="sm"
@@ -921,6 +945,7 @@ function PlateGroup({ label, links }: { label?: string; links: readonly SiteNavL
 function PlateRow({ link }: { link: SiteNavLink }) {
   return (
     <Link
+      prefetch={false}
       href={link.href}
       className={styles.row}
       {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
@@ -928,11 +953,17 @@ function PlateRow({ link }: { link: SiteNavLink }) {
       <span className={styles.rowHead}>
         <span className={styles.rowLabel}>{link.label}</span>
         {link.external ? (
-          <Icon name="arrow-right-up" label="opens in a new tab" className={styles.rowExternal} />
+          <Icon
+            name="arrow-right-up"
+            label="opens in a new tab"
+            className={styles.rowExternal}
+          />
         ) : null}
         <Icon name="arrow-right" className={styles.rowArrow} />
       </span>
-      {link.description ? <span className={styles.rowDescription}>{link.description}</span> : null}
+      {link.description ? (
+        <span className={styles.rowDescription}>{link.description}</span>
+      ) : null}
     </Link>
   );
 }
@@ -978,6 +1009,7 @@ function SheetPane({ item }: { item: SiteNavItem }) {
                 style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
               >
                 <Link
+                  prefetch={false}
                   href={link.href}
                   className={styles.sheetLink}
                   {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
@@ -1002,6 +1034,8 @@ function SheetPane({ item }: { item: SiteNavItem }) {
           <Button
             as={Link}
             href={item.hub.href}
+            title={item.hub.description}
+            {...(item.hub.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             emphasis="link"
             tone="neutral"
             size="sm"

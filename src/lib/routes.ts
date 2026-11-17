@@ -135,7 +135,7 @@ export type RouteKey = keyof typeof ROUTES;
  * The site's public origin, for the few outputs that must carry absolute URLs (the sitemap). Set
  * `SITE_URL` to point a preview deployment's sitemap at itself; production needs nothing.
  */
-export const SITE_ORIGIN = (process.env.SITE_URL?.trim() || 'https://tcules.com').replace(
+export const SITE_ORIGIN = (process.env.SITE_URL?.trim() || 'https://www.tcules.com').replace(
   /\/+$/u,
   '',
 );
@@ -177,6 +177,7 @@ export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${stri
   return `#${id}`;
 }
 
+/** Build one canonical audit-detail path without duplicating the route family at call sites. */
 /** A corpus page through its template in the proving ground: `/design/corpus-page/<file-slug>`. */
 export function designCorpusPagePath(fileSlug: string): string {
   return `${ROUTES.design}/corpus-page/${encodeURIComponent(fileSlug)}`;
@@ -187,7 +188,6 @@ export function designServicePagePath(slug: string): string {
   return `${ROUTES.design}/service-page/${encodeURIComponent(slug)}`;
 }
 
-/** Build one canonical audit-detail path without duplicating the route family at call sites. */
 export function auditPath(slug: string): string {
   return `${ROUTES.audits}/${encodeURIComponent(slug)}`;
 }
@@ -322,9 +322,33 @@ export function caseStudyPlaceholderPath(slug: string): string {
 }
 
 /**
+ * The insights formats, each kind's plural name: the name a reader sees in the hub's Type group and
+ * in an insight's breadcrumb, and (lower-cased) its value in the finder's `?type=`.
+ */
+export const INSIGHT_FORMAT_NAMES = {
+  article: 'Articles',
+  guide: 'Guides',
+  research: 'Research',
+  podcast: 'Podcasts',
+  video: 'Videos',
+  event: 'Events',
+  interview: 'Interviews',
+} as const;
+
+/**
+ * A format's listing: the insights hub with that format picked (`/insights?type=articles`). The hub
+ * is the one listing (owner, 28 Oct 2026; decisions/2026-10-29-insights-hub-is-the-finder) and the
+ * format path under it redirects here, so a link names this URL directly rather than the redirect.
+ */
+export function insightsFormatPath(kind: keyof typeof INSIGHT_FORMAT_NAMES): string {
+  return `${ROUTES.insights}?type=${INSIGHT_FORMAT_NAMES[kind].toLowerCase()}`;
+}
+
+/**
  * The retired format pages, each to the insights hub with its type picked (`/insights/articles` →
- * `/insights?type=articles`): the breadcrumbs of a podcast's or an event's page and any old link
- * still land. The type's value is the path's last segment, the slug the hub's Type group uses.
+ * `/insights?type=articles`): any old link or bookmark still lands. Permanent (next.config.ts): the
+ * pages were retired for good, so a search engine moves what it holds for them to the hub. The type's
+ * value is the path's last segment, the slug the hub's Type group uses.
  */
 export const FORMAT_PAGE_REDIRECTS: readonly { from: string; to: string }[] = [
   ROUTES.articles,
@@ -425,14 +449,9 @@ export const EXTERNAL = {
   x: 'https://x.com/tculesux',
 } as const;
 
-/**
- * Endpoints, which are not routes. Named here anyway so a form action is not a literal in a
- * pattern's fixture. NOTHING SERVES `newsletter` OR `enquiry` YET — the newsletter field posts to a
- * 404 until an `app/api/newsletter/route.ts` exists, and the corpus pages' enquiry form posts to a
- * 404 until `app/api/enquiry/route.ts` does (FORM_ENDPOINT_VERIFICATION, a release dependency on
- * every corpus page).
- */
+/** Same-origin form submission endpoints. */
 export const ENDPOINTS = {
+  clientContact: '/api/client-contact',
   newsletter: '/api/newsletter',
   contact: '/api/contact',
   enquiry: '/api/enquiry',
