@@ -1,422 +1,90 @@
-# Tracker — Design Engineer handoff
+# Tracker
 
-**The one list of what's next.** Work top to bottom. A phase starts when the one above it is done,
-unless a task says otherwise. Update it in the same PR as the work: tick the box and add the PR number.
+**The one list of what's next.** Work top to bottom unless a task says otherwise. Update it in the same
+PR as the work: tick the box and add the PR number.
 
 `[ ]` todo · `[~]` in progress · `[x]` done · `[-]` dropped (say why)
 
-**Stages are not launch phases.** The numbered sections below are build stages, called "Phase 0–6" before
-30 Oct; older specs and rulings still say Phase. A *phase* is a release: **phase 1** is everything that
-ships on 6 Nov, and **phase 2** is everything after launch. There is no phase 3 (owner, 30 Oct 2026;
-decisions/2026-10-30-launch-is-phase-1-after-is-phase-2).
+**Every task is done when:** `npm run verify` passes · the specimen is updated · it has been checked at
+1440 and 390 · the fix lives in the component or its tokens, not in a route.
 
-Inputs: `Tcules-Design-Engineer-Handoff-Package/` (handoff docx, content system, Copy × UI standard),
-the brand framework (see 0.2), `docs/visual-assets-plan.md`, `docs/dbf-ch05-amendments.md`.
-
-**Every task is done when:** `npm run verify` passes · the specimen has been updated · it has been
-checked at 1440 and 390 · the Copy × UI hard gates pass (CU01, 03, 06, 10, 16, 21, 23, 25) · the
-fix lives in the component or its tokens, not in a route.
+The handoff and launch tracker (Stages 0–6, closed 17 Nov 2026) is in git history:
+`git show e17fb37c:docs/TRACKER.md`.
 
 ---
 
-## Stage 0 — Base
+## Now — the page overhaul (9 pages)
 
-- [x] **0.1** Land `feat/content-section-per-heading`: Tag, Texture, the Prose changes, the route edits. (#55)
-- [x] **0.2** Put the brand framework in the repo at `docs/brand/`: illustration concept, image rules,
-      product UI treatment, ch05 Imagery, ch10 Social. Every later task reads it, so it has to be
-      readable from here. First copy `b539e13`; re-pulled at v1.0 on 28 Sep.
-- [x] **0.3** Brand guidelines complete (25 Sep): ch02, ch05 and ch10 at v1.0 in Claude Design. There are no
-      open, deferred, draft or void items left, and every rule is consistent with every other.
-      Record: `docs/dbf-consistency-check-2026-09-24.md`.
-- [x] **0.4** `V10-REPORT.md` is in the package. `TESTIMONIAL-REGISTER-V10.csv` is deferred with the
-      other content asks (see Parked). The design work is content-agnostic for now.
-- [x] **0.5** Two running lists, added to *while* the work happens rather than written up at the end:
-      `docs/content-changes.md` (copy and structure changes a component needs, for Devagya) and
-      `docs/strapi-changes.md` (CMS recommendations, for the CMS owner). Strapi is not our work: we
-      design the right thing, make the recommendation, and move on. The first entry is the
-      component ↔ Strapi mirroring rule.
-- [x] **0.6** Client-logo rules and the cover registry are final in ch05 v1.0 (25 Sep).
-- [ ] **0.7** Bring the Claude Design templates in line with ch10 v1.0 (moved out of the chapter on 25 Sep):
-      - `social-posts-v3`: marked phrase as the drawn rectangle (A5); paper on cover, closer and more than half the frames; hinge on ink or brandeis-500; `#d6e0ff` → brandeis-100.
-      - `hiring-poster`: marked phrase as A5; two peridot marks (illustration, date); labels become ch05 §4b concept chip and part labels; `#9bb200` → peridot-600; QR on paper or paper-deep, ruled; mono 20 → 22px; margin 80; distances on the ladder; file message lines per ch05 §4.
-      - `hiring-poster-detail`: marked phrase as A5; remove the blue fact panel, chips and two body columns (terms line and QR row carry them); margin 80; distances on the ladder; floor 22px.
+Jatin's new copy and layouts for Home, Product Design, Design-led MVP Development, Product
+Modernisation, B2B SaaS expertise, How we work, About, Careers and Contact, laptop and phone:
+https://claude.ai/artifact/RJaNv6S6sQf9qQj7JsB4HP (the top rows are the final picks; the archive below
+them is superseded). Content is fixture-only for the preview; Strapi is updated when the designs go to
+production.
 
-## Stage 1 — Component audit (decide before building)
+### Rulings (each logged with `/decide` in the PR that applies it)
 
-Read-only. The output is a decision, not code.
+- [ ] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026).
+- [ ] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026).
+- [ ] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026).
+- [ ] **O.4** The client-logo marquee's motion: speed, pause control, hover, reduced motion (with O.6).
 
-- [x] **1.0** Revisit the foundations before the components that sit on them: the type ladder
-      (H1/H2 and card-heading wrapping with real long titles), the gap scale, the Section/Layout
-      grid and breakpoints, media ratios, focus states. Most of it has shipped; this checks it against
-      the handoff's "build now" list and the brand framework, and records what to refine.
-- [x] **1.1** Write `docs/component-audit.md` (decided 28 Sep; rulings in its §6). For each of the 25 shipped components, record:
-      - **Jobs it must serve:** from the handoff's page families and semantic inventory.
-      - **Arrangements it must offer:** from the brand's visual treatments. For example, PageHero
-        currently has one left-aligned layout, but has to serve routing, situation-led, proof-led and
-        article/definition intros, each with illustration, product capture, photography or no visual.
-      - **What it has today:** read from its specimen.
-      - **Brand fit:** no type on images, media kind (capture / cut-out / drawing), images checked at
-        326px, and ink/blue reserved (addendum D). The ink/blue bands on routes today get reviewed here.
-      - **Verdict:** keep · extend (new variants) · rebuild. Rebuild gets a sentence saying why.
-      - **Missing jobs:** jobs nothing serves yet (logo strip, testimonial group, case selection,
-        mechanism/steps, comparison, related content). **A job is not a component.** First show
-        whether existing pieces already compose it; a logo strip, for example, is Figures in a
-        Cluster. Only propose a new component if the composition needs something of its own:
-        markup or semantics, behaviour, or an arrangement the primitives can't express. If not,
-        the answer is a composition in the template.
-- [-] **1.2** ~~Comp the five contexts in Claude Design.~~ Dropped 28 Sep: whole pages are the wrong unit
-      before the components are fixed. Each component's design is now decided in its own spec (Stage 2), and
-      "is the page beautiful" is answered in Stage 3 on the real page. The one idea kept from it: the
-      no-visual page is designed first, in 3.2.
-- [x] **1.4** Illustration concepts and asset inventory (runs alongside Stage 2; needs no code). From
-      `visual-assets-plan.md`: for each of the ~26 illustrations, the one-line message, the brief answered in
-      ch05 §4d order, and the read-back test. For each case study, run §9a to decide the cover and banner kind
-      (cut-out or registry archetype). Also inventory the client work and photography already cleared for use.
-      Output: `docs/illustration-concepts.md`, starting with the six service lines. Concepts done 28 Sep; covers and
-      photography parked. Service-line illustrations round 1 generated (`npm run illustrations`).
-- [x] **1.3** Fill in Stage 2 below from 1.1: one task per component, in dependency order (28 Sep).
+### New components
 
-## Stage 2 — Component overhaul
+- [ ] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch;
+      `VoiceLedger` is retired once About and `/expertise/healthtech` stop using it.
+- [ ] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`.
+- [ ] **O.7** The six sides of a B2B product: the wheel and its six annotated sides (SaaS).
+- [ ] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
 
-One component per PR, run as in CLAUDE.md § How a component gets made: Claude writes the spec, the
-owner answers its open questions, Claude builds (`/build-from-spec`), verifies (`verify`, `aria:check`,
-`/audit-component`) and screenshots (`npm run shots`), and the owner approves. Every specimen gains stress rows
-(shortest and longest real copy, long proper nouns, a 326 track). Order is `docs/component-audit.md` §5;
-★ marks the tasks that need an owner decision before building.
+### Component updates
 
-**Foundations: no decisions needed, so Claude runs these straight through.**
-- [x] **2.1** Heading wrap: `text-wrap: balance` on every title role, `pretty` on lead/body. Long-title stress
-      rows in `/design/typography` at the CU04 ceilings. (#61)
-- [x] **2.2** `_specimen` gains a 326 track. Every specimen with an image slot gets a 326 row. (#62)
-- [x] **2.3** `--ratio-cover` 3/2 as a primitive; BlockCard and ListCard alias it. (#64)
-- [x] **2.4** CtaSection: `open` collapses to one track when there is no proof (`CtaSection.tsx:376`, the
-      `Proof.tsx:189` idiom). ~466px of dead ground on ten routes. (#66)
-- [x] **2.5** Tag: fix the specimen's hydration mismatch and its 18px overflow at 390 (found by `npm run shots`). (#67)
-      A 29 Sep "regression" was `shots` screenshotting another checkout's server; fixed in the script (#80).
+- [ ] **O.9** `ListCard`: the stage rows (stage drawing, link on the right) and the "first step" strip under them.
+- [ ] **O.10** `EngagementOptions` `plans`: prices, one highlighted plan.
+- [ ] **O.11** A legend marker for keep / fix / rebuild (MVP "Your prototype is the brief").
 
-**Media, in dependency order.**
-- [x] **2.6** ★ `Media` primitive (new, tier 1): responsive slot (derived widths, WebP), `kind` capture ·
-      cut-out · illustration · photograph, intrinsic size, cover/contain. Everything with an image depends on it. (#71)
-- [x] **2.7** Figure onto `Media`: edge by kind (a capture takes the hairline; a cut-out takes no edge, one
-      shadow and a contrast panel when needed; an illustration is never boxed), radius 0. (#72, landed via #76)
-- [x] **2.8** ★ `ClientMark` primitive (new, tier 1): drawn in the ground's ink, sized by visual weight (ch05 §10). (#69; real client set #78)
-- [x] **2.9** ★ PageHero rebuild: arrangements (stacked · media beside · media below) × media kind, media at
-      intrinsic ratio, a designed no-visual state. It unblocks 6.4. (#74, landed via #76. "Media below" is `stacked`, ruling H1)
+### To design
 
-**Patterns.**
-- [x] **2.10** ★ BlockCard: onto `Media`, a featured horizontal arrangement, a designed no-media state, and a review of
-      `media.kind: 'icon'` against ch04. (#77, landed via #76. The icon fill was removed after the ch04 review)
-- [x] **2.11** ListCard: onto `Media`, the ordered marker as a real `ol`, the external glyph. (#76)
-- [x] **2.12** ★ Proof: 1:1 portrait and client mark; `role` optional. (#75, landed via #76)
-- [x] **2.13** ★ ContentSection: a head-beside-body arrangement; specimen raised to the Tag standard. (#70)
-- [x] **2.14** Icon: the ch04 glyphs the site needs (`square-arrow-right-up`, `info-circle`, `danger-triangle`);
-      check the size scale against ch04's seven; review the six service glyphs. (#63)
-- [x] **2.15** ★ DataTable (brief 10): the comparison job. (#73 — revised 29 Sep: boxed, scrolls sideways on narrow tracks, dividers on every column)
-- [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
+- [ ] **O.12** MVP "Your demo works": our own drawing.
+- [ ] **O.13** MVP "Your prototype is the brief": our own drawing.
+- [ ] **O.14** How we work "The engagement moves with your product": our own drawing, and a lighter
+      arrangement than the 2 × 3 ruled facts.
+- [ ] **O.15** The text-only tile sets (What stays the same, The terms, What we believe, How Tcules works
+      with clients, What happens after you get in touch): give each set a shape.
+- [ ] **O.16** Stage drawings (about 10 unique across the six stage bands) and the four free-tool drawings.
 
-**Visual pass — before Stage 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
-- [x] **2.17** ★ Visual overhaul (done, owner 3 Nov 2026): review every shipped component's specimen at 1440 and 390 against CLAUDE.md
-      § Design quality and the brand chapters, and propose per component what to change. The owner approves each
-      proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
-- [x] **2.18** Reasons: the "why Tcules" band (15 Oct queue). Six argued reasons, each with an isometric drawing of
-      its claim; `open`, `boxed` and `beside`, all one fold at 1440 (owner picks, 16 Oct 2026, mocks rounds 1–4). (#115)
+### Pages
 
-**Review with Jatin, 22 Oct.** Triaged with the owner's answers in the review checklist
-(https://claude.ai/artifact/HLnxA2opHsfw47YkfSXcnf). Batch 1 lands and is reviewed before batch 2 starts (owner, 22 Oct).
+- [ ] **O.17** Home
+- [ ] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation
+- [ ] **O.19** B2B SaaS expertise (after O.7, O.8)
+- [ ] **O.20** How we work
+- [ ] **O.21** About
+- [ ] **O.22** Careers
+- [ ] **O.23** Contact (after the form decision below)
 
-*Batch 1: small items, one PR each.* Closed 1 Nov 2026 (owner): each item was approved or has changed since.
-- [x] **2.19** FAQ question at 20px, as a standard step in the type ladder.
-- [x] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
-- [x] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
-- [x] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
-- [x] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
+### On hold
 
-*Batch 2: exploratory, after batch 1 is reviewed.*
-- [-] **2.24** Moved to phase 2 (owner, 3 Nov 2026). Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
-      improve the current card instead, on a paper-deep card ground.
-- [x] **2.25** (done, owner 3 Nov 2026) Recolour every Reasons isometric without peridot, to see the set in blue only.
-- [x] **2.26** (done, owner 3 Nov 2026) Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
-      polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
-      The bento's six drawings are redrawn and solve their story on hover (decisions/2026-10-25-bento-drawings-tell-their-story).
-      Rolled out 26 Oct (branch design/s2-flat-grammar, awaiting the owner's look): every Sketch plate draws the
-      redrawn scenes, still and held solved, in the two weights; EngagementOptions and TracePlates draw through
-      Sketch, their 14 drawings redrawn as kit scenes; EngagementModel takes the weights and dash. Logged as proposed: decisions/2026-10-26-flat-graphics-grammar and
-      -flat-or-isometric-two-questions.
-- [x] **2.27** (done, owner 3 Nov 2026) Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
-- [-] **2.28** Moved to phase 2 (owner, 3 Nov 2026). Tools in the listings, looking like tools rather than standard cards.
-- [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further
-      (owner, 23 Oct 2026): the close at 1:1 (`islandArrangement="halves"`, the panel at a `stack` inset),
-      the TextureFlow field, and the sketch-to-shipped drawing; both versions on /design/cta-section § 1d.
-      Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
-- [-] **2.30** Scrapped (owner, 3 Nov 2026). Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
-      cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
-      Photos replaced (owner, 26 Oct 2026): no faces, a close crop on the main part of each sector's activity.
-      The band stays the 4×2 grid for now; accordion, contact-sheet and sentence directions were mocked and set aside.
-- [~] **2.31** Service pages at home's level, starting with Product Design (owner, 26 Oct 2026; mock
-      https://claude.ai/artifact/8d5ZWF4hQTMkJ57iZDc4Em, rounds 1–4). Shipped in #161: drawn offer and starting points, the Dealpath strip on tint, the case slider (2a), two
-      tint testimonial bands, Ways to work drawn as Reasons, specialist services as an equal bento, home's close.
-      Rulings: decisions/2026-10-26-sliders-allowed-off-homepage, -quote-gets-its-own-band,
-      -case-cards-use-the-case-image, -service-items-drawn-per-item, -worked-example-is-a-strip.
+- Enquiry form changes, including the Careers application form on the ink band (owner confirming, 18 Nov).
+- `Accordion`'s circled open/close buttons: not decided.
+- Contact's hero form: the Contact redesign and Jatin's "new Contact page" proposal, both awaiting a decision.
 
-**Pages the owner has not designed yet (owner, 30 Oct 2026).** Home and the seven level-1 service pages had their
-design pass (#174, #175). Everything below still renders the 26 Oct copy through the generic composer (`_corpus/`),
-and each can take many design changes. Work in the order listed: polished-tier pages first (launch roadmap), and
-a template before the single pages it serves, since one pass there fixes every page on it. Starting notes are the
-29 Oct critic's (`docs/page-build/review-29-oct.md`), not a brief.
+---
 
-**Design order (owner, 1 Nov 2026):** 2.40 `/how-we-work` → 2.41 `/why-tcules` → 2.37 `/services` hub → 2.38
-`/expertise` hub → 2.32 the 12 expertise pages → 2.36 audit pages → 2.39 glossary → 2.42 `/careers` → 2.35 Future Interfaces Lab →
-2.43 `/matter-design-system`. 2.46 level-2 sub-services are low priority, after these. One PR per large page or per template group (how-we-work and its two subpages; the two hubs; the 12 expertise pages). Every page designed gets its record in `docs/page-build/pages/<page>.md` (decisions
-and band → component mapping) in the same PR, and any rule that generalises goes into `treatment-rules.md`, so
-the next page starts from what is settled instead of re-deriving it. Small illustrations may be drawn in a later
-pass on another account; a page ships with its placeholders until then.
-- [x] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
-      from what the service pages got in round 5. Polished tier. Done for launch (owner, 4 Nov 2026): the shared
-      components change with the homepage pass (2.63) and carry across these pages, and the missing visuals (the
-      12 hero placeholders, the empty "What we design" plates, the pending "Why founders…" illustrations and the
-      "Other industries" slots) belong to the illustration and flat graphics passes (2.61, 2.62).
-- [x] **2.33** `/about` (#182, #188): two OfferSheets read the same; the leadership band has no portraits yet; the difference
-      band as a DataTable is still an open owner call. Polished tier.
-- [x] **2.34** `/contact` (#186): the hero's right half is empty, and the page ends in text bands. Polished tier.
-- [x] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
-      Done 4 Nov 2026 (`design/careers-lab-matter`, records docs/page-build/pages/future-interfaces-lab{,-join}.md):
-      alternating grounds, selection steps under the form, Why join as the Why Tcules list (decisions/2026-11-04-lab-pages-alternate-grounds).
-- [x] **2.36** (#213) Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
-      starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
-      `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
-      in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
-      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026). Started 2 Nov in another session.
-      approved 4 Nov (record docs/page-build/pages/audits.md).
-- [x] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
-      Design pass 2 Nov (#194, record docs/page-build/pages/services.md): the guide is split
-      service tiles (mock A); centred hero, illustration placeholder until art.
-- [x] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders. Design pass 2 Nov with the
-      services hub (#194).
-- [x] **2.39** (#213) Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
-      relief (lowest score on 29 Oct, 4/10). approved 4 Nov (record docs/page-build/pages/glossary.md).
+## Backlog — after the overhaul
 
-*More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
-
-**Every page in 2.32–2.47 renders (checked 1 Nov 2026 on main at 6815435e).** #181 routed each one through the
-generic composer (`_corpus/`), the legal pages through the article shell and the tools through `_corpus/tool`. A
-production build serves all 95 routes in `_pages/` with a 200, so none of them 404s and no "make it render" pass is
-needed. What remains on 2.32–2.43 and 2.46 is the design pass itself. `kinds:check` on that build reports 7
-problems: 5 client logos that have no file yet (Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier) on
-`/expertise`, `/how-we-work`, `/services` and `/why-tcules`; and the 2 `/contact` bands, which wait on the owner's
-choice (2.34).
-- [x] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
-      First pass in #190 (record: docs/page-build/pages/how-we-work.md). The owner: the page still needs improvement;
-      the four middle illustrations and the subpages' prose runs are open. Done for now (owner, 2 Nov 2026).
-- [x] **2.41** `/why-tcules`: every service page links to it. First pass done 2 Nov (owner: "decent for now"):
-      work-wall hero; reasons drawn (two reused) with their examples in the example panel; the ConnectX story as a
-      case strip; the Tcules row picked in the alternatives table; every testimonial rated by its person.
-      Record: `docs/page-build/pages/why-tcules.md`. Open: the craft reason's illustration, five client marks.
-- [x] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct). Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/careers.md).
-- [x] **2.43** `/matter-design-system`: crucial. Done 4 Nov 2026 (`design/careers-lab-matter`, record docs/page-build/pages/matter-design-system.md): the live site's Matter images in the hero, contents and use bands.
-- [x] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
-      render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
-      Needs no design pass, only full coverage. Done 1 Nov (`feat/insights-rich-text`): all 105 live insights
-      match their Strapi bodies; `docs/page-build/insights-rich-text-report.md`. The copy's articles and glossary
-      terms got their subsections, quotes and FAQs back in the same PR.
-- [x] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
-      but they need no design. A plain text-page template is enough. They render in the article shell (#181).
-- [-] **2.46** Moved to phase 2 (owner, 4 Nov 2026). Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
-      that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
-      designed no-visual state.
-- [x] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap). All seven
-      render from the copy through `_corpus/tool` (#181).
-- [x] **2.48** Flat drawings (owner, 31 Oct–1 Nov 2026, branch design/flat-line-motion): every tile drawing moves in
-      the four patterns, two at most, start and end different (decisions/2026-10-31-tile-drawings-move-in-four-patterns),
-      in any hover tile; the 29 service tiles redrawn; the 310 empty What-you-get plates on 33 level-2 pages drawn
-      (components/Sketch/wyg-*.tsx); peridot accent on ink (proposed). Workflows `flat-drawings` and
-      `flat-drawings-pages`, brief in docs/research/flat-graphics/drawing-brief.md. Open: About's three How-we-work
-      plates; the three term rows read as one template across pages.
-- [x] **2.49** Author pages, moved back into phase 1 (owner, 1 Nov 2026;
-      decisions/2026-11-01-author-pages-one-template-from-strapi, superseding the 30 Oct move to phase 2):
-      `/insights/authors` and one `/insights/authors/<person>` template filled from Strapi's bylines (11 people),
-      each person's live pieces as the hub's cards, `ProfilePage` + `Person` markup; the bylines and "About the
-      author" link to the page. Built on `feat/insights-rich-text`. Design pass (owner, 1 Nov 2026): a bio for
-      everyone (`people.ts` fallback until Strapi's `Profile` is readable), LinkedIn where known, the index
-      hero centred, and the person page's head as PageHero `arrangement="profile"` (the face at 240 beside the
-      name, role, bio, topic labels and LinkedIn).
-
-**Review with Jatin, 2 Nov 2026.** Jatin's order: home, the CTAs and the enquiry modal, the reused bands
-(engagement, trust markers, FAQ), then the commercial banners. His note on the whole site: the problem is now
-more content than design, and the owner keeps visual consistency, pushing back on content that can't be
-designed well. Everything here is designed before the lock on Wed 4 Nov. Not ours: Yash sends Jatin the
-page-by-page content problems, adds CTAs on the engagement band across pages, and gathers the studio photos;
-the content team shares the home client logos, reviews the audit-alternatives band ("Readiness review, free
-checklist or straight to the build?") and turns About's "How Tcules compares" into a comparison table.
-- [x] **2.50** One visual language down a page. Today it runs isometric hero drawing → flat drawings on dotted
-      plates → textured cards with flat drawings, and reads as three sites. Converge on one drawing language and
-      one plate; mock on Home and one service page first. Open: does the hero stay the only isometric drawing?
-      Done 3 Nov 2026 as the owner scoped it ("unify the approach for flat graphics"): every flat drawing sits on
-      the one dotted plate; the bento cards keep their frame and lose the texture (decisions/2026-11-03-flat-graphics-on-one-plate).
-- [-] **2.51** Obsolete: the new homepage design (2.63) covers it (owner, 4 Nov 2026). How we work together (`EngagementOptions`, kind `tiles`, on home, service, audit and expertise
-      pages): a better design. The heading leads; the drawing drops to tertiary weight or goes; the items become
-      real cards with far less text (reference: Jatin's "Three ways to work with us"). The two blocks about the
-      engagement itself stay text. Also `/how-we-work` itself needs a better design (follows 2.40).
-- [-] **2.52** Deferred to phase 2 (owner, 5 Nov 2026). CTA modal: the enquiry form in a dialog on desktop and a bottom sheet on mobile, opened by any CTA
-      on a page with no form of its own; a page with a form scrolls to it. Design only: autofill, the
-      success and failure copy, and CTA-source analytics come after launch. May move to phase 2 (owner, 4 Nov 2026).
-- [x] **2.53** (#205) One-line links in the copy ("*Is your vibe-coded app ready for production?* covers where AI-built
-      apps break first.") become ink island CTA blocks. Find the right places across the copy; never two
-      adjacent, never beside the close.
-- [x] **2.54** (#207) Hard parts (`ClaimSet`): tabs change on hover, and an entry animation shows there is more
-      (transform only, decisions/2026-10-19-hover-is-a-move, reduced motion respected).
-- [-] **2.55** Gone: covered by 2.63 (owner, 5 Nov 2026). Home: remove "What our designers can now do with AI"; People takes a collage of studio photos once
-      Yash gathers them; Industries we know well takes illustrations (drawn later; placeholders until then) and
-      links to `/expertise`.
-- [x] **2.56** (#208) `/contact`, against the live tcules.com/contact: remove "What to include in your first message";
-      "What happens after you send" merges into the post-send state; "Keep the message…" is cut; add cards for
-      social media, the other ways to reach us, and the studio address.
-- [x] **2.57** (#213) `/tools`: the hub's cards don't read as clickable. Check whether a tool's own page should render as
-      the article page, and bring the comparison to the owner. approved 4 Nov (record docs/page-build/pages/tools.md).
-- [x] **2.58** (#218) `/clients`, moved from phase 2: built from existing components; Claude makes the treatment
-      decisions and records them in `docs/page-build/pages/clients.md`.
-- [x] **2.59** Done (owner, 5 Nov 2026). Commercial banners: still with Bhumika, but the deadline may need a scaled pass over all the
-      illustrations instead.
-- [x] **2.60** The 3 Nov copy, held back where it changes a page's outline (the rest landed with the 3 Nov copy PR):
-      `/why-tcules` (two new bands, `design-to-code` and `ai-products`, match no kind), the six audit pages (new
-      outline: worked example, talk, after the audit; compare moves last; how-we-work-together and industries
-      cut), `/how-we-work` (reordered, new `ai-native-practice`, `working-loop` cut). Design each, then land its
-      copy from `~/Downloads/pages`. The copy also moves eight articles from `/insights/articles/<slug>` to
-      `/insights/<slug>`: the owner decides the scheme first. 2.56's first two cuts on `/contact` came with the copy.
-      The six audit pages: done 4 Nov (#213). `/why-tcules` and `/how-we-work`: done 4 Nov
-      (design/2-60-why-how), every band on a home/service/expertise shape, claim quotes and stray lines cut
-      (content-changes), studio-at-work heroes, alternating grounds; rulings 2026-11-04-claims-carry-no-quotes,
-      -studio-pages-alternate-grounds, -studio-heroes-show-people-at-work, -no-heading-row-over-a-split,
-      -no-case-images-in-sections. The article URL scheme was set aside by the owner (4 Nov) and closed 5 Nov 2026.
-- [x] **2.61** Illustration pass across the site (owner, 4 Nov 2026), phase 1: walk every page and bring each
-      isometric illustration to ch05 §4 and the illustration rulings; list the placeholders still waiting on art.
-      Works alongside 2.59's banners.
-      Scope set 5 Nov 2026 (owner): only drawings a page shows. In: the 12 expertise heroes (new ideas built
-      from the expertise hub's objects), the `/services`, `/tools` and `/future-interfaces-lab` heroes, the
-      three `/why-tcules` principles, and the designer's desk redrawn in the new hand for /careers or the Lab.
-      Out for now: the 25 service sub-page heroes (words only, no placeholder:
-      decisions/2026-11-05-service-subpage-heroes-no-placeholder) and the audit heroes (see 2.66). All older
-      illustration rules are loose; consistency with the 10 approved heroes is the standard. Owner signs off.
-      Done 5 Nov 2026 (design/illustration-run): the twelve industry heroes, the /services, /tools and Lab heroes,
-      the /why-tcules band as one drawing, the ten approved heroes brought to the figure rules; rulings
-      2026-11-05-*. Left: where the redrawn designer's desk goes (docs/illustrations/run-2026-11-05/designer-desk/,
-      owner to place: /careers or the Lab), and the audit heroes (2.66). Closed 5 Nov 2026 (owner).
-      6 Nov 2026 (owner): the /why-tcules principles went back to three cards, one flat drawing each
-      (decisions/2026-11-06-why-tcules-principles-flat-drawings); the band's wide drawing is parked for the hero.
-- [x] **2.62** Flat graphics pass across the site (owner, 4 Nov 2026), phase 1: every flat drawing on the one
-      dotted plate (decisions/2026-11-03-flat-graphics-on-one-plate), moving in the four patterns, and no empty
-      plate left on a page; picks up 2.48's open items (About's How-we-work plates, the term rows).
-      No empty plate left: done 5 Nov 2026 (design/2-62-flat-graphics). A sweep of all 249 sitemap pages found
-      84 empty plates on 14 pages, all drawn and blind-checked (33 linked expertise tiles move on hover); three
-      drawings re-keyed to retitled items; interaction-ui-design's What you get re-anchored to the four-part
-      layout (owner, 5 Nov). Tile audit against the four patterns: done 5 Nov 2026 (owner).
-- [x] **2.63** Homepage pass from the designs and content Jatin shared (owner, 4 Nov 2026), phase 1. Takes in
-      what is left of 2.55. Done (design/home-pass): v2.1 copy and order; Why Tcules, Three ways, industries and
-      the FAQ carried to every page that repeats them; rulings 2026-11-04-*.
-      The studio collage leaves home for /about (owner, 4 Nov 2026): its photo picks, focal points and zoom
-      are `PEOPLE_COLLAGE` in `src/templates/CorpusPage/HomePage.tsx` at f3f49fb6 (decisions/2026-11-03-studio-collage).
-- [x] **2.64** Header and footer (owner, 4 Nov 2026), phase 1: the footer is almost done (`design/nav-footer-v2`);
-      the header still needs work. Done 4 Nov 2026 (#215, #216, #217).
-- [x] **2.65** Case study images (owner, 4 Nov 2026), phase 1: made by Bhumika; wire them in as they land.
-- [x] **2.66** Audit videos (owner, 4 Nov 2026), phase 1: the videos in the audit components, made by Atharva;
-      wire them in as they land.
-      The audit heroes may take these videos too (owner, 5 Nov 2026), so they stay out of 2.61 and keep their
-      placeholders. If no video comes for an audit hero, run an illustration pass on the audit heroes
-      (`/audits/ai-product-ux-readiness`, `design-system-audit`, `design-to-code-audit`,
-      `product-modernisation-assessment`, `ux-product-audit`; round 3 has their ideas, Jatin: "all can go ahead").
-      No video came (owner, 5 Nov 2026): the five audit heroes drawn on design/audit-heroes
-      (docs/illustrations/run-2026-11-05/audits/), approved by the owner 5 Nov 2026. The prototype review keeps its film.
-- [-] **2.67** `/accessibility` page. Dropped: the site has no such page, so none is needed (owner, 5 Nov 2026).
-      Its unused path is removed from `src/lib/routes.ts`.
-
-Post-launch from the same review: the audit worked examples ("Illustration, not client work") become a real
-screen or report where the problem is evident · enquiry form autofill, success/failure copy
-and CTA-source analytics · a pricing section · taxonomy collection pages.
-
-*Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
-teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
-Jatin's explicit sign-off on the reduced type size.
-
-## Stage 3 — Slice 1: `/services/product-design`
-
-Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
-
-- [-] **3.1** Semantic section view models in `src/content/types.ts`: Situation, Capability set,
-      Mechanism, Proof, FAQ, Related, Enquiry. Shape them as the components' content props, not
-      after today's Strapi response. Keep the adapter in `sources/strapi/service.ts` as thin as it can be
-      while the page still renders. Anything that doesn't map cleanly goes on `docs/strapi-changes.md`
-      and isn't solved here.
-- [-] **3.2** `ServicePage` template in `src/templates/` + the section renderer. Design the no-visual
-      state first (from the dropped 1.2): it is what most pages ship in.
-- [-] **3.3** Route down to composition only (~50 lines).
-- [-] **3.4** SEO/meta helper: unique title and description, canonical, social image, robots. No
-      FAQPage schema. Analytics hooks at component boundaries (CTA to contact, form start/error/complete,
-      case-study clicks). The handoff lists both as "build now", so the first slice ships with them.
-- [-] **3.5** Handoff acceptance checks + Copy × UI review on the real page. The first two checks
-      matter most: changing copy or proof needs no code change, and reordering an allowed section
-      needs no schema change.
-
-## Stage 4 — Slice 2: `/audits/design-to-code-audit`
-
-Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
-
-- [-] **4.1** Reuse Stage 3. New only where an audit genuinely differs: what's examined, the deliverable, the boundary.
-- [-] **4.2** Count the new components it needed. More than two means Stage 3's sections were too
-      specific: fix them before going on.
-
-## Stage 5 — Slice 3: ConnectX case study
-
-Dropped: not relevant, the site was built through the corpus pages and templates instead (owner, 5 Nov 2026).
-
-- [-] **5.1** Reusable records as view models: Client, Testimonial, Case Study, Proof/Metric, Media.
-- [-] **5.2** Proof and logo strips reference records instead of copying text.
-- [-] **5.3** Case-study template: artefacts, outcomes with their evidence state, related work.
-
-## Stage 6 — Rollout and plumbing
-
-- [-] **6.1** Remaining services, audits and expertise onto the templates. Dropped: not relevant (owner, 5 Nov 2026).
-- [-] **6.2** Draft preview, and an empty optional section renders nothing. Dropped: not needed (owner, 4 Nov 2026).
-- [-] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya. Dropped: not relevant (owner, 5 Nov 2026).
-- [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6). Phase 2: not needed for
-      launch (owner, 4 Nov 2026).
-- [x] **6.5** Responsive check across the site (owner, 31 Oct). Done 5 Nov 2026: all 17 pages reviewed at 1440, 1024, 768
-      and 390, the notes fixed in their components and tokens and logged (decisions/2026-11-05-*). How to review it, the widths and the 19 pages
-      that cover every responsive behaviour: `docs/responsive-check.md` (`npm run responsive:census`). Two concerns to test at 1440, 1024, 768
-      and 390 before changing anything:
-      - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
-        most of all at the `-t` / `-m` steps where titles step down. Size and line height change together
-        in `primitives.css`.
-      - **Grouping on mobile.** Distances must not collapse to one value on a phone, or the nesting stops
-        reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
-        Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
-        a fix that needs it to is a ruling for `/decide`, not a local media query.
-- [x] **6.6** OG image generation pipeline (owner, 4 Nov 2026), phase 1: ships on 6 Nov. Every page gets its own social image, generated
-      at build from its title and page type (Next's `opengraph-image` route convention), not hand-made per page.
-      No route has one today; a few set `openGraph` metadata with no image. Covers the 95 corpus routes, the
-      insights, case studies, authors, tools and glossary terms; feeds the social-image slot of 3.4's SEO helper.
-      Done 5 Nov 2026 (`feat/og-images`): all 253 sitemap pages, reviewed on /design/share-cards
-      (decisions/2026-11-05-share-cards-words-left-picture-right); `npm run share:census` lists each card's picture.
-
-## Parked (handoff says don't freeze yet)
-
-Homepage · About · final positioning copy · migrating all 135 routes · share-preview generator.
-
-## Phase 2 — after the 6 Nov launch
-
-- [-] `/clients` (owner, 31 Oct 2026). Moved to phase 1 as 2.58 (owner, 2 Nov 2026).
-- [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (was 2.46;
-      owner, 4 Nov 2026).
-- [ ] Branded case study cards, an experiment on Linear's concept (was 2.24; owner, 3 Nov 2026).
-- [ ] Tools in the listings, looking like tools rather than standard cards (was 2.28; owner, 3 Nov 2026).
-- [ ] CTA modal (was 2.52; owner, 5 Nov 2026): the enquiry form in a dialog on desktop, a bottom sheet on mobile.
-- [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
+- [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (owner, 4 Nov 2026).
+- [ ] Branded case study cards, an experiment on Linear's concept (owner, 3 Nov 2026).
+- [ ] Tools in the listings, looking like tools rather than standard cards (owner, 3 Nov 2026).
+- [ ] CTA modal: the enquiry form in a dialog on desktop, a bottom sheet on mobile (owner, 5 Nov 2026).
+- [ ] Cookie consent banner: not designed yet (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
-      for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
-      with Ask AI).
-- [ ] /contact enquiry form: an animation that celebrates a sent enquiry, played as the panel turns into
-      the next steps (owner, 1 Nov 2026). It must still respect reduced motion and
-      decisions/2026-10-19-hover-is-a-move; anything beyond transform-only motion needs a new ruling.
-- [ ] /contact enquiry form: pre-fill from the page the visitor came from (owner, 31 Oct 2026).
+      for learning about Tcules on the site · the reply-style form redesigned as an AI chat window.
+- [ ] /contact: an animation that celebrates a sent enquiry as the panel turns into the next steps
+      (owner, 1 Nov 2026). Reduced motion and decisions/2026-10-19-hover-is-a-move apply; anything beyond
+      transform-only motion needs a new ruling.
+- [ ] /contact: pre-fill the form from the page the visitor came from (owner, 31 Oct 2026).
+- [ ] Rewrite ch05 §9 placement specs from the shipped components (addendum B6; owner, 4 Nov 2026).
 
-**Content asks, addressed later.** The design is content-agnostic for now, so nothing here blocks
-a phase: `TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in
+**Content asks, addressed later.** The design is content-agnostic, so nothing here blocks the work:
+`TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in
 `docs/content-changes.md`.
