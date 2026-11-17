@@ -125,7 +125,7 @@ const FRAME_MS = 1000 / 30;
    thread on decoration: SLOW_FRAMES ticks in a row each SLOW_FRAME_MS or more apart (three times the
    frame interval) stop the motion for the life of the context. Without a GPU, WebGL rasterises on
    the CPU — about 140 ms a frame on PageSpeed's mobile run, 20 s of blocking on /contact (performance
-   pass, 6 Nov 2026) — so a software renderer holds from the first frame without waiting to measure. */
+   pass, 6 Nov 2026) — so a software renderer draws no field at all (see the effect below). */
 const SLOW_FRAME_MS = 100;
 const SLOW_FRAMES = 3;
 const SOFTWARE_GL = /swiftshader|llvmpipe|software|softpipe|basic render/i;
@@ -159,8 +159,8 @@ const LIVE_MARGIN = '100% 0px';
  *
  * Decorative: hidden from assistive tech, no pointer events. Motion only while on screen and the
  * tab is visible; under prefers-reduced-motion, or where the machine cannot keep the frame budget
- * (SLOW_FRAME_MS, a software renderer at once), it is drawn once and holds. Without WebGL it draws
- * nothing and the ground stands plain.
+ * (SLOW_FRAME_MS), it is drawn once and holds. Without WebGL, or on a software renderer (no GPU),
+ * it draws nothing and the ground stands plain.
  *
  * A WebGL context is held only while the field is within a screen of the viewport (LIVE_MARGIN), so
  * any number of fields can share a page. Each time it comes near it draws on a fresh canvas (`key`),
@@ -207,6 +207,15 @@ export function TextureFlow({
       alpha: true,
     });
     if (!gl) return;
+    /* A software renderer (no GPU: PageSpeed's machines, a VM, a blocklisted driver) gets no field: the
+       ground stands plain, as it does without WebGL. Even one held frame was the heaviest thing on
+       /contact under PageSpeed — compiling and drawing on the CPU blocked the main thread for up to
+       2 s on a slow run (17 Nov 2026) — so it steps aside before compiling anything. */
+    if (isSoftwareGL(gl)) {
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      canvas.setAttribute('data-lost', '');
+      return;
+    }
     /* A lost context (a GPU reset, or the browser's cap on live contexts when a page carries many
        fields, as the CtaSection specimen does) leaves the canvas painting the browser's own
        placeholder over the island. The field is decoration: it steps aside and the ground stands
@@ -265,7 +274,7 @@ export function TextureFlow({
       /* The frame budget (SLOW_FRAME_MS): the previous tick, and how many slow ticks in a row. */
       prevTick = 0,
       slowTicks = 0,
-      stalled = isSoftwareGL(gl);
+      stalled = false;
 
     const measure = () => {
       /* The canvas's own box: the host's, or taller where the field bleeds past it. */
