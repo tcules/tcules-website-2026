@@ -13,7 +13,8 @@ enforced_by: 'workflow (.github/workflows/new-cms-sync.yml opens the new-cms →
 `new-cms` is the production branch: it reads Strapi, the live site deploys from it, and Mihir commits to
 it directly. `main` is staging: the same CMS-connected site plus `/design`, deployed to its own Railway
 project. Production comes down to staging by merging `new-cms` into `main`, through the PR that
-`new-cms-sync.yml` keeps open. Staging goes up to production one PR per change, never by merging `main`
+`new-cms-sync.yml` keeps open, run once a day and when a session starts work (owner: every 30 minutes
+was too often). Staging goes up to production one PR per change, never by merging `main`
 into `new-cms`. `/design` and its checks (`specimens:check`, the `/design` route names in
 `src/lib/routes.ts`, `public/design/`) exist on `main` only. On production they're deleted, not hidden.
 
@@ -30,6 +31,8 @@ has `new-cms`'s history, so the next sync replays the same commits as conflicts.
 
 **How to apply.**
 
+- A session's catch-up (CLAUDE.md) runs `gh workflow run new-cms-sync.yml` when `new-cms` is ahead of
+  `main`. The daily run at 08:00 India time covers days with no session.
 - Merge the sync PR with "Create a merge commit". Resolve a conflict on `sync/new-cms`, never on
   `new-cms`, keeping `main`'s side for anything under `/design`.
 - Send a frontend change up as its own PR to `new-cms`, or open it against `new-cms` from the start
