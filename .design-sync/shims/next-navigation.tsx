@@ -22,3 +22,14 @@ export function usePathname(): string {
 export function notFound(): never {
   throw new Error('notFound()');
 }
+
+/**
+ * The listings Finder (ListingIndex) reads `useRouter()` to `replace` the URL as filters change.
+ * A static card has no route to change, so every method is a no-op: the Finder still renders and
+ * filters in place, and nothing navigates out of the artifact frame.
+ */
+const noop = () => {};
+const router = { push: noop, replace: noop, refresh: noop, back: noop, forward: noop, prefetch: noop };
+export function useRouter(): typeof router {
+  return router;
+}

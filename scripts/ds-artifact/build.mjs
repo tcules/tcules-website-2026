@@ -121,9 +121,15 @@ const common = {
   legalComments: 'none',
   charset: 'utf8',
   logLevel: 'silent',
-  define: { 'process.env.NODE_ENV': '"production"' },
+  /* The bundle runs in a browser frame, where `process` does not exist: every `process.env` read the
+     library makes is defined here. SITE_URL is unset, so routes.ts takes its own default origin. */
+  define: { 'process.env.NODE_ENV': '"production"', 'process.env.SITE_URL': 'undefined' },
   tsconfig: join(ROOT, 'tsconfig.json'),
-  alias: { 'next/link': join(SHIMS, 'next-link.tsx'), 'next/navigation': join(SHIMS, 'next-navigation.tsx') },
+  alias: {
+    'next/link': join(SHIMS, 'next-link.tsx'),
+    'next/navigation': join(SHIMS, 'next-navigation.tsx'),
+    'next/form': join(SHIMS, 'next-form.tsx'),
+  },
   loader: { '.svg': 'dataurl', '.png': 'dataurl', '.webp': 'dataurl', '.jpg': 'dataurl' },
 };
 const REACT = { react: 'React', 'react-dom': 'ReactDOM', 'react-dom/client': 'ReactDOM' };
@@ -251,6 +257,8 @@ function s(v){if(!P.some(function(d){return v.indexOf('/'+d+'/')>=0}))return v;r
 function fix(el){if(!el||el.nodeType!==1)return;['src','poster','href'].forEach(function(a){if(a==='href'&&el.tagName!=='LINK')return;var v=el.getAttribute(a);if(v){var n=f(v);if(n!==v)el.setAttribute(a,n)}});
 var ss=el.getAttribute('srcset');if(ss){var n=s(ss);if(n!==ss)el.setAttribute('srcset',n)}
 var st=el.getAttribute('style');if(st&&st.indexOf('url(')>=0){var r=st.replace(/url\\((['"]?)(\\/[^'")]+)/g,function(m,q,u){return 'url('+q+f(u)});if(r!==st)el.setAttribute('style',r)}}
+var SA=Element.prototype.setAttribute;Element.prototype.setAttribute=function(n,v){if(n==='poster'||n==='src')v=f(v);else if(n==='srcset')v=s(String(v));return SA.call(this,n,v)};
+if(typeof window.fetch==='function'){var F=window.fetch;window.fetch=function(u,o){return F.call(this,typeof u==='string'?f(u):u,o)}}
 new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='attributes')fix(m.target);else m.addedNodes.forEach(function(n){if(n.nodeType===1){fix(n);n.querySelectorAll('*').forEach(fix)}})})})
 .observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['src','srcset','poster','style']});})();`;
 
