@@ -2,13 +2,20 @@
 
 import { type FormEvent, useRef, useState } from 'react';
 
-import { Button, Cluster, Input } from '@/components';
+import {
+  Button,
+  Cluster,
+  Input,
+  TurnstileWidget,
+  type TurnstileWidgetHandle,
+} from '@/components';
 
 import styles from './SiteFooter.module.css';
 import type { SiteFooterNewsletter } from './types';
 
 export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFooterNewsletter) {
   const inFlight = useRef(false);
+  const turnstile = useRef<TurnstileWidgetHandle>(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -17,17 +24,38 @@ export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFoo
     if (inFlight.current) return;
 
     const form = event.currentTarget;
+    if (!form.reportValidity()) return;
     const data = new FormData(form);
     inFlight.current = true;
     setSubmitting(true);
     setMessage('');
     try {
+      let token: string | undefined;
+      try {
+        token = await turnstile.current?.requestToken();
+      } catch (error) {
+        setMessage(
+          error instanceof Error ? error.message : 'Verification failed. Please try again.',
+        );
+        return;
+      }
+      if (!token) {
+        setMessage('Verification is unavailable. Please try again.');
+        return;
+      }
+      data.set('turnstileToken', token);
       const response = await fetch(action, { method: 'POST', body: data });
       if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as {
+          code?: string;
+          error?: string;
+        } | null;
         setMessage(
-          response.status === 400
-            ? 'Enter a valid email address.'
-            : 'We could not subscribe you. Please try again.',
+          result?.code === 'turnstile'
+            ? result.error || 'Verification failed. Please try again.'
+            : response.status === 400
+              ? 'Enter a valid email address.'
+              : 'We could not subscribe you. Please try again.',
         );
         return;
       }
@@ -71,6 +99,7 @@ export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFoo
           {cta.label}
         </Button>
       </Cluster>
+      <TurnstileWidget ref={turnstile} />
       <p className={styles.body} role="status">
         {submitting ? 'Subscribing…' : message}
       </p>

@@ -124,21 +124,19 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
     };
   }
 
-  if (kind !== 'newsletter') {
-    const verification = await verifyTurnstile(get('turnstileToken'));
-    if (verification !== 'verified') {
-      const unavailable = verification === 'unavailable';
-      return Response.json(
-        {
-          ok: false,
-          code: 'turnstile',
-          error: unavailable
-            ? 'Verification is unavailable. Please try again later.'
-            : 'Verification failed. Please try again.',
-        },
-        { status: unavailable ? 503 : 400, headers: { 'Cache-Control': 'no-store' } },
-      );
-    }
+  const verification = await verifyTurnstile(get('turnstileToken'));
+  if (verification !== 'verified') {
+    const unavailable = verification === 'unavailable';
+    return Response.json(
+      {
+        ok: false,
+        code: 'turnstile',
+        error: unavailable
+          ? 'Verification is unavailable. Please try again later.'
+          : 'Verification failed. Please try again.',
+      },
+      { status: unavailable ? 503 : 400, headers: { 'Cache-Control': 'no-store' } },
+    );
   }
 
   try {
