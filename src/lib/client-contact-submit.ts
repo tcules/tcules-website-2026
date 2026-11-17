@@ -1,5 +1,6 @@
 import { ENDPOINTS } from './routes';
 import { appendHubSpotAttribution } from './hubspot-attribution';
+import { leadTrackingReady } from './tracking-start';
 
 type OpenAiPixel = (
   command: 'measure',
@@ -7,8 +8,11 @@ type OpenAiPixel = (
   properties: { type: 'customer_action' },
 ) => void;
 
-function trackLead(body: FormData) {
+async function trackLead(body: FormData) {
   if (document.body.dataset.trackingEnabled !== 'true') return;
+  /* Tracking loads after the page is ready (lib/tracking-start); a lead never reports before its
+     tags are listening. Filling the form started them, so this is normally immediate. */
+  await leadTrackingReady();
 
   try {
     const oaiq = (window as Window & { oaiq?: OpenAiPixel }).oaiq;
@@ -61,11 +65,8 @@ export async function submitProtectedForm(
   }
   const response = await fetch(ENDPOINTS.clientContact, { method: 'POST', body });
   if (response.ok) {
-    try {
-      trackLead(body);
-    } catch {
-      // Tracking must not change the result of a successful submission.
-    }
+    // Tracking must not change or delay the result of a successful submission.
+    trackLead(body).catch(() => {});
     return { ok: true };
   }
 
