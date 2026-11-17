@@ -18,20 +18,24 @@ The handoff and launch tracker (Stages 0–6, closed 17 Nov 2026) is in git hist
 Jatin's new copy and layouts for Home, Product Design, Design-led MVP Development, Product
 Modernisation, B2B SaaS expertise, How we work, About, Careers and Contact, laptop and phone:
 https://claude.ai/artifact/RJaNv6S6sQf9qQj7JsB4HP (the top rows are the final picks; the archive below
-them is superseded). Content is fixture-only for the preview; Strapi is updated when the designs go to
-production.
+them is superseded). The pages are built on their real routes on staging (`main`), with fixture content;
+Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 ### Rulings (each logged with `/decide` in the PR that applies it)
 
 - [ ] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026).
 - [ ] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026).
 - [ ] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026).
-- [ ] **O.4** The client-logo marquee's motion: speed, pause control, hover, reduced motion (with O.6).
+- [ ] **O.4** The client-logo marquee's motion: speed, hover pauses the row and highlights the logo, no pause
+      button, reduced motion (with O.6).
+- [ ] **O.4a** decisions/2026-10-19-hover-is-a-move is scoped to cards with an interactive flat drawing;
+      it does not govern the marquee, buttons or other controls (owner, 17 Nov 2026).
 
 ### New components
 
-- [ ] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch;
-      `VoiceLedger` is retired once About and `/expertise/healthtech` stop using it.
+- [ ] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch.
+- [ ] **O.5a** Retire `VoiceLedger`: `/expertise/healthtech`'s hard-parts band moves to the existing ruled
+      tile set it already looks like; About's unused code path, the specimen and its token layer go.
 - [ ] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`.
 - [ ] **O.7** The six sides of a B2B product: the wheel and its six annotated sides (SaaS).
 - [ ] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
