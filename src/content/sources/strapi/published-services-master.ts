@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import type { LogoGridMark } from '@/patterns';
 
+import { markSrc } from '@/lib/image-resize';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { sketchForRoute } from '@/lib/sketches';
 import type {
@@ -295,13 +296,14 @@ export const getPublishedServicesMaster = cache(
     const sections = rows(serviceMaster.content).flatMap(
       (section) => mapSection(section) ?? [],
     );
-    // CSS masks need CORS. Embed CMS logos so the existing styling works with this upload host.
+    // CSS masks need CORS. A raster mark is drawn from its same-origin resized copy (ClientMark,
+    // lib/image-resize § markSrc); any other CMS logo is embedded so the styling still works.
     for (const section of sections) {
       if (section.type !== 'clients') continue;
       section.marks = (
         await Promise.all(
           section.marks.map(async (mark) => {
-            if (!mark.src) return mark;
+            if (!mark.src || markSrc(mark.src)) return mark;
             try {
               const response = await fetch(mark.src, {
                 cache: 'no-store',

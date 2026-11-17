@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import { markSrc } from '@/lib/image-resize';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import type { LogoGridMark } from '@/patterns';
 import type { CaseGroup, CaseItem } from '@/templates';
@@ -83,13 +84,13 @@ type TaggedCase = CaseItem & { tags: Tags };
 
 const warn = (message: string) => console.warn(`New CMS ${ROUTES.caseStudies}: ${message}`);
 
-// CSS masks require CORS. The CMS's public asset bucket omits that header, so serve
-// the original mark bytes inline and keep ClientMark's ink and sizing rules.
+// CSS masks require CORS. A raster mark is drawn from its same-origin resized copy (ClientMark,
+// lib/image-resize § markSrc), so only an SVG from the CMS bucket is still inlined here.
 const MARK_ASSET_ORIGIN = 'https://pub-03a6bf73987b442ab0a1b4037ec6740c.r2.dev';
 const MARK_MAX_BYTES = 128 * 1024;
 
 async function maskSource(src: string): Promise<string | undefined> {
-  if (new URL(src).origin !== MARK_ASSET_ORIGIN) return src;
+  if (new URL(src).origin !== MARK_ASSET_ORIGIN || markSrc(src)) return src;
   try {
     const response = await fetch(src, {
       redirect: 'error',

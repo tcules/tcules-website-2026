@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 
 import { cx } from '@/lib/cx';
+import { markSrc } from '@/lib/image-resize';
 
 import styles from './ClientMark.module.css';
 
@@ -154,7 +155,8 @@ export function ClientMark({
      the declaration is invalid, the width computes to nothing, and every mark in the strip
      collapses to zero with no error. A number computed once on the server costs nothing. */
   const vars = {
-    '--cmark-src': cssUrl(src),
+    /* A CMS raster is drawn from its same-origin copy (lib/image-resize § markSrc). */
+    '--cmark-src': cssUrl(markSrc(src) ?? src),
     '--cmark-ratio': round(ratio),
     '--cmark-ratio-root': round(Math.sqrt(ratio)),
     '--cmark-correction': round(1 + k),
