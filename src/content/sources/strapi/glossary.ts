@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   GlossaryAction,
   GlossaryBlock,
@@ -19,8 +20,7 @@ import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from
 import { mapTable } from './table';
 import type { StrapiContentColumn, StrapiLabelledItem, StrapiLink } from './types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const GLOSSARY_REVALIDATE_SECONDS = 300;
+const GLOSSARY_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
@@ -33,9 +33,6 @@ function joinCopy(parts: Array<string | undefined>, separator = ' '): string {
     .join(separator);
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function mapAction(link: StrapiLink | null | undefined): GlossaryAction | undefined {
   const label = value(link?.name);
@@ -543,7 +540,7 @@ function mapGlossary(raw: StrapiGlossary, graphqlUrl: string): GlossaryPage | nu
 
 async function fetchGlossaryBySlug(slug: string): Promise<StrapiGlossary | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -551,7 +548,7 @@ async function fetchGlossaryBySlug(slug: string): Promise<StrapiGlossary | null>
     },
     body: JSON.stringify({
       query: GLOSSARY_BY_SLUG_QUERY,
-      variables: { slug, status: 'DRAFT' },
+      variables: { slug, status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
     next: {

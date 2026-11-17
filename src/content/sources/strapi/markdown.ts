@@ -196,6 +196,16 @@ function normaliseSource(markdown: string): string {
     .trim();
 }
 
+export function markdownInlineToHtml(markdown: string | null | undefined): string {
+  return (
+    markdown
+      ?.trim()
+      .split(/\n\s*\n/u)
+      .map((paragraph) => renderInline(joinLines(paragraph.split('\n'))))
+      .join('<br><br>') ?? ''
+  );
+}
+
 export function markdownToHtml(
   markdown: string | null | undefined,
   context: string,

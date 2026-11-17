@@ -1,8 +1,8 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type { SitePage, SitePageFamily, SitePagesContentSource } from '../../types';
 import { SITE_PAGES_QUERY } from './site-pages-query';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const SITE_PAGES_REVALIDATE_SECONDS = 300;
+const SITE_PAGES_REVALIDATE_SECONDS = false;
 
 type StrapiSlugEntry = {
   slug?: string | null;
@@ -61,12 +61,9 @@ function routeSlug(family: SitePageFamily, candidate: string | null | undefined)
   return LAST_SEGMENT_ONLY.has(family) ? (segments.at(-1) ?? '') : segments.join('/');
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 async function fetchSitePages(): Promise<StrapiSitePagesResponse['data']> {
-  const response = await fetch(getStrapiGraphqlUrl(), {
+  const response = await cachedCmsFetch(getStrapiGraphqlUrl(), {
     method: 'POST',
     headers: {
       accept: 'application/json',

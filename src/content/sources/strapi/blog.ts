@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   BlogAction,
   BlogBlock,
@@ -26,17 +27,13 @@ import { markdownToHtml, resolveInPageAnchors, type BodyHeading } from './markdo
 import { authoredDate, publishedLine } from './published-line';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const BLOG_REVALIDATE_SECONDS = 300;
+const BLOG_REVALIDATE_SECONDS = false;
 const BLOG_RESOURCE_LIMIT = 3;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function normaliseSlug(candidate: string | null | undefined): string {
   return value(candidate)
@@ -458,7 +455,7 @@ function structuredData(candidate: unknown): ContentSeo['structuredData'] {
 function canonicalUrl(candidate: string | null | undefined): string | undefined {
   const source = value(candidate);
   if (!source.startsWith('http://') && !source.startsWith('https://')) return undefined;
-  return absoluteUrl(source, DEFAULT_STRAPI_GRAPHQL_URL);
+  return absoluteUrl(source, getStrapiGraphqlUrl());
 }
 
 function mapSeo(rawSeo: StrapiBlogSeo | null | undefined): ContentSeo | undefined {
@@ -645,7 +642,7 @@ async function fetchBlogBySlug(slug: string): Promise<{
   resources: StrapiBlogResource[];
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

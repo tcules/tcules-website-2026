@@ -3,30 +3,22 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import {
-  getBlogPage,
-  getCaseStudyListingPage,
-  getCaseStudyPage,
+  getAuthorShareProfile,
+  getCaseCoverFallback,
+  getCaseStudyDetail,
   getCorpusPage,
-  getEventPage,
-  listAuthors,
-  listSitePages,
-  type SitePageFamily,
+  getPageSeo,
+  getResourceDetail,
 } from '@/content';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import { inlineToText } from '@/lib/inline';
 import {
   auditPath,
-  authorPath,
   blogPath,
   CASE_SLUG_REDIRECTS,
-  caseStudyPath,
-  eventPath,
   expertisePath,
-  glossaryPath,
-  podcastPath,
   ROUTES,
   servicePath,
-  toolPath,
 } from '@/lib/routes';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
@@ -53,42 +45,10 @@ const HERO_CUTS: Readonly<Record<string, string>> = {
     'How to build a SaaS design system',
 };
 
-const FAMILY_PATH: Record<SitePageFamily, (slug: string) => string> = {
-  service: servicePath,
-  audit: auditPath,
-  expertise: expertisePath,
-  glossary: glossaryPath,
-  tool: toolPath,
-  insight: blogPath,
-  podcast: podcastPath,
-  event: eventPath,
-  caseStudy: caseStudyPath,
-};
-
-/** Every CMS entry's title by path, read once per build. An outage leaves the corpus cards standing. */
-let cmsTitles: Promise<Map<string, string>> | undefined;
-function cmsTitle(path: string): Promise<string | undefined> {
-  cmsTitles ??= listSitePages()
-    .then((pages) => new Map(pages.map((page) => [FAMILY_PATH[page.family](page.slug), page.title])))
-    .catch((error: unknown) => {
-      console.error('share cards: Strapi titles unavailable', error);
-      return new Map<string, string>();
-    });
-  return cmsTitles.then((titles) => titles.get(path));
-}
-
-/** Everyone with an author page, by path, read once per build. */
-type Person = { name: string; role?: string; image?: { src: string; width: number; height: number } };
-let authors: Promise<Map<string, Person>> | undefined;
-function author(path: string) {
-  authors ??= listAuthors()
-    .then((list) => new Map(list.map((one) => [authorPath(one.slug), one])))
-    .catch((error: unknown) => {
-      console.error('share cards: authors unavailable', error);
-      return new Map<string, Person>();
-    });
-  return authors.then((byPath) => byPath.get(path));
-}
+// Share images are generated in static route handlers, which need cacheable CMS requests.
+const SHARE_REVALIDATE_SECONDS = 300;
+type Resource = Awaited<ReturnType<typeof getResourceDetail>>;
+type CaseStudy = Awaited<ReturnType<typeof getCaseStudyDetail>>;
 
 /**
  * A drawing a page's card carries that is not its hero's: the hero table (HERO_ILLUSTRATIONS) answers
@@ -102,37 +62,12 @@ const CARD_DRAWINGS: Readonly<Record<string, { src: string; width: number; heigh
 };
 
 /**
- * Each case's V1 cover by live slug, read once per build: the listing carries it over the Strapi
- * thumbnail (fixtures/case-covers.ts, owner 3 Nov 2026). Only a delivered V1 cover is taken here; a case
- * without one keeps its Strapi banner.
- */
-let caseCovers: Promise<Map<string, { src: string; width: number; height: number }>> | undefined;
-function caseCover(slug: string) {
-  caseCovers ??= getCaseStudyListingPage(ROUTES.caseStudies.slice(1))
-    .then((listing) => {
-      const covers = new Map<string, { src: string; width: number; height: number }>();
-      for (const item of listing?.items ?? []) {
-        const image = item.thumbnail;
-        if (image?.src.startsWith('/case-covers/') && image.width && image.height) {
-          covers.set(item.slug, { src: image.src, width: image.width, height: image.height });
-        }
-      }
-      return covers;
-    })
-    .catch((error: unknown) => {
-      console.error('share cards: case covers unavailable', error);
-      return new Map<string, { src: string; width: number; height: number }>();
-    });
-  return caseCovers.then((covers) => covers.get(CASE_SLUG_REDIRECTS[slug] ?? slug));
-}
-
-/**
  * The page's picture (owner, 4 Nov 2026):
  * - its own hero drawing, where it has one;
  * - else its family hub's drawing until its own lands: a service's line, /audits for an audit,
  *   /expertise for an expertise page (expertise pages take illustrations, never photographs), /tools
  *   for a tool;
- * - a case study's V1 cover (owner, 5 Nov 2026), else its banner from Strapi;
+ * - a case study's published banner, with its local V1 cover as a fallback;
  * - a video's YouTube thumbnail, else its cover from Strapi;
  * - an article's or an event's cover from Strapi.
  * Glossary terms, tools, listings and legal pages have none and set their title alone. A failure to
@@ -175,40 +110,25 @@ async function youtubeThumbnail(id: string): Promise<{ src: string; width: numbe
   }
 }
 
-async function mediaFor(path: string): Promise<{ media: ShareMedia; source: ShareSource } | null> {
+async function mediaFor(path: string, resource: Resource, caseStudy: CaseStudy) {
   const drawing = drawingFor(path);
   if (drawing) return drawing;
 
-  const [, family, slug, ...rest] = path.split('/');
-  const capture = (image: { src: string; width: number; height: number }): ShareMedia => ({
-    kind: 'capture',
-    src: image.src,
-    width: image.width,
-    height: image.height,
-  });
-  try {
-    if (family === 'case-studies' && slug && rest.length === 0) {
-      const image = (await caseCover(slug)) ?? (await getCaseStudyPage(slug))?.heroImage;
-      if (image) return { media: capture(image), source: 'banner' };
-    }
-    if (family === 'insights' && slug === 'events' && rest[0]) {
-      const image = (await getEventPage(rest[0]))?.featureImage;
-      if (image) return { media: capture(image), source: 'cover' };
-    }
-    if (family === 'insights' && slug === 'videos' && rest.length > 0) {
-      const blog = await getBlogPage([slug, ...rest].join('/'));
-      const thumbnail = blog?.heroVideo ? await youtubeThumbnail(blog.heroVideo.id) : null;
-      if (thumbnail) return { media: capture(thumbnail), source: 'video' };
-      if (blog?.featureImage) return { media: capture(blog.featureImage), source: 'cover' };
-    }
-    if (family === 'insights' && slug && !['authors', 'events', 'podcasts', 'videos'].includes(slug)) {
-      const image = (await getBlogPage([slug, ...rest].join('/')))?.featureImage;
-      if (image) return { media: capture(image), source: 'cover' };
-    }
-  } catch (error) {
-    console.error(`share cards: no picture for ${path}`, error);
-  }
-  return null;
+  const video = resource?.heroVideo;
+  const thumbnail = video ? await youtubeThumbnail(video.id) : null;
+  const [, family, slug] = path.split('/');
+  const hero = caseStudy?.hero.media;
+  const cover =
+    thumbnail ??
+    resource?.bannerImage ??
+    resource?.thumbnail ??
+    (hero?.type === 'image' ? hero.image : undefined) ??
+    (family === 'case-studies' && slug ? getCaseCoverFallback(CASE_SLUG_REDIRECTS[slug] ?? slug) : undefined);
+  if (!cover?.width || !cover.height) return null;
+  return {
+    media: { kind: 'capture', src: cover.src, width: cover.width, height: cover.height } as const,
+    source: thumbnail ? ('video' as const) : caseStudy ? ('banner' as const) : ('cover' as const),
+  };
 }
 
 /**
@@ -223,8 +143,10 @@ async function fingerprintOf(media: ShareMedia): Promise<string> {
 
 async function pictureFor(
   path: string,
+  resource: Resource,
+  caseStudy: CaseStudy,
 ): Promise<{ media: ShareMedia; source: ShareSource; fingerprint: string } | null> {
-  const found = await mediaFor(path);
+  const found = await mediaFor(path, resource, caseStudy);
   return found ? { ...found, fingerprint: await fingerprintOf(found.media) } : null;
 }
 
@@ -234,21 +156,43 @@ async function pictureFor(
  * link ever unfurls without an image.
  */
 export async function shareCardFor(path: string): Promise<ShareCard> {
+  const [, family, slug, ...rest] = path.split('/');
+  const isResource = family === 'insights' && slug && slug !== 'authors';
+  const isCaseStudy = family === 'case-studies' && slug && !rest.length;
+  const authorSlug = family === 'insights' && slug === 'authors' && rest.length === 1
+    ? rest[0]
+    : undefined;
+  const [resource, caseStudy] = await Promise.all([
+    isResource
+      ? getResourceDetail([slug, ...rest].join('/'), SHARE_REVALIDATE_SECONDS).catch((error) => {
+          console.error(`share cards: resource unavailable for ${path}`, error);
+          return null;
+        })
+      : null,
+    isCaseStudy
+      ? getCaseStudyDetail(CASE_SLUG_REDIRECTS[slug] ?? slug, SHARE_REVALIDATE_SECONDS).catch((error) => {
+          console.error(`share cards: case study unavailable for ${path}`, error);
+          return null;
+        })
+      : null,
+  ]);
   const page = await getCorpusPage(path);
-  if (page) {
+  if (page && resource?.kind !== 'event' && resource?.kind !== 'podcast') {
     return shareCard({
       path,
       title: page.hero.titleText,
       eyebrow: page.hero.eyebrow ? inlineToText(page.hero.eyebrow) : null,
       name: page.name,
       cut: HERO_CUTS[path],
-      ...(await pictureFor(path)),
+      ...(await pictureFor(path, resource, caseStudy)),
     });
   }
-  /* A person's card carries their face: their photograph, else their initials in its square, as
-     the byline draws them (decisions/2026-11-01-byline-initials-without-a-photo); their position
-     sits under their name (owner, 5 Nov 2026). */
-  const person = await author(path);
+  const person = authorSlug
+    ? await getAuthorShareProfile(authorSlug, SHARE_REVALIDATE_SECONDS).catch((error) => {
+        console.error(`share cards: author unavailable for ${path}`, error);
+        return null;
+      })
+    : null;
   if (person) {
     const photo = person.image && !(await isCutOut(person.image.src)) ? person.image : undefined;
     return shareCard({
@@ -273,10 +217,18 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
         : { initials: initialsOf(person.name), source: 'initials' as const, fingerprint: 'initials' }),
     });
   }
-  const title = await cmsTitle(path);
+  const title = resource?.title ?? caseStudy?.hero.title;
   if (title) {
-    const picture = await pictureFor(path);
-    return shareCard({ path, title, eyebrow: null, name: title, cut: HERO_CUTS[path], ...picture });
+    const picture = await pictureFor(path, resource, caseStudy);
+    return shareCard({ path, title, eyebrow: resource?.eyebrow ?? null, name: title, cut: HERO_CUTS[path], ...picture });
+  }
+  if (isResource || isCaseStudy || authorSlug)
+    return shareCard({ path, title: 'Tcules', eyebrow: null, name: 'Tcules' });
+
+  const { metadata } = await getPageSeo(path, SHARE_REVALIDATE_SECONDS);
+  if (typeof metadata.title === 'string') {
+    const picture = await pictureFor(path, resource, caseStudy);
+    return shareCard({ path, title: metadata.title, eyebrow: null, name: metadata.title, ...picture });
   }
   if (path !== ROUTES.home) return { ...(await shareCardFor(ROUTES.home)), path };
   return shareCard({ path, title: 'Tcules', eyebrow: null, name: 'Tcules' });

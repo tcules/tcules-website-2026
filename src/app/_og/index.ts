@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import type { ShareCard } from './card';
 import { shareCardFor } from './resolve';
 import { renderShareCard, SHARE_SIZE } from './render';
 
@@ -52,7 +53,18 @@ export const shareImagePath = (path: string, id: string) =>
  * from its segment's file; this is the same card by another door.
  */
 export async function withShareImage(metadata: Metadata, path: string): Promise<Metadata> {
-  const card = await shareCardFor(path);
+  // Authored social metadata takes precedence, including Next's Open Graph to Twitter fallback.
+  if (metadata.openGraph?.images !== undefined || metadata.twitter?.images !== undefined) {
+    return metadata;
+  }
+
+  let card: ShareCard;
+  try {
+    card = await shareCardFor(path);
+  } catch (error) {
+    console.warn(`share cards: fallback unavailable for ${path}`, error);
+    return metadata;
+  }
   const image = {
     url: shareImagePath(path, card.id),
     ...SHARE_SIZE,
@@ -62,6 +74,6 @@ export async function withShareImage(metadata: Metadata, path: string): Promise<
   return {
     ...metadata,
     openGraph: { ...metadata.openGraph, images: [image] },
-    twitter: { ...metadata.twitter, card: 'summary_large_image', images: [image] },
+    twitter: { card: 'summary_large_image', ...metadata.twitter, images: [image] },
   };
 }

@@ -68,6 +68,8 @@ export type EngagementOption = {
   eyebrow?: string;
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
   title: string;
+  /** An optional authored link target for the option. */
+  anchorId?: string;
   /** What it is: plain text, or inline content the caller renders (a link to the team that builds). */
   body: ReactNode;
   /**
@@ -77,6 +79,8 @@ export type EngagementOption = {
   more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
+  /** Authored artwork for the option. Replaces its registered scope drawing when provided. */
+  art?: ReactNode;
   /**
    * `cards` only: the glyph that heads the option, composed by the caller (a pattern takes its
    * sibling as a node): glyph, then label and name, then words, each on its own row. Set on every
@@ -163,6 +167,8 @@ export type EngagementOptionsProps = {
   surface?: SectionSurface;
   /** Default `grid`. See `EngagementArrangement`. */
   arrangement?: EngagementArrangement;
+  /** The first illustrated row's artwork position. Following rows alternate. */
+  mediaSide?: 'start' | 'end';
 };
 
 /** The scope's drawing: a kit scene, on its plate, in the grammar every flat drawing shares. */
@@ -197,6 +203,7 @@ export function EngagementOptions({
   action,
   surface = 'paper',
   arrangement = 'grid',
+  mediaSide,
 }: EngagementOptionsProps) {
   /* An option with no name is dropped, except as a card: a card may be its glyph and words alone, as
      a set of one-line points (/how-we-work "How we use AI", owner 4 Nov 2026: "3 cards, one for each
@@ -207,7 +214,7 @@ export function EngagementOptions({
   );
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
-  const anyDrawn = shown.some((option) => option.scope);
+  const anyDrawn = shown.some((option) => option.art || option.scope);
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
   /* The terms sit on the options' own track count from 1024. */
@@ -270,12 +277,13 @@ export function EngagementOptions({
                 {shown.map((option) => {
                   const card = (
                     <Layout rowGap="block">
-                      {option.scope ? (
-                        <Drawing scope={option.scope} />
-                      ) : anyDrawn ? (
-                        /* Not drawn yet, in a set that is: the empty plate holds its place. */
-                        <Sketch />
-                      ) : null}
+                      {option.art ??
+                        (option.scope ? (
+                          <Drawing scope={option.scope} />
+                        ) : anyDrawn ? (
+                          /* Not drawn yet, in a set that is: the empty plate holds its place. */
+                          <Sketch />
+                        ) : null)}
                       <Layout rowGap="text">
                         <OptionHead
                           option={option}
@@ -306,14 +314,16 @@ export function EngagementOptions({
                 {shown.map((option, index) => (
                   <li key={option.title || index} className={styles.card}>
                     <Layout rowGap="block">
-                      {option.icon ? (
-                        <span className={styles.cellIcon} aria-hidden="true">
-                          {option.icon}
-                        </span>
-                      ) : null}
+                      {option.art ??
+                        (option.icon ? (
+                          <span className={styles.cellIcon} aria-hidden="true">
+                            {option.icon}
+                          </span>
+                        ) : null)}
                       <Layout rowGap="text">
                         <OptionHead option={option} className={styles.title} />
                         <OptionBody option={option} className={styles.body} />
+                        {option.facts?.length ? <Facts facts={option.facts} /> : null}
                       </Layout>
                     </Layout>
                   </li>
@@ -321,6 +331,9 @@ export function EngagementOptions({
               </Layout>
             ) : arrangement === 'compare' ? (
               <>
+                {shown.map((option) =>
+                  option.anchorId ? <span key={option.anchorId} id={option.anchorId} /> : null,
+                )}
                 {/* From 1024: the options head the set three across, then each fact runs as one ruled
                   row, its key over the three values aligned under their option, so a read across a
                   row compares the deals (owner, 1 Nov 2026, /how-we-work). Below 1024 there is no
@@ -329,11 +342,11 @@ export function EngagementOptions({
                   <Compare shown={shown} />
                 </div>
                 <div className={styles.compareNarrow}>
-                  <Rows shown={shown} />
+                  <Rows shown={shown} showAnchors={false} mediaSide={mediaSide} />
                 </div>
               </>
             ) : (
-              <Rows shown={shown} />
+              <Rows shown={shown} mediaSide={mediaSide} />
             )}
             {closing ? (
               <Layout rowGap="block">
@@ -407,7 +420,15 @@ function Facts({ facts }: { facts: readonly EngagementFact[] }) {
 }
 
 /** One row per option, the drawing beside its words, sides swapping row by row. */
-function Rows({ shown }: { shown: readonly EngagementOption[] }) {
+function Rows({
+  shown,
+  showAnchors = true,
+  mediaSide = 'start',
+}: {
+  shown: readonly EngagementOption[];
+  showAnchors?: boolean;
+  mediaSide?: 'start' | 'end';
+}) {
   return (
     <Layout as="ul" rowGap="column">
       {shown.map((option, index) => (
@@ -416,15 +437,15 @@ function Rows({ shown }: { shown: readonly EngagementOption[] }) {
               by row from 768. Below 768 the drawing heads its words, full width at 2:1:
               beside them, the column gap left both too narrow. */}
           <Layout
-            columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-            reverse={{ md: index % 2 === 1 }}
+            columns={option.art || option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+            reverse={{ md: (index % 2 === 1) !== (mediaSide === 'end') }}
             colGap="column"
             rowGap="block"
             align="center"
           >
-            {option.scope ? <Drawing scope={option.scope} /> : null}
+            {option.art ?? (option.scope ? <Drawing scope={option.scope} /> : null)}
             <Layout rowGap="block">
-              <OptionHead option={option} className={styles.title} />
+              <OptionHead option={option} className={styles.title} showAnchor={showAnchors} />
               <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
               {option.facts && option.facts.length > 0 ? <Facts facts={option.facts} /> : null}
             </Layout>
@@ -452,9 +473,9 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
         {shown.map((option) => (
           <li key={option.title}>
             <Layout rowGap="block">
-              {option.scope ? <Drawing scope={option.scope} /> : <Sketch />}
+              {option.art ?? (option.scope ? <Drawing scope={option.scope} /> : <Sketch />)}
               <Layout rowGap="text">
-                <OptionHead option={option} className={styles.title} />
+                <OptionHead option={option} className={styles.title} showAnchor={false} />
                 <OptionBody option={option} className={styles.body} />
               </Layout>
             </Layout>
@@ -511,7 +532,7 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
                 (owner, 5 Nov 2026, final copy), both over the head's hairline. */}
             <Layout rowGap="tight" className={styles.planHead}>
               <OptionHead option={option} className={styles.planTitle} />
-              {option.body != null ? <p className={styles.planBody}>{option.body}</p> : null}
+              {option.body != null ? <OptionBody option={option} className={styles.planBody} /> : null}
             </Layout>
             {option.checklist && option.checklist.length > 0 ? (
               <Layout as="ul" rowGap="text">
@@ -527,6 +548,7 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
                 ))}
               </Layout>
             ) : null}
+            {option.facts?.length ? <Facts facts={option.facts} /> : null}
           </Layout>
           <Layout>{option.action ?? <div />}</Layout>
         </Layout>
@@ -536,8 +558,20 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
 }
 
 /** The option's name, with its eyebrow over it a `tight` step when it has one. */
-function OptionHead({ option, className }: { option: EngagementOption; className?: string }) {
-  const title = option.title ? <h3 className={className}>{option.title}</h3> : null;
+function OptionHead({
+  option,
+  className,
+  showAnchor = true,
+}: {
+  option: EngagementOption;
+  className?: string;
+  showAnchor?: boolean;
+}) {
+  const title = option.title ? (
+    <h3 id={showAnchor ? option.anchorId : undefined} className={className}>
+      {option.title}
+    </h3>
+  ) : null;
   if (!option.eyebrow) return title;
   return (
     <Layout rowGap="tight">

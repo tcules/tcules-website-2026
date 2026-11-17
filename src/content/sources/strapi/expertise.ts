@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ExpertiseAction,
   ExpertiseBlock,
@@ -22,8 +23,7 @@ import { markdownToHtml } from './markdown';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 import { mapTable } from './table';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const EXPERTISE_REVALIDATE_SECONDS = 300;
+const EXPERTISE_REVALIDATE_SECONDS = false;
 
 function value(rawValue: string | null | undefined): string {
   return typeof rawValue === 'string' ? rawValue.trim() : '';
@@ -36,9 +36,6 @@ function joinCopy(parts: Array<string | undefined>, separator = ' '): string {
     .join(separator);
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function mapAction(link: StrapiExpertiseLink | null | undefined): ExpertiseAction | undefined {
   const label = value(link?.name);
@@ -581,7 +578,7 @@ function mapExpertise(rawExpertise: StrapiExpertise, graphqlUrl: string): Expert
 
 async function fetchExpertiseBySlug(slug: string): Promise<StrapiExpertise | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -589,7 +586,7 @@ async function fetchExpertiseBySlug(slug: string): Promise<StrapiExpertise | nul
     },
     body: JSON.stringify({
       query: EXPERTISE_BY_SLUG_QUERY,
-      variables: { slug, status: 'DRAFT' },
+      variables: { slug, status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
     next: {

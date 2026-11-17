@@ -75,6 +75,9 @@ const railLabelOf = (heading: string) => {
 
 type TermEntry = { term: Term; card: string };
 
+/** One row of a term group: the term, its one-line definition, and the term page it opens. */
+type TermRow = { key: string; title: string; body?: string; href: string };
+
 /**
  * One group as a dictionary (owner, 4 Nov 2026: "the words/phrases are the important pieces; drawings
  * dilute the meaning"): one term a row, the term in the title's voice and its one-line definition
@@ -82,22 +85,30 @@ type TermEntry = { term: Term; card: string };
  * (decisions/2026-10-30 insight cards: a ruled list is fine at one item per row). The same row on a
  * term page's related terms (LongformShell `relatedTerms`).
  */
-function TermGroup({ terms }: { terms: readonly TermEntry[] }) {
+function TermGroup({ terms }: { terms: readonly TermRow[] }) {
   return (
     <Layout as="ul" columns={{ base: 1 }} rowGap="none">
-      {terms.map(({ term, card }) => (
+      {terms.map((term) => (
         <ListCard
-          key={term.link.href}
+          key={term.key}
           titleAs="h3"
           cue="arrow"
-          title={inlineToText(term.link.children)}
-          body={capitalised(card)}
-          href={term.link.href}
+          title={term.title}
+          body={term.body ? capitalised(term.body) : undefined}
+          href={term.href}
         />
       ))}
     </Layout>
   );
 }
+
+const corpusRows = (terms: readonly TermEntry[]): TermRow[] =>
+  terms.map(({ term, card }) => ({
+    key: term.link.href,
+    title: inlineToText(term.link.children),
+    body: card,
+    href: term.link.href,
+  }));
 
 export type GlossaryIndex = {
   hero: ListingHero;
@@ -150,7 +161,7 @@ export function glossaryIndex(page: CorpusPage): GlossaryIndex {
       railLabel: band.navLabel ?? railLabelOf(band.headingText),
       count: terms.length,
       band: 'listing-section',
-      content: <TermGroup terms={terms} />,
+      content: <TermGroup terms={corpusRows(terms)} />,
       note:
         notes.length > 0 ? (
           <Prose html={notes.map((runs) => paragraphHtml(runs)).join('')} />
@@ -182,5 +193,72 @@ export function glossaryIndex(page: CorpusPage): GlossaryIndex {
     sections,
     closing,
     after: page.bands.slice(lastGroup + 1),
+  };
+}
+
+/* ── The glossary hub from the CMS (Glossary Master single type) ─────────────────────
+   The same listing as above, handed plain data instead of corpus copy: the page reads the Glossary
+   Master and its term groups through @/content and passes them here, so the hub renders through the
+   one TermGroup, rail and lead the corpus path uses. Ordering is the CMS's: groups in Dynamic Zone
+   order, terms in relation order. */
+
+/** One term of a CMS term group, already resolved through its Glossary relation. */
+export type PublishedGlossaryTerm = {
+  key: string;
+  title: string;
+  definition?: string;
+  /** `/glossary/{slug}`, from the related term's slug. */
+  href: string;
+};
+
+/** One CMS term group: a listing section with its rail label and an optional note under it. */
+export type PublishedGlossaryGroup = {
+  id: string;
+  heading: string;
+  /** The CMS navigation label; absent, the heading's part before an authored colon. */
+  railLabel?: string;
+  terms: readonly PublishedGlossaryTerm[];
+  /** The group's note as HTML (Markdown with links, rendered by the content seam). */
+  noteHtml?: string;
+};
+
+/** The CMS editorial section that opens the listing ("How to use this UX glossary"). */
+export type PublishedGlossaryLead = { id: string; heading: string; html: string };
+
+/** The listing's lead and sections from CMS data, for ListingIndex. */
+export function publishedGlossaryIndex({
+  lead,
+  groups,
+}: {
+  lead?: PublishedGlossaryLead;
+  groups: readonly PublishedGlossaryGroup[];
+}): { lead?: ListingLead; sections: ListingSection[] } {
+  return {
+    lead: lead
+      ? {
+          id: lead.id,
+          heading: lead.heading,
+          band: 'listing-lead',
+          content: <Prose html={lead.html} />,
+        }
+      : undefined,
+    sections: groups.map((group) => ({
+      id: group.id,
+      heading: group.heading,
+      railLabel: group.railLabel ?? railLabelOf(group.heading),
+      count: group.terms.length,
+      band: 'listing-section',
+      content: (
+        <TermGroup
+          terms={group.terms.map((term) => ({
+            key: term.key,
+            title: term.title,
+            body: term.definition,
+            href: term.href,
+          }))}
+        />
+      ),
+      note: group.noteHtml ? <Prose html={group.noteHtml} /> : undefined,
+    })),
   };
 }

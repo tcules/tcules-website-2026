@@ -5,12 +5,11 @@ import { Media } from '@/components';
 import {
   getCaseIndustries,
   getCaseRefs,
-  getCaseStudyListingPage,
+  getCaseStudyIndex,
   getCorpusPage,
   getTestimonialAvatars,
   getTestimonialRatings,
   listCorpusPages,
-  type CaseStudyListingItem,
 } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import type {
@@ -107,11 +106,15 @@ const trailingLink = (runs: readonly InlineRun[]): Link | undefined => {
 };
 
 /** What the route reads besides the copy: the cases' own records, by live route. */
+type PublishedCaseCard = NonNullable<
+  NonNullable<Awaited<ReturnType<typeof getCaseStudyIndex>>>['listing']
+>['cases'][number];
+
 type Sources = {
   page: CorpusPage;
   refs: Readonly<Record<string, CorpusCaseRef>>;
   /** The Strapi list, by live route. */
-  live: ReadonlyMap<string, CaseStudyListingItem>;
+  live: ReadonlyMap<string, PublishedCaseCard>;
 };
 
 /**
@@ -120,7 +123,7 @@ type Sources = {
  * never has a hole.
  */
 function coverOf(sources: Sources, name: string, href: string | undefined, band: string) {
-  const thumb = href ? sources.live.get(href)?.thumbnail : undefined;
+  const thumb = href ? sources.live.get(href)?.cover : undefined;
   if (thumb?.src) {
     return {
       src: thumb.src,
@@ -216,13 +219,13 @@ function groupOf(sources: Sources, band: CorpusBand): CaseGroup {
 }
 
 /** A live case no table names: its Strapi record, as the industry view lists it. */
-function liveItem(sources: Sources, route: string, record: CaseStudyListingItem): CaseItem {
+function liveItem(sources: Sources, route: string, record: PublishedCaseCard): CaseItem {
   return {
     id: route,
     href: route,
-    title: record.client ? `${record.client}: ${record.title}` : record.title,
+    title: record.title,
     description: record.description,
-    cover: coverOf(sources, record.client ?? record.title, route, 'live'),
+    cover: coverOf(sources, record.title, route, 'live'),
   };
 }
 
@@ -470,10 +473,12 @@ export async function caseIndexProps(
     getTestimonialAvatars(ids),
     getCaseIndustries(),
     /* The live list; without it the page still renders from the copy, covers from the copy. */
-    getCaseStudyListingPage('case-studies').catch(() => null),
+    getCaseStudyIndex().catch(() => null),
   ]);
   const live = new Map(
-    (listing?.items ?? []).map((record) => [caseStudyPath(record.slug), record] as const),
+    (listing?.listing?.cases ?? []).flatMap((record) =>
+      record.href ? [[record.href, record] as const] : [],
+    ),
   );
   const sources: Sources = { page, refs, live };
 

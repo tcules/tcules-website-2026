@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseStudyListingPage, getIdealServiceStory, idealServiceSlugs } from '@/content';
+import { getCaseStudyIndex, getIdealServiceStory, idealServiceSlugs } from '@/content';
 import type { ServiceStory, StoryCase } from '@/lib/service-story';
 import { caseStudyPath, designServicePagePath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { ServicePage } from '@/templates';
@@ -26,7 +26,7 @@ export async function generateMetadata({
  * story instead of the CMS translation (sources/fixtures/ideal/services). Put it beside the live
  * /services/<slug> and the difference is the design, the copy edits and the missing images.
  *
- * It reads @/content for one real thing: the case-study listing, so every cited case gets its real
+ * It reads @/content for one real thing: the case-study index, so every cited case gets its real
  * cover and its real path. `?slots=1` renders the images each page is designed to carry.
  */
 export default async function ServicePageSpecimen({
@@ -38,16 +38,17 @@ export default async function ServicePageSpecimen({
   const story = getIdealServiceStory(slug);
   if (!story) notFound();
 
-  const listing = await getCaseStudyListingPage(ROUTES.caseStudies.slice(1));
-  const bySlug = new Map((listing?.items ?? []).map((item) => [item.slug, item]));
+  const index = await getCaseStudyIndex();
+  const byHref = new Map((index?.listing.cases ?? []).map((item) => [item.href, item]));
 
   const resolve = (item: StoryCase): StoryCase => {
-    const entry = bySlug.get(item.slug);
+    const href = caseStudyPath(item.slug);
+    const cover = byHref.get(href)?.cover;
     return {
       ...item,
-      href: caseStudyPath(item.slug),
-      cover: entry?.thumbnail
-        ? { ...entry.thumbnail, alt: entry.thumbnail.alt || '' }
+      href,
+      cover: cover
+        ? { src: cover.src, alt: cover.alt, width: cover.width, height: cover.height }
         : undefined,
     };
   };

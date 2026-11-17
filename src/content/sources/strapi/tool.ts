@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ToolBlock,
   ToolCard,
@@ -20,8 +21,7 @@ import type {
   StrapiToolResponse,
 } from './tool-types';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
-const TOOL_REVALIDATE_SECONDS = 300;
+const TOOL_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
@@ -34,9 +34,6 @@ function joinCopy(parts: Array<string | undefined>, separator = ' '): string {
     .join(separator);
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function labelledItemSummary(item: StrapiToolLabelledItem): string {
   const label = value(item.label);
@@ -473,7 +470,7 @@ function mapTool(rawTool: StrapiTool, graphqlUrl: string): ToolPage | null {
 
 async function fetchToolBySlug(slug: string): Promise<StrapiTool | null> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',
@@ -481,7 +478,7 @@ async function fetchToolBySlug(slug: string): Promise<StrapiTool | null> {
     },
     body: JSON.stringify({
       query: TOOL_BY_SLUG_QUERY,
-      variables: { slug, status: 'DRAFT' },
+      variables: { slug, status: 'PUBLISHED' },
     }),
     cache: 'force-cache',
     next: {

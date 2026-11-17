@@ -1,7 +1,7 @@
 import { Layout, Media, Section } from '@/components';
 
 import { shareCardFor, shareImagePath, type ShareCard } from '../../_og';
-import { listSitemapGroups } from '../../_sitemap/pages';
+import { listSitemapFallbackEntries } from '../../_sitemap/pages';
 import { Specimen } from '../_specimen/Specimen';
 
 /**
@@ -16,8 +16,11 @@ export const dynamic = 'force-dynamic';
 
 /** Where the card is served: the segment's `opengraph-image` file, or `/og/…` for a catch-all family. */
 function imageUrl(card: ShareCard): string {
-  const catchAll = /^\/(services|insights)\/.+/.test(card.path) && !card.path.startsWith('/insights/authors/')
-    && !card.path.startsWith('/insights/events/') && !card.path.startsWith('/insights/podcasts/');
+  const catchAll =
+    /^\/(services|insights)\/.+/.test(card.path) &&
+    !card.path.startsWith('/insights/authors/') &&
+    !card.path.startsWith('/insights/events/') &&
+    !card.path.startsWith('/insights/podcasts/');
   if (catchAll) return shareImagePath(card.path, card.id);
   return `${card.path === '/' ? '' : card.path}/opengraph-image/${card.id}`;
 }
@@ -53,8 +56,7 @@ const KIND_ORDER: readonly ShareCard['kind'][] = [
 ];
 
 export default async function ShareCardsSpecimenPage() {
-  const groups = await listSitemapGroups();
-  const paths = groups.flatMap((group) => group.entries.map((entry) => entry.path));
+  const paths = (await listSitemapFallbackEntries()).map((entry) => entry.path);
   const cards = await Promise.all(paths.map((path) => shareCardFor(path)));
 
   return (
@@ -63,10 +65,11 @@ export default async function ShareCardsSpecimenPage() {
         <Layout rowGap="block">
           <h1>Share cards</h1>
           <p>
-            The image every page sends into LinkedIn, Slack, WhatsApp and mail: ch10 Part C&rsquo;s
-            layout T, generated at build from the page&rsquo;s own H1 and eyebrow. {cards.length}{' '}
-            pages, shown at feed size. The hero is the H1 verbatim where it fits the 55-character
-            ceiling and cut otherwise; the alt under each card is what the cut kept.
+            The image every page sends into LinkedIn, Slack, WhatsApp and mail: ch10 Part
+            C&rsquo;s layout T, generated at build from the page&rsquo;s own H1 and eyebrow.{' '}
+            {cards.length} pages, shown at feed size. The hero is the H1 verbatim where it fits
+            the 55-character ceiling and cut otherwise; the alt under each card is what the cut
+            kept.
           </p>
         </Layout>
         {KIND_ORDER.map((kind) => {
@@ -86,16 +89,20 @@ export default async function ShareCardsSpecimenPage() {
                     note={`${SOURCE_LABEL[card.source]} · ${card.alt}`}
                   >
                     {/* Read by `npm run share:census`: which page's card carries which picture. */}
-                    <div data-share-path={card.path} data-share-source={card.source} data-share-kind={card.kind}>
+                    <div
+                      data-share-path={card.path}
+                      data-share-source={card.source}
+                      data-share-kind={card.kind}
+                    >
                       <Media
-                      image={{
-                        src: imageUrl(card),
-                        alt: card.alt,
-                        width: 2560,
-                        height: 1340,
-                        kind: 'capture',
-                      }}
-                      sizes="400px"
+                        image={{
+                          src: imageUrl(card),
+                          alt: card.alt,
+                          width: 2560,
+                          height: 1340,
+                          kind: 'capture',
+                        }}
+                        sizes="400px"
                       />
                     </div>
                   </Specimen>

@@ -1,27 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+/* Links never prefetch (performance pass, 6 Nov 2026): every page renders on request from the CMS,
+   so each link in view cost a full server render on every page load. See SiteNav. */
+
 import { Layout, Section } from '@/components';
-import { ROUTES } from '@/lib/routes';
-import { heroTrail } from '@/lib/trail';
-import { Breadcrumbs, PageHero, TableOfContents, type TocItem } from '@/patterns';
+import { TableOfContents, type TocItem } from '@/patterns';
 
-import { listSitemapGroups, type SitemapEntry } from '../_sitemap/pages';
+import { getSitemapMasterPage, getPageSeo } from '@/content';
+import { jsonLdMarkup } from '@/lib/json-ld';
+import { notFound } from 'next/navigation';
+import { PublishedHero } from '@/templates/CorpusPage/PublishedHome';
+type SitemapEntry = { path: string; title: string; parentPath?: string };
 
-/**
- * `/sitemap`: every page the site answers, grouped by family — the readable twin of `/sitemap.xml`,
- * read from the same list (`_sitemap/pages.ts`) and revalidated on the same five minutes, so a page
- * published in Strapi shows here without a deploy.
- *
- * The shell is the legal pages' (privacy-policy): an outline rail beside the document. A sitemap is
- * read by jumping to a family, which is what the rail is for.
- */
+/** Render the published Sitemap Master in the existing outline and link layout. */
 export const revalidate = 300;
-
-const TITLE = 'Sitemap';
-const DESCRIPTION = 'Every page on the Tcules website, grouped by section.';
-
-const anchorId = (key: string) => `sitemap-${key}`;
 
 /**
  * A group's pages, with any page that has sub-pages pulled out as a branch of its own: a service and
@@ -29,17 +22,23 @@ const anchorId = (key: string) => `sitemap-${key}`;
  * left to right. A family's index (`/services`) is never a branch: depth one is the family itself.
  */
 function branches(entries: SitemapEntry[]) {
-  const parentOf = (path: string) => path.slice(0, path.lastIndexOf('/'));
-  const isBranch = (entry: SitemapEntry) =>
-    entry.path.split('/').length > 2 && entries.some((e) => parentOf(e.path) === entry.path);
-  const heads = entries.filter(isBranch);
-  const headPaths = new Set(heads.map((head) => head.path));
+  const paths = new Set(entries.map((e) => e.path));
+  const parent = (entry: SitemapEntry) =>
+    entry.parentPath && paths.has(entry.parentPath) && entry.parentPath.split('/').length > 2
+      ? entry.parentPath
+      : undefined;
+  const heads = entries.filter((e) => entries.some((child) => parent(child) === e.path));
+  const headPaths = new Set(heads.map((e) => e.path));
   return {
-    leaves: entries.filter((e) => !headPaths.has(e.path) && !headPaths.has(parentOf(e.path))),
-    branches: heads.map((head) => ({
-      head,
-      children: entries.filter((e) => parentOf(e.path) === head.path),
-    })),
+    leaves: entries.filter((e) => !parent(e) && !headPaths.has(e.path)),
+    branches: heads
+      .filter((e) => !parent(e))
+      .map((head) => ({
+        head,
+        children: entries.filter(
+          (e) => e.path !== head.path && e.path.startsWith(head.path + '/'),
+        ),
+      })),
   };
 }
 
@@ -48,7 +47,9 @@ function LinkList({ entries }: { entries: SitemapEntry[] }) {
     <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="column" rowGap="text">
       {entries.map((entry) => (
         <li key={entry.path}>
-          <Link href={entry.path}>{entry.title}</Link>
+          <Link href={entry.path} prefetch={false}>
+            {entry.title}
+          </Link>
         </li>
       ))}
     </Layout>
@@ -66,52 +67,45 @@ function SitemapGroupBody({ entries }: { entries: SitemapEntry[] }) {
           <h3>
             <Link href={head.path}>{head.title}</Link>
           </h3>
-          <LinkList entries={children} />
+          <SitemapGroupBody entries={children} />
         </Layout>
       ))}
     </Layout>
   );
 }
 
-export const metadata: Metadata = {
-  title: `${TITLE} | Tcules`,
-  description: DESCRIPTION,
-};
-
+export async function generateMetadata(): Promise<Metadata> {
+  return (await getPageSeo('/sitemap')).metadata;
+}
 export default async function SitemapPage() {
-  const groups = await listSitemapGroups();
-
+  const [page, { structuredData }] = await Promise.all([
+    getSitemapMasterPage(),
+    getPageSeo('/sitemap'),
+  ]);
+  if (!page) notFound();
+  const groups = page.groups;
   const outline: TocItem[] = groups.map((group) => ({
     label: group.label,
-    href: `#${anchorId(group.key)}` as const,
+    href: `#${group.anchorId}` as const,
   }));
 
   return (
     <>
-      <PageHero
-        trail={heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: TITLE, href: ROUTES.sitemap },
-          ],
-          TITLE,
-          (t) => (
-            <Breadcrumbs {...t} />
-          ),
-        )}
-        title={TITLE}
-        body={[DESCRIPTION]}
-        surface="paper"
-      />
-
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedHero hero={page.hero} />
       <Section as="div" surface="paper">
         <Layout columns={{ base: 1, lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
           <TableOfContents items={outline} />
           <Layout as="article" rowGap="section">
             {groups.map((group) => (
-              <section key={group.key} aria-labelledby={anchorId(group.key)}>
+              <section key={group.key} aria-labelledby={group.anchorId}>
                 <Layout rowGap="block">
-                  <h2 id={anchorId(group.key)}>{group.label}</h2>
+                  <h2 id={group.anchorId}>{group.label}</h2>
                   <SitemapGroupBody entries={group.entries} />
                 </Layout>
               </section>

@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   ContentSeo,
   FutureInterfacesLabAction,
@@ -18,9 +19,8 @@ import type {
 } from './future-interfaces-lab-types';
 import { cmsHeadingText, escapeHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const FUTURE_INTERFACES_LAB_SLUG = 'future-interfaces-lab';
-const FUTURE_INTERFACES_LAB_REVALIDATE_SECONDS = 300;
+const FUTURE_INTERFACES_LAB_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
@@ -32,9 +32,6 @@ function text(candidate: unknown): string {
     : richTextToPlainText(candidate).trim();
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function normaliseSlug(candidate: string | null | undefined): string {
   return value(candidate).replace(/^\/+|\/+$/gu, '');
@@ -312,7 +309,7 @@ async function fetchFutureInterfacesLab(): Promise<{
   page: StrapiFutureInterfacesLab | null;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

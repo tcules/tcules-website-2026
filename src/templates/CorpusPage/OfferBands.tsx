@@ -594,7 +594,11 @@ function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
  * (DrawnTableBand `ledger`): a chain of checks, a choice between services, a comparison. The bands
  * before them ("What you get") are the tile grid, so these take the other shape (round 5 critic).
  */
-const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 'compare']);
+export const LEDGER_BANDS: ReadonlySet<string> = new Set([
+  'status-example',
+  'options',
+  'compare',
+]);
 
 /** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
 const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
@@ -605,7 +609,7 @@ const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars
  * Each Why Tcules reason's glyph, by its title as authored (owner, 4 Nov 2026, homepage pass: "each
  * title gets an inline icon"). The same six reasons on every page that carries the band.
  */
-const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
+export const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
   'Fluent in SaaS': 'layers',
   'Idea to launch': 'flag',
   'Craft people notice': 'eye',

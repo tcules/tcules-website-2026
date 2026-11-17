@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type { ContentSeo, PrivacyPolicyContentSource, PrivacyPolicyPage } from '../../types';
 import { markdownToHtml } from './markdown';
 import { PRIVACY_POLICY_QUERY } from './privacy-policy-query';
@@ -8,17 +9,13 @@ import type {
 } from './privacy-policy-types';
 import { richTextToPlainText } from './rich-text';
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const PRIVACY_POLICY_SLUG = 'privacy-policy';
-const PRIVACY_POLICY_REVALIDATE_SECONDS = 300;
+const PRIVACY_POLICY_REVALIDATE_SECONDS = false;
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function isRecord(candidate: unknown): candidate is Record<string, unknown> {
   return typeof candidate === 'object' && candidate !== null && !Array.isArray(candidate);
@@ -154,7 +151,7 @@ function mapPrivacyPolicy(
 }
 
 async function fetchPrivacyPolicy(): Promise<StrapiPrivacyPolicy | null> {
-  const response = await fetch(getStrapiGraphqlUrl(), {
+  const response = await cachedCmsFetch(getStrapiGraphqlUrl(), {
     method: 'POST',
     headers: {
       accept: 'application/json',

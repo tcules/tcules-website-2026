@@ -1,16 +1,27 @@
 import type { Metadata } from 'next';
-
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
-import { ROUTES } from '@/lib/routes';
-
-/**
- * `/how-we-work/ai-native-product-design` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
- */
+import { notFound } from 'next/navigation';
+import { getPageSeo, getPublishedWorkPage } from '@/content';
+import { PublishedWork } from '@/templates/CorpusPage/PublishedWork';
+import { jsonLdMarkup } from '@/lib/json-ld';
+export const revalidate = 300;
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.howWeWorkAiNative)) ?? { title: 'Tcules' };
+  return (await getPageSeo('/how-we-work/ai-native-product-design')).metadata;
 }
-
-export default function AiNativeProductDesignPage() {
-  return <ComposedRoute route={ROUTES.howWeWorkAiNative} />;
+export default async function WorkPage() {
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedWorkPage('ai-native-product-design'),
+    getPageSeo('/how-we-work/ai-native-product-design'),
+  ]);
+  if (!page) notFound();
+  return (
+    <>
+      {structuredData ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
+        />
+      ) : null}
+      <PublishedWork page={page} />
+    </>
+  );
 }

@@ -1,29 +1,29 @@
 import Link from 'next/link';
 
+/* The chrome's links never prefetch (performance pass, 6 Nov 2026): every page renders on request
+   from the CMS, so each link in view cost a full server render on every page load, competing with
+   the page itself. A click fetches the page then. Revisit once pages are cached again. */
+
 import {
   BrandMark,
   Button,
   Cluster,
   Icon,
-  Input,
   Layout,
   Logo,
   RatingBadge,
   Section,
 } from '@/components';
 
+import { NewsletterForm } from './NewsletterForm';
 import styles from './SiteFooter.module.css';
 import type { SiteFooterProps } from './types';
 
 /**
  * SiteFooter — the closing band: brand, directory, newsletter, studio, legal.
  *
- * A SERVER component, and worth keeping that way. Nothing here is stateful, nothing reads the URL,
- * and the newsletter posts as a plain form rather than through JavaScript — so the footer ships no
- * client bundle at all. That is why `'use client'` is confined to SiteNav, which genuinely needs
- * it: a footer on every page of the site is the wrong place to hand the browser a hydration cost
- * for nothing. The mobile accordions below are native `<details>`, chosen so that constraint
- * survives them.
+ * The newsletter handles submission in a client component. The rest of the footer is rendered
+ * on the server, including the native mobile accordions.
  *
  * ── Five bands, five shapes ─────────────────────────────────────────────────────────────────────
  * The one decision worth defending. A footer is the easiest place in a site to end up with four
@@ -57,6 +57,10 @@ import type { SiteFooterProps } from './types';
  * rules out shipping only the accordions' contents when open. `display: none` removes the inactive
  * copy from the accessibility tree and the tab order both, so only one is ever reachable.
  */
+function externalProps(external: boolean | undefined) {
+  return external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+}
+
 export function SiteFooter({
   brand,
   cta,
@@ -104,14 +108,23 @@ export function SiteFooter({
             {/* md, not lg. The tagline beside it is the band's weight; an lg button opposite a
                 lede line makes two things compete for the same job, and the badge under it reads
                 as a caption to a smaller control rather than an equal to a larger one. */}
-            <Button as={Link} href={cta.href}>
-              {cta.label}
-            </Button>
+            {cta ? (
+              <Button
+                as={Link}
+                href={cta.href}
+                {...externalProps(cta.external)}
+                title={cta.description}
+              >
+                {cta.icon ? <Icon name={cta.icon} /> : null}
+                {cta.label}
+              </Button>
+            ) : null}
             {brand.rating ? (
               <RatingBadge
                 size="sm"
                 score={brand.rating.score}
                 platform={brand.rating.platform}
+                detail={brand.rating.detail}
                 href={brand.rating.href}
                 icon={<Icon name="star" size="sm" />}
                 mark={<BrandMark name={brand.rating.mark} />}
@@ -139,9 +152,18 @@ export function SiteFooter({
                   <Layout as="ul" rowGap="tight">
                     {group.links.map((link) => (
                       <li key={`${group.title}-${link.label}`}>
-                        <Link href={link.href} className={styles.link}>
+                        <Link
+                          prefetch={false}
+                          href={link.href}
+                          className={styles.link}
+                          {...externalProps(link.external)}
+                        >
+                          {link.icon ? <Icon name={link.icon} size="sm" /> : null}
                           {link.label}
                         </Link>
+                        {link.description ? (
+                          <p className={styles.body}>{link.description}</p>
+                        ) : null}
                       </li>
                     ))}
                   </Layout>
@@ -164,9 +186,18 @@ export function SiteFooter({
                 <Layout as="ul" className={styles.accordionPanel} rowGap="tight">
                   {group.links.map((link) => (
                     <li key={`${group.title}-${link.label}`}>
-                      <Link href={link.href} className={styles.link}>
+                      <Link
+                        prefetch={false}
+                        href={link.href}
+                        className={styles.link}
+                        {...externalProps(link.external)}
+                      >
+                        {link.icon ? <Icon name={link.icon} size="sm" /> : null}
                         {link.label}
                       </Link>
+                      {link.description ? (
+                        <p className={styles.body}>{link.description}</p>
+                      ) : null}
                     </li>
                   ))}
                 </Layout>
@@ -176,55 +207,29 @@ export function SiteFooter({
         </div>
 
         {/* ── 3 · Newsletter ──────────────────────────────────────────────────────── */}
-        <Layout
-          className={styles.newsletterBand}
-          columns={[1, 1]}
-          colGap="section"
-          rowGap="stack"
-        >
-          <Layout rowGap="block">
-            {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
+        {newsletter ? (
+          <Layout
+            className={styles.newsletterBand}
+            columns={[1, 1]}
+            colGap="section"
+            rowGap="stack"
+          >
+            <Layout rowGap="block">
+              {/* The label and title nest at tight INSIDE a block stack. Flattening all three to
                 block makes them read as three unrelated lines rather than an eyebrow on a title
                 with a sentence under it. */}
-            <Layout rowGap="tight">
-              <p className={styles.label}>Newsletter</p>
-              <p className={styles.title}>{newsletter.title}</p>
+              <Layout rowGap="tight">
+                {newsletter.eyebrow ? (
+                  <p className={styles.label}>{newsletter.eyebrow}</p>
+                ) : null}
+                <p className={styles.title}>{newsletter.title}</p>
+              </Layout>
+              <p className={styles.body}>{newsletter.description}</p>
             </Layout>
-            <p className={styles.body}>{newsletter.description}</p>
+
+            <NewsletterForm {...newsletter} />
           </Layout>
-
-          {/* A plain POST, no JavaScript. NOTHING SERVES THIS ENDPOINT YET — see ENDPOINTS in
-              @/lib/routes. `align="end"` so a field and button that have wrapped onto two lines
-              still sit on one baseline. */}
-          <form action={newsletter.action} method="post" className={styles.newsletterForm}>
-            <Cluster rowGap="tight" colGap="tight" align="end">
-              {/* The input is WRAPPED by its label rather than wired to it with an id. A real
-                  label is required — a placeholder is not one, it disappears the moment anyone
-                  types — and wrapping means the pattern needs no generated id, which is what keeps
-                  it a server component and lets four of them coexist on the proving ground without
-                  three broken `for` references. */}
-              <label className={styles.fieldLabel}>
-                <span className={styles.fieldLabelText}>{newsletter.fieldLabel}</span>
-                <Input
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder={newsletter.placeholder}
-                  required
-                />
-              </label>
-              {/* Ghost rather than solid: the page already has one primary action, two bands up,
-                  and a second solid button here would split the ask. extendHitArea because this
-                  one has nothing to help it — the field beside it is wrapped in a label that
-                  forwards taps, and this Button is not. 40px box, 44px target, row height
-                  unchanged. */}
-              <Button type="submit" emphasis="ghost" extendHitArea>
-                {newsletter.cta.label}
-              </Button>
-            </Cluster>
-          </form>
-        </Layout>
-
+        ) : null}
         {/* ── 4 · Studio ──────────────────────────────────────────────────────────────
             A split: the studio describing itself on one side, the facts on the other (owner,
             4 Nov 2026: "something better" than one run-on paragraph over a line of small print).
@@ -247,7 +252,9 @@ export function SiteFooter({
 
           <Layout columns={[1, 1]} colGap="gutter" rowGap="stack">
             <Layout rowGap="text">
-              <p className={styles.label}>Address</p>
+              {studio.addressLabel ? (
+                <p className={styles.label}>{studio.addressLabel}</p>
+              ) : null}
               <Layout rowGap="tight">
                 <address className={styles.address}>
                   {studio.address.map((line) => (
@@ -256,14 +263,22 @@ export function SiteFooter({
                     </span>
                   ))}
                 </address>
-                <a className={styles.email} href={`mailto:${studio.email}`}>
-                  {studio.email}
-                </a>
+                {studio.email ? (
+                  <a className={styles.email} href={`mailto:${studio.email}`}>
+                    {studio.email}
+                  </a>
+                ) : null}
+                {studio.meta?.map((entry, index) => (
+                  <p key={index} className={styles.body}>
+                    {entry.label}{' '}
+                    {entry.href ? <a href={entry.href}>{entry.value}</a> : entry.value}
+                  </p>
+                ))}
               </Layout>
             </Layout>
 
             <Layout rowGap="text">
-              <p className={styles.label}>Elsewhere</p>
+              {studio.socialLabel ? <p className={styles.label}>{studio.socialLabel}</p> : null}
               {/* A plain anchor, not a Link: next/link prefetches and client-navigates, and
                   neither means anything for another origin. `noreferrer` implies `noopener`, and
                   both are stated because the pair is what reviews look for. */}
@@ -273,11 +288,14 @@ export function SiteFooter({
                     <a
                       className={styles.socialLink}
                       href={social.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
+                      {...externalProps(social.external !== false)}
                     >
+                      {social.mark ? <BrandMark name={social.mark} /> : null}
                       {social.label}
-                      <Icon name="arrow-right-up" size="sm" />
+                      <Icon
+                        name={social.external === false ? 'arrow-right' : 'arrow-right-up'}
+                        size="sm"
+                      />
                     </a>
                   </li>
                 ))}
@@ -302,7 +320,14 @@ export function SiteFooter({
             <Cluster as="ul" rowGap="tight" colGap="text">
               {legal.links.map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className={styles.smallLink}>
+                  <Link
+                    prefetch={false}
+                    href={item.href}
+                    className={styles.smallLink}
+                    {...externalProps(item.external)}
+                    title={item.description}
+                  >
+                    {item.icon ? <Icon name={item.icon} size="sm" /> : null}
                     {item.label}
                   </Link>
                 </li>

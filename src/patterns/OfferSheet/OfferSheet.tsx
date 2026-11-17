@@ -76,6 +76,8 @@ export type OfferSheetItem = {
    * drawings. Set on every item or on none; a set is all-icon or all-text.
    */
   icon?: IconName;
+  /** CMS art in the existing inline glyph slot. */
+  iconArt?: ReactNode;
   /**
    * `list` only: a label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer":
    * who acts at that step). Set on every item or on none.
@@ -126,6 +128,8 @@ export type OfferSheetProps = {
   asideImage?: MediaImage;
   /** A closing line under the promises, in their column (in practice the next step). A slot. */
   note?: ReactNode;
+  /** Authored content preceding the offers in their column. */
+  before?: ReactNode;
   /**
    * Promises per row from 1024 when there is no aside: 2 (default) or 3. Five principles set two up
    * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026). 4 for
@@ -180,6 +184,7 @@ export function OfferSheet({
   aside,
   asideImage,
   note,
+  before,
   terms,
   across = 2,
   arrangement = 'grid',
@@ -189,7 +194,8 @@ export function OfferSheet({
   const rows = arrangement === 'rows' || list;
   const shown = items.filter(
     (item) =>
-      (item.title ?? item.body ?? item.bodyHtml ?? item.facts?.join('') ?? '').trim().length > 0,
+      (item.title ?? item.body ?? item.bodyHtml ?? item.facts?.join('') ?? '').trim().length >
+      0,
   );
   const keyOf = (item: OfferSheetItem) => item.id ?? item.title ?? item.body ?? item.bodyHtml;
   /* The item's words under (or beside) its title: HTML, a line of facts, or plain text. */
@@ -229,11 +235,15 @@ export function OfferSheet({
   /* Drawn: every promise beside its own drawing, two up at full width, no rule (the drawing opens the
      item). The quote has its own band after the offer (owner, 26 Oct 2026: a quote beside or under
      the set "reads as noise"), so a drawn sheet takes no aside. */
-  /* Shown: every promise beside an image of its own instead, in the same arrangement. A set is all
-     scenes or all images. */
+  /* Images and scenes share the drawn arrangement. List scenes have their own rendering below. */
   const pictured = !rows && shown.length > 0 && shown.every((item) => item.image);
   const drawn = pictured || (!rows && shown.length > 0 && shown.every((item) => item.scene));
-  if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    !list &&
+    !drawn &&
+    shown.some((item) => item.scene)
+  ) {
     console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
   }
   if (process.env.NODE_ENV !== 'production' && !pictured && shown.some((item) => item.image)) {
@@ -304,6 +314,7 @@ export function OfferSheet({
             rowGap="text"
             align="start"
           >
+            {item.eyebrow ? <p className={styles.listLabel}>{item.eyebrow}</p> : null}
             {item.icon && !item.title ? (
               /* An untitled point (/how-we-work "How we use AI": a list row a line, owner 4 Nov
                  2026): the glyph leads its words on their first line, as it leads a title. */
@@ -312,17 +323,32 @@ export function OfferSheet({
                   <Icon name={item.icon} size="xl" />
                 </span>
                 {item.bodyHtml ? (
-                  <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                  <p
+                    className={styles.body}
+                    dangerouslySetInnerHTML={{ __html: item.bodyHtml }}
+                  />
                 ) : (
                   <p className={styles.body}>{item.body}</p>
                 )}
               </Cluster>
-            ) : item.icon ? (
+            ) : item.icon || item.iconArt ? (
               /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
                  card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
               <Cluster colGap="text" align="start" nowrap>
                 <span className={styles.rowIcon}>
-                  <Icon name={item.icon} size="xl" />
+                  {item.iconArt ? (
+                    <span
+                      style={{
+                        display: 'block',
+                        inlineSize: 'var(--ofs-icon-size)',
+                        blockSize: 'var(--ofs-icon-size)',
+                      }}
+                    >
+                      {item.iconArt}
+                    </span>
+                  ) : item.icon ? (
+                    <Icon name={item.icon} size="xl" />
+                  ) : null}
                 </span>
                 {titleOf(item)}
               </Cluster>
@@ -401,14 +427,16 @@ export function OfferSheet({
   ) : (
     promises
   );
-  const sheet = note ? (
-    <Layout rowGap="stack">
-      {labelled}
-      {note}
-    </Layout>
-  ) : (
-    labelled
-  );
+  const sheet =
+    note || before ? (
+      <Layout rowGap="stack">
+        {before}
+        {labelled}
+        {note}
+      </Layout>
+    ) : (
+      labelled
+    );
   const side =
     drawn || rows || glyphed
       ? undefined
@@ -467,7 +495,14 @@ export function OfferSheet({
           ) : (
             headText
           )}
-          {promises}
+          {before ? (
+            <Layout rowGap="block">
+              {before}
+              {promises}
+            </Layout>
+          ) : (
+            promises
+          )}
           {/* Below 1024 the split stacks, and the way deeper follows the list it leads on to rather
               than sitting between the heading and the reasons (owner, 5 Nov 2026). One of the two
               is displayed at any width (`display: none` drops the other from the a11y tree too). */}

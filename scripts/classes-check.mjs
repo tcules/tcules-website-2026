@@ -42,9 +42,11 @@ const classesIn = (css) =>
 
 /**
  * Bindings that ARE accessed as `X.key` and are legitimately not stylesheets. Keep this short and
- * justified — same discipline as JS_INJECTED in tokens-check.mjs. Empty today.
+ * justified — same discipline as JS_INJECTED in tokens-check.mjs.
  */
-const KNOWN_NON_SHEET = new Set([]);
+const KNOWN_NON_SHEET = new Set([
+  'LEDGER_BANDS', // A set of section IDs. Callers use Set.has to choose an arrangement.
+]);
 
 /** Which files a module re-exports a stylesheet through, name → sheet. Memoised per path. */
 const exportCache = new Map();

@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Media, Section, type MediaImage } from '@/components';
+import { Layout, Media, Prose, Section, type MediaImage } from '@/components';
 import { PageHero, Statement, type HeroTrail } from '@/patterns';
 
 import styles from './CaseStory.module.css';
@@ -9,15 +9,18 @@ import styles from './CaseStory.module.css';
    imports @/content, so the route passes the story straight in. */
 export type CaseStoryFigureProps = {
   id: string;
-  image: MediaImage;
-  label: string;
+  image?: MediaImage;
+  label?: string;
   caption: string;
+  note?: string;
   notes: readonly string[];
 };
 
 export type CaseStoryPartProps =
   | { type: 'paragraphs'; paragraphs: readonly string[] }
-  | { type: 'quote'; quote: string; attribution: string }
+  | { type: 'prose'; html: string }
+  | { type: 'quote'; quote: string; attribution?: string }
+  | { type: 'content'; node: ReactNode }
   | {
       type: 'steps';
       ordered?: boolean;
@@ -29,7 +32,7 @@ export type CaseStoryPartProps =
 export type CaseStoryChapterProps = {
   id: string;
   number: string;
-  label: string;
+  label?: string;
   heading: string;
   parts: readonly CaseStoryPartProps[];
 };
@@ -51,9 +54,9 @@ export type CaseStoryProps = {
 };
 
 /** The reading column's parts: words that sit beside the chapter's number. */
-type Reading = Extract<CaseStoryPartProps, { type: 'paragraphs' | 'quote' }>;
+type Reading = Extract<CaseStoryPartProps, { type: 'paragraphs' | 'prose' | 'quote' }>;
 /** The parts that break out of the reading column to the full width of the band. */
-type Breakout = Extract<CaseStoryPartProps, { type: 'steps' | 'figures' }>;
+type Breakout = Extract<CaseStoryPartProps, { type: 'steps' | 'figures' | 'content' }>;
 
 /**
  * A chapter's parts in runs: consecutive reading parts form one row beside the chapter's marker
@@ -65,7 +68,7 @@ function runsOf(parts: readonly CaseStoryPartProps[]) {
     [];
   for (const part of parts) {
     if (part.type === 'principle') continue;
-    if (part.type === 'paragraphs' || part.type === 'quote') {
+    if (part.type === 'paragraphs' || part.type === 'prose' || part.type === 'quote') {
       const last = runs.at(-1);
       if (last?.kind === 'reading') last.parts.push(part);
       else runs.push({ kind: 'reading', parts: [part] });
@@ -74,19 +77,42 @@ function runsOf(parts: readonly CaseStoryPartProps[]) {
   return runs;
 }
 
-function ReadingPart({ part }: { part: Reading }) {
-  if (part.type === 'quote') {
-    return (
-      <figure className={styles.quote}>
-        <Layout rowGap="text">
-          <blockquote className={styles.quoteText}>
-            <p>“{part.quote}”</p>
-          </blockquote>
-          <figcaption className={styles.key}>{part.attribution}</figcaption>
-        </Layout>
-      </figure>
-    );
+export function CaseStoryQuote({
+  quote,
+  attribution,
+}: {
+  quote: string;
+  attribution?: string;
+}) {
+  return (
+    <figure className={styles.quote}>
+      <Layout rowGap="text">
+        <blockquote className={styles.quoteText}>
+          <p>“{quote}”</p>
+        </blockquote>
+        {attribution ? <figcaption className={styles.key}>{attribution}</figcaption> : null}
+      </Layout>
+    </figure>
+  );
+}
+
+/** Keep chapter copy at the story's type scale while allowing authored inline formatting. */
+export function CaseStoryProse({ html, closing = false }: { html: string; closing?: boolean }) {
+  const className = closing ? styles.closingBody : styles.paragraph;
+  const paragraphs = [...html.matchAll(/<p>([\s\S]*?)<\/p>/g)];
+  if (!paragraphs.length || paragraphs.map((part) => part[0]).join('') !== html) {
+    return <Prose html={html} className={className} />;
   }
+
+  const copy = paragraphs.map((part, index) => (
+    <p key={index} className={className} dangerouslySetInnerHTML={{ __html: part[1] ?? '' }} />
+  ));
+  return copy.length > 1 ? <Layout rowGap="text">{copy}</Layout> : copy[0];
+}
+
+function ReadingPart({ part }: { part: Reading }) {
+  if (part.type === 'quote') return <CaseStoryQuote {...part} />;
+  if (part.type === 'prose') return <CaseStoryProse html={part.html} />;
   return (
     <Layout rowGap="text">
       {part.paragraphs.map((paragraph, index) => (
@@ -103,7 +129,11 @@ function ReadingPart({ part }: { part: Reading }) {
  * hairline. The label is the item's title; the body is its sentence, capitalised in presentation only
  * (the CMS wrote it as the tail of "Label: text").
  */
-function Steps({ part }: { part: Extract<CaseStoryPartProps, { type: 'steps' }> }) {
+export function CaseStorySteps({
+  part,
+}: {
+  part: Extract<CaseStoryPartProps, { type: 'steps' }>;
+}) {
   const n = part.items.length;
   return (
     <Layout
@@ -113,7 +143,7 @@ function Steps({ part }: { part: Extract<CaseStoryPartProps, { type: 'steps' }> 
       rowGap="stack"
     >
       {part.items.map((item, index) => (
-        <li key={item.label} className={styles.step}>
+        <li key={`${index}-${item.label}`} className={styles.step}>
           <Layout rowGap="text">
             {part.ordered ? (
               <span className={styles.index} aria-hidden="true">
@@ -138,12 +168,15 @@ function Figure({ figure }: { figure: CaseStoryFigureProps }) {
   return (
     <figure className={styles.figure} id={figure.id}>
       <Layout rowGap="block">
-        <Media image={figure.image} sizes="(min-width: 1304px) 1240px, calc(100vw - 64px)" />
+        {figure.image ? (
+          <Media image={figure.image} sizes="(min-width: 1304px) 1240px, calc(100vw - 64px)" />
+        ) : null}
         <figcaption>
           <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="text">
             <Layout rowGap="inline">
-              <span className={styles.key}>{figure.label}</span>
-              <span className={styles.caption}>{figure.caption}</span>
+              {figure.label ? <span className={styles.key}>{figure.label}</span> : null}
+              {figure.caption ? <span className={styles.caption}>{figure.caption}</span> : null}
+              {figure.note ? <span className={styles.caption}>{figure.note}</span> : null}
             </Layout>
             {figure.notes.length > 0 ? (
               <Layout as="ol" rowGap="tight">
@@ -171,7 +204,7 @@ function Figure({ figure }: { figure: CaseStoryFigureProps }) {
   );
 }
 
-function Chapter({ chapter }: { chapter: CaseStoryChapterProps }) {
+export function CaseStoryChapter({ chapter }: { chapter: CaseStoryChapterProps }) {
   const headingId = `${chapter.id}-heading`;
   const runs = runsOf(chapter.parts);
   const marker = (
@@ -179,14 +212,20 @@ function Chapter({ chapter }: { chapter: CaseStoryChapterProps }) {
       <span className={styles.number} aria-hidden="true">
         {chapter.number}
       </span>
-      <span className={styles.key}>{chapter.label}</span>
+      {chapter.label ? <span className={styles.key}>{chapter.label}</span> : null}
     </Layout>
   );
   /* The first run of words sits beside the marker under the heading; a later run of words (after a
      breakout) keeps the reading column, so the text edge never moves within a chapter. */
   const row = (first: boolean, content: ReactNode, key: string) =>
     first ? (
-      <Layout key={key} columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="block" align="start">
+      <Layout
+        key={key}
+        columns={{ base: 1, lg: [1, 2] }}
+        colGap="column"
+        rowGap="block"
+        align="start"
+      >
         {marker}
         {content}
       </Layout>
@@ -206,7 +245,9 @@ function Chapter({ chapter }: { chapter: CaseStoryChapterProps }) {
             <h2 id={headingId} className={styles.heading}>
               {chapter.heading}
             </h2>
-            {firstReading?.parts.map((part, index) => <ReadingPart key={index} part={part} />)}
+            {firstReading?.parts.map((part, index) => (
+              <ReadingPart key={index} part={part} />
+            ))}
           </Layout>,
           'head',
         )}
@@ -222,7 +263,9 @@ function Chapter({ chapter }: { chapter: CaseStoryChapterProps }) {
               `run-${index}`,
             )
           ) : run.part.type === 'steps' ? (
-            <Steps key={`run-${index}`} part={run.part} />
+            <CaseStorySteps key={`run-${index}`} part={run.part} />
+          ) : run.part.type === 'content' ? (
+            <Fragment key={`run-${index}`}>{run.part.node}</Fragment>
           ) : (
             <Layout key={`run-${index}`} rowGap="section">
               {run.part.figures.map((figure) => (
@@ -261,18 +304,7 @@ export function CaseStory({ trail, story }: CaseStoryProps) {
         media={story.heroImage ? { type: 'image', image: story.heroImage } : undefined}
       />
 
-      {story.statements.length > 0 ? (
-        <Section surface="paper" aria-label="Problem and solution">
-          <Layout columns={{ base: 1, md: story.statements.length > 1 ? 2 : 1 }} colGap="column" rowGap="stack">
-            {story.statements.map((statement) => (
-              <Layout key={statement.id} rowGap="block" className={styles.statement}>
-                <h2 className={styles.key}>{statement.title}</h2>
-                <p className={styles.statementBody}>{statement.body}</p>
-              </Layout>
-            ))}
-          </Layout>
-        </Section>
-      ) : null}
+      <CaseStoryStatements statements={story.statements} />
 
       {story.chapters.map((chapter) => {
         const principle = chapter.parts.find(
@@ -281,7 +313,7 @@ export function CaseStory({ trail, story }: CaseStoryProps) {
         );
         return (
           <Fragment key={chapter.id}>
-            <Chapter chapter={chapter} />
+            <CaseStoryChapter chapter={chapter} />
             {principle ? (
               <Statement as="p" align="start" eyebrow={principle.label} surface="tint">
                 {principle.text}
@@ -292,24 +324,71 @@ export function CaseStory({ trail, story }: CaseStoryProps) {
       })}
 
       {story.closing ? (
-        <Section surface="tint" aria-labelledby="case-closing-heading">
-          <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="block" align="start">
-            <Layout rowGap="tight" className={styles.marker}>
-              <span className={styles.key}>{story.closing.label}</span>
-            </Layout>
-            <Layout rowGap="block">
-              <h2 id="case-closing-heading" className={styles.closingHeading}>
-                {story.closing.heading}
-              </h2>
-              {story.closing.paragraphs.map((paragraph, index) => (
-                <p key={index} className={styles.closingBody}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-          </Layout>
-        </Section>
+        <CaseStoryClosing
+          id="case-closing"
+          label={story.closing.label}
+          heading={story.closing.heading}
+        >
+          {story.closing.paragraphs.map((paragraph, index) => (
+            <p key={index} className={styles.closingBody}>
+              {paragraph}
+            </p>
+          ))}
+        </CaseStoryClosing>
       ) : null}
     </>
+  );
+}
+
+export function CaseStoryStatements({
+  statements,
+}: {
+  statements: CaseStoryProps['story']['statements'];
+}) {
+  if (!statements.length) return null;
+  return (
+    <Section surface="paper" aria-label="Problem and solution">
+      <Layout
+        columns={{ base: 1, md: statements.length > 1 ? 2 : 1 }}
+        colGap="column"
+        rowGap="stack"
+      >
+        {statements.map((statement) => (
+          <Layout key={statement.id} rowGap="block" className={styles.statement}>
+            <h2 className={styles.key}>{statement.title}</h2>
+            <p className={styles.statementBody}>{statement.body}</p>
+          </Layout>
+        ))}
+      </Layout>
+    </Section>
+  );
+}
+
+export function CaseStoryClosing({
+  id,
+  label,
+  heading,
+  children,
+}: {
+  id: string;
+  label?: string;
+  heading: string;
+  children: ReactNode;
+}) {
+  const headingId = `${id}-heading`;
+  return (
+    <Section id={id} surface="tint" aria-labelledby={headingId}>
+      <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="block" align="start">
+        <Layout rowGap="tight" className={styles.marker}>
+          {label ? <span className={styles.key}>{label}</span> : null}
+        </Layout>
+        <Layout rowGap="block">
+          <h2 id={headingId} className={styles.closingHeading}>
+            {heading}
+          </h2>
+          {children}
+        </Layout>
+      </Layout>
+    </Section>
   );
 }

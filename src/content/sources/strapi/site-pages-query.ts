@@ -6,27 +6,27 @@
  */
 export const SITE_PAGES_QUERY = /* GraphQL */ `
   query SitePages {
-    services(status: DRAFT, pagination: { limit: -1 }) {
+    services(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title
       updatedAt
     }
-    audits(status: DRAFT, pagination: { limit: -1 }) {
+    audits(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title
       updatedAt
     }
-    expertises(status: DRAFT, pagination: { limit: -1 }) {
+    expertises(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title
       updatedAt
     }
-    glossaries(status: DRAFT, pagination: { limit: -1 }) {
+    glossaries(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title
       updatedAt
     }
-    tools(status: DRAFT, pagination: { limit: -1 }) {
+    tools(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
       title
       updatedAt

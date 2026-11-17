@@ -1,6 +1,6 @@
 import type { SectionSurface } from '@/components';
 
-import type { BrandMarkName } from '@/components';
+import type { BrandMarkName, IconName } from '@/components';
 
 /**
  * The site footer's information architecture, as a shape.
@@ -18,6 +18,10 @@ import type { BrandMarkName } from '@/components';
 export type SiteFooterLink = {
   label: string;
   href: string;
+  external?: boolean;
+  description?: string;
+  icon?: IconName;
+  mark?: BrandMarkName;
 };
 
 /**
@@ -37,6 +41,7 @@ export type SiteFooterRating = {
    * profile sitting on a whole number still prints '5.0'.
    */
   score: string;
+  detail?: string;
   /** The profile. One href, two consumers — Stat's source link is the other. See @/lib/routes. */
   href: string;
 };
@@ -55,6 +60,7 @@ export type SiteFooterGroup = {
 
 export type SiteFooterNewsletter = {
   title: string;
+  eyebrow?: string;
   description: string;
   /** The submit button's label. No href — this posts, it does not navigate. */
   cta: { label: string };
@@ -75,6 +81,9 @@ export type SiteFooterNewsletter = {
  */
 export type SiteFooterStudio = {
   statement: string;
+  addressLabel?: string;
+  socialLabel?: string;
+  meta?: { label: string; value: string; href?: string }[];
   /**
    * The registered address, one entry per printed line. Lines rather than one string because the
    * address is set as a short stacked block, and where it breaks is an authoring decision — a
@@ -95,15 +104,16 @@ export type SiteFooterLegal = {
 };
 
 export type SiteFooterProps = {
+  available?: boolean;
   brand: SiteFooterBrand;
   /** The closing action. Solid, primary, md — the last thing in the band that is not chrome. */
-  cta: SiteFooterLink;
+  cta?: SiteFooterLink;
   /**
    * The directory. Drawn for six groups, in two rows of three from lg; a seventh starts a third
    * row rather than squeezing the others.
    */
   groups: SiteFooterGroup[];
-  newsletter: SiteFooterNewsletter;
+  newsletter?: SiteFooterNewsletter;
   studio: SiteFooterStudio;
   legal: SiteFooterLegal;
   /**

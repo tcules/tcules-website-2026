@@ -1,3 +1,4 @@
+import { publicGraphqlUrl as getStrapiGraphqlUrl, cachedCmsFetch } from './public-graphql';
 import type {
   BlogPage,
   ContentSeo,
@@ -39,9 +40,8 @@ function labLink(action: InsightAction | undefined): InsightAction | undefined {
     : action;
 }
 
-const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const INSIGHTS_SLUG = 'insights';
-const INSIGHTS_REVALIDATE_SECONDS = 300;
+const INSIGHTS_REVALIDATE_SECONDS = false;
 /* Well above every live count (102 blogs on 1 Nov 2026; Strapi honours a limit over 100). At 100 the hub
    silently dropped the 2 oldest articles. */
 const RESOURCE_LIMIT = 500;
@@ -66,9 +66,6 @@ function normaliseSlug(candidate: string | null | undefined): string {
     .join('/');
 }
 
-function getStrapiGraphqlUrl(): string {
-  return value(process.env.STRAPI_GRAPHQL_URL) || DEFAULT_STRAPI_GRAPHQL_URL;
-}
 
 function absoluteUrl(
   candidate: string | null | undefined,
@@ -320,7 +317,7 @@ function mapSeo(rawSeo: StrapiInsightsSeo | null | undefined): ContentSeo | unde
   const canonicalCandidate = value(rawSeo.canonicalURL);
   const canonical =
     canonicalCandidate.startsWith('http://') || canonicalCandidate.startsWith('https://')
-      ? absoluteUrl(canonicalCandidate, DEFAULT_STRAPI_GRAPHQL_URL)
+      ? absoluteUrl(canonicalCandidate, getStrapiGraphqlUrl())
       : undefined;
   const robotTokens = value(rawSeo.robot)
     .toLowerCase()
@@ -426,7 +423,7 @@ async function fetchInsightsPage(): Promise<{
   payload: StrapiInsightsResponse;
 }> {
   const graphqlUrl = getStrapiGraphqlUrl();
-  const response = await fetch(graphqlUrl, {
+  const response = await cachedCmsFetch(graphqlUrl, {
     method: 'POST',
     headers: {
       accept: 'application/json',

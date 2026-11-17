@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-import { Button, Cluster, Icon, Layout, Media, type MediaImage } from '@/components';
+import { Button, Cluster, Icon, Layout, Media, Prose, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 
@@ -18,6 +18,10 @@ export type Contributor = {
   portrait?: MediaImage;
   /** Their page. Absent (a podcast guest has none), the name is plain and there is no link. */
   link?: ContributorLink;
+  /** Authored author biography, rendered with the existing prose treatment. */
+  descriptionHtml?: string;
+  /** Author profile links, in authored order. */
+  socialLinks?: readonly ContributorLink[];
 };
 
 export type ContributorsProps = {
@@ -76,6 +80,19 @@ export function Contributors({ label, people }: ContributorsProps) {
                     <h3 className={styles.name}>{person.name}</h3>
                     {person.role ? <p className={styles.role}>{person.role}</p> : null}
                   </Layout>
+                  {person.descriptionHtml ? <Prose html={person.descriptionHtml} /> : null}
+                  {person.socialLinks?.map((link) => (
+                    <Button
+                      key={link.href}
+                      as="a"
+                      href={link.href}
+                      emphasis="link"
+                      tone="primary"
+                      size="sm"
+                    >
+                      {link.label}
+                    </Button>
+                  ))}
                   {person.link ? (
                     <Button
                       as="a"
