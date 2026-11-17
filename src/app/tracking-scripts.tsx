@@ -10,7 +10,7 @@ import { HubSpotTracking } from './hubspot-tracking';
  * Every third-party tag on the live site, rendered only once tracking has started (lib/tracking-start:
  * the visitor's first scroll, tap or keypress, or 5 s after load). Marketing, Jatin, 17 Nov 2026:
  * Tag Manager no longer loads before the page; of the three visitor-identification tools only RB2B
- * stays (Vector, which brought LiveIntent, and Snitcher are gone).
+ * stays (Vector and Snitcher are gone). RB2B itself loads LiveIntent, an ad-identity service.
  */
 export function TrackingScripts() {
   const started = useTrackingStarted();

@@ -19,7 +19,9 @@ five answers, 17 Nov 2026:
 2. **Remove Hotjar, keep Microsoft Clarity:** yes (a Tag Manager change).
 3. **HubSpot chat only when it's needed:** yes. The widget loads a few seconds after tracking starts, not
    during page load.
-4. **One visitor-identification tool:** "RB2B". Vector, and LiveIntent with it, and Snitcher are removed.
+4. **One visitor-identification tool:** "RB2B". Vector and Snitcher are removed. (Corrected 17 Nov 2026: LiveIntent, an
+   ad-identity service, is loaded by RB2B, not Vector, so it stays with RB2B. The table told marketing
+   otherwise; every PageSpeed run with LiveIntent shows it after RB2B's IP lookup, before and after Vector's removal.)
 5. **Factors.ai:** "Remove" (a Tag Manager change).
 
 **Why.** PageSpeed, 17 Nov 2026: 13 tracking tools from 11 companies, ~1 MB of tracking code and 75–80 of
