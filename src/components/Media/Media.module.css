@@ -248,18 +248,24 @@
   background: var(--media-panel-ink-ground);
 }
 
-/* An animated image's frame for its stop control (MediaMotion). The control is placed on the
-   image, in its end corner, as Clip's is on its film: placement inside the component's own box,
-   not an arrangement of siblings, so it is not a Layout's job. */
+/* An animated image and its stop control (MediaMotion). The control sits BELOW the image, at its
+   end, never on it: a recorded tour keeps its own controls and step cards in the corners, and a
+   button laid over them hid the step being shown (owner, 18 Nov 2026). The bar is Media's own box,
+   so its air above the control is padding inside the component, not a child's margin, and the
+   control's end alignment is inline flow (text-align), not an arrangement of siblings. */
 .motion {
-  position: relative;
   display: block;
 }
 
+.motionBar {
+  display: block;
+  padding-block-start: var(--media-control-gap);
+  text-align: end;
+  line-height: 0;
+}
+
 .motionControl {
-  position: absolute;
-  inset-block-end: var(--media-control-inset);
-  inset-inline-end: var(--media-control-inset);
+  position: relative;
   inline-size: var(--media-control-size);
   block-size: var(--media-control-size);
   display: inline-grid;
@@ -270,6 +276,13 @@
   border: var(--media-control-rule-width) solid var(--media-control-rule);
   border-radius: var(--media-control-radius);
   cursor: pointer;
+}
+
+/* The touch target: 44 square around the 32 disc, as Button's extendHitArea does. */
+.motionControl::after {
+  content: '';
+  position: absolute;
+  inset: calc((var(--media-control-size) - var(--media-control-target)) / 2);
 }
 
 .motionControl:focus-visible {

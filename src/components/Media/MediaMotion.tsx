@@ -19,8 +19,8 @@ const readReduce = () => window.matchMedia(REDUCE).matches;
  * `animated` record, around the same `<img>` it renders for any other.
  *
  * ── The contract ─────────────────────────────────────────────────────────────────
- *   Clip's, for a file that cannot be scrubbed. One control in the image's end corner, always
- *   present: pause while it moves, play while it holds (WCAG 2.2.2 — anything that moves for more
+ *   Clip's, for a file that cannot be scrubbed. One control below the image, at its end
+ *   (never on it: a recorded tour has its own controls in its corners), always present: pause while it moves, play while it holds (WCAG 2.2.2 — anything that moves for more
  *   than five seconds by itself can be stopped). Reduced motion: it never moves by itself; the
  *   still stands and the control plays it on request.
  *
@@ -73,14 +73,16 @@ export function MediaMotion({
         ) : null}
         {children}
       </picture>
-      <button
-        type="button"
-        className={styles.motionControl}
-        onClick={() => setChoice(moving ? 'paused' : 'playing')}
-        aria-label={name}
-      >
-        {moving ? glyphs.pause : glyphs.play}
-      </button>
+      <span className={styles.motionBar}>
+        <button
+          type="button"
+          className={styles.motionControl}
+          onClick={() => setChoice(moving ? 'paused' : 'playing')}
+          aria-label={name}
+        >
+          {moving ? glyphs.pause : glyphs.play}
+        </button>
+      </span>
     </span>
   );
 }

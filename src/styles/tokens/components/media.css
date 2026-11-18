@@ -67,12 +67,14 @@
   --media-panel-inset: var(--gap-gutter);
 
   /* The stop control of an animated image (MediaMotion): Clip's control, duplicated on purpose
-     (a component never reads another's tokens). It sits ON THE IMAGE, never on the band's ground,
-     so like Clip's it does not move with `data-surface` and is declared once, here: paper with an
-     ink glyph and a hairline, which reads on any frame, and a two-tone ring that shows on blue as
-     on paper. The inset is the image's edge to the control, cell padding (--gap-text). */
-  --media-control-size: 44px; /* the WCAG 2.5.5 target, as Clip's and the Slider's */
-  --media-control-inset: var(--gap-text);
+     (a component never reads another's tokens). It sits below the image on the band's ground, at
+     the image's end; the image's frames vary, the ground does not, and paper with an ink glyph, a
+     hairline and a two-tone ring reads on all four surfaces, so it is declared once here.
+     The gap is the image to its control, an icon to its label (--gap-tight). The disc is 32 and
+     its touch target 44 (WCAG 2.5.5), the Slider's and Clip's target. */
+  --media-control-size: 32px;
+  --media-control-target: 44px;
+  --media-control-gap: var(--gap-tight);
   --media-control-radius: var(--radius-full);
   --media-control-rule-width: var(--border-width-1);
   --media-control-bg: var(--color-paper);
