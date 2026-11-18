@@ -236,17 +236,41 @@
   font: var(--cta-tick-text);
 }
 
-/* The island close's quote (owner, 18 Nov 2026): the 22 serif italic in the heading's ink, marks
-   included (no coloured punctuation), and who said it at body-sm in the body ink under it. */
+/* The island close's quote as a block of its own (owner, 18 Nov 2026: "in a designed block of its
+   own so it actually reads as a testimonial"): a quiet panel one step off the island, a `block`
+   inset and the 8 radius, no edge (the testimonial card's box). The 22 serif italic in the block's
+   own ink, marks included (no coloured punctuation); the speaker under it as the testimonial card
+   sets one: the name at h6, "role, company" at body-sm in a quieter ink, opening on a hairline. */
+.quoteBlock {
+  padding: var(--cta-quote-inset);
+  background: var(--cta-quote-ground);
+  border-radius: var(--cta-quote-radius);
+}
+
 .quote {
   max-inline-size: var(--cta-lede-measure);
-  color: var(--cta-heading-ink);
+  color: var(--cta-quote-ink);
   font: var(--cta-quote-text);
   text-wrap: pretty;
 }
 
-.quoteCite {
-  color: var(--cta-body-ink);
+.quoteWho {
+  padding-block-start: var(--cta-quote-inset);
+  border-block-start: var(--cta-rule-width) solid var(--cta-quote-rule-ink);
+}
+
+.quoteName {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--cta-quote-name-ink);
+  font: var(--cta-quote-name-text);
+  letter-spacing: var(--cta-quote-name-tracking);
+}
+
+.quoteRole {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--cta-quote-role-ink);
   font: var(--cta-detail-text);
 }
 

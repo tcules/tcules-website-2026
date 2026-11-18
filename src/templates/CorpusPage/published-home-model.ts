@@ -171,7 +171,7 @@ export type HomeSection = SectionHead &
          * numbered points and the drawing.
          */
         markers?: 'tick';
-        quote?: { text: string; cite: string };
+        quote?: { text: string; name: string; role?: string; company: string };
         illustration?: false;
         rating?: HomeRating;
         image?: MediaImage;
