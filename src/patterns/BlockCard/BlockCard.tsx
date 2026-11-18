@@ -121,8 +121,8 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  *   panel the text-only card as an OBJECT (owner, 28 Oct 2026, the insights finder's grid: a piece
  *         with no picture beside pieces with one): at rest, the drawn covers' plate — their ground,
  *         hairline and 8 radius — with the label at its head and the title and standfirst at its
- *         foot, filling its row's height (from md, never less than a square), so a row of covered
- *         and uncovered pieces ends on one line. Title-cued; no top hairline. In place of a picture
+ *         foot, filling its row's height, so a row of covered and uncovered pieces ends on one line;
+ *         in a row with no cover it is as tall as its words (owner, 18 Nov 2026). Title-cued; no top hairline. In place of a picture
  *         it carries what the piece has: its `icon` before the label, its `meta` under the title.
  *   tile  the filled tile (owner, 3 Nov 2026, /contact "Other ways to reach us"): at rest a ground of
  *         its own (--bcrd-tile-ground, one step off the surface) at the 16 radius, no edge and no
