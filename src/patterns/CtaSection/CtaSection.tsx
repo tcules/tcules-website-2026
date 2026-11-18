@@ -1293,6 +1293,11 @@ export function CtaSection(props: CtaSectionProps) {
         {ratingRow}
       </Layout>
     );
+    const halvesPanel = (
+      <div className={cx(styles.islandPanel, styles.islandPanelHalves)} data-surface="paper">
+        {props.form}
+      </div>
+    );
     return (
       <IslandBand
         inBand={props.inBand}
@@ -1310,8 +1315,8 @@ export function CtaSection(props: CtaSectionProps) {
             <TextureFlow fade={art ? 'start' : undefined} />
           ) : null}
           {props.islandTexture === 'frame' ? <TextureFrame /> : null}
-          <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-            {art ? (
+          {art ? (
+            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
               <Layout pinLast>
                 <Layout rowGap="stack">
                   <div className={styles.artLarge}>{props.art}</div>
@@ -1323,23 +1328,36 @@ export function CtaSection(props: CtaSectionProps) {
                   </div>
                 </Layout>
               </Layout>
-            ) : (
-              /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
-                 the title?"): the words were pinned to the half's foot under a drawing that is not
-                 there, so the form's extra height opened as empty ink over the heading. Without a
-                 drawing the words head the half and the quote, when there is one, takes the foot. */
-              <Layout pinLast={quote ? true : undefined} rowGap="stack">
-                <div data-texture-calm>{words}</div>
+              {halvesPanel}
+            </Layout>
+          ) : (
+            /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
+               the title?"): the words were pinned to the half's foot under a drawing that is not
+               there, so the form's extra height opened as empty ink over the heading. Without a
+               drawing the head (heading and lede) tops the start half, the ticks and the quote
+               follow it with the quote on the half's foot, and the form spans both rows beside
+               them. Stacked, Jatin's m- boards order it head, FORM, then the ticks and the quote:
+               the DOM is that order, and from 1024 the module places the panel in the end column. */
+            <Layout
+              columns={{ base: 1, lg: [1, 1] }}
+              colGap="section"
+              rowGap="stack"
+              className={styles.halvesSplit}
+            >
+              <div data-texture-calm className={styles.halvesHead}>
+                {lede({ scale: 'halves' })}
+              </div>
+              {halvesPanel}
+              <Layout pinLast={quote ? true : undefined} rowGap="stack" className={styles.halvesRest}>
+                <Layout rowGap="block">
+                  <CtaPoints shape="stack" markers={markers} points={points} />
+                  {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                  {ratingRow}
+                </Layout>
                 {quote ? <CtaQuoteBlock quote={quote} /> : null}
               </Layout>
-            )}
-            <div
-              className={cx(styles.islandPanel, styles.islandPanelHalves)}
-              data-surface="paper"
-            >
-              {props.form}
-            </div>
-          </Layout>
+            </Layout>
+          )}
         </Island>
       </IslandBand>
     );

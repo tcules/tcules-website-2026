@@ -365,6 +365,32 @@
   padding: var(--cta-panel-inset-halves);
 }
 
+/* The halves close with no drawing (owner, 18 Nov 2026): the DOM is the stacked order of Jatin's
+   m- boards (head, form, then the ticks and the quote). From 1024 the head and the rest take the
+   start column's two rows, the rest's row taking the spare height so its quote sits on the foot,
+   and the panel spans both rows in the end column, centred on them. Placement only: the Layout
+   owns both seams. */
+@media (min-width: 1024px) {
+  .halvesSplit {
+    grid-template-rows: auto 1fr;
+  }
+
+  .halvesHead {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .halvesRest {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .halvesSplit > .islandPanelHalves {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
+}
+
 /* The drawing: a component size, never cropped (Media renders an illustration whole). */
 .art {
   inline-size: min(100%, var(--cta-art-inline-size));
