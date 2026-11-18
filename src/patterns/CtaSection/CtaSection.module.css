@@ -225,6 +225,31 @@
   min-inline-size: 0;
 }
 
+/* The tick marker (`markers="tick"`, owner 18 Nov 2026): the glyph centres on the body label's
+   first line, offset by half of what the line box exceeds the glyph by (an optical correction). */
+.tick {
+  padding-block-start: var(--cta-tick-offset);
+}
+
+.tickLabel {
+  color: var(--cta-body-ink);
+  font: var(--cta-tick-text);
+}
+
+/* The island close's quote (owner, 18 Nov 2026): the 22 serif italic in the heading's ink, marks
+   included (no coloured punctuation), and who said it at body-sm in the body ink under it. */
+.quote {
+  max-inline-size: var(--cta-lede-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-quote-text);
+  text-wrap: pretty;
+}
+
+.quoteCite {
+  color: var(--cta-body-ink);
+  font: var(--cta-detail-text);
+}
+
 .label {
   color: var(--cta-point-ink);
   font: var(--cta-point-text);

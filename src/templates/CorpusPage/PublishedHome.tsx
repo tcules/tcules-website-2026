@@ -491,7 +491,10 @@ function Cta({
     );
   }
   const halves = section.presentation === 'form_island';
-  const art = section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK);
+  const art =
+    section.illustration === false
+      ? undefined
+      : (section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK));
   const formProps = {
     action: ENDPOINTS.enquiry,
     context: enquiryContext ?? {
@@ -512,9 +515,11 @@ function Cta({
     <CtaSection
       {...{ id, heading, eyebrow, surface, island, body, points }}
       data-band="L"
+      markers={section.markers}
+      quote={section.quote}
       islandArrangement={halves ? 'halves' : 'beside'}
       islandTexture={halves ? 'flow' : 'frame'}
-      art={<Media image={art} sizes={halves ? '300px' : '240px'} />}
+      art={art ? <Media image={art} sizes={halves ? '300px' : '240px'} /> : undefined}
       footnote={section.footnote}
       footnoteIcon="shield-check"
       contact={section.contacts.length ? section.contacts : undefined}
@@ -528,7 +533,12 @@ function Cta({
             variant="enquiry"
             urlLabel={form.urlLabel}
             scheduleHref={form.scheduleHref}
-            dress={{ kind: 'card', reply: form.reply ?? form.caption ?? '' }}
+            dress={{
+              kind: 'card',
+              reply: form.reply ?? form.caption ?? '',
+              name: form.askName,
+              emailLabel: form.emailLabel,
+            }}
           />
         )
       }
