@@ -1,7 +1,7 @@
 ---
 title: "The overhaul enquiry island: the quote is a block of its own, the ticks ruled and at body-sm, the words head the half"
 date: 2026-11-18
-status: active
+status: superseded
 area: [proof, forms, layout]
 source: "Owner (Devagya), 18 Nov 2026, review of the overhaul Home enquiry island: put Roland Sailer's quote 'in a designed block of its own so it actually reads as a testimonial' with the name, position and company split as in the testimonial card; 'what is this blank space above the title?'; 'add a line divider before the three bullets. one size smaller for the three lines of text'; 'keep the form on the paper panel'. Branch design/ov5-enquiry-home."
 supersedes: ["2026-11-18-enquiry-island-carries-a-quote"]

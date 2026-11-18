@@ -173,6 +173,12 @@ export type HomeSection = SectionHead &
         markers?: 'tick';
         quote?: { text: string; name: string; role?: string; company: string };
         illustration?: false;
+        /**
+         * The overhaul enquiry close is an ink band, not an island in a paper band (owner, 18 Nov
+         * 2026: "form island should become a section so the padding is not applied twice"). The CMS
+         * sends none, so its closes keep the island.
+         */
+        frame?: 'band';
         rating?: HomeRating;
         image?: MediaImage;
         form?: {
