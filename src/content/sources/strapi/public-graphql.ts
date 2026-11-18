@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache';
 
 import { publicGraphqlUrl } from './cms-url';
+import { markAnimatedUploads } from './image';
 export { publicGraphqlUrl } from './cms-url';
 
 import { modelTag, queryTags, relationDependencies } from '../../../lib/cms/cache-policy';
@@ -40,7 +41,9 @@ export async function publicGraphql<T>(
     key,
     unstable_cache(
       () => readPublicGraphql<T>(url, query, operationName, variables, options),
-      ['cms-graphql-v1', key],
+      /* v2: responses now carry `animated` on moving uploads; a v1 entry restored from a previous
+         build's cache would not. */
+      ['cms-graphql-v2', key],
       { tags: queryTags(query, operationName, variables), revalidate: false },
     ),
   );
@@ -93,6 +96,9 @@ async function readPublicGraphql<T>(
       `New CMS ${operationName}: ${result.errors.length} optional image files are missing`,
     );
   }
+  /* Which images move is read here, once per response and inside its cache, so every page's
+     records carry it (see markAnimatedUploads). */
+  await markAnimatedUploads(result.data, url);
   return result.data;
 }
 
@@ -140,9 +146,10 @@ export async function cachedCmsFetch(
         const payload = (await response.json()) as { data?: unknown; errors?: unknown[] };
         if (!response.ok || payload.errors?.length || !payload.data)
           throw new Error(`CMS legacy query failed (HTTP ${response.status})`);
+        await markAnimatedUploads(payload.data, url);
         return payload;
       },
-      ['cms-legacy-v1', key],
+      ['cms-legacy-v2', key],
       { tags: [...tags], revalidate: false },
     ),
   );

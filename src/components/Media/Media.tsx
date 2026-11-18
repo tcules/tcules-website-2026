@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 
 import { cx } from '@/lib/cx';
 import { RESIZE_WIDTHS, resizedSrc, stillSrc } from '@/lib/image-resize';
@@ -151,9 +151,9 @@ export type MediaImage = {
   placeholderSize?: boolean;
   /**
    * True when the file MOVES: an animated WebP or GIF, read from the file's own header at supply
-   * (`withMotion` in the Strapi source). A content fact, like `kind`. Media then serves the
-   * original alone, never a resized width (a resized copy is its first frame), and with `glyphs`
-   * gives it a pause control and the still under reduced motion (WCAG 2.2.2).
+   * (`markAnimatedUploads` in the Strapi source). A content fact, like `kind`. Media then serves
+   * the original alone, never a resized width (a resized copy is its first frame), with a pause
+   * control below it and the still under reduced motion (WCAG 2.2.2).
    */
   animated?: boolean;
 };
@@ -265,16 +265,9 @@ export type MediaProps = {
    * empty, Media renders a bare `<img>`; present, the `<img>` is wrapped in a `<picture>`.
    */
   art?: readonly MediaArt[];
-  /**
-   * The motion control's two glyphs, composed by the caller as Clip's are (a primitive takes its
-   * sibling as a node, never by import): `pause` while the image moves, `play` while it holds its
-   * still. Read only for an `animated` image, and required there: without them a moving image has
-   * no way to be stopped, which fails WCAG 2.2.2, so Media warns in development.
-   */
-  glyphs?: MediaGlyphs;
 };
 
-export type MediaGlyphs = { play: ReactNode; pause: ReactNode };
+
 
 /**
  * The `srcset` for an image: every derived width plus the master, ascending, one entry per width.
@@ -416,7 +409,6 @@ export function Media({
   focus,
   zoom,
   art,
-  glyphs,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
   const isCutOut = kind === 'cut-out';
@@ -558,18 +550,17 @@ export function Media({
       bare
     );
 
-  /* A moving image: the same <img>, handed to the client control that can stop it. It needs a
-     still to stop on and the caller's glyphs to draw the control; missing either, it moves as before. */
+  /* A moving image: the same <img>, handed to the client control that can stop it, wherever the
+     image is placed (decisions/2026-11-18-animated-image-pause-below). It needs a still to stop
+     on; an image that is not ours to resize has none, and moves as before. */
   const still = image.animated ? stillSrc(image.src) : undefined;
-  if (image.animated && !glyphs) warn('an animated image needs `glyphs` for its pause control', image);
-  const shown =
-    still && glyphs ? (
-      <MediaMotion still={still} label={image.alt} glyphs={glyphs} contained={boxed}>
-        {bare}
-      </MediaMotion>
-    ) : (
-      img
-    );
+  const shown = still ? (
+    <MediaMotion still={still} label={image.alt} contained={boxed}>
+      {bare}
+    </MediaMotion>
+  ) : (
+    img
+  );
 
   if (!panel) return shown;
 

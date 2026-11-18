@@ -74,6 +74,7 @@
      its touch target 44 (WCAG 2.5.5), the Slider's and Clip's target. */
   --media-control-size: 32px;
   --media-control-target: 44px;
+  --media-control-glyph: var(--icon-size-16); /* Icon's md, as in Clip's control */
   --media-control-gap: var(--gap-tight);
   --media-control-radius: var(--radius-full);
   --media-control-rule-width: var(--border-width-1);

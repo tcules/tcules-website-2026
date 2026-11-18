@@ -291,3 +291,12 @@
     0 0 0 var(--media-ring-offset) var(--media-ring-gap-color),
     0 0 0 calc(var(--media-ring-offset) + var(--media-ring-width)) var(--media-ring-color);
 }
+
+.motionGlyph {
+  display: block;
+  inline-size: var(--media-control-glyph);
+  block-size: var(--media-control-glyph);
+  fill: currentColor;
+  fill-rule: evenodd;
+  stroke: none;
+}

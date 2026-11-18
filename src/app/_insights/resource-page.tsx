@@ -56,14 +56,7 @@ function renderBlock(block: Block) {
               ) : (
                 <>
                   {figure.image ? (
-                    <Media
-                      image={figure.image}
-                      sizes={BODY_IMAGE_SIZES}
-                      glyphs={{
-                        play: <Icon name="chrome-play" />,
-                        pause: <Icon name="chrome-pause" />,
-                      }}
-                    />
+                    <Media image={figure.image} sizes={BODY_IMAGE_SIZES} />
                   ) : null}
                   {figure.note ? (
                     <Prose>

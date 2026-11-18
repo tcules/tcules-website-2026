@@ -3,6 +3,7 @@
 import { type ReactNode, useState, useSyncExternalStore } from 'react';
 
 import { cx } from '@/lib/cx';
+import { glyphs as GLYPHS, type IconName } from '@/lib/icon-glyphs';
 
 import styles from './Media.module.css';
 
@@ -33,7 +34,6 @@ const readReduce = () => window.matchMedia(REDUCE).matches;
 export function MediaMotion({
   still,
   label,
-  glyphs,
   contained,
   children,
 }: {
@@ -41,7 +41,6 @@ export function MediaMotion({
   still: string;
   /** The image's alt, which names what the control stops. */
   label: string;
-  glyphs: { play: ReactNode; pause: ReactNode };
   /** The placement owns a box the image fills (`fit="fill" | "contain"`). */
   contained: boolean;
   /** Media's `<img>`, unchanged. */
@@ -80,9 +79,24 @@ export function MediaMotion({
           onClick={() => setChoice(moving ? 'paused' : 'playing')}
           aria-label={name}
         >
-          {moving ? glyphs.pause : glyphs.play}
+          <Glyph name={moving ? 'chrome-pause' : 'chrome-play'} />
         </button>
       </span>
     </span>
+  );
+}
+
+/**
+ * The control's mark, from the icon set's own paths: the universal pause and play (the `chrome-`
+ * marks Clip's and the hero's films use). Drawn here from the leaf rather than taken as an `Icon`
+ * node, so no placement can render a moving image without its control.
+ */
+function Glyph({ name }: { name: IconName }) {
+  return (
+    <svg className={styles.motionGlyph} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {GLYPHS[name].map((d) => (
+        <path key={d} d={d} />
+      ))}
+    </svg>
   );
 }
