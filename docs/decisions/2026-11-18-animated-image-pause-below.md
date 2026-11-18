@@ -7,7 +7,7 @@ source: "Devagya, 18 Nov 2026, reviewing figure 7 on /insights/what-an-ai-agent-
 supersedes: []
 dbf: [ch05 §2]
 dbf_status: pending
-enforced_by: "Media (MediaMotion renders the control for every `animated` record given glyphs; dev warning without them) + review"
+enforced_by: "Media (MediaMotion renders the control for every `animated` record) + review"
 ---
 
 An animated image (an animated WebP or GIF, such as a figure's recorded product tour) moves by itself only with a
@@ -24,7 +24,8 @@ resizer decoded one frame), looping with no way to stop them where they did play
 recording's corner. Not to be confused with `2026-10-31-autoplay-without-a-control`, which is about sets that
 advance by themselves (tabs), not media that moves.
 
-**How to apply.** `Media` with an `animated` record and the caller's `glyphs` (`chrome-play` / `chrome-pause`)
-renders `MediaMotion`; `Figure` and the article page pass them. The Strapi resource source marks `animated` from the
-file header. The `/img/*` copy of an animated original is its still, at 1240. The still is the clip's title frame,
-so the clip should open on one.
+**How to apply.** Everywhere on the site, whatever the page: every CMS response is read for uploads whose file
+moves (`markAnimatedUploads`, from the file header), and `Media` renders any `animated` record through `MediaMotion`,
+drawing the `chrome-play` / `chrome-pause` marks itself so no placement can leave the control out. The `/img/*` copy
+of an animated original is its still, at 1240. The still is the clip's title frame, so the clip should open on one.
+Not covered: an image inside Markdown body copy, which is HTML rather than `Media`.
