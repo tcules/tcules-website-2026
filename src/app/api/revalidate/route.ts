@@ -4,7 +4,11 @@ import { revalidateTag } from 'next/cache';
 import { authenticWebhook, eventTags, parseCmsEvent } from '@/lib/cms/webhook';
 
 export const runtime = 'nodejs';
-const MAX_BODY_BYTES = 256 * 1024;
+/* 8 MB. The secret is checked before a byte of the body is read, so only Strapi can send one this
+   large. At 256 KB a Resource Listing publish (one entry linking 152 pieces) is the likely reason
+   /insights stayed stale after a listing-only publish (16–18 Nov 2026): the notice was refused
+   before its model was read, and nothing was logged. */
+const MAX_BODY_BYTES = 8 * 1024 * 1024;
 
 async function readBody(request: Request): Promise<string> {
   const reader = request.body?.getReader();
@@ -63,6 +67,16 @@ export async function POST(request: Request) {
     }
     event = parseCmsEvent(payload);
   } catch (error) {
+    /* Logged, so a refused notice shows in the deploy's logs: a refusal here means a page stays
+       stale until something else expires it. */
+    console.error(
+      JSON.stringify({
+        scope: 'cms-revalidation',
+        requestId,
+        status: error instanceof RangeError ? 'too-large' : 'invalid',
+        error: error instanceof Error ? error.message : String(error),
+      }),
+    );
     return Response.json(
       { error: error instanceof RangeError ? 'Body too large' : 'Invalid webhook payload' },
       { status: error instanceof RangeError ? 413 : 400 },

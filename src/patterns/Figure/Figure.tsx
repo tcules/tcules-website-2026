@@ -49,6 +49,12 @@ export type FigureProps = {
    * does NOT establish. Absent — or empty — renders no element and no seam.
    */
   note?: string;
+  /**
+   * The figure's number as authored ("Figure 7"), read WITH the caption: it leads the caption's
+   * own line as a run-in label, inside the <figcaption>, so the two are one sentence to a screen
+   * reader and to the eye (18 Nov 2026: it printed as a stray paragraph after the figure).
+   */
+  label?: string;
 };
 
 /* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
@@ -73,7 +79,7 @@ const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
  * fixed 3:2 centre crop that is right for `ListCard`'s marker is deliberately not generalised here.
  * Its edge is Media's, by kind, and radius 0 on every kind (ch05 §6).
  */
-export function Figure({ image, caption, note }: FigureProps) {
+export function Figure({ image, caption, note, label }: FigureProps) {
   /* An empty note is treated as absent, an empty caption is not, and the asymmetry is deliberate
      rather than an oversight. `note` is optional, so `note=""` is indistinguishable from no note
      at all and collapsing it is the honest reading. `caption` is required, so an empty one is a
@@ -95,7 +101,16 @@ export function Figure({ image, caption, note }: FigureProps) {
           above an image reads as an eyebrow — a label for what is coming — and this system
           already assigns that role a different meaning on PageHero. */}
       <Layout as="figcaption" rowGap="tight" className={styles.legend}>
-        <p className={styles.caption}>{caption}</p>
+        <p className={styles.caption}>
+          {label?.trim() ? (
+            <>
+              <span className={styles.label}>
+                {/[.:]$/.test(label.trim()) ? label.trim() : `${label.trim()}.`}
+              </span>{' '}
+            </>
+          ) : null}
+          {caption}
+        </p>
         {hasNote ? <p className={styles.note}>{note}</p> : null}
       </Layout>
     </Layout>

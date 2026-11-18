@@ -1,0 +1,14 @@
+/* ResourceArticle — the article column's two widths. Layout owns every seam; this module owns the
+   reading measure only. A measure is a type decision, not a distance, so it reads the reading
+   measure unaliased (68ch, owner 18 Nov 2026: the body measure's 75ch set 83–94 characters a line).
+
+   Both wrappers keep a track's min-content from widening it: a long URL or a wide table inside
+   must scroll or wrap within the column rather than push the article past the rail's split. */
+.reading {
+  min-inline-size: 0;
+  max-inline-size: var(--measure-reading);
+}
+
+.block {
+  min-inline-size: 0;
+}

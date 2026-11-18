@@ -1,8 +1,7 @@
-import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Icon, Layout, Media, Prose, Section } from '@/components';
+import { Icon, Layout, Media, Prose } from '@/components';
 import { getResourceDetail } from '@/content';
 import { withBreadcrumbList } from '@/lib/breadcrumb-json-ld';
 import { jsonLdMarkup } from '@/lib/json-ld';
@@ -15,12 +14,11 @@ import {
   DataTable,
   Figure,
   PageHero,
-  TableOfContents,
   type HeroCredit,
   type HeroPerson,
   type TocItem,
 } from '@/patterns';
-import { InsightResources } from '@/templates';
+import { InsightResources, ResourceArticle, type ArticleItem } from '@/templates';
 import { PublishedSection } from '@/templates/CorpusPage/PublishedHome';
 
 import { withShareImage } from '@/app/_og';
@@ -28,6 +26,10 @@ import { withShareImage } from '@/app/_og';
 type Resource = NonNullable<Awaited<ReturnType<typeof getResourceDetail>>>;
 type Block = Resource['blocks'][number];
 const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+
+/* Running words cap at the reading measure; figures, tables and callouts keep the whole track. */
+const measureOf = (block: Block): ArticleItem['measure'] =>
+  block.type === 'heading' || block.type === 'prose' || block.type === 'faq' ? 'text' : 'block';
 
 function renderBlock(block: Block) {
   switch (block.type) {
@@ -51,8 +53,15 @@ function renderBlock(block: Block) {
         >
           {block.figures.map((figure) => (
             <Layout key={figure.id} id={figure.id} rowGap="text">
-              {figure.caption ? (
-                <Figure image={figure.image} caption={figure.caption} note={figure.note} />
+              {/* The label ("Figure 7") is read with the caption, inside the <figcaption>; a figure
+                  with a label and no caption takes the label as its caption. */}
+              {figure.caption || figure.label ? (
+                <Figure
+                  image={figure.image}
+                  caption={figure.caption ?? figure.label ?? ''}
+                  label={figure.caption ? figure.label : undefined}
+                  note={figure.note}
+                />
               ) : (
                 <>
                   {figure.image ? (
@@ -65,16 +74,13 @@ function renderBlock(block: Block) {
                   ) : null}
                 </>
               )}
-              {figure.label || figure.notes.length ? (
+              {figure.notes.length ? (
                 <Prose>
-                  {figure.label ? <p>{figure.label}</p> : null}
-                  {figure.notes.length ? (
-                    <ol>
-                      {figure.notes.map((note, index) => (
-                        <li key={index}>{note}</li>
-                      ))}
-                    </ol>
-                  ) : null}
+                  <ol>
+                    {figure.notes.map((note, index) => (
+                      <li key={index}>{note}</li>
+                    ))}
+                  </ol>
                 </Prose>
               ) : null}
             </Layout>
@@ -123,7 +129,6 @@ export async function renderResourcePage(slug: string) {
     label,
     href: `#${anchorId}`,
   }));
-  const hasOutline = outline.length >= 2;
   /* One summary per piece, never two boxes. Strapi carries it in two places: a callout that opens
      the body (the "Insights" box) and the key-takeaways list. Whichever exist meet in one panel,
      the paragraph before the list, keyed by the callout's label, else the list's. */
@@ -218,47 +223,60 @@ export async function renderResourcePage(slug: string) {
         ) : null}
       </PageHero>
       {resource.blocks.length || resource.authors.length || resource.takeaways ? (
-        <Section as="div" surface="paper">
-          <Layout
-            columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
-            colGap="column"
-            rowGap="stack"
-            align="start"
-          >
-            {hasOutline ? <TableOfContents items={outline} /> : null}
-            <Layout as="article" rowGap="stack">
-              {summary ? (
-                <Callout tone="summary" label={summary.label} html={summary.html} />
-              ) : null}
-              {bodyBlocks.map((block) => (
-                <Fragment key={block.key}>{renderBlock(block)}</Fragment>
-              ))}
-              <Contributors
-                label={resource.authors.length > 1 ? 'About the authors' : 'About the author'}
-                people={resource.authors.map((author) => ({
-                  name: author.name,
-                  role: author.role,
-                  portrait: author.portrait,
-                  descriptionHtml: author.descriptionHtml,
-                  socialLinks: author.linkedIn
-                    ? [{ label: 'LinkedIn', href: author.linkedIn }]
-                    : undefined,
-                  link: author.href
-                    ? {
-                        label: `More from ${author.name.trim().split(/\s+/)[0]}`,
-                        href: author.href,
-                      }
-                    : undefined,
-                }))}
-              />
-            </Layout>
-          </Layout>
-        </Section>
+        <ResourceArticle
+          outline={outline}
+          items={[
+            ...(summary
+              ? [
+                  {
+                    key: 'summary',
+                    measure: 'block' as const,
+                    node: <Callout tone="summary" label={summary.label} html={summary.html} />,
+                  },
+                ]
+              : []),
+            ...bodyBlocks.map((block) => ({
+              key: block.key,
+              measure: measureOf(block),
+              node: renderBlock(block),
+            })),
+            {
+              key: 'contributors',
+              measure: 'block' as const,
+              node: (
+                <Contributors
+                  label={resource.authors.length > 1 ? 'About the authors' : 'About the author'}
+                  people={resource.authors.map((author) => ({
+                    name: author.name,
+                    role: author.role,
+                    portrait: author.portrait,
+                    descriptionHtml: author.descriptionHtml,
+                    socialLinks: author.linkedIn
+                      ? [{ label: 'LinkedIn', href: author.linkedIn }]
+                      : undefined,
+                    link: author.href
+                      ? {
+                          label: `More from ${author.name.trim().split(/\s+/)[0]}`,
+                          href: author.href,
+                        }
+                      : undefined,
+                  }))}
+                />
+              ),
+            },
+          ]}
+        />
       ) : null}
-      {resource.related?.heading ? (
-        <InsightResources {...resource.related} heading={resource.related.heading} />
-      ) : null}
+      {/* The ask straight after the article, the further reading last and on tint (owner, 2 Nov 2026;
+          decisions/2026-11-02-insight-ask-before-further-reading). */}
       {resource.cta ? <PublishedSection section={resource.cta} route={resource.path} /> : null}
+      {resource.related?.heading ? (
+        <InsightResources
+          {...resource.related}
+          heading={resource.related.heading}
+          surface="tint"
+        />
+      ) : null}
     </>
   );
 }

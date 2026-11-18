@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Children, type ReactNode } from 'react';
 
 import {
   Arena,
@@ -1111,7 +1111,15 @@ export function PageHero({
   const shownLabels = [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
   const labelsNode =
     shownLabels.length === 0 ? null : (
-      <Cluster as="ul" colGap="text" rowGap="tight" justify={centredHead ? 'center' : 'start'}>
+      /* One sideways row on a phone rather than two or three lines of tags ahead of the content
+         (owner, 18 Nov 2026); wrapping from 768. */
+      <Cluster
+        as="ul"
+        colGap="text"
+        rowGap="tight"
+        justify={centredHead ? 'center' : 'start'}
+        scrollUntil="md"
+      >
         {shownLabels.map((label) => (
           <li key={label}>
             <Tag>{label}</Tag>
@@ -1121,8 +1129,10 @@ export function PageHero({
     );
 
   /* ── extras · the caller's block. No class: it carries nothing. The <div> groups whatever is
-     passed into ONE row of the stack. */
-  const extrasNode = children == null ? null : <div>{children}</div>;
+     passed into ONE row of the stack. Absent when nothing in it renders: a caller passing
+     conditional blocks hands over `[null, null]`, which is not `null`, and the empty <div> took a
+     whole stack seam under the byline on every article (owner, 18 Nov 2026). */
+  const extrasNode = Children.toArray(children).length === 0 ? null : <div>{children}</div>;
 
   /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is the page's one main action, the
