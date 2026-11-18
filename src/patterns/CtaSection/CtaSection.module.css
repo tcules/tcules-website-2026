@@ -238,7 +238,7 @@
 
 /* The island close's quote as a block of its own (owner, 18 Nov 2026: "in a designed block of its
    own so it actually reads as a testimonial"): a quiet panel one step off the island, a `block`
-   inset and the 8 radius, no edge (the testimonial card's box). The 22 serif italic in the block's
+   inset and the 8 radius, no edge (the testimonial card's box). The card's 18 sans italic in the block's
    own ink, marks included (no coloured punctuation); the speaker under it as the testimonial card
    sets one: the name at h6, "role, company" at body-sm in a quieter ink, opening on a hairline. */
 .quoteBlock {
