@@ -39,15 +39,21 @@ export type CtaPoint = {
 
 /**
  * A client's line at the foot of the island close's words (owner, 18 Nov 2026; supersedes the
- * own-band rule for this one place: decisions/2026-11-18-enquiry-island-carries-a-quote). Small: the
- * 22 serif italic quote and its attribution under it, never the testimonial card. Plain strings, so
- * no rating, portrait or link can ride on it. It always shows its marks, curled (lib/quote-marks),
- * in the quote's own ink (decisions/2026-10-11-no-coloured-punctuation).
+ * own-band rule for this one place: decisions/2026-11-18-enquiry-quote-is-a-block). Its own block on
+ * the island (owner, 18 Nov 2026: "in a designed block of its own so it actually reads as a
+ * testimonial"): the 22 serif italic quote, then the speaker as the testimonial card sets one, the
+ * name on its own line and "role, company" under it. Plain strings, so no rating, portrait or link
+ * can ride on it. It always shows its marks, curled (lib/quote-marks), in the quote's own ink
+ * (decisions/2026-10-11-no-coloured-punctuation).
  */
 export type CtaQuote = {
   text: string;
-  /** "Roland Sailer, Director of Product, Ringier Media Switzerland": who said it, one line. */
-  cite: string;
+  /** "Roland Sailer". */
+  name: string;
+  /** "Director of Product". A blank role leaves no separator. */
+  role?: string;
+  /** "Ringier Media Switzerland". */
+  company: string;
 };
 
 /** A point under `markers="icon"`: the glyph is required, so no point renders a hole in the column. */
@@ -706,24 +712,42 @@ function CtaPoints({
     );
   }
 
-  return (
+  const list = (
     <Layout as={listElement} rowGap={stackGap}>
       {items}
     </Layout>
   );
+  /* The ticks open on a hairline (owner, 18 Nov 2026: "add a line divider before the three
+     bullets"), a `block` above the list: the assurances read as a set apart from the lede, as on
+     Jatin's boards. Part of the tick list, so every tick list carries it. */
+  if (markers === 'tick') {
+    return (
+      <Layout rowGap="block">
+        <div className={styles.rule} />
+        {list}
+      </Layout>
+    );
+  }
+  return list;
 }
 
-/** The island close's quote (`CtaQuote`): the line, then who said it a `tight` under it. */
+/**
+ * The island close's quote (`CtaQuote`) as a block of its own: a quiet panel one step off the
+ * island (--cta-quote-ground), the line, then the speaker on a hairline a `block` under it, as the
+ * testimonial card closes on its speaker: the name, and "role, company" an `inline` under it.
+ */
 function CtaQuoteBlock({ quote }: { quote: CtaQuote }) {
+  const role = quote.role?.trim() ? `${quote.role}, ${quote.company}` : quote.company;
   return (
-    <figure>
-      <Layout rowGap="tight">
-        <blockquote className={styles.quote}>
-          <p>{withQuoteMarks(curlQuotes(quote.text))}</p>
-        </blockquote>
-        <figcaption className={styles.quoteCite}>{quote.cite}</figcaption>
+    <Layout as="figure" rowGap="block" className={styles.quoteBlock}>
+      <blockquote className={styles.quote}>
+        <p>{withQuoteMarks(curlQuotes(quote.text))}</p>
+      </blockquote>
+      <Layout as="figcaption" rowGap="inline" className={styles.quoteWho}>
+        <span className={styles.quoteName}>{quote.name}</span>
+        <span className={styles.quoteRole}>{role}</span>
       </Layout>
-    </figure>
+    </Layout>
   );
 }
 
@@ -1261,6 +1285,14 @@ export function CtaSection(props: CtaSectionProps) {
        never grows empty paper under the form. */
   if (props.islandArrangement === 'halves') {
     const art = present(props.art);
+    const words = (
+      <Layout rowGap="block">
+        {lede({ scale: 'halves' })}
+        <CtaPoints shape="stack" markers={markers} points={points} />
+        {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+        {ratingRow}
+      </Layout>
+    );
     return (
       <IslandBand
         inBand={props.inBand}
@@ -1279,22 +1311,28 @@ export function CtaSection(props: CtaSectionProps) {
           ) : null}
           {props.islandTexture === 'frame' ? <TextureFrame /> : null}
           <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-            <Layout pinLast>
-              <Layout rowGap="stack">
-                {art ? <div className={styles.artLarge}>{props.art}</div> : null}
-                <div data-texture-calm>
-                  <Layout rowGap="stack">
-                    <Layout rowGap="block">
-                      {lede({ scale: 'halves' })}
-                      <CtaPoints shape="stack" markers={markers} points={points} />
-                      {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-                      {ratingRow}
+            {art ? (
+              <Layout pinLast>
+                <Layout rowGap="stack">
+                  <div className={styles.artLarge}>{props.art}</div>
+                  <div data-texture-calm>
+                    <Layout rowGap="stack">
+                      {words}
+                      {quote ? <CtaQuoteBlock quote={quote} /> : null}
                     </Layout>
-                    {quote ? <CtaQuoteBlock quote={quote} /> : null}
-                  </Layout>
-                </div>
+                  </div>
+                </Layout>
               </Layout>
-            </Layout>
+            ) : (
+              /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
+                 the title?"): the words were pinned to the half's foot under a drawing that is not
+                 there, so the form's extra height opened as empty ink over the heading. Without a
+                 drawing the words head the half and the quote, when there is one, takes the foot. */
+              <Layout pinLast={quote ? true : undefined} rowGap="stack">
+                <div data-texture-calm>{words}</div>
+                {quote ? <CtaQuoteBlock quote={quote} /> : null}
+              </Layout>
+            )}
             <div
               className={cx(styles.islandPanel, styles.islandPanelHalves)}
               data-surface="paper"

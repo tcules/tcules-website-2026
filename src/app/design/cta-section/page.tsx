@@ -339,6 +339,52 @@ export default function CtaSectionSpecimenPage() {
         body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
       />
+      <SpecimenNote
+        title="1e · The overhaul island: ruled ticks, a quote block, a name, on ink"
+        note="The enquiry island the overhaul pages close on (owner, 18 Nov 2026): halves with the flow field on an ink island and no drawing, so the words head the start half and the quote takes its foot (no empty ink over the heading); the points as the plan checklists' tick (markers='tick': a hairline a `block` under the lede opens the list, check-circle at 18 in the accent, the label at body-sm, a `text` apart, a <ul>); the client's line as a block of its own (quote: a quiet panel one step off the island, the 22 serif italic, marks included, then the speaker on a hairline as the testimonial card sets one, the name at h6 and 'role, company' at body-sm; decisions/2026-11-18-enquiry-quote-is-a-block); and the card asking Name first, then Work email, the question and the optional Product website. Second instance: the longest quote, name and points, on blue, where the block is paper (blue is never a panel). Below 1024 the words, the ticks, the quote, then the form, as on m-Home."
+      />
+      <CtaSection
+        island="ink"
+        islandTexture="flow"
+        islandArrangement="halves"
+        markers="tick"
+        points={OVERHAUL_POINTS}
+        quote={{
+          text: '“It was simply the most successful long-distance 3rd party collaboration I have seen.”',
+          name: 'Roland Sailer',
+          role: 'Director of Product',
+          company: 'Ringier Media Switzerland',
+        }}
+        heading="Tell us what you're working on"
+        body={["One stubborn workflow, a new product, a redesign that's been on the roadmap too long, or an opportunity you're still figuring out. We'll suggest the best way to begin."]}
+        form={
+          <EnquiryForm
+            {...ENQUIRY_FORM_PROPS}
+            submitLabel="Book a free product review"
+            urlLabel="Product website"
+            dress={{ ...DRESS.card, name: true, emailLabel: 'Work email' }}
+          />
+        }
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="flow"
+        islandArrangement="halves"
+        markers="tick"
+        points={[
+          ...OVERHAUL_POINTS,
+          { label: 'A longer assurance that runs to three lines in the half, to show the tick holding to the first line while the sentence wraps under itself.' },
+        ]}
+        quote={{
+          text: 'A client quote authored without its marks, long enough to wrap across four lines at the lede measure so the attribution sits under a full paragraph.',
+          name: 'A Speaker With A Long Name',
+          role: 'Head of Product Design and Research',
+          company: 'A Company With A Long Name',
+        }}
+        heading="Tell us what you're working on"
+        body={['A sketch, a prototype or a product with years of history behind it.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={{ ...DRESS.card, name: true }} />}
+      />
 
       <CtaSection
         arrangement="open"
