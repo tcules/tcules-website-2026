@@ -126,3 +126,47 @@ export function mapUploadImage(
     ...(sources ? { sources } : {}),
   };
 }
+
+/* ── Motion ─────────────────────────────────────────────────────────────────────────────────── */
+
+const motionMemo = new Map<string, Promise<boolean>>();
+
+/**
+ * Whether the file at `src` moves, read from its own header: a WebP's VP8X chunk carries an
+ * animation flag (bit 1 of the byte after the chunk header), and an animated GIF carries the
+ * NETSCAPE2.0 looping extension ahead of its frames. Strapi records neither, so the header is the
+ * one place it is written. Only the first kilobyte is fetched (a range request), once per file per
+ * process: an upload's URL carries its hash, so its bytes never change. Any failure reads as still,
+ * which is how every image rendered before this check existed.
+ */
+export function isAnimated(src: string): Promise<boolean> {
+  if (!/\.(webp|gif)$/i.test(new URL(src, 'https://x.invalid').pathname)) return Promise.resolve(false);
+  let pending = motionMemo.get(src);
+  if (!pending) {
+    pending = fetch(src, {
+      headers: { Range: 'bytes=0-1023' },
+      cache: 'force-cache',
+      signal: AbortSignal.timeout(4_000),
+    })
+      .then(async (response) => {
+        if (!response.ok) return false;
+        const head = new Uint8Array(await response.arrayBuffer()).subarray(0, 1024);
+        const ascii = (from: number, to: number) => String.fromCharCode(...head.subarray(from, to));
+        if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP')
+          return ascii(12, 16) === 'VP8X' && ((head[20] ?? 0) & 0x02) !== 0;
+        if (ascii(0, 3) === 'GIF') return ascii(0, head.length).includes('NETSCAPE2.0');
+        return false;
+      })
+      .catch(() => false);
+    motionMemo.set(src, pending);
+  }
+  return pending;
+}
+
+/** The record, marked `animated` when its file moves (see `isAnimated`). */
+export async function withMotion<T extends { src: string; animated?: boolean }>(
+  image: T | undefined,
+): Promise<T | undefined> {
+  if (!image) return image;
+  return (await isAnimated(image.src)) ? { ...image, animated: true } : image;
+}

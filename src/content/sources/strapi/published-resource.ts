@@ -11,7 +11,7 @@ import type { ArticleSceneName } from '@/lib/sketches';
 
 import { actionHref, icon, image, mapBand, rows, text } from './home';
 import type { CmsHomeSection, CmsImage, Entries } from './home-types';
-import { mapUploadImage, type StrapiUploadFile } from './image';
+import { mapUploadImage, type StrapiUploadFile, withMotion } from './image';
 import { markdownInlineToHtml, resolveInPageAnchors, type BodyHeading } from './markdown';
 import {
   PUBLISHED_RESOURCE_QUERY,
@@ -373,8 +373,24 @@ export const getPublishedResource = cache(async (slug: string, revalidate?: numb
   const [lead, ...rest] = paragraphs;
   const body: [string, ...string[]] | undefined = lead ? [lead, ...rest] : undefined;
   const outline: BodyHeading[] = [];
-  const blocks = resolveInPageAnchors(
-    rows(record.content).flatMap((block) => mapBlock(block, record.routePath, outline) ?? []),
+  const blocks = await Promise.all(
+    resolveInPageAnchors(
+      rows(record.content).flatMap((block) => mapBlock(block, record.routePath, outline) ?? []),
+    ).map(async (block) =>
+      /* A figure may be a recorded tour (an animated WebP): its record says so, so Media serves the
+         original and gives it a pause control rather than freezing it on a resized first frame. */
+      block.type === 'figures'
+        ? {
+            ...block,
+            figures: await Promise.all(
+              block.figures.map(async (figure) => ({
+                ...figure,
+                image: await withMotion(figure.image),
+              })),
+            ),
+          }
+        : block,
+    ),
   );
   const labels = [
     ...new Set(

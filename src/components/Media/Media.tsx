@@ -1,7 +1,9 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { cx } from '@/lib/cx';
-import { RESIZE_WIDTHS, resizedSrc } from '@/lib/image-resize';
+import { RESIZE_WIDTHS, resizedSrc, stillSrc } from '@/lib/image-resize';
+
+import { MediaMotion } from './MediaMotion';
 
 import styles from './Media.module.css';
 
@@ -147,6 +149,13 @@ export type MediaImage = {
    * 3px "master". Absent means the numbers are real.
    */
   placeholderSize?: boolean;
+  /**
+   * True when the file MOVES: an animated WebP or GIF, read from the file's own header at supply
+   * (`withMotion` in the Strapi source). A content fact, like `kind`. Media then serves the
+   * original alone, never a resized width (a resized copy is its first frame), and with `glyphs`
+   * gives it a pause control and the still under reduced motion (WCAG 2.2.2).
+   */
+  animated?: boolean;
 };
 
 /**
@@ -256,7 +265,16 @@ export type MediaProps = {
    * empty, Media renders a bare `<img>`; present, the `<img>` is wrapped in a `<picture>`.
    */
   art?: readonly MediaArt[];
+  /**
+   * The motion control's two glyphs, composed by the caller as Clip's are (a primitive takes its
+   * sibling as a node, never by import): `pause` while the image moves, `play` while it holds its
+   * still. Read only for an `animated` image, and required there: without them a moving image has
+   * no way to be stopped, which fails WCAG 2.2.2, so Media warns in development.
+   */
+  glyphs?: MediaGlyphs;
 };
+
+export type MediaGlyphs = { play: ReactNode; pause: ReactNode };
 
 /**
  * The `srcset` for an image: every derived width plus the master, ascending, one entry per width.
@@ -267,6 +285,9 @@ export type MediaProps = {
  * a preload link for a hero would want the same string.
  */
 export function mediaSrcSet(image: MediaImage): string | undefined {
+  /* An animated file has one width worth serving, its own: every derived width is a still (the
+     resizer's) or an unknown (Strapi's formats), and either would freeze it on some screens. */
+  if (image.animated) return undefined;
   const byWidth = new Map<number, string>();
   const add = (src: string, width: number) => {
     if (src && Number.isFinite(width) && width > 0) byWidth.set(Math.round(width), src);
@@ -395,6 +416,7 @@ export function Media({
   focus,
   zoom,
   art,
+  glyphs,
 }: MediaProps) {
   const kind: MediaKind = image.kind ?? 'capture';
   const isCutOut = kind === 'cut-out';
@@ -536,7 +558,20 @@ export function Media({
       bare
     );
 
-  if (!panel) return img;
+  /* A moving image: the same <img>, handed to the client control that can stop it. It needs a
+     still to stop on and the caller's glyphs to draw the control; missing either, it moves as before. */
+  const still = image.animated ? stillSrc(image.src) : undefined;
+  if (image.animated && !glyphs) warn('an animated image needs `glyphs` for its pause control', image);
+  const shown =
+    still && glyphs ? (
+      <MediaMotion still={still} label={image.alt} glyphs={glyphs} contained={boxed}>
+        {bare}
+      </MediaMotion>
+    ) : (
+      img
+    );
+
+  if (!panel) return shown;
 
   /* A span rather than a div so Media stays legal inside phrasing content — a card's link, a
      caption-adjacent slot — wherever a bare <img> would be. It is display:block in the module. */
@@ -549,7 +584,7 @@ export function Media({
         PANEL_CLASS[panel],
       )}
     >
-      {img}
+      {shown}
     </span>
   );
 }

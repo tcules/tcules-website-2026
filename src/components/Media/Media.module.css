@@ -8,7 +8,8 @@
    No margin. The seam around an image is the parent's.
    No display:grid or display:flex. The three display:block declarations below de-inline an
      element (the <img>'s baseline gap, the panel <span>, the art-direction <picture>); none
-     arranges anything.
+     arranges anything. The one inline-grid centres a glyph inside the motion control's own 44
+     box, as Clip's does; it places one child in a control, it does not arrange siblings.
    One aspect-ratio, and only for a photograph cut to a `ratio` (.crop, visual-direction § 5.3,
      6 Oct 2026). In `intrinsic` the ratio is the asset's own, carried by the width and height
      attributes; in `fill` the ratio is the PARENT's box, which is the whole point of `fill` —
@@ -245,4 +246,35 @@
 
 .panelInk {
   background: var(--media-panel-ink-ground);
+}
+
+/* An animated image's frame for its stop control (MediaMotion). The control is placed on the
+   image, in its end corner, as Clip's is on its film: placement inside the component's own box,
+   not an arrangement of siblings, so it is not a Layout's job. */
+.motion {
+  position: relative;
+  display: block;
+}
+
+.motionControl {
+  position: absolute;
+  inset-block-end: var(--media-control-inset);
+  inset-inline-end: var(--media-control-inset);
+  inline-size: var(--media-control-size);
+  block-size: var(--media-control-size);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  color: var(--media-control-fg);
+  background: var(--media-control-bg);
+  border: var(--media-control-rule-width) solid var(--media-control-rule);
+  border-radius: var(--media-control-radius);
+  cursor: pointer;
+}
+
+.motionControl:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--media-ring-offset) var(--media-ring-gap-color),
+    0 0 0 calc(var(--media-ring-offset) + var(--media-ring-width)) var(--media-ring-color);
 }

@@ -1,4 +1,4 @@
-import { Layout, Media, type MediaImage } from '@/components';
+import { Icon, Layout, Media, type MediaImage } from '@/components';
 
 import styles from './Figure.module.css';
 
@@ -51,6 +51,10 @@ export type FigureProps = {
   note?: string;
 };
 
+/* An animated figure's stop control (Media draws it only for a record that moves): the same two
+   chrome marks as Clip's and the hero's films, so every pause on the site reads alike. */
+const MOTION_GLYPHS = { play: <Icon name="chrome-play" />, pause: <Icon name="chrome-pause" /> };
+
 /* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
 const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
@@ -89,7 +93,7 @@ export function Figure({ image, caption, note }: FigureProps) {
            (Figure.md §17 Q7). `sizes` is the full content column: a Figure cannot see its track, and
            the full-column value over-fetches in a narrower track rather than ever under-fetching
            (Media.md §9, §17 Q8). */
-        <Media image={image} sizes={FIGURE_SIZES} />
+        <Media image={image} sizes={FIGURE_SIZES} glyphs={MOTION_GLYPHS} />
       ) : null}
       {/* <figcaption> must be the figure's first or last child. It is last, because a caption
           above an image reads as an eyebrow — a label for what is coming — and this system
