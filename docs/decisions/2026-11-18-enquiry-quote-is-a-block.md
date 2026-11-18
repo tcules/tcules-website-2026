@@ -19,7 +19,7 @@ one step off the island (neutral-800 on the ink island; paper on a blue one, sin
 `block` inset and the 8 radius, the testimonial card's 18 sans italic quote in the block's ink with its marks (amended
 18 Nov by the owner: "make the quote text sans. serif looks bad in italics at that size"; it was the 22 serif italic), then the speaker as
 the testimonial card sets one, on a hairline: the **name** (h6) on its own line and **"role, company"** (body-sm)
-under it. Still no rating and no portrait. The card asks **Name** before **Work email**, the question and the
+under it. Still no rating and no portrait. Stacked (below 1024) the island reads as Jatin's m- boards do: heading and lead, then the **form**, then the ticks and the quote. The card asks **Name** before **Work email**, the question and the
 optional **Product website**.
 
 The rest of the 26 Oct ruling stands unchanged: anywhere else a client's quote takes a band of its own, on tint,
