@@ -104,7 +104,7 @@ function TrackingTags() {
         id="origami-visitors"
         strategy="afterInteractive"
         src="/_ov/o.js"
-        data-key="og_pk_Y11jlmsMXCRjA3ZpUsV4wQ"
+        data-key="og_pk_BBcCLMipuVQ0yrYr-8FZHw"
         data-endpoint="/_ov"
       />
       <Script id="clarity-script" strategy="afterInteractive">
