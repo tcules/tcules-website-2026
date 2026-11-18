@@ -9,12 +9,24 @@
 
    Both wrappers keep a track's min-content from widening it: a long URL or a wide table inside
    must scroll or wrap within the column rather than push the article past the rail's split. */
-.reading {
-  min-inline-size: 0;
+/* A `ch` resolves against the font of the element it is set on, so 68ch on an h2 at 43 is 68 of the
+   HEADING's characters, wider than the track. The measure is therefore computed once here, at the
+   body size, into a registered length every part inherits as pixels: a heading wraps on the text's
+   edge. A rule (hr) takes the whole track with tables and figures: it divides the article, not the
+   paragraph above it (owner, 18 Nov 2026). */
+@property --article-measure {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0;
 }
 
-.reading > * > :not(table) {
-  max-inline-size: var(--measure-reading);
+.reading {
+  min-inline-size: 0;
+  --article-measure: var(--measure-reading);
+}
+
+.reading > * > :not(table, hr) {
+  max-inline-size: var(--article-measure);
 }
 
 .block {
