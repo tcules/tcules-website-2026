@@ -41,8 +41,8 @@ export type CtaPoint = {
  * A client's line at the foot of the island close's words (owner, 18 Nov 2026; supersedes the
  * own-band rule for this one place: decisions/2026-11-18-enquiry-quote-is-a-block). Its own block on
  * the island (owner, 18 Nov 2026: "in a designed block of its own so it actually reads as a
- * testimonial"): the 22 serif italic quote, then the speaker as the testimonial card sets one, the
- * name on its own line and "role, company" under it. Plain strings, so no rating, portrait or link
+ * testimonial"): the card's 18 sans italic quote (owner, 18 Nov 2026), then the speaker as the
+ * testimonial card sets one, the name on its own line and "role, company" under it. Plain strings, so no rating, portrait or link
  * can ride on it. It always shows its marks, curled (lib/quote-marks), in the quote's own ink
  * (decisions/2026-10-11-no-coloured-punctuation).
  */

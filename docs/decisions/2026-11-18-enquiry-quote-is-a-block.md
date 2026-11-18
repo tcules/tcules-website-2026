@@ -16,7 +16,8 @@ heading, so the form's extra height never opens as empty ink over the title; the
 Under the lead a **hairline** opens the points, which are the plan checklists' **tick** (`check-circle`, the
 accent) at **body-sm** (14), one step under the lede. The client's line is **a block of its own**: a quiet panel
 one step off the island (neutral-800 on the ink island; paper on a blue one, since blue is never a panel), a
-`block` inset and the 8 radius, the 22 serif italic quote in the block's ink with its marks, then the speaker as
+`block` inset and the 8 radius, the testimonial card's 18 sans italic quote in the block's ink with its marks (amended
+18 Nov by the owner: "make the quote text sans. serif looks bad in italics at that size"; it was the 22 serif italic), then the speaker as
 the testimonial card sets one, on a hairline: the **name** (h6) on its own line and **"role, company"** (body-sm)
 under it. Still no rating and no portrait. The card asks **Name** before **Work email**, the question and the
 optional **Product website**.

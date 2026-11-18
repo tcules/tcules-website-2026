@@ -72,8 +72,11 @@
   );
   /* Icon's lg (18), duplicated on purpose (token rule 6). */
   --cta-tick-glyph: var(--icon-size-18);
-  /* The island close's quote (owner, 18 Nov 2026): the compact 22 serif italic quote role. */
-  --cta-quote-text: var(--text-quote-sm);
+  /* The island close's quote (owner, 18 Nov 2026: "make the quote text sans. serif looks bad in
+     italics at that size"): the testimonial card's sans quote by value (token rule 6), 18 on the
+     lead-lg ratio, and italic because every testimonial is (2026-10-22-testimonials-italic-everywhere). */
+  --cta-quote-text: italic var(--font-weight-regular)
+    var(--font-size-lead-lg)/var(--line-height-lead-lg) var(--font-family-sans);
   /* Its block (owner, 18 Nov 2026): the testimonial card's box by value (token rule 6): a `block`
      inset, the 8 radius, and the speaker's name at h6 over "role, company" at body-sm. */
   --cta-quote-inset: var(--gap-block);
