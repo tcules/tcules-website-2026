@@ -63,6 +63,16 @@
   --cta-rule-width: var(--border-width-hairline);
   --cta-detail-text: var(--text-body-sm);
   --cta-marker-text: var(--text-index);
+  /* The tick points (owner, 18 Nov 2026): assurances read as sentences, so body (16), and the
+     glyph centred in the label's first line box. */
+  --cta-tick-text: var(--text-body);
+  --cta-tick-offset: calc(
+    (var(--font-size-body) * var(--line-height-body) - var(--cta-tick-glyph)) / 2
+  );
+  /* Icon's lg (18), duplicated on purpose (token rule 6). */
+  --cta-tick-glyph: var(--icon-size-18);
+  /* The island close's quote (owner, 18 Nov 2026): the compact 22 serif italic quote role. */
+  --cta-quote-text: var(--text-quote-sm);
   --cta-marker-tracking: var(--text-index-tracking);
 
   /* Two measures. The heading takes the title measure so a three-line close
