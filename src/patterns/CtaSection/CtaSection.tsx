@@ -39,7 +39,7 @@ export type CtaPoint = {
 
 /**
  * A client's line at the foot of the island close's words (owner, 18 Nov 2026; supersedes the
- * own-band rule for this one place: decisions/2026-11-18-enquiry-quote-is-a-block). Its own block on
+ * own-band rule for this one place: decisions/2026-11-18-enquiry-close-is-an-ink-band). Its own block on
  * the island (owner, 18 Nov 2026: "in a designed block of its own so it actually reads as a
  * testimonial"): the card's 18 sans italic quote (owner, 18 Nov 2026), then the speaker as the
  * testimonial card sets one, the name on its own line and "role, company" under it. Plain strings, so no rating, portrait or link
@@ -306,6 +306,18 @@ type CtaSplitProps = {
    */
   islandArrangement?: 'beside' | 'above' | 'halves';
   /**
+   * What carries the close's ground (owner, 18 Nov 2026; decisions/2026-11-18-enquiry-close-is-an-ink-band).
+   * Halves only.
+   *
+   *   island  (default) a floating island of `island`'s ground inside a band of `surface`: the band's
+   *           padding, then the island's inset, then the panel's.
+   *   band    the band IS that ground: an `island`-coloured Section with the field across it and the
+   *           words and the form straight in its column, so only the band's padding applies (owner:
+   *           "form island should become a section so the padding is not applied twice"). `surface`
+   *           is ignored; the island's own ground is the band's.
+   */
+  frame?: 'island' | 'band';
+  /**
    * The island set INSIDE another band rather than as a band of its own (owner, 31 Oct 2026: the
    * contact hero carries the form "just like how an image would be placed"). No Section: a labelled
    * `<section>` keeps the id, `data-band` and the heading relationship, and the enclosing band owns
@@ -385,6 +397,7 @@ type CtaOpenProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  frame?: never;
   /**
    * `compact` (owner, 4 Nov 2026, homepage pass: "a CTA island variant that's compact and has
    * buttons on the right"): the heading and its line at the start, the actions at the inline end
@@ -427,6 +440,7 @@ type CtaOfferWithActionsProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  frame?: never;
   inBand?: never;
 };
 
@@ -1285,6 +1299,18 @@ export function CtaSection(props: CtaSectionProps) {
        never grows empty paper under the form. */
   if (props.islandArrangement === 'halves') {
     const art = present(props.art);
+    /* `frame="band"`: the island's ground becomes the band's and the island goes, so the words and
+       the panel sit in Section's column under the band's padding alone. The field, the words, the
+       ticks, the quote and the panel are the same nodes either way. */
+    const asBand = props.frame === 'band';
+    const framed = (children: ReactNode) =>
+      asBand ? (
+        children
+      ) : (
+        <Island surface={islandSurface} inset="form">
+          {children}
+        </Island>
+      );
     const words = (
       <Layout rowGap="block">
         {lede({ scale: 'halves' })}
@@ -1305,60 +1331,66 @@ export function CtaSection(props: CtaSectionProps) {
         footnoteIcon={props.footnoteIcon}
         after={props.after}
         afterHeadingId={`${baseId}-after-heading`}
-        surface={band}
+        surface={asBand ? requested : band}
         id={props.id}
         data-band={props['data-band']}
         aria-labelledby={headingId}
       >
-        <Island surface={islandSurface} inset="form">
-          {props.islandTexture === 'flow' ? (
-            <TextureFlow fade={art ? 'start' : undefined} />
-          ) : null}
-          {props.islandTexture === 'frame' ? <TextureFrame /> : null}
-          {art ? (
-            <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-              <Layout pinLast>
-                <Layout rowGap="stack">
-                  <div className={styles.artLarge}>{props.art}</div>
-                  <div data-texture-calm>
-                    <Layout rowGap="stack">
-                      {words}
-                      {quote ? <CtaQuoteBlock quote={quote} /> : null}
-                    </Layout>
-                  </div>
+        {framed(
+          <>
+            {props.islandTexture === 'flow' ? (
+              <TextureFlow fade={art ? 'start' : undefined} />
+            ) : null}
+            {props.islandTexture === 'frame' ? <TextureFrame /> : null}
+            {art ? (
+              <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
+                <Layout pinLast>
+                  <Layout rowGap="stack">
+                    <div className={styles.artLarge}>{props.art}</div>
+                    <div data-texture-calm>
+                      <Layout rowGap="stack">
+                        {words}
+                        {quote ? <CtaQuoteBlock quote={quote} /> : null}
+                      </Layout>
+                    </div>
+                  </Layout>
                 </Layout>
+                {halvesPanel}
               </Layout>
-              {halvesPanel}
-            </Layout>
-          ) : (
-            /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
+            ) : (
+              /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
                the title?"): the words were pinned to the half's foot under a drawing that is not
                there, so the form's extra height opened as empty ink over the heading. Without a
                drawing the head (heading and lede) tops the start half, the ticks and the quote
                follow it with the quote on the half's foot, and the form spans both rows beside
                them. Stacked, Jatin's m- boards order it head, FORM, then the ticks and the quote:
                the DOM is that order, and from 1024 the module places the panel in the end column. */
-            <Layout
-              columns={{ base: 1, lg: [1, 1] }}
-              colGap="section"
-              rowGap="stack"
-              className={styles.halvesSplit}
-            >
-              <div data-texture-calm className={styles.halvesHead}>
-                {lede({ scale: 'halves' })}
-              </div>
-              {halvesPanel}
-              <Layout pinLast={quote ? true : undefined} rowGap="stack" className={styles.halvesRest}>
-                <Layout rowGap="block">
-                  <CtaPoints shape="stack" markers={markers} points={points} />
-                  {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-                  {ratingRow}
+              <Layout
+                columns={{ base: 1, lg: [1, 1] }}
+                colGap="section"
+                rowGap="stack"
+                className={styles.halvesSplit}
+              >
+                <div data-texture-calm className={styles.halvesHead}>
+                  {lede({ scale: 'halves' })}
+                </div>
+                {halvesPanel}
+                <Layout
+                  pinLast={quote ? true : undefined}
+                  rowGap="stack"
+                  className={styles.halvesRest}
+                >
+                  <Layout rowGap="block">
+                    <CtaPoints shape="stack" markers={markers} points={points} />
+                    {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                    {ratingRow}
+                  </Layout>
+                  {quote ? <CtaQuoteBlock quote={quote} /> : null}
                 </Layout>
-                {quote ? <CtaQuoteBlock quote={quote} /> : null}
               </Layout>
-            </Layout>
-          )}
-        </Island>
+            )}
+          </>,
+        )}
       </IslandBand>
     );
   }

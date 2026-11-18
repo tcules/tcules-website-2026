@@ -518,6 +518,7 @@ function Cta({
       markers={section.markers}
       quote={section.quote}
       islandArrangement={halves ? 'halves' : 'beside'}
+      frame={halves ? section.frame : undefined}
       islandTexture={halves ? 'flow' : 'frame'}
       art={art ? <Media image={art} sizes={halves ? '300px' : '240px'} /> : undefined}
       footnote={section.footnote}
