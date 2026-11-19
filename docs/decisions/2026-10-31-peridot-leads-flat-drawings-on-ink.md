@@ -1,7 +1,7 @@
 ---
 title: "On ink, peridot is the flat drawings' accent"
 date: 2026-10-31
-status: proposed
+status: superseded
 area: [illustration, colour]
 source: "Devagya, 31 Oct 2026, flat-drawings pass (branch design/flat-line-motion)"
 supersedes: []
