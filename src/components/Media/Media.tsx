@@ -1,7 +1,9 @@
 import type { CSSProperties } from 'react';
 
 import { cx } from '@/lib/cx';
-import { RESIZE_WIDTHS, resizedSrc } from '@/lib/image-resize';
+import { RESIZE_WIDTHS, resizedSrc, stillSrc } from '@/lib/image-resize';
+
+import { MediaMotion } from './MediaMotion';
 
 import styles from './Media.module.css';
 
@@ -147,6 +149,13 @@ export type MediaImage = {
    * 3px "master". Absent means the numbers are real.
    */
   placeholderSize?: boolean;
+  /**
+   * True when the file MOVES: an animated WebP or GIF, read from the file's own header at supply
+   * (`markAnimatedUploads` in the Strapi source). A content fact, like `kind`. Media then serves
+   * the original alone, never a resized width (a resized copy is its first frame), with a pause
+   * control below it and the still under reduced motion (WCAG 2.2.2).
+   */
+  animated?: boolean;
 };
 
 /**
@@ -258,6 +267,8 @@ export type MediaProps = {
   art?: readonly MediaArt[];
 };
 
+
+
 /**
  * The `srcset` for an image: every derived width plus the master, ascending, one entry per width.
  * `undefined` when there is nothing to choose between, so a single-file asset renders a plain
@@ -267,6 +278,9 @@ export type MediaProps = {
  * a preload link for a hero would want the same string.
  */
 export function mediaSrcSet(image: MediaImage): string | undefined {
+  /* An animated file has one width worth serving, its own: every derived width is a still (the
+     resizer's) or an unknown (Strapi's formats), and either would freeze it on some screens. */
+  if (image.animated) return undefined;
   const byWidth = new Map<number, string>();
   const add = (src: string, width: number) => {
     if (src && Number.isFinite(width) && width > 0) byWidth.set(Math.round(width), src);
@@ -536,7 +550,19 @@ export function Media({
       bare
     );
 
-  if (!panel) return img;
+  /* A moving image: the same <img>, handed to the client control that can stop it, wherever the
+     image is placed (decisions/2026-11-18-animated-image-pause-below). It needs a still to stop
+     on; an image that is not ours to resize has none, and moves as before. */
+  const still = image.animated ? stillSrc(image.src) : undefined;
+  const shown = still ? (
+    <MediaMotion still={still} label={image.alt} contained={boxed}>
+      {bare}
+    </MediaMotion>
+  ) : (
+    img
+  );
+
+  if (!panel) return shown;
 
   /* A span rather than a div so Media stays legal inside phrasing content — a card's link, a
      caption-adjacent slot — wherever a bare <img> would be. It is display:block in the module. */
@@ -549,7 +575,7 @@ export function Media({
         PANEL_CLASS[panel],
       )}
     >
-      {img}
+      {shown}
     </span>
   );
 }
