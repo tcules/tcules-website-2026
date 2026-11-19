@@ -8,6 +8,7 @@ import {
   ROUTES,
 } from '@/lib/routes';
 import type { ArticleSceneName } from '@/lib/sketches';
+import { distinctLabels, HERO_LABEL_LIMIT } from '@/lib/labels';
 
 import { actionHref, icon, image, mapBand, rows, text } from './home';
 import type { CmsHomeSection, CmsImage, Entries } from './home-types';
@@ -376,16 +377,16 @@ export const getPublishedResource = cache(async (slug: string, revalidate?: numb
   const blocks = resolveInPageAnchors(
     rows(record.content).flatMap((block) => mapBlock(block, record.routePath, outline) ?? []),
   );
-  const labels = [
-    ...new Set(
-      [
-        ...rows(record.topics),
-        ...rows(record.industries),
-        ...rows([record.stage]),
-        ...rows(record.expertises),
-      ].flatMap((item) => text(item.name) ?? []),
+  /* The hero's tags: what the piece is about, then who it is for, then the craft, the same tag
+     spelled twice shown once, three at most (bug report #8, 18 Nov 2026). The stage (a company's
+     size) is left out: it names the reader's company rather than the piece, and under a cap of three
+     it pushed a subject out. */
+  const labels = distinctLabels(
+    [...rows(record.topics), ...rows(record.industries), ...rows(record.expertises)].flatMap(
+      (item) => text(item.name) ?? [],
     ),
-  ];
+    HERO_LABEL_LIMIT,
+  );
   if (record.otherResources && !text(record.otherResources.heading))
     console.warn(`New CMS ${record.routePath}: related Resources heading missing`);
   if (record.otherResources?.items?.length)

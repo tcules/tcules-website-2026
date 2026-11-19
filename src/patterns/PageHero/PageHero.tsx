@@ -34,6 +34,7 @@ import {
   HERO_WIDE,
 } from '@/lib/image-sizes';
 import { repeatsTrail, sameLabel, type HeroTrail } from '@/lib/trail';
+import { distinctLabels } from '@/lib/labels';
 
 import styles from './PageHero.module.css';
 
@@ -1127,7 +1128,8 @@ export function PageHero({
     );
 
   /* ── labels · the taxonomy chips, a block under the copy, inside the opening ───── */
-  const shownLabels = [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
+  /* The same label spelled twice shows once, whatever the source (src/lib/labels). */
+  const shownLabels = distinctLabels(labels);
   const labelsNode =
     shownLabels.length === 0 ? null : (
       /* One sideways row on a phone rather than two or three lines of tags ahead of the content
