@@ -2,7 +2,13 @@ import { Fragment } from 'react';
 
 import { Button, Icon, Layout, Section, type SectionSurface } from '@/components';
 import { ROUTES } from '@/lib/routes';
-import { Callout, CtaRow, EngagementOptions, type EngagementOption } from '@/patterns';
+import {
+  Callout,
+  CtaRow,
+  EngagementOptions,
+  type EngagementOption,
+  type PlanHighlight,
+} from '@/patterns';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -81,6 +87,49 @@ const PRICED: EngagementOption[] = [
 ];
 
 const PRICED_SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
+
+/* The live copy's pilot line, its phrase underlined in the CMS (`<u>`), as the Strapi renderer
+   hands it over. */
+const PRICED_UNDERLINED: EngagementOption[] = PRICED.map((option, index) =>
+  index === 0
+    ? {
+        ...option,
+        checklist: [
+          <>
+            Starts with a <u>free one‑day review</u>
+          </>,
+          ...(option.checklist ?? []).slice(1),
+        ],
+      }
+    : option,
+);
+
+const HIGHLIGHTS: readonly { key: PlanHighlight; letter: string; name: string; note: string }[] = [
+  {
+    key: 'highlighter',
+    letter: 'A',
+    name: 'Highlighter',
+    note: 'a soft brand-tint band low behind the phrase, like a marker swipe; the phrase at medium weight. No underline.',
+  },
+  {
+    key: 'tag',
+    letter: 'B',
+    name: 'Inline tag',
+    note: 'the phrase as a small inline mark: blue-tint ground, deep-blue words, small radius, inline padding only so the line height holds.',
+  },
+  {
+    key: 'accent',
+    letter: 'C',
+    name: 'Accent text',
+    note: 'the phrase in the accent blue at medium weight, nothing else. The default until a pick.',
+  },
+  {
+    key: 'lead',
+    letter: 'D',
+    name: 'Lead line',
+    note: 'the line holding the phrase is promoted to the card’s lead benefit: its own soft blue-tint row, the stars glyph in place of the tick, the line at medium weight, the phrase semibold in the accent.',
+  },
+];
 
 const TOGETHER: EngagementOption[] = [
   {
@@ -366,6 +415,30 @@ export default function EngagementOptionsSpecimen() {
           />
         </Fragment>
       ))}
+      <Variation
+        id="highlight-directions"
+        title="5 · Highlight directions (pick one), 19 Nov 2026"
+        note="How an underlined phrase from the CMS (<u>free one-day review</u>) reads in a plan. Each direction in the real pilot card (focused, full checklist) beside its neighbours, on paper and on tint. Default rendering is C until the owner picks; the others are then deleted."
+      />
+      {HIGHLIGHTS.flatMap(({ key, letter, name, note }) =>
+        (['paper', 'tint'] as const).map((surface) => (
+          <Fragment key={`hl-${key}-${surface}`}>
+            <Variation
+              id={`highlight-${letter.toLowerCase()}-${surface}`}
+              title={`${letter} · ${name}, on ${surface}`}
+              note={note}
+            />
+            <EngagementOptions
+              heading="Start small. Grow when you're sure."
+              headingId={`eop-hl-${key}-${surface}`}
+              options={PRICED_UNDERLINED}
+              arrangement="plans"
+              surface={surface}
+              highlight={key}
+            />
+          </Fragment>
+        )),
+      )}
     </>
   );
 }
