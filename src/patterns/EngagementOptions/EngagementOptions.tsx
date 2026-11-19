@@ -111,7 +111,7 @@ export type EngagementOption = {
    * `plans` only (owner, 17 Nov 2026): the ONE highlighted plan — its edge drawn in the accent at
    * twice the hairline. At most one per set (a second warns in development and only the first is
    * drawn). The caller composes its action, in practice the blue solid where the others take the
-   * outline or the link.
+   * outline (owner, 19 Nov 2026), as the live pages compose it.
    */
   featured?: boolean;
 };
