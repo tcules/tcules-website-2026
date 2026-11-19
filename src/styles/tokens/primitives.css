@@ -412,6 +412,11 @@
   --measure-title: 32ch;
   --measure-lead: 56ch;
   --measure-body: 75ch;
+  /* `reading` is long-form running text in an insight's article column (owner, 18 Nov 2026): 75ch
+     of Public Sans at 16 set 83–94 characters a line there — the `ch` is a zero, wider than the
+     average letter — against the 60–80 comfortable range. 68ch sets about 80. Only the article's
+     running words take it; captions, callouts and every other body run keep --measure-body. */
+  --measure-reading: 68ch;
 }
 
 /* ── Type · usage layer ───────────────────────────────────────────────────────

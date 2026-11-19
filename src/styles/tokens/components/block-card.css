@@ -146,10 +146,8 @@
   /* The tile (`frame="tile"`, 3 Nov 2026): a filled ground at rest, so the larger corner of a panel
      that is seen, not the 8 of a ground that only appears under the pointer. Ground per surface. */
   --bcrd-tile-radius: var(--radius-16);
-  /* The panel (`frame="panel"`, 28 Oct 2026): its least proportion from md (a square, about a
-     covered card's cover and copy together at three tracks), and how many lines of standfirst its
-     foot holds. Component sizes. */
-  --bcrd-panel-ratio: 1;
+  /* The panel (`frame="panel"`, 28 Oct 2026): how many lines of standfirst its foot holds. A
+     component size. It has no least proportion: tall only where its row is (owner, 18 Nov 2026). */
   --bcrd-panel-body-lines: 3;
   /* The panel's format glyph before its label: the label's scale, not the card icon's. */
   --bcrd-panel-glyph: var(--icon-size-16);

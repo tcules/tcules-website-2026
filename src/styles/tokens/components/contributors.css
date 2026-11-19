@@ -26,6 +26,9 @@
   --ctb-name-text: var(--text-h5);
   --ctb-name-tracking: var(--text-h5-tracking);
   --ctb-role-text: var(--text-body-sm);
+  /* The biography's line length: the article's reading measure (owner, 18 Nov 2026: unbounded, it
+     ran 120 characters a line). */
+  --ctb-bio-measure: var(--measure-reading);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

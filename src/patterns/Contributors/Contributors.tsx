@@ -80,30 +80,40 @@ export function Contributors({ label, people }: ContributorsProps) {
                     <h3 className={styles.name}>{person.name}</h3>
                     {person.role ? <p className={styles.role}>{person.role}</p> : null}
                   </Layout>
-                  {person.descriptionHtml ? <Prose html={person.descriptionHtml} /> : null}
-                  {person.socialLinks?.map((link) => (
-                    <Button
-                      key={link.href}
-                      as="a"
-                      href={link.href}
-                      emphasis="link"
-                      tone="primary"
-                      size="sm"
-                    >
-                      {link.label}
-                    </Button>
-                  ))}
-                  {person.link ? (
-                    <Button
-                      as="a"
-                      href={person.link.href}
-                      emphasis="link"
-                      tone="primary"
-                      size="sm"
-                      icon={<Icon name="arrow-right" />}
-                    >
-                      {person.link.label}
-                    </Button>
+                  {/* The biography at the reading measure: running words, however wide the row. */}
+                  {person.descriptionHtml ? (
+                    <div className={styles.bio}>
+                      <Prose html={person.descriptionHtml} />
+                    </div>
+                  ) : null}
+                  {/* The links are one row of actions, not a list: the profile, then the author page. */}
+                  {person.socialLinks?.length || person.link ? (
+                    <Cluster colGap="block" rowGap="tight">
+                      {person.socialLinks?.map((link) => (
+                        <Button
+                          key={link.href}
+                          as="a"
+                          href={link.href}
+                          emphasis="link"
+                          tone="primary"
+                          size="sm"
+                        >
+                          {link.label}
+                        </Button>
+                      ))}
+                      {person.link ? (
+                        <Button
+                          as="a"
+                          href={person.link.href}
+                          emphasis="link"
+                          tone="primary"
+                          size="sm"
+                          icon={<Icon name="arrow-right" />}
+                        >
+                          {person.link.label}
+                        </Button>
+                      ) : null}
+                    </Cluster>
                   ) : null}
                 </Layout>
               </Cluster>
