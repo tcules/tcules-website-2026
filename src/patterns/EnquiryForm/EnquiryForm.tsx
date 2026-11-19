@@ -1104,7 +1104,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
      The submit is the blue solid: the form sits in the close, which carries the page's one main
      action (r7-buttons, 8 Oct 2026 — there is no ink solid). */
   const submitButton = (
-    <Button type="submit" emphasis="solid" tone="primary" size="md" busy={submitting}>
+    <Button
+      type="submit"
+      emphasis="solid"
+      tone="primary"
+      size="md"
+      block="until-md"
+      busy={submitting}
+    >
       {submitLabel}
     </Button>
   );

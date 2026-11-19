@@ -1181,6 +1181,7 @@ export function PageHero({
             emphasis={index === 0 ? 'solid' : 'ghost'}
             size="md"
             extendHitArea
+            block={index === 0 ? 'until-md' : undefined}
             icon={
               /* An action that leaves the site says so, solid or ghost (lib/href.ts): the
                  leaving mark replaces the ghost's arrow and is the solid's only glyph. */
