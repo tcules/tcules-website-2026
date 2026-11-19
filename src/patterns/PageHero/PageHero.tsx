@@ -698,12 +698,21 @@ const separatorAt = (index: number, count: number) =>
   index === 0 ? '' : index === count - 1 ? ' and ' : ', ';
 
 /* A credit group's value: the portraits overlapping, then the names, each linked where it has a
-   page. The portraits are decoration (alt=""), because the names beside them say who they are. */
+   page. The portraits are decoration (alt=""), because the names beside them say who they are.
+
+   The face is part of the link (owner, 18 Nov 2026: a reader clicks the photograph). One person with
+   a page: the portrait and the name are ONE link, its name the person's name, so a reader with a
+   screen reader or a keyboard meets one link, as before. Several people: the discs overlap and the
+   names are joined, so no one link can hold a face and its name; each disc links to its person
+   outside the reading and tab order (aria-hidden, tabIndex -1), and the name stays the one link a
+   keyboard reaches. */
 function CreditValue({ people }: { people: readonly HeroPerson[] }) {
+  const single = people.length === 1 ? people[0] : undefined;
+  const whole = single?.href !== undefined;
   const names = people.map((person, index) => (
     <span key={`${person.name}-${index}`}>
       {separatorAt(index, people.length)}
-      {person.href ? (
+      {person.href && !whole ? (
         <a href={person.href} className={styles.name}>
           {person.name}
         </a>
@@ -712,12 +721,14 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
       )}
     </span>
   ));
-  return (
+  const row = (
     <Cluster nowrap colGap="tight" align="center">
       <span className={styles.avatars} aria-hidden="true">
-        {people.map((person, index) =>
-          person.portrait ? (
-            <span key={`${person.name}-${index}`} className={styles.avatar}>
+        {people.map((person, index) => {
+          const Disc = person.href && !whole ? 'a' : 'span';
+          const link = Disc === 'a' ? { href: person.href, tabIndex: -1 } : {};
+          return person.portrait ? (
+            <Disc key={`${person.name}-${index}`} className={styles.avatar} {...link}>
               <Media
                 image={{
                   ...person.portrait,
@@ -728,19 +739,27 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
                 edge="placement"
                 sizes="32px"
               />
-            </span>
+            </Disc>
           ) : (
-            <span
+            <Disc
               key={`${person.name}-${index}`}
               className={cx(styles.avatar, styles.initials)}
+              {...link}
             >
               {initialsOf(person.name)}
-            </span>
-          ),
-        )}
+            </Disc>
+          );
+        })}
       </span>
       <span>{names}</span>
     </Cluster>
+  );
+  return whole ? (
+    <a href={single.href} className={styles.credit}>
+      {row}
+    </a>
+  ) : (
+    row
   );
 }
 

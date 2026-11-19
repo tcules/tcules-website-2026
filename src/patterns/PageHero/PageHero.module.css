@@ -319,8 +319,18 @@
   text-decoration-line: none;
 }
 
-a.name:hover {
+a.name:hover,
+.credit:hover .name {
   text-decoration-line: underline;
+}
+
+/* One person's portrait and name as one link: the link takes its row's width, not the value's,
+   so only the face and the name are the target. It carries the link's own focus ring. */
+.credit {
+  display: block;
+  inline-size: fit-content;
+  color: inherit;
+  text-decoration-line: none;
 }
 
 /* ── Portraits · one group, overlapping ─────────────────────────────────────────
