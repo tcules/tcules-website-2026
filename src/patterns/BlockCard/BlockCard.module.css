@@ -357,9 +357,11 @@
 /* ── The panel (`frame="panel"`, owner 28 Oct 2026) ───────────────────────────────────
    A text-only card drawn as an object: the drawn covers' plate (--bcrd-panel-ground, the media
    rule, the media radius) with the copy a `block` inside on every side — an inner inset, the frame
-   being the card's one box. It fills the height its grid row gives it, and from md stands at least
-   as tall as it is wide, roughly a covered card's cover and copy together, so a row of panels alone
-   still reads as a row of objects. The standfirst stops at three lines: the plate is a shape, not a
+   being the card's one box. It fills the height its grid row gives it — beside a covered card that
+   is the cover and copy together, its label at the head and its words at the foot, so the row ends
+   level — and is otherwise as tall as its words. It is not held square: a row of panels alone
+   stood ~400 tall with an empty middle (owner, 18 Nov 2026: tall only beside a card with an
+   image). The standfirst stops at three lines: the plate is a shape, not a
    column of reading. */
 .panel .frame {
   block-size: 100%;
@@ -395,12 +397,6 @@
 .panel .meta {
   display: block;
   text-box: trim-both cap alphabetic;
-}
-
-@media (min-width: 768px) {
-  .panel .frame {
-    aspect-ratio: var(--bcrd-panel-ratio);
-  }
 }
 
 /* The play mark: a round chip in the cover's top-end corner, outside the zoom (23 Oct 2026). */

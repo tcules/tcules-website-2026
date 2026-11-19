@@ -93,6 +93,20 @@ function TrackingTags() {
           })();
         `}
       </Script>
+      <Script id="origami-init" strategy="afterInteractive">
+        {`
+          window.origami = window.origami || function () {
+            (window.origami.q = window.origami.q || []).push(arguments);
+          };
+        `}
+      </Script>
+      <Script
+        id="origami-visitors"
+        strategy="afterInteractive"
+        src="/_ov/o.js"
+        data-key="og_pk_BBcCLMipuVQ0yrYr-8FZHw"
+        data-endpoint="/_ov"
+      />
       <Script id="clarity-script" strategy="afterInteractive">
         {`
           (function (c, l, a, r, i, t, y) {

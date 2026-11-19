@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
+import { AnchorHeading, Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import { getCaseStudyDetail } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { BlockCard, Figure, Proof, Statement, TableOfContents, type TocItem } from '@/patterns';
@@ -53,7 +53,7 @@ function renderBlock(block: BodyBlock) {
     case 'heading':
       return (
         <Prose>
-          <h2 id={block.id}>{block.heading}</h2>
+          <AnchorHeading id={block.id}>{block.heading}</AnchorHeading>
         </Prose>
       );
     case 'prose':
@@ -73,17 +73,21 @@ function renderBlock(block: BodyBlock) {
         >
           {block.figures.map((figure) => (
             <Layout key={figure.id} id={figure.id} rowGap="text">
-              <Figure image={figure.image} caption={figure.caption} note={figure.note} />
-              {figure.label || figure.notes.length ? (
+              {/* The label ("Figure 4") is read with the caption, inside the <figcaption>, as an
+                  article's figures are; a figure with a label and no caption takes the label as it. */}
+              <Figure
+                image={figure.image}
+                caption={figure.caption ?? figure.label}
+                label={figure.caption ? figure.label : undefined}
+                note={figure.note}
+              />
+              {figure.notes.length ? (
                 <Prose>
-                  {figure.label ? <p>{figure.label}</p> : null}
-                  {figure.notes.length ? (
-                    <ol>
-                      {figure.notes.map((note, index) => (
-                        <li key={index}>{note}</li>
-                      ))}
-                    </ol>
-                  ) : null}
+                  <ol>
+                    {figure.notes.map((note, index) => (
+                      <li key={index}>{note}</li>
+                    ))}
+                  </ol>
                 </Prose>
               ) : null}
             </Layout>

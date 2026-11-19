@@ -40,6 +40,16 @@ export function resizedSrc(src: string, width: number): string | undefined {
 }
 
 /**
+ * The still of an animated CMS image: its first frame, which the resizer serves at the 1240 rung
+ * for an animated original (the route never resizes motion). `undefined` when the image is not
+ * ours to resize, and then there is no still to pause on. 1240 because it stands in for the
+ * original in a body column, which is 1240 at its widest.
+ */
+export function stillSrc(src: string): string | undefined {
+  return resizedSrc(src, 1240);
+}
+
+/**
  * Where a raster client mark is drawn from: its 1240 copy on this origin, or `undefined` when the mark
  * is not a CMS raster (an SVG, a data URI, another host), which is then drawn from its own src.
  *

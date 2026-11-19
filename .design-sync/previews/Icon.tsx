@@ -20,6 +20,7 @@ const NAMES = [
   'chrome-pause',
   'chrome-play',
   'chrome-check',
+  'chrome-link',
   'play',
   'star',
   'close-circle',

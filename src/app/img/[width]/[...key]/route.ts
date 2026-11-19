@@ -24,7 +24,14 @@ export async function GET(_request: Request, ctx: RouteContext<'/img/[width]/[..
 
   const originalBytes = Buffer.from(await upstream.arrayBuffer());
   try {
-    const resized = await sharp(originalBytes)
+    const image = sharp(originalBytes);
+    /* An animated original (a figure's recorded tour) is never served resized: its page plays the
+       original, and a copy here is its STILL, the first frame, the poster a reader sees while it is
+       paused or under reduced motion (`mediaStill`). sharp decodes one frame unless asked for more,
+       so the copy is that frame; it is always served, even in the unlikely case it outweighs the
+       original, because the original would move. */
+    const animated = ((await image.metadata()).pages ?? 1) > 1;
+    const resized = await image
       .rotate()
       .resize({ width: target, withoutEnlargement: true })
       /* The original's colour profile travels with it: a screenshot taken on a Mac is often
@@ -34,7 +41,7 @@ export async function GET(_request: Request, ctx: RouteContext<'/img/[width]/[..
       .toBuffer();
     /* Lossless can outweigh a lossy original (a photograph saved as lossy WebP at 2560): then the
        original is served as it is, so a smaller width is never a heavier download or a lesser file. */
-    const smaller = resized.length < originalBytes.length;
+    const smaller = animated || resized.length < originalBytes.length;
     return new Response(new Uint8Array(smaller ? resized : originalBytes), {
       headers: {
         'Content-Type': smaller
