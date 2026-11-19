@@ -59,7 +59,6 @@ export function PublishedCareers({
                 arrangement={
                   section.editorialPresentation === 'head_beside' ? 'beside' : 'stacked'
                 }
-                split={section.editorialPresentation === 'head_beside' ? 'halves' : undefined}
               >
                 {section.editorialPresentation === 'peer_columns' ? (
                   <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="text">
@@ -101,7 +100,6 @@ export function PublishedCareers({
                 {...head}
                 data-band="list-beside"
                 arrangement="beside"
-                split="halves"
               >
                 <Layout as="ul" rowGap="none">
                   {section.entries.map((entry, i) => (
@@ -212,7 +210,6 @@ export function PublishedCareers({
                 surface="paper"
                 data-band="D-faq"
                 arrangement="beside"
-                split="halves"
               >
                 <Accordion items={section.faqs} />
               </ContentSection>

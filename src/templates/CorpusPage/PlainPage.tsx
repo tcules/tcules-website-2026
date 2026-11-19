@@ -41,7 +41,6 @@ export function PlainPage({ page }: PlainPageProps) {
               {...head(band)}
               data-band="D-faq"
               arrangement="beside"
-              split="halves"
             >
               <FaqItems band={band} />
             </ContentSection>

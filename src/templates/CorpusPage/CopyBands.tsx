@@ -2783,11 +2783,9 @@ export function TextBand({
       </ContentSection>
     );
   }
-  /* A short prose band set head beside body (HEAD_BESIDE_PROSE), in halves: the head in the first
-     half, the words from the column's middle, on the line the page's other beside bands (the lists,
-     the FAQ) share (decisions/2026-09-28-content-section-head-beside-body; 2026-11-04-faq-beside-in-
-     halves). In the narrow head track the heading wrapped to four lines over a three-line paragraph
-     (/careers critic, 4 Nov 2026). */
+  /* A short prose band set head beside body (HEAD_BESIDE_PROSE), on the one head split every beside
+     band shares (owner, 19 Nov 2026: 5 : 7, then 1 : 2 from 1440; halves, which
+     decisions/2026-11-04-faq-beside-in-halves gave the FAQ and this band, retired). */
   if (HEAD_BESIDE_PROSE.has(`${page.route}#${band.id}`)) {
     return (
       <ContentSection
@@ -2795,7 +2793,6 @@ export function TextBand({
         {...head(band)}
         data-band="C-text"
         arrangement="beside"
-        split="halves"
         footer={actions}
       >
         {text}

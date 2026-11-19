@@ -1,7 +1,7 @@
 ---
 title: "The FAQ sits beside its heading, in halves, on every page"
 date: 2026-11-04
-status: active
+status: superseded
 area: [layout, components]
 source: "Owner (Devagya), homepage pass 2.63, 4 Nov 2026 (design/home-pass), reviewed on the built page"
 supersedes: []

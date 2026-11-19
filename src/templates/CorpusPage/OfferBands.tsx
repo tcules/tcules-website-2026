@@ -621,7 +621,7 @@ export const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
 /**
  * "Why founders and product teams choose Tcules", on every page that repeats it (owner, 4 Nov 2026:
  * the homepage's design carries across): the heading at the left with its way deeper under it, the
- * six reasons down the right in halves, one ruled row each, its glyph inline before its title and its
+ * six reasons down the right on the head split, one ruled row each, its glyph inline before its title and its
  * sentence under it (OfferSheet `list`). A reason whose title has no glyph sets the whole list
  * without glyphs, so nothing is dropped and the set never mixes.
  */
@@ -789,14 +789,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'faq':
       return (
         /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
-           decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
+           decisions/2026-11-04-faq-beside-its-heading), on the one head split (owner, 19 Nov 2026; halves retired). One FAQ shape on
            every page. */
         <ContentSection
           {...head(band)}
           data-band="D-faq"
           surface={unit.surface}
           arrangement="beside"
-          split="halves"
           footer={faqFooter(band)}
         >
           <FaqItems band={band} />
@@ -2431,7 +2430,7 @@ function ListBesideBand({
   const items = band.blocks.flatMap((block) => (block.type === 'list' ? block.items : []));
   const lines = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
   return (
-    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside" split="halves">
+    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside">
       <Layout as="ul" rowGap="none">
         {items.map((runs, index) => {
           const title = plain(runs);

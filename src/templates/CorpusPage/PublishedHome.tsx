@@ -650,8 +650,10 @@ export function PublishedSection({
           data-band="D-faq"
           eyebrow={section.eyebrow}
           lead={section.lead}
+          /* The "Why teams choose" split (owner, 19 Nov 2026: "make the FAQ split the same as 'why
+             teams choose…'"): the default head tracks, 5 : 7 from 1024 and 1 : 2 from 1440, the
+             questions in the long track, not halves. Every FAQ band takes it, since all render here. */
           arrangement="beside"
-          split="halves"
         >
           {section.items.length ? <Accordion items={section.items} /> : null}
         </ContentSection>
