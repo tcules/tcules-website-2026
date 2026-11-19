@@ -71,6 +71,12 @@ main > .strip:first-child + .section:not(.flush, .strip) {
   padding-block: 0;
 }
 
+/* A band that continues the one above it (`continues`, an article's body under its hero, owner
+   19 Nov 2026): no air above its content, so the seam is the band above's foot alone. Only the TOP. */
+.continues {
+  padding-block-start: var(--sec-padding-y-continued);
+}
+
 /* The open band: room for a moving field to fade out around its words (owner, 31 Oct 2026). Its
    field reaches into the air of the bands either side (TextureFlow `bleed`), so the band sits one
    layer above its siblings: the next band's ground would otherwise paint over the field's lower
