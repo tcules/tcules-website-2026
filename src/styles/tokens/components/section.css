@@ -51,6 +51,10 @@
    to fade out around its words takes the gap scale's open section step, 128 (96 on a phone). The
    one exception to one-value-per-width besides the strip and flush. */
 --sec-padding-y-open:var(--gap-section-open);
+/* A band that continues the band above it on the same ground (Section `continues`: an article's
+   body under its hero; owner and Jatin, 19 Nov 2026): none above its content, so the seam is the
+   hero's foot alone, 96 (64 on a phone) rather than the doubled 192. A size, the same at every width. */
+--sec-padding-y-continued:0;
 --sec-gutter:var(--gap-gutter);
 --sec-rule-width:var(--border-width-hairline);
 --sec-container:1240px;  /* literal: the content column. Not a scale step — it is the
