@@ -45,6 +45,14 @@ export type ClusterProps = {
    * sitting side by side on one page and stacking on the next (cmp-hero, 6 Oct 2026).
    */
   stackUntil?: 'md';
+  /**
+   * Below 768 the items keep to ONE line and the row scrolls sideways instead of wrapping; from 768
+   * up it wraps as usual. For a row of labels that would otherwise stack two or three lines deep on
+   * a phone ahead of the content (an article's taxonomy tags, 18 Nov 2026). `rowGap` then has no
+   * second line to separate below 768. The scrollbar is hidden, as Layout's scroll row hides its
+   * own: the cut-off last item at the column's edge is the affordance.
+   */
+  scrollUntil?: 'md';
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -68,6 +76,7 @@ export function Cluster({
   justify = 'start',
   nowrap = false,
   stackUntil,
+  scrollUntil,
   className,
   style,
   children,
@@ -90,6 +99,7 @@ export function Cluster({
             ]),
         nowrap && styles.nowrap,
         stackUntil === 'md' && styles.stackUntilMd,
+        scrollUntil === 'md' && styles.scrollUntilMd,
         className,
       )}
     >

@@ -88,6 +88,10 @@
   text-wrap: var(--text-running-wrap);
 }
 
+.label {
+  font-weight: var(--fig-label-weight);
+}
+
 .note {
   max-inline-size: var(--measure-body);
   overflow-wrap: anywhere;

@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import { distinctLabels, labelKey } from '@/lib/labels';
 import { authorPath, blogPath } from '@/lib/routes';
 import type { ArticleSceneName } from '@/lib/sketches';
 
@@ -156,20 +157,25 @@ export const getPublishedAuthor = cache(async (slug: string) => {
   if (!name || author.routePath !== authorPath(slug))
     throw new Error(`New CMS author ${slug}: missing name or invalid routePath`);
   const resources = await resourcesFor(slug);
-  const counts = new Map<string, number>();
+  /* Counted by labelKey, so one tag spelled two ways is one topic, under its first spelling. */
+  const counts = new Map<string, { name: string; count: number }>();
   for (const resource of resources) {
-    const names = new Set(
+    const names = distinctLabels(
       [
         ...rows(resource.topics),
         ...rows(resource.expertises),
         ...rows([resource.stage]),
       ].flatMap((item) => text(item.name) ?? []),
     );
-    for (const name of names) counts.set(name, (counts.get(name) ?? 0) + 1);
+    for (const name of names) {
+      const entry = counts.get(labelKey(name));
+      if (entry) entry.count += 1;
+      else counts.set(labelKey(name), { name, count: 1 });
+    }
   }
-  const topics = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .map(([name]) => name);
+  const topics = [...counts.values()]
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .map(({ name }) => name);
   const role = text(author.designation);
   const bio = text(author.description);
   const image = mapUploadImage(author.profilePicture, publicGraphqlUrl(), {

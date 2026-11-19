@@ -44,6 +44,11 @@
   text-transform: var(--text-mono-case);
 }
 
+/* A measure is a type decision, not a distance: the reading measure, read once. */
+.bio {
+  max-inline-size: var(--ctb-bio-measure);
+}
+
 .name {
   color: var(--ctb-name-ink);
   font: var(--ctb-name-text);

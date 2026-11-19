@@ -52,6 +52,9 @@
 :root {
   --fig-caption-text: var(--text-body);
   --fig-note-text: var(--text-body-sm);
+  /* The run-in label ("Figure 7.") is the caption's own words at the caption's size, set apart by
+     weight alone, so it reads as the start of the sentence rather than a heading over it. */
+  --fig-label-weight: var(--font-weight-semibold);
 
   /* Component geometry, not layout distance. 192 matches Layout's xs track by value
      rather than reading --lay-track-xs: a component never reads another component's

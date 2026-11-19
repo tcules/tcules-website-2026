@@ -1,4 +1,5 @@
-export { Media, mediaSrcSet } from './Media';
+export { Media, mediaSrcSet, mediaStill } from './Media';
+export { MediaMotionControl, MediaMotionScope } from './MediaMotion';
 export type {
   MediaArt,
   MediaEdge,

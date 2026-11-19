@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Children, type ReactNode } from 'react';
 
 import {
   Arena,
@@ -34,6 +34,7 @@ import {
   HERO_WIDE,
 } from '@/lib/image-sizes';
 import { repeatsTrail, sameLabel, type HeroTrail } from '@/lib/trail';
+import { distinctLabels } from '@/lib/labels';
 
 import styles from './PageHero.module.css';
 
@@ -698,12 +699,20 @@ const separatorAt = (index: number, count: number) =>
   index === 0 ? '' : index === count - 1 ? ' and ' : ', ';
 
 /* A credit group's value: the portraits overlapping, then the names, each linked where it has a
-   page. The portraits are decoration (alt=""), because the names beside them say who they are. */
+   page. The portraits are decoration (alt=""), because the names beside them say who they are.
+
+   The face is part of the link (owner, 18 Nov 2026: a reader clicks the photograph). One person with
+   a page: the portrait and the name are ONE link, its name the person's name, so a reader with a
+   screen reader or a keyboard meets one link, as before. Several people: the discs overlap and the
+   names are joined, so no one link can hold a face and its name; the stacked discs are not links
+   (owner, 19 Nov 2026), and each name is its person's link. */
 function CreditValue({ people }: { people: readonly HeroPerson[] }) {
+  const single = people.length === 1 ? people[0] : undefined;
+  const whole = single?.href !== undefined;
   const names = people.map((person, index) => (
     <span key={`${person.name}-${index}`}>
       {separatorAt(index, people.length)}
-      {person.href ? (
+      {person.href && !whole ? (
         <a href={person.href} className={styles.name}>
           {person.name}
         </a>
@@ -712,11 +721,11 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
       )}
     </span>
   ));
-  return (
+  const row = (
     <Cluster nowrap colGap="tight" align="center">
       <span className={styles.avatars} aria-hidden="true">
-        {people.map((person, index) =>
-          person.portrait ? (
+        {people.map((person, index) => {
+          return person.portrait ? (
             <span key={`${person.name}-${index}`} className={styles.avatar}>
               <Media
                 image={{
@@ -736,11 +745,18 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
             >
               {initialsOf(person.name)}
             </span>
-          ),
-        )}
+          );
+        })}
       </span>
       <span>{names}</span>
     </Cluster>
+  );
+  return whole ? (
+    <a href={single.href} className={styles.credit}>
+      {row}
+    </a>
+  ) : (
+    row
   );
 }
 
@@ -1108,10 +1124,19 @@ export function PageHero({
     );
 
   /* ── labels · the taxonomy chips, a block under the copy, inside the opening ───── */
-  const shownLabels = [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
+  /* The same label spelled twice shows once, whatever the source (src/lib/labels). */
+  const shownLabels = distinctLabels(labels);
   const labelsNode =
     shownLabels.length === 0 ? null : (
-      <Cluster as="ul" colGap="text" rowGap="tight" justify={centredHead ? 'center' : 'start'}>
+      /* One sideways row on a phone rather than two or three lines of tags ahead of the content
+         (owner, 18 Nov 2026); wrapping from 768. */
+      <Cluster
+        as="ul"
+        colGap="text"
+        rowGap="tight"
+        justify={centredHead ? 'center' : 'start'}
+        scrollUntil="md"
+      >
         {shownLabels.map((label) => (
           <li key={label}>
             <Tag>{label}</Tag>
@@ -1121,8 +1146,10 @@ export function PageHero({
     );
 
   /* ── extras · the caller's block. No class: it carries nothing. The <div> groups whatever is
-     passed into ONE row of the stack. */
-  const extrasNode = children == null ? null : <div>{children}</div>;
+     passed into ONE row of the stack. Absent when nothing in it renders: a caller passing
+     conditional blocks hands over `[null, null]`, which is not `null`, and the empty <div> took a
+     whole stack seam under the byline on every article (owner, 18 Nov 2026). */
+  const extrasNode = Children.toArray(children).length === 0 ? null : <div>{children}</div>;
 
   /* ── actions · one solid, one ghost partner ────────────────────────────────
      Anchors, because a hero action always navigates. The first is the page's one main action, the
