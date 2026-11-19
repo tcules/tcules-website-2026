@@ -66,6 +66,26 @@
   --media-cutout-shadow: var(--shadow-crop);
   --media-panel-inset: var(--gap-gutter);
 
+  /* The stop control of an animated image (MediaMotion): Clip's control, duplicated on purpose
+     (a component never reads another's tokens). It sits below the image on the band's ground, at
+     the image's end; the image's frames vary, the ground does not, and paper with an ink glyph, a
+     hairline and a two-tone ring reads on all four surfaces, so it is declared once here.
+     The gap is the image to its control, an icon to its label (--gap-tight). The disc is 32 and
+     its touch target 44 (WCAG 2.5.5), the Slider's and Clip's target. */
+  --media-control-size: 32px;
+  --media-control-target: 44px;
+  --media-control-glyph: var(--icon-size-16); /* Icon's md, as in Clip's control */
+  --media-control-gap: var(--gap-tight);
+  --media-control-radius: var(--radius-full);
+  --media-control-rule-width: var(--border-width-1);
+  --media-control-bg: var(--color-paper);
+  --media-control-fg: var(--color-neutral-900);
+  --media-control-rule: var(--color-neutral-300);
+  --media-ring-width: var(--focus-ring-width);
+  --media-ring-offset: var(--focus-ring-offset);
+  --media-ring-color: var(--color-brandeis-500);
+  --media-ring-gap-color: var(--color-paper);
+
   /* The three contrast panels (ch05 §2a "Cut out, not framed", B5). Fixed brand grounds,
      not surface values: an asset marked `panel: 'paper-deep'` gets paper-deep on paper,
      on tint and on ink alike, because the panel exists for the UI's edge, not the band's. */

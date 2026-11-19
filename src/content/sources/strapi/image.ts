@@ -21,6 +21,8 @@ export type StrapiUploadFile = {
   mime?: string | null;
   /** A JSON scalar in the GraphQL schema: `{ [formatName]: { url, width, height, … } }`. */
   formats?: unknown;
+  /** Set by `markAnimatedUploads` when the file's header says it moves; Strapi does not record it. */
+  animated?: boolean;
 };
 
 function text(candidate: string | null | undefined): string {
@@ -124,5 +126,74 @@ export function mapUploadImage(
     width,
     height,
     ...(sources ? { sources } : {}),
+    ...(file.animated ? { animated: true } : {}),
   };
+}
+
+/* ── Motion ─────────────────────────────────────────────────────────────────────────────────── */
+
+const motionMemo = new Map<string, Promise<boolean>>();
+
+/**
+ * Whether the file at `src` moves, read from its own header: a WebP's VP8X chunk carries an
+ * animation flag (bit 1 of the byte after the chunk header), and an animated GIF carries the
+ * NETSCAPE2.0 looping extension ahead of its frames. Strapi records neither, so the header is the
+ * one place it is written. Only the first kilobyte is fetched (a range request), once per file per
+ * process: an upload's URL carries its hash, so its bytes never change. Any failure reads as still,
+ * which is how every image rendered before this check existed.
+ */
+export function isAnimated(src: string): Promise<boolean> {
+  if (!/\.(webp|gif)$/i.test(new URL(src, 'https://x.invalid').pathname)) return Promise.resolve(false);
+  let pending = motionMemo.get(src);
+  if (!pending) {
+    pending = fetch(src, {
+      headers: { Range: 'bytes=0-1023' },
+      cache: 'force-cache',
+      signal: AbortSignal.timeout(4_000),
+    })
+      .then(async (response) => {
+        if (!response.ok) return false;
+        const head = new Uint8Array(await response.arrayBuffer()).subarray(0, 1024);
+        const ascii = (from: number, to: number) => String.fromCharCode(...head.subarray(from, to));
+        if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP')
+          return ascii(12, 16) === 'VP8X' && ((head[20] ?? 0) & 0x02) !== 0;
+        if (ascii(0, 3) === 'GIF') return ascii(0, head.length).includes('NETSCAPE2.0');
+        return false;
+      })
+      .catch(() => false);
+    motionMemo.set(src, pending);
+  }
+  return pending;
+}
+
+/**
+ * Marks every upload file in a CMS response whose file moves (`isAnimated`) with `animated: true`,
+ * in place. Run once on every response, where it is fetched and before it is cached, so every
+ * mapper's image record carries the fact without knowing it exists: an animated image renders
+ * the same way wherever it appears on the site. An upload is any object with a string `url` to a
+ * WebP or GIF and numeric `width` and `height`; a Strapi format inside `formats` is a JSON scalar
+ * and is never an upload, so its copies are not read.
+ */
+export async function markAnimatedUploads(data: unknown, graphqlUrl: string): Promise<void> {
+  const uploads: Record<string, unknown>[] = [];
+  const walk = (value: unknown) => {
+    if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value)) return value.forEach(walk);
+    const record = value as Record<string, unknown>;
+    if (
+      typeof record.url === 'string' &&
+      /\.(webp|gif)(?:$|[?#])/i.test(record.url) &&
+      typeof record.width === 'number' &&
+      typeof record.height === 'number'
+    )
+      uploads.push(record);
+    for (const [key, child] of Object.entries(record)) if (key !== 'formats') walk(child);
+  };
+  walk(data);
+  await Promise.all(
+    uploads.map(async (upload) => {
+      const src = absoluteAssetUrl(upload.url as string, graphqlUrl);
+      if (src && (await isAnimated(src))) upload.animated = true;
+    }),
+  );
 }

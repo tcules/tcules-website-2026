@@ -96,3 +96,5 @@ export type {
   OfferUnit,
   RatingsById,
 } from './CorpusPage';
+export { ResourceArticle } from './ResourceArticle';
+export type { ArticleItem, ResourceArticleProps } from './ResourceArticle';

@@ -318,6 +318,16 @@ const SPECIMENS = [
         note: 'the quiet scope note — semantic routing, placement equivalence, narrow tracks, 4 surfaces',
       },
       {
+        href: '/design/anchor-heading',
+        name: 'AnchorHeading',
+        note: 'a section heading with a copy-link control after its last word — copies the #id link, announces "Link copied"; short, wrapping and h3 headings, 4 surfaces',
+      },
+      {
+        href: '/design/turnstile-widget',
+        name: 'TurnstileWidget',
+        note: "Cloudflare's invisible form check — draws nothing at rest, loads on the form's first touch, asks for a token on submit",
+      },
+      {
         href: '/design/figure',
         name: 'Figure',
         note: 'the captioned image — slot ladder, 3 intrinsic ratios uncropped, the empty state, 4 surfaces, a row per Media kind',
@@ -366,6 +376,11 @@ const SPECIMENS = [
         href: '/design/listing-index',
         name: 'ListingIndex',
         note: 'the one listing page type: the insights hub, curated BY TYPE until something is picked in the finder (the filters in the rail: ?type=articles&topic=… — the picks as chips over a three-track grid of results, Show more in place, Nothing matches keeps the picks) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group its featured cases as the card-less horizontal lead, one to a row, then the same three-track grid as the hub) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
+      },
+      {
+        href: '/design/resource-article',
+        name: 'ResourceArticle',
+        note: 'an insight body — contents rail beside the article column; running words and headings at the 68ch reading measure, figures, tables and rules on the whole track',
       },
       {
         href: '/design/case-story',

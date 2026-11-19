@@ -67,6 +67,33 @@
   }
 }
 
+/* scrollUntil="md" — below 768 one line that scrolls sideways (the same declarations as Layout's
+   scroll row, without its snapping or ring room: a label is not a stop and takes no focus).
+   Items keep their own width rather than shrinking to fit; a swipe that runs out of row does not
+   become the browser's back gesture. */
+@media (max-width: 767.98px) {
+  .scrollUntilMd {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .scrollUntilMd > * {
+    flex: none;
+  }
+
+  .scrollUntilMd::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* A centred row that overflows would push its first items past the start edge, out of reach of
+     the scroll; `safe` falls back to the start when the row does not fit. */
+  .scrollUntilMd.justify-center {
+    justify-content: safe center;
+  }
+}
+
 /* justify={{ base, lg }} — the main-axis distribution from 1024 (Layout's lg), where a split head
    sets its ask at the column's end edge and a phone keeps it at the start. */
 @media (min-width: 1024px) {

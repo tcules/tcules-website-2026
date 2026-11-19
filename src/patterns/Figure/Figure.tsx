@@ -1,4 +1,13 @@
-import { Layout, Media, type MediaImage } from '@/components';
+import { useId } from 'react';
+
+import {
+  Layout,
+  Media,
+  MediaMotionControl,
+  MediaMotionScope,
+  mediaStill,
+  type MediaImage,
+} from '@/components';
 
 import styles from './Figure.module.css';
 
@@ -49,6 +58,12 @@ export type FigureProps = {
    * does NOT establish. Absent — or empty — renders no element and no seam.
    */
   note?: string;
+  /**
+   * The figure's number as authored ("Figure 7"), read WITH the caption: it leads the caption's
+   * own line as a run-in label, inside the <figcaption>, so the two are one sentence to a screen
+   * reader and to the eye (18 Nov 2026: it printed as a stray paragraph after the figure).
+   */
+  label?: string;
 };
 
 /* Section's column is min(100vw − 64px, 1240px): the 1240 cap is reached at 1304. */
@@ -73,7 +88,7 @@ const FIGURE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
  * fixed 3:2 centre crop that is right for `ListCard`'s marker is deliberately not generalised here.
  * Its edge is Media's, by kind, and radius 0 on every kind (ch05 §6).
  */
-export function Figure({ image, caption, note }: FigureProps) {
+export function Figure({ image, caption, note, label }: FigureProps) {
   /* An empty note is treated as absent, an empty caption is not, and the asymmetry is deliberate
      rather than an oversight. `note` is optional, so `note=""` is indistinguishable from no note
      at all and collapsing it is the honest reading. `caption` is required, so an empty one is a
@@ -81,23 +96,60 @@ export function Figure({ image, caption, note }: FigureProps) {
      hiding it behind a fallback string nobody wrote. */
   const hasNote = note !== undefined && note.trim().length > 0;
 
-  return (
-    <Layout as="figure" rowGap="text" className={styles.root}>
+  /* An animated image's pause control sits at the end of the caption's row rather than on a row
+     of its own below the image (owner, 19 Nov 2026): the caption stops at its measure, so the row
+     has room. The control is inside the <figcaption> (which must be the figure's last child), so
+     the figure takes its name from the caption text alone, not the control's label. */
+  const captionId = useId();
+  const moves = image ? mediaStill(image) !== undefined : false;
+
+  const lines = (
+    <>
+      <p className={styles.caption} id={captionId}>
+        {label?.trim() ? (
+          <>
+            <span className={styles.label}>
+              {/[.:]$/.test(label.trim()) ? label.trim() : `${label.trim()}.`}
+            </span>{' '}
+          </>
+        ) : null}
+        {caption}
+      </p>
+      {hasNote ? <p className={styles.note}>{note}</p> : null}
+    </>
+  );
+
+  const figure = (
+    <Layout
+      as="figure"
+      rowGap="text"
+      className={styles.root}
+      aria-labelledby={moves ? captionId : undefined}
+    >
       {image ? (
-        /* Media owns the delivery and the edge; Figure owns the caption. Lazy, because every real
-           Figure is a page-body figure below the fold — the above-the-fold hero image is PageHero's
-           (Figure.md §17 Q7). `sizes` is the full content column: a Figure cannot see its track, and
-           the full-column value over-fetches in a narrower track rather than ever under-fetching
-           (Media.md §9, §17 Q8). */
+        /* Figure is a page-body figure below the fold — the above-the-fold hero image is
+           PageHero's (Figure.md §17 Q7). `sizes` is the full content column: a Figure cannot see
+           its track, and the full-column value over-fetches in a narrower track rather than ever
+           under-fetching (Media.md §9, §17 Q8). */
         <Media image={image} sizes={FIGURE_SIZES} />
       ) : null}
       {/* <figcaption> must be the figure's first or last child. It is last, because a caption
           above an image reads as an eyebrow — a label for what is coming — and this system
           already assigns that role a different meaning on PageHero. */}
-      <Layout as="figcaption" rowGap="tight" className={styles.legend}>
-        <p className={styles.caption}>{caption}</p>
-        {hasNote ? <p className={styles.note}>{note}</p> : null}
-      </Layout>
+      {moves && image ? (
+        <Layout as="figcaption" columns={{ base: [1, 'auto'] }} colGap="text" align="start">
+          <Layout rowGap="tight" className={styles.legend}>
+            {lines}
+          </Layout>
+          <MediaMotionControl label={image.alt} />
+        </Layout>
+      ) : (
+        <Layout as="figcaption" rowGap="tight" className={styles.legend}>
+          {lines}
+        </Layout>
+      )}
     </Layout>
   );
+
+  return moves ? <MediaMotionScope>{figure}</MediaMotionScope> : figure;
 }
