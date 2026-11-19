@@ -1,7 +1,7 @@
 ---
 title: "In a figure, an animated image's pause control sits at the end of the caption's row"
 date: 2026-11-19
-status: proposed
+status: active
 area: [motion, imagery, components]
 source: "Devagya, 19 Nov 2026, reviewing figure 7 on /insights/what-an-ai-agent-console-should-show (fix/article-bugs): \"since the figcaption is anyway capped, can we put the play/pause button in the same row?\""
 supersedes: []

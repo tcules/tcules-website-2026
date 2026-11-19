@@ -1,7 +1,7 @@
 ---
 title: "Below 768 a hero's tags are one sideways row, and an empty hero slot takes no seam"
 date: 2026-11-18
-status: proposed
+status: active
 area: [layout, components]
 source: "Devagya, 18 Nov 2026, on the article head (P2 #7 of the article bug report): \"we can remove that extra margin/space that appears after author, published.... line. tags in one scrollable row\""
 supersedes: []

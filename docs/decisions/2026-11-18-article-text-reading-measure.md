@@ -1,7 +1,7 @@
 ---
 title: "An insight's running words cap at a 68ch reading measure; its blocks keep the whole track"
 date: 2026-11-18
-status: proposed
+status: active
 area: [type, layout]
 source: "Devagya, 18 Nov 2026, P2 #4 of the article bug report (N21 body ran 941px, ~120 characters a line): picked \"Cap text at ~68ch\" over narrowing the whole column (fix/article-p2)"
 supersedes: []

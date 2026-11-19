@@ -1,7 +1,7 @@
 ---
 title: "A long-form section heading carries a copy-link control after its last word, confirmed by a toast"
 date: 2026-11-19
-status: proposed
+status: active
 area: [components, iconography]
 source: "Article bug report, P3 #5 (\"copy-link icon on each H2\"), built 19 Nov 2026 on fix/heading-copy-link for Devagya's review"
 supersedes: []

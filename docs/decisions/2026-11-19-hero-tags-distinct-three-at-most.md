@@ -1,7 +1,7 @@
 ---
 title: A piece's hero shows three distinct tags at most, topics then industry then expertise
 date: 2026-11-19
-status: proposed
+status: active
 area: [content, cards]
 source: Article bug report #8 (P3), 18 Nov 2026; owner asked for it to be built, 19 Nov 2026 (branch fix/hero-tags-dedupe)
 supersedes: []

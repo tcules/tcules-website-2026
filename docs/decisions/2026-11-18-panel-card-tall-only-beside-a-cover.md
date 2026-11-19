@@ -1,7 +1,7 @@
 ---
 title: "A panel card is tall only beside a covered card; otherwise it is as tall as its words"
 date: 2026-11-18
-status: proposed
+status: active
 area: [cards, components]
 source: "Devagya, 18 Nov 2026, on an article's \"Explore other resources\" (three panels, empty middles): \"reduce that space and only make these cards tall when they're in a grid with a card that has an image\""
 supersedes: []
