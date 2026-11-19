@@ -248,6 +248,17 @@
   text-decoration: none;
 }
 
+/* E. Blue underline (the default): the words keep the card's ink and weight; a solid accent line
+   under them, one continuous stroke. */
+.hlUnderline .planBody u,
+.hlUnderline .planItem u {
+  text-decoration-line: underline;
+  text-decoration-color: var(--eop-hl-underline-ink);
+  text-decoration-thickness: var(--eop-hl-underline-thickness);
+  text-underline-offset: var(--eop-hl-underline-offset);
+  text-decoration-skip-ink: none;
+}
+
 /* A. Highlighter: a marker swipe low behind the phrase, the phrase at medium weight. */
 .hlHighlighter .planBody u,
 .hlHighlighter .planItem u {

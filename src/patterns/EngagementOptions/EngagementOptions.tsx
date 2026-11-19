@@ -139,13 +139,14 @@ export type EngagementOption = {
 export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards' | 'plans';
 
 /**
- * How an underlined phrase (`<u>`, authored in the CMS) reads inside a plan (`plans` only). Four
+ * How an underlined phrase (`<u>`, authored in the CMS) reads inside a plan (`plans` only). Five
  * directions under review (19 Nov 2026, the owner picks one; the rest are then deleted):
  * `highlighter` a marker band low behind the phrase; `tag` an inline blue-tint mark; `accent` the
  * phrase in the accent at medium weight; `lead` the line holding it promoted to the card's lead
- * benefit, its own tinted row with the `stars` glyph. Default `accent`, the least risky.
+ * benefit, its own tinted row with the `stars` glyph; `underline` a solid accent underline under
+ * words left in the card's own ink, the default (owner, 19 Nov 2026: "why not just a blue underline?").
  */
-export type PlanHighlight = 'highlighter' | 'tag' | 'accent' | 'lead';
+export type PlanHighlight = 'underline' | 'highlighter' | 'tag' | 'accent' | 'lead';
 
 export type EngagementOptionsProps = {
   /** The band's anchor. */
@@ -241,7 +242,7 @@ export function EngagementOptions({
   closing,
   closingLine,
   closingAction,
-  highlight = 'accent',
+  highlight = 'underline',
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -570,6 +571,7 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
  * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
  */
 const HIGHLIGHT_CLASS: Record<PlanHighlight, string | undefined> = {
+  underline: styles.hlUnderline,
   highlighter: styles.hlHighlighter,
   tag: styles.hlTag,
   accent: styles.hlAccent,
