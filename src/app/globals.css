@@ -108,6 +108,18 @@ h6 {
   color: var(--sec-link-ink-hover);
 }
 
+/* An underline an author made in the CMS (`<u>`, the Strapi Markdown renderers let exactly that
+   pair through). The floor is a quiet underline in the text's own ink, a little below the baseline:
+   never the link ink, so it cannot pass for a link, which on this site is the coloured word. A
+   component that means it as a highlight says so (EngagementOptions' plans). Zero specificity, as
+   the link rules above, so any component class wins. Literals relative to the type, as in reset. */
+:where(u) {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
 /* Inline code and the mono chrome role. */
 code,
 kbd,

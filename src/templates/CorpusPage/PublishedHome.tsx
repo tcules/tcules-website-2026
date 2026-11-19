@@ -312,6 +312,8 @@ export function PublishedEngagement({
   ) : undefined;
   const closingHeading = closing?.heading;
   const [primary, secondary] = closing?.actions ?? [];
+  /* Priced plans close on their line and at most one link, never a second ask. */
+  const plansClose = section.presentation === 'plans' && Boolean(closingHeading) && !secondary;
   return (
     <EngagementOptions
       {...{ id, heading, headingId, surface }}
@@ -325,6 +327,8 @@ export function PublishedEngagement({
         return {
           title: option.title,
           eyebrow: option.eyebrow,
+          price: option.price,
+          featured: option.featured,
           anchorId: option.anchorId,
           body: inline(body),
           more: more.map(inline),
@@ -347,7 +351,9 @@ export function PublishedEngagement({
               href={button.href}
               target={button.external ? '_blank' : undefined}
               rel={button.external ? 'noopener noreferrer' : undefined}
-              emphasis="outline"
+              /* The featured plan carries the converting action, "Book a free product review":
+                 always a solid primary (owner, 18 Nov 2026); the other plans stay outline. */
+              emphasis={option.featured ? 'solid' : 'outline'}
               size="md"
               icon={<Icon name={button.icon ?? 'arrow-right'} />}
             >
@@ -357,8 +363,29 @@ export function PublishedEngagement({
         };
       })}
       terms={section.terms.map((term) => ({ label: term.label, body: inline(term.html) }))}
+      closingLine={
+        /* Priced plans close on one quiet line, a gutter under the cards, and its one link after it
+           (Jatin's boards, 18 Nov 2026: "A senior product designer leads every option…  How we work
+           with clients →"; owner, 18 Nov: the link restored): never an ink ask, the featured plan
+           already carries the converting action. */
+        plansClose ? closingHeading : undefined
+      }
+      closingAction={
+        plansClose && primary ? (
+          <Button
+            as="a"
+            href={primary.href}
+            emphasis="link"
+            size="md"
+            extendHitArea
+            icon={<Icon name="arrow-right" />}
+          >
+            {labelWithoutArrow(primary.label)}
+          </Button>
+        ) : undefined
+      }
       note={
-        primary && closingHeading ? (
+        plansClose ? undefined : primary && closingHeading ? (
           <CtaSection
             id={id ? `${id}-ask` : undefined}
             data-band="onward"
@@ -377,7 +404,7 @@ export function PublishedEngagement({
         ) : undefined
       }
       closing={
-        !primary && closingHeading
+        !primary && closingHeading && section.presentation !== 'plans'
           ? {
               heading: closingHeading,
               lead: inline(closing?.html),

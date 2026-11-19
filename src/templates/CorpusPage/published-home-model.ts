@@ -114,6 +114,12 @@ export type HomeSection = SectionHead &
         options: {
           title: string;
           eyebrow?: string;
+          /** `plans` only: the plan's price, the whole string as authored ("From $2,500 a month").
+              The CMS writes it in the option's `title`, with the plan's name in `eyebrow` (owner,
+              19 Nov 2026); the Strapi mapper moves them into place. */
+          price?: { amount: string; unit?: string };
+          /** `plans` only: the one highlighted plan (the option's `focused` in the CMS). */
+          featured?: boolean;
           anchorId?: string;
           html?: string;
           icon?: IconName;
