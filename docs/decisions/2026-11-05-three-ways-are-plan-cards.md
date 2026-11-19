@@ -1,7 +1,7 @@
 ---
 title: "Three ways to work with us: plan cards — name, one line under it, one-tick checklist, an outline action each"
 date: 2026-11-05
-status: active
+status: superseded
 area: [cards, layout, components, type]
 source: "Owner (Devagya), 5 Nov 2026, pricing-component round: references (artifact KPG8Z6hvtiqq1VDY1BofYB), hi-fi mocks (artifact 9ULPpnXudRdtfxV7eVGbmQ), direction E picked"
 supersedes: [2026-11-04-three-ways-cards]
