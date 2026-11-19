@@ -45,6 +45,22 @@
   /* `plans` (owner, 5 Nov 2026): a plan's name, h4 one step up. */
   --eop-plan-title-text: var(--text-h4-lg);
   --eop-plan-title-tracking: var(--text-h4-lg-tracking);
+  /* A priced plan (owner, 17 Nov 2026: pricing is allowed): the price leads at h3, the serif, as the
+     boards set "From $500"; the name over it is the eyebrow (owner, 18 Nov 2026), so it reads the
+     eyebrow tokens and has none of its own. */
+  --eop-plan-price-text: var(--text-h3);
+  --eop-plan-price-tracking: var(--text-h3-tracking);
+  /* The price's dollar sign (owner, 18 Nov 2026): Newsreader swaps in its single-stroke `dollar.1`
+     through its own `rvrn` feature when opsz is under ~16.8 and the weight is over 400 (the price is
+     500). An opsz of 16 on the sign alone is the nearest to display size that makes the swap; the
+     rest of the price keeps the automatic optical size. */
+  --eop-plan-currency-variation: 'opsz' 16;
+  /* An underlined phrase in a plan's words (`<u>`, Jatin's highlight, 19 Nov 2026) is a HIGHLIGHT,
+     not a link: a soft band of the brand blue laid low behind the words, a third of the type deep,
+     reaching up into the x-height. Relative to the type so it scales with whichever role holds it;
+     painted under the glyphs (an underline draws before the text). Its colour is per surface. */
+  --eop-mark-thickness: 0.36em;
+  --eop-mark-offset: -0.2em;
   /* Optical correction: the 18 tick centres on the 14 item's first line (line box ~20). */
   --eop-tick-optical-offset: var(--space-1);
   /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
@@ -58,6 +74,14 @@
   --eop-card-ground: var(--color-paper);
   --eop-plan-ground: var(--color-white); /* a step brighter than the paper band */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
+  --eop-mark-ink: var(--color-brandeis-200); /* decoration under the words; neutral-800 on it 7.23:1, and it still shows on the featured brandeis-50 */
+  /* The featured plan (owner, 18 Nov 2026: "subtler, a slight blue"): the lightest blue for its
+     ground, two steps up for its one hairline and its head rule a step up. Decoration; the copy on
+     brandeis-50: title neutral-900 13.2:1, item neutral-800 10.66:1, body neutral-700 7.35:1,
+     tick brandeis-500 5.57:1. */
+  --eop-plan-featured-ground: var(--color-brandeis-50);
+  --eop-plan-featured-edge-ink: var(--color-brandeis-200);
+  --eop-plan-featured-rule-ink: var(--color-brandeis-100);
   --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-300); /* decoration */
   --eop-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
@@ -74,6 +98,13 @@
   --eop-card-ground: var(--color-paper);
   --eop-plan-ground: var(--color-white); /* the brightest object on tint */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
+  --eop-mark-ink: var(--color-brandeis-200); /* as paper: decoration under the words */
+  /* As paper. brandeis-50 is 1.01:1 against the tint band, so the brandeis-200 hairline (1.46:1)
+     carries the edge. Copy on brandeis-50: title neutral-900 13.2:1, item and body neutral-800
+     10.66:1, tick brandeis-500 5.57:1. */
+  --eop-plan-featured-ground: var(--color-brandeis-50);
+  --eop-plan-featured-edge-ink: var(--color-brandeis-200);
+  --eop-plan-featured-rule-ink: var(--color-brandeis-100);
   --eop-card-rule-ink: var(--color-neutral-200); /* decoration */
   --eop-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on tint */
   --eop-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
@@ -90,6 +121,12 @@
   --eop-card-ground: var(--color-neutral-900);
   --eop-plan-ground: var(--color-neutral-900);
   --eop-plan-item-ink: var(--color-neutral-300); /* 11.07:1 */
+  --eop-mark-ink: var(--color-brandeis-800); /* decoration; neutral-300 on it 8.4:1 */
+  /* A step lighter than its neighbours, the hairline a deep blue. Copy on neutral-800: white
+     11.92:1, neutral-300 7.64:1, tick brandeis-300 5.05:1. */
+  --eop-plan-featured-ground: var(--color-neutral-800);
+  --eop-plan-featured-edge-ink: var(--color-brandeis-700);
+  --eop-plan-featured-rule-ink: var(--color-neutral-700);
   --eop-card-rule-ink: var(--color-neutral-700); /* decoration */
   --eop-rule-ink: var(--color-neutral-700); /* decoration */
   --eop-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
@@ -106,6 +143,12 @@
   --eop-card-ground: var(--color-brandeis-600);
   --eop-plan-ground: var(--color-brandeis-600);
   --eop-plan-item-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --eop-mark-ink: var(--color-brandeis-800); /* decoration; a step under the featured brandeis-700; brandeis-50 on it 11.71:1 */
+  /* A step deeper than its neighbours, the hairline the brand blue. Copy on brandeis-700: white
+     10.16:1, brandeis-50 9.09:1. */
+  --eop-plan-featured-ground: var(--color-brandeis-700);
+  --eop-plan-featured-edge-ink: var(--color-brandeis-500);
+  --eop-plan-featured-rule-ink: var(--color-brandeis-500);
   --eop-card-rule-ink: var(--color-brandeis-300); /* decoration */
   --eop-rule-ink: var(--color-brandeis-300); /* decoration */
   --eop-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */

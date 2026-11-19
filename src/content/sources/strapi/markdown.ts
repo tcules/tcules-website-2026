@@ -16,6 +16,14 @@ function siteHref(href: string): string {
   return match?.[1] ? `${match[1].toLowerCase()}${href.slice(match[0].length)}` : href;
 }
 
+/* An underline, as Strapi's rich-text editor writes it (`<u>free one-day review</u>`, Jatin's
+   highlight, 19 Nov 2026). The whole field is escaped first, so this is the ONE piece of HTML let
+   back through: the exact lowercase pair, no attributes, holding no other `<u>`, and only as a
+   balanced pair. A lone or unmatched tag, any other tag, and a `<u>` inside a code span or written
+   `\<u>` stay literal text. It renders as `<u>`; what it looks like is the stylesheet's (a neutral
+   underline in globals.css, a highlight where a component says so), never a link's. */
+const UNDERLINE = /&lt;u&gt;((?:(?!&lt;\/?u&gt;)[\s\S])+?)&lt;\/u&gt;/gu;
+
 function renderMarks(source: string): string {
   const escapedCharacters: string[] = [];
   const protectedSource = source.replace(
@@ -32,6 +40,7 @@ function renderMarks(source: string): string {
   const codeSpans: string[] = [];
   return escapeHtml(protectedSource)
     .replace(/`([^`]+)`/gu, (_, code: string) => `\uE005${codeSpans.push(code) - 1}\uE006`)
+    .replace(UNDERLINE, '<u>$1</u>')
     .replace(/\*\*([^*]+)\*\*/gu, '<strong>$1</strong>')
     .replace(/(?<![\p{L}\p{N}_])__([^_]+)__(?![\p{L}\p{N}_])/gu, '<strong>$1</strong>')
     .replace(/~~([^~]+)~~/gu, '<del>$1</del>')

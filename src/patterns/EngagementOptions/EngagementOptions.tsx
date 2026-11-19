@@ -99,6 +99,21 @@ export type EngagementOption = {
    * at the card's foot, the full width of the card.
    */
   action?: ReactNode;
+  /**
+   * `plans` only (owner, 17 Nov 2026: pricing is allowed): the plan's price, set large in the title
+   * voice under its name ("From $500"; "Quoted per project" for a plan with no list price), with an
+   * optional quiet unit after it on the same line ("a month"). Once one plan in a set carries a
+   * price the name steps down to the label size so the price leads the card; set it on every plan
+   * or on none. Plain text, as authored.
+   */
+  price?: { amount: string; unit?: string };
+  /**
+   * `plans` only (owner, 17 Nov 2026): the ONE highlighted plan — its edge drawn in the accent at
+   * twice the hairline. At most one per set (a second warns in development and only the first is
+   * drawn). The caller composes its action, in practice the blue solid where the others take the
+   * outline or the link.
+   */
+  featured?: boolean;
 };
 
 /**
@@ -155,6 +170,19 @@ export type EngagementOptionsProps = {
    */
   closing?: { heading: string; lead: ReactNode; proof?: ReactNode };
   /**
+   * One quiet sentence that closes the set (owner, 18 Nov 2026, the priced plans: "A senior product
+   * designer leads every option…"): the note voice, a `gutter` under the cards. Its one way on, when
+   * it has one, is `closingAction`; the featured plan carries the converting action.
+   */
+  closingLine?: ReactNode;
+  /**
+   * The closing line's way on (owner, 18 Nov 2026: "add that 'how we work' link back to the pricing
+   * section"), composed by the caller: in practice one link Button ("How we work with clients →").
+   * It stands at the row's inline end, opposite the sentence (owner, 19 Nov 2026), and wraps under
+   * it, start-aligned, when the row cannot hold both (a phone). Only with `closingLine`.
+   */
+  closingAction?: ReactNode;
+  /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
    * decisions/2026-10-29-how-we-work-together-link-in-head): at the inline end of the heading's
@@ -200,6 +228,8 @@ export function EngagementOptions({
   note,
   terms = [],
   closing,
+  closingLine,
+  closingAction,
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -377,6 +407,19 @@ export function EngagementOptions({
                 )}
               </Layout>
             ) : null}
+            {/* The quiet closing line belongs to the set, so it sits a gutter under the cards, not a
+                section away. Its link stands at the row's inline end, the sentence at the start (owner,
+                19 Nov 2026: "don't like the link inlined like that … move it to the right end"), the
+                CtaRow note-and-action shape: `block` apart, centred on one line, and when the row
+                cannot hold both the link wraps under the sentence at the start. */}
+            {closingLine && closingAction ? (
+              <Cluster colGap="block" rowGap="block" align="center" justify="between">
+                <p className={cx(styles.closingLine, styles.closingLineLed)}>{closingLine}</p>
+                {closingAction}
+              </Cluster>
+            ) : closingLine ? (
+              <p className={styles.closingLine}>{closingLine}</p>
+            ) : null}
           </Layout>
         </Layout>
         {note}
@@ -515,6 +558,16 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
  * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
  */
 function Plans({ shown }: { shown: readonly EngagementOption[] }) {
+  const priced = shown.some((option) => option.price);
+  const featuredIndex = shown.findIndex((option) => option.featured);
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    shown.filter((option) => option.featured).length > 1
+  ) {
+    console.warn(
+      'EngagementOptions: more than one featured plan; only the first is highlighted.',
+    );
+  }
   return (
     <Layout
       as="ul"
@@ -526,13 +579,38 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
       {shown.map((option, index) => (
         /* The action stands a `stack` (48) under the list (owner, 5 Nov 2026: "more
            space above the button"); the head and list keep their `block` inside their group. */
-        <Layout as="li" key={option.title || index} rowGap="stack" className={styles.plan}>
+        <Layout
+          as="li"
+          key={option.title || index}
+          rowGap="stack"
+          className={cx(styles.plan, index === featuredIndex && styles.planFeatured)}
+        >
           <Layout rowGap="block">
             {/* The name, then the one line that says what the plan is for, a `tight` step under it
                 (owner, 5 Nov 2026, final copy), both over the head's hairline. */}
             <Layout rowGap="tight" className={styles.planHead}>
-              <OptionHead option={option} className={styles.planTitle} />
-              {option.body != null ? <OptionBody option={option} className={styles.planBody} /> : null}
+              {priced ? (
+                /* Priced: the name at the label size, the price leading the card under it. */
+                <Layout rowGap="tight">
+                  <OptionHead option={option} className={styles.planName} />
+                  {option.price ? (
+                    <p className={styles.planPrice}>
+                      <Amount text={option.price.amount} />
+                      {option.price.unit ? (
+                        <>
+                          {' '}
+                          <span className={styles.planUnit}>{option.price.unit}</span>
+                        </>
+                      ) : null}
+                    </p>
+                  ) : null}
+                </Layout>
+              ) : (
+                <OptionHead option={option} className={styles.planTitle} />
+              )}
+              {option.body != null ? (
+                <OptionBody option={option} className={styles.planBody} />
+              ) : null}
             </Layout>
             {option.checklist && option.checklist.length > 0 ? (
               <Layout as="ul" rowGap="text">
@@ -554,6 +632,28 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
         </Layout>
       ))}
     </Layout>
+  );
+}
+
+/**
+ * A price's words with each currency sign set in its own span, so the sign can take the display
+ * face's single-stroke dollar (`.planCurrency`) while the words stay as authored.
+ */
+function Amount({ text }: { text: string }) {
+  const parts = text.split(/(\$)/);
+  if (parts.length === 1) return <>{text}</>;
+  return (
+    <>
+      {parts.map((part, index) =>
+        part === '$' ? (
+          <span key={index} className={styles.planCurrency}>
+            $
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </>
   );
 }
 
