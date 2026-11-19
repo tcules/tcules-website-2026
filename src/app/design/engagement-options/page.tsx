@@ -53,7 +53,7 @@ const PRICED: EngagementOption[] = [
       <Button
         as="a"
         href={ROUTES.contact}
-        emphasis="link"
+        emphasis="outline"
         size="md"
         icon={<Icon name="arrow-right" />}
       >
@@ -75,7 +75,7 @@ const PRICED: EngagementOption[] = [
       <Button
         as="a"
         href={ROUTES.contact}
-        emphasis="link"
+        emphasis="outline"
         size="md"
         icon={<Icon name="arrow-right" />}
       >
