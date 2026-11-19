@@ -293,11 +293,6 @@ const SPECIMENS = [
         note: "a page's hard parts — tabs on a stage (one slide moving as one piece, autoplay with no control), four of five without an example, two claims, and the page layout, ruled",
       },
       {
-        href: '/design/voice-ledger',
-        name: 'VoiceLedger',
-        note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",
-      },
-      {
         href: '/design/case-spread',
         name: 'CaseSpread',
         note: 'one worked example — problem, what we did and the result on one rail (blue at the result) beside its sticky 16:9 evidence; three steps, no action, paper and tint',

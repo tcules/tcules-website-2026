@@ -106,7 +106,7 @@ export default function LayoutSpecimenPage() {
 
         <Specimen
           title="columns={[7, 5]} align='first-baseline'"
-          note="First lines share a baseline although the two sides open at different sizes and the right one wraps: a large line beside a smaller reply (VoiceLedger). align='baseline' would sink the reply's first line to the large line's last; 'start' would set it high by the difference in line height."
+          note="First lines share a baseline although the two sides open at different sizes and the right one wraps: a large line beside a smaller reply. align='baseline' would sink the reply's first line to the large line's last; 'start' would set it high by the difference in line height."
         >
           <Layout columns={[7, 5]} colGap="column" rowGap="text" align="first-baseline">
             <p className={s.specFirstBaselineLarge}>A large first line</p>

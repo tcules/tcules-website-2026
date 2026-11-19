@@ -38,7 +38,11 @@ export const KIND_COMPONENTS: Readonly<
     status: 'approved',
     note: 'What you get, four parts.',
   },
-  personas: { component: ['voice-ledger'], status: 'approved' },
+  personas: {
+    component: ['D-claims'],
+    status: 'approved',
+    note: 'The people beside a hard-parts band: their questions as the ruled tile set (ListTiles), then the hard parts as ClaimSet, the challenges component (O.5a, 17 Nov 2026: VoiceLedger retired).',
+  },
   catalog: {
     component: ['catalog-tiles'],
     status: 'to-design',

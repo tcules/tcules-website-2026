@@ -24,7 +24,6 @@ import {
   OfferSheet,
   ProfileCard,
   ProfileFollow,
-  VoiceLedger,
   type BentoItem,
   type BlockCardSetItem,
   type EngagementScope,
@@ -72,7 +71,6 @@ const LEGACY_ABOUT_BANDS = [
   'ahmedabad-is-part-of-how-we-work',
   'the-practice-keeps-moving',
   'what-we-do',
-  'who-we-work-with',
   'difference',
   'how-we-work',
   'leadership',
@@ -484,7 +482,7 @@ function Text({
  *
  * The one page of its type, composed band by band in the content team's order. No two neighbours share
  * a shape: the studio paragraphs beside a photograph, a photograph beside the studio's story, plain
- * prose, a rail of six services, three situations, two tiles beside a photograph, three differences,
+ * prose, a rail of six services, two tiles beside a photograph, three differences,
  * the principles in an accordion beside a photograph, two people, four cases, the working wall, client
  * voices, the company record as two halves, the questions, a coda beside a photograph, the ask and a
  * careers banner. The hero holds the title and its first paragraph; the rest of the opening splits into
@@ -503,7 +501,6 @@ export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
       <Ahmedabad page={page} />
       <Practice page={page} />
       <WhatWeDo page={page} />
-      <WhoWeWorkWith page={page} />
       <Difference page={page} />
       <HowWeWork page={page} />
       <Leadership page={page} />
@@ -626,33 +623,6 @@ function WhatWeDo({ page }: { page: CorpusPage }) {
         scroll="never"
       />
     </ContentSection>
-  );
-}
-
-/* ── 4 · who we work with: three situations as peers ─────────────────────────── */
-
-function WhoWeWorkWith({ page }: { page: CorpusPage }) {
-  const b = band(page, 'who-we-work-with');
-  const [leadBlock, list, ...closing] = b.blocks;
-  const rows =
-    list?.type === 'list'
-      ? list.items.flatMap((runs) => {
-          const lead = boldLead(runs);
-          return lead ? [{ voice: labelTitle(lead.label), reply: plain(lead.body) }] : [];
-        })
-      : [];
-  /* The three situations as the questions layout (pattern 32: the reader recognises their own
-     situation in the large line, what it involves beside it); the closing two lines under the rows,
-     in the same band. */
-  return (
-    <VoiceLedger
-      id={b.id}
-      heading={b.headingText}
-      headingId={headingIdOf(b)}
-      lead={leadBlock?.type === 'paragraph' ? plain(leadBlock.runs) : undefined}
-      items={rows}
-      note={<Text paragraphs={paragraphRuns(closing)} />}
-    />
   );
 }
 

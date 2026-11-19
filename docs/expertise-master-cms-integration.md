@@ -34,7 +34,7 @@ changed. The Expertise detail pages (`/expertise/{slug}`) are not changed by thi
 
 Sections the live record doesn't use still map, through the same renderers as the Service pages: Stage,
 Offer Sheet, Hard Parts, Comparison, Illustrated, Editorial, Industry Grid, and the Question/Role
-Ledger (as VoiceLedger).
+Ledger (as the ruled tile set, ListTiles; VoiceLedger retired 17 Nov 2026).
 
 Variants:
 - Service Card: `single-grid-content` and `two-grid-content`.
