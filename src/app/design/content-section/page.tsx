@@ -1,10 +1,14 @@
 import type { ReactNode } from 'react';
 
 import {
+  BrandMark,
+  Icon,
+  RatingBadge,
   Layout,
   Media,
   Prose,
   Section,
+  Sketch,
   Texture,
   TextureShape,
   type IconName,
@@ -849,6 +853,23 @@ export default function ContentSectionSpecimen() {
         </ContentSectionText>
       </ContentSection>
       <ContentSection
+        align="center"
+        heading="What clients say"
+        headingId="csec-centre-score"
+        score={
+          <RatingBadge
+            score="4.8"
+            platform="Clutch"
+            href="https://clutch.co/profile/tcules-saas-product-design-studio"
+            icon={<Icon name="star" size="sm" />}
+            mark={<BrandMark name="clutch" />}
+          />
+        }
+        lead="score: the caller's RatingBadge in the head, a block under the heading and over the lead (owner, 18 Nov 2026: the Clutch badge above the testimonials)."
+      >
+        <Cards />
+      </ContentSection>
+      <ContentSection
         align="center-lg"
         eyebrow="Centred from 1024 · center-lg"
         heading="Centred over the row, start-aligned over the stack"
@@ -1163,6 +1184,82 @@ export default function ContentSectionSpecimen() {
         >
           <Tiles count={2} />
         </ContentSection>
+      </FoldExempt>
+
+      {/* ── 14a · a bare media head over rows, against the same head stacked ─────────────── */}
+      <Label title="14a · media head = every band's head (18 Nov 2026)">
+        A media split&rsquo;s heading is the band&rsquo;s h2, the same role and weight as the
+        stacked band under it, at every width; the h1 role is the explicit
+        media.head=&quot;xl&quot; (shown last). A bare head (no lead) sits a block (24) over its
+        rows. With media.headAbove (19 Nov 2026) the head takes its own full-width row and the
+        figure sits beside the rows under it: head, figure, rows on a phone. From 1024 the
+        photograph is as tall as the rows, not its own 4:5 (round 10); a drawing keeps its own
+        16:9 in half the width, centred on the rows&rsquo; height (round 11): the second band. The
+        coda closes the whole split at the section lead&rsquo;s role (16), never above the body
+        ceiling. MVP&rsquo;s &ldquo;Your prototype is the brief we build from&rdquo; is this
+        band.
+      </Label>
+      <FoldExempt reason="compares the media head with a stacked one; height is not the point">
+        <ContentSection
+          arrangement="media"
+          media={{ image: photo('studio-sticky-board-ux'), side: 'start', headAbove: true }}
+          heading="Your prototype is the brief we build from"
+          headingId="csec-media-bare-rows"
+          coda="You get the call in writing, area by area, with the reason. You decide what to fund."
+        >
+          <Layout as="ul" rowGap="none">
+            {STEPS.map((step) => (
+              <ListCard
+                key={step.title}
+                title={step.title}
+                titleAs="h3"
+                arrangement="stacked"
+              />
+            ))}
+          </Layout>
+        </ContentSection>
+        <ContentSection
+          arrangement="media"
+          media={{
+            drawing: <Sketch name="design-systems" />,
+            side: 'start',
+            headAbove: true,
+          }}
+          heading="The same band, with its drawing"
+          headingId="csec-media-bare-rows-drawing"
+        >
+          <Layout as="ul" rowGap="none">
+            {STEPS.map((step) => (
+              <ListCard
+                key={step.title}
+                title={step.title}
+                titleAs="h3"
+                arrangement="stacked"
+              />
+            ))}
+          </Layout>
+        </ContentSection>
+        <ContentSection heading="The same head, stacked" headingId="csec-media-bare-compare">
+          <Layout as="ul" rowGap="none">
+            {STEPS.map((step) => (
+              <ListCard
+                key={step.title}
+                title={step.title}
+                titleAs="h3"
+                arrangement="stacked"
+              />
+            ))}
+          </Layout>
+        </ContentSection>
+        <ContentSection
+          arrangement="media"
+          media={{ head: 'xl', image: photo('whiteboard-two-hands'), side: 'end' }}
+          eyebrow='media.head="xl" · the opt-in h1 role (h2 below 768)'
+          heading="Start with the decision in front of you"
+          headingId="csec-media-xl"
+          lead="A thirty-minute call about the decision you are facing, and a written note of what we would do first."
+          actions={<CtaRow actions={[START]} rule={false} />}
+        />
       </FoldExempt>
 
       {/* ── 14b · the texture slot outside `media` ───────────────────────────────────────── */}
