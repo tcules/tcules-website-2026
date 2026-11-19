@@ -489,11 +489,20 @@ export function mapBand(
         options: rows(section.options).flatMap((option) => {
           const title = text(option.title);
           const optionAction = action(option.action);
+          /* A priced plan (owner, 19 Nov 2026): the CMS has no price field, so on `plans` the
+             option's eyebrow is the plan's name and its title is the price, the whole string as
+             authored ("From $2,500 a month"). A plan with no eyebrow is a plain plan: its title is
+             its name and it carries no price, as before. */
+          const plan =
+            section.engagementPresentation === 'plans' ? text(option.eyebrow) : undefined;
           return title
             ? [
                 {
-                  title,
-                  eyebrow: text(option.eyebrow),
+                  title: plan ?? title,
+                  eyebrow: plan ? undefined : text(option.eyebrow),
+                  price: plan ? { amount: title } : undefined,
+                  /* `focused` (Mihir, 19 Nov 2026) highlights the one plan in blue. */
+                  featured: section.engagementPresentation === 'plans' && option.focused === true,
                   anchorId: text(option.anchorId),
                   html: markdownInlineToHtml(option.body) || undefined,
                   icon: icon(option.icon),

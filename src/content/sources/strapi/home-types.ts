@@ -196,6 +196,7 @@ export type CmsHomeSection = Band &
           id: string;
           title: Text;
           eyebrow: Text;
+          focused: Maybe<boolean>;
           body: Text;
           icon: Text;
           scope: Text;

@@ -312,6 +312,26 @@ export function PublishedEngagement({
   ) : undefined;
   const closingHeading = closing?.heading;
   const [primary, secondary] = closing?.actions ?? [];
+  /* Plans close on one quiet line and its link, never an ink ask (owner, 19 Nov 2026: the closing
+     in the new design on every plans band). The line is the closing's heading; its body is not
+     drawn. Until the new copy is published the live closings carry two actions ("Book a call",
+     "See how we work"), so a second one stands beside the first as another quiet link. A closing
+     with a proof keeps the band's old close, so a case is never dropped (none carries one today). */
+  const plansClose =
+    section.presentation === 'plans' && Boolean(closingHeading) && !closing?.proof;
+  const closingLink = (action: HomeAction) => (
+    <Button
+      key={action.href}
+      as="a"
+      href={action.href}
+      emphasis="link"
+      size="md"
+      extendHitArea
+      icon={<Icon name="arrow-right" />}
+    >
+      {labelWithoutArrow(action.label)}
+    </Button>
+  );
   return (
     <EngagementOptions
       {...{ id, heading, headingId, surface }}
@@ -325,6 +345,8 @@ export function PublishedEngagement({
         return {
           title: option.title,
           eyebrow: option.eyebrow,
+          price: option.price,
+          featured: option.featured,
           anchorId: option.anchorId,
           body: inline(body),
           more: more.map(inline),
@@ -347,7 +369,9 @@ export function PublishedEngagement({
               href={button.href}
               target={button.external ? '_blank' : undefined}
               rel={button.external ? 'noopener noreferrer' : undefined}
-              emphasis="outline"
+              /* The featured plan carries the converting action, "Book a free product review":
+                 always a solid primary (owner, 18 Nov 2026); the other plans stay outline. */
+              emphasis={option.featured ? 'solid' : 'outline'}
               size="md"
               icon={<Icon name={button.icon ?? 'arrow-right'} />}
             >
@@ -357,8 +381,27 @@ export function PublishedEngagement({
         };
       })}
       terms={section.terms.map((term) => ({ label: term.label, body: inline(term.html) }))}
+      closingLine={
+        /* Priced plans close on one quiet line, a gutter under the cards, and its one link after it
+           (Jatin's boards, 18 Nov 2026: "A senior product designer leads every option…  How we work
+           with clients →"; owner, 18 Nov: the link restored): never an ink ask, the featured plan
+           already carries the converting action. */
+        plansClose ? closingHeading : undefined
+      }
+      closingAction={
+        plansClose && primary ? (
+          secondary ? (
+            <Cluster colGap="block" rowGap="tight" align="center">
+              {closingLink(primary)}
+              {closingLink(secondary)}
+            </Cluster>
+          ) : (
+            closingLink(primary)
+          )
+        ) : undefined
+      }
       note={
-        primary && closingHeading ? (
+        plansClose ? undefined : primary && closingHeading ? (
           <CtaSection
             id={id ? `${id}-ask` : undefined}
             data-band="onward"
@@ -377,7 +420,7 @@ export function PublishedEngagement({
         ) : undefined
       }
       closing={
-        !primary && closingHeading
+        !primary && closingHeading && section.presentation !== 'plans'
           ? {
               heading: closingHeading,
               lead: inline(closing?.html),

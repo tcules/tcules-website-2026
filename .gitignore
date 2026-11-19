@@ -57,3 +57,6 @@ yarn-error.log*
 # The page-build census (npm run corpus:census), regenerated from _pages on every run
 /docs/page-build/census.json
 /docs/page-build/census.md
+
+# CMS write snapshots (scripts/cms/*): hold live content, never committed
+/snapshots/

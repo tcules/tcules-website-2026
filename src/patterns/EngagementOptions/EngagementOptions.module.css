@@ -94,6 +94,20 @@
 }
 
 /* The set's closing statement: the h3 role, a step under the band's h2 and over each option's name. */
+/* The set's closing sentence (`closingLine`): the quiet note voice, at the body measure. */
+.closingLine {
+  font: var(--eop-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--eop-body-ink);
+  max-inline-size: var(--eop-body-measure);
+}
+
+/* With its link at the row's end, the line runs to its own length, so on a laptop it holds one line
+   opposite the link; where the row cannot hold both it takes the row and the link wraps under it. */
+.closingLineLed {
+  max-inline-size: none;
+}
+
 .closingHeading {
   font: var(--eop-closing-text);
   letter-spacing: var(--eop-closing-tracking);
@@ -168,6 +182,51 @@
   color: var(--eop-title-ink);
 }
 
+/* The one highlighted plan (owner, 17 Nov 2026; made subtler 18 Nov: "a slight blue"): the lightest
+   blue ground, its one hairline two steps up at the normal weight, so the box and copy do not move by
+   a pixel against its neighbours. */
+.planFeatured {
+  border-color: var(--eop-plan-featured-edge-ink);
+  background: var(--eop-plan-featured-ground);
+}
+
+.planFeatured .planHead {
+  border-block-end-color: var(--eop-plan-featured-rule-ink);
+}
+
+/* A priced plan's name, at the label size: the price under it leads the card. */
+/* A priced plan's name: the eyebrow over its price (owner, 18 Nov 2026: "make sure the texts
+   'Pilot project' etc are eyebrows"), mono and capitals in presentation only, the words as authored. */
+.planName {
+  font: var(--eop-eyebrow-text);
+  letter-spacing: var(--eop-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--eop-eyebrow-ink);
+}
+
+/* The price, in the serif title voice; its unit quiet after it on the same line. */
+.planPrice {
+  font: var(--eop-plan-price-text);
+  letter-spacing: var(--eop-plan-price-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--eop-title-ink);
+}
+
+/* The price's dollar sign: Newsreader's own single-stroke dollar (`dollar.1`, the stroke only above
+   and below the S) in place of its default double bar through it (owner, 18 Nov 2026: "is there a
+   different dollar symbol within the font that we can use?"). The font has no stylistic set for it;
+   it substitutes `dollar.1` itself (its `rvrn` feature) at optical sizes under ~17 from weight 401, so
+   the sign alone is set at that optical size. See the token. */
+.planCurrency {
+  font-variation-settings: var(--eop-plan-currency-variation);
+}
+
+.planUnit {
+  font: var(--eop-body-text);
+  letter-spacing: normal;
+  color: var(--eop-body-ink);
+}
+
 /* The line under a plan's name: what the plan is for, at the card body size. */
 .planBody {
   font: var(--eop-body-text);
@@ -182,9 +241,26 @@
   min-inline-size: 0;
 }
 
-/* The shared tick, in the accent, set on the item's first line. */
+/* An underline the CMS carries (`<u>`) in a plan's words (owner, 19 Nov 2026: "E is approved";
+   Jatin asked for "free one-day review" to stand out): the words keep the card's own ink and weight,
+   and under them runs one solid line in the full accent, unbroken by descenders. On this site a
+   link is the coloured word, so an underline under ink words cannot pass for one. */
+.planBody u,
+.planItem u {
+  text-decoration-line: underline;
+  text-decoration-color: var(--eop-underline-ink);
+  text-decoration-thickness: var(--eop-underline-thickness);
+  text-underline-offset: var(--eop-underline-offset);
+  text-decoration-skip-ink: none;
+}
+
+/* The shared tick, in the accent, set on the item's first line. `flex: none`: the span is the flex
+   item in the item's nowrap row, and a flex item shrinks by default, so a line that wrapped took
+   its width from the tick and drew it smaller than its neighbours (owner, 18 Nov 2026: "why are the
+   checkmarks different sizes?"). The glyph's own `flex: none` cannot help from inside the span. */
 .tick {
   display: block;
+  flex: none;
   color: var(--eop-cell-icon-ink);
   padding-block-start: var(--eop-tick-optical-offset);
 }
