@@ -58,8 +58,8 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --bnt-tile-ground: var(--color-paper); /* paper on the tint, as BlockCard's tile (owner, 4 Nov 2026: "white fill cards") */
-  --bnt-rule-ink: var(--color-neutral-300);
-  --bnt-cta-rule-ink: var(--color-neutral-400); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
+  --bnt-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
+  --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */

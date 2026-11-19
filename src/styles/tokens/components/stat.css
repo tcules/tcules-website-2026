@@ -65,7 +65,7 @@
   --stat-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --stat-unit-ink: var(--color-neutral-700); /* 7.27:1 */
   --stat-label-ink: var(--color-neutral-700); /* 7.27:1 */
-  --stat-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --stat-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --stat-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 

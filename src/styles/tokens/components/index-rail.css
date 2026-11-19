@@ -133,7 +133,7 @@
   --irl-pop-shadow-ink: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
   --irl-switch-ground: var(--color-neutral-100);
   --irl-thumb-ground: var(--color-paper);
-  --irl-rule-ink: var(--color-neutral-300);
+  --irl-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --irl-menu-ground: var(--color-white);
   --irl-menu-rule-ink: var(--color-neutral-300);
 }

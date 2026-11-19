@@ -100,7 +100,7 @@
 
 [data-surface='tint'] {
   --toc-title-ink: var(--color-neutral-700); /*  7.27:1 — 600 would be 4.39:1 */
-  --toc-rule-ink: var(--color-neutral-300);
+  --toc-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --toc-item-ink: var(--color-neutral-700); /*  7.27:1 */
   --toc-item-ink-hover: var(--color-neutral-900); /* 13.06:1 */
   --toc-item-ink-current: var(--color-neutral-900); /* 13.06:1 */

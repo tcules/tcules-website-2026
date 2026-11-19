@@ -166,7 +166,7 @@
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
-  --tsr-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on paper-deep */
+  --tsr-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --tsr-arrow-ink: var(--color-brandeis-600);
   --tsr-glyph-ink: var(--color-brandeis-600);
 }

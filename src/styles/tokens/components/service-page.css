@@ -76,7 +76,7 @@
   --svc-ink: var(--color-neutral-900);
   --svc-ink-muted: var(--color-neutral-700); /* 7.27:1 */
   --svc-ink-label: var(--color-neutral-800); /* 10.54:1 */
-  --svc-rule: var(--color-neutral-300);
+  --svc-rule: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --svc-rule-strong: var(--color-neutral-500);
   --svc-mark: var(--color-brandeis-500); /* 5.51:1 */
   --svc-slot-edge: var(--color-neutral-500);

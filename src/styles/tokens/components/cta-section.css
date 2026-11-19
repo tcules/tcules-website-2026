@@ -156,7 +156,7 @@
   --cta-marker-ink: var(--color-brandeis-500);
   --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */ /* 5.51:1 */
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
-  --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --cta-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --cta-panel-ground: var(--color-paper); /* declared for self-containment; no panel is tint (29 Oct 2026) */
 }
 

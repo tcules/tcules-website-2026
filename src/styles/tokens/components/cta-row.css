@@ -44,8 +44,7 @@
 
 [data-surface='tint'] {
   --ctarow-rule-ink: var(
-    --color-neutral-400
-  ); /* decoration; 300 vanishes on the deeper ground */
+    --color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --ctarow-note-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
