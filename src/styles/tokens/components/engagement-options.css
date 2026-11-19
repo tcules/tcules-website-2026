@@ -55,23 +55,10 @@
      500). An opsz of 16 on the sign alone is the nearest to display size that makes the swap; the
      rest of the price keeps the automatic optical size. */
   --eop-plan-currency-variation: 'opsz' 16;
-  /* An underlined phrase in a plan's words (`<u>`, 19 Nov 2026): four directions under review
-     (PlanHighlight). Geometry here, colour per surface below. */
-  --eop-hl-weight: var(--font-weight-medium);
-  /* E (the default). A solid underline in the full accent under words left in the card's own ink:
-     on this site a link is the coloured word, so an underline under ink words cannot pass for one.
-     Clearly heavier than a hairline, a little below the baseline, unbroken by descenders. */
-  --eop-hl-underline-thickness: 0.12em;
-  --eop-hl-underline-offset: 0.2em;
-  --eop-hl-weight-strong: var(--font-weight-semibold);
-  /* A. The marker band: from the descender line to over the x-height, measured up the content box. */
-  --eop-hl-band-from: 2%;
-  --eop-hl-band-to: 64%;
-  /* B/D. A small radius for the tag and the lead row. Insets are optical: the tag's 4 keeps the
-     letters off its edge without growing the line; the lead row's 8/12 holds its glyph and words. */
-  --eop-hl-tag-radius: var(--radius-4);
-  --eop-hl-tag-inset: var(--space-4);
-  --eop-hl-lead-inset: var(--space-8) var(--space-12);
+  /* An underlined phrase in a plan's words (`<u>`, owner, 19 Nov 2026): a solid accent line under
+     words left in the card's ink, clearly heavier than a hairline, a little below the baseline. */
+  --eop-underline-thickness: 0.12em;
+  --eop-underline-offset: 0.2em;
   /* Optical correction: the 18 tick centres on the 14 item's first line (line box ~20). */
   --eop-tick-optical-offset: var(--space-1);
   /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */
@@ -85,13 +72,7 @@
   --eop-card-ground: var(--color-paper);
   --eop-plan-ground: var(--color-white); /* a step brighter than the paper band */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
-  --eop-hl-accent-ink: var(--color-brandeis-600); /* 7.59:1 on white, 6.79:1 on the featured brandeis-50 */
-  --eop-hl-underline-ink: var(--color-brandeis-500); /* decoration; the accent the ticks take */
-  --eop-hl-band-ink: var(--color-brandeis-200); /* decoration; neutral-800 on it 7.23:1 */
-  --eop-hl-tag-ground: var(--color-brandeis-200); /* shows on white and on the featured brandeis-50 */
-  --eop-hl-tag-ink: var(--color-brandeis-800); /* 7.95:1 on brandeis-200 */
-  --eop-hl-lead-ground: var(--color-brandeis-100); /* a step over the featured brandeis-50 */
-  --eop-hl-lead-ink: var(--color-neutral-900); /* over 12:1 on brandeis-100 */
+  --eop-underline-ink: var(--color-brandeis-500); /* decoration; the accent the ticks take */
   /* The featured plan (owner, 18 Nov 2026: "subtler, a slight blue"): the lightest blue for its
      ground, two steps up for its one hairline and its head rule a step up. Decoration; the copy on
      brandeis-50: title neutral-900 13.2:1, item neutral-800 10.66:1, body neutral-700 7.35:1,
@@ -115,13 +96,7 @@
   --eop-card-ground: var(--color-paper);
   --eop-plan-ground: var(--color-white); /* the brightest object on tint */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
-  --eop-hl-accent-ink: var(--color-brandeis-600); /* as paper: 7.59:1 white, 6.79:1 brandeis-50 */
-  --eop-hl-underline-ink: var(--color-brandeis-500); /* as paper */
-  --eop-hl-band-ink: var(--color-brandeis-200);
-  --eop-hl-tag-ground: var(--color-brandeis-200);
-  --eop-hl-tag-ink: var(--color-brandeis-800); /* 7.95:1 */
-  --eop-hl-lead-ground: var(--color-brandeis-100);
-  --eop-hl-lead-ink: var(--color-neutral-900);
+  --eop-underline-ink: var(--color-brandeis-500); /* as paper */
   /* As paper. brandeis-50 is 1.01:1 against the tint band, so the brandeis-200 hairline (1.46:1)
      carries the edge. Copy on brandeis-50: title neutral-900 13.2:1, item and body neutral-800
      10.66:1, tick brandeis-500 5.57:1. */
@@ -144,13 +119,7 @@
   --eop-card-ground: var(--color-neutral-900);
   --eop-plan-ground: var(--color-neutral-900);
   --eop-plan-item-ink: var(--color-neutral-300); /* 11.07:1 */
-  --eop-hl-accent-ink: var(--color-brandeis-300); /* 7.07:1 on neutral-900 */
-  --eop-hl-underline-ink: var(--color-brandeis-300); /* decoration; the icon blue on ink */
-  --eop-hl-band-ink: var(--color-brandeis-800); /* decoration; neutral-300 on it 8.4:1 */
-  --eop-hl-tag-ground: var(--color-brandeis-800);
-  --eop-hl-tag-ink: var(--color-brandeis-100); /* 10.32:1 on brandeis-800 */
-  --eop-hl-lead-ground: var(--color-brandeis-800);
-  --eop-hl-lead-ink: var(--color-white); /* 13.1:1 on brandeis-800 */
+  --eop-underline-ink: var(--color-brandeis-300); /* decoration; the icon blue on ink */
   /* A step lighter than its neighbours, the hairline a deep blue. Copy on neutral-800: white
      11.92:1, neutral-300 7.64:1, tick brandeis-300 5.05:1. */
   --eop-plan-featured-ground: var(--color-neutral-800);
@@ -172,13 +141,7 @@
   --eop-card-ground: var(--color-brandeis-600);
   --eop-plan-ground: var(--color-brandeis-600);
   --eop-plan-item-ink: var(--color-brandeis-50); /* 5.57:1 */
-  --eop-hl-accent-ink: var(--color-white); /* 7.59:1 on brandeis-600, 10.16:1 on brandeis-700 */
-  --eop-hl-underline-ink: var(--color-white); /* decoration; the icon ink on blue */
-  --eop-hl-band-ink: var(--color-brandeis-800); /* decoration; brandeis-50 on it 11.71:1 */
-  --eop-hl-tag-ground: var(--color-brandeis-800);
-  --eop-hl-tag-ink: var(--color-white); /* 13.1:1 */
-  --eop-hl-lead-ground: var(--color-brandeis-800);
-  --eop-hl-lead-ink: var(--color-white); /* 13.1:1 */
+  --eop-underline-ink: var(--color-white); /* decoration; the icon ink on blue */
   /* A step deeper than its neighbours, the hairline the brand blue. Copy on brandeis-700: white
      10.16:1, brandeis-50 9.09:1. */
   --eop-plan-featured-ground: var(--color-brandeis-700);

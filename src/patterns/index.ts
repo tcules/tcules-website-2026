@@ -431,7 +431,6 @@ export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpr
 export {
   EngagementOptions,
   type EngagementArrangement,
-  type PlanHighlight,
   type EngagementFact,
   type EngagementOption,
   type EngagementOptionsProps,
