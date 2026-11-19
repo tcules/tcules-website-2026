@@ -43,6 +43,11 @@
   color: var(--ofs-label-ink);
 }
 
+/* A step's number over its title (Contact's next steps) in the accent ink, as the boards draw it. */
+.step {
+  color: var(--ofs-mark-ink);
+}
+
 .title {
   font: var(--ofs-title-text);
   letter-spacing: var(--ofs-title-tracking);
@@ -196,22 +201,21 @@
   line-height: 0;
 }
 
-/* `facts`: the body role as one wrapping line of facts. Each fact is kept whole, so a narrow track
-   breaks between facts and never at a hyphen inside one; each but the last carries its middle dot
-   at its own end, inside its own box (the Cluster owns the distance to the next), so a wrapped line
-   never opens on a dot. EngagementOptions' fact list, duplicated on purpose. */
-.facts {
-  font: var(--ofs-body-text);
-  color: var(--ofs-body-ink);
+/* A linked row's words take everything the arrow leaves, from a zero floor. Sizing, not spacing. */
+.rowCore {
+  flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
-.facts > li {
-  white-space: nowrap;
-}
-
-.facts > li:not(:last-child)::after {
-  content: '·';
-  padding-inline-start: var(--gap-tight);
+/* The arrow that closes a linked row: the accent glyph, one line of the title tall so it sits on the
+   title's first line, a fixed square. */
+.cue {
+  display: grid;
+  place-items: center;
+  flex: none;
+  block-size: var(--ofs-cue-size);
+  inline-size: var(--ofs-cue-size);
+  color: var(--ofs-mark-ink);
 }
 
 /* `list`: the same closing hairline, the row's air the `block` step either side of it: a title and one

@@ -7,6 +7,7 @@ import {
   Media,
   Section,
   Sketch,
+  Tag,
   type IconName,
   type MediaImage,
   type SectionSurface,
@@ -79,8 +80,9 @@ export type OfferSheetItem = {
   /** CMS art in the existing inline glyph slot. */
   iconArt?: ReactNode;
   /**
-   * `list` only: a label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer":
-   * who acts at that step). Set on every item or on none.
+   * A label over the title in the label voice (home's AI run: "1 · AI", "2 · Designer": who acts at
+   * that step; Contact's step numbers "01"…"04" in the plain grid). `list` and the plain grid only.
+   * Set on every item or on none.
    */
   eyebrow?: string;
 };
@@ -94,6 +96,8 @@ export type OfferSheetProps = {
   /** "What you get": the h2, the band's accessible name. */
   heading: string;
   headingId: string;
+  /** A label over the heading in the label voice ("What we believe"), as a ContentSection head takes. */
+  eyebrow?: string;
   /**
    * The sentence that frames the offer, under the heading at the lead role ("Our digital product
    * design services cover the thinking behind your product…", component-map C4). Optional: most
@@ -178,6 +182,7 @@ export function OfferSheet({
   id,
   heading,
   headingId,
+  eyebrow,
   lead,
   listLabel,
   items,
@@ -203,9 +208,20 @@ export function OfferSheet({
     item.bodyHtml ? (
       <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
     ) : item.facts && item.facts.length > 0 ? (
-      <Cluster as="ul" colGap="tight" rowGap="inline" className={styles.facts}>
+      /* Each fact a Tag mark (the boards' chips, desktop and phone, 18 Nov 2026): a short fact is a
+         label on the item, not a sentence, and a chip keeps it whole on a narrow line. In `rows`, from
+         1024 the chips sit at the row's inline end, against its arrow (owner, 19 Nov 2026: "right
+         aligned tags"); under the title below it they start where the title starts. */
+      <Cluster
+        as="ul"
+        colGap="tight"
+        rowGap="tight"
+        justify={rows && !list ? { base: 'start', lg: 'end' } : 'start'}
+      >
         {item.facts.map((fact) => (
-          <li key={fact}>{fact}</li>
+          <li key={fact}>
+            <Tag>{fact}</Tag>
+          </li>
         ))}
       </Cluster>
     ) : item.body ? (
@@ -228,6 +244,58 @@ export function OfferSheet({
         )}
       </h3>
     ) : null;
+  /* One row's words: the title (with its glyph) and its body. */
+  /* `list`: the words under the title in the narrow body track. `rows`: from 1024 the title in a
+     label column beside its words, a split, so the seam is `section` (96). */
+  const core = (item: OfferSheetItem) => (
+    <Layout
+      columns={list ? undefined : { base: 1, lg: [1, 1] }}
+      colGap={list ? undefined : 'section'}
+      rowGap="text"
+      align="start"
+      className={item.href && !list ? styles.rowCore : undefined}
+    >
+      {item.eyebrow ? <p className={styles.listLabel}>{item.eyebrow}</p> : null}
+      {item.icon && !item.title ? (
+        /* An untitled point (/how-we-work "How we use AI": a list row a line, owner 4 Nov
+         2026): the glyph leads its words on their first line, as it leads a title. */
+        <Cluster colGap="text" align="start" nowrap>
+          <span className={styles.rowIcon}>
+            <Icon name={item.icon} size="xl" />
+          </span>
+          {item.bodyHtml ? (
+            <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+          ) : (
+            <p className={styles.body}>{item.body}</p>
+          )}
+        </Cluster>
+      ) : item.icon || item.iconArt ? (
+        /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
+         card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
+        <Cluster colGap="text" align="start" nowrap>
+          <span className={styles.rowIcon}>
+            {item.iconArt ? (
+              <span
+                style={{
+                  display: 'block',
+                  inlineSize: 'var(--ofs-icon-size)',
+                  blockSize: 'var(--ofs-icon-size)',
+                }}
+              >
+                {item.iconArt}
+              </span>
+            ) : item.icon ? (
+              <Icon name={item.icon} size="xl" />
+            ) : null}
+          </span>
+          {titleOf(item)}
+        </Cluster>
+      ) : (
+        titleOf(item)
+      )}
+      {item.icon && !item.title ? null : bodyOf(item)}
+    </Layout>
+  );
   if (process.env.NODE_ENV !== 'production' && (shown.length < 2 || shown.length > 6)) {
     console.warn(`OfferSheet: ${shown.length} promises; the sheet is built for two to six.`);
   }
@@ -306,57 +374,20 @@ export function OfferSheet({
           key={keyOf(item)}
           className={cx(styles.row, list && styles.listRow, item.href && styles.linked)}
         >
-          {/* `list`: the words under the title in the narrow body track. `rows`: from 1024 the title
-              in a label column beside its words, a split, so the seam is `section` (96). */}
-          <Layout
-            columns={list ? undefined : { base: 1, lg: [1, 1] }}
-            colGap={list ? undefined : 'section'}
-            rowGap="text"
-            align="start"
-          >
-            {item.eyebrow ? <p className={styles.listLabel}>{item.eyebrow}</p> : null}
-            {item.icon && !item.title ? (
-              /* An untitled point (/how-we-work "How we use AI": a list row a line, owner 4 Nov
-                 2026): the glyph leads its words on their first line, as it leads a title. */
-              <Cluster colGap="text" align="start" nowrap>
-                <span className={styles.rowIcon}>
-                  <Icon name={item.icon} size="xl" />
-                </span>
-                {item.bodyHtml ? (
-                  <p
-                    className={styles.body}
-                    dangerouslySetInnerHTML={{ __html: item.bodyHtml }}
-                  />
-                ) : (
-                  <p className={styles.body}>{item.body}</p>
-                )}
-              </Cluster>
-            ) : item.icon || item.iconArt ? (
-              /* The glyph leads its title on the title's line (owner, 4 Nov 2026: a row, not a
-                 card), 16 (`text`) from icon to title, owner 4 Nov 2026; unlabelled, as the title names the subject. */
-              <Cluster colGap="text" align="start" nowrap>
-                <span className={styles.rowIcon}>
-                  {item.iconArt ? (
-                    <span
-                      style={{
-                        display: 'block',
-                        inlineSize: 'var(--ofs-icon-size)',
-                        blockSize: 'var(--ofs-icon-size)',
-                      }}
-                    >
-                      {item.iconArt}
-                    </span>
-                  ) : item.icon ? (
-                    <Icon name={item.icon} size="xl" />
-                  ) : null}
-                </span>
-                {titleOf(item)}
-              </Cluster>
-            ) : (
-              titleOf(item)
-            )}
-            {item.icon && !item.title ? null : bodyOf(item)}
-          </Layout>
+          {item.href && !list ? (
+            /* A row that opens something (/careers' open roles) closes on the arrow, after its
+               words, in the accent ink (the boards, 18 Nov 2026; no ring: the owner, 18 Nov 2026,
+               "i don't like the buttons inside the circles"). Decoration: the stretched title link
+               is the target and names it. */
+            <Cluster colGap="block" align="start" nowrap>
+              {core(item)}
+              <span className={styles.cue} aria-hidden="true">
+                <Icon name="arrow-right" size="md" />
+              </span>
+            </Cluster>
+          ) : (
+            core(item)
+          )}
         </li>
       ))}
     </ul>
@@ -413,7 +444,16 @@ export function OfferSheet({
     >
       {shown.map((item) => (
         <li key={keyOf(item)} className={cx(styles.item, item.href && styles.linked)}>
-          {words(item)}
+          {item.eyebrow ? (
+            /* A step's number over its title (Contact's "What happens after you get in touch",
+               18 Nov 2026), in the label voice, a `tight` step above its words. */
+            <Layout rowGap="tight">
+              <p className={cx(styles.listLabel, styles.step)}>{item.eyebrow}</p>
+              {words(item)}
+            </Layout>
+          ) : (
+            words(item)
+          )}
         </li>
       ))}
     </Layout>
@@ -468,18 +508,21 @@ export function OfferSheet({
     </Layout>
   ) : null;
 
-  const headText = lead ? (
-    <Layout rowGap="block">
+  /* Eyebrow, heading and lead: one head group, a `block` apart, as ContentSection sets its head. */
+  const headText =
+    lead || eyebrow ? (
+      <Layout rowGap="block">
+        {eyebrow ? <p className={styles.listLabel}>{eyebrow}</p> : null}
+        <h2 id={headingId} className={styles.heading}>
+          {heading}
+        </h2>
+        {lead ? <p className={styles.lead}>{lead}</p> : null}
+      </Layout>
+    ) : (
       <h2 id={headingId} className={styles.heading}>
         {heading}
       </h2>
-      <p className={styles.lead}>{lead}</p>
-    </Layout>
-  ) : (
-    <h2 id={headingId} className={styles.heading}>
-      {heading}
-    </h2>
-  );
+    );
 
   if (list) {
     /* A head beside its body is a split: `section` (96) between them, on the beside head tracks every
