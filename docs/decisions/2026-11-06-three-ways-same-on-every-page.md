@@ -1,7 +1,7 @@
 ---
 title: "Three ways to work with us: plan cards, the same band on every page, /how-we-work included"
 date: 2026-11-06
-status: active
+status: superseded
 area: [cards, layout, components, type]
 source: "Owner (Devagya), 6 Nov 2026, in session: \"how-we-work should also be the same component as on other pages. the title is also just 'Three ways to work with us'\""
 supersedes: [2026-11-05-three-ways-are-plan-cards]

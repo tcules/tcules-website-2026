@@ -1,5 +1,13 @@
-import { Layout, Section } from '@/components';
-import { Callout, CtaRow, EngagementOptions, type EngagementOption } from '@/patterns';
+import { Fragment } from 'react';
+
+import { Button, Icon, Layout, Section, type SectionSurface } from '@/components';
+import { ROUTES } from '@/lib/routes';
+import {
+  Callout,
+  CtaRow,
+  EngagementOptions,
+  type EngagementOption,
+} from '@/patterns';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -10,6 +18,91 @@ import t from '../_specimen/typeroles.module.css';
  * home set it (owner, 29 Oct 2026), the four scopes with a note, three options, an option with no
  * drawing, and the paper and tint grounds. Sample words.
  */
+
+/* Priced plans (owner, 17 Nov 2026: pricing allowed, one plan highlighted). HowWeWork board copy. */
+const PRICED: EngagementOption[] = [
+  {
+    title: 'Pilot project',
+    price: { amount: 'From $500' },
+    body: 'One real piece of your product, designed for a fixed price.',
+    checklist: [
+      'Starts with a free one\u2011day review',
+      'Stop after the review and owe nothing',
+      'Fixed price, agreed up front',
+      'The designs are yours to keep',
+    ],
+    featured: true,
+    action: (
+      <Button as="a" href={ROUTES.contact} size="md">
+        Book a free product review
+      </Button>
+    ),
+  },
+  {
+    title: 'Dedicated design team',
+    price: { amount: 'From $2,500', unit: 'a month' },
+    body: 'A senior product designer working in your team.',
+    checklist: [
+      'Part\u2011time or full\u2011time, starting within a week',
+      'UX research, design engineering or front\u2011end when needed',
+      'Scale up or down on a week\u2019s notice',
+      'Pause any time; billing pauses too',
+      'Usually the same senior product designer throughout',
+    ],
+    action: (
+      <Button
+        as="a"
+        href={ROUTES.contact}
+        emphasis="outline"
+        size="md"
+        icon={<Icon name="arrow-right" />}
+      >
+        Add design capacity
+      </Button>
+    ),
+  },
+  {
+    title: 'Project',
+    price: { amount: 'Quoted per project' },
+    body: 'A first release, a redesign or a design system.',
+    checklist: [
+      'Taken from start to finish',
+      'Design only, or design\u2011led development',
+      'Scope, price and dates agreed before we start',
+      'Designers stay until it\u2019s live',
+    ],
+    action: (
+      <Button
+        as="a"
+        href={ROUTES.contact}
+        emphasis="outline"
+        size="md"
+        icon={<Icon name="arrow-right" />}
+      >
+        Ask for a quote
+      </Button>
+    ),
+  },
+];
+
+const PRICED_SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
+
+/* The live copy's pilot line, its phrase underlined in the CMS (`<u>`), as the Strapi renderer
+   hands it over. */
+const PRICED_UNDERLINED: EngagementOption[] = PRICED.map((option, index) =>
+  index === 0
+    ? {
+        ...option,
+        checklist: [
+          <>
+            Starts with a <u>free one‑day review</u>
+          </>,
+          ...(option.checklist ?? []).slice(1),
+        ],
+      }
+    : option,
+);
+
 
 const TOGETHER: EngagementOption[] = [
   {
@@ -266,6 +359,51 @@ export default function EngagementOptionsSpecimen() {
         note={NOTE}
         surface="tint"
       />
+      {PRICED_SURFACES.map((surface) => (
+        <Fragment key={`priced-${surface}`}>
+          <Variation
+            id={`priced-${surface}`}
+            title={`4 · Priced plans, one highlighted, on ${surface} (17 Nov 2026)`}
+            note="plans with price on every option and featured on one: the name is the eyebrow (mono, capitals in presentation), the price leads at h3 (serif) with Newsreader's single-stroke dollar (dollar.1, via opsz 16 on the sign alone). Every tick 18 (flex: none). The featured plan (18 Nov 2026) sits on the lightest blue with one hairline two steps up, per surface. closingLine and closingAction close the set a gutter under the cards: the sentence, then its link on the same line, wrapping under it on a phone (18 Nov). The caller composes each action."
+          />
+          <EngagementOptions
+            heading="Start small. Grow when you're sure."
+            headingId={`eop-priced-${surface}`}
+            options={PRICED}
+            arrangement="plans"
+            surface={surface}
+            closingLine="A senior product designer leads every option, and what we make is yours once paid for."
+            closingAction={
+              <Button
+                as="a"
+                href={ROUTES.howWeWork}
+                emphasis="link"
+                size="md"
+                extendHitArea
+                icon={<Icon name="arrow-right" />}
+              >
+                How we work with clients
+              </Button>
+            }
+          />
+        </Fragment>
+      ))}
+      {(['paper', 'tint', 'ink'] as const).map((surface) => (
+        <Fragment key={`underline-${surface}`}>
+          <Variation
+            id={`underline-${surface}`}
+            title={`5 · An underlined phrase in a plan, on ${surface} (19 Nov 2026)`}
+            note="The CMS's <u> (the Strapi renderer lets exactly that pair through): the words keep the card's ink and weight, and a solid accent line runs under them, 0.12em thick, 0.2em below, unbroken by descenders. A link on this site is the coloured word, so it cannot pass for one."
+          />
+          <EngagementOptions
+            heading="Start small. Grow when you're sure."
+            headingId={`eop-underline-${surface}`}
+            options={PRICED_UNDERLINED}
+            arrangement="plans"
+            surface={surface}
+          />
+        </Fragment>
+      ))}
     </>
   );
 }
