@@ -1,6 +1,7 @@
 /* CaseCard — one featured case as one card. Every colour is --ccd-*.
 
-   The card's ground and 8 radius; a `text` inset, so the cover sits in it like a print on a mat.
+   UNBOUNDED (owner, 18 Nov 2026: "these become unbounded cards"): no ground and no mat. The cover and
+   the claim sit straight on the band; the 8 radius stays only as the focus ring's shape.
 
    The card IS the anchor (19 Oct 2026), so it is a block and carries no link colour or underline of
    its own: `inherit` keeps globals.css's bare-anchor blue off every part, each of which states its
@@ -12,8 +13,6 @@
 .card {
   display: block;
   min-inline-size: 0;
-  padding: var(--gap-text);
-  background: var(--ccd-ground);
   border-radius: var(--ccd-radius);
   color: inherit;
   text-decoration: none;
@@ -35,14 +34,15 @@
 }
 
 /* The cover: the card ratio, ruled at the placement (Media `edge="placement"`) in the case's own
-   lighter hairline, so the capture separates from the card's ground. */
+   lighter hairline, so the capture separates from the band, and rounded at the 8 every card image
+   and every Media image takes (--ccd-media-radius). */
 .media {
   display: block;
   min-inline-size: 0;
   aspect-ratio: var(--ccd-media-ratio);
   overflow: hidden;
   border: var(--ccd-rule-width) solid var(--ccd-media-rule);
-  border-radius: var(--ccd-inner-radius);
+  border-radius: var(--ccd-media-radius);
 }
 
 /* A linked card's hover and keyboard focus: the cover leans in inside its still, ruled box
@@ -74,11 +74,13 @@
   }
 }
 
-/* The claim's column: its own inset (a `gutter` block, a `text` inline), so the words stand off the
-   card's edge and the cover by more than the mat. Padding inside the part, never a margin. */
+/* The claim's column: one group (eyebrow, title, story, cue), centred on the cover from 1024, with a
+   `gutter` block inset so a claim as tall as the cover still starts and ends inside its height. No inline inset: with no ground there
+   is no card edge to stand off, and the cover's `stack` is the seam. Padding inside the part, never
+   a margin. */
 .copy {
   min-inline-size: 0;
-  padding: var(--gap-gutter) var(--gap-text);
+  padding-block: var(--gap-gutter);
 }
 
 .eyebrow {
