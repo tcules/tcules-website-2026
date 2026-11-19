@@ -351,7 +351,7 @@
 --hero-avatar-initials-ink:var(--color-neutral-700); /*  7.27:1 */
 --hero-portrait-ground:var(--color-neutral-200);
 --hero-portrait-initials-ink:var(--color-neutral-900);
---hero-byline-rule-ink:var(--color-neutral-400); /* decoration */
+--hero-byline-rule-ink:var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 
 --hero-title-ink:var(--color-neutral-900);    /* 13.06:1 — §6 of the spec rounds this to 13.05 */
 --hero-lead-ink:var(--color-neutral-800);     /* 10.54:1 */

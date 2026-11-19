@@ -110,7 +110,7 @@
    (The newsletter field's own bg and rule used to be described here. They live in input.css
    under the quiet emphasis now — see the header. This block no longer sets them.)      */
 [data-surface='tint'] {
-  --foot-rule: var(--color-neutral-300);
+  --foot-rule: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --foot-tagline-ink: var(--color-neutral-700); /*  7.27:1 */
   --foot-title-ink: var(--color-neutral-900);
   --foot-body-ink: var(--color-neutral-700); /*  7.27:1 — stepped; 600 would be 4.39:1 */

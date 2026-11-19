@@ -114,7 +114,7 @@
 --sec-ink:var(--color-neutral-900);            /* 13.06:1 */
 --sec-ink-muted:var(--color-neutral-700);      /*  7.27:1 — stepped; 600 would be 4.39:1 */
 --sec-ink-label:var(--color-neutral-800);      /* 10.54:1 — stepped to stay clear of muted */
---sec-rule:var(--color-neutral-300);
+--sec-rule:var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 --sec-rule-strong:var(--color-neutral-500);
 --sec-accent:var(--color-brandeis-500);
 --sec-accent-ink:var(--color-brandeis-500);    /*  5.51:1 */

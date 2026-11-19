@@ -71,7 +71,7 @@
   --clm-label-ink: var(--color-neutral-700);
   --clm-proof-ink: var(--color-neutral-900);
   --clm-link-ink: var(--color-brandeis-500);
-  --clm-rule-ink: var(--color-neutral-300); /* decoration */
+  --clm-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --clm-ring-color: var(--color-brandeis-500);
 }
 

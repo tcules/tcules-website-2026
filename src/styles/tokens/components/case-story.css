@@ -86,7 +86,7 @@
   --cst-statement-ink: var(--color-neutral-900);
   --cst-closing-ink: var(--color-neutral-900);
   --cst-closing-body-ink: var(--color-neutral-800);
-  --cst-rule-ink: var(--color-neutral-400); /* decoration */
+  --cst-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
