@@ -35,7 +35,7 @@ import t from '../../_specimen/typeroles.module.css';
  * edge drawn (closed, the default since the 9 Oct review), at equal weight — equal area of INK, by
  * each mark's measured density — the Enorm reference's treatment. The cell is the named exception to "no boxes" — a logo cell is not
  * a card. The band's heading is demoted to an eyebrow-size context line, and it may lead with the
- * sourced rating badge. No marquee. Each band is ≤ 830 at 1470 (`npm run fold:check`).
+ * sourced rating badge. Each band is ≤ 830 at 1470 (`npm run fold:check`).
  *
  * The three variants differ in what leads, so the page never repeats one rectangle:
  *   01  the context line alone, start-aligned, nine marks three by three across the column;
@@ -45,6 +45,8 @@ import t from '../../_specimen/typeroles.module.css';
  * alternative; and the token proof on tint, ink and blue (never this band's ground on a page — blue
  * is the foreground accent — but every surface block in logo-grid.css has to render somewhere).
  * On a phone every count is two across; nine closes on one cell spanning the row.
+ * 08 is the ticker (owner, 17 Nov 2026): no boxes, one slow row that loops, pauses under the pointer
+ * or keyboard focus, and the hovered mark takes the full ink. With reduced motion it is still and wraps.
  *
  * Honesty (§ 5.8): the marks are the nine real files in public/clients, one ink, equal ink area, the
  * densities measured and recorded in ../../_specimen/clients.ts. The badge is the one sourced figure the seam
@@ -251,6 +253,34 @@ export default async function KitLogosPage() {
           align="center"
         />
       </Section>
+
+      {/* ── 08 ──────────────────────────────────────────────────────────────────────────── */}
+      <Label title="08 · Ticker">
+        {`arrangement="ticker" (owner, 17 Nov 2026): the hero's client logos. No boxes, one row moving left at ~45 px/s whatever the count, fading at both edges. Point at it or tab to it and it stops; the mark under the pointer takes the full ink. Reduced motion: still, wrapped, centred, every mark in view. Ten marks.`}
+      </Label>
+      <Section aria-labelledby="logos-ticker">
+        <LogoGrid
+          marks={[EDEN_AI, ...CLIENTS]}
+          arrangement="ticker"
+          context="Some of the teams we've worked with"
+          headingId="logos-ticker"
+        />
+      </Section>
+      <Label title="08b · Ticker with typeset wordmarks, on tint and ink">
+        A client with no approved SVG keeps its typeset wordmark in the row. Token proof for the
+        hover ink and the focus ring on the other grounds.
+      </Label>
+      {(['tint', 'ink'] as const).map((surface) => (
+        <Section key={surface} surface={surface} aria-labelledby={`logos-ticker-${surface}`}>
+          <LogoGrid
+            marks={[{ name: 'Dealpath' }, ...EIGHT, { name: 'JoVE' }]}
+            arrangement="ticker"
+            context={`Ticker · surface="${surface}"`}
+            headingId={`logos-ticker-${surface}`}
+            contextAs="p"
+          />
+        </Section>
+      ))}
 
       {/* ── 07 ──────────────────────────────────────────────────────────────────────────── */}
       <Label title="07 · The other surfaces">

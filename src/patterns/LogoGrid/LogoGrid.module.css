@@ -137,3 +137,111 @@
     text-align: center;
   }
 }
+
+/* ── The ticker (arrangement="ticker", owner 17 Nov 2026) ─────────────────────────────────────
+   Three boxes, each with one job. `.ticker` is the focusable region and draws the focus ring (as a
+   box-shadow, every ring in the system); `.tickerFade` clips the row and fades its two ends, on its
+   own element because a mask would cut the ring too; `.tickerTrack` holds the marks twice and moves.
+   Cluster lays out both sets; nothing here arranges anything except the one property motion
+   changes, wrapping (below). */
+.ticker {
+  border-radius: var(--lgrid-radius);
+}
+
+.ticker:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--lgrid-ring-offset) var(--lgrid-ring-gap-color),
+    0 0 0 calc(var(--lgrid-ring-offset) + var(--lgrid-ring-width)) var(--lgrid-ring-color);
+}
+
+/* The fade is an alpha mask, not a colour: opaque in the middle, nothing at the very edges. */
+.tickerFade {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--lgrid-ticker-fade),
+    black calc(100% - var(--lgrid-ticker-fade)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--lgrid-ticker-fade),
+    black calc(100% - var(--lgrid-ticker-fade)),
+    transparent
+  );
+}
+
+/* Content-sized, so -50% is exactly one set's length and the loop has no seam. */
+.tickerTrack {
+  inline-size: max-content;
+  animation: lgrid-ticker calc(var(--lgrid-ticker-count) * var(--lgrid-ticker-beat)) linear
+    infinite;
+}
+
+.ticker:hover .tickerTrack,
+.ticker:focus-within .tickerTrack {
+  animation-play-state: paused;
+}
+
+.tickerCell {
+  inline-size: var(--lgrid-ticker-cell-inline);
+  min-block-size: var(--lgrid-ticker-cell-height);
+}
+
+@keyframes lgrid-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Right to left, the row runs the other way. */
+@keyframes lgrid-ticker-rtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+.tickerTrack:dir(rtl) {
+  animation-name: lgrid-ticker-rtl;
+}
+
+/* Reduced motion: nothing moves, so the moving row is not drawn and the boxed wall stands in for it
+   (owner, 19 Nov 2026: "just show the logogrid on reduced motion from before"). One of the two is
+   displayed at a time, so a screen reader meets each client once. */
+.tickerWall {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker {
+    display: none;
+  }
+
+  .tickerWall {
+    display: block;
+  }
+}
+
+/* The still wall's phone fold (owner, 19 Nov 2026: "on mobile limit to 6 logos and a button to see
+   more when reduced motion"). TickerFold wraps the row and the wall; only the still wall on a phone
+   folds, after its sixth cell, and only there is the toggle drawn. A moving row needs no fold. */
+.tickerFold {
+  min-inline-size: 0;
+}
+
+.tickerFoldToggle {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 767.98px) {
+  .tickerFold:not([data-open]) .tickerWall li:nth-child(n + 7) {
+    display: none;
+  }
+
+  .tickerFoldToggle {
+    display: grid;
+  }
+}

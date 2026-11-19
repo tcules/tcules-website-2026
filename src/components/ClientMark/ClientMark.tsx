@@ -67,6 +67,13 @@ export type ClientMarkProps = {
    * beside it): 24 tall at most, one value at every width.
    */
   size?: 'md' | 'sm' | 'xs';
+  /**
+   * `hover` (owner, 17 Nov 2026, the client-logo marquee): while the mark's own cell — its parent —
+   * is hovered, the mark takes the ground's FULL ink (--cmark-ink-hover), so the one under the
+   * pointer stands out of the quieter set. Still one solid colour, never an opacity (ch05 §10).
+   * Off by default: a static wall has nothing to point at.
+   */
+  highlight?: 'hover';
   className?: string;
 };
 
@@ -110,6 +117,7 @@ export function ClientMark({
   correction = 0,
   density,
   size = 'md',
+  highlight,
   className,
 }: ClientMarkProps) {
   if (!src) {
@@ -168,6 +176,17 @@ export function ClientMark({
     /* role="img" + aria-label: the element has no content, so the label is its entire accessible
        text, and the role makes a screen reader announce it as an image ("Northwind, image")
        rather than skip an empty span. */
-    <span role="img" aria-label={name} className={cx(styles.mark, size === 'sm' && styles.sm, size === 'xs' && styles.xs, className)} style={vars} />
+    <span
+      role="img"
+      aria-label={name}
+      className={cx(
+        styles.mark,
+        size === 'sm' && styles.sm,
+        size === 'xs' && styles.xs,
+        highlight === 'hover' && styles.highlight,
+        className,
+      )}
+      style={vars}
+    />
   );
 }
