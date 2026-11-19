@@ -53,9 +53,16 @@
      .leadBeside. Like the lead, no tracking companion. */
   --csec-lead-text-beside: var(--text-body-lg);
 
+  /* The media split's coda (owner, 18 Nov 2026): a closing statement under the whole split, at the
+     section lead's role, on the body measure. Not the hero lede's 18: no body or lede text above 16
+     outside the hero and a quote (decisions/2026-10-19-body-type-ceiling); its weight comes from its
+     place, alone under both tracks, and the heading's ink. No tracking companion (a body role). */
+  --csec-coda-text: var(--text-lead);
+  --csec-coda-measure: var(--measure-body);
+
   /* headingSize="xl": the band's h2 at the h1 role, on the heading's own title measure. Two callers:
-     the media split's head (cmp-media-split), the copy column's one large element beside the
-     photograph unless the caller sets `media.head="lg"`; and headingSize="xl", for the band whose
+     the media split's head when the caller sets `media.head="xl"` (the default is the band's h2,
+     owner, 18 Nov 2026); and headingSize="xl", for the band whose
      heading is its one large thing (it opens an argument). It was the DISPLAY role, as PageHero's,
      until home round 5 (owner, 11 Oct 2026: "display text should only be used for heros. any other
      section should use h1/h2 depending on the prominence it requires"), so the `display` size is

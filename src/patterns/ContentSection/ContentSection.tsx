@@ -82,6 +82,12 @@ export type ContentSectionMedia = (
   | {
       image: MediaImage;
       drawing?: never;
+      /**
+       * Opt-in, additive (Jatin's m-About board, 18 Nov 2026): `none` leaves the photograph out below
+       * 768, where the board sets the band as its words alone (About's "The Ahmedabad studio"). From
+       * 768 the split as before. Absent, the photograph at every width.
+       */
+      phone?: 'none';
     }
   | {
       /** One flat figure (a `Sketch`), at its own ratio in its own half. */
@@ -94,6 +100,28 @@ export type ContentSectionMedia = (
    * A `drawing` defaults to `end`: the words lead and the figure answers them.
    */
   side?: ContentSectionMediaSide;
+  /**
+   * Below 1024, where the split stacks: the figure stands under the head, BEFORE the words it
+   * explains, rather than after them (owner, 18 Nov 2026, Jatin's m- boards: MVP's "Your prototype
+   * is the brief" drawing, whose keep / fix / rebuild rows are its legend). From 1024 the split is
+   * unchanged. Placed twice and displayed once at any width, as the head's actions are. A photograph
+   * placement only.
+   */
+  figureFirst?: boolean;
+  /**
+   * The head on its own full-width row, then the figure beside the body under it (owner, 19 Nov
+   * 2026, MVP's "Your prototype is the brief we build from": "title goes at the top and the diagram
+   * plus list cards live under it"). For a figure whose body is a LIST of rows (keep / fix / rebuild):
+   * the rows are the figure's legend, so the two are the pair and the heading names both. Head to
+   * split is the head-to-body seam (a bare head a `block` over it, a led head a `stack`). Below 1024
+   * the order is head, figure, rows. Narrows decisions/2026-11-04-no-heading-row-over-a-split for
+   * figure-and-rows bands (proposed); a photograph beside prose keeps its head in the copy column.
+   * A photograph or a drawing. From 1024 a photograph is as tall as the rows beside it, not its own
+   * 4:5 (owner, 19 Nov 2026), and cover-crops to that box. A drawing keeps its own ratio in half the
+   * width, centred on the rows' height (owner, 19 Nov 2026, round 11: stretched to the rows' height it
+   * "looks squashed and tall"; then "center align the drawing vertically"): pass a plain 16:9 `Sketch`.
+   */
+  headAbove?: boolean;
   /**
    * Whether a copy column that ends in a footer UNDER BLOCKS stretches to the photo and pins the
    * footer to its bottom edge (§ 3.2 rule 1). Default `true`. `false` centres that copy column on
@@ -142,11 +170,14 @@ export type ContentSectionMedia = (
    */
   weight?: 'copy' | 'photo';
   /**
-   * The head's scale (final fix round, 6 Oct 2026), in `ContentSectionHeadingSize`'s steps. Default
-   * `xl` (the h1 role): in a media split the head is the copy column's one large element. `lg` keeps
-   * the band's h2 role, for a head that would run past two lines in its track, or a copy column (an
-   * accordion) that needs the height. (Until home round 5 the default was the display role and `lg`
-   * was spelled `title`; display is the hero's alone since 11 Oct 2026.)
+   * The head's scale, in `ContentSectionHeadingSize`'s steps. Default `lg`, the band's h2 role, the
+   * same head every other band on the page carries (owner, 18 Nov 2026, the MVP brief band: "the
+   * titles are always hella large than other titles in the page"). `xl` (the h1 role) is an explicit
+   * opt-in for a split whose heading is the page's one argument-opening statement; it is the h2 below
+   * 768 either way. The default was `xl` from 6 Oct to 18 Nov 2026, which set every media split's head
+   * a step above its neighbours (54 against 43, 46 against 38 on a tablet) wherever a caller forgot to
+   * pass `lg`, and most did. (Until home round 5 the default was the display role; display is the
+   * hero's alone since 11 Oct 2026.)
    *
    * An explicit choice rather than a rule on the heading's length, which this used to be: a hidden
    * character cutoff dropped a whole role at 23 characters for a reason no author could see, and
@@ -178,7 +209,7 @@ export type ContentSectionMediaHeight = 'ratio' | 'copy';
  * section should use h1/h2 depending on the prominence it requires"):
  *
  *   xl  the h1 role (54). For the band whose HEADING is its one large thing — it opens an argument
- *       (the media split's head beside its photograph, a feature band's opener). One or two a page.
+ *       (a feature band's opener; a media split only with `media.head="xl"`). One or two a page.
  *   lg  the section h2 (43), the default. For the band whose CONTENT is its large thing — a set, a
  *       grid, proof, a form, an FAQ. Most bands.
  *   md  the same `h2` element at the h3 role (34), for a band whose large thing would be out-sized
@@ -241,6 +272,14 @@ type ContentSectionBaseProps = {
    * eyebrow, heading and lead group into ONE unit and the blocks are a separate beat.
    */
   lead?: string;
+  /**
+   * An independent score under the heading, composed by the caller: in practice one `RatingBadge`
+   * (owner, 18 Nov 2026, the testimonial wall: "move the clutch rating badge above the
+   * testimonials"; Jatin's boards set it under "What clients say"). It is part of the head, a `block`
+   * under the heading and over the lead, centred with a centred head, so the score introduces the
+   * quotes rather than closing them. A slot, as `footer` is: the caller composes the badge.
+   */
+  score?: ReactNode;
   /**
    * Passed through to `Section`: `strip` only. Every other band takes the one section padding
    * (owner, 7 Oct 2026).
@@ -404,6 +443,14 @@ type MediaSplitProps = {
    */
   actions?: ReactNode;
   aside?: never;
+  /**
+   * A closing statement under the WHOLE split (owner, 18 Nov 2026, the MVP board's "You get the call
+   * in writing, area by area, with the reason. You decide what to fund."): one sentence the band
+   * argues toward, so it is neither a block in the copy column nor body text. Set at the section
+   * lead's role (16; the body ceiling, decisions/2026-10-19-body-type-ceiling) on the body measure, start-aligned on the band's edge, a `stack` (48) under the split:
+   * block to block. A plain string, like `lead`. Whitespace-only renders nothing.
+   */
+  coda?: string;
 };
 
 /* ── The ground, and whether a texture may sit on it ──────────────────────────────
@@ -560,6 +607,7 @@ export function ContentSection(props: ContentSectionProps) {
     headingSize,
     eyebrow,
     lead,
+    score,
     surface,
     density,
     footer,
@@ -575,7 +623,7 @@ export function ContentSection(props: ContentSectionProps) {
   const media = props.arrangement === 'media' ? props.media : undefined;
   const texture = props.texture;
 
-  const hasText = Boolean(eyebrow || heading || lead);
+  const hasText = Boolean(eyebrow || heading || lead || present(score));
   const hasActions = present(actions);
   const hasBlocks = present(children);
   const hasFooter = present(footer);
@@ -613,12 +661,12 @@ export function ContentSection(props: ContentSectionProps) {
   /* ── The head text's three parts ─────────────────────────────────────────────
      Built once, placed by the arrangement. `.centred` sets the text centred inside each part's own
      measure; the Layout holding the parts centres the parts themselves (justifyItems). */
-  /* In `media` the heading takes the h1 role unless the caller set `media.head="lg"` (see
-     ContentSectionMedia). The eyebrow is the same in every arrangement: its blue is the mark, not
+  /* In `media` the heading is the band's h2 like every other band's, unless the caller set
+     `media.head="xl"` (see ContentSectionMedia). The eyebrow is the same in every arrangement: its blue is the mark, not
      the label (fix round 1, 7 Oct 2026 — the media eyebrow's accent ink made one band's label blue
      and every other band's grey, which read as drift rather than a rule). */
   const inMedia = arrangement === 'media' && Boolean(media);
-  const xlHead = inMedia && Boolean(heading) && media?.head !== 'lg';
+  const xlHead = inMedia && Boolean(heading) && media?.head === 'xl';
   /* The counterweight is a texture, and a texture sits on paper only (§ 6.2). */
   const onPaper = (surface ?? 'paper') === 'paper';
   if (inMedia && media?.counterweight && !onPaper) {
@@ -671,6 +719,18 @@ export function ContentSection(props: ContentSectionProps) {
     </p>
   ) : null;
 
+  /* The score: the caller's badge, on the head's own alignment (a Cluster for `center-lg`'s
+     per-breakpoint justify, as the eyebrow). */
+  const scoreEl = present(score) ? (
+    <Cluster
+      colGap="tight"
+      align="center"
+      justify={centredAll ? 'center' : centredLg ? { base: 'start', lg: 'center' } : 'start'}
+    >
+      {score}
+    </Cluster>
+  ) : null;
+
   /* The eyebrow-to-title seam and the title-to-lead seam are the same step, so one Layout at
      `block` (24): the rhythm PageHero and CtaSection already use (S1). */
   const headText = hasText ? (
@@ -681,6 +741,7 @@ export function ContentSection(props: ContentSectionProps) {
     >
       {eyebrowEl}
       {headingEl}
+      {scoreEl}
       {leadEl}
     </Layout>
   ) : null;
@@ -727,6 +788,15 @@ export function ContentSection(props: ContentSectionProps) {
         counterweight={counterweight}
       />
     );
+    const coda = props.arrangement === 'media' ? props.coda?.trim() : undefined;
+    if (coda) {
+      arranged = (
+        <Layout rowGap="stack">
+          {arranged}
+          <p className={styles.coda}>{coda}</p>
+        </Layout>
+      );
+    }
   } else {
     /* stacked, beside, and every degraded case. One outer Layout; `beside` touches it only through
        Layout's own props.
@@ -931,6 +1001,80 @@ function MediaSplit({
     </>
   );
   const image = media.image;
+  /* `headAbove`: the head over the whole split, for a photograph AND a drawing (round 10, 19 Nov
+     2026: the drawing branch returned before this, so MVP's brief band kept its title in the rows'
+     column). The figure is first in the DOM (head, figure, rows on a phone) and mirrored to the end
+     from 1024 when `side="end"`. From 1024 the figure takes the rows' height rather than its own
+     ratio (owner, 19 Nov 2026: "drawing need not be this tall. it should be as tall as the content
+     on the right side"): its track is size-contained and stretched, so the rows alone set the row's
+     height and the photograph cover-crops, the drawing centres, in whatever box that leaves. Below
+     1024 it keeps a ratio. The ratios travel with their child, so the tracks are written figure-first. */
+  if (media.headAbove && image === undefined) {
+    /* A drawing under a head above (round 11, owner 19 Nov 2026: the drawing stretched to the rows'
+       height "looks squashed and tall ... needs to be redrawn to fit in a 16:9 plate"): the figure at
+       its own ratio in its own half, never stretched, sharing the rows' top edge. Halves, as a figure
+       beside words takes everywhere else, so a 16:9 plate is large enough to read (572 wide at 1440).
+       Centred on the rows' height (owner, 19 Nov 2026: "center align the drawing vertically"). Head,
+       figure, rows on a phone. */
+    return (
+      <Layout rowGap={headLed ? 'stack' : 'block'}>
+        {headText}
+        <Layout
+          columns={{ lg: [1, 1] }}
+          colGap="section"
+          rowGap="stack"
+          reverse={media.side === 'end' ? { lg: true } : undefined}
+          align="center"
+        >
+          {media.drawing}
+          <Layout rowGap="stack" pinLast={pinned}>
+            {body}
+            {counterweight ? <TextureCounterweight /> : null}
+          </Layout>
+        </Layout>
+      </Layout>
+    );
+  }
+  if (media.headAbove) {
+    const split = (
+      <Layout
+        columns={photoLeads ? { lg: [7, 5] } : { lg: [4, 8], xl: [5, 7] }}
+        colGap="section"
+        rowGap="stack"
+        reverse={media.side === 'end' ? { lg: true } : undefined}
+        align="stretch"
+      >
+        <div
+          className={cx(
+            styles.fillTrack,
+            'phone' in media && media.phone === 'none' && styles.photoPhoneNone,
+          )}
+        >
+          <div className={styles.fill}>
+            {image === undefined ? (
+              media.drawing
+            ) : (
+              <Media
+                image={image}
+                fit="fill"
+                sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', image)}
+              />
+            )}
+          </div>
+        </div>
+        <Layout rowGap="stack" pinLast={pinned}>
+          {body}
+          {counterweight ? <TextureCounterweight /> : null}
+        </Layout>
+      </Layout>
+    );
+    return (
+      <Layout rowGap={headLed ? 'stack' : 'block'}>
+        {headText}
+        {split}
+      </Layout>
+    );
+  }
   if (image === undefined) {
     /* A flat figure beside the words (see ContentSectionMedia): halves, the copy column first in the
        DOM so a phone reads the words before the figure; `side="start"` mirrors it from 1024. Top
@@ -948,31 +1092,58 @@ function MediaSplit({
       </Layout>
     );
   }
+  const figure = (
+    <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
+      <Media
+        image={image}
+        fit="fill"
+        sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', image)}
+      />
+    </div>
+  );
+  /* `figureFirst`: below 1024 the figure between the head and the words it explains. The seam follows
+     the same rule as `copy` (decisions/2026-11-05-bare-head-sits-a-block-over-its-body): a bare head
+     sits a `block` over its words, and from 1024, where the figure is gone from this column, that is
+     the only seam left. At `stack` here, MVP's brief band set its rows 48 + the row's inset under the
+     head while the band above it, the same arrangement, set them 24 + the inset (owner, 18 Nov 2026). */
+  const stackedCopy = media.figureFirst ? (
+    <Layout rowGap={tight ? 'block' : 'stack'}>
+      {headText}
+      <div className={styles.untilLg}>{figure}</div>
+      {body}
+    </Layout>
+  ) : (
+    copy
+  );
+  /* The copy comes first in the DOM, so a phone reads head, words, then the photograph (owner,
+     18 Nov 2026, after Jatin's m- boards: MVP's brief and "underneath" bands, the About and Careers
+     studio); from 1024 `reverse` puts the photograph at the start unless `side="end"`. The ratios
+     travel with their child, so the tracks are written copy-first. */
   return (
     <Layout
-      columns={photoLeads ? { lg: [7, 5] } : { lg: [4, 8], xl: [5, 7] }}
+      columns={photoLeads ? { lg: [5, 7] } : { lg: [8, 4], xl: [7, 5] }}
       colGap="section"
       rowGap="stack"
-      reverse={media.side === 'end' ? { lg: true } : undefined}
+      reverse={media.side === 'end' ? undefined : { lg: true }}
       /* Unpinned, the copy shares the photograph's TOP edge rather than centring on it: "pairs
          top-align; vertical centring reads as floating" (decisions/2026-10-11-secondary-anchored-to-primary,
          which post-dates visual-direction § 3.2 rule 2). Centred, the head of an "After the audit"
          band floated mid-photo on every audit page (critic, audits run, 4 Nov 2026). */
       align={pinned ? 'stretch' : 'start'}
     >
-      <div className={styles.photoTrack}>
-        <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
-          <Media
-            image={image}
-            fit="fill"
-            sizes={mediaSplitSizes(photoLeads ? 'photo' : 'copy', image)}
-          />
-        </div>
-      </div>
       <Layout rowGap="stack" pinLast={pinned}>
-        {copy}
+        {stackedCopy}
         {counterweight ? <TextureCounterweight /> : null}
       </Layout>
+      <div
+        className={cx(
+          styles.photoTrack,
+          media.phone === 'none' && styles.photoPhoneNone,
+          media.figureFirst && styles.fromLg,
+        )}
+      >
+        {figure}
+      </div>
     </Layout>
   );
 }
