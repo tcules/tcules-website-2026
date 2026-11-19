@@ -178,7 +178,6 @@ function LabBand({
           {...head}
           data-band="D-faq"
           arrangement="beside"
-          split="halves"
           footer={
             section.footerHtml ? (
               <ContentSectionText>

@@ -117,7 +117,6 @@ function AboutSection({
           data-band="M"
           lead={section.lead}
           arrangement="beside"
-          split="halves"
         >
           <Layout as="ul" rowGap="none">
             {section.entries.map(({ key, title, icon }) => (

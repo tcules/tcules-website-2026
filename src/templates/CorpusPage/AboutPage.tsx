@@ -276,7 +276,6 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
         data-band="M"
         lead={lead}
         arrangement="beside"
-        split="halves"
       >
         {list ? (
           <Layout as="ul" rowGap="none">
@@ -903,7 +902,7 @@ function CompanyRecord({ page }: { page: CorpusPage }) {
 function Faq({ page }: { page: CorpusPage }) {
   const b = band(page, 'frequently-asked-questions');
   return (
-    <ContentSection {...head(b)} data-band="D-faq" arrangement="beside" split="halves">
+    <ContentSection {...head(b)} data-band="D-faq" arrangement="beside">
       <FaqItems band={b} />
     </ContentSection>
   );

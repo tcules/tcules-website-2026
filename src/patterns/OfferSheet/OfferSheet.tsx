@@ -483,10 +483,15 @@ export function OfferSheet({
 
   if (list) {
     /* A head beside its body is a split: `section` (96) between them, on the beside head tracks every
-       split band takes (5 : 7, then 1 : 2 from 1440). The head's way deeper sits a `stack` under it. */
+       split band takes (5 : 7, then 1 : 2 from 1440; owner, 19 Nov 2026: one split, the FAQ's). The head's way deeper sits a `stack` under it. */
     return (
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
-        <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="start">
+        <Layout
+          columns={{ base: 1, lg: [5, 7], xl: [1, 2] }}
+          colGap="section"
+          rowGap="stack"
+          align="start"
+        >
           {note ? (
             <Layout rowGap="stack">
               {headText}

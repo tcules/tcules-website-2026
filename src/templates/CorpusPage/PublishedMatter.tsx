@@ -136,7 +136,6 @@ export function PublishedMatter({ page }: { page: MatterPageModel }) {
                 lead={section.lead}
                 data-band="D-faq"
                 arrangement="beside"
-                split="halves"
               >
                 <Accordion items={section.items} />
               </ContentSection>

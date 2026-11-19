@@ -247,13 +247,6 @@ type ContentSectionBaseProps = {
    */
   density?: SectionDensity;
   /**
-   * The `beside` tracks from 1024. `head` (default) is the narrow head track, 5 : 7 then 1 : 2 from
-   * 1440 (O2). `halves` is 1 : 1 at every split width, for a body that is a short list and would
-   * otherwise leave its long track half empty (owner, 1 Nov 2026, About's audiences). Read only
-   * under `beside`.
-   */
-  split?: 'head' | 'halves';
-  /**
    * The band's foot: in practice one `CtaRow` (a hairline, then a row of actions — § 3.1). It is the
    * body's last row, a `stack` (48) under the blocks (§ 1.2: body → CtaRow), in every arrangement:
    * under the blocks in `stacked`, in the body track under `beside`, and pinned to
@@ -512,7 +505,11 @@ export function ContentSectionText({ children, align = 'start' }: ContentSection
  * The arrangement changes at a breakpoint; no distance does.
  */
 const HEAD_TRACKS = { lg: [5, 7], xl: [1, 2] };
-const HALF_TRACKS = { lg: 2 };
+/* ONE split for every head beside its body (owner, 19 Nov 2026: "we need to fix one split for sections
+   like these. i think the FAQ split we have now is good"). The `halves` option (1 : 1, owner 1 Nov for
+   About's audiences, then the FAQ on 4 Nov) is gone: a head and its body are a split of two different
+   kinds, never peers, so they never share the row evenly. Two peer lists side by side are a Layout of
+   two in the body, not a head split. */
 
 /** A development-only warning, prefixed with the component's name. */
 const warn = (message: string) => {
@@ -565,7 +562,6 @@ export function ContentSection(props: ContentSectionProps) {
     lead,
     surface,
     density,
-    split,
     footer,
     children,
   } = props;
@@ -793,7 +789,7 @@ export function ContentSection(props: ContentSectionProps) {
       <Layout
         rowGap="stack"
         colGap={besideSplit ? 'section' : undefined}
-        columns={besideSplit ? (split === 'halves' ? HALF_TRACKS : HEAD_TRACKS) : undefined}
+        columns={besideSplit ? HEAD_TRACKS : undefined}
         align={besideSplit ? (asideFill ? 'stretch' : 'start') : undefined}
         reverse={headAtEnd ? { lg: true } : undefined}
       >
