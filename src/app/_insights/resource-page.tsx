@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Icon, Layout, Media, Prose } from '@/components';
+import { AnchorHeading, Icon, Layout, Media, Prose } from '@/components';
 import { getResourceDetail } from '@/content';
 import { withBreadcrumbList } from '@/lib/breadcrumb-json-ld';
 import { jsonLdMarkup } from '@/lib/json-ld';
@@ -34,6 +34,11 @@ const measureOf = (block: Block): ArticleItem['measure'] =>
 function renderBlock(block: Block) {
   switch (block.type) {
     case 'heading':
+      return (
+        <Prose>
+          <AnchorHeading id={block.id}>{block.heading}</AnchorHeading>
+        </Prose>
+      );
     case 'prose':
       return <Prose html={block.html} />;
     case 'callout':

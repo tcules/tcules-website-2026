@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
+import { AnchorHeading, Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import { getCaseStudyDetail } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { BlockCard, Figure, Proof, Statement, TableOfContents, type TocItem } from '@/patterns';
@@ -53,7 +53,7 @@ function renderBlock(block: BodyBlock) {
     case 'heading':
       return (
         <Prose>
-          <h2 id={block.id}>{block.heading}</h2>
+          <AnchorHeading id={block.id}>{block.heading}</AnchorHeading>
         </Prose>
       );
     case 'prose':
