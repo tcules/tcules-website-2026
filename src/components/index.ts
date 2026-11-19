@@ -149,6 +149,7 @@ export { ClientMark, type ClientMarkProps } from './ClientMark';
    run on its own timeline, paused out of view and under reduced motion. Its control glyphs are
    passed in. */
 export { Arena, type ArenaProps } from './Arena';
+export { TurnstileWidget, type TurnstileWidgetHandle } from './TurnstileWidget';
 
 export { BrandMark, type BrandMarkName } from './BrandMark';
 export { RatingBadge, type RatingBadgeProps } from './RatingBadge';

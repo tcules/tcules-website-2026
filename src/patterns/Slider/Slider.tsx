@@ -229,6 +229,8 @@ export function Slider({
   const rowRef = useRef<HTMLElement>(null);
   const rootRef = useRef<HTMLElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
+  /* The current step's fill: the one element that reads --slider-step-progress (the clock below). */
+  const fillRef = useRef<HTMLSpanElement>(null);
   const [position, setPosition] = useState<Position>({
     ready: false,
     atStart: true,
@@ -482,13 +484,15 @@ export function Slider({
   /* A new current slide starts its hold full, before paint. */
   useLayoutEffect(() => {
     elapsed.current = 0;
-    rootRef.current?.style.setProperty('--slider-step-progress', '0');
+    fillRef.current?.style.setProperty('--slider-step-progress', '0');
   }, [current]);
 
   /* The clock: frames, not a timer, so a hold is exact across a pause and the step's fill is the
      clock itself rather than an animation that has to be kept in step with one. It runs only while
      rotating, hydrated, and not held; a pause stops the frames and keeps `elapsed`, so the fill
-     resumes where it froze. The fill is written straight to the root, as the rail's thumb is. */
+     resumes where it froze. The fill is written straight onto the current step's fill, the only
+     element that reads it: written on the root, every frame restyled the whole slider (126 elements
+     on /case-studies, 17 Nov 2026: ~700 ms of a 16 s load at 4× CPU), for a value one bar uses. */
   useEffect(() => {
     if (!playing || !ready || held) return;
     let frame = 0;
@@ -497,7 +501,7 @@ export function Slider({
       elapsed.current += Math.min(MAX_FRAME, Math.max(0, now - last));
       last = now;
       const progress = Math.min(1, elapsed.current / interval);
-      rootRef.current?.style.setProperty('--slider-step-progress', String(progress));
+      fillRef.current?.style.setProperty('--slider-step-progress', String(progress));
       if (progress >= 1) {
         /* Empty: hand over and stop. The bar stays empty until `current` moves, which resets the hold
            and restarts this clock, so no frame counts on while the old bar is still current. */
@@ -591,7 +595,7 @@ export function Slider({
             }}
           >
             <span className={styles.stepLine} aria-hidden="true">
-              <span className={styles.stepFill} />
+              <span className={styles.stepFill} ref={index === current ? fillRef : undefined} />
             </span>
           </button>
         </li>

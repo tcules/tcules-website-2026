@@ -3,13 +3,21 @@
 import type { FocusEvent, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
+import {
+  Button,
+  Chip,
+  Cluster,
+  Icon,
+  Input,
+  Layout,
+  TurnstileWidget,
+  type TurnstileWidgetHandle,
+} from '@/components';
 import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 
 import styles from './EnquiryForm.module.css';
-import { TurnstileWidget, type TurnstileWidgetHandle } from './TurnstileWidget';
 
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */

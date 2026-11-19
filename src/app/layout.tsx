@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 
 import { getNavigation, getSiteIdentity } from '@/content';
 import { siteGraphMarkup } from '@/lib/json-ld';
@@ -51,22 +50,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        {trackingEnabled ? (
-          <Script id="gtm-script" strategy="beforeInteractive">
-            {`
-              (function(w, d, s, l, i) {
-                w[l] = w[l] || [];
-                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-                var first = d.getElementsByTagName(s)[0];
-                var tag = d.createElement(s);
-                var layer = l !== 'dataLayer' ? '&l=' + l : '';
-                tag.async = true;
-                tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + layer;
-                first.parentNode.insertBefore(tag, first);
-              })(window, document, 'script', 'dataLayer', 'GTM-KMJSP983');
-            `}
-          </Script>
-        ) : null}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- the rule targets the

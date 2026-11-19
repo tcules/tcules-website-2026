@@ -43,6 +43,7 @@
     "sketch:frames": "node scripts/sketch-frames.mjs",
     "responsive:census": "node --no-warnings scripts/responsive-census.mjs",
     "test:hubspot": "node --test tests/hubspot.test.mjs",
+    "test:newsletter": "node --test tests/newsletter-turnstile.test.mjs",
     "test:cms-cache": "node --test tests/cms-cache.test.mjs",
     "test:cms-cache:integration": "node tests/cms-cache.integration.mjs"
   },
