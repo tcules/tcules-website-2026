@@ -312,8 +312,26 @@ export function PublishedEngagement({
   ) : undefined;
   const closingHeading = closing?.heading;
   const [primary, secondary] = closing?.actions ?? [];
-  /* Priced plans close on their line and at most one link, never a second ask. */
-  const plansClose = section.presentation === 'plans' && Boolean(closingHeading) && !secondary;
+  /* Plans close on one quiet line and its link, never an ink ask (owner, 19 Nov 2026: the closing
+     in the new design on every plans band). The line is the closing's heading; its body is not
+     drawn. Until the new copy is published the live closings carry two actions ("Book a call",
+     "See how we work"), so a second one stands beside the first as another quiet link. A closing
+     with a proof keeps the band's old close, so a case is never dropped (none carries one today). */
+  const plansClose =
+    section.presentation === 'plans' && Boolean(closingHeading) && !closing?.proof;
+  const closingLink = (action: HomeAction) => (
+    <Button
+      key={action.href}
+      as="a"
+      href={action.href}
+      emphasis="link"
+      size="md"
+      extendHitArea
+      icon={<Icon name="arrow-right" />}
+    >
+      {labelWithoutArrow(action.label)}
+    </Button>
+  );
   return (
     <EngagementOptions
       {...{ id, heading, headingId, surface }}
@@ -372,16 +390,14 @@ export function PublishedEngagement({
       }
       closingAction={
         plansClose && primary ? (
-          <Button
-            as="a"
-            href={primary.href}
-            emphasis="link"
-            size="md"
-            extendHitArea
-            icon={<Icon name="arrow-right" />}
-          >
-            {labelWithoutArrow(primary.label)}
-          </Button>
+          secondary ? (
+            <Cluster colGap="block" rowGap="tight" align="center">
+              {closingLink(primary)}
+              {closingLink(secondary)}
+            </Cluster>
+          ) : (
+            closingLink(primary)
+          )
         ) : undefined
       }
       note={

@@ -56,11 +56,11 @@
      rest of the price keeps the automatic optical size. */
   --eop-plan-currency-variation: 'opsz' 16;
   /* An underlined phrase in a plan's words (`<u>`, Jatin's highlight, 19 Nov 2026) is a HIGHLIGHT,
-     not a link: a soft band of the brand blue laid low behind the words, a third of the type deep,
+     not a link: a soft band of the brand blue laid low behind the words, under half the type deep,
      reaching up into the x-height. Relative to the type so it scales with whichever role holds it;
      painted under the glyphs (an underline draws before the text). Its colour is per surface. */
-  --eop-mark-thickness: 0.36em;
-  --eop-mark-offset: -0.2em;
+  --eop-mark-thickness: 0.44em;
+  --eop-mark-offset: -0.28em;
   /* Optical correction: the 18 tick centres on the 14 item's first line (line box ~20). */
   --eop-tick-optical-offset: var(--space-1);
   /* Optical correction: the 11 mono key sits on the 14 value's first line, not its top edge. */

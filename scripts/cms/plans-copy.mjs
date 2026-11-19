@@ -354,8 +354,18 @@ function actionHref(current) {
   return current && /^#enquiry\b/u.test(current) ? current : ENQUIRY;
 }
 
-function newPlansBlock(current, route) {
-  const closingHref = route === '/how-we-work' ? '#terms' : HOW_WE_WORK;
+/* On /how-we-work the link goes to the page's own terms band. The fixture says `#terms`; the live
+   band's anchorId is `essentials` ("The terms when you outsource UX design to Tcules"), so it is read
+   from the zone: the engagement block whose heading starts "The terms". */
+function termsAnchor(zone) {
+  const terms = zone.find(
+    (b) => b.__component === 'shared.engagement-options' && /^The terms\b/u.test(b.heading ?? '') && b.anchorId,
+  );
+  return terms ? `#${terms.anchorId}` : null;
+}
+
+function newPlansBlock(current, route, zone) {
+  const closingHref = route === '/how-we-work' ? (termsAnchor(zone) ?? HOW_WE_WORK) : HOW_WE_WORK;
   return {
     __component: 'shared.engagement-options',
     id: current.id,
@@ -544,7 +554,8 @@ for (const target of targets) {
     }
 
     const index = plansIndexes[0];
-    const next = newPlansBlock(zone[index], route);
+    const next = newPlansBlock(zone[index], route, zone);
+    if (route === '/how-we-work' && !termsAnchor(zone)) console.log('    ! no terms band on the page; the closing link falls back to /how-we-work');
     const after = before.map((b, i) => (i === index ? next : b));
 
     /* The proof for the dry run: every other block is carried over exactly as read, same order,
