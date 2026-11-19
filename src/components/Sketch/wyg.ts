@@ -38,6 +38,7 @@ import { SCENES as P_BACKEND_API_DEVELOPMENT } from './wyg-backend-api-developme
 import { SCENES as P_GLOSSARY } from './wyg-glossary';
 import { SCENES as P_GLOSSARY_DESTINATIONS } from './wyg-glossary-destinations';
 import { SCENES as P_TOOLS } from './wyg-tools';
+import { SCENES as P_GUIDES } from './wyg-guides';
 import { SCENES as P_TOOL_AI_READINESS } from './wyg-tool-ai-product-ux-readiness-check';
 import { SCENES as P_TOOL_AI_TRUST } from './wyg-tool-ai-trust-control-canvas';
 import { SCENES as P_TOOL_REBUILD } from './wyg-tool-audit-redesign-modernise-rebuild';
@@ -99,6 +100,7 @@ export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
   ...P_GLOSSARY,
   ...P_GLOSSARY_DESTINATIONS,
   ...P_TOOLS,
+  ...P_GUIDES,
   ...P_TOOL_AI_READINESS,
   ...P_TOOL_AI_TRUST,
   ...P_TOOL_REBUILD,
