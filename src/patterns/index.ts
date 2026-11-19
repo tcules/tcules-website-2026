@@ -421,9 +421,6 @@ export {
   type ReasonsProps,
 } from './Reasons';
 
-/* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
-export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
-
 /* CaseSpread — one worked example: the outcome as the claim beside its evidence, the story under. */
 export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpread';
 
