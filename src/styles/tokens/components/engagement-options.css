@@ -58,6 +58,11 @@
   /* An underlined phrase in a plan's words (`<u>`, 19 Nov 2026): four directions under review
      (PlanHighlight). Geometry here, colour per surface below. */
   --eop-hl-weight: var(--font-weight-medium);
+  /* E (the default). A solid underline in the full accent under words left in the card's own ink:
+     on this site a link is the coloured word, so an underline under ink words cannot pass for one.
+     Clearly heavier than a hairline, a little below the baseline, unbroken by descenders. */
+  --eop-hl-underline-thickness: 0.12em;
+  --eop-hl-underline-offset: 0.2em;
   --eop-hl-weight-strong: var(--font-weight-semibold);
   /* A. The marker band: from the descender line to over the x-height, measured up the content box. */
   --eop-hl-band-from: 2%;
@@ -81,6 +86,7 @@
   --eop-plan-ground: var(--color-white); /* a step brighter than the paper band */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
   --eop-hl-accent-ink: var(--color-brandeis-600); /* 7.59:1 on white, 6.79:1 on the featured brandeis-50 */
+  --eop-hl-underline-ink: var(--color-brandeis-500); /* decoration; the accent the ticks take */
   --eop-hl-band-ink: var(--color-brandeis-200); /* decoration; neutral-800 on it 7.23:1 */
   --eop-hl-tag-ground: var(--color-brandeis-200); /* shows on white and on the featured brandeis-50 */
   --eop-hl-tag-ink: var(--color-brandeis-800); /* 7.95:1 on brandeis-200 */
@@ -110,6 +116,7 @@
   --eop-plan-ground: var(--color-white); /* the brightest object on tint */
   --eop-plan-item-ink: var(--color-neutral-800); /* 11.79:1 on white */
   --eop-hl-accent-ink: var(--color-brandeis-600); /* as paper: 7.59:1 white, 6.79:1 brandeis-50 */
+  --eop-hl-underline-ink: var(--color-brandeis-500); /* as paper */
   --eop-hl-band-ink: var(--color-brandeis-200);
   --eop-hl-tag-ground: var(--color-brandeis-200);
   --eop-hl-tag-ink: var(--color-brandeis-800); /* 7.95:1 */
@@ -138,6 +145,7 @@
   --eop-plan-ground: var(--color-neutral-900);
   --eop-plan-item-ink: var(--color-neutral-300); /* 11.07:1 */
   --eop-hl-accent-ink: var(--color-brandeis-300); /* 7.07:1 on neutral-900 */
+  --eop-hl-underline-ink: var(--color-brandeis-300); /* decoration; the icon blue on ink */
   --eop-hl-band-ink: var(--color-brandeis-800); /* decoration; neutral-300 on it 8.4:1 */
   --eop-hl-tag-ground: var(--color-brandeis-800);
   --eop-hl-tag-ink: var(--color-brandeis-100); /* 10.32:1 on brandeis-800 */
@@ -165,6 +173,7 @@
   --eop-plan-ground: var(--color-brandeis-600);
   --eop-plan-item-ink: var(--color-brandeis-50); /* 5.57:1 */
   --eop-hl-accent-ink: var(--color-white); /* 7.59:1 on brandeis-600, 10.16:1 on brandeis-700 */
+  --eop-hl-underline-ink: var(--color-white); /* decoration; the icon ink on blue */
   --eop-hl-band-ink: var(--color-brandeis-800); /* decoration; brandeis-50 on it 11.71:1 */
   --eop-hl-tag-ground: var(--color-brandeis-800);
   --eop-hl-tag-ink: var(--color-white); /* 13.1:1 */

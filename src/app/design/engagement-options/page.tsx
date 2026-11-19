@@ -106,6 +106,12 @@ const PRICED_UNDERLINED: EngagementOption[] = PRICED.map((option, index) =>
 
 const HIGHLIGHTS: readonly { key: PlanHighlight; letter: string; name: string; note: string }[] = [
   {
+    key: 'underline',
+    letter: 'E',
+    name: 'Blue underline (default)',
+    note: 'the words keep the card’s own ink and weight; a solid accent-blue underline under them, 0.12em thick, 0.2em below, one unbroken line. A link on this site is the coloured word, so this cannot pass for one.',
+  },
+  {
     key: 'highlighter',
     letter: 'A',
     name: 'Highlighter',
@@ -121,7 +127,7 @@ const HIGHLIGHTS: readonly { key: PlanHighlight; letter: string; name: string; n
     key: 'accent',
     letter: 'C',
     name: 'Accent text',
-    note: 'the phrase in the accent blue at medium weight, nothing else. The default until a pick.',
+    note: 'the phrase in the accent blue at medium weight, nothing else.',
   },
   {
     key: 'lead',
@@ -418,7 +424,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="highlight-directions"
         title="5 · Highlight directions (pick one), 19 Nov 2026"
-        note="How an underlined phrase from the CMS (<u>free one-day review</u>) reads in a plan. Each direction in the real pilot card (focused, full checklist) beside its neighbours, on paper and on tint. Default rendering is C until the owner picks; the others are then deleted."
+        note="How an underlined phrase from the CMS (<u>free one-day review</u>) reads in a plan. Each direction in the real pilot card (focused, full checklist) beside its neighbours, on paper and on tint. Default rendering is E until the owner picks; the others are then deleted."
       />
       {HIGHLIGHTS.flatMap(({ key, letter, name, note }) =>
         (['paper', 'tint'] as const).map((surface) => (
