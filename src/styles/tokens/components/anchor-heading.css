@@ -1,0 +1,63 @@
+/* ══ Component layer — AnchorHeading ═════════════════════════════════════════════
+   Tier 1. A section heading with a copy-link control after its last word, and the toast that
+   confirms the copy (P3 #5, 18 Nov 2026).
+   Naming: --anh-{part}-{role}-{state}
+     parts  control · glyph · ring · toast
+   The control is unboxed: its rest is the prose's muted ink, its hover and focus the link's ink.
+   No transition: nothing moves, the ink changes. The toast is an overlay above the page, the same
+   dark chip on every surface, so its tokens sit in :root only. Every surface block declares every
+   surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --anh-control-size: 32px;
+  --anh-control-target: 44px;
+  --anh-control-radius: var(--radius-4);
+  /* The link mark is a wide, low drawing (20 by 10 on its 24 box), so it takes the full 24 to read
+     beside a heading: at 18 it was a dash beside a 43px h2. */
+  --anh-glyph-size: var(--icon-size-24);
+  --anh-ring-width: var(--focus-ring-width);
+  --anh-ring-offset: var(--focus-ring-offset);
+  /* The toast's air from the viewport foot, and its padding: a chip's padding, a gutter off the edge. */
+  --anh-toast-inset: var(--gap-gutter);
+  --anh-toast-pad-block: var(--gap-tight);
+  --anh-toast-pad-inline: var(--gap-text);
+  --anh-toast-radius: var(--radius-8);
+  /* Sans, not the mono label voice: "Link copied" is a sentence, and mono is uppercase only. */
+  --anh-toast-text: var(--text-body-sm);
+  --anh-toast-bg: var(--color-neutral-950);
+  --anh-toast-fg: var(--color-white);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --anh-control-fg: var(--color-neutral-600); /* 4.92:1, the prose's muted ink */
+  --anh-control-fg-hover: var(--color-brandeis-500);
+  --anh-ring-color: var(--color-brandeis-500);
+  --anh-ring-gap-color: var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --anh-control-fg: var(--color-neutral-700);
+  --anh-control-fg-hover: var(--color-brandeis-500);
+  --anh-ring-color: var(--color-brandeis-500);
+  --anh-ring-gap-color: var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --anh-control-fg: var(--color-neutral-400);
+  --anh-control-fg-hover: var(--color-brandeis-300);
+  --anh-ring-color: var(--color-brandeis-300);
+  --anh-ring-gap-color: var(--color-neutral-950);
+}
+
+/* ── Surface: blue ── declared for self-containment ─────────────────────────────── */
+[data-surface='blue'] {
+  --anh-control-fg: var(--color-brandeis-100);
+  --anh-control-fg-hover: var(--color-white);
+  --anh-ring-color: var(--color-white);
+  --anh-ring-gap-color: var(--color-brandeis-500);
+}

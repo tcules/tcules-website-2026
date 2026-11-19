@@ -1,0 +1,73 @@
+/* AnchorHeading — see AnchorHeading.tsx. The heading's type is Prose's or the base h2's; this module
+   holds only the control and its confirmation. Every value comes from --anh-*. */
+
+/* The last word and the control wrap together, so the control never starts a line alone. */
+.glue {
+  white-space: nowrap;
+}
+
+/* An unboxed glyph in the heading's line: no ground at rest or on hover (no hover-only grounds). */
+.control {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--anh-control-size);
+  block-size: var(--anh-control-size);
+  padding: 0;
+  vertical-align: middle;
+  color: var(--anh-control-fg);
+  background: none;
+  border: 0;
+  border-radius: var(--anh-control-radius);
+  cursor: pointer;
+}
+
+/* The touch target: 44 square around the 32 box, as Button's extendHitArea does. */
+.control::after {
+  content: '';
+  position: absolute;
+  inset: calc((var(--anh-control-size) - var(--anh-control-target)) / 2);
+}
+
+.control:hover,
+.control:focus-visible {
+  color: var(--anh-control-fg-hover);
+}
+
+.control:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--anh-ring-offset) var(--anh-ring-gap-color),
+    0 0 0 calc(var(--anh-ring-offset) + var(--anh-ring-width)) var(--anh-ring-color);
+}
+
+.glyph {
+  display: block;
+  inline-size: var(--anh-glyph-size);
+  block-size: var(--anh-glyph-size);
+  fill: currentColor;
+  fill-rule: evenodd;
+  stroke: none;
+}
+
+/* The confirmation: one toast at the foot of the viewport, centred, above everything. Fixed, so it
+   never moves the heading or widens the page. */
+.toast {
+  position: fixed;
+  inset-block-end: var(--anh-toast-inset);
+  inset-inline-start: 50%;
+  z-index: var(--z-toast);
+  transform: translateX(-50%);
+  padding: var(--anh-toast-pad-block) var(--anh-toast-pad-inline);
+  color: var(--anh-toast-fg);
+  background: var(--anh-toast-bg);
+  border-radius: var(--anh-toast-radius);
+  font: var(--anh-toast-text);
+  white-space: nowrap;
+}
+
+/* Empty, it keeps its place in the accessibility tree but draws nothing. */
+.toast:empty {
+  padding: 0;
+  clip-path: inset(50%);
+}

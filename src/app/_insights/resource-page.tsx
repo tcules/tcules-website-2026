@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Icon, Layout, Media, Prose, Section } from '@/components';
+import { AnchorHeading, Icon, Layout, Media, Prose, Section } from '@/components';
 import { getResourceDetail } from '@/content';
 import { withBreadcrumbList } from '@/lib/breadcrumb-json-ld';
 import { jsonLdMarkup } from '@/lib/json-ld';
@@ -32,6 +32,11 @@ const BODY_IMAGE_SIZES = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 function renderBlock(block: Block) {
   switch (block.type) {
     case 'heading':
+      return (
+        <Prose>
+          <AnchorHeading id={block.id}>{block.heading}</AnchorHeading>
+        </Prose>
+      );
     case 'prose':
       return <Prose html={block.html} />;
     case 'callout':
