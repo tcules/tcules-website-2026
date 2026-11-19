@@ -740,6 +740,32 @@ export default async function PageHeroSpecimenPage() {
         />
       </div>
 
+      {/* ── 2d · Six tags as chips, above the ask ─────────────────────────────────── */}
+      <div>
+        <PageHero
+          title="SaaS UI/UX design for B2B software that many roles share"
+          body={paragraphs(1)}
+          arrangement="beside"
+          media={{
+            type: 'image',
+            image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+          }}
+          tags={[
+            'Deal and pipeline software',
+            'Quoting, pricing and approvals',
+            'Staffing and people operations',
+            'Scheduling across teams',
+            'Environment, health and safety suites',
+            'Back-office software for one trade',
+          ]}
+          actions={ONE_ACTION}
+        />
+        <Note
+          title="2d · tags — the article hero's Tag chips, above the actions"
+          note="Owner, 18 Nov 2026: tags render as the same Tag chips an article's labels do, in one wrapping row a block under the lead and so above the ask. The unboxed mono grid after the actions is retired. Six at most; at 390 the chips wrap."
+        />
+      </div>
+
       {/* ── 3 · The paragraph ladder ───────────────────────────────────────────── */}
       {([1, 2, 3, 4, 5, 6, 12] as const).map((count) => (
         <div key={count}>
