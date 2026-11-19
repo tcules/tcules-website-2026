@@ -88,19 +88,23 @@ export function CaseCard({
     /* The cover and the claim keep the round-7 card's seams (approved as TestimonialCase, 16 Oct
        2026): `stack` across from 1024, plus the copy's `text` inline inset, so the two read as one
        card rather than a split of two regions; `inline` down below it, plus the copy's `gutter`
-       block inset. */
+       block inset. The claim is ONE group (owner, 18 Nov 2026: "move the link closer to the body
+       so it reads as one block"): the cue a `block` under the story rather than pinned to the
+       cover's foot, and the group centred on the cover's height from 1024, so its air splits evenly
+       above and below instead of pooling between the body and a stranded link. */
     <Layout
       columns={{ base: 1, lg: [7, 5] }}
       reverse={reverse ? { lg: true } : undefined}
       colGap="stack"
       rowGap="inline"
+      align="center"
     >
       <span className={styles.media}>
         <span className={styles.zoom}>
           <Media image={image} sizes={CASE_CARD_COVER} fit="fill" edge="placement" />
         </span>
       </span>
-      <Layout rowGap="gutter" pinLast className={styles.copy}>
+      <Layout rowGap="block" className={styles.copy}>
         <Layout rowGap="text">
           {filled(eyebrow) ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
           <Title id={titleId} className={styles.title}>

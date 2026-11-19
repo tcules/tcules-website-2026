@@ -26,10 +26,12 @@ export default function CaseCardSpecimen() {
           <p>
             One featured case as one card: home&rsquo;s selected work and the case index&rsquo;s
             featured cases. The 16:9 cover beside the eyebrow, claim and result on [7, 5], the
-            cue pinned to the foot, on the boxed card&rsquo;s ground with a text mat. The shape
-            approved as TestimonialCase (16 Oct 2026, round 7); the client&rsquo;s words left
-            the card on 22 Oct 2026 (case study cards hold no testimonial), so the testimonials
-            keep their own band.
+            cue a block under the story so the words and the link read as one group, the group
+            centred on the cover from 1024 (owner, 18 Nov 2026), unbounded: no ground and no
+            mat, the cover and the words straight on the band (owner, 18 Nov 2026), the cover
+            rounded at the 8 every card image takes. The shape approved as TestimonialCase (16
+            Oct 2026, round 7); the client&rsquo;s words left the card on 22 Oct 2026 (case
+            study cards hold no testimonial), so the testimonials keep their own band.
           </p>
         </Layout>
       </Section>
@@ -63,7 +65,7 @@ export default function CaseCardSpecimen() {
           </Specimen>
           <Specimen
             title="no eyebrow · long claim · two paragraphs"
-            note="stress: a title with no client before a colon carries no eyebrow; a long claim balances; the story grows and the cue stays pinned to the foot"
+            note="stress: a title with no client before a colon carries no eyebrow; a long claim balances; the story grows and the cue stays a block under it, the group centred on the cover"
           >
             <CaseCard
               {...CASE}
@@ -91,7 +93,7 @@ export default function CaseCardSpecimen() {
         <Section key={surface} surface={surface}>
           <Layout rowGap="stack">
             {index === 0 ? <h2>2 · Four surfaces</h2> : null}
-            <Specimen title={surface} note="the card's ground and inks on this surface">
+            <Specimen title={surface} note="the card's inks on this surface; it has no ground of its own">
               <CaseCard {...CASE} />
             </Specimen>
           </Layout>
