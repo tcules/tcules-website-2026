@@ -1,608 +1,679 @@
 #!/usr/bin/env node
 /**
- * The "Start small. Grow when you're sure." copy for every published "Three ways to work with us"
- * band: each entry's `shared.engagement-options` block with presentation `plans` (owner, 19 Nov 2026).
+ * plans-copy — rewrite the "Three ways to work with us" band (dynamic-zone block
+ * `shared.engagement-options` with `presentation: "plans"`) to the priced-plans copy, on every
+ * published entry that carries it. Every other block in the zone is preserved.
  *
- *   node scripts/cms/plans-copy.mjs --dry-run [--snapshots=<dir>] [--only=<uid|documentId>]
- *   node scripts/cms/plans-copy.mjs --write --status=draft|published [--snapshots=<dir>] [--only=…]
- *   node scripts/cms/plans-copy.mjs --restore <snapshotDir> --status=draft|published [--only=…]
+ *   node scripts/cms/plans-copy.mjs                      dry run (default): GET only, snapshot, diff, assert
+ *   node scripts/cms/plans-copy.mjs --only api::home.home
+ *   node scripts/cms/plans-copy.mjs --only api::service.service:<documentId>
+ *   node scripts/cms/plans-copy.mjs --write --status=published [--allow-draft-drift]
+ *   node scripts/cms/plans-copy.mjs --verify <snapshotDir>           GET only: published = snapshot + new plans
+ *   node scripts/cms/plans-copy.mjs --restore <snapshotDir> --status=published
  *
- * WHY IT IS CAREFUL. Strapi 5 REST replaces a dynamic zone wholesale on PUT: every block left out of
- * the payload is deleted. So the script GETs each entry's DRAFT with the whole zone deep-populated
- * (every component type the zone allows, nested components, relations and media, derived from the
- * content-type-builder schema), saves it, and PUTs the zone back with every other block carried over
- * as it came (component ids kept, relations as documentIds, media as ids) and only the plans block's
- * copy fields replaced. An entry is refused when the read cannot be proven complete: a schema
- * attribute missing from any component in the zone (private, or not populated) would be wiped.
+ * Env (.env.local): NEW_CMS_GRAPHQL_URL (BASE = it minus /graphql), NEW_CMS_WRITE_TOKEN.
  *
- * Draft vs published: PUT writes the draft. `--status=published` publishes that draft, so an entry
- * whose draft already differs from its published version would publish someone's pending edits too;
- * the dry run lists those entries and --write refuses them unless --allow-pending is passed.
+ * Strapi 5 REST replaces a whole dynamic zone on PUT, so the script reads the zone deep-populated
+ * from the schema (every component the zone allows, recursively; relations → documentId; media →
+ * id), proves the read is complete (every schema attribute of every component instance is present
+ * in the response — an unpopulated relation or component would otherwise be silently dropped), and
+ * sends the zone field only. Component ids are NOT sent: in Strapi 5 the draft and published
+ * versions hold separate component rows, so a published component id is not one the draft owns;
+ * every component is re-created from its content instead, which is the same content in new rows.
  *
- * The highlight boolean (`focused`, Mihir) is written only when the schema has it.
- *
- * Env: NEW_CMS_GRAPHQL_URL (Strapi base = it minus /graphql) and NEW_CMS_WRITE_TOKEN, from the
- * environment or .env.local.
+ * Writes are refused unless --write or --restore is given; the HTTP helper throws on any non-GET
+ * otherwise.
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 
-/* ── The copy (owner, 19 Nov 2026; from the overhaul fixture PRICED_PLANS) ─────────────────────── */
+// ─── args & env ────────────────────────────────────────────────────────────────────────────────
+const argv = process.argv.slice(2);
+const flag = (name) => argv.includes(name);
+const opt = (name) => {
+  const eq = argv.find((a) => a.startsWith(`${name}=`));
+  if (eq) return eq.slice(name.length + 1);
+  const i = argv.indexOf(name);
+  return i >= 0 && argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : undefined;
+};
 
-/** The option field Mihir is adding for the blue highlight. Written only if the schema has it. */
-const FOCUS_FIELD = 'focused';
+const MODE = flag('--write') ? 'write' : opt('--restore') ? 'restore' : opt('--verify') ? 'verify' : 'dry-run';
+const STATUS = opt('--status');
+const ONLY = opt('--only');
+const ALLOW_DRAFT_DRIFT = flag('--allow-draft-drift');
+const SNAP_ROOT =
+  opt('--snapshots') ??
+  '/private/tmp/claude-501/-Users-devagya-tcules-website-2026/6647b009-7843-4a4b-b701-6ed8cf6b03e4/scratchpad/plans-snapshots';
 
-const HEADING = "Start small. Grow when you're sure.";
-/* U+2011 non-breaking hyphens, as the fixture sets them, so "one‑day" never splits across lines. */
-const OPTIONS = [
-  {
-    eyebrow: 'Pilot project',
-    title: 'From $500',
-    body: 'One real piece of your product, designed for a fixed price.',
-    checklist: [
-      'Starts with a <u>free one‑day review</u>',
-      'Stop after the review and owe nothing',
-      'Fixed price, agreed up front',
-      'The designs are yours to keep',
-    ],
-    label: 'Book a free product review',
-    focused: true,
-  },
-  {
-    eyebrow: 'Dedicated design team',
-    title: 'From $2,500 a month',
-    body: 'A senior product designer working in your team.',
-    checklist: [
-      'Part‑time or full‑time, starting within a week',
-      'UX research, design engineering or front‑end when needed',
-      "Scale up or down on a week's notice",
-      'Pause any time; billing pauses too',
-      'Usually the same senior product designer throughout',
-    ],
-    label: 'Add design capacity',
-    focused: false,
-  },
-  {
-    eyebrow: 'Project',
-    title: 'Quoted per project',
-    body: 'A first release, a redesign or a design system.',
-    checklist: [
-      'Taken from start to finish',
-      'Design only, or design‑led development',
-      'Scope, price and dates agreed before we start',
-      "Designers stay until it's live",
-    ],
-    label: 'Ask for a quote',
-    focused: false,
-  },
-];
-const CLOSING_HEADING =
-  'A senior product designer leads every option, and what we make is yours once paid for.';
-/* `content.engagement-closing.body` is REQUIRED in the schema (publish fails without it), but the
-   plans band renders only the closing heading as its line. The body carries the same sentence so the
-   entry validates; nothing shows it. If Mihir relaxes `required`, set this to null. */
-const CLOSING_BODY = CLOSING_HEADING;
-const CLOSING_LABEL = 'How we work with clients';
-const HOW_WE_WORK = '/how-we-work';
-const ENQUIRY = '#enquiry';
-
-/* ── Arguments and environment ──────────────────────────────────────────────────────────────── */
-
-const args = process.argv.slice(2);
-const flag = (name) => args.includes(`--${name}`);
-const option = (name) => args.find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
-const mode = flag('write') ? 'write' : flag('restore') ? 'restore' : 'dry-run';
-const status = option('status');
-const only = option('only');
-const today = new Date().toISOString().slice(0, 10);
-const snapshotDir = resolve(
-  mode === 'restore' ? args[args.indexOf('--restore') + 1] ?? '' : option('snapshots') ?? `snapshots/plans-${today}`,
-);
-if ((mode === 'write' || mode === 'restore') && !['draft', 'published'].includes(status ?? '')) {
-  fail('--write and --restore need --status=draft|published');
-}
-if (mode === 'restore' && !existsSync(snapshotDir)) fail(`no snapshot directory at ${snapshotDir}`);
-
-function loadEnv() {
-  const env = { ...process.env };
-  const file = resolve('.env.local');
-  if (existsSync(file)) {
-    for (const line of readFileSync(file, 'utf8').split('\n')) {
-      const m = /^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/u.exec(line);
-      if (m && env[m[1]] === undefined) env[m[1]] = m[2].replace(/^(['"])(.*)\1$/u, '$2');
-    }
-  }
-  return env;
-}
-const env = loadEnv();
-const BASE = env.NEW_CMS_GRAPHQL_URL?.replace(/\/graphql\/?$/u, '');
-const TOKEN = env.NEW_CMS_WRITE_TOKEN;
-if (!BASE || !TOKEN) fail('NEW_CMS_GRAPHQL_URL and NEW_CMS_WRITE_TOKEN are required');
-
-function fail(message) {
-  console.error(`plans-copy: ${message}`);
-  process.exit(1);
+if ((MODE === 'write' || MODE === 'restore') && !['draft', 'published'].includes(STATUS)) {
+  die('--write and --restore need --status=draft|published');
 }
 
-async function api(method, path, body) {
-  if (method !== 'GET' && mode === 'dry-run') throw new Error('dry run never writes');
-  let response;
-  /* A GET is retried on a 5xx (the host answers 502 under a burst); a write never is. */
-  for (let attempt = 0; ; attempt += 1) {
-    response = await fetch(`${BASE}${path}`, {
-      method,
-      headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if (method !== 'GET' || response.status < 500 || attempt >= 4) break;
-    await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)));
-  }
-  const text = await response.text();
-  if (!response.ok) throw new Error(`${method} ${path.slice(0, 120)} → ${response.status} ${text.slice(0, 600)}`);
+loadEnvLocal();
+const GQL = process.env.NEW_CMS_GRAPHQL_URL;
+const TOKEN = process.env.NEW_CMS_WRITE_TOKEN;
+if (!GQL || !TOKEN) die('NEW_CMS_GRAPHQL_URL and NEW_CMS_WRITE_TOKEN must be set (.env.local)');
+const BASE = GQL.replace(/\/graphql\/?$/, '');
+const WRITES_ALLOWED = MODE === 'write' || MODE === 'restore';
+
+const ZONE_BLOCK = 'shared.engagement-options';
+
+// ─── the new copy (PRICED_PLANS, src/content/sources/overhaul/studio-shared.ts) ─────────────────
+// Non-breaking hyphens (U+2011) are kept exactly as the fixture writes them.
+const NB = '‑';
+const NEW_COPY = {
+  heading: "Start small. Grow when you're sure.",
+  options: [
+    {
+      eyebrow: 'Pilot project',
+      title: 'From $500',
+      body: 'One real piece of your product, designed for a fixed price.',
+      checklist: [
+        `Starts with a <u>free one${NB}day review</u>`,
+        'Stop after the review and owe nothing',
+        'Fixed price, agreed up front',
+        'The designs are yours to keep',
+      ],
+      action: 'Book a free product review',
+      focused: true,
+    },
+    {
+      eyebrow: 'Dedicated design team',
+      title: 'From $2,500 a month',
+      body: 'A senior product designer working in your team.',
+      checklist: [
+        `Part${NB}time or full${NB}time, starting within a week`,
+        `UX research, design engineering or front${NB}end when needed`,
+        "Scale up or down on a week's notice",
+        'Pause any time; billing pauses too',
+        'Usually the same senior product designer throughout',
+      ],
+      action: 'Add design capacity',
+      focused: false,
+    },
+    {
+      eyebrow: 'Project',
+      title: 'Quoted per project',
+      body: 'A first release, a redesign or a design system.',
+      checklist: [
+        'Taken from start to finish',
+        `Design only, or design${NB}led development`,
+        'Scope, price and dates agreed before we start',
+        "Designers stay until it's live",
+      ],
+      action: 'Ask for a quote',
+      focused: false,
+    },
+  ],
+  closingHeading:
+    'A senior product designer leads every option, and what we make is yours once paid for.',
+  closingAction: { name: 'How we work with clients', href: '/how-we-work' },
+};
+
+// ─── HTTP (GET-only unless a write mode was asked for) ──────────────────────────────────────────
+async function http(method, url, body) {
+  if (method !== 'GET' && !WRITES_ALLOWED) throw new Error(`refused ${method} ${url}: not in a write mode`);
+  const res = await fetch(url, {
+    method,
+    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`${method} ${url} → ${res.status}: ${text.slice(0, 2000)}`);
   return text ? JSON.parse(text) : null;
 }
+const get = (p) => http('GET', `${BASE}${p}`);
 
-/* ── Schema → populate ──────────────────────────────────────────────────────────────────────── */
-
-const contentTypes = (await api('GET', '/api/content-type-builder/content-types')).data;
-const components = Object.fromEntries(
-  (await api('GET', '/api/content-type-builder/components')).data.map((c) => [c.uid, c.schema]),
-);
-const optionSchema = components['content.engagement-option'];
-const hasFocus = Boolean(optionSchema?.attributes?.[FOCUS_FIELD]);
-
-/** The populate tree for one component: every nested component, relation and media. */
-function componentPopulate(uid, depth = 0) {
-  if (depth > 12) throw new Error(`component nesting too deep at ${uid}`);
-  const populate = {};
-  for (const [name, attr] of Object.entries(components[uid].attributes)) {
-    if (attr.type === 'component') populate[name] = componentPopulate(attr.component, depth + 1);
-    else if (attr.type === 'dynamiczone') populate[name] = zonePopulate(attr.components, depth + 1);
-    else if (attr.type === 'media' || attr.type === 'relation') populate[name] = true;
-  }
-  return Object.keys(populate).length ? { populate } : true;
-}
-function zonePopulate(uids, depth = 0) {
-  return { on: Object.fromEntries(uids.map((uid) => [uid, componentPopulate(uid, depth)])) };
+// ─── schema ────────────────────────────────────────────────────────────────────────────────────
+const schema = { types: new Map(), comps: new Map() };
+async function loadSchema() {
+  const [cts, comps] = await Promise.all([
+    get('/api/content-type-builder/content-types'),
+    get('/api/content-type-builder/components'),
+  ]);
+  for (const c of cts.data) schema.types.set(c.uid, c.schema);
+  for (const c of comps.data) schema.comps.set(c.uid, c.schema.attributes);
 }
 
-/** qs-style bracket serialisation, as Strapi parses it. */
-function qs(value, prefix) {
-  if (value === true) return [`${prefix}=true`];
-  if (Array.isArray(value)) return value.flatMap((v, i) => qs(v, `${prefix}[${i}]`));
-  if (value && typeof value === 'object') {
-    return Object.entries(value).flatMap(([k, v]) => qs(v, prefix ? `${prefix}[${k}]` : k));
-  }
-  return [`${prefix}=${encodeURIComponent(String(value))}`];
-}
-
-/** The content types whose zone allows the engagement block, with that zone's name. */
-const targets = contentTypes
-  .filter((t) => t.uid.startsWith('api::'))
-  .flatMap((t) =>
-    Object.entries(t.schema.attributes)
-      .filter(([, a]) => a.type === 'dynamiczone' && a.components.includes('shared.engagement-options'))
-      .map(([zone, a]) => ({
-        uid: t.uid,
-        kind: t.schema.kind,
-        path: t.schema.kind === 'singleType' ? t.schema.singularName : t.schema.pluralName,
-        zone,
-        zoneComponents: a.components,
-        hasSlug: Boolean(t.schema.attributes.slug),
-      })),
-  );
-
-/* ── Routes, for the report and the local preview ───────────────────────────────────────────── */
-
-const SINGLE_ROUTES = {
-  'api::home.home': '/',
-  'api::how-we-work-master.how-we-work-master': '/how-we-work',
-  'api::service-master.service-master': '/services',
-  'api::audit-master.audit-master': '/audits',
-  'api::expertise-master.expertise-master': '/expertise',
-  'api::about.about': '/about',
-  'api::why-tcules.why-tcules': '/why-tcules',
-};
-function routeOf(target, entry) {
-  if (SINGLE_ROUTES[target.uid]) return SINGLE_ROUTES[target.uid];
-  if (target.uid === 'api::service.service') return `/services/${entry.slug}`;
-  if (target.uid === 'api::expertise.expertise') return `/expertise/${entry.slug}`;
-  if (target.uid === 'api::how-we-work.how-we-work') return `/how-we-work/${entry.slug}`;
-  return `?${target.uid}/${entry.documentId}`;
-}
-
-/* ── Reading ────────────────────────────────────────────────────────────────────────────────── */
-
-/* The whole zone deep-populated is too long for one URL (a 17-type zone answers 431), so the read is
-   one shallow request for the zone's order and ids, then the component types in groups that fit,
-   each block taken from the group that populated its type. */
-const URL_BUDGET = 6000;
-function populateGroups(target) {
-  const groups = [];
-  let current = [];
-  const size = (uids) => qs({ [target.zone]: zonePopulate(uids) }, 'populate').join('&').length;
-  for (const uid of target.zoneComponents) {
-    if (current.length && size([...current, uid]) > URL_BUDGET) {
-      groups.push(current);
-      current = [];
-    }
-    current.push(uid);
-  }
-  if (current.length) groups.push(current);
-  for (const g of groups) if (size(g) > URL_BUDGET * 1.5) throw new Error(`populate for ${g[0]} alone is too long`);
-  return groups;
-}
-
-async function read(target, documentId, which) {
-  const at = (query) =>
-    target.kind === 'singleType'
-      ? `/api/${target.path}?status=${which}&${query}`
-      : `/api/${target.path}/${documentId}?status=${which}&${query}`;
-  const shallow = (await api('GET', at(`populate[${target.zone}]=true`)))?.data ?? null;
-  if (!shallow) return null;
-  const full = new Map();
-  for (const group of populateGroups(target)) {
-    const query = qs({ [target.zone]: zonePopulate(group) }, 'populate').join('&');
-    const data = (await api('GET', at(query)))?.data;
-    for (const block of data?.[target.zone] ?? []) {
-      if (group.includes(block.__component)) full.set(`${block.__component}#${block.id}`, block);
-    }
-  }
-  const zone = (shallow[target.zone] ?? []).map((block) => {
-    const deep = full.get(`${block.__component}#${block.id}`);
-    if (!deep) throw new Error(`${target.uid} ${documentId}: block ${block.__component}#${block.id} missing from its deep read`);
-    return deep;
-  });
-  return { ...shallow, [target.zone]: zone };
-}
-
-async function list(target) {
-  if (target.kind === 'singleType') {
-    const entry = await api('GET', `/api/${target.path}?status=published&populate[${target.zone}]=true`).then((r) => r?.data ?? null, (e) =>
-      /→ 404/u.test(e.message) ? null : Promise.reject(e),
-    );
-    return entry ? [entry] : [];
-  }
-  const populate = `populate[${target.zone}]=true`;
-  const entries = [];
-  for (let page = 1; ; page += 1) {
-    const result = await api(
-      'GET',
-      `/api/${target.path}?status=published&pagination[page]=${page}&pagination[pageSize]=100&${populate}`,
-    );
-    entries.push(...result.data);
-    if (page >= (result.meta?.pagination?.pageCount ?? 1)) break;
-  }
-  return entries;
-}
-
-const isPlans = (block) =>
-  block?.__component === 'shared.engagement-options' && block.presentation === 'plans';
-
-/* ── The round trip: GET shape → PUT shape ──────────────────────────────────────────────────── */
-
-/**
- * One component instance as Strapi 5 accepts it back. Every schema attribute must be present in the
- * read, or the write would drop it: `missing` collects the paths that are not.
- */
-function toInput(uid, value, path, missing, { keepIds = true } = {}) {
-  const schema = components[uid];
-  const out = {};
-  if (keepIds && value.id != null) out.id = value.id;
-  for (const [name, attr] of Object.entries(schema.attributes)) {
-    const at = `${path}.${name}`;
-    if (!(name in value)) {
-      missing.push(`${at}${attr.private ? ' (private)' : ''}`);
-      continue;
-    }
-    const v = value[name];
-    switch (attr.type) {
-      case 'component':
-        out[name] = attr.repeatable
-          ? (v ?? []).map((item, i) => toInput(attr.component, item, `${at}[${i}]`, missing, { keepIds }))
-          : v
-            ? toInput(attr.component, v, at, missing, { keepIds })
-            : null;
-        break;
-      case 'dynamiczone':
-        out[name] = (v ?? []).map((item, i) => ({
-          __component: item.__component,
-          ...toInput(item.__component, item, `${at}[${i}]`, missing, { keepIds }),
-        }));
-        break;
-      case 'media':
-        out[name] = attr.multiple ? (v ?? []).map((m) => m.id) : (v?.id ?? null);
-        break;
-      case 'relation': {
-        const many = /ToMany$/u.test(attr.relation);
-        const ids = (many ? (v ?? []) : v ? [v] : []).map((r) => r.documentId);
-        out[name] = { set: ids };
-        break;
+/** Every api:: content type whose dynamic zone allows the block: [{ uid, kind, zone, path, i18n }]. */
+function targets() {
+  const out = [];
+  for (const [uid, s] of schema.types) {
+    if (!uid.startsWith('api::')) continue;
+    for (const [field, a] of Object.entries(s.attributes)) {
+      if (a.type === 'dynamiczone' && a.components.includes(ZONE_BLOCK)) {
+        const localized = !!s.pluginOptions?.i18n?.localized;
+        out.push({
+          uid,
+          kind: s.kind,
+          zone: field,
+          zoneComponents: a.components,
+          path: s.kind === 'singleType' ? s.singularName : s.pluralName,
+          localized,
+          draftAndPublish: !!s.options?.draftAndPublish || !!s.draftAndPublish,
+        });
       }
-      default:
-        out[name] = v;
     }
   }
   return out;
 }
 
-function zoneToInput(target, zone, missing, opts) {
-  return (zone ?? []).map((block, i) => ({
-    __component: block.__component,
-    ...toInput(block.__component, block, `${target.zone}[${i}]<${block.__component}>`, missing, opts),
-  }));
+// ─── populate: built from the schema, recursively ──────────────────────────────────────────────
+/** Populate object for one component's attributes, or `true` when it needs nothing nested. */
+function componentPopulate(uid, stack = []) {
+  if (stack.includes(uid)) throw new Error(`component cycle: ${[...stack, uid].join(' → ')}`);
+  const attrs = schema.comps.get(uid);
+  if (!attrs) throw new Error(`unknown component ${uid}`);
+  const pop = {};
+  for (const [k, a] of Object.entries(attrs)) {
+    if (a.type === 'component') pop[k] = componentPopulate(a.component, [...stack, uid]);
+    else if (a.type === 'relation' || a.type === 'media') pop[k] = true;
+    else if (a.type === 'dynamiczone') throw new Error('dynamic zone inside a component is not expected');
+  }
+  return Object.keys(pop).length ? { populate: pop } : true;
+}
+function zonePopulate(t, components = t.zoneComponents) {
+  const on = {};
+  for (const c of components) on[c] = componentPopulate(c) === true ? { populate: '*' } : componentPopulate(c);
+  return { [t.zone]: { on } };
+}
+/** Every non-zone field that needs populating (hero, media, relations), for the draft-drift check. */
+function restPopulate(t) {
+  const pop = {};
+  for (const [k, a] of Object.entries(schema.types.get(t.uid).attributes)) {
+    if (k === t.zone) continue;
+    if (a.type === 'component') pop[k] = componentPopulate(a.component);
+    else if (a.type === 'relation' || a.type === 'media') pop[k] = true;
+    else if (a.type === 'dynamiczone') pop[k] = { on: Object.fromEntries(a.components.map((c) => [c, componentPopulate(c) === true ? { populate: '*' } : componentPopulate(c)])) };
+  }
+  return pop;
+}
+/** qs-style bracket encoding, no dependency. */
+function encode(obj, prefix = '') {
+  const parts = [];
+  for (const [k, v] of Object.entries(obj)) {
+    const key = prefix ? `${prefix}[${k}]` : k;
+    if (v && typeof v === 'object') parts.push(...encode(v, key));
+    else parts.push(`${encodeURIComponent(key).replace(/%5B/g, '[').replace(/%5D/g, ']')}=${encodeURIComponent(String(v))}`);
+  }
+  return parts;
 }
 
-/** Strip ids and timestamps so draft and published (separate rows) compare on content alone. */
-function contentOnly(value) {
-  if (Array.isArray(value)) return value.map(contentOnly);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value)
-        .filter(([k]) => !['id', 'createdAt', 'updatedAt', 'publishedAt', 'locale'].includes(k))
-        .map(([k, v]) => [k, contentOnly(v)]),
+// ─── read ──────────────────────────────────────────────────────────────────────────────────────
+async function listDocuments(t) {
+  if (t.kind === 'singleType') return [{ documentId: null }];
+  const docs = [];
+  for (let page = 1; ; page++) {
+    const r = await get(
+      `/api/${t.path}?status=published&fields[0]=slug&fields[1]=documentId&pagination[page]=${page}&pagination[pageSize]=100`,
     );
+    docs.push(...r.data.map((d) => ({ documentId: d.documentId, slug: d.slug })));
+    if (page >= r.meta.pagination.pageCount) break;
   }
-  return value;
+  return docs;
 }
-
-/* ── The new plans block ────────────────────────────────────────────────────────────────────── */
-
-/** Where an option's button goes: today's href when it points at the enquiry, else #enquiry. */
-function actionHref(current) {
-  return current && /^#enquiry\b/u.test(current) ? current : ENQUIRY;
+function entryUrl(t, documentId) {
+  return `/api/${t.path}${documentId ? `/${documentId}` : ''}`;
 }
-
-/* The closing link always goes to the how-we-work page, /how-we-work's own band included (owner,
-   19 Nov 2026), never to an in-page anchor. */
-function newPlansBlock(current, route, zone) {
-  const closingHref = HOW_WE_WORK;
-  return {
-    __component: 'shared.engagement-options',
-    id: current.id,
-    heading: HEADING,
-    description: null,
-    presentation: 'plans',
-    anchorId: current.anchorId ?? null,
-    surface: current.surface ?? null,
-    mediaSide: current.mediaSide ?? null,
-    action: null,
-    terms: [],
-    options: OPTIONS.map((o, i) => ({
-      title: o.title,
-      eyebrow: o.eyebrow,
-      body: o.body,
-      illustration: null,
-      facts: [],
-      anchorId: null,
-      scope: null,
-      icon: null,
-      checklist: o.checklist.map((body) => ({ body })),
-      action: {
-        name: o.label,
-        href: actionHref(current.options?.[i]?.action?.href),
-        description: null,
-        icon: null,
-        isExternal: false,
-        expertise: { set: [] },
-        scene: null,
-      },
-      ...(hasFocus ? { [FOCUS_FIELD]: o.focused } : {}),
-    })),
-    closing: {
-      heading: CLOSING_HEADING,
-      body: CLOSING_BODY,
-      proof: null,
-      actions: [
-        {
-          name: CLOSING_LABEL,
-          href: closingHref,
-          description: null,
-          icon: null,
-          isExternal: false,
-          expertise: { set: [] },
-          scene: null,
-        },
-      ],
-    },
-  };
-}
-
-/** The new block in the GraphQL shape the site's mapper reads, for the local preview only. */
-function previewBlock(block) {
-  const action = (a) => ({ name: a.name, href: a.href, description: null, icon: null, isExternal: false });
-  return {
-    heading: block.heading,
-    anchorId: block.anchorId,
-    engagementSurface: block.surface,
-    engagementSide: block.mediaSide,
-    engagementDescription: null,
-    engagementPresentation: 'plans',
-    action: null,
-    options: block.options.map((o, i) => ({
-      id: `preview-${i}`,
-      title: o.title,
-      eyebrow: o.eyebrow,
-      [FOCUS_FIELD]: OPTIONS[i].focused,
-      body: o.body,
-      icon: null,
-      scope: null,
-      anchorId: null,
-      facts: [],
-      illustration: null,
-      checklist: o.checklist,
-      action: action(o.action),
-    })),
-    terms: [],
-    closing: {
-      heading: block.closing.heading,
-      body: block.closing.body,
-      actions: block.closing.actions.map(action),
-      proof: null,
-    },
-  };
-}
-
-/** What changes in the plans block, field by field, for the report. */
-function diffFields(before, after, path = '') {
-  const lines = [];
-  const keys = new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})]);
-  for (const key of keys) {
-    if (key === 'id' || key === '__component') continue;
-    const a = before?.[key];
-    const b = after?.[key];
-    if (isDeepStrictEqual(contentOnly(a), contentOnly(b))) continue;
-    const show = (v) => (typeof v === 'string' ? JSON.stringify(v) : JSON.stringify(contentOnly(v)));
-    const plain = (v) => v && typeof v === 'object' && !Array.isArray(v);
-    if (plain(a) && plain(b)) {
-      lines.push(...diffFields(a, b, `${path}${key}.`));
-    } else if (Array.isArray(a) || Array.isArray(b) || plain(a) || plain(b)) {
-      const summary = (v) => (Array.isArray(v) ? `[${v.length}]` : v == null ? 'null' : '{…}');
-      lines.push(`    ${path}${key}: ${summary(a)} → ${summary(b)}`);
-    } else {
-      lines.push(`    ${path}${key}: ${show(a)} → ${show(b)}`);
+/**
+ * The entry with its zone deep-populated. A zone allowing many components makes one populate URL
+ * too long for the server (431), so the zone is read in groups of components, each request
+ * populating its group's fragments, and each block is taken from the request that populated it.
+ * Every block in the skeleton must be found in exactly one group read.
+ */
+const URL_BUDGET = 6000;
+async function readEntry(t, documentId, status) {
+  const groups = [];
+  let cur = [];
+  for (const c of t.zoneComponents) {
+    const next = [...cur, c];
+    if (cur.length && encode({ populate: zonePopulate(t, next) }).join('&').length > URL_BUDGET) {
+      groups.push(cur);
+      cur = [c];
+    } else cur = next;
+  }
+  if (cur.length) groups.push(cur);
+  const fetchQ = async (q) => {
+    try {
+      return (await get(`${entryUrl(t, documentId)}?${[...q, `status=${status}`].join('&')}`)).data;
+    } catch (e) {
+      if (/→ 404/.test(e.message)) return null;
+      throw e;
     }
+  };
+  const reads = [];
+  for (const g of groups) reads.push({ g, data: await fetchQ(encode({ populate: zonePopulate(t, g) })) });
+  if (reads.some((r) => r.data == null)) {
+    if (reads.every((r) => r.data == null)) return null;
+    throw new Error(`${t.uid} ${documentId}: entry vanished between reads`);
   }
-  return lines;
+  // A read with `on` returns only its group's blocks, so the order comes from a skeleton read of the
+  // whole zone (every block, scalars only); each block is then filled from its group by
+  // (__component, id).
+  const skeleton = await fetchQ([`populate[${t.zone}]=true`]);
+  const byKey = new Map();
+  for (const r of reads) for (const blk of r.data[t.zone] ?? []) byKey.set(`${blk.__component}#${blk.id}`, blk);
+  const entry = { ...skeleton };
+  entry[t.zone] = (skeleton[t.zone] ?? []).map((blk) => {
+    const full = byKey.get(`${blk.__component}#${blk.id}`);
+    if (!full) throw new Error(`${t.uid} ${documentId}: block ${blk.__component}#${blk.id} missing from the group reads`);
+    return full;
+  });
+  if (byKey.size !== entry[t.zone].length) throw new Error(`${t.uid} ${documentId}: group reads hold ${byKey.size} blocks, skeleton ${entry[t.zone].length}`);
+  // The rest of the entry populated too, so the draft-drift check sees the hero, media and relations.
+  const rest = restPopulate(t);
+  if (Object.keys(rest).length) {
+    const r = await fetchQ(encode({ populate: rest }));
+    for (const k of Object.keys(rest)) entry[k] = r?.[k] ?? null;
+  }
+  return entry;
 }
 
-/* ── Run ────────────────────────────────────────────────────────────────────────────────────── */
-
-mkdirSync(snapshotDir, { recursive: true });
-const summary = { entries: 0, safe: 0, unsafe: [], pending: [], noEnquiry: [], wrote: 0, failed: [] };
-const preview = {};
-
-if (mode === 'restore') {
-  for (const file of readdirSync(snapshotDir).filter((f) => f.endsWith('.json') && !f.startsWith('_'))) {
-    const snap = JSON.parse(readFileSync(join(snapshotDir, file), 'utf8'));
-    if (only && snap.uid !== only && snap.documentId !== only) continue;
-    const target = targets.find((t) => t.uid === snap.uid);
-    const missing = [];
-    /* Restore recreates every component (ids dropped): the write removed some of the old rows, and
-       Strapi refuses an id that no longer belongs to the entry. Content, relations and media are the
-       snapshot's, exactly. */
-    const zone = zoneToInput(target, snap.draft[target.zone], missing, { keepIds: false });
-    if (missing.length) {
-      summary.failed.push(`${file}: snapshot incomplete (${missing[0]})`);
+// ─── completeness: every schema attribute is present on every instance ─────────────────────────
+function assertComplete(uid, node, where, problems) {
+  if (node == null) return;
+  const attrs = schema.comps.get(uid);
+  for (const [k, a] of Object.entries(attrs)) {
+    if (!(k in node)) {
+      problems.push(`${where}.${k} (${a.type}) missing from the response — not populated, would be lost`);
       continue;
     }
-    const path =
-      target.kind === 'singleType'
-        ? `/api/${target.path}?status=${status}`
-        : `/api/${target.path}/${snap.documentId}?status=${status}`;
-    try {
-      await api('PUT', path, { data: { [target.zone]: zone } });
-      summary.wrote += 1;
-      console.log(`restored ${snap.route}`);
-    } catch (e) {
-      summary.failed.push(`${snap.route}: ${e.message}`);
+    const v = node[k];
+    if (a.type === 'component') {
+      if (a.repeatable) (v ?? []).forEach((c, i) => assertComplete(a.component, c, `${where}.${k}[${i}]`, problems));
+      else assertComplete(a.component, v, `${where}.${k}`, problems);
+    }
+    if (a.type === 'relation' && v) {
+      for (const r of Array.isArray(v) ? v : [v]) if (!r.documentId) problems.push(`${where}.${k}: relation without documentId`);
+    }
+    if (a.type === 'media' && v) {
+      for (const m of Array.isArray(v) ? v : [v]) if (typeof m.id !== 'number') problems.push(`${where}.${k}: media without id`);
     }
   }
-  console.log(JSON.stringify(summary, null, 2));
-  process.exit(summary.failed.length ? 1 : 0);
+  const extra = Object.keys(node).filter((k) => !(k in attrs) && k !== 'id' && k !== '__component');
+  if (extra.length) problems.push(`${where}: unexpected keys ${extra.join(', ')}`);
 }
 
-console.log(`plans-copy ${mode}${status ? ` --status=${status}` : ''}; highlight field "${FOCUS_FIELD}": ${hasFocus ? 'in schema, written' : 'NOT in schema, not written'}`);
-console.log(`snapshots → ${snapshotDir}\n`);
+// ─── serialise: response shape → write shape (schema-driven) ───────────────────────────────────
+function toWrite(uid, node) {
+  if (node == null) return null;
+  const attrs = schema.comps.get(uid);
+  const out = {};
+  for (const [k, a] of Object.entries(attrs)) {
+    const v = node[k];
+    if (a.type === 'component') {
+      out[k] = a.repeatable ? (v ?? []).map((c) => toWrite(a.component, c)) : toWrite(a.component, v);
+    } else if (a.type === 'relation') {
+      // Strapi 5 accepts documentIds; `set` replaces and keeps the given order. An empty relation is
+      // omitted: the component is created fresh, so leaving it out leaves it empty.
+      const ids = v == null ? [] : (Array.isArray(v) ? v : [v]).map((r) => r.documentId);
+      if (ids.length) out[k] = { set: ids };
+    } else if (a.type === 'media') {
+      out[k] = v == null ? null : Array.isArray(v) ? v.map((m) => m.id) : v.id;
+    } else {
+      out[k] = v === undefined ? null : v;
+    }
+  }
+  return out;
+}
+const blockToWrite = (block) => ({ __component: block.__component, ...toWrite(block.__component, block) });
 
-for (const target of targets) {
-  for (const listed of await list(target)) {
-    if (!(listed[target.zone] ?? []).some(isPlans)) continue;
-    if (only && target.uid !== only && listed.documentId !== only) continue;
-    const published = await read(target, listed.documentId, 'published');
-    summary.entries += 1;
-    const route = routeOf(target, published);
-    const draft = await read(target, published.documentId, 'draft');
-    const label = `${route}  (${target.uid} ${published.documentId})`;
-    const snapshot = { uid: target.uid, documentId: published.documentId, route, zone: target.zone, draft, published };
-    writeFileSync(
-      join(snapshotDir, `${target.uid.replace(/[^a-z0-9.-]+/giu, '_')}-${published.documentId}.json`),
-      JSON.stringify(snapshot, null, 2),
+/**
+ * Independent normaliser of the RAW response (not schema-driven): drops `id`, reduces anything
+ * holding a documentId to it, anything that looks like a media file (`mime`/`url`+`hash`) to its id.
+ * The round-trip check compares this with the inverse of the write shape, so a field the
+ * serialiser forgets, mangles or invents fails loudly.
+ */
+function normRaw(v) {
+  if (Array.isArray(v)) return v.map(normRaw);
+  if (v && typeof v === 'object') {
+    if ('mime' in v && 'hash' in v) return { $media: v.id };
+    if ('documentId' in v) return { $rel: v.documentId };
+    const o = {};
+    for (const [k, x] of Object.entries(v)) if (k !== 'id') o[k] = normRaw(x);
+    return o;
+  }
+  return v;
+}
+/** Write shape → the same normal form, schema-driven (the inverse of toWrite). */
+function normWrite(uid, node) {
+  if (node == null) return null;
+  const attrs = schema.comps.get(uid);
+  const o = {};
+  for (const [k, a] of Object.entries(attrs)) {
+    const v = node[k];
+    if (a.type === 'component') o[k] = a.repeatable ? v.map((c) => normWrite(a.component, c)) : normWrite(a.component, v);
+    else if (a.type === 'relation') {
+      const many = /ToMany$|^manyWay$/.test(a.relation);
+      const ids = v?.set ?? [];
+      o[k] = many ? ids.map((d) => ({ $rel: d })) : ids.length ? { $rel: ids[0] } : null;
+    } else if (a.type === 'media') o[k] = v == null ? null : Array.isArray(v) ? v.map((m) => ({ $media: m })) : { $media: v };
+    else o[k] = v;
+  }
+  return o;
+}
+function roundTrip(block) {
+  const written = blockToWrite(block);
+  const back = { __component: written.__component, ...normWrite(written.__component, written) };
+  const raw = normRaw(block);
+  if (!isDeepStrictEqual(back, raw)) return firstDiff(raw, back, block.__component);
+  if (JSON.stringify(written).includes('"id":')) return `${block.__component}: write shape still carries an id`;
+  return null;
+}
+function firstDiff(a, b, p) {
+  if (isDeepStrictEqual(a, b)) return null;
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      const d = firstDiff(a[k], b[k], `${p}.${k}`);
+      if (d) return d;
+    }
+  }
+  return `${p}: snapshot ${JSON.stringify(a)?.slice(0, 200)} ≠ re-serialised ${JSON.stringify(b)?.slice(0, 200)}`;
+}
+
+// ─── the rewrite ───────────────────────────────────────────────────────────────────────────────
+const isPlans = (b) => b.__component === ZONE_BLOCK && b.presentation === 'plans';
+const pointsToEnquiry = (href) => typeof href === 'string' && /enquir/i.test(href);
+
+/**
+ * A button with the new label and href. What is not copy — its icon, scene, external flag and
+ * expertise link — is carried from the button it replaces; the old description (copy for the old
+ * label) is not, and the dry run notes it when there was one.
+ */
+function cta(name, href, old, notes, where) {
+  if (old?.description) notes.push(`${where}: old button description dropped: ${trim(old.description)}`);
+  const b = { name, href, description: null, icon: old?.icon ?? null, isExternal: false, scene: old?.scene ?? null };
+  if (old?.expertise?.documentId) b.expertise = { set: [old.expertise.documentId] };
+  return b;
+}
+
+/**
+ * Which old option each new plan replaces, by meaning rather than position (the old band ran
+ * pilot · defined project · ongoing partnership; the new one runs pilot · dedicated team · project).
+ * Falls back to position when the old titles say nothing.
+ */
+const MATCH = [/pilot/i, /ongoing|partner|dedicated|team|capacity|retainer/i, /defined|project|quote/i];
+function matchOld(old) {
+  const taken = new Set();
+  return MATCH.map((re, i) => {
+    let j = old.findIndex((o, k) => !taken.has(k) && re.test(`${o.title} ${o.eyebrow ?? ''}`) && !(i === 2 && /pilot/i.test(o.title)));
+    if (j < 0) j = taken.has(i) || !old[i] ? old.findIndex((_, k) => !taken.has(k)) : i;
+    if (j >= 0) taken.add(j);
+    return j >= 0 ? j : null;
+  });
+}
+
+/** Returns { block (write shape), notes[], blockers[] }. */
+function rewritePlans(block) {
+  const notes = [];
+  const blockers = [];
+  const w = blockToWrite(block);
+  w.heading = NEW_COPY.heading;
+  const old = block.options ?? [];
+  if (old.length !== 3) notes.push(`had ${old.length} options (new copy has 3)`);
+  const matched = matchOld(old);
+  notes.push(`old → new: ${matched.map((j, i) => `${j == null ? '(none)' : `"${old[j].title}"`} → ${NEW_COPY.options[i].eyebrow}`).join('; ')}`);
+  w.options = NEW_COPY.options.map((n, i) => {
+    const o = matched[i] == null ? null : old[matched[i]];
+    const oldHref = o?.action?.href;
+    const href = pointsToEnquiry(oldHref) ? oldHref : '#enquiry';
+    notes.push(`plan ${i + 1} href: ${oldHref ?? '(none)'} → ${href}`);
+    const carried = o ? toWrite('content.engagement-option', o) : null;
+    if (o) {
+      const kept = ['icon', 'scope', 'anchorId'].filter((k) => o[k] != null).map((k) => `${k}=${o[k]}`);
+      if (o.illustration) kept.push('illustration');
+      if (o.action?.icon) kept.push(`button icon=${o.action.icon}`);
+      if (o.action?.scene) kept.push(`button scene=${o.action.scene}`);
+      if (kept.length) notes.push(`plan ${i + 1} keeps: ${kept.join(', ')}`);
+      if (o.facts?.length) notes.push(`plan ${i + 1} drops facts×${o.facts.length} (the new copy has none)`);
+    }
+    return {
+      title: n.title,
+      focused: n.focused,
+      body: n.body,
+      // Not copy, so kept from the option this plan replaces.
+      illustration: carried?.illustration ?? null,
+      icon: carried?.icon ?? null,
+      scope: carried?.scope ?? null,
+      anchorId: carried?.anchorId ?? null,
+      eyebrow: n.eyebrow,
+      facts: [],
+      checklist: n.checklist.map((body) => ({ body })),
+      action: cta(n.action, href, o?.action, notes, `plan ${i + 1}`),
+    };
+  });
+  // One sentence and one link on every entry, how-we-work-master included (owner, 19 Nov 2026).
+  const closingAction = NEW_COPY.closingAction;
+  const oc = block.closing;
+  if (!oc) notes.push('had no closing');
+  else notes.push(`closing body: ${oc.body ? 'yes' : 'no'}, proof: ${oc.proof ? `yes (case study ${oc.proof.card?.caseStudy?.documentId ?? '?'})` : 'no'}, old actions: ${JSON.stringify((oc.actions ?? []).map((a) => `${a.name} → ${a.href}`))}`);
+  if (oc?.body) notes.push(`closing body removed: ${trim(oc.body)}`);
+  w.closing = {
+    heading: NEW_COPY.closingHeading,
+    // PLACEHOLDER: "." until Mihir makes content.engagement-closing.body optional. The plans design
+    // has no closing body and the front end does not render it (owner, 19 Nov 2026), but the schema
+    // still requires one, so an empty body could not publish.
+    body: CLOSING_BODY_PLACEHOLDER,
+    proof: oc ? toWrite('content.case-study-teaser', oc.proof) : null,
+    actions: [cta(closingAction.name, closingAction.href, oc?.actions?.[0], notes, 'closing')],
+  };
+  return { block: w, notes, blockers };
+}
+
+// ─── compact diff of the plans block ───────────────────────────────────────────────────────────
+function summarisePlans(b, write = false) {
+  const opt = (o) =>
+    `      ${o.focused ? '★' : '·'} [${o.eyebrow ?? '—'}] ${o.title} | ${trim(o.body)} | ✓×${(o.checklist ?? []).length} | ${o.action ? `${o.action.name} → ${o.action.href}` : '(no action)'}`;
+  const c = b.closing;
+  return [
+    `    heading: ${b.heading}`,
+    ...(b.options ?? []).map(opt),
+    `    closing: ${c ? `${trim(c.heading)} | body ${c.body ? 'yes' : 'no'} | proof ${c.proof ? 'yes' : 'no'} | ${(c.actions ?? []).map((a) => `${a.name} → ${a.href}`).join('; ')}` : '(none)'}`,
+  ].join('\n');
+}
+const trim = (s, n = 60) => (s == null ? '—' : String(s).replace(/\s+/g, ' ').slice(0, n) + (String(s).length > n ? '…' : ''));
+
+// ─── modes ─────────────────────────────────────────────────────────────────────────────────────
+const stamp = new Date().toISOString().replace(/[:]/g, '').replace(/\..*/, '').replace('T', '_');
+const snapName = (uid, documentId) => `${uid.replace(/[:/]/g, '_')}__${documentId ?? 'single'}.json`;
+
+async function collect() {
+  const found = [];
+  for (const t of targets()) {
+    const [, onlyUid, onlyDoc] = ONLY ? (ONLY.match(/^(api::[^:]+)(?::(.+))?$/) ?? die(`bad --only ${ONLY}`)) : [];
+    if (ONLY && t.uid !== onlyUid) continue;
+    for (const d of await listDocuments(t)) {
+      if (onlyDoc && d.documentId !== onlyDoc) continue;
+      const published = await readEntry(t, d.documentId, 'published');
+      if (!published) continue;
+      const zone = published[t.zone] ?? [];
+      if (!zone.some(isPlans)) continue;
+      found.push({ t, documentId: d.documentId, slug: published.slug ?? d.slug ?? '(single)', published });
+    }
+  }
+  return found;
+}
+
+const CLOSING_BODY_PLACEHOLDER = '.';
+
+/**
+ * Info only: whether content.engagement-closing.body is still required. While it is, the closing
+ * body is written as the "." placeholder; once Mihir makes it optional, the placeholder can become
+ * null and this line says so.
+ */
+async function closingBodyPreflight() {
+  const c = await get('/api/content-type-builder/components/content.engagement-closing');
+  const body = c.data?.schema?.attributes?.body ?? c.data?.attributes?.body;
+  if (!body) return 'could not read content.engagement-closing.body from the content-type builder';
+  if (body.required || (body.minLength ?? 0) > 0)
+    return `content.engagement-closing.body is still required (required: ${!!body.required}, minLength: ${body.minLength ?? 0}), so the closing body is written as the "${CLOSING_BODY_PLACEHOLDER}" placeholder.`;
+  return `content.engagement-closing.body is optional now; the "${CLOSING_BODY_PLACEHOLDER}" placeholder can be replaced with null.`;
+}
+
+async function dryRunOrWrite() {
+  await loadSchema();
+  const closingBodyInfo = await closingBodyPreflight();
+  const ts = targets();
+  for (const t of ts) if (t.localized) die(`${t.uid} is localized — this script handles non-i18n types only; add locale handling first`);
+  const found = await collect();
+  const dir = path.join(SNAP_ROOT, stamp);
+  fs.mkdirSync(dir, { recursive: true });
+
+  let failures = 0;
+  const byType = new Map();
+  const plans = [];
+  for (const e of found) {
+    const { t, documentId, published } = e;
+    const zone = published[t.zone];
+    const draft = await readEntry(t, documentId, 'draft');
+    fs.writeFileSync(
+      path.join(dir, snapName(t.uid, documentId)),
+      JSON.stringify({ uid: t.uid, kind: t.kind, path: t.path, zone: t.zone, documentId, slug: e.slug, takenAt: new Date().toISOString(), published, draft }, null, 2),
     );
 
     const problems = [];
-    if (!draft) problems.push('no draft version');
-    const zone = draft?.[target.zone] ?? [];
-    const plansIndexes = zone.flatMap((b, i) => (isPlans(b) ? [i] : []));
-    if (plansIndexes.length !== 1) problems.push(`${plansIndexes.length} plans blocks in the draft`);
+    zone.forEach((b, i) => assertComplete(b.__component, b, `${t.zone}[${i}] ${b.__component}`, problems));
+    const plansIdx = zone.map((b, i) => (isPlans(b) ? i : -1)).filter((i) => i >= 0);
+    if (plansIdx.length !== 1) problems.push(`${plansIdx.length} plans blocks (expected 1)`);
+    const otherEngagement = zone.filter((b) => b.__component === ZONE_BLOCK && !isPlans(b)).length;
 
-    const missing = [];
-    const before = zoneToInput(target, zone, missing);
-    if (missing.length) problems.push(`read incomplete, would wipe: ${missing.slice(0, 3).join(', ')}${missing.length > 3 ? ` (+${missing.length - 3})` : ''}`);
-
-    /* Pending: the draft differs from what is live, so publishing it would ship someone's edits. */
-    const pending = !isDeepStrictEqual(contentOnly(draft?.[target.zone]), contentOnly(published[target.zone]));
-    if (pending) summary.pending.push(label);
-
-    /* An enquiry band on the page: a `shared.cta` form block, which renders #enquiry. */
-    const hasEnquiry = zone.some((b) => b.__component === 'shared.cta' && (b.ctaType === 'form' || b.anchorId === 'enquiry'));
-    if (!hasEnquiry) summary.noEnquiry.push(label);
-
-    if (problems.length) {
-      summary.unsafe.push(`${label}: ${problems.join('; ')}`);
-      console.log(`✗ ${label}\n    ${problems.join('\n    ')}\n`);
-      continue;
-    }
-
-    const index = plansIndexes[0];
-    const next = newPlansBlock(zone[index], route, zone);
-    const after = before.map((b, i) => (i === index ? next : b));
-
-    /* The proof for the dry run: every other block is carried over exactly as read, same order,
-       same component ids, and the read was complete (no attribute missing anywhere in the zone). */
-    const others = (zoneList) => zoneList.filter((_, i) => i !== index);
-    if (!isDeepStrictEqual(others(after), others(before)) || after.length !== zone.length) {
-      summary.unsafe.push(`${label}: other blocks would change`);
-      continue;
-    }
-    summary.safe += 1;
-    preview[route] = previewBlock(next);
-
-    console.log(`${mode === 'write' ? '→' : '·'} ${label}${pending ? '  [draft ≠ published]' : ''}${hasEnquiry ? '' : '  [no enquiry band]'}`);
-    console.log(`    zone: ${zone.length} blocks, plans at ${index}; ${zone.length - 1} others carried over unchanged (ids kept)`);
-    for (const line of diffFields(before[index], next)) console.log(line);
-    const optionLines = next.options.map(
-      (o, i) => `      option ${i + 1}: "${o.eyebrow}" / "${o.title}" → ${o.action.href} (was ${before[index].options?.[i]?.action?.href ?? '—'})`,
-    );
-    console.log(optionLines.join('\n'));
-    console.log(`      closing → "${CLOSING_LABEL}" ${next.closing.actions[0].href}\n`);
-
-    if (mode === 'write') {
-      if (pending && !flag('allow-pending') && status === 'published') {
-        summary.failed.push(`${label}: draft has unpublished edits; rerun with --allow-pending to publish them too`);
-        continue;
-      }
-      const path =
-        target.kind === 'singleType'
-          ? `/api/${target.path}?status=${status}`
-          : `/api/${target.path}/${published.documentId}?status=${status}`;
-      try {
-        await api('PUT', path, { data: { [target.zone]: after } });
-        /* Re-read and prove the other blocks survived, content for content. */
-        const reread = await read(target, published.documentId, 'draft');
-        const reMissing = [];
-        const reInput = zoneToInput(target, reread[target.zone], reMissing);
-        const same = isDeepStrictEqual(
-          contentOnly(others(reInput)),
-          contentOnly(others(before)),
-        );
-        if (!same) throw new Error('other blocks differ after the write; restore from the snapshot');
-        summary.wrote += 1;
-      } catch (e) {
-        summary.failed.push(`${label}: ${e.message}`);
-        console.log(`    ✗ ${e.message}`);
+    const body = [];
+    let notes = [];
+    let blockers = [];
+    for (const [i, b] of zone.entries()) {
+      if (isPlans(b)) {
+        const r = rewritePlans(b);
+        body.push(r.block);
+        notes = r.notes;
+        blockers = r.blockers;
+      } else {
+        const rt = roundTrip(b);
+        if (rt) problems.push(`round-trip ${t.zone}[${i}]: ${rt}`);
+        body.push(blockToWrite(b));
       }
     }
+    // The untouched blocks of the body, normalised, equal the snapshot's, normalised.
+    const untouchedBody = body.filter((_, i) => !plansIdx.includes(i)).map((w) => ({ __component: w.__component, ...normWrite(w.__component, w) }));
+    const untouchedSnap = zone.filter((b) => !isPlans(b)).map(normRaw);
+    if (!isDeepStrictEqual(untouchedBody, untouchedSnap)) problems.push('untouched blocks differ from the snapshot after normalising');
+    // Draft drift: a published write publishes the draft, so the draft must equal published.
+    const drift = draft ? firstDiff(normEntryRaw(published), normEntryRaw(draft), 'entry') : 'no draft version';
+    if (drift) problems.push(`draft ≠ published (${drift}) — a published write would discard or publish that`);
+
+    const key = `${t.uid}${documentId ? `:${documentId}` : ''}`;
+    const tag = problems.length ? 'FAIL' : 'ok';
+    if (problems.length) failures++;
+    const agg = byType.get(t.uid) ?? { n: 0, ok: 0, fail: 0 };
+    agg.n++;
+    problems.length ? agg.fail++ : agg.ok++;
+    byType.set(t.uid, agg);
+
+    console.log(`\n── ${tag}  ${key}  (${e.slug})  zone ${zone.length} blocks, plans at [${plansIdx}], other engagement-options: ${otherEngagement}`);
+    const before = zone[plansIdx[0]];
+    if (before) {
+      console.log('  before:\n' + summarisePlans(before));
+      console.log('  after:\n' + summarisePlans(body[plansIdx[0]], true));
+      for (const n of notes) console.log(`  note: ${n}`);
+    }
+    for (const p of problems) console.log(`  !! ${p}`);
+    for (const b of blockers) console.log(`  ⛔ ${b}`);
+    plans.push({ key, t, documentId, body, problems, blockers, slug: e.slug });
+  }
+
+  console.log(`\n══ ${found.length} entries with a plans block; snapshots in ${dir}`);
+  for (const [uid, a] of byType) console.log(`   ${uid.padEnd(44)} ${a.n} entries, ${a.ok} ok, ${a.fail} fail`);
+
+  console.log(`\n   info: ${closingBodyInfo}`);
+  const withBlockers = plans.filter((p) => p.blockers.length);
+  if (withBlockers.length) {
+    console.log(`\n   ⛔ ${withBlockers.length} entr${withBlockers.length === 1 ? 'y is' : 'ies are'} blocked for a published write (content, not safety):`);
+    for (const p of withBlockers) console.log(`      ${p.key} (${p.slug}): ${p.blockers.join('; ')}`);
+  }
+  if (MODE === 'dry-run') {
+    if (failures) die(`${failures} entr${failures === 1 ? 'y' : 'ies'} failed the safety checks`);
+    console.log('   dry run: nothing written.');
+    return;
+  }
+
+  // ── write ──
+  const blocked = plans.filter((p) => p.problems.some((x) => !/^draft ≠ published/.test(x) || !ALLOW_DRAFT_DRIFT));
+  if (STATUS === 'published' && withBlockers.length) die(`refusing to publish: ${withBlockers.length} entries are blocked (see ⛔ above)`);
+  if (blocked.length) die(`refusing to write: ${blocked.length} entr${blocked.length === 1 ? 'y has' : 'ies have'} failing checks (see above)`);
+  for (const p of plans) {
+    await http('PUT', `${BASE}${entryUrl(p.t, p.documentId)}?status=${STATUS}`, { data: { [p.t.zone]: p.body } });
+    console.log(`   wrote ${p.key} (${STATUS})`);
+  }
+  console.log(`   done. Verify: node scripts/cms/plans-copy.mjs --verify ${dir}`);
+}
+
+/** Whole-entry normal form for draft/published comparison: drop ids, timestamps, status fields. */
+function normEntryRaw(e) {
+  const { id, documentId, createdAt, updatedAt, publishedAt, locale, ...rest } = e;
+  return normRaw(rest);
+}
+
+async function verify(dir) {
+  await loadSchema();
+  let bad = 0;
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.json'))) {
+    const snap = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    const t = targets().find((x) => x.uid === snap.uid);
+    if (ONLY && !`${snap.uid}:${snap.documentId}`.startsWith(ONLY)) continue;
+    const now = await readEntry(t, snap.documentId, 'published');
+    const zNow = now?.[t.zone] ?? [];
+    const zWas = snap.published[t.zone];
+    const problems = [];
+    const othersNow = zNow.filter((b) => !isPlans(b)).map(normRaw);
+    const othersWas = zWas.filter((b) => !isPlans(b)).map(normRaw);
+    const d = firstDiff(othersWas, othersNow, 'other blocks');
+    if (d) problems.push(d);
+    if (zNow.findIndex(isPlans) !== zWas.findIndex(isPlans)) problems.push('plans block moved');
+    const p = zNow.find(isPlans);
+    const expected = rewritePlans(zWas.find(isPlans)).block;
+    const got = p ? { __component: ZONE_BLOCK, ...normWrite(ZONE_BLOCK, blockToWrite(p)) } : null;
+    const want = { __component: ZONE_BLOCK, ...normWrite(ZONE_BLOCK, expected) };
+    const dp = firstDiff(want, got, 'plans');
+    if (dp) problems.push(dp);
+    for (const k of Object.keys(snap.published)) {
+      if ([t.zone, 'id', 'documentId', 'createdAt', 'updatedAt', 'publishedAt'].includes(k)) continue;
+      if (!isDeepStrictEqual(normRaw(snap.published[k]), normRaw(now?.[k]))) problems.push(`non-zone field ${k} changed`);
+    }
+    console.log(`${problems.length ? 'FAIL' : 'ok  '} ${snap.uid}${snap.documentId ? `:${snap.documentId}` : ''} (${snap.slug})`);
+    for (const x of problems) console.log(`   !! ${x}`);
+    if (problems.length) bad++;
+  }
+  if (bad) die(`${bad} entries did not verify`);
+  console.log('all verified.');
+}
+
+async function restore(dir) {
+  await loadSchema();
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.json'))) {
+    const snap = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    if (ONLY && !`${snap.uid}:${snap.documentId}`.startsWith(ONLY)) continue;
+    const t = targets().find((x) => x.uid === snap.uid);
+    // Restore the published content; with --status=draft, the snapshot's draft content.
+    const source = STATUS === 'draft' && snap.draft ? snap.draft : snap.published;
+    const zone = source[t.zone].map(blockToWrite);
+    await http('PUT', `${BASE}${entryUrl(t, snap.documentId)}?status=${STATUS}`, { data: { [t.zone]: zone } });
+    console.log(`restored ${snap.uid}${snap.documentId ? `:${snap.documentId}` : ''} (${STATUS})`);
   }
 }
 
-writeFileSync(join(snapshotDir, '_plans-preview.json'), JSON.stringify(preview, null, 2));
-console.log('── summary');
-console.log(`entries with a published plans band: ${summary.entries}`);
-console.log(`round-trip proven safe: ${summary.safe}`);
-console.log(`unsafe (not written): ${summary.unsafe.length}${summary.unsafe.map((u) => `\n  ${u}`).join('')}`);
-console.log(`draft ≠ published (publishing would ship pending edits): ${summary.pending.length}${summary.pending.map((u) => `\n  ${u}`).join('')}`);
-console.log(`no enquiry band in the zone: ${summary.noEnquiry.length}${summary.noEnquiry.map((u) => `\n  ${u}`).join('')}`);
-if (mode === 'write') console.log(`written: ${summary.wrote}; failed: ${summary.failed.length}${summary.failed.map((u) => `\n  ${u}`).join('')}`);
-console.log(`preview payload: ${join(snapshotDir, '_plans-preview.json')}`);
+// ─── util ──────────────────────────────────────────────────────────────────────────────────────
+function loadEnvLocal() {
+  const f = path.resolve(process.cwd(), '.env.local');
+  if (!fs.existsSync(f)) return;
+  for (const line of fs.readFileSync(f, 'utf8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^(['"])(.*)\1$/, '$2');
+  }
+}
+function die(msg) {
+  console.error(`\n✖ ${msg}`);
+  process.exit(1);
+}
+
+const run = { 'dry-run': dryRunOrWrite, write: dryRunOrWrite, verify: () => verify(opt('--verify')), restore: () => restore(opt('--restore')) }[MODE];
+run().catch((e) => die(e.stack ?? e.message));
