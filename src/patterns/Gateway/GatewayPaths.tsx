@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Cluster, Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
 import type { IconName } from '@/lib/icon-glyphs';
-import type { SketchName } from '@/lib/sketches';
+import { drawingMoves, type SketchName } from '@/lib/sketches';
 
 import styles from './Gateway.module.css';
 
@@ -237,7 +237,7 @@ export function GatewayPaths({
                     >
                       <span className={styles.serviceArt} aria-hidden="true">
                         {/* The card is a link: its drawing makes its move on hover (owner, 1 Nov 2026). */}
-                        <Sketch name={link.scene} story />
+                        <Sketch name={link.scene} story={drawingMoves(link.href)} />
                       </span>
                       <span className={styles.serviceLabel}>
                         {link.label}

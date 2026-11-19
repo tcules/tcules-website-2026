@@ -76,10 +76,16 @@ export type SketchProps = {
    * route lands at the line weight; on a plate it scales with the plate. A STORY scene (./stories) tells its story, the problem at rest and
    * solved (owner, 25 Oct 2026, home What we do); every other tile scene makes its one `Move`/`GrowIn`
    * move (decisions/2026-10-30-service-tile-drawing-moves-on-hover). Without it a scene is drawn still,
-   * as every plate draws it: a cover or a card image does not move.
+   * as every plate draws it: a cover or a card image does not move. A still scene shows its END state,
+   * the picture the tile's move arrives at (owner, 19 Nov 2026: "motion on the tiles but the static end
+   * state inside resources"): every moving part (TraceIn, GrowIn, Glide, the parts that light, Move)
+   * set where the hover leaves it, with no transition, from the same drawing.
    */
   story?: boolean;
-  /** A story drawing held in its solved state, or a live scene in its moved one, for a specimen showing both. */
+  /**
+   * A LIVE scene held in its end state, for a specimen showing rest and end side by side. A still scene
+   * needs no flag: it is always its end state.
+   */
   end?: boolean;
 };
 
@@ -109,8 +115,9 @@ const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number
 export function Sketch({ name, frame = 'plate', story = false, end = false }: SketchProps) {
   const bare = frame === 'bare';
   const storyDrawing = name ? STORY[name] : undefined;
-  /* Any scene moves where it is asked to, in the bare frame; anywhere else it is held at rest (a story
-     scene solved, every other scene as drawn: its Move parts at rest, its GrowIn parts present). */
+  /* A scene moves where it is asked to; anywhere else it is held at its END state (a story scene
+     solved, every other scene moved: its routes drawn, its GrowIn parts present, its Move parts moved),
+     the same picture the tile's hover arrives at (owner, 19 Nov 2026). */
   const live = story;
   const Still = name
     ? (STILL[name] ??
@@ -140,11 +147,11 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
         styles.sketch,
         bare && styles.bare,
         /* Every scene not asked to move is held finished: its routes drawn, what arrives there,
-           what lights lit (a plate never moves, owner 25 Oct 2026). */
+           what lights lit, what moves moved (a plate never moves, owner 25 Oct 2026; its end state
+           inside a resource, owner 19 Nov 2026). */
         !live && styles.still,
         (end || !live) && styles.end,
         live && styles.live,
-        end && styles.solved,
       )}
       viewBox={`${x} ${y} ${w} ${h}`}
       width={bare ? w : undefined}
