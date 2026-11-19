@@ -138,6 +138,15 @@ export type EngagementOption = {
  */
 export type EngagementArrangement = 'grid' | 'rows' | 'compare' | 'cards' | 'plans';
 
+/**
+ * How an underlined phrase (`<u>`, authored in the CMS) reads inside a plan (`plans` only). Four
+ * directions under review (19 Nov 2026, the owner picks one; the rest are then deleted):
+ * `highlighter` a marker band low behind the phrase; `tag` an inline blue-tint mark; `accent` the
+ * phrase in the accent at medium weight; `lead` the line holding it promoted to the card's lead
+ * benefit, its own tinted row with the `stars` glyph. Default `accent`, the least risky.
+ */
+export type PlanHighlight = 'highlighter' | 'tag' | 'accent' | 'lead';
+
 export type EngagementOptionsProps = {
   /** The band's anchor. */
   id?: string;
@@ -193,6 +202,8 @@ export type EngagementOptionsProps = {
   action?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
+  /** `plans` only: how an underlined phrase reads. See PlanHighlight. */
+  highlight?: PlanHighlight;
   /** Default `grid`. See `EngagementArrangement`. */
   arrangement?: EngagementArrangement;
   /** The first illustrated row's artwork position. Following rows alternate. */
@@ -230,6 +241,7 @@ export function EngagementOptions({
   closing,
   closingLine,
   closingAction,
+  highlight = 'accent',
   action,
   surface = 'paper',
   arrangement = 'grid',
@@ -297,7 +309,7 @@ export function EngagementOptions({
             rowGap={arrangement === 'cards' || arrangement === 'plans' ? 'gutter' : 'column'}
           >
             {arrangement === 'plans' ? (
-              <Plans shown={shown} />
+              <Plans shown={shown} highlight={highlight} />
             ) : arrangement === 'grid' ? (
               /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
                column below: a borderless tile each (the drawing's plate is the image, the
@@ -557,7 +569,20 @@ function Compare({ shown }: { shown: readonly EngagementOption[] }) {
  * 1024 (the head over its rule with the checklist a `block` under it, then the action a `stack`
  * below), so every action starts on one line; the cards a `gutter` apart. The checklist's tick is the accent and the same glyph on every line.
  */
-function Plans({ shown }: { shown: readonly EngagementOption[] }) {
+const HIGHLIGHT_CLASS: Record<PlanHighlight, string | undefined> = {
+  highlighter: styles.hlHighlighter,
+  tag: styles.hlTag,
+  accent: styles.hlAccent,
+  lead: styles.hlLead,
+};
+
+function Plans({
+  shown,
+  highlight,
+}: {
+  shown: readonly EngagementOption[];
+  highlight: PlanHighlight;
+}) {
   const priced = shown.some((option) => option.price);
   const featuredIndex = shown.findIndex((option) => option.featured);
   if (
@@ -575,6 +600,7 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
       colGap="gutter"
       rowGap="gutter"
       shareRows={2}
+      className={HIGHLIGHT_CLASS[highlight]}
     >
       {shown.map((option, index) => (
         /* The action stands a `stack` (48) under the list (owner, 5 Nov 2026: "more
@@ -615,11 +641,17 @@ function Plans({ shown }: { shown: readonly EngagementOption[] }) {
             {option.checklist && option.checklist.length > 0 ? (
               <Layout as="ul" rowGap="text">
                 {option.checklist.map((item, i) => (
-                  <li key={i}>
+                  <li key={i} className={styles.planLine}>
                     <Cluster colGap="tight" align="start" nowrap>
                       <span className={styles.tick} aria-hidden="true">
                         <Icon name="check-circle" size="lg" />
                       </span>
+                      {highlight === 'lead' ? (
+                        /* `lead`: a line holding a `<u>` swaps the tick for this glyph (CSS :has). */
+                        <span className={styles.tickLead} aria-hidden="true">
+                          <Icon name="stars" size="lg" />
+                        </span>
+                      ) : null}
                       <span className={styles.planItem}>{item}</span>
                     </Cluster>
                   </li>

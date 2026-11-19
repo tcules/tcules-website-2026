@@ -241,16 +241,80 @@
   min-inline-size: 0;
 }
 
-/* An underline the CMS carries (`<u>`) in a plan's words is a highlight, never a link look: a soft,
-   low band of the surface's blue behind the words (Jatin, 19 Nov 2026). No colour change and no
-   pointer state, so nothing about it says "click". */
+/* An underline the CMS carries (`<u>`) in a plan's words: four directions under review (19 Nov
+   2026, PlanHighlight in the TSX). None of them is a link look: no underline, no pointer state. */
 .planBody u,
 .planItem u {
-  text-decoration-line: underline;
-  text-decoration-color: var(--eop-mark-ink);
-  text-decoration-thickness: var(--eop-mark-thickness);
-  text-underline-offset: var(--eop-mark-offset);
-  text-decoration-skip-ink: none;
+  text-decoration: none;
+}
+
+/* A. Highlighter: a marker swipe low behind the phrase, the phrase at medium weight. */
+.hlHighlighter .planBody u,
+.hlHighlighter .planItem u {
+  font-weight: var(--eop-hl-weight);
+  background-image: linear-gradient(
+    to top,
+    transparent var(--eop-hl-band-from),
+    var(--eop-hl-band-ink) var(--eop-hl-band-from),
+    var(--eop-hl-band-ink) var(--eop-hl-band-to),
+    transparent var(--eop-hl-band-to)
+  );
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* B. Inline tag: a small mark inside the sentence; inline padding only, so the line box holds. */
+.hlTag .planBody u,
+.hlTag .planItem u {
+  font-weight: var(--eop-hl-weight);
+  color: var(--eop-hl-tag-ink);
+  background: var(--eop-hl-tag-ground);
+  border-radius: var(--eop-hl-tag-radius);
+  padding-inline: var(--eop-hl-tag-inset);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* C. Accent text: the phrase in the accent at medium weight, nothing else. */
+.hlAccent .planBody u,
+.hlAccent .planItem u {
+  font-weight: var(--eop-hl-weight);
+  color: var(--eop-hl-accent-ink);
+}
+
+/* D. Lead line: the checklist line holding a `<u>` is the card's lead benefit, its own tinted row
+   with the `stars` glyph in place of the tick; the line at medium weight, the phrase bold in the
+   accent. The body keeps C. */
+.tickLead {
+  display: none;
+  flex: none;
+  color: var(--eop-hl-accent-ink);
+  padding-block-start: var(--eop-tick-optical-offset);
+}
+
+.hlLead .planLine:has(u) {
+  background: var(--eop-hl-lead-ground);
+  border-radius: var(--eop-hl-tag-radius);
+  padding: var(--eop-hl-lead-inset);
+}
+
+.hlLead .planLine:has(u) .tick {
+  display: none;
+}
+
+.hlLead .planLine:has(u) .tickLead {
+  display: block;
+}
+
+.hlLead .planLine:has(u) .planItem {
+  font-weight: var(--eop-hl-weight);
+  color: var(--eop-hl-lead-ink);
+}
+
+.hlLead .planItem u,
+.hlLead .planBody u {
+  font-weight: var(--eop-hl-weight-strong);
+  color: var(--eop-hl-accent-ink);
 }
 
 /* The shared tick, in the accent, set on the item's first line. `flex: none`: the span is the flex
