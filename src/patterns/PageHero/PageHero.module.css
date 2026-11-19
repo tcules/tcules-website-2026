@@ -326,10 +326,14 @@ a.name:hover,
 
 /* One person's portrait and name as one link: the link takes its row's width, not the value's,
    so only the face and the name are the target. It carries the link's own focus ring. */
-.credit {
+.credit,
+.credit:hover {
   display: block;
   inline-size: fit-content;
   color: inherit;
+  /* Never underlined as a whole: an underline set on the link would run under the initials in a
+     portrait too (owner, 19 Nov 2026). Only the name underlines, on hover, above. The :hover half
+     outranks the base link's own hover rule. */
   text-decoration-line: none;
 }
 

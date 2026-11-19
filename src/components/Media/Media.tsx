@@ -398,6 +398,12 @@ function warn(message: string, image: MediaImage) {
  * surface in JavaScript, so an illustration's palette for its ground is the asset's own business
  * (an illustration may sit on blue since 23 Oct 2026; decisions/2026-10-23-illustrations-may-sit-on-blue).
  */
+/** An animated image's still (its first frame), or undefined when the image does not move or its
+ *  file has no still (a GIF): exactly when Media gives the image a pause control. */
+export function mediaStill(image: MediaImage): string | undefined {
+  return image.animated ? stillSrc(image.src) : undefined;
+}
+
 export function Media({
   image,
   sizes,
@@ -553,7 +559,7 @@ export function Media({
   /* A moving image: the same <img>, handed to the client control that can stop it, wherever the
      image is placed (decisions/2026-11-18-animated-image-pause-below). It needs a still to stop
      on; an image that is not ours to resize has none, and moves as before. */
-  const still = image.animated ? stillSrc(image.src) : undefined;
+  const still = mediaStill(image);
   const shown = still ? (
     <MediaMotion still={still} label={image.alt} contained={boxed}>
       {bare}

@@ -100,6 +100,9 @@ export { Prose, type ProseProps } from './Prose';
 export { AnchorHeading, type AnchorHeadingProps } from './AnchorHeading';
 export {
   Media,
+  MediaMotionControl,
+  MediaMotionScope,
+  mediaStill,
   mediaSrcSet,
   type MediaEdge,
   type MediaFit,

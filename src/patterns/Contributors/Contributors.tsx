@@ -49,7 +49,7 @@ export function Contributors({ label, people }: ContributorsProps) {
         <h2 id={labelId} className={styles.label}>
           {label}
         </h2>
-        <Cluster as="ul" colGap="stack" rowGap="block" align="start">
+        <Cluster as="ul" colGap="stack" rowGap="stack" align="start">
           {people.map((person, index) => (
             <li key={`${person.name}-${index}`}>
               {/* Top-aligned: the name sits on the portrait's top edge, so a row with a link and a

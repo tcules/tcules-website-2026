@@ -1,6 +1,12 @@
 'use client';
 
-import { type ReactNode, useState, useSyncExternalStore } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 import { cx } from '@/lib/cx';
 import { glyphs as GLYPHS, type IconName } from '@/lib/icon-glyphs';
@@ -20,8 +26,8 @@ const readReduce = () => window.matchMedia(REDUCE).matches;
  * `animated` record, around the same `<img>` it renders for any other.
  *
  * ── The contract ─────────────────────────────────────────────────────────────────
- *   Clip's, for a file that cannot be scrubbed. One control below the image, at its end
- *   (never on it: a recorded tour has its own controls in its corners), always present: pause while it moves, play while it holds (WCAG 2.2.2 — anything that moves for more
+ *   Clip's, for a file that cannot be scrubbed. One control below the image, at its end — or, in a
+ *   Figure, at the end of the caption's row (owner, 19 Nov 2026) — (never on it: a recorded tour has its own controls in its corners), always present: pause while it moves, play while it holds (WCAG 2.2.2 — anything that moves for more
  *   than five seconds by itself can be stopped). Reduced motion: it never moves by itself; the
  *   still stands and the control plays it on request.
  *
@@ -31,6 +37,29 @@ const readReduce = () => window.matchMedia(REDUCE).matches;
  *   the source is media-gated on `prefers-reduced-motion`, so a reader who asked for no motion
  *   never sees a frame move, even before the script runs.
  */
+type Choice = 'playing' | 'paused' | null;
+
+/* A placement that sets the control in a row of its own (Figure: beside its caption) shares one
+   choice between the image and the control through this scope. Without one, MediaMotion keeps the
+   choice itself and sets the control below the image. */
+const MotionScope = createContext<{ choice: Choice; setChoice: (next: Choice) => void } | null>(
+  null,
+);
+
+/** Holds one animated image's play/pause choice for a placement that sets its control apart. */
+export function MediaMotionScope({ children }: { children: ReactNode }) {
+  const [choice, setChoice] = useState<Choice>(null);
+  return <MotionScope value={{ choice, setChoice }}>{children}</MotionScope>;
+}
+
+/* The reader's press wins; before one, the motion preference decides. On the server and through
+   hydration the preference is unknown (`null`), so the state is `auto` and the media query in the
+   markup decides instead. */
+function useMotionState(choice: Choice) {
+  const reduce = useSyncExternalStore(subscribeReduce, readReduce, () => null);
+  return choice ?? (reduce === null ? 'auto' : reduce ? 'paused' : 'playing');
+}
+
 export function MediaMotion({
   still,
   label,
@@ -46,18 +75,11 @@ export function MediaMotion({
   /** Media's `<img>`, unchanged. */
   children: ReactNode;
 }) {
-  /* The reader's press wins; before one, the motion preference decides. On the server and through
-     hydration the preference is unknown (`null`), so the state is `auto` and the media query in the
-     markup decides instead. */
-  const [choice, setChoice] = useState<'playing' | 'paused' | null>(null);
-  const reduce = useSyncExternalStore(subscribeReduce, readReduce, () => null);
-  const state = choice ?? (reduce === null ? 'auto' : reduce ? 'paused' : 'playing');
-
-  /* Before hydration the control says what it will do for a reader without the preference, since
-     that is what the image is doing; hydration corrects it before anyone can reach it. */
-  const moving = state !== 'paused';
-  const action = moving ? 'Pause' : 'Play';
-  const name = label.trim() ? `${action}: ${label.trim()}` : `${action} animation`;
+  const scope = useContext(MotionScope);
+  const [own, setOwn] = useState<Choice>(null);
+  const choice = scope ? scope.choice : own;
+  const setChoice = scope ? scope.setChoice : setOwn;
+  const state = useMotionState(choice);
 
   return (
     <span className={styles.motion}>
@@ -72,17 +94,46 @@ export function MediaMotion({
         ) : null}
         {children}
       </picture>
-      <span className={styles.motionBar}>
-        <button
-          type="button"
-          className={styles.motionControl}
-          onClick={() => setChoice(moving ? 'paused' : 'playing')}
-          aria-label={name}
-        >
-          <Glyph name={moving ? 'chrome-pause' : 'chrome-play'} />
-        </button>
-      </span>
+      {scope ? null : (
+        <span className={styles.motionBar}>
+          <Control label={label} state={state} setChoice={setChoice} />
+        </span>
+      )}
     </span>
+  );
+}
+
+/** The control alone, for a placement inside a MediaMotionScope that sets it in its own row. */
+export function MediaMotionControl({ label }: { label: string }) {
+  const scope = useContext(MotionScope);
+  const state = useMotionState(scope?.choice ?? null);
+  if (!scope) return null;
+  return <Control label={label} state={state} setChoice={scope.setChoice} />;
+}
+
+/* Before hydration the control says what it will do for a reader without the preference, since
+   that is what the image is doing; hydration corrects it before anyone can reach it. */
+function Control({
+  label,
+  state,
+  setChoice,
+}: {
+  label: string;
+  state: 'auto' | 'paused' | 'playing';
+  setChoice: (next: Choice) => void;
+}) {
+  const moving = state !== 'paused';
+  const action = moving ? 'Pause' : 'Play';
+  const name = label.trim() ? `${action}: ${label.trim()}` : `${action} animation`;
+  return (
+    <button
+      type="button"
+      className={styles.motionControl}
+      onClick={() => setChoice(moving ? 'paused' : 'playing')}
+      aria-label={name}
+    >
+      <Glyph name={moving ? 'chrome-pause' : 'chrome-play'} />
+    </button>
   );
 }
 
@@ -93,7 +144,12 @@ export function MediaMotion({
  */
 function Glyph({ name }: { name: IconName }) {
   return (
-    <svg className={styles.motionGlyph} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg
+      className={styles.motionGlyph}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
       {GLYPHS[name].map((d) => (
         <path key={d} d={d} />
       ))}

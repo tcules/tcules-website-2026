@@ -704,9 +704,8 @@ const separatorAt = (index: number, count: number) =>
    The face is part of the link (owner, 18 Nov 2026: a reader clicks the photograph). One person with
    a page: the portrait and the name are ONE link, its name the person's name, so a reader with a
    screen reader or a keyboard meets one link, as before. Several people: the discs overlap and the
-   names are joined, so no one link can hold a face and its name; each disc links to its person
-   outside the reading and tab order (aria-hidden, tabIndex -1), and the name stays the one link a
-   keyboard reaches. */
+   names are joined, so no one link can hold a face and its name; the stacked discs are not links
+   (owner, 19 Nov 2026), and each name is its person's link. */
 function CreditValue({ people }: { people: readonly HeroPerson[] }) {
   const single = people.length === 1 ? people[0] : undefined;
   const whole = single?.href !== undefined;
@@ -726,10 +725,8 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
     <Cluster nowrap colGap="tight" align="center">
       <span className={styles.avatars} aria-hidden="true">
         {people.map((person, index) => {
-          const Disc = person.href && !whole ? 'a' : 'span';
-          const link = Disc === 'a' ? { href: person.href, tabIndex: -1 } : {};
           return person.portrait ? (
-            <Disc key={`${person.name}-${index}`} className={styles.avatar} {...link}>
+            <span key={`${person.name}-${index}`} className={styles.avatar}>
               <Media
                 image={{
                   ...person.portrait,
@@ -740,15 +737,14 @@ function CreditValue({ people }: { people: readonly HeroPerson[] }) {
                 edge="placement"
                 sizes="32px"
               />
-            </Disc>
+            </span>
           ) : (
-            <Disc
+            <span
               key={`${person.name}-${index}`}
               className={cx(styles.avatar, styles.initials)}
-              {...link}
             >
               {initialsOf(person.name)}
-            </Disc>
+            </span>
           );
         })}
       </span>
