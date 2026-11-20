@@ -7,14 +7,14 @@ source: 'Owner, 17 Nov 2026, in a session on whether main should connect to the 
 supersedes: []
 dbf: []
 dbf_status: none
-enforced_by: 'workflow (.github/workflows/new-cms-sync.yml opens the new-cms → main PR; graphics-carry.yml carries graphics up)'
+enforced_by: 'workflow (graphics-carry.yml carries graphics up); the new-cms → main sync PR is opened by hand'
 ---
 
 `new-cms` is the production branch: it reads Strapi, the live site deploys from it, and Mihir commits to
 it directly. `main` is staging: the same CMS-connected site plus `/design`, deployed to its own Railway
-project. Production comes down to staging by merging `new-cms` into `main`, through the PR that
-`new-cms-sync.yml` keeps open, run once a day and when a session starts work (owner: every 30 minutes
-was too often). Staging goes up to production one PR per change, never by merging `main`
+project. Production comes down to staging by merging `new-cms` into `main`, through a sync PR opened
+by hand when `new-cms` is ahead. (The `new-cms-sync.yml` workflow that opened it was removed on 20 Nov 2026:
+GitHub Actions may not create PRs in this repo, so it only ever failed.) Staging goes up to production one PR per change, never by merging `main`
 into `new-cms`. `/design` and its checks (`specimens:check`, the `/design` route names in
 `src/lib/routes.ts`, `public/design/`) exist on `main` only. On production they're deleted, not hidden.
 
@@ -31,8 +31,8 @@ has `new-cms`'s history, so the next sync replays the same commits as conflicts.
 
 **How to apply.**
 
-- A session's catch-up (CLAUDE.md) runs `gh workflow run new-cms-sync.yml` when `new-cms` is ahead of
-  `main`. The daily run at 08:00 India time covers days with no session.
+- A session's catch-up (CLAUDE.md) says when `new-cms` is ahead of `main` and offers to open the sync PR
+  from a `sync/new-cms` branch cut from `new-cms`.
 - Merge the sync PR with "Create a merge commit". Resolve a conflict on `sync/new-cms`, never on
   `new-cms`, keeping `main`'s side for anything under `/design`.
 - Send a frontend change up as its own PR to `new-cms`, or open it against `new-cms` from the start
