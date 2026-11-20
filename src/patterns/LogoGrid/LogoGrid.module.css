@@ -242,6 +242,6 @@
   }
 
   .tickerFoldToggle {
-    display: grid;
+    display: block;
   }
 }
