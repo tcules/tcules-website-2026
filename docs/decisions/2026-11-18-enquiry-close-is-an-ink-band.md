@@ -7,7 +7,7 @@ source: "Owner (Devagya), 18 Nov 2026, the overhaul enquiry island on a phone (a
 supersedes: ["2026-11-18-enquiry-quote-is-a-block"]
 dbf: []
 dbf_status: none
-enforced_by: "structure (CtaSection `frame=\"band\"` on `islandArrangement=\"halves\"` paints the Section in the island's ground and renders no Island; `enquiry()` in src/content/sources/overhaul/studio-shared.ts sets `frame: 'band'`; the CMS closes send none), review"
+enforced_by: "structure (CtaSection `frame=\"band\"` on `islandArrangement=\"halves\"` paints the Section in the island's ground and renders no Island; src/templates/CorpusPage/ink-close.ts renders every CMS enquiry close whose island is ink as the band), review"
 ---
 
 The enquiry close the overhaul pages end on is **an ink band** (`Section surface="ink"`), not an ink island
@@ -35,6 +35,8 @@ nested insets squeezed the form. The band already supplies that air.
 removing the island and leaving the close as words beside a panel on a light ground (the retired plain split).
 
 **How to apply.** `CtaSection islandArrangement="halves" island="ink" frame="band"` with `markers="tick"` and
-`quote={{ text, name, role, company }}`; set by `enquiry()` (`frame: 'band'`). Halves closes without `frame`
-(the CMS home and services closes, every other form close) keep the island, as
-2026-10-29-forms-only-on-the-island rules.
+`quote={{ text, name, role, company }}`. On the live site (20 Nov 2026) the switch is the CMS close's island:
+a close set to **ink** renders as this band through `src/templates/CorpusPage/ink-close.ts` (every template
+that renders an enquiry close), its quote a linked testimonial's short quote (tcules-cms-2026#1), its points
+and "Product website" label from the CMS. A close left on blue keeps the island
+(2026-10-29-forms-only-on-the-island) until its content changes.
