@@ -76,9 +76,12 @@ function LinkBanner({ section }: { section: LinkBannerSection }) {
 function AboutSection({
   section,
   followingBanner,
+  last,
 }: {
   section: PublishedAboutSection;
   followingBanner?: LinkBannerSection;
+  /** The page's last band: an ink close there is the island on paper, not the band, above the footer. */
+  last?: boolean;
 }) {
   if (section.type === 'link-banner') {
     return (
@@ -112,12 +115,7 @@ function AboutSection({
       );
     case 'audience':
       return (
-        <ContentSection
-          {...head}
-          data-band="M"
-          lead={section.lead}
-          arrangement="beside"
-        >
+        <ContentSection {...head} data-band="M" lead={section.lead} arrangement="beside">
           <Layout as="ul" rowGap="none">
             {section.entries.map(({ key, title, icon }) => (
               <ListCard
@@ -226,7 +224,13 @@ function AboutSection({
         />
       );
     default:
-      return <PublishedSection section={section} route={ROUTES.about} />;
+      return (
+        <PublishedSection
+          section={section}
+          route={ROUTES.about}
+          inkFrame={last ? 'island' : 'band'}
+        />
+      );
   }
 }
 
@@ -256,7 +260,12 @@ export function PublishedAbout({ page }: { page: PublishedAboutPage }) {
             ? next
             : undefined;
         return (
-          <AboutSection key={section.key} section={section} followingBanner={followingBanner} />
+          <AboutSection
+            key={section.key}
+            section={section}
+            followingBanner={followingBanner}
+            last={index === sections.length - 1}
+          />
         );
       })}
     </>

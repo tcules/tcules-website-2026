@@ -284,7 +284,23 @@ export async function renderResourcePage(slug: string) {
       ) : null}
       {/* The ask straight after the article, the further reading last and on tint (owner, 2 Nov 2026;
           decisions/2026-11-02-insight-ask-before-further-reading). */}
-      {resource.cta ? <PublishedSection section={resource.cta} route={resource.path} /> : null}
+      {/* The enquiry close replaces the button (owner, 20 Nov 2026): the ink band when further reading
+          follows, the ink island on paper when the footer does. Its leads keep the button's attribution. */}
+      {resource.cta ? (
+        <PublishedSection
+          section={resource.cta}
+          route={resource.path}
+          inkFrame={resource.related?.heading ? 'band' : 'island'}
+          enquiryContext={{
+            originRoute: resource.path,
+            placement: 'terminal',
+            family: 'insights',
+            serviceOrAudit: '',
+            referrer: '',
+            campaign: '',
+          }}
+        />
+      ) : null}
       {resource.related?.heading ? (
         <InsightResources
           {...resource.related}
