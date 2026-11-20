@@ -150,12 +150,16 @@ export function PublishedCareers({
                 key={section.key}
                 {...head}
                 data-band="L"
-                island="blue"
+                island={section.island === 'ink' ? 'ink' : 'blue'}
                 islandArrangement="halves"
                 islandTexture="flow"
                 footnote={section.disclaimer}
                 footnoteIcon="info-circle"
-                art={<Media image={section.art ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
+                /* Set to ink in the CMS, the application close is the ink band, with no drawing
+                   (decisions/2026-11-18-enquiry-close-is-an-ink-band; owner, 20 Nov 2026). */
+                {...(section.island === 'ink'
+                  ? { frame: 'band' as const, art: undefined }
+                  : { art: <Media image={section.art ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> })}
                 body={[
                   <span
                     key="lead"

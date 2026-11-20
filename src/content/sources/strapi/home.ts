@@ -88,7 +88,7 @@ export function quoteHtml(value: string | null | undefined) {
  * (CtaSection `quote`). Its one-line `shortQuote` when the editor set one, else the whole quote as
  * plain text; the block adds the marks. An editorial quote has no speaker to split, so it is skipped.
  */
-function ctaQuote(
+export function ctaQuote(
   value: Extract<CmsHomeSection, { __typename: 'ComponentSharedCta' }>['ctaQuote'],
   context: string,
 ) {

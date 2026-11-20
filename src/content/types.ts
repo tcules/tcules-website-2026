@@ -1433,6 +1433,13 @@ export type InsightsPage = {
     action?: InsightAction;
     /** The close's own illustration, where the source has one; else the page's own drawing. */
     image?: InsightImage;
+    /** The close's ground in the CMS: ink is the ink close (ticks, the quote, no drawing). */
+    island?: 'ink' | 'blue';
+    points?: { label: string }[];
+    quote?: { text: string; name: string; role?: string; company: string };
+    /** The form's reply promise and URL label, as the CMS sets them. */
+    reply?: string;
+    urlLabel?: string;
   };
   seo?: ContentSeo;
 };

@@ -38,7 +38,7 @@ ${PUBLISHED_HERO}
       }
       ... on ComponentSharedCta {
         media { altText kind file {url width height formats alternativeText} }
-        heading description descriptionRich disclaimer anchorId ctaType ctaPresentation: presentation
+        heading description descriptionRich disclaimer anchorId ctaType ctaPresentation: presentation island
         form {
           variant purpose formLabel submitLabel showWork workLabel urlLabel urlRequired
           roleListingAnchor roleQuestion otherRoleLabel successHeading successBody

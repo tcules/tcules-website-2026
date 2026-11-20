@@ -202,7 +202,11 @@ function LabBand({
             island={section.island}
             islandArrangement="halves"
             islandTexture="flow"
-            art={<Art art={section.media ? { image: section.media } : undefined} />}
+            /* Set to ink in the CMS, the application close is the ink band, with no drawing
+               (decisions/2026-11-18-enquiry-close-is-an-ink-band; owner, 20 Nov 2026). */
+            {...(section.island === 'ink'
+              ? { frame: 'band' as const, art: undefined }
+              : { art: <Art art={section.media ? { image: section.media } : undefined} /> })}
             footnote={section.footnote}
             footnoteIcon="info-circle"
             after={

@@ -70,6 +70,9 @@ export function ListingClose({
         eyebrow={closing.eyebrow || undefined}
         heading={closing.heading}
         body={body ? [body] : undefined}
+        points={closing.points?.length ? closing.points : undefined}
+        markers={closing.markers}
+        quote={closing.quote}
         form={closing.form}
       />
     );
@@ -197,6 +200,10 @@ export type ListingClosing = {
    * decisions/2026-10-29-forms-only-on-the-island): absent, the island is blue with no drawing.
    */
   island?: { surface: 'blue' | 'ink'; art?: ReactElement };
+  /** The ink close's ticks and client quote (owner, 20 Nov 2026), on the ink island. */
+  points?: { label: string }[];
+  markers?: 'tick';
+  quote?: { text: string; name: string; role?: string; company: string };
 };
 
 export type ListingIndexProps = {
