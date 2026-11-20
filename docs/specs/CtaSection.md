@@ -514,6 +514,8 @@ So the component reaches into `--space-*` nowhere, and it carries **no margin on
 
 **Case — settled by the token layer. Amended 25 Aug 2026:** mono is always uppercase system-wide (`tokens/primitives.css` § Type · case), so the `eyebrow` and the `marker` — this component's two mono parts — both read `text-transform: var(--text-mono-case)`, and there are two `text-transform` declarations rather than one. The `eyebrow` renders **uppercase**. `--text-eyebrow` is mono semibold with tracking on it, and tracking that wide exists for capitals: set lower-case, a tracked mono label reads as letter-spaced body text rather than as a label — which is why the case belongs to the role and not to this block. The `marker` is a numeral and has nothing for the transform to do; it states it anyway, so the omission never has to be read as a decision. Everything else — heading, copy, points, actions — is **verbatim**, and the transform is applied in CSS rather than in the data, so the frontmatter keeps its authored casing and reversing this is one declaration.
 
+**The island quote's face. Amended 18 Nov 2026 (owner: "make the quote text sans. serif looks bad in italics at that size"):** the enquiry island's quote block (`quote={{ text, name, role, company }}`, decisions/2026-11-18-enquiry-quote-is-a-block) sets the quote in the testimonial card's sans quote, 18 on the lead-lg ratio, by value in `--cta-quote-text`, not the 22 serif `--text-quote-sm`. It stays italic: every testimonial is (decisions/2026-10-22-testimonials-italic-everywhere), and the testimonial card's sans quote is italic too.
+
 Example copy, exactly as it would be authored — the eyebrow in sentence case, uppercased at render:
 
 - eyebrow — `Next step`

@@ -13,6 +13,7 @@ import {
 
 import { BandBody } from './CopyBands';
 import { PublishedHero } from './PublishedHome';
+import { INK_CLOSE_DRESS, inkCloseProps, isInkClose } from './ink-close';
 import type { MatterPageModel, MatterSection } from './published-matter-model';
 
 const EDITORIAL_SIZES =
@@ -36,12 +37,19 @@ function Close({ section }: { section: Extract<MatterSection, { type: 'cta' }> }
         /* The close's CMS illustration; else the drawing the enquiry close has always had. */
         art={<Media image={section.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
         body={body}
+        {...(isInkClose(section)
+          ? { ...inkCloseProps(section), points: section.points.length ? section.points : undefined }
+          : {})}
         form={
           <EnquiryForm
             variant="enquiry"
             urlLabel={form.urlLabel}
             action={ENDPOINTS.enquiry}
-            dress={{ kind: 'card', reply: form.reply ?? '' }}
+            dress={{
+              kind: 'card',
+              reply: form.reply ?? '',
+              ...(isInkClose(section) ? INK_CLOSE_DRESS : {}),
+            }}
             fieldScale="md"
             submit="inline"
             submitLabel={form.submitLabel}

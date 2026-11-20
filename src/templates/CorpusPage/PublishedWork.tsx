@@ -12,6 +12,7 @@ import {
 } from '@/patterns';
 import { ENDPOINTS } from '@/lib/routes';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
+import { INK_CLOSE_DRESS, inkCloseProps, isInkClose } from './ink-close';
 import { PublishedEngagement, PublishedHero, PublishedSection } from './PublishedHome';
 import type { WorkPageModel, WorkSection } from './published-work-model';
 function WorkBand({ s, route }: { s: WorkSection; route: string }) {
@@ -105,12 +106,15 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
             footnoteIcon="info-circle"
             art={<Media image={s.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
             body={s.lead ? [s.lead] : undefined}
+            {...(isInkClose(s)
+              ? { ...inkCloseProps(s), points: s.points.length ? s.points : undefined }
+              : {})}
             form={
               <EnquiryForm
                 variant="enquiry"
-                urlLabel="Product or company URL"
+                urlLabel={isInkClose(s) ? (s.form?.urlLabel ?? 'Product website') : 'Product or company URL'}
                 action={ENDPOINTS.enquiry}
-                dress={{ kind: 'card', reply: f.reply }}
+                dress={{ kind: 'card', reply: f.reply , ...(isInkClose(s) ? INK_CLOSE_DRESS : {}) }}
                 fieldScale="md"
                 submit="inline"
                 submitLabel={f.submitLabel}

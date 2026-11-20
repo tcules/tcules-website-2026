@@ -26,6 +26,8 @@ export type EnquiryUrlLabel =
   | 'Link to the work'
   | 'Where can we see it?'
   | 'Product or company URL'
+  /* The overhaul enquiry island (Jatin's boards, 18 Nov 2026). */
+  | 'Product website'
   /* The application wording (4 Nov 2026, /future-interfaces-lab/join): the copy's own words for
      what an applicant links. */
   | 'Links to your proof-of-work';
@@ -178,6 +180,13 @@ export type EnquiryDress =
       note?: string;
       /** The promise beside the send, led by a bolt in a disc (speed, not a tick): "We reply in 1 business day". */
       reply?: string;
+      /**
+       * Ask for the name first, required (owner, 18 Nov 2026: the overhaul enquiry island, "Name"
+       * before "Work email"). Checked on send only, as every field is.
+       */
+      name?: boolean;
+      /** The email's label in the board's words (18 Nov 2026). Default "Email". */
+      emailLabel?: 'Work email';
       /**
        * A pick-one chip group set first in the card, posting `role` (4 Nov 2026, /careers' application:
        * "The role you want", the open roles and "No matching role"). Optional to answer, as every
@@ -797,6 +806,13 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const validated: readonly FieldSpec[] =
     dress?.kind === 'choice'
       ? [FIELD.name('name'), FIELD.email('email'), work]
+      : dress?.kind === 'card' && dress.name
+        ? [
+            FIELD.name('name'),
+            FIELD.email('email'),
+            ...(asksWork ? [work] : []),
+            ...(urlRequired ? [urlField] : []),
+          ]
       : dress?.kind === 'message'
         ? [work, FIELD.name('name'), FIELD.email('email')]
         : rows.flatMap((row) => (row === 'url' ? (urlRequired ? [urlField] : []) : row));
@@ -1396,7 +1412,14 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <Layout rowGap="block">
             <Layout rowGap="text">
               {dress.role ? renderChoiceGroup(dress.role, 'role') : null}
-              {renderField(email, { visibleLabel: true, placeholder: null, look: 'fill' })}
+              {dress.name
+                ? renderField(name, { visibleLabel: true, placeholder: null, look: 'fill' })
+                : null}
+              {renderField(dress.emailLabel ? { ...email, label: dress.emailLabel } : email, {
+                visibleLabel: true,
+                placeholder: null,
+                look: 'fill',
+              })}
               {asksWork
                 ? renderField(work, { visibleLabel: true, placeholder: null, look: 'fill' })
                 : null}

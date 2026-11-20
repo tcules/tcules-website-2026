@@ -225,6 +225,55 @@
   min-inline-size: 0;
 }
 
+/* The tick marker (`markers="tick"`, owner 18 Nov 2026): the glyph centres on the body label's
+   first line, offset by half of what the line box exceeds the glyph by (an optical correction). */
+.tick {
+  padding-block-start: var(--cta-tick-offset);
+}
+
+.tickLabel {
+  color: var(--cta-body-ink);
+  font: var(--cta-tick-text);
+}
+
+/* The island close's quote as a block of its own (owner, 18 Nov 2026: "in a designed block of its
+   own so it actually reads as a testimonial"): a quiet panel one step off the island, a `block`
+   inset and the 8 radius, no edge (the testimonial card's box). The card's 18 sans italic in the block's
+   own ink, marks included (no coloured punctuation); the speaker under it as the testimonial card
+   sets one: the name at h6, "role, company" at body-sm in a quieter ink, opening on a hairline. */
+.quoteBlock {
+  padding: var(--cta-quote-inset);
+  background: var(--cta-quote-ground);
+  border-radius: var(--cta-quote-radius);
+}
+
+.quote {
+  max-inline-size: var(--cta-lede-measure);
+  color: var(--cta-quote-ink);
+  font: var(--cta-quote-text);
+  text-wrap: pretty;
+}
+
+.quoteWho {
+  padding-block-start: var(--cta-quote-inset);
+  border-block-start: var(--cta-rule-width) solid var(--cta-quote-rule-ink);
+}
+
+.quoteName {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--cta-quote-name-ink);
+  font: var(--cta-quote-name-text);
+  letter-spacing: var(--cta-quote-name-tracking);
+}
+
+.quoteRole {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--cta-quote-role-ink);
+  font: var(--cta-detail-text);
+}
+
 .label {
   color: var(--cta-point-ink);
   font: var(--cta-point-text);
@@ -314,6 +363,32 @@
 .islandPanelHalves {
   align-self: center;
   padding: var(--cta-panel-inset-halves);
+}
+
+/* The halves close with no drawing (owner, 18 Nov 2026): the DOM is the stacked order of Jatin's
+   m- boards (head, form, then the ticks and the quote). From 1024 the head and the rest take the
+   start column's two rows, the rest's row taking the spare height so its quote sits on the foot,
+   and the panel spans both rows in the end column, centred on them. Placement only: the Layout
+   owns both seams. */
+@media (min-width: 1024px) {
+  .halvesSplit {
+    grid-template-rows: auto 1fr;
+  }
+
+  .halvesHead {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .halvesRest {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .halvesSplit > .islandPanelHalves {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
 }
 
 /* The drawing: a component size, never cropped (Media renders an illustration whole). */
