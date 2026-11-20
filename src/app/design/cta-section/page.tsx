@@ -96,6 +96,12 @@ const DESK = {
   kind: 'illustration',
 } as const;
 
+const OVERHAUL_POINTS = [
+  { label: 'Every project starts with a call with the senior product designer who would lead your work.' },
+  { label: 'Start with a free product review. Stop after the review and owe nothing.' },
+  { label: "Need an NDA first? Say so and we'll set one up." },
+];
+
 /** The halves close's drawing (scripts/enquiry-sketch-to-shipped.mjs): one product, sketch to shipped. */
 const SKETCH_TO_SHIPPED = {
   src: '/illustrations/enquiry/sketch-to-shipped.svg',
