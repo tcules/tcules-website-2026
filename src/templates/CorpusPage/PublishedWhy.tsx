@@ -14,6 +14,7 @@ import {
   OfferSheet,
   Reasons,
 } from '@/patterns';
+import { INK_CLOSE_DRESS, inkCloseProps, isInkClose } from './ink-close';
 import { PublishedHero, PublishedSection } from './PublishedHome';
 import { bandIllustration } from './images';
 import type { WhyPageModel, WhySection } from './published-why-model';
@@ -149,12 +150,15 @@ function WhyBand({
             footnoteIcon="info-circle"
             art={<Media image={s.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
             body={s.lead ? [s.lead] : undefined}
+            {...(isInkClose(s)
+              ? { ...inkCloseProps(s), points: s.points.length ? s.points : undefined }
+              : {})}
             form={
               <EnquiryForm
                 variant="enquiry"
-                urlLabel="Product or company URL"
+                urlLabel={isInkClose(s) ? (s.form?.urlLabel ?? 'Product website') : 'Product or company URL'}
                 action={ENDPOINTS.enquiry}
-                dress={{ kind: 'card', reply: f.reply }}
+                dress={{ kind: 'card', reply: f.reply , ...(isInkClose(s) ? INK_CLOSE_DRESS : {}) }}
                 fieldScale="md"
                 submit="inline"
                 submitLabel={f.submitLabel}

@@ -165,6 +165,20 @@ export type HomeSection = SectionHead &
         leadHtml?: string;
         footnote?: string;
         points: { label: string }[];
+        /**
+         * The overhaul enquiry island (owner, 18 Nov 2026): the points as ticks, a client's quote at
+         * the foot of the words and no drawing. The CMS sends none of these, so its closes keep the
+         * numbered points and the drawing.
+         */
+        markers?: 'tick';
+        quote?: { text: string; name: string; role?: string; company: string };
+        illustration?: false;
+        /**
+         * The overhaul enquiry close is an ink band, not an island in a paper band (owner, 18 Nov
+         * 2026: "form island should become a section so the padding is not applied twice"). The CMS
+         * sends none, so its closes keep the island.
+         */
+        frame?: 'band';
         rating?: HomeRating;
         image?: MediaImage;
         form?: {
@@ -174,6 +188,9 @@ export type HomeSection = SectionHead &
           urlLabel?: EnquiryUrlLabel;
           scheduleHref?: string;
           reply?: string;
+          /** Ask for the name first (owner, 18 Nov 2026), and the email's label in the board's words. */
+          askName?: boolean;
+          emailLabel?: 'Work email';
           success: { heading: string; body: string };
           nextSteps: EnquiryNextStep[];
         };

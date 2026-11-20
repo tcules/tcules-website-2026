@@ -63,6 +63,26 @@
   --cta-rule-width: var(--border-width-hairline);
   --cta-detail-text: var(--text-body-sm);
   --cta-marker-text: var(--text-index);
+  /* The tick points (owner, 18 Nov 2026): assurances read as sentences, at body-sm (14), one
+     step under the lede's body (owner, 18 Nov 2026: "one size smaller for the three lines"), and
+     the glyph centred in the label's first line box. */
+  --cta-tick-text: var(--text-body-sm);
+  --cta-tick-offset: calc(
+    (var(--font-size-body-sm) * var(--line-height-body-sm) - var(--cta-tick-glyph)) / 2
+  );
+  /* Icon's lg (18), duplicated on purpose (token rule 6). */
+  --cta-tick-glyph: var(--icon-size-18);
+  /* The island close's quote (owner, 18 Nov 2026: "make the quote text sans. serif looks bad in
+     italics at that size"): the testimonial card's sans quote by value (token rule 6), 18 on the
+     lead-lg ratio, and italic because every testimonial is (2026-10-22-testimonials-italic-everywhere). */
+  --cta-quote-text: italic var(--font-weight-regular)
+    var(--font-size-lead-lg)/var(--line-height-lead-lg) var(--font-family-sans);
+  /* Its block (owner, 18 Nov 2026): the testimonial card's box by value (token rule 6): a `block`
+     inset, the 8 radius, and the speaker's name at h6 over "role, company" at body-sm. */
+  --cta-quote-inset: var(--gap-block);
+  --cta-quote-radius: var(--radius-8);
+  --cta-quote-name-text: var(--text-h6);
+  --cta-quote-name-tracking: var(--text-h6-tracking);
   --cta-marker-tracking: var(--text-index-tracking);
 
   /* Two measures. The heading takes the title measure so a three-line close
@@ -146,6 +166,12 @@
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
   --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
+  /* The quote block: the testimonial card's grounds and inks, by value (token rule 6). */
+  --cta-quote-ground: var(--color-paper-deep);
+  --cta-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
+  --cta-quote-name-ink: var(--color-neutral-900);
+  --cta-quote-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
+  --cta-quote-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
 [data-surface='tint'] {
@@ -158,6 +184,11 @@
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --cta-panel-ground: var(--color-paper); /* declared for self-containment; no panel is tint (29 Oct 2026) */
+  --cta-quote-ground: var(--color-paper);
+  --cta-quote-ink: var(--color-neutral-800);
+  --cta-quote-name-ink: var(--color-neutral-900);
+  --cta-quote-role-ink: var(--color-neutral-700);
+  --cta-quote-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
 [data-surface='ink'] {
@@ -170,6 +201,12 @@
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
   --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
+  /* One step off the island's neutral-900, as the island is off the footer's 950. */
+  --cta-quote-ground: var(--color-neutral-800);
+  --cta-quote-ink: var(--color-white); /* 11.9:1 on neutral-800 */
+  --cta-quote-name-ink: var(--color-white);
+  --cta-quote-role-ink: var(--color-neutral-300); /* 8.9:1 on neutral-800 */
+  --cta-quote-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
 [data-surface='blue'] {
@@ -182,4 +219,11 @@
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
   --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
+  /* Blue is never a panel (index.css § Blue): a paper block with paper inks, as the testimonial
+     card sets itself on blue. */
+  --cta-quote-ground: var(--color-paper);
+  --cta-quote-ink: var(--color-neutral-800);
+  --cta-quote-name-ink: var(--color-neutral-900);
+  --cta-quote-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
+  --cta-quote-rule-ink: var(--color-neutral-200); /* decoration */
 }

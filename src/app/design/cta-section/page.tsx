@@ -96,6 +96,12 @@ const DESK = {
   kind: 'illustration',
 } as const;
 
+const OVERHAUL_POINTS = [
+  { label: 'Every project starts with a call with the senior product designer who would lead your work.' },
+  { label: 'Start with a free product review. Stop after the review and owe nothing.' },
+  { label: "Need an NDA first? Say so and we'll set one up." },
+];
+
 /** The halves close's drawing (scripts/enquiry-sketch-to-shipped.mjs): one product, sketch to shipped. */
 const SKETCH_TO_SHIPPED = {
   src: '/illustrations/enquiry/sketch-to-shipped.svg',
@@ -338,6 +344,53 @@ export default function CtaSectionSpecimenPage() {
         heading="Tell us what you're building"
         body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+      <SpecimenNote
+        title="1e · The overhaul close: an ink band (frame='band'), ruled ticks, a quote block, a name"
+        note="The enquiry close the overhaul pages end on (owner, 18 Nov 2026). frame='band': the close IS the ink band, not an ink island inside a paper band, so only the band's padding applies and the form panel takes the column (owner: 'form island should become a section so the padding is not applied twice'; decisions/2026-11-18-enquiry-close-is-an-ink-band). The flow field runs across the whole band. Halves with no drawing, so the words head the start half and the quote takes its foot (no empty ink over the heading); the points as the plan checklists' tick (markers='tick': a hairline a `block` under the lede opens the list, check-circle at 18 in the accent, the label at body-sm, a `text` apart, a <ul>); the client's line as a block of its own (quote: a quiet panel one step off the island, the testimonial card's 18 sans italic (owner, 18 Nov 2026: serif looked bad in italics at that size), marks included, then the speaker on a hairline as the testimonial card sets one, the name at h6 and 'role, company' at body-sm; decisions/2026-11-18-enquiry-close-is-an-ink-band); and the card asking Name first, then Work email, the question and the optional Product website. Second instance: the default frame='island' with the longest quote, name and points, on a blue island, where the block is paper (blue is never a panel) — what a halves close without frame='band' still draws. Stacked (below 1024) the head, then the FORM, then the ticks and the quote, as on Jatin's m- boards; from 1024 the form spans the start half's two rows."
+      />
+      <CtaSection
+        island="ink"
+        frame="band"
+        islandTexture="flow"
+        islandArrangement="halves"
+        markers="tick"
+        points={OVERHAUL_POINTS}
+        quote={{
+          text: '“It was simply the most successful long-distance 3rd party collaboration I have seen.”',
+          name: 'Roland Sailer',
+          role: 'Director of Product',
+          company: 'Ringier Media Switzerland',
+        }}
+        heading="Tell us what you're working on"
+        body={["One stubborn workflow, a new product, a redesign that's been on the roadmap too long, or an opportunity you're still figuring out. We'll suggest the best way to begin."]}
+        form={
+          <EnquiryForm
+            {...ENQUIRY_FORM_PROPS}
+            submitLabel="Book a free product review"
+            urlLabel="Product website"
+            dress={{ ...DRESS.card, name: true, emailLabel: 'Work email' }}
+          />
+        }
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="flow"
+        islandArrangement="halves"
+        markers="tick"
+        points={[
+          ...OVERHAUL_POINTS,
+          { label: 'A longer assurance that runs to three lines in the half, to show the tick holding to the first line while the sentence wraps under itself.' },
+        ]}
+        quote={{
+          text: 'A client quote authored without its marks, long enough to wrap across four lines at the lede measure so the attribution sits under a full paragraph.',
+          name: 'A Speaker With A Long Name',
+          role: 'Head of Product Design and Research',
+          company: 'A Company With A Long Name',
+        }}
+        heading="Tell us what you're working on"
+        body={['A sketch, a prototype or a product with years of history behind it.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={{ ...DRESS.card, name: true }} />}
       />
 
       <CtaSection

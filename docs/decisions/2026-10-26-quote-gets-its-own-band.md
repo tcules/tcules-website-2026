@@ -1,7 +1,7 @@
 ---
 title: "A client's quote gets its own tint band after the band it supports"
 date: 2026-10-26
-status: active
+status: superseded
 area: [proof, layout]
 source: "Devagya, 26 Oct 2026, product-design service page mock rounds 1–4 (https://claude.ai/artifact/8d5ZWF4hQTMkJ57iZDc4Em), approved to build; branch design/service-page-pd"
 supersedes: ["2026-10-11-offer-bands-read-as-an-offer"]

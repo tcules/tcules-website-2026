@@ -42,6 +42,7 @@ import {
   type TeaserFormat,
 } from '@/patterns';
 
+import { INK_CLOSE_DRESS, isInkClose } from './ink-close';
 import type {
   HomeAction,
   HomePageModel,
@@ -490,8 +491,13 @@ function Cta({
       </ContentSection>
     );
   }
-  const halves = section.presentation === 'form_island';
-  const art = section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK);
+  /* An ink close is the ink band (ink-close.ts); every other keeps the island it had. */
+  const ink = isInkClose(section);
+  const halves = ink || section.presentation === 'form_island';
+  const art =
+    ink || section.illustration === false
+      ? undefined
+      : (section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK));
   const formProps = {
     action: ENDPOINTS.enquiry,
     context: enquiryContext ?? {
@@ -510,11 +516,15 @@ function Cta({
   };
   return (
     <CtaSection
-      {...{ id, heading, eyebrow, surface, island, body, points }}
+      {...{ id, heading, eyebrow, surface, body, points }}
+      island={ink ? 'ink' : island}
       data-band="L"
+      markers={ink ? 'tick' : section.markers}
+      quote={section.quote}
       islandArrangement={halves ? 'halves' : 'beside'}
+      frame={ink ? 'band' : halves ? section.frame : undefined}
       islandTexture={halves ? 'flow' : 'frame'}
-      art={<Media image={art} sizes={halves ? '300px' : '240px'} />}
+      art={art ? <Media image={art} sizes={halves ? '300px' : '240px'} /> : undefined}
       footnote={section.footnote}
       footnoteIcon="shield-check"
       contact={section.contacts.length ? section.contacts : undefined}
@@ -528,7 +538,11 @@ function Cta({
             variant="enquiry"
             urlLabel={form.urlLabel}
             scheduleHref={form.scheduleHref}
-            dress={{ kind: 'card', reply: form.reply ?? form.caption ?? '' }}
+            dress={{
+              kind: 'card',
+              reply: form.reply ?? form.caption ?? '',
+              ...(ink ? INK_CLOSE_DRESS : { name: form.askName, emailLabel: form.emailLabel }),
+            }}
           />
         )
       }

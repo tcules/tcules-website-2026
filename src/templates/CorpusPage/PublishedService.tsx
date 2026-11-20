@@ -47,6 +47,7 @@ import {
   type Claim,
 } from './CopyBands';
 import { LEDGER_BANDS, WHY_GLYPHS } from './OfferBands';
+import { INK_CLOSE_DRESS, inkCloseProps, isInkClose } from './ink-close';
 import { PublishedHero, PublishedSection } from './PublishedHome';
 import type { HomeAction } from './published-home-model';
 import type {
@@ -804,7 +805,9 @@ function Enquiry({
 }) {
   const { form } = section;
   if (!form) return <PublishedSection section={section} route={route} />;
-  const halves = section.presentation !== 'standard';
+  /* An ink close is the ink band (ink-close.ts); every other keeps the island it had. */
+  const ink = isInkClose(section);
+  const halves = ink || section.presentation !== 'standard';
   const art = section.image ?? (halves ? ENQUIRY_SKETCH_TO_SHIPPED : ENQUIRY_DESK);
   const words = section.leadHtml
     ? ([<span key="lead" dangerouslySetInnerHTML={{ __html: section.leadHtml }} />] as const)
@@ -846,6 +849,8 @@ function Enquiry({
       footnote={section.footnote}
       footnoteIcon="shield-check"
       contact={section.contacts.length > 0 ? section.contacts : undefined}
+      quote={section.quote}
+      {...(ink ? inkCloseProps(section) : {})}
       form={
         form.variant === 'compact' ? (
           <EnquiryForm variant="compact" {...formProps} />
@@ -855,7 +860,7 @@ function Enquiry({
             variant="enquiry"
             urlLabel={form.urlLabel}
             scheduleHref={form.scheduleHref}
-            dress={{ kind: 'card', ...(reply ? { reply } : {}) }}
+            dress={{ kind: 'card', ...(reply ? { reply } : {}), ...(ink ? INK_CLOSE_DRESS : {}) }}
           />
         )
       }

@@ -17,6 +17,7 @@ import {
   TextureFrame,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import { curlQuotes, withQuoteMarks } from '@/lib/quote-marks';
 import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
 
 import styles from './CtaSection.module.css';
@@ -36,6 +37,25 @@ export type CtaPoint = {
   detail?: string;
 };
 
+/**
+ * A client's line at the foot of the island close's words (owner, 18 Nov 2026; supersedes the
+ * own-band rule for this one place: decisions/2026-11-18-enquiry-close-is-an-ink-band). Its own block on
+ * the island (owner, 18 Nov 2026: "in a designed block of its own so it actually reads as a
+ * testimonial"): the card's 18 sans italic quote (owner, 18 Nov 2026), then the speaker as the
+ * testimonial card sets one, the name on its own line and "role, company" under it. Plain strings, so no rating, portrait or link
+ * can ride on it. It always shows its marks, curled (lib/quote-marks), in the quote's own ink
+ * (decisions/2026-10-11-no-coloured-punctuation).
+ */
+export type CtaQuote = {
+  text: string;
+  /** "Roland Sailer". */
+  name: string;
+  /** "Director of Product". A blank role leaves no separator. */
+  role?: string;
+  /** "Ringier Media Switzerland". */
+  company: string;
+};
+
 /** A point under `markers="icon"`: the glyph is required, so no point renders a hole in the column. */
 export type CtaIconPoint = CtaPoint & {
   icon: IconName;
@@ -51,8 +71,12 @@ export type CtaIconPoint = CtaPoint & {
  *           not a position, so these are the contents of an offer rather than a sequence.
  *   plain   no marker. A `<ul>`. The serif label carries the point on its own — for an offer whose
  *           points are short claims that a numeral or a glyph would over-dress.
+ *   tick    (owner, 18 Nov 2026: the overhaul enquiry island) the plan checklists' tick, the same
+ *           `check-circle` glyph in front of every point in the accent, and the label in the body
+ *           voice rather than the serif step title: these are assurances read as sentences, not
+ *           steps. A `<ul>`; the glyph is the caller's to omit, never to choose.
  */
-export type CtaPointMarker = 'number' | 'icon' | 'plain';
+export type CtaPointMarker = 'number' | 'icon' | 'plain' | 'tick';
 
 /** One action. `href` comes from `@/lib/routes` at the call site, never written out there. */
 export type CtaAction = {
@@ -162,7 +186,7 @@ type CtaSectionBaseProps = {
 type CtaPointsProps =
   | {
       /** Default `number`. See `CtaPointMarker`. */
-      markers?: 'number' | 'plain';
+      markers?: 'number' | 'plain' | 'tick';
       points?: readonly CtaPoint[];
     }
   | {
@@ -238,6 +262,11 @@ type CtaSplitProps = {
    */
   rating?: ReactNode;
   /**
+   * A client's quote at the foot of the words (owner, 18 Nov 2026). Island halves and beside only.
+   * See `CtaQuote`.
+   */
+  quote?: CtaQuote;
+  /**
    * The island the close sits on (owner, 16 Oct 2026, the home enquiry close; ALWAYS since 29 Oct
    * 2026): the copy and the form on a floating island of this surface, the form on a paper panel
    * inside it. Default `blue`; `ink` the other. The band takes paper unless `surface` says otherwise
@@ -276,6 +305,18 @@ type CtaSplitProps = {
    *           open ground, which is what `islandTexture="flow"` is for. Below 1024 it stacks.
    */
   islandArrangement?: 'beside' | 'above' | 'halves';
+  /**
+   * What carries the close's ground (owner, 18 Nov 2026; decisions/2026-11-18-enquiry-close-is-an-ink-band).
+   * Halves only.
+   *
+   *   island  (default) a floating island of `island`'s ground inside a band of `surface`: the band's
+   *           padding, then the island's inset, then the panel's.
+   *   band    the band IS that ground: an `island`-coloured Section with the field across it and the
+   *           words and the form straight in its column, so only the band's padding applies (owner:
+   *           "form island should become a section so the padding is not applied twice"). `surface`
+   *           is ignored; the island's own ground is the band's.
+   */
+  frame?: 'island' | 'band';
   /**
    * The island set INSIDE another band rather than as a band of its own (owner, 31 Oct 2026: the
    * contact hero carries the form "just like how an image would be placed"). No Section: a labelled
@@ -346,6 +387,7 @@ type CtaOpenProps = {
   media?: never;
   contact?: never;
   rating?: never;
+  quote?: never;
   /**
    * The island: ink by default, with the moving field on it (owner, 29 Oct 2026;
    * decisions/2026-10-29-cta-band-is-an-ink-island). `blue` where the page closes on brandeis, as
@@ -355,6 +397,7 @@ type CtaOpenProps = {
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  frame?: never;
   /**
    * `compact` (owner, 4 Nov 2026, homepage pass: "a CTA island variant that's compact and has
    * buttons on the right"): the heading and its line at the start, the actions at the inline end
@@ -392,10 +435,12 @@ type CtaOfferWithActionsProps = {
   media?: CtaMedia;
   contact?: never;
   rating?: never;
+  quote?: never;
   island?: never;
   art?: never;
   islandTexture?: never;
   islandArrangement?: never;
+  frame?: never;
   inBand?: never;
 };
 
@@ -586,6 +631,8 @@ function CtaPoints({
   /* An ordered list only when the marker IS the order. Icons and plain points are an offer's
      contents, not a sequence, and an `<ol>` would announce a position nobody can see. */
   const listElement = markers === 'number' ? 'ol' : 'ul';
+  /* Sentences under a tick sit a `text` apart, as paragraphs do; the step titles a `block`. */
+  const stackGap = markers === 'tick' ? 'text' : 'block';
 
   const items = visiblePoints.map((point, index) => {
     const key = `${index}-${point.label}`;
@@ -603,12 +650,18 @@ function CtaPoints({
         <span className={styles.glyph}>
           <Icon name={point.icon} size="xl" />
         </span>
+      ) : markers === 'tick' ? (
+        <span className={cx(styles.glyph, styles.tick)}>
+          <Icon name="check-circle" size="lg" />
+        </span>
       ) : null;
 
     const reading = shape === 'rows';
     const content =
       shape === 'line' ? (
         <span className={styles.label}>{point.label}</span>
+      ) : markers === 'tick' ? (
+        <span className={styles.tickLabel}>{point.label}</span>
       ) : (
         <CtaPointContent point={point} reading={reading} />
       );
@@ -673,9 +726,41 @@ function CtaPoints({
     );
   }
 
-  return (
-    <Layout as={listElement} rowGap="block">
+  const list = (
+    <Layout as={listElement} rowGap={stackGap}>
       {items}
+    </Layout>
+  );
+  /* The ticks open on a hairline (owner, 18 Nov 2026: "add a line divider before the three
+     bullets"), a `block` above the list: the assurances read as a set apart from the lede, as on
+     Jatin's boards. Part of the tick list, so every tick list carries it. */
+  if (markers === 'tick') {
+    return (
+      <Layout rowGap="block">
+        <div className={styles.rule} />
+        {list}
+      </Layout>
+    );
+  }
+  return list;
+}
+
+/**
+ * The island close's quote (`CtaQuote`) as a block of its own: a quiet panel one step off the
+ * island (--cta-quote-ground), the line, then the speaker on a hairline a `block` under it, as the
+ * testimonial card closes on its speaker: the name, and "role, company" an `inline` under it.
+ */
+function CtaQuoteBlock({ quote }: { quote: CtaQuote }) {
+  const role = quote.role?.trim() ? `${quote.role}, ${quote.company}` : quote.company;
+  return (
+    <Layout as="figure" rowGap="block" className={styles.quoteBlock}>
+      <blockquote className={styles.quote}>
+        <p>{withQuoteMarks(curlQuotes(quote.text))}</p>
+      </blockquote>
+      <Layout as="figcaption" rowGap="inline" className={styles.quoteWho}>
+        <span className={styles.quoteName}>{quote.name}</span>
+        <span className={styles.quoteRole}>{role}</span>
+      </Layout>
     </Layout>
   );
 }
@@ -1181,6 +1266,7 @@ export function CtaSection(props: CtaSectionProps) {
   /* The score at its own width: a Cluster row, so the pill never stretches to the column. */
   const ratingRow =
     'rating' in props && present(props.rating) ? <Cluster>{props.rating}</Cluster> : null;
+  const quote = 'quote' in props ? props.quote : undefined;
 
   /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
      The copy and the form on a blue or ink island, the form on a paper panel inside it. [5, 7] at
@@ -1213,6 +1299,31 @@ export function CtaSection(props: CtaSectionProps) {
        never grows empty paper under the form. */
   if (props.islandArrangement === 'halves') {
     const art = present(props.art);
+    /* `frame="band"`: the island's ground becomes the band's and the island goes, so the words and
+       the panel sit in Section's column under the band's padding alone. The field, the words, the
+       ticks, the quote and the panel are the same nodes either way. */
+    const asBand = props.frame === 'band';
+    const framed = (children: ReactNode) =>
+      asBand ? (
+        children
+      ) : (
+        <Island surface={islandSurface} inset="form">
+          {children}
+        </Island>
+      );
+    const words = (
+      <Layout rowGap="block">
+        {lede({ scale: 'halves' })}
+        <CtaPoints shape="stack" markers={markers} points={points} />
+        {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+        {ratingRow}
+      </Layout>
+    );
+    const halvesPanel = (
+      <div className={cx(styles.islandPanel, styles.islandPanelHalves)} data-surface="paper">
+        {props.form}
+      </div>
+    );
     return (
       <IslandBand
         inBand={props.inBand}
@@ -1220,38 +1331,66 @@ export function CtaSection(props: CtaSectionProps) {
         footnoteIcon={props.footnoteIcon}
         after={props.after}
         afterHeadingId={`${baseId}-after-heading`}
-        surface={band}
+        surface={asBand ? requested : band}
         id={props.id}
         data-band={props['data-band']}
         aria-labelledby={headingId}
       >
-        <Island surface={islandSurface} inset="form">
-          {props.islandTexture === 'flow' ? (
-            <TextureFlow fade={art ? 'start' : undefined} />
-          ) : null}
-          {props.islandTexture === 'frame' ? <TextureFrame /> : null}
-          <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-            <Layout pinLast>
-              <Layout rowGap="stack">
-                {art ? <div className={styles.artLarge}>{props.art}</div> : null}
-                <div data-texture-calm>
+        {framed(
+          <>
+            {props.islandTexture === 'flow' ? (
+              <TextureFlow fade={art ? 'start' : undefined} />
+            ) : null}
+            {props.islandTexture === 'frame' ? <TextureFrame /> : null}
+            {art ? (
+              <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
+                <Layout pinLast>
+                  <Layout rowGap="stack">
+                    <div className={styles.artLarge}>{props.art}</div>
+                    <div data-texture-calm>
+                      <Layout rowGap="stack">
+                        {words}
+                        {quote ? <CtaQuoteBlock quote={quote} /> : null}
+                      </Layout>
+                    </div>
+                  </Layout>
+                </Layout>
+                {halvesPanel}
+              </Layout>
+            ) : (
+              /* No drawing (the overhaul island, owner 18 Nov 2026: "what is this blank space above
+               the title?"): the words were pinned to the half's foot under a drawing that is not
+               there, so the form's extra height opened as empty ink over the heading. Without a
+               drawing the head (heading and lede) tops the start half, the ticks and the quote
+               follow it with the quote on the half's foot, and the form spans both rows beside
+               them. Stacked, Jatin's m- boards order it head, FORM, then the ticks and the quote:
+               the DOM is that order, and from 1024 the module places the panel in the end column. */
+              <Layout
+                columns={{ base: 1, lg: [1, 1] }}
+                colGap="section"
+                rowGap="stack"
+                className={styles.halvesSplit}
+              >
+                <div data-texture-calm className={styles.halvesHead}>
+                  {lede({ scale: 'halves' })}
+                </div>
+                {halvesPanel}
+                <Layout
+                  pinLast={quote ? true : undefined}
+                  rowGap="stack"
+                  className={styles.halvesRest}
+                >
                   <Layout rowGap="block">
-                    {lede({ scale: 'halves' })}
                     <CtaPoints shape="stack" markers={markers} points={points} />
                     {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
                     {ratingRow}
                   </Layout>
-                </div>
+                  {quote ? <CtaQuoteBlock quote={quote} /> : null}
+                </Layout>
               </Layout>
-            </Layout>
-            <div
-              className={cx(styles.islandPanel, styles.islandPanelHalves)}
-              data-surface="paper"
-            >
-              {props.form}
-            </div>
-          </Layout>
-        </Island>
+            )}
+          </>,
+        )}
       </IslandBand>
     );
   }
@@ -1317,12 +1456,15 @@ export function CtaSection(props: CtaSectionProps) {
           rowGap="stack"
           align="center"
         >
-          <Layout rowGap="block">
-            {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
-            {lede({ scale: 'offer' })}
-            <CtaPoints shape="stack" markers={markers} points={points} />
-            {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-            {ratingRow}
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
+              {lede({ scale: 'offer' })}
+              <CtaPoints shape="stack" markers={markers} points={points} />
+              {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+              {ratingRow}
+            </Layout>
+            {quote ? <CtaQuoteBlock quote={quote} /> : null}
           </Layout>
           {panel}
         </Layout>

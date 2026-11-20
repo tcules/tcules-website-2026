@@ -83,6 +83,41 @@ export function quoteHtml(value: string | null | undefined) {
   return clean.replace(/<[^>]+>/g, '').trim() ? clean : undefined;
 }
 
+/**
+ * The close's client quote (tcules-cms-2026#1): a linked testimonial, set as the island's quote block
+ * (CtaSection `quote`). Its one-line `shortQuote` when the editor set one, else the whole quote as
+ * plain text; the block adds the marks. An editorial quote has no speaker to split, so it is skipped.
+ */
+function ctaQuote(
+  value: Extract<CmsHomeSection, { __typename: 'ComponentSharedCta' }>['ctaQuote'],
+  context: string,
+) {
+  if (!value) return undefined;
+  if (value.kind !== 'testimonial') {
+    warn(`${context} quote: only a linked testimonial renders on the close`);
+    return undefined;
+  }
+  const t = value.testimonial;
+  const name = text(t?.name);
+  const quote =
+    text(t?.shortQuote) ??
+    text(
+      quoteHtml(t?.quoteHtml)
+        ?.replace(/<[^>]+>/g, ' ')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' '),
+    );
+  if (!t || !name || !quote) return undefined;
+  const role = text(t.role);
+  const company = text(t.company);
+  /* The block sets "role, company" under the name; with only one of them it stands alone. */
+  return company ? { text: quote, name, role, company } : { text: quote, name, company: role ?? '' };
+}
+
 export function icon(value: string | null | undefined): IconName | undefined {
   return iconNames.find((name) => name === value);
 }
@@ -300,6 +335,7 @@ export const formUrlLabels = [
   'Link to the work',
   'Where can we see it?',
   'Product or company URL',
+  'Product website',
 ] as const;
 
 function resourceMedia(
@@ -655,6 +691,7 @@ export function mapBand(
         leadHtml: markdownInlineToHtml(section.descriptionRich) || undefined,
         footnote: text(section.disclaimer),
         points: texts(section.points).map((label) => ({ label })),
+        quote: ctaQuote(section.ctaQuote, key),
         rating: rating(section.rating),
         image: image(section.media),
         form: configuredForm,

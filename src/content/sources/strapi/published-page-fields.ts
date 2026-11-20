@@ -40,6 +40,7 @@ export const PUBLISHED_CTA = `
         id heading anchorId eyebrow description descriptionRich disclaimer ctaSurface: surface ctaSide: mediaSide isEnabled ctaType ctaPresentation: presentation island
         form { variant submitLabel caption urlLabel scheduleHref successHeading successBody replyLabel successSteps { label detail } }
         points { text } contactLinks { key value href }
+        ctaQuote: quote { kind testimonial { name role company quoteHtml shortQuote } }
         button { ...PublishedAction } secondaryButton { ...PublishedAction }
         media { ...PublishedImage }
         rating { ...PublishedRating }
