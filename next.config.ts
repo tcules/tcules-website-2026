@@ -9,8 +9,24 @@ import {
   caseStudyPath,
   FORMAT_PAGE_REDIRECTS,
 } from './src/lib/routes';
+import { HTML_LIMITED_BOT_UA_RE } from 'next/dist/shared/lib/router/utils/html-bots';
+
+/**
+ * Crawlers that read the HTML without running JavaScript, so they must get the title, canonical and
+ * share tags in `<head>` rather than streamed in after it. Next keeps its own list (search engines and
+ * link unfurlers) and setting this option REPLACES that list, so it is imported and extended rather
+ * than copied: a copy would silently fall behind Next's, and a renamed export fails the build instead.
+ *
+ * The additions are the AI answer engines' crawlers and fetchers. Next 16.4 began streaming metadata
+ * on pages whose `generateMetadata` waits on the CMS (home, /why-tcules, the author pages …), and none
+ * of these run scripts, so they would otherwise find no title in `<head>` (20 Nov 2026). Only a
+ * matching user agent waits for metadata before the first byte; people still get the streamed page.
+ */
+const AI_CRAWLERS =
+  /GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|Claude-SearchBot|anthropic-ai|PerplexityBot|Perplexity-User|CCBot|Amazonbot|meta-externalagent|Bytespider|cohere-ai|DuckAssistBot|MistralAI-User/;
 
 const nextConfig: NextConfig = {
+  htmlLimitedBots: new RegExp(`${HTML_LIMITED_BOT_UA_RE.source}|${AI_CRAWLERS.source}`, 'i'),
   /**
    * Hosts allowed to request DEV-ONLY assets — the JS chunks, the HMR socket, the dev font
    * endpoint. Development only; it has no effect on a build and grants nothing in production.
