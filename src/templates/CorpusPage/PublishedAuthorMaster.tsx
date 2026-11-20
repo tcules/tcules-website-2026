@@ -5,6 +5,7 @@ import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, CtaSection, EnquiryForm, PageHero, ProfileCard } from '@/patterns';
 
 import type { AuthorMasterPage, AuthorMasterSection } from './published-author-master-model';
+import { INK_CLOSE_DRESS, inkIslandProps, isInkClose } from './ink-close';
 
 function Close({ section }: { section: Extract<AuthorMasterSection, { type: 'cta' }> }) {
   const form = section.form;
@@ -35,7 +36,11 @@ function Close({ section }: { section: Extract<AuthorMasterSection, { type: 'cta
         {...formProps}
         variant="enquiry"
         urlLabel={form.urlLabel}
-        dress={{ kind: 'card', reply: form.reply ?? '' }}
+        dress={{
+          kind: 'card',
+          reply: form.reply ?? '',
+          ...(section.variant === 'form' && isInkClose(section) ? INK_CLOSE_DRESS : {}),
+        }}
         scheduleHref={form.scheduleHref}
       />
     ));
@@ -51,6 +56,9 @@ function Close({ section }: { section: Extract<AuthorMasterSection, { type: 'cta
         eyebrow={section.eyebrow}
         heading={section.heading}
         body={section.lead ? [section.lead] : undefined}
+        {...(isInkClose(section)
+          ? { ...inkIslandProps(section), points: section.points.length ? section.points : undefined }
+          : {})}
         form={enquiry}
       />
     );

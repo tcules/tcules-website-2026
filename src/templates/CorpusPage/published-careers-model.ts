@@ -31,6 +31,8 @@ export type CareersPageModel = {
     photos: ComponentProps<typeof Collage>['photos'];
     art?: MediaImage;
     disclaimer?: string;
+    /** The application close's ground; ink renders it as the ink band (ink-close.ts). */
+    island?: 'ink' | 'blue';
     form?: {
       formLabel: string;
       submitLabel: string;
