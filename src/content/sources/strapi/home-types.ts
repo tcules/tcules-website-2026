@@ -263,7 +263,7 @@ export type CmsHomeSection = Band &
         ctaPresentation: Maybe<'standard' | 'form_island' | 'offer'>;
         island: Maybe<'ink' | 'blue'>;
         /** The close's client quote (tcules-cms-2026#1): a linked testimonial, its short line when set. */
-        quote?: Maybe<{
+        ctaQuote?: Maybe<{
           kind: Maybe<'editorial' | 'testimonial'>;
           testimonial: Maybe<{ name: Text; role: Text; company: Text; quoteHtml: Text; shortQuote: Text }>;
         }>;

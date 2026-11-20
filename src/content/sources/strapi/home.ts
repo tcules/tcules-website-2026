@@ -89,7 +89,7 @@ export function quoteHtml(value: string | null | undefined) {
  * plain text; the block adds the marks. An editorial quote has no speaker to split, so it is skipped.
  */
 function ctaQuote(
-  value: Extract<CmsHomeSection, { __typename: 'ComponentSharedCta' }>['quote'],
+  value: Extract<CmsHomeSection, { __typename: 'ComponentSharedCta' }>['ctaQuote'],
   context: string,
 ) {
   if (!value) return undefined;
@@ -691,7 +691,7 @@ export function mapBand(
         leadHtml: markdownInlineToHtml(section.descriptionRich) || undefined,
         footnote: text(section.disclaimer),
         points: texts(section.points).map((label) => ({ label })),
-        quote: ctaQuote(section.quote, key),
+        quote: ctaQuote(section.ctaQuote, key),
         rating: rating(section.rating),
         image: image(section.media),
         form: configuredForm,
