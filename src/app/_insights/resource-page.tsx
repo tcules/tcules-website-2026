@@ -194,14 +194,9 @@ export async function renderResourcePage(slug: string) {
         readingTime={resource.readingTime}
         dates={resource.dates}
         media={heroMedia}
-        /* A drawing sits beside the copy, as a tool page's does (LongformPage); a video is watched. */
-        arrangement={
-          heroMedia?.type === 'youtube'
-            ? 'watch'
-            : heroMedia?.type === 'sketch'
-              ? 'beside'
-              : undefined
-        }
+        /* A video is watched. A drawing takes the article hero's stacked arrangement, as a banner image
+           does (owner, 20 Nov 2026: "this was never supposed to be split"). */
+        arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
         labels={resource.labels}
         surface="paper"
       >
