@@ -5,6 +5,7 @@ import { AnchorHeading, Icon, Layout, Media, Prose } from '@/components';
 import { getResourceDetail } from '@/content';
 import { withBreadcrumbList } from '@/lib/breadcrumb-json-ld';
 import { jsonLdMarkup } from '@/lib/json-ld';
+import { resourceSceneFor } from '@/lib/sketches';
 import { heroTrail } from '@/lib/trail';
 import {
   Accordion,
@@ -15,6 +16,7 @@ import {
   Figure,
   PageHero,
   type HeroCredit,
+  type HeroMedia,
   type HeroPerson,
   type TocItem,
 } from '@/patterns';
@@ -151,11 +153,17 @@ export async function renderResourcePage(slug: string) {
   const credits: HeroCredit[] | undefined = people[0]
     ? [{ role: 'author', people: people as [HeroPerson, ...HeroPerson[]] }]
     : undefined;
-  const heroMedia =
+  /* A drawn insight (a guide or an article the site draws a thumbnail for) shows that same drawing in
+     its hero, still at its end state, so the page matches the card that led to it (owner, 19 Nov 2026).
+     One map (`resourceSceneFor`, @/lib/sketches) serves the card and the hero. A video still leads. */
+  const drawn = resourceSceneFor(resource.path);
+  const heroMedia: HeroMedia | undefined =
     resource.heroVideo ??
-    (resource.bannerImage
-      ? { type: 'image' as const, image: resource.bannerImage }
-      : undefined);
+    (drawn
+      ? { type: 'sketch', name: drawn }
+      : resource.bannerImage
+        ? { type: 'image' as const, image: resource.bannerImage }
+        : undefined);
 
   const { event } = resource;
   const eventDate = event?.startsAt ? new Date(event.startsAt) : undefined;
@@ -186,7 +194,14 @@ export async function renderResourcePage(slug: string) {
         readingTime={resource.readingTime}
         dates={resource.dates}
         media={heroMedia}
-        arrangement={heroMedia?.type === 'youtube' ? 'watch' : undefined}
+        /* A drawing sits beside the copy, as a tool page's does (LongformPage); a video is watched. */
+        arrangement={
+          heroMedia?.type === 'youtube'
+            ? 'watch'
+            : heroMedia?.type === 'sketch'
+              ? 'beside'
+              : undefined
+        }
         labels={resource.labels}
         surface="paper"
       >

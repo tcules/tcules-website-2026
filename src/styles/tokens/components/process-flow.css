@@ -37,12 +37,12 @@
 }
 
 [data-surface='tint'] {
-  --flow-rule-ink: var(--color-neutral-400); /* decoration, the tile hairline */
+  --flow-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --flow-number-ink: var(--color-brandeis-500); /* 5.51:1 */
   --flow-label-ink: var(--color-neutral-900);
   --flow-arrow-ink: var(--color-brandeis-500); /* 5.51:1 */
   --flow-item-ink: var(--color-neutral-800); /* 10.54:1 */
-  --flow-item-rule-ink: var(--color-neutral-300);
+  --flow-item-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --flow-actor-ink: var(--color-neutral-800);
   --flow-span-ink: var(--color-neutral-600);
   --flow-lane-label-ink: var(--color-neutral-700);

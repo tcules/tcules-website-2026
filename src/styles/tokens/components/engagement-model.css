@@ -79,7 +79,7 @@
   --eng-stretch-fill: var(--color-brandeis-100);
   --eng-idle-ink: var(--color-neutral-600);
   --eng-grid-ink: var(--color-neutral-300);
-  --eng-rule-ink: var(--color-neutral-400);
+  --eng-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 }
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */

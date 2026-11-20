@@ -33,12 +33,33 @@
   /* The closed frame's corners: the photograph radius, so the grid matches the images round it
      (owner, 9 Oct 2026). Only the frame's outer corners; the cells inside stay square. */
   --lgrid-radius: var(--radius-8);
+
+  /* The ticker (arrangement="ticker", owner 17 Nov 2026): the marks in one moving row, no boxes.
+     --lgrid-ticker-cell-inline   a component SIZE: every mark's slot, wide enough for the widest
+                                  sm mark (188) to sit with air either side at its phone step.
+     --lgrid-ticker-cell-height   the row's height: the sm mark's 32 cap with 20 of air.
+     --lgrid-ticker-beat          the time ONE slot takes to pass. The loop's duration is the beat
+                                  times the count (LogoGrid.tsx sets --lgrid-ticker-count), so the
+                                  row moves at one speed, ~45 px/s, whatever the number of marks.
+     --lgrid-ticker-fade          how far in from each edge the row fades to nothing.            */
+  --lgrid-ticker-cell-inline: 180px;
+  --lgrid-ticker-cell-inline-m: 132px;
+  --lgrid-ticker-cell-height: 72px;
+  --lgrid-ticker-cell-height-m: 60px;
+  --lgrid-ticker-beat: 4s;
+  --lgrid-ticker-beat-m: 3s;
+  --lgrid-ticker-fade: 10%;
+  --lgrid-ring-width: var(--focus-ring-width);
+  --lgrid-ring-offset: var(--focus-ring-offset);
 }
 
 @media (max-width: 767px) {
   :root {
     --lgrid-cell-height: var(--lgrid-cell-height-m);
     --lgrid-cell-height-compact: var(--lgrid-cell-height-compact-m);
+    --lgrid-ticker-cell-inline: var(--lgrid-ticker-cell-inline-m);
+    --lgrid-ticker-cell-height: var(--lgrid-ticker-cell-height-m);
+    --lgrid-ticker-beat: var(--lgrid-ticker-beat-m);
   }
 }
 
@@ -56,22 +77,32 @@
      a drawn mark and a typeset one are one colour (ClientMark's --cmark-ink, duplicated on purpose:
      a component never reads another's tokens). */
   --lgrid-wordmark-ink: var(--color-neutral-600); /* 4.92:1 */
+  /* The ticker's focus ring (keyboard focus pauses the row). */
+  --lgrid-ring-color: var(--color-brandeis-500);
+  --lgrid-ring-gap-color: var(--color-paper);
 }
 
 [data-surface='tint'] {
   --lgrid-rule-ink: var(--color-neutral-200); /* decoration */
   --lgrid-context-ink: var(--color-neutral-700); /* 7.27:1 */
   --lgrid-wordmark-ink: var(--color-neutral-600); /* 4.39:1 on paper-deep */
+  --lgrid-ring-color: var(--color-brandeis-500);
+  --lgrid-ring-gap-color: var(--color-paper-deep);
 }
 
 [data-surface='ink'] {
   --lgrid-rule-ink: var(--color-neutral-700); /* decoration */
   --lgrid-context-ink: var(--color-neutral-400); /* 8.05:1 */
   --lgrid-wordmark-ink: var(--color-neutral-300); /* 11.07:1 on neutral-950 */
+  /* Blue as ink fails on neutral-950, so the ring lifts to 300. */
+  --lgrid-ring-color: var(--color-brandeis-300);
+  --lgrid-ring-gap-color: var(--color-neutral-950);
 }
 
 [data-surface='blue'] {
   --lgrid-rule-ink: var(--color-brandeis-400); /* decoration */
   --lgrid-context-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lgrid-wordmark-ink: var(--color-brandeis-200); /* 3.78:1, large text */
+  --lgrid-ring-color: var(--color-white);
+  --lgrid-ring-gap-color: var(--color-brandeis-500);
 }

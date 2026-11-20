@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Button, Cluster, Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
-import type { SketchName } from '@/lib/sketches';
+import { drawingMoves, type SketchName } from '@/lib/sketches';
 
 import styles from './Bento.module.css';
 
@@ -240,7 +240,9 @@ function TileLink({
     <div className={styles.art}>
       {/* The drawing on its plate, the one frame every flat drawing sits in (owner, 3 Nov 2026,
           decisions/2026-11-03-flat-graphics-on-one-plate). No drawing yet: the empty plate. */}
-      {item.picture ?? <Sketch name={item.scene} story={Boolean(item.href)} />}
+      {/* A tile that leads to a page moves its drawing; a resource's tile (a free tool, an insight)
+          keeps its thumbnail still at its end state (`drawingMoves`, owner 19 Nov 2026). */}
+      {item.picture ?? <Sketch name={item.scene} story={drawingMoves(item.href)} />}
     </div>
   );
   if (item.detail) {
@@ -513,7 +515,7 @@ export function ServiceTile({
     <div className={styles.picture}>{picture}</div>
   ) : scene ? (
     <div className={styles.art}>
-      <Sketch name={scene} story />
+      <Sketch name={scene} story={drawingMoves(href)} />
     </div>
   ) : null;
   const button = action?.trim() ? (

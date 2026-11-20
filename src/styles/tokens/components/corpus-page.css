@@ -43,7 +43,7 @@
   --cpg-ink-label: var(--color-neutral-800); /* 10.54:1 */
   --cpg-mark: var(--color-brandeis-500); /* 5.51:1 */
   --cpg-panel-ground: var(--color-paper);
-  --cpg-panel-rule: var(--color-neutral-300);
+  --cpg-panel-rule: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 }
 
 [data-surface='ink'] {

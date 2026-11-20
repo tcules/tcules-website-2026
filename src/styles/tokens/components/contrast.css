@@ -47,7 +47,7 @@
   --cntr-item-ink: var(--color-neutral-900); /* 13.06:1 */
   --cntr-yes-ink: var(--color-brandeis-500); /* 5.51:1 */
   --cntr-no-ink: var(--color-neutral-700); /* 7.27:1 */
-  --cntr-rule: var(--color-neutral-300); /* decoration */
+  --cntr-rule: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --cntr-rule-strong: var(--color-neutral-500); /* decoration */
   --cntr-heading-ink-quiet: var(--color-neutral-800); /* 10.54:1 */
   --cntr-item-ink-quiet: var(--color-neutral-800); /* 10.54:1 */

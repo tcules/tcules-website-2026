@@ -82,8 +82,10 @@
 
   /* One image ratio for every placement (owner, 11 Oct 2026: never random ratios on cards). */
   --tsr-media-ratio: var(--ratio-standard);
-  /* A slight radius and no stroke: the photograph's own edge is the shape. */
-  --tsr-media-radius: var(--radius-4);
+  /* No stroke: the photograph's own edge is the shape. The 8 every card image and every Media image
+     takes (owner, 18 Nov 2026, "make sure the image corner rounding is consistent";
+     decisions/2026-11-01-every-image-rounded); it was a slighter 4 from 16 Oct. */
+  --tsr-media-radius: var(--radius-8);
   --tsr-media-rule-width: var(--border-width-hairline);
   --tsr-media-zoom: 1.02;
   /* One motion for the whole hover (beauty round 4): the picture leans in and the title's ink
@@ -133,6 +135,14 @@
   --tsr-arrow-shift: var(--space-4);
 }
 
+/* A row's standfirst on a phone: three lines (Jatin's m- boards, 18 Nov 2026) — the 358 column
+   breaks a two-line desktop sentence into three, and two cut it mid-thought. A count, not a size. */
+@media (max-width: 767px) {
+  :root {
+    --tsr-row-body-lines: 3;
+  }
+}
+
 :root,
 [data-surface='paper'] {
   --tsr-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -166,7 +176,7 @@
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
-  --tsr-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on paper-deep */
+  --tsr-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --tsr-arrow-ink: var(--color-brandeis-600);
   --tsr-glyph-ink: var(--color-brandeis-600);
 }

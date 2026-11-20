@@ -53,6 +53,8 @@
   --ofs-title-link-easing: var(--easing-ease);
   --ofs-ring-width: var(--border-width-2);
   --ofs-ring-offset: var(--space-2); /* optical: clears the title's side bearings */
+  /* A linked row's closing arrow (/careers' open roles): a component size. */
+  --ofs-cue-size: var(--space-32);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -74,7 +76,7 @@
   --ofs-heading-ink: var(--color-neutral-900); /* 13.05:1 */
   --ofs-title-ink: var(--color-neutral-900); /* 13.05:1 */
   --ofs-body-ink: var(--color-neutral-800); /* 10.54:1 */
-  --ofs-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --ofs-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --ofs-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --ofs-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --ofs-label-ink: var(--color-neutral-700); /* 7.27:1 */

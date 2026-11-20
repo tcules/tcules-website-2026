@@ -478,7 +478,7 @@ type PageHeroBaseProps = {
   facts?: readonly HeroFact[];
   /**
    * The page's taxonomy as chips, directly under the lead copy (owner, 11 Oct 2026: "move the tags
-   * just below the description line"). Distinct from `tags`, the unboxed record after the actions.
+   * just below the description line"). Rendered with `tags` as one chip row.
    */
   labels?: readonly string[];
   /** How long the page takes to read, as the page states it ("11 min"), after the dates. */
@@ -533,10 +533,10 @@ type PageHeroBaseProps = {
    */
   arrangement?: HeroArrangement;
   /**
-   * Taxonomy marks after the actions: an unboxed mono grid, each after a 6px blue pixel, three
-   * columns from 768 and two below (four tags are 2 × 2 at every width). At most six render (a development warning names the rest), so
-   * the set is two balanced rows. Inert; a list, so a reader is told how many. Keep the title to 3
-   * lines when tags are set.
+   * Taxonomy marks as `Tag` chips, the article hero's, in one wrapping row with `labels` under the
+   * copy and above the actions (owner, 18 Nov 2026: "tags like on article pages instead of this
+   * list. also above the CTA"; was an unboxed mono grid after the actions). At most six render (a
+   * development warning names the rest). Inert; a list, so a reader is told how many.
    */
   tags?: readonly string[];
   /**
@@ -635,7 +635,7 @@ export type PageHeroProps = Omit<PageHeroBaseProps, 'eyebrow' | 'rating'> &
   HeroEyebrowProps &
   PageHeroActionProps;
 
-/** Six tags at most: two balanced rows of three beside the media (fix round 2). */
+/** Six tags at most: more is a metadata dump in a hero (fix round 2); the rest belong in the body. */
 const MAX_TAGS = 6;
 
 /* Where an illustration's numbered cut replaces the drawing: below 1440, where its track is
@@ -936,9 +936,8 @@ export function PageHero({
     );
   }
 
-  /* Tags are capped at six: two balanced rows of three beside the media, three rows of two on a
-     phone. Nine set as a wrapping list ran to two ragged rows and four on a phone, a metadata dump
-     under the ask (cmp-hero fix round 2). The rest belong in the page's body. */
+  /* Tags are capped at six: nine ran to a metadata dump in the hero (cmp-hero fix round 2). The
+     rest belong in the page's body. */
   const shownTags = tags.slice(0, MAX_TAGS);
   if (process.env.NODE_ENV !== 'production' && tags.length > MAX_TAGS) {
     console.warn(
@@ -1123,9 +1122,13 @@ export function PageHero({
       </Cluster>
     );
 
-  /* ── labels · the taxonomy chips, a block under the copy, inside the opening ───── */
-  /* The same label spelled twice shows once, whatever the source (src/lib/labels). */
-  const shownLabels = distinctLabels(labels);
+  /* ── labels and tags · the taxonomy chips, a block under the copy, inside the opening ─────
+     One treatment for both: the `Tag` chip an article's hero carries, under the copy and so ABOVE
+     the actions (owner, 18 Nov 2026: "tags like on article pages instead of this list. also above
+     the CTA"). Tags were an unboxed mono grid after the ask, each after a blue pixel; that grid is
+     retired. Labels first, then tags, one set: the same label spelled twice shows once, whatever the
+     source (src/lib/labels). */
+  const shownLabels = distinctLabels([...labels, ...shownTags]);
   const labelsNode =
     shownLabels.length === 0 ? null : (
       /* One sideways row on a phone rather than two or three lines of tags ahead of the content
@@ -1181,6 +1184,7 @@ export function PageHero({
             emphasis={index === 0 ? 'solid' : 'ghost'}
             size="md"
             extendHitArea
+            block={index === 0 ? 'until-md' : undefined}
             icon={
               /* An action that leaves the site says so, solid or ghost (lib/href.ts): the
                  leaving mark replaces the ghost's arrow and is the solid's only glyph. */
@@ -1206,41 +1210,6 @@ export function PageHero({
       </Layout>
     ) : (
       actionsRow
-    );
-
-  /* ── tags · an unboxed mono grid, each mark a blue pixel ───────────────────
-     Each tag is a mono label after a 6px blue square (the eyebrow's mark), set in three equal
-     columns from 768 and two below it, so six tags are two balanced rows beside the media and three
-     on a phone rather than a ragged wrap. After the actions, as the hero's footnote, so the ask
-     stays where every other hero puts it. A list, so a reader is told how many. The key is the
-     index with the tag, because a record may repeat a tag. Under a centred head a grid would hang
-     from the column's start, so there the marks wrap as a centred row instead. */
-  const tagItems = shownTags.map((tag, index) => (
-    <li key={`${index}-${tag}`}>
-      <Cluster colGap="tight" align="center" nowrap>
-        <span className={styles.mark} aria-hidden="true" />
-        <span className={styles.tag}>{tag}</span>
-      </Cluster>
-    </li>
-  ));
-  const tagsNode =
-    shownTags.length === 0 ? null : centredHead ? (
-      <Cluster as="ul" colGap="block" rowGap="text" justify="center">
-        {tagItems}
-      </Cluster>
-    ) : (
-      /* Four tags are 2 × 2 (a record of four facts, home's studio line): in three columns they set
-         3 + 1, an orphan, and in a 572 track a nowrap mono tag of 21 characters fills its whole
-         175 column and touches its neighbour's pixel. Two tracks give each tag 274. Every other
-         count keeps the two balanced rows of three. */
-      <Layout
-        as="ul"
-        columns={shownTags.length === 4 ? 2 : { base: 2, md: 3 }}
-        colGap="block"
-        rowGap="text"
-      >
-        {tagItems}
-      </Layout>
     );
 
   /* ── stats · the record as figures, one row under the actions (home round 3) ──────────
@@ -1432,7 +1401,6 @@ export function PageHero({
       {extrasNode}
       {actionsNode}
       {statsNode}
-      {tagsNode}
     </Layout>
   );
 
@@ -1483,7 +1451,6 @@ export function PageHero({
             {copyNode}
             {labelsNode}
             {bylineNode}
-            {tagsNode}
           </Layout>
           {statsNode}
         </Layout>
@@ -1507,7 +1474,6 @@ export function PageHero({
             {titleNode}
             {copyNode}
             {labelsNode}
-            {labelsNode}
           </Layout>
           {/* The figures are their own block, a `stack` under the ask (home round 4), as in the
               split stack below; the byline, extras, actions and tags keep this column's `block`. */}
@@ -1520,7 +1486,6 @@ export function PageHero({
               </Layout>
             ) : null}
             {statsNode}
-            {tagsNode}
           </Layout>
         </Layout>
         {mediaNode}

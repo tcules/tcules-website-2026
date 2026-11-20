@@ -240,7 +240,10 @@
    Title and body use their own inks at rest whether or not the item is linked. The marker and the
    index numeral carry the blue accent at rest (visual-direction § 4, owner 6 Oct 2026: blue is the
    recurring foreground accent); a linked title takes brandeis-500 on hover and 700 on press. The
-   neutral-300 hairline is decoration at one width in every state, and is a boxed tile's edge. */
+   rule is decoration at one width in every state. Every row and tile rule sits one step quieter
+   than it did (owner, 18 Nov 2026: "the rules can be made subtler"), on the step the other ruled
+   ladders (Accordion, ClaimSet, Bento) already use: 200 on paper and on tint (owner, 19 Nov 2026), 800 on ink. The
+   thumbnail's hairline is an image edge, not a divider, and keeps its step. */
 :root,
 [data-surface='paper'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -253,7 +256,7 @@
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-cue-ink: var(--color-neutral-600); /* 4.92:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
-  --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+  --lcrd-rule-ink: var(--color-neutral-200); /* decoration; one step quieter (owner, 18 Nov 2026) */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --lcrd-ground-hover: var(--color-paper-deep); /* a boxed linked tile only */
   --lcrd-ground-pressed: var(--color-neutral-100);
@@ -263,7 +266,8 @@
 
 /* ── Surface: tint ──────────────────────────────────────────────────────────────
    The text and action ramps still clear their floors on paper-deep, so they are restated at the
-   same steps. The base rule moves to neutral-400 to remain present on the deeper ground. */
+   same steps. The rule keeps paper's step: on the deeper ground that reads quieter, which is the point
+   (owner, 19 Nov 2026: "subtler dividers on paper-deep sections"). */
 [data-surface='tint'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
@@ -275,7 +279,7 @@
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-cue-ink: var(--color-neutral-600); /* 4.39:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
-  --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
+  --lcrd-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-100);
   --lcrd-ground-pressed: var(--color-neutral-200);
@@ -287,7 +291,7 @@
    The direction inverts. Title lifts to white and body to neutral-300. The accent — marker,
    numeral, a linked title's hover — lifts to brandeis-300 (pressed 50), because brandeis-500 is
    only 2.77:1 here. The rule drops
-   to neutral-700 so a twelve-row block does not become a light ladder. */
+   to neutral-800 so a twelve-row block does not become a light ladder. */
 [data-surface='ink'] {
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
@@ -299,7 +303,7 @@
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-cue-ink: var(--color-neutral-400); /* 8.05:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
-  --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
+  --lcrd-rule-ink: var(--color-neutral-800); /* decoration; one step quieter (owner, 18 Nov 2026) */
   --lcrd-thumbnail-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-900);
   --lcrd-ground-pressed: var(--color-neutral-800);
@@ -321,7 +325,7 @@
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-cue-ink: var(--color-brandeis-100); /* 4.91:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
-  --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
+  --lcrd-rule-ink: var(--color-brandeis-400); /* decoration; one step quieter (owner, 18 Nov 2026) */
   --lcrd-thumbnail-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --lcrd-ground-hover: var(--color-brandeis-600);
   --lcrd-ground-pressed: var(--color-brandeis-700);

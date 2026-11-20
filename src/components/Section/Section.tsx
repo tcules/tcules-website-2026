@@ -50,6 +50,15 @@ export type SectionProps = {
    */
   flush?: boolean;
   /**
+   * The band CONTINUES the band above it on the same ground, so the seam between them is that band's
+   * foot alone: this band takes no air above its content (--sec-padding-y-continued), its foot keeps
+   * the page's one seam. For an article's body under its hero (owner and Jatin, 19 Nov 2026: "the
+   * first section has a bottom padding and then the section after that also has a padding … for
+   * article pages I can deduplicate this padding"; decisions/2026-11-19-article-body-continues-its-hero).
+   * Every other pair of bands keeps both paddings (30 Sep 2026).
+   */
+  continues?: boolean;
+  /**
    * Extra classes. Do NOT set horizontal padding, max-width, background or colour here —
    * Section owns the content column and the ground, and overriding either from outside puts
    * one band out of alignment with every other band on the page.
@@ -102,6 +111,7 @@ export function Section({
   surface = 'paper',
   density,
   flush = false,
+  continues = false,
   className,
   children,
   id,
@@ -126,6 +136,7 @@ export function Section({
         styles.section,
         !flush && density && styles[density],
         flush && styles.flush,
+        continues && !flush && styles.continues,
         className,
       )}
     >

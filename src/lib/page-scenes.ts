@@ -526,6 +526,11 @@ export const PAGE_SCENE_NAMES = [
   'specialist-ai-trust-canvas',
   'specialist-fidelity-checklist',
   'specialist-rebuild-worksheet',
+  /* The drawn guides (components/Sketch/wyg-guides.tsx; which page takes which: DRAWN_INSIGHTS,
+     @/lib/sketches). Drawn from what each guide does for its reader. */
+  'guide-ux-audit',
+  'guide-choose-agency',
+  'guide-saas-onboarding',
   /* /tools/<slug>: each tool page's worked-example story and its diagram, drawn from that page's own
      words (components/Sketch/wyg-tool-<slug>.tsx; which band takes which: LongformPage TOOL_SCENES). */
   'tool-ai-product-ux-readiness-check-example',

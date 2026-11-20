@@ -154,7 +154,6 @@ title and a body per item**; the drawing is chosen in code by name, and is never
 | Component | Used on | Content it reads |
 |---|---|---|
 | `Gateway` | home | situations: the reader's own words, one sentence, the service that answers it |
-| `VoiceLedger` | home | complaints in the customer's words, and where the work starts |
 | `OfferSheet` | offer pages | promises: what the buyer gets, then what it means |
 | `EngagementOptions` | about | engagement options and how an engagement runs (scene keyed by name) |
 | `TracePlates` | product design | stages of one screen's life (scene keyed by name) |

@@ -74,7 +74,7 @@
   --enq-bubble-ink: var(--color-neutral-800);
   --enq-composer-edge: var(--color-neutral-400);
   --enq-composer-edge-focus: var(--color-brandeis-500);
-  --enq-divider: var(--color-neutral-300);
+  --enq-divider: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 }
 
 [data-surface='ink'] {

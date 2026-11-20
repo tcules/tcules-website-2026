@@ -273,7 +273,7 @@ export type LayoutProps = {
    * taller image). Default "stretch". `baseline` aligns the items' LAST baselines: a split head's
    * ask set on its lead's last line (PageHero `display`, the Quantum split header).
    * `first-baseline` aligns their FIRST lines: a row whose two sides open at different type sizes
-   * and either may wrap — a large line and the smaller reply beside it (VoiceLedger, 11 Oct 2026),
+   * and either may wrap — a large line and the smaller reply beside it (11 Oct 2026),
    * where `start` set the reply's first line high and `baseline` sank it to the large line's last.
    */
   align?: Place | 'baseline' | 'first-baseline';

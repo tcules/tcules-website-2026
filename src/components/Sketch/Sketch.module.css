@@ -356,8 +356,9 @@
   fill: var(--skt-accent-on);
 }
 
-/* Held still (every plate, and a bare story scene not asked to move): the solved state above, with no
-   move to make, and the route a plain line at the line weight, since nothing reveals it. */
+/* Held still (every plate, and a bare story scene not asked to move): the solved state above, its END
+   state (owner, 19 Nov 2026: the static end state inside resources), with no move to make, and the
+   route a plain line at the line weight, since nothing reveals it. */
 .still
   :is(.decision, .block, .press, .release, .codeLine, .releaseMark, .trace, .grow, .glide) {
   transition: none;
@@ -382,17 +383,29 @@
   }
 }
 
-/* A live scene's one move (Move): rest is the drawing as drawn; hovered or focused, the end state. The
-   origin is a point of the drawing, so the box is the viewBox's coordinate system. */
-.live .move {
+/* A scene's one move (Move): rest is the drawing as drawn; hovered or focused (a live scene), or held
+   at its end (every still scene, and a specimen's `end`), the moved state. The origin is a point of the
+   drawing, so the box is the viewBox's coordinate system. Only a live scene transitions. */
+.live .move,
+.end .move {
   transform-box: view-box;
   transform-origin: calc(var(--skt-move-ox) * var(--skt-unit)) calc(var(--skt-move-oy) * var(--skt-unit));
+}
+.live .move {
   transition: transform var(--skt-duration) var(--skt-easing);
 }
+.end .move {
+  transform: translate(
+      calc(var(--skt-move-x) * var(--skt-unit)),
+      calc(var(--skt-move-y) * var(--skt-unit))
+    )
+    rotate(var(--skt-move-turn)) scale(var(--skt-move-sx), var(--skt-move-sy));
+}
+/* The hover makes the move only where motion is welcome; a still end state is a picture, not a move,
+   so reduced motion keeps it. */
 @media (prefers-reduced-motion: no-preference) {
   :global(a:hover) .live .move,
-  :global(a:focus-visible) .live .move,
-  .solved .move {
+  :global(a:focus-visible) .live .move {
     transform: translate(
         calc(var(--skt-move-x) * var(--skt-unit)),
         calc(var(--skt-move-y) * var(--skt-unit))
@@ -400,5 +413,6 @@
       rotate(var(--skt-move-turn)) scale(var(--skt-move-sx), var(--skt-move-sy));
   }
 }
+
 
 

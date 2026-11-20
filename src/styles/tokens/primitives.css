@@ -248,7 +248,8 @@
   --font-size-code: 14px;
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
   --font-size-display-t: 54px;
-  --font-size-display-m: 43px;
+  /* 38 on a phone (owner, 18 Nov 2026, after Jatin's m- boards: every hero title 38 at 390; was 43). */
+  --font-size-display-m: 38px;
   --font-size-mark-t: 104px;
   --font-size-mark-m: 64px;
   /* h1 and h2 open up at tablet and phone (owner, 5 Nov 2026, the responsive pass: a 28 section
@@ -345,7 +346,7 @@
   /* Breakpoint steps. Only the roles whose ratio actually moves have one — stat holds
    at 1 on every width, so it has no -m step even though its SIZE has one. */
   --line-height-display-t: 1.06;
-  --line-height-display-m: 1.08;
+  --line-height-display-m: 1.06; /* with the 38 step (18 Nov 2026; was 1.08 at 43) */
   --line-height-mark-t: 0.98;
   --line-height-mark-m: 1;
   --line-height-h1-t: 1.08;

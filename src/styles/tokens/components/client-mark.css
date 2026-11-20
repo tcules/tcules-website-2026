@@ -110,6 +110,7 @@
    neutral-600, the step --sec-ink-muted uses here. 900 was 14.62:1.                          */
 :root,[data-surface="paper"]{
 --cmark-ink:var(--color-neutral-600);         /*  4.92:1 on paper */
+--cmark-ink-hover:var(--color-neutral-950);   /* the ground's full ink, while its cell is hovered */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -118,12 +119,14 @@
    paints its marks dark. 900 was 13.06:1.                                                    */
 [data-surface="tint"]{
 --cmark-ink:var(--color-neutral-600);         /*  4.39:1 on paper-deep */
+--cmark-ink-hover:var(--color-neutral-950);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
    neutral-300: visibly quieter than white, still far above the floor. White was 17.26:1.     */
 [data-surface="ink"]{
 --cmark-ink:var(--color-neutral-300);         /* 11.07:1 on neutral-950 */
+--cmark-ink-hover:var(--color-white);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -139,4 +142,5 @@
    a brand-blue mark on brand blue, which is the tint §10 rules out.                         */
 [data-surface="blue"]{
 --cmark-ink:var(--color-brandeis-200);        /*  3.78:1 on brandeis-500 */
+--cmark-ink-hover:var(--color-white);
 }

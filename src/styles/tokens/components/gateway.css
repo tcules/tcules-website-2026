@@ -148,7 +148,7 @@
   --gwy-body-ink: var(--color-neutral-700);
   --gwy-answer-ink: var(--color-neutral-800);
   --gwy-marker-ground: var(--color-paper);
-  --gwy-rule-ink: var(--color-neutral-400); /* decoration */
+  --gwy-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --gwy-ring-color: var(--color-brandeis-500);
 }
 

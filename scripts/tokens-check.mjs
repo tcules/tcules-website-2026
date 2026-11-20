@@ -52,6 +52,7 @@ const JS_INJECTED = new Set([
   '--toc-marker-size',
   '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
   '--slider-progress',
+  '--lgrid-ticker-count', // LogoGrid ticker: the mark count, which sets the loop's duration
   '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
   '--blockcardset-count', // BlockCardSet: the card count, for the phone scroll row's rail thumb
   '--cmark-src',
@@ -253,8 +254,9 @@ for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
  *     layer cannot alias it — `--x-mark: var(--color-peridot-300)` is consumption;
  *   · every consumer stylesheet (*.module.css, globals.css, reset.css);
  *   · every .ts/.tsx under src/, so an inline style cannot route around the CSS check.
- * The exemptions are a declaration inside a rule whose selector is `::selection`, in globals.css, and
- * the sketch layer's ink block (flat drawings take peridot as their accent on ink, 31 Oct 2026).
+ * The exemption is a declaration inside a rule whose selector is `::selection`, in globals.css. (The
+ * sketch layer's ink block was exempt from 31 Oct to 19 Nov 2026, while the drawings took peridot on
+ * ink; the owner reverted them to blue.)
  * Comments are stripped first: a comment that names peridot is not consumption. Illustration SVGs
  * are files in public/ and are not scanned, which is the exemption § 4.4 asks for.
  */
@@ -277,9 +279,6 @@ for (const file of peridotFiles) {
       const selector = m[1].trim().replace(/\s+/g, ' ');
       /* globSync returns backslashes on Windows; compare in POSIX form. */
       if (file.replaceAll('\\', '/') === 'src/app/globals.css' && selector === '::selection') continue;
-      /* The flat drawings' accent on ink (owner, 31 Oct 2026; decisions/2026-10-31-peridot-leads-flat-
-         drawings-on-ink): the sketch layer's ink block only. */
-      if (file.replaceAll('\\', '/') === 'src/styles/tokens/components/sketch.css' && selector.endsWith("[data-surface='ink']")) continue;
       const line = code.slice(0, m.index + m[0].search(PERIDOT)).split('\n').length;
       problems.push(
         `${file}:${line}  reads the peridot ramp in \`${selector}\` — peridot on the website is ` +
@@ -310,5 +309,5 @@ if (problems.length) {
 }
 
 console.log(
-  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer; peridot read only by ::selection and the drawings on ink',
+  'all custom properties resolve; every component layer is registered; no literal colours or raw distances outside the token layer; peridot read only by ::selection',
 );

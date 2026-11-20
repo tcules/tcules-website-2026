@@ -733,6 +733,7 @@ function CtaActions({
             emphasis={emphasis}
             size="md"
             extendHitArea
+            block={solid ? 'until-md' : undefined}
             icon={solid ? undefined : <Icon name="arrow-right" />}
           >
             {action.label}

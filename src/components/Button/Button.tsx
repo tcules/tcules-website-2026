@@ -111,6 +111,15 @@ type ButtonBase = Omit<
    */
   extendHitArea?: boolean;
   /**
+   * `until-md`: below 768 the button runs the full width of its container, at the lg floor (48)
+   * (owner, 18 Nov 2026, after Jatin's m- boards: "the closing button runs the full width like every
+   * main button on phone"). Set by the slots that place the page's main action — PageHero's solid,
+   * CtaRow's solid, CtaSection's solid, EnquiryForm's submit — so one mechanism serves all of them.
+   * From 768 the button is its own size again. Width and floor only: colour, padding and type are
+   * the size's.
+   */
+  block?: 'until-md';
+  /**
    * Extra classes. Do NOT set colour, background, padding, height or radius here — all six live
    * in the token layer, per surface, and a hand-set value is exactly the drift the layer exists
    * to prevent. Position and margin are the caller's business; nothing else is.
@@ -226,6 +235,7 @@ export function Button({
   busy = false,
   disabled = false,
   extendHitArea = false,
+  block,
   type,
   className,
   children,
@@ -274,6 +284,7 @@ export function Button({
         off ? styles.disabled : busy ? styles.busy : styles.live,
         held && styles.held,
         extendHitArea && styles.hit,
+        block === 'until-md' && styles.blockUntilMd,
         glued && styles.glued,
         className,
       )}

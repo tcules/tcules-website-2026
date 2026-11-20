@@ -11,13 +11,13 @@ import {
   DataTable,
   EngagementOptions,
   Gateway,
+  ListCard,
   PageHero,
   ProfileCard,
   ProfileFollow,
   OfferSheet,
   Statement,
   TestimonialWall,
-  VoiceLedger,
   type EngagementScope,
   type HeroTrail,
 } from '@/patterns';
@@ -200,14 +200,39 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         />
       </ContentSection>
 
-      <VoiceLedger
+      {/* The situations as the ruled tile set (ListCard `tile`), each situation its title and what it
+          involves its body (O.5a, 17 Nov 2026: VoiceLedger retired). */}
+      <ContentSection
         id="who-we-work-with"
         heading={c.who.heading}
         headingId="who-we-work-with-heading"
         lead={c.who.lead}
-        items={c.who.items}
-        note={c.who.note ? <p>{c.who.note}</p> : undefined}
-      />
+      >
+        <Layout rowGap="stack">
+          <Layout
+            as="ul"
+            columns={{ base: 1, md: c.who.items.length % 3 === 0 ? 3 : 2 }}
+            colGap="gutter"
+            rowGap="stack"
+          >
+            {c.who.items.map((item) => (
+              <ListCard
+                key={item.voice}
+                form="tile"
+                size="sm"
+                titleAs="h3"
+                title={item.voice}
+                body={item.reply}
+              />
+            ))}
+          </Layout>
+          {c.who.note ? (
+            <ContentSectionText>
+              <p>{c.who.note}</p>
+            </ContentSectionText>
+          ) : null}
+        </Layout>
+      </ContentSection>
 
       <OfferSheet
         id="difference"
