@@ -22,19 +22,23 @@ export function TickerFold({ hidden, children }: { hidden: number; children: Rea
       <div id={id} data-open={open || undefined} className={styles.tickerFold}>
         {children}
       </div>
-      <Layout justifyItems="center" className={styles.tickerFoldToggle}>
-        <Button
-          emphasis="link"
-          size="md"
-          extendHitArea
-          aria-expanded={open}
-          aria-controls={id}
-          onClick={() => setOpen((value) => !value)}
-          icon={<Icon name={open ? 'alt-arrow-up' : 'alt-arrow-down'} />}
-        >
-          {open ? 'See fewer' : `See ${hidden} more`}
-        </Button>
-      </Layout>
+      {/* The show/hide sits on a plain wrapper: on the Layout itself, Layout's own `display` (later in
+          the cascade) won, so the toggle showed at every width. */}
+      <div className={styles.tickerFoldToggle}>
+        <Layout justifyItems="center">
+          <Button
+            emphasis="link"
+            size="md"
+            extendHitArea
+            aria-expanded={open}
+            aria-controls={id}
+            onClick={() => setOpen((value) => !value)}
+            icon={<Icon name={open ? 'alt-arrow-up' : 'alt-arrow-down'} />}
+          >
+            {open ? 'See fewer' : `See ${hidden} more`}
+          </Button>
+        </Layout>
+      </div>
     </Layout>
   );
 }
