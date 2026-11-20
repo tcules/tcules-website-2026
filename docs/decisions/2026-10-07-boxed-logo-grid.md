@@ -1,7 +1,7 @@
 ---
 title: "Client logos: a boxed grid, one viewport, no marquee"
 date: 2026-10-07
-status: active
+status: superseded
 area: [proof, components]
 source: "Owner review, 7 Oct 2026 (corrected 8 Oct)"
 supersedes: []

@@ -202,7 +202,7 @@
   --bcrd-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --bcrd-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --bcrd-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --bcrd-text-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
+  --bcrd-text-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --bcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --bcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --bcrd-media-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */

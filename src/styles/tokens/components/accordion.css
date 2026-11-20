@@ -81,7 +81,7 @@
   --acc-label-mark-ink-hover: var(--color-neutral-950);
   --acc-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --acc-mark-ink-hover: var(--color-brandeis-700); /* 8.99:1 */
-  --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
+  --acc-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --acc-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --acc-ring-gap-color: var(--color-paper-deep);
 }

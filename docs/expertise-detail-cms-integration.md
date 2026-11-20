@@ -40,7 +40,7 @@ Each section renders through the component it renders through on a Service page
 | Industry Grid                             | `expertise` selection               | shared pills band, links from the related Expertise records                   | C-pills               |
 | FAQ                                       | —                                   | shared FAQ band from related FAQ records                                      | D-faq                 |
 | Editorial                                 | `text`                              | prose band                                                                    | C-text                |
-| Expertise Directory, Question Role Ledger | not used on any detail record today | `ExpertiseDirectoryBand`, `QuestionLedgerBand`                                | C-image, voice-ledger |
+| Expertise Directory, Question Role Ledger | not used on any detail record today | `ExpertiseDirectoryBand`, `QuestionLedgerBand`                                | C-image, list-tiles |
 
 Relationships: case cards link to `/case-studies/{slug}` through the CMS's resolved card; testimonials
 and FAQs come from their related records; Industry Grid entries take their route from the related

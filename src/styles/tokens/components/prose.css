@@ -111,7 +111,7 @@
 --prose-link-rule:var(--color-brandeis-300);
 --prose-quote-ink:var(--color-neutral-800);
 --prose-quote-rule:var(--color-brandeis-500);
---prose-rule:var(--color-neutral-300);
+--prose-rule:var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
 --prose-code-bg:var(--color-neutral-200);--prose-code-fg:var(--color-neutral-900);
 --prose-pre-bg:var(--color-neutral-950);--prose-pre-fg:var(--color-neutral-100);
 --prose-table-body-ground:var(--color-paper);      /* the frame is paper on the deeper band; muted 8.14 */

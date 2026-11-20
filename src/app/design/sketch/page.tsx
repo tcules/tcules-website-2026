@@ -61,6 +61,10 @@ const TILE: readonly SketchName[] = [
   'specialist-fidelity-checklist',
   'specialist-rebuild-worksheet',
   'specialist-prototype-readiness-checklist',
+  /* The drawn guides (19 Nov 2026): each guide's own scene, shown still in its hero. */
+  'guide-ux-audit',
+  'guide-choose-agency',
+  'guide-saas-onboarding',
   /* The expertise pages' What we design tiles that link to a case or page (2.62): each moves on hover. */
   'kind-ai-products-developer-tools-model-api-platforms-workflow',
   'kind-ai-products-developer-tools-ai-review-tools-engineer',
@@ -283,7 +287,7 @@ export default function SketchSpecimen() {
           </Specimen>
           <Specimen
             title={`S.7 · the tile drawings, rest and moved · ${surface}`}
-            note="Owner, 30 Oct 2026 (decisions/2026-10-30-service-tile-drawing-moves-on-hover): every tile drawing makes ONE transform-only move when its link is hovered or focused, on the tile's curve: a part moves (Move) or arrives (GrowIn). Left: at rest (hover it). Right: held moved. Bare frame, as the bento sets them; a plate never moves. Reduced motion holds rest."
+            note="Owner, 30 Oct 2026 (decisions/2026-10-30-service-tile-drawing-moves-on-hover): every tile drawing makes ONE transform-only move when its link is hovered or focused, on the tile's curve: a part moves (Move) or arrives (GrowIn). Left: at rest (hover it). Right: held moved, which is also how every still copy of the drawing shows it, a plate, a resource's hero or a resource card's cover (owner, 19 Nov 2026: motion on the tiles, the static end state inside resources). Bare frame, as the bento sets them; a plate never moves. Reduced motion holds a hovered tile at rest; a still end state stays."
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {TILE.map((name) => (

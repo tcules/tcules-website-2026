@@ -2,8 +2,9 @@ import { Layout } from '@/components';
 import { placeholderImage } from '@/lib/placeholders';
 import { expertisePath } from '@/lib/routes';
 import { serviceIllustration } from '@/lib/service-illustrations';
-import { BlockCardSet, ContentSection, VoiceLedger, type BlockCardSetItem } from '@/patterns';
+import { BlockCardSet, ContentSection, type BlockCardSetItem } from '@/patterns';
 
+import { ListTiles } from './blocks';
 import { BandBody } from './CopyBands';
 import styles from './CorpusPage.module.css';
 import type {
@@ -65,21 +66,28 @@ export function ExpertiseDirectoryBand({
   );
 }
 
-/** The question/role ledger (VoiceLedger): each question beside the role that asks it. */
+/**
+ * The question/role ledger: each question a ruled tile's title, the role that asks it its body
+ * (ListTiles, as the hard-parts band sets the same people; O.5a, 17 Nov 2026: VoiceLedger retired).
+ * The ledger's following words under the tiles.
+ */
 export function QuestionLedgerBand({ section }: { section: QuestionLedgerSection }) {
+  const rows = section.items.map((item) => ({ title: item.voice, body: item.reply }));
   return (
-    <VoiceLedger
+    <ContentSection
       id={section.id}
       heading={section.heading}
       headingId={section.headingId}
-      lead={section.lead}
       surface={section.surface}
-      items={section.items}
-      note={
-        section.after.length > 0 ? (
+      data-band="list-tiles"
+      lead={section.lead}
+    >
+      <Layout rowGap="stack">
+        <ListTiles rows={rows} columns={rows.length % 3 === 0 ? 3 : 2} />
+        {section.after.length > 0 ? (
           <BandBody blocks={section.after} labelledBy={section.headingId} />
-        ) : undefined
-      }
-    />
+        ) : null}
+      </Layout>
+    </ContentSection>
   );
 }

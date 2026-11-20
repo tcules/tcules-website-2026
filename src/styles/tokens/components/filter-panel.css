@@ -47,7 +47,7 @@
   --fpn-ink: var(--color-neutral-900);
   --fpn-heading-ink: var(--color-neutral-900);
   --fpn-label-ink: var(--color-neutral-700); /* 7.27:1 */
-  --fpn-rule-ink: var(--color-neutral-300);
+  --fpn-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --fpn-backdrop: color-mix(in srgb, var(--color-neutral-900) 24%, transparent);
   --fpn-ring-color: var(--color-brandeis-500);
 }

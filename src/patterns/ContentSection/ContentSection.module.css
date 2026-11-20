@@ -4,9 +4,9 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .mark .heading .headingMd .headingEyebrow .headingXl .asideFill .lead .leadBeside .centred
+   Classes: .eyebrow .mark .heading .headingMd .headingEyebrow .headingXl .asideFill .lead .leadBeside .coda .centred
    .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textCentred .textureLg .photoTrack .photo
-   .photoLeads .photoToCopy
+   .photoLeads .photoToCopy .untilLg .fromLg .fillTrack .fill
 
    The @media queries swap a role, a crop or an alignment, never a distance: .leadBeside (the
    lead's ROLE follows the arrangement, and the beside arrangement only exists from 1024),
@@ -52,6 +52,14 @@
   /* The title measure is set in the title's own em, so at the eyebrow's size it would break a short
      label in two: an eyebrow is one line, as the eyebrow above a title is. */
   max-inline-size: none;
+}
+
+/* The media split's closing statement, under both tracks (see `coda`). */
+.coda {
+  font: var(--csec-coda-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--csec-heading-ink);
+  max-inline-size: var(--csec-coda-measure);
 }
 
 .lead {
@@ -155,7 +163,7 @@
   }
 }
 
-/* The prominent head (`headingSize="xl"`, and the media split's head unless `media.head="lg"`): the
+/* The prominent head (`headingSize="xl"`, or the media split's head with `media.head="xl"`): the
    heading steps to the h1 role, on the title measure it already has. After .heading and .headingMd
    at equal specificity, so it wins by order. A role swap, not a size: h1 re-declares itself at 1023
    and 767 like every title role, so it needs no breakpoint here. It was the display role until home
@@ -163,6 +171,16 @@
 .headingXl {
   font: var(--csec-heading-text-xl);
   letter-spacing: var(--csec-heading-tracking-xl);
+}
+
+/* On a phone the prominent head is the band's h2 like every other (owner, 18 Nov 2026, after Jatin's
+   m- boards: the media split's heading at 32, where the h1 role set it at 38 above its neighbours).
+   A role swap below 768, not a size. */
+@media (max-width: 767.98px) {
+  .headingXl {
+    font: var(--csec-heading-text);
+    letter-spacing: var(--csec-heading-tracking);
+  }
 }
 
 /* The media split's photograph: a track and a box (see MediaSplit in the TSX).
@@ -178,6 +196,13 @@
   container-type: inline-size;
 }
 
+/* `media.phone="none"`: the band is its words alone below 768 (m-About, 18 Nov 2026). */
+@media (max-width: 767px) {
+  .photoPhoneNone {
+    display: none;
+  }
+}
+
 .photo {
   inline-size: 100%;
   aspect-ratio: var(--csec-photo-ratio);
@@ -190,6 +215,44 @@
 
   .photoLeads {
     aspect-ratio: var(--csec-photo-ratio-lead);
+  }
+}
+
+/* `headAbove` (round 10, owner 19 Nov 2026): the PHOTOGRAPH beside a list of rows is as tall as the rows
+   (a drawing keeps its own ratio since round 11),
+   not its own ratio. Below 1024 the figure stands under the head at the photograph's stacked ratio.
+   From 1024 the track is size-contained, so it adds nothing to the row's height, and stretched, so it
+   takes the height the rows set; the box fills it. The box is a size container so a `Sketch fill`
+   inside can scale its drawing and its dot field to the box's shorter side. Sizing, not arrangement. */
+.fill {
+  container-type: size;
+  inline-size: 100%;
+  aspect-ratio: var(--csec-photo-ratio);
+}
+
+@media (min-width: 1024px) {
+  .fillTrack {
+    contain: size;
+  }
+
+  .fill {
+    block-size: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+/* `figureFirst` (owner, 18 Nov 2026, Jatin's m- boards): the figure placed twice and shown once —
+   under the head below 1024, in its own track from 1024. `display: none` drops the other placement
+   from the a11y tree. */
+@media (min-width: 1024px) {
+  .untilLg {
+    display: none;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .fromLg {
+    display: none;
   }
 }
 

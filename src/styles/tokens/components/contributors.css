@@ -45,7 +45,7 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --ctb-label-ink: var(--color-neutral-600);
-  --ctb-rule-ink: var(--color-neutral-400); /* decoration */
+  --ctb-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --ctb-portrait-ground: var(--color-neutral-100); /* decoration */
   --ctb-initials-ink: var(--color-neutral-900);
   --ctb-name-ink: var(--color-neutral-900);

@@ -651,6 +651,15 @@
 
    For toolbars and table rows that stay dense on touch. A button that can simply step up to lg
    should do that instead — at 48 the box already clears 44 and needs nothing. */
+/* `block="until-md"` — the page's main action on a phone (owner, 18 Nov 2026): the container's
+   full width at the lg floor, below 768 only. Sizing, not arrangement: the container still places it. */
+@media (max-width: 767.98px) {
+  .blockUntilMd {
+    inline-size: 100%;
+    min-block-size: var(--btn-height-lg);
+  }
+}
+
 .hit {
   position: relative;
 }

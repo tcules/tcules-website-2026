@@ -293,11 +293,6 @@ const SPECIMENS = [
         note: "a page's hard parts — tabs on a stage (one slide moving as one piece, autoplay with no control), four of five without an example, two claims, and the page layout, ruled",
       },
       {
-        href: '/design/voice-ledger',
-        name: 'VoiceLedger',
-        note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",
-      },
-      {
         href: '/design/case-spread',
         name: 'CaseSpread',
         note: 'one worked example — problem, what we did and the result on one rail (blue at the result) beside its sticky 16:9 evidence; three steps, no action, paper and tint',
@@ -425,12 +420,12 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'Kit · Client logos',
-        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces',
+        note: 'band H, the boxed grid (r7): context line, led by the rating badge, beside a short h4 heading, 12 cells, open edges, surfaces; the ticker (one moving row, pauses on hover or focus)',
       },
       {
         href: '/design/kit/logos',
         name: 'LogoGrid',
-        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks; arrangement="ticker": one slow looping row, no boxes, hover or focus pauses, hovered mark in full ink, still under reduced motion',
       },
       {
         href: '/design/kit/gateway',

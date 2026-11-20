@@ -1,9 +1,15 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { ClientMark, Cluster, Layout, type ClientMarkProps } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './LogoGrid.module.css';
+import { TickerFold } from './TickerFold';
+
+/* The still phone wall shows six marks before its toggle (owner, 19 Nov 2026). Declared here, not in
+   the client TickerFold: a server module reading a constant from a 'use client' file gets a client
+   reference, not the number. The stylesheet's `:nth-child(n + 7)` is the same six. */
+const TICKER_PHONE_FOLD = 6;
 
 /** One client with an approved mark: the same record ClientMark takes, density included — it is what sizes the mark. */
 export type LogoGridMarkArt = Omit<ClientMarkProps, 'className'>;
@@ -178,8 +184,16 @@ export type LogoGridProps = {
    * track and the grid in the trailing one, the head CENTRED on the grid's height so the two read
    * as one composition (9 Oct review: top-aligned, a 3 × 3 grid left ~200 of dead paper under a
    * short head). Below 1024 it stacks.
+   *
+   * `ticker` (owner, 17 Nov 2026, the page overhaul's hero logos): no boxes — the marks in ONE row
+   * that moves slowly sideways and loops, fading out at both edges, under the context line. Pointing
+   * at the row or giving it keyboard focus pauses it, and the mark under the pointer takes the
+   * ground's full ink. There is no pause button (owner, 17 Nov 2026). With reduced motion nothing
+   * moves: the row gives way to the boxed wall (the default density), every mark in view, and on a phone past six
+   * marks the wall folds behind a "See N more" toggle (owner, 19 Nov 2026). `edges`, `density` and
+   * `track` do not apply. Supersedes decisions/2026-10-07-boxed-logo-grid's "no marquee" for this arrangement.
    */
-  arrangement?: 'stacked' | 'beside';
+  arrangement?: 'stacked' | 'beside' | 'ticker';
   /**
    * The head's alignment in `stacked`. The grid itself always spans its track. Default `start`.
    * `center-narrow` (owner, 5 Nov 2026): centred below 1024, where the wall is two or three marks
@@ -240,6 +254,18 @@ export function LogoGrid({
   density = 'default',
   className,
 }: LogoGridProps) {
+  if (arrangement === 'ticker') {
+    return (
+      <Ticker
+        marks={marks}
+        context={context}
+        contextAs={contextAs}
+        headingId={headingId}
+        className={className}
+      />
+    );
+  }
+
   const compact = density === 'compact';
   const beside = arrangement === 'beside';
   const centred = !beside && align === 'center';
@@ -339,6 +365,97 @@ export function LogoGrid({
     >
       {head}
       {grid}
+    </Layout>
+  );
+}
+
+/**
+ * The ticker: the marks once, then the same marks again, side by side in one track that slides left
+ * by exactly half its length and loops, so the seam never shows. The copy is aria-hidden: a screen
+ * reader hears each client once. The row's own box is focusable so a keyboard user can stop it, and
+ * it is a labelled region so that focus lands somewhere named.
+ */
+function Ticker({
+  marks,
+  context,
+  contextAs,
+  headingId,
+  className,
+}: Pick<LogoGridProps, 'marks' | 'context' | 'contextAs' | 'headingId' | 'className'>) {
+  const Context = contextAs ?? 'h2';
+  const set = () => (
+    <Cluster as="ul" nowrap>
+      {marks.map((mark) => (
+        <Cluster
+          as="li"
+          key={mark.name}
+          justify="center"
+          align="center"
+          className={styles.tickerCell}
+        >
+          {!hasArt(mark) ? (
+            <span className={styles.wordmark}>{mark.name}</span>
+          ) : (
+            <ClientMark {...mark} size="sm" highlight="hover" />
+          )}
+        </Cluster>
+      ))}
+    </Cluster>
+  );
+  const count = { '--lgrid-ticker-count': marks.length } as CSSProperties;
+
+  const row = (
+    <div
+      className={styles.ticker}
+      role="region"
+      aria-labelledby={context ? headingId : undefined}
+      aria-label={context ? undefined : 'Client logos'}
+      tabIndex={0}
+    >
+      <div className={styles.tickerFade}>
+        <Cluster nowrap className={styles.tickerTrack} style={count}>
+          {set()}
+          {/* Cluster forwards no ARIA, so the copy's wrapper carries the hiding. */}
+          <div aria-hidden="true">
+            {set()}
+          </div>
+        </Cluster>
+      </div>
+    </div>
+  );
+
+  /* With reduced motion the row does not move, so it is not drawn at all: the boxed wall stands in
+     for it (owner, 19 Nov 2026: "just show the logogrid on reduced motion from before"), the approved
+     default wall (at most four across, so the last row closes on a pair: compact's six left 22 marks
+     on a half row), no head of its own (the context line above serves both). Only one of
+     the two is ever displayed, so a screen reader hears each client once. On a phone past six marks
+     the wall folds behind a toggle (TickerFold). */
+  const wall = (
+    <div className={styles.tickerWall}>
+      <LogoGrid marks={marks} />
+    </div>
+  );
+  const body =
+    marks.length > TICKER_PHONE_FOLD ? (
+      <TickerFold hidden={marks.length - TICKER_PHONE_FOLD}>
+        {row}
+        {wall}
+      </TickerFold>
+    ) : (
+      <>
+        {row}
+        {wall}
+      </>
+    );
+
+  if (!context) return className ? <div className={className}>{body}</div> : body;
+
+  return (
+    <Layout rowGap="block" className={className}>
+      <Context id={headingId} className={styles.context}>
+        {context}
+      </Context>
+      {body}
     </Layout>
   );
 }

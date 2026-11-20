@@ -94,7 +94,7 @@
   --rsn-title-ink: var(--color-neutral-900); /* 13.05:1 */
   --rsn-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-lead-ink: var(--color-neutral-800); /* 10.54:1 */
-  --rsn-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on the deeper ground */
+  --rsn-rule-ink: var(--color-neutral-200); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --rsn-proof-label-ink: var(--color-neutral-700); /* 7.27:1 */
   --rsn-wordmark-ink: var(--color-neutral-600); /* the client marks' ink, 4.39:1 */
   --rsn-cover-ground: var(--color-paper);

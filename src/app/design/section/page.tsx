@@ -15,6 +15,7 @@ type SeamBand = {
   surface: SectionSurface;
   density?: SectionDensity;
   flush?: boolean;
+  continues?: boolean;
 };
 
 /**
@@ -31,6 +32,12 @@ const SEAMS: readonly SeamBand[] = [
     label: 'Seam · paper + paper — both paddings, 96 + 96',
     note: 'Follows a paper band and keeps its own top padding: the seam is 192. On one ground the air is what separates two arguments (reverted from the single seam, 30 Sep 2026).',
     surface: 'paper',
+  },
+  {
+    label: 'Seam · paper continues paper — one padding, 96',
+    note: 'continues (owner and Jatin, 19 Nov 2026): an article body under its hero takes no air above its content, so the seam is the band above\'s foot alone. Articles only; every other pair keeps both paddings.',
+    surface: 'paper',
+    continues: true,
   },
   {
     label: 'Seam · paper → tint — full air, 96 + 96',
@@ -131,6 +138,7 @@ export default function SectionSpecimenPage() {
           surface={band.surface}
           density={band.density}
           flush={band.flush}
+          continues={band.continues}
           className={s.bandOutline}
         >
           <Layout rowGap="text">
@@ -140,6 +148,7 @@ export default function SectionSpecimenPage() {
               surface=&quot;{band.surface}&quot;
               {band.density ? ` · density="${band.density}"` : ''}
               {band.flush ? ' · flush' : ''}
+              {band.continues ? ' · continues' : ''}
             </Box>
           </Layout>
         </Section>

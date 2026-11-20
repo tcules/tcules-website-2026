@@ -542,7 +542,7 @@ export function kindByShape(band: CorpusBand, sig: string = signature(band)): Of
 
 /* ── Planning ───────────────────────────────────────────────────────────────────── */
 
-/* Product-design round 6 (11 Oct 2026, page-mapping § 23): `symptoms` (VoiceLedger), `record`
+/* Product-design round 6 (11 Oct 2026, page-mapping § 23): `symptoms` (ruled tiles since VoiceLedger's retirement, 17 Nov 2026), `record`
    (CaseSpread) and `tiles` (EngagementOptions) no longer carry a photograph beside their copy, so they
    take no side in the alternation. `record` keeps its evidence image, always at the end of its claim. */
 const MEDIA_KINDS: ReadonlySet<OfferKind> = new Set([

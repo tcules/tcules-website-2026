@@ -94,13 +94,15 @@ export function PublishedHero({
   const { recognition, breadcrumbs, actionsNote, arrangement, media, ...props } = hero;
   const foot = recognition?.marks.length ? (
     <div id={recognition.id}>
+      {/* The hero's client logos as the slow ticker (owner, 17 Nov 2026;
+          decisions/2026-11-17-client-logos-may-run-as-a-ticker): one moving row that pauses on hover
+          or focus, the boxed wall under reduced motion. The marks are whatever the CMS sets. */}
       <LogoGrid
         marks={recognition.marks}
         context={recognition.title}
         contextAs="h2"
         headingId={recognition.id ? `${recognition.id}-heading` : undefined}
-        edges="closed"
-        density={recognition.compact ? 'compact' : 'default'}
+        arrangement="ticker"
       />
     </div>
   ) : undefined;
@@ -650,8 +652,10 @@ export function PublishedSection({
           data-band="D-faq"
           eyebrow={section.eyebrow}
           lead={section.lead}
+          /* The "Why teams choose" split (owner, 19 Nov 2026: "make the FAQ split the same as 'why
+             teams choose…'"): the default head tracks, 5 : 7 from 1024 and 1 : 2 from 1440, the
+             questions in the long track, not halves. Every FAQ band takes it, since all render here. */
           arrangement="beside"
-          split="halves"
         >
           {section.items.length ? <Accordion items={section.items} /> : null}
         </ContentSection>

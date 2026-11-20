@@ -32,7 +32,9 @@ export type ResourceArticleProps = {
 export function ResourceArticle({ outline, items }: ResourceArticleProps) {
   const hasOutline = outline.length >= 2;
   return (
-    <Section as="div" surface="paper">
+    /* The body continues the hero above it on the same paper: one seam between them, the hero's foot,
+       not the hero's and this band's both (owner and Jatin, 19 Nov 2026). */
+    <Section as="div" surface="paper" continues>
       <Layout
         columns={hasOutline ? { base: 1, lg: [1, 4] } : { base: 1 }}
         colGap="column"

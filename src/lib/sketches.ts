@@ -1,4 +1,5 @@
 import { PAGE_SCENE_NAMES, type PageSceneName } from './page-scenes';
+import { ROUTES } from './routes';
 
 /**
  * The Sketch scenes (components/Sketch) and which one a service page takes. Named here, once, so the
@@ -317,6 +318,51 @@ export function serviceSceneFor(
 ): ServiceSceneName | OfferSceneName | L1SpecialistScene | DestinationSceneName | undefined {
   const route = href.split('#')[0] ?? href;
   return BY_ROUTE[route] ?? SPECIALIST_BY_ROUTE[route];
+}
+
+/**
+/**
+ * The drawn guides' scenes (components/Sketch/wyg-guides.tsx): each drawn from what that guide does for
+ * its reader. Named here so SketchName covers them; which page takes which is `DRAWN_INSIGHTS`.
+ */
+export type GuideSceneName = Extract<PageSceneName, `guide-${string}`>;
+
+/**
+ * THE ONE MAP OF DRAWN INSIGHTS (owner, 19 Nov 2026): every guide or article the site draws a thumbnail
+ * for, by its route. The same drawing is its card (the insights hub's cover via
+ * content/sources/cover-scenes.ts, which derives from this map) and its page hero (`resourceSceneFor`):
+ * "the guidepages and articles should show their drawings, still, in their hero so it matches their
+ * card". A new drawn insight is one row here.
+ */
+export const DRAWN_INSIGHTS: Readonly<Record<string, GuideSceneName | ArticleSceneName>> = {
+  '/insights/guides/how-to-use-a-ux-product-audit': 'guide-ux-audit',
+  '/insights/guides/how-to-choose-a-product-design-agency': 'guide-choose-agency',
+  '/insights/guides/saas-onboarding-strategies-to-increase-customer-retention': 'guide-saas-onboarding',
+  /* The article covers, each drawn for that one article from its own argument (owner, 13 Oct 2026). */
+  '/insights/accepting-ai-generated-front-end-code-what-review-is-for-now': 'code-review',
+  '/insights/vibe-coded-app-security-checklist': 'security-checklist',
+  '/insights/vibe-coded-app-production-ready': 'prototype-to-production',
+};
+
+/** A drawn insight's drawing, by route, for its page hero; undefined for an insight not drawn. */
+export function resourceSceneFor(href: string): GuideSceneName | ArticleSceneName | undefined {
+  const route = href.split(/[?#]/)[0] ?? href;
+  return DRAWN_INSIGHTS[route];
+}
+
+/**
+ * Whether a flat drawing in a link to `href` moves on hover (owner, 19 Nov 2026: "one consistent
+ * approach"). A RESOURCE's drawing (an insight of any kind, a free tool, a glossary entry) is its
+ * thumbnail and stays still at its end state, on every card and in its own hero; a drawing that leads
+ * into a page (a service, an audit, a sector, How we work) moves on the card's hover. Decided here from
+ * the destination, once, so no caller passes motion by hand.
+ */
+export function drawingMoves(href: string | undefined): boolean {
+  const route = href?.trim().split(/[?#]/)[0];
+  if (!route) return false;
+  return ![ROUTES.insights, ROUTES.tools, ROUTES.glossary].some((index) =>
+    route.startsWith(`${index}/`),
+  );
 }
 
 /**

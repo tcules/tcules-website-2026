@@ -21,7 +21,6 @@ import {
   TestimonialBeside,
   Thread,
   TracePlates,
-  VoiceLedger,
   type BentoCta,
   type BlockCardSetItem,
   type CollagePhotos,
@@ -621,7 +620,7 @@ export const WHY_GLYPHS: Readonly<Record<string, IconName>> = {
 /**
  * "Why founders and product teams choose Tcules", on every page that repeats it (owner, 4 Nov 2026:
  * the homepage's design carries across): the heading at the left with its way deeper under it, the
- * six reasons down the right in halves, one ruled row each, its glyph inline before its title and its
+ * six reasons down the right on the head split, one ruled row each, its glyph inline before its title and its
  * sentence under it (OfferSheet `list`). A reason whose title has no glyph sets the whole list
  * without glyphs, so nothing is dropped and the set never mixes.
  */
@@ -789,14 +788,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'faq':
       return (
         /* Beside: the question set reads down beside its heading (owner, 4 Nov 2026, homepage pass;
-           decisions/2026-11-04-faq-beside-its-heading), in halves (owner, 4 Nov 2026: 50/50). One FAQ shape on
+           decisions/2026-11-04-faq-beside-its-heading), on the one head split (owner, 19 Nov 2026; halves retired). One FAQ shape on
            every page. */
         <ContentSection
           {...head(band)}
           data-band="D-faq"
           surface={unit.surface}
           arrangement="beside"
-          split="halves"
           footer={faqFooter(band)}
         >
           <FaqItems band={band} />
@@ -985,23 +983,20 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return <CloseBand page={page} band={band} surface={unit.surface} />;
     }
 
-    /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
-       product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
-       know which service they need, so the complaint is the band's large thing, set in the speech
-       voice down one edge, and the answer is the reply beside it. Round 1–5 set them as a two-column
-       read-down beside a placeholder photograph: the eye zigzagged and the voices read as titles. */
-    case 'symptoms':
+    /* Symptoms in the customer's own words, each answered by where we start: the ruled tile set
+       (ListTiles), as every labelled set (O.5a, 17 Nov 2026: VoiceLedger retired, it read as this set
+       under another name). The complaint is the tile's title, the answer its body. */
+    case 'symptoms': {
+      const rows = leads(band);
       return (
-        <VoiceLedger
-          {...head(band)}
-          lead={leadText(band)}
-          items={leads(band).map((row) => ({
-            voice: row.title,
-            reply: renderInline(row.body),
-            scene: sceneFor(ctx, band, row.title),
-          }))}
-        />
+        <ContentSection {...head(band)} data-band="list-tiles" lead={leadText(band)}>
+          <ListTiles
+            rows={rows.map((row) => ({ title: row.title, ...bodyOf(row.body) }))}
+            columns={rows.length % 3 === 0 ? 3 : 2}
+          />
+        </ContentSection>
       );
+    }
 
     /* A worked example, with the emphasis where the argument is (CaseSpread; product-design round 6,
        page-mapping § 23): the OUTCOME ("The result.") is the claim, beside the evidence at 16:9; the
@@ -1586,11 +1581,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* People who each have a question, in their own words (VoiceLedger, as the service page's
-       "Where we start"; owner, 11 Oct 2026: the icon-card grid was "too dense and doesn't make
-       sense"). Each question is the row's large thing — what a visitor recognises — and the person
-       asking stands beside it; the closing line sits under the rows, in the same band (it was a
-       Statement band of its own, part b, which read as a second section). */
+    /* People who each have a question, in their own words, the person asking under it: the ruled
+       tile set (ListTiles), as the CMS's hard-parts band draws the same people (O.5a, 17 Nov 2026:
+       VoiceLedger retired). The closing line, then the hard parts as claim rows, follow in the same
+       band, the kind's one approved component (D-claims). */
     case 'personas': {
       if (unit.part === 'b') return null;
       const table = blocksOf(band, 'table')[0];
@@ -1608,27 +1602,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           labelledBy={head(band).headingId}
         />
       );
+      const people = (table?.rows ?? []).map((row) => ({
+        title: plain(row[1] ?? []),
+        body: plain(row[0] ?? []),
+      }));
       return (
-        <VoiceLedger
-          {...head(band)}
-          lead={leadText(band)}
-          items={(table?.rows ?? []).map((row) => ({
-            voice: plain(row[1] ?? []),
-            reply: plain(row[0] ?? []),
-          }))}
-          note={
-            <Layout rowGap="stack">
-              {closing.length > 0 ? (
-                <ContentSectionText>
-                  {closing.map((runs, index) => (
-                    <p key={index}>{renderInline(runs)}</p>
-                  ))}
-                </ContentSectionText>
-              ) : null}
-              {rows}
-            </Layout>
-          }
-        />
+        <ContentSection {...head(band)} data-band="D-claims" lead={leadText(band)}>
+          <Layout rowGap="stack">
+            <ListTiles rows={people} columns={people.length % 3 === 0 ? 3 : 2} />
+            {closing.length > 0 ? (
+              <ContentSectionText>
+                {closing.map((runs, index) => (
+                  <p key={index}>{renderInline(runs)}</p>
+                ))}
+              </ContentSectionText>
+            ) : null}
+            {rows}
+          </Layout>
+        </ContentSection>
       );
     }
 
@@ -2457,7 +2448,7 @@ function ListBesideBand({
   const items = band.blocks.flatMap((block) => (block.type === 'list' ? block.items : []));
   const lines = band.blocks.flatMap((block) => (block.type === 'paragraph' ? [block] : []));
   return (
-    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside" split="halves">
+    <ContentSection {...head(band)} data-band="list-beside" arrangement="beside">
       <Layout as="ul" rowGap="none">
         {items.map((runs, index) => {
           const title = plain(runs);
