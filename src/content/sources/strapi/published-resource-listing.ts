@@ -14,7 +14,7 @@ import type {
   InsightsPage,
 } from '../../types';
 import { COVER_SCENES } from '../cover-scenes';
-import { action, image, rows, text } from './home';
+import { action, ctaQuote, formUrlLabels, image, rows, text } from './home';
 import type { CmsHero, CmsHomeSection, CmsImage, Entries } from './home-types';
 import {
   PUBLISHED_RESOURCE_LISTING_QUERY,
@@ -240,12 +240,24 @@ function ctaCopy(cta: CmsCta) {
   }
   const act = ctaAction(cta);
   const picture = insightImage(cta.media);
+  const quote = ctaQuote(cta.ctaQuote, `CTA ${cta.id}`);
+  const points = rows(cta.points).flatMap((p) => (text(p.text) ? [{ label: text(p.text)! }] : []));
+  const reply = text(cta.form?.replyLabel);
+  const rawUrlLabel = cta.form?.urlLabel;
+  const urlLabel = formUrlLabels.find(
+    (label) => label.replace(/[^a-zA-Z0-9]+/g, '_').replace(/_$/, '') === rawUrlLabel || label === rawUrlLabel,
+  );
   return {
     id: text(cta.anchorId) ?? `insights-cta-${cta.id}`,
     heading,
     description: text(cta.description) ?? '',
     ...(act ? { action: act } : {}),
     ...(picture ? { image: picture } : {}),
+    ...(cta.island ? { island: cta.island } : {}),
+    ...(points.length ? { points } : {}),
+    ...(quote ? { quote } : {}),
+    ...(reply ? { reply } : {}),
+    ...(urlLabel ? { urlLabel } : {}),
   };
 }
 

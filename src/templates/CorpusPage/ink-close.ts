@@ -25,5 +25,22 @@ export function inkCloseProps(section: Cta) {
   };
 }
 
+/**
+ * The ink close as an ink ISLAND on paper, for a close that is the last band before the ink footer
+ * (/insights and its listings, the authors index, the author pages): the band would run into the
+ * footer (owner, 20 Nov 2026: "Ink island on paper"). Everything else is the band's: ticks, the quote,
+ * no drawing.
+ */
+export function inkIslandProps(section: Cta) {
+  return {
+    island: 'ink' as const,
+    islandArrangement: 'halves' as const,
+    islandTexture: 'flow' as const,
+    markers: 'tick' as const,
+    quote: section.quote,
+    art: undefined,
+  };
+}
+
 /** The ink close's card asks the name first, and the email in the board's words. */
 export const INK_CLOSE_DRESS = { name: true, emailLabel: 'Work email' } as const;

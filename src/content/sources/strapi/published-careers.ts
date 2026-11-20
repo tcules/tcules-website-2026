@@ -39,6 +39,7 @@ type Section = {
   middleEnd?: Photo;
   end?: Photo;
   disclaimer?: string;
+  island?: 'ink' | 'blue' | null;
   form?: {
     formLabel: string;
     submitLabel: string;
@@ -128,6 +129,7 @@ export function mapCareers(page: CareersRecord | null) {
           icon: icon(entry.icon),
         })),
         action: action(section.action),
+        island: section.island ?? undefined,
         form: section.form && careersForm(section.form),
         closingHtml: markdownToHtml(section.closing, 'Careers'),
         entries: (section.entries ?? []).map((entry) => ({ ...entry, icon: icon(entry.icon) })),

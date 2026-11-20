@@ -6,7 +6,7 @@ import type {
 } from '@/content';
 import { blogPath, ENDPOINTS, INSIGHT_FORMAT_NAMES, ROUTES } from '@/lib/routes';
 import { Media } from '@/components';
-import { EnquiryForm } from '@/patterns';
+import { EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
 import {
   ENQUIRY_SKETCH_TO_SHIPPED,
   ENQUIRY_DRESS,
@@ -204,6 +204,7 @@ export function closingOf(
 ): ListingClosing | undefined {
   const closing = page.closing;
   if (!closing?.heading) return undefined;
+  const ink = closing.island === 'ink';
   const copy = {
     heading: closing.heading,
     body: closing.description,
@@ -216,21 +217,42 @@ export function closingOf(
     /* The island close, as home has it: the halves, the drawing over the words, the moving field
        across the island, the form in its card dress (owner, 28 Oct 2026). The close's own CMS
        illustration where it has one; else the sketch-to-shipped drawing. */
-    island: {
-      surface: 'blue',
-      art: (
-        <Media
-          image={pictureOf(page.closing?.image) ?? ENQUIRY_SKETCH_TO_SHIPPED}
-          sizes="300px"
-        />
-      ),
-    },
+    /* Set to ink in the CMS, the close is the ink close as an island on paper, since it is the last
+       band before the ink footer: ticks, the quote, no drawing, the card asking Name and Work email
+       (owner, 20 Nov 2026). */
+    ...(ink
+      ? {
+          island: { surface: 'ink' as const },
+          points: closing.points,
+          markers: 'tick' as const,
+          quote: closing.quote,
+        }
+      : {
+          island: {
+            surface: 'blue' as const,
+            art: (
+              <Media
+                image={pictureOf(page.closing?.image) ?? ENQUIRY_SKETCH_TO_SHIPPED}
+                sizes="300px"
+              />
+            ),
+          },
+        }),
     form: (
       <EnquiryForm
         variant="enquiry"
-        urlLabel="Product or company URL"
+        urlLabel={ink ? ((closing.urlLabel as EnquiryUrlLabel | undefined) ?? 'Product website') : 'Product or company URL'}
         action={ENDPOINTS.enquiry}
-        dress={ENQUIRY_DRESS.card}
+        dress={
+          ink
+            ? {
+                kind: 'card',
+                name: true,
+                emailLabel: 'Work email',
+                ...(closing.reply ? { reply: closing.reply } : {}),
+              }
+            : ENQUIRY_DRESS.card
+        }
         fieldScale="md"
         submit="inline"
         context={{
