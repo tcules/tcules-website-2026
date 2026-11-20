@@ -59,6 +59,7 @@ query PublishedResource($slug: String!) {
       button { ...PublishedAction } secondaryButton { ...PublishedAction }
       media { ...PublishedImage }
       rating { ...PublishedRating }
+      ctaQuote: quote { kind testimonial { name role company quoteHtml shortQuote } }
     }
     seo {
       metaTitle metaDescription canonicalURL robot structuredData focusString
