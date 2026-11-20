@@ -33,6 +33,7 @@ function AuthorClose({ author }: { author: Author }) {
   if (!closing?.heading) return null;
   if (closing.variant === 'form' && closing.form) {
     const form = closing.form;
+    const ink = closing.island === 'ink';
     return (
       <ListingClose
         closing={{
@@ -40,10 +41,16 @@ function AuthorClose({ author }: { author: Author }) {
           heading: closing.heading,
           body: closing.lead,
           eyebrow: closing.eyebrow,
-          island: {
-            surface: closing.island ?? 'blue',
-            art: <Media image={closing.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />,
-          },
+          /* An ink close is the ink island with ticks, the quote and no drawing (owner, 20 Nov 2026). */
+          island: ink
+            ? { surface: 'ink' }
+            : {
+                surface: closing.island ?? 'blue',
+                art: <Media image={closing.image ?? ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />,
+              },
+          ...(ink
+            ? { points: closing.points, markers: 'tick' as const, quote: closing.quote }
+            : {}),
           form: (
             <EnquiryForm
               variant="enquiry"
@@ -56,7 +63,11 @@ function AuthorClose({ author }: { author: Author }) {
               success={form.success}
               nextSteps={form.nextSteps}
               scheduleHref={form.scheduleHref}
-              dress={{ kind: 'card', reply: form.reply ?? form.caption ?? '' }}
+              dress={{
+                kind: 'card',
+                reply: form.reply ?? form.caption ?? '',
+                ...(ink ? { name: true, emailLabel: 'Work email' as const } : {}),
+              }}
               context={{
                 originRoute: author.path,
                 placement: closing.id ?? 'author-page',
