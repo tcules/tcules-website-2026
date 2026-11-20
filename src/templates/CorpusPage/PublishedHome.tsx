@@ -42,7 +42,7 @@ import {
   type TeaserFormat,
 } from '@/patterns';
 
-import { INK_CLOSE_DRESS, isInkClose } from './ink-close';
+import { INK_CLOSE_DRESS, isInkClose, type InkFrame } from './ink-close';
 import type {
   HomeAction,
   HomePageModel,
@@ -439,10 +439,12 @@ function Cta({
   section,
   route,
   enquiryContext,
+  inkFrame = 'band',
 }: {
   section: Extract<Section, { type: 'cta' }>;
   route: string;
   enquiryContext?: EnquiryContextBase;
+  inkFrame?: InkFrame;
 }) {
   const { id, heading, eyebrow, surface, island, points, form, lead, leadHtml, rating } =
     section;
@@ -491,7 +493,8 @@ function Cta({
       </ContentSection>
     );
   }
-  /* An ink close is the ink band (ink-close.ts); every other keeps the island it had. */
+  /* An ink close is the ink band (ink-close.ts), or the ink island on paper where it is the last band
+     before the ink footer; every other keeps the island it had. */
   const ink = isInkClose(section);
   const halves = ink || section.presentation === 'form_island';
   const art =
@@ -522,7 +525,9 @@ function Cta({
       markers={ink ? 'tick' : section.markers}
       quote={section.quote}
       islandArrangement={halves ? 'halves' : 'beside'}
-      frame={ink ? 'band' : halves ? section.frame : undefined}
+      frame={
+        ink ? (inkFrame === 'band' ? 'band' : undefined) : halves ? section.frame : undefined
+      }
       islandTexture={halves ? 'flow' : 'frame'}
       art={art ? <Media image={art} sizes={halves ? '300px' : '240px'} /> : undefined}
       footnote={section.footnote}
@@ -554,10 +559,13 @@ export function PublishedSection({
   section,
   route = ROUTES.home,
   enquiryContext,
+  inkFrame,
 }: {
   section: Section;
   route?: string;
   enquiryContext?: EnquiryContextBase;
+  /** For an ink close: the band (default), or `island` when it is the last band before the footer. */
+  inkFrame?: InkFrame;
 }) {
   const { id, heading, headingId, surface } = section;
   const head = { id, heading, headingId, surface };
@@ -658,7 +666,14 @@ export function PublishedSection({
       );
     }
     case 'cta':
-      return <Cta section={section} route={route} enquiryContext={enquiryContext} />;
+      return (
+        <Cta
+          section={section}
+          route={route}
+          enquiryContext={enquiryContext}
+          inkFrame={inkFrame}
+        />
+      );
     case 'faq':
       return (
         <ContentSection

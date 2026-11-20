@@ -9,7 +9,11 @@ type Cta = Extract<HomeSection, { type: 'cta' }>;
  * as before, so each page switches when its content does, and a content restore switches it back.
  */
 export function isInkClose(section: Cta): boolean {
-  return section.island === 'ink' && section.variant === 'form' && section.form?.variant !== 'compact';
+  return (
+    section.island === 'ink' &&
+    section.variant === 'form' &&
+    section.form?.variant !== 'compact'
+  );
 }
 
 /** The CtaSection props the ink close sets; spread after the template's own so they win. */
@@ -41,6 +45,9 @@ export function inkIslandProps(section: Cta) {
     art: undefined,
   };
 }
+
+/** How an ink close sits: the band, or the island on paper when nothing follows it but the footer. */
+export type InkFrame = 'band' | 'island';
 
 /** The ink close's card asks the name first, and the email in the board's words. */
 export const INK_CLOSE_DRESS = { name: true, emailLabel: 'Work email' } as const;
