@@ -132,7 +132,6 @@ function mapSection(
         type: 'clients',
         surface: section.clientSurface ?? undefined,
         compact: section.gridDensity === 'compact',
-        names: rows(section.namedClients).flatMap((client) => text(client.name) ?? []),
         marks: rows(section.clients).flatMap<LogoGridMark>((client) => {
           const name = text(client.name);
           if (!name) return [];

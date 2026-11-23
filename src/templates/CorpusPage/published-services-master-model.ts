@@ -16,7 +16,6 @@ export type ServicesMasterSection =
   | (Head & {
       type: 'clients';
       marks: LogoGridMark[];
-      names: string[];
       compact: boolean;
     })
   | (Head & {
