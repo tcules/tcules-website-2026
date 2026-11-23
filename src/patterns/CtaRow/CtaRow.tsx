@@ -54,14 +54,6 @@ type CtaRowCommon = {
   rule?: boolean;
   /** Default `start`. See `CtaRowAlign`. */
   align?: CtaRowAlign;
-  /**
-   * `centred` (owner, 23 Nov 2026; decisions/2026-11-23-see-all-centred-on-a-phone): below 768 a lone
-   * see-all link is centred under the band's body, bare, exactly as the testimonial wall's "See 3
-   * more" sits under its cards. No hairlines: the ruled row it replaces (18 Nov) was rejected. From
-   * 768 the row is the usual link. For a band's section-level "see all" action only; ignored with a
-   * note, a pair or a converting action.
-   */
-  phone?: 'centred';
 };
 
 export type CtaRowProps = CtaRowCommon & {
@@ -118,7 +110,7 @@ export type CtaRowProps = CtaRowCommon & {
  * `actions`, or a template's own row — and never imports one.
  */
 export function CtaRow(props: CtaRowProps) {
-  const { actions, note, rule = true, align = 'start', phone } = props;
+  const { actions, note, rule = true, align = 'start' } = props;
   const centred = align === 'center';
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
@@ -156,7 +148,7 @@ export function CtaRow(props: CtaRowProps) {
     linkTo(action)
   );
 
-  const row = (
+  return (
     <Layout rowGap="block" className={centred ? styles.centredBox : undefined}>
       {rule ? <div className={styles.rule} /> : null}
       {/* `between` only when there is a note to sit opposite the actions: a lone action at the far
@@ -174,18 +166,4 @@ export function CtaRow(props: CtaRowProps) {
       </Cluster>
     </Layout>
   );
-
-  /* The phone copy: placed beside the usual row and displayed once at any width (`display: none`
-     drops the other from the a11y tree). The same link button, centred by Layout. */
-  if (phone === 'centred' && !second && !hasNote && !action.converts) {
-    return (
-      <>
-        <div className={styles.fromMd}>{row}</div>
-        <div className={styles.phoneOnly}>
-          <Layout justifyItems="center">{linkTo(action)}</Layout>
-        </div>
-      </>
-    );
-  }
-  return row;
 }

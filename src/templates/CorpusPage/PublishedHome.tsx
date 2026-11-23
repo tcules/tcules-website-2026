@@ -63,15 +63,12 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
 }
 
 /* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
-   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay).
-   `seeAll`: a band's closing "see all" link, which on a phone is centred under the band's body
-   (CtaRow `phone="centred"`, owner 23 Nov 2026); CtaRow ignores it when the action carries a note. */
-function link(action: HomeAction | undefined, seeAll = false) {
+   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay). */
+function link(action: HomeAction | undefined) {
   return action ? (
     <CtaRow
       rule={false}
       note={action.description}
-      phone={seeAll ? 'centred' : undefined}
       actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
     />
   ) : undefined;
@@ -137,7 +134,7 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
       {...{ id, heading, headingId, lead, surface }}
       data-band="M"
       actionsAt="end"
-      actions={link(section.action, true)}
+      actions={link(section.action)}
     >
       {/* The horizontal cases stack at every width, a `column` (64) apart, as on the overhaul: no
           sideways slider on a phone (owner, 23 Nov 2026). */}

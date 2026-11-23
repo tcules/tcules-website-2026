@@ -34,7 +34,6 @@
      under a centred head it reads as the foot of the centred block above it (an accordion at the
      body measure, D-faq) rather than as a 1240 rule under a 666 column. */
   --ctarow-centred-measure: var(--measure-body);
-
 }
 
 :root,

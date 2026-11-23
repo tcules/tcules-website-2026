@@ -53,10 +53,7 @@ function WhyBand({
           {...head}
           data-band="M"
           actionsAt="end"
-          /* The band's "see all": centred under the cards on a phone (CtaRow phone="centred"). */
-          actions={
-            s.action ? <CtaRow rule={false} phone="centred" actions={[s.action]} /> : undefined
-          }
+          actions={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
         >
           <BlockCardSet
             lead="none"
