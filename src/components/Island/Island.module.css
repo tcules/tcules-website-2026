@@ -40,3 +40,10 @@
 .insetForm {
   padding-inline: var(--isl-inset-form-inline);
 }
+
+/* The strip's island (`inset="strip"`): a thinner block inset for one row of note and action, the
+   default inset at the sides (owner, 18 Nov 2026), and the card's corner on a phone. */
+.insetStrip {
+  padding-block: var(--isl-inset-strip-block);
+  border-radius: var(--isl-radius-strip);
+}

@@ -321,18 +321,28 @@ export function serviceSceneFor(
 }
 
 /**
-/**
- * The drawn guides' scenes (components/Sketch/wyg-guides.tsx): each drawn from what that guide does for
- * its reader. Named here so SketchName covers them; which page takes which is `DRAWN_INSIGHTS`.
+ * FREE TOOL scenes (19 Nov 2026, the overhaul's "Free tools for product teams" bands): the guides those
+ * bands name as tools, each drawn from what that guide does for its reader (components/Sketch/
+ * wyg-guides.tsx). Named here so SketchName covers them; which card takes which is `toolSceneFor`.
  */
 export type GuideSceneName = Extract<PageSceneName, `guide-${string}`>;
 
+/** Every scene a free tool or guide card may carry: a tool's own, a guide's own, an article's cover. */
+export type ToolSceneName = DestinationSceneName | GuideSceneName | ArticleSceneName;
+
+/**
+ * THE ONE DRAWING PER FREE TOOL (owner, 19 Nov 2026: "one tool across different pages has one drawing
+ * only and not per page"). Keyed by the tool's route, its identity wherever it is named: a tool page
+ * keeps the scene its /tools hub tile already draws (SPECIALIST_BY_ROUTE), a guide takes its own, and
+ * an insight named as a tool takes its own cover scene. Every tools band and tool card reads this map,
+ * so no page can give a tool a second drawing.
+ */
 /**
  * THE ONE MAP OF DRAWN INSIGHTS (owner, 19 Nov 2026): every guide or article the site draws a thumbnail
- * for, by its route. The same drawing is its card (the insights hub's cover via
- * content/sources/cover-scenes.ts, which derives from this map) and its page hero (`resourceSceneFor`):
- * "the guidepages and articles should show their drawings, still, in their hero so it matches their
- * card". A new drawn insight is one row here.
+ * for, by its route. The same drawing is its card everywhere (a tools band's card via `toolSceneFor`, the
+ * insights hub's cover via content/sources/cover-scenes.ts, which derives from this map) and its page
+ * hero (`resourceSceneFor`): "the guidepages and articles should show their drawings, still, in their
+ * hero so it matches their card". A new drawn insight is one row here.
  */
 export const DRAWN_INSIGHTS: Readonly<Record<string, GuideSceneName | ArticleSceneName>> = {
   '/insights/guides/how-to-use-a-ux-product-audit': 'guide-ux-audit',
@@ -363,6 +373,15 @@ export function drawingMoves(href: string | undefined): boolean {
   return ![ROUTES.insights, ROUTES.tools, ROUTES.glossary].some((index) =>
     route.startsWith(`${index}/`),
   );
+}
+
+/** The drawing for a free tool's or guide's route, or undefined for one not drawn (never another's). */
+export function toolSceneFor(href: string): ToolSceneName | undefined {
+  const route = href.split('#')[0] ?? href;
+  if (route in DRAWN_INSIGHTS) return DRAWN_INSIGHTS[route];
+  if (!route.startsWith('/tools/')) return undefined;
+  const scene = SPECIALIST_BY_ROUTE[route];
+  return scene && scene.startsWith('specialist-') ? (scene as DestinationSceneName) : undefined;
 }
 
 /**

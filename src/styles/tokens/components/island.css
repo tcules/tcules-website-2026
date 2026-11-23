@@ -44,6 +44,20 @@
   /* `inset="form"` (owner, 5 Nov 2026): the island that holds the enquiry form. The default inset at
      every width but the phone's sides, where the form panel takes 16 so its fields get the width. */
   --isl-inset-form-inline: var(--gap-stack);
+  /* `inset="strip"` (owner, 18 Nov 2026: "for this strip type island, we need thinner block
+     padding"): the one-line island CtaRow's `frame="strip"` draws, a note and one button on a single
+     row. Its block inset is `gutter` (32), one step under the default `stack`: the island's air
+     shrinks to the size of what it holds, a single ~44 row rather than a stacked composition, and 32
+     is still more than the `block` (24) between the note and the button inside it, so the edge
+     reads as the island's and not as one more seam of the row. The inline inset stays the
+     default's. */
+  --isl-inset-strip-block: var(--gap-gutter);
+  /* The strip's corner: the 8 every card, plate and photograph takes, at every width (owner, 19 Nov
+     2026: "that island strip's height is not tall enough for the kind of corner radius it has. the
+     graphic plates above it look nice but then this suddenly has a big radius"). A ~100-tall strip under
+     the stage plates is a card-sized box, not a composition, so it takes the card corner; on a phone it
+     already did (owner, 18 Nov 2026). A large island (the enquiry close) keeps 24. */
+  --isl-radius-strip: var(--radius-8);
 }
 
 /* Phone (owner, 5 Nov 2026, the responsive pass; was 48 above and below and the 32 gutter at the
@@ -56,6 +70,9 @@
     --isl-inset-block: var(--gap-gutter);
     --isl-inset-inline: var(--gap-block);
     --isl-inset-form-inline: var(--gap-text);
+    /* The strip one step under the phone's default 32 block, to `block` (24): equal to the phone's
+       24 inline inset, so the wrapped note and button sit in even air. */
+    --isl-inset-strip-block: var(--gap-block);
     --isl-inset-band-block: var(--gap-column);
     --isl-inset-band-inline: var(--gap-text);
   }

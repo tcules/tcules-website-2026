@@ -17,6 +17,28 @@
   background-size: 6.25% 11.111%;
 }
 
+/* The portrait plate (240 × 300, 4:5): the same 20-unit tile, as shares of its own box (20 / 240, 20 / 300). */
+.portrait {
+  background-size: 8.3333% 6.6667%;
+}
+
+/* `fill`: the plate takes its size container's box. The drawing centres at the scale the shorter side
+   allows (the SVG's default `meet`); the field's 20-unit tile is set at that same scale and anchored on
+   the box's centre, which is a tile edge across and a tile middle down in both drawings (320 × 180 and
+   240 × 300), so the field runs on past the drawing's edge on the drawing's own grid. */
+.fill {
+  block-size: 100%;
+  background-size: calc(min(100cqw / 320, 100cqh / 180) * 20)
+    calc(min(100cqw / 320, 100cqh / 180) * 20);
+  background-position: calc(50% + min(100cqw / 320, 100cqh / 180) * 10) 50%;
+}
+
+.fill.portrait {
+  background-size: calc(min(100cqw / 240, 100cqh / 300) * 20)
+    calc(min(100cqw / 240, 100cqh / 300) * 20);
+  background-position: calc(50% + min(100cqw / 240, 100cqh / 300) * 10) 50%;
+}
+
 /* The bare frame: the drawing alone, its width its drawing units times the parent's --skt-scale (the
    one Sketch token a parent sets, on an ancestor), never wider than its box; the height follows
    from the drawing's ratio. Sized here rather than by CSS `zoom`, which WebKit and Gecko apply to an
@@ -91,6 +113,16 @@
   stroke: var(--skt-quiet-ink);
   stroke-width: var(--skt-frame-width);
   stroke-dasharray: var(--skt-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+/* A lit ground that holds frames (owner, 19 Nov 2026, MVP's "Your demo works" on ink: "the dark
+   blue doesn't stand out much on the ink bg ... a lighter blue instead like we do for icons"): the
+   light end of the blue, so the frames and chips set on it read against it on every surface. */
+.foundation {
+  fill: var(--skt-lit-fill);
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-frame-width);
   vector-effect: non-scaling-stroke;
 }
 
@@ -414,5 +446,78 @@
   }
 }
 
+/* The three calls on an area of a product, as AreaMark draws its legend (keep solid in the accent,
+   fix dotted in the accent, rebuild dashed in the quiet ink), so a drawing and the rows that are its
+   key share one key (MVP's "Your prototype is the brief", 19 Nov 2026). */
+.areaKeep,
+.areaFix,
+.areaRebuild {
+  fill: none;
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-line-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
 
+.areaFix {
+  stroke-dasharray: var(--skt-dot-dash);
+}
 
+.areaRebuild {
+  stroke: var(--skt-quiet-ink);
+  stroke-dasharray: var(--skt-dash);
+}
+
+/* ── The infographic (owner, 19 Nov 2026) ─────────────────────────────────────────
+   The one flat drawing that carries words: short labels over the plate, each placed at its point in
+   the drawing (--skt-label-x / -y, shares of the plate set by the component) and set in the mono
+   label voice at a fixed size, so they stay legible at every width instead of scaling with the
+   drawing. The phone composition replaces the wide one below 768. */
+.labelled {
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  inset-inline-start: var(--skt-label-x);
+  inset-block-start: var(--skt-label-y);
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--skt-label-ink);
+  white-space: nowrap;
+}
+
+.labelLine {
+  display: block;
+}
+
+.labelStart {
+  transform: translateY(-50%);
+}
+
+.labelMiddle {
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.labelEnd {
+  transform: translate(-100%, -50%);
+  text-align: end;
+}
+
+.labelAccent {
+  color: var(--skt-label-accent-ink);
+}
+
+@media (max-width: 767.98px) {
+  .fromMd {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .untilMd {
+    display: none;
+  }
+}

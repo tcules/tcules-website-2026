@@ -5,6 +5,7 @@ export type {
   ListCardArrangement,
   ListCardForm,
   ListCardFrame,
+  ListCardRule,
   ListCardNumberTone,
   ListCardSize,
   ListCardTitleElement,
@@ -13,3 +14,5 @@ export { Steps } from './Steps';
 export type { Step, StepsProps } from './Steps';
 export { ReadDown } from './ReadDown';
 export type { ReadDownRow, ReadDownProps, ReadDownColumns } from './ReadDown';
+export { Stages } from './Stages';
+export type { Stage, StagesProps } from './Stages';

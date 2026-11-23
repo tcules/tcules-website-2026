@@ -59,6 +59,20 @@ export const WORDMARK_PATHS = [
 /** The wordmark's box, for a renderer that draws the paths itself (the share-card generator). */
 export const WORDMARK_VIEWBOX = { width: 675, height: 177 } as const;
 
+/**
+ * The logomark: the T with its bar, the owner's "Tcules Logomark" artwork (6 Nov 2026) on its own
+ * 75 x 115 box, as src/app/icon.svg draws it for the browser tab. Exported for a renderer that sets
+ * the mark small inside a shape of its own (ChatThread's reply disc); the paths are the artwork's,
+ * not a redraw of the wordmark's T.
+ */
+export const LOGOMARK_PATHS = [
+  'M74.8329 40.1986H46.8049V114.698H28.4903V40.1986H0.336426V24.1875H74.8329V40.1986Z',
+  'M66.4046 0.0371094H8.77002V14.1507H66.4046V0.0371094Z',
+] as const;
+
+/** The logomark's box. */
+export const LOGOMARK_VIEWBOX = { width: 75, height: 115 } as const;
+
 /** The bar above the "u" — the one element of the mark that is not a letterform. */
 export const BAR_PATH = 'M351.86 0.139648H225.23V27.1396H351.86V0.139648Z';
 
