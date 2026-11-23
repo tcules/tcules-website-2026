@@ -111,6 +111,19 @@ for (const rel of unregistered) {
   );
 }
 
+/* The token files read each other too: a component layer reads primitives and usage tokens. A read
+   of a token no file defines resolved to nothing in the browser and passed here, because only the
+   consumer stylesheets were checked (23 Nov 2026: chat-thread.css read --radius-12, which main's
+   primitives did not have, and the chat bubbles lost their corners). */
+for (const file of tokenFiles) {
+  const css = read(file);
+  for (const v of new Set(usedIn(css))) {
+    if (!tokens.has(v) && !JS_INJECTED.has(v)) {
+      problems.push(`${file}:${lineOf(css, v)}  reads ${v}, which no token defines`);
+    }
+  }
+}
+
 for (const file of consumers) {
   const css = read(file);
   const local = definedIn(css);
