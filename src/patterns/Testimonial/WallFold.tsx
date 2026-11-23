@@ -20,22 +20,26 @@ export function WallFold({ hidden, children }: { hidden: number; children: React
         {children}
       </div>
       {/* Centred under the wall (owner, 23 Nov 2026): the toggle belongs to the whole set, not to
-          its first column. */}
-      <Layout justifyItems="center" className={styles.foldToggle}>
-        {/* The link button every in-band "see more" takes (owner, 18 Nov 2026: "the link button
+          its first column. The phone-only class sits on its own wrapper, never on the Layout:
+          Layout's `display: grid` has the same weight as `.foldToggle`'s `display: none`, so on the
+          Layout the winner was whichever stylesheet loaded last, and the toggle showed on desktop. */}
+      <div className={styles.foldToggle}>
+        <Layout justifyItems="center">
+          {/* The link button every in-band "see more" takes (owner, 18 Nov 2026: "the link button
             instead of the blocky outline button"), still a real <button> with aria-expanded. */}
-        <Button
-          emphasis="link"
-          size="md"
-          extendHitArea
-          aria-expanded={open}
-          aria-controls={id}
-          onClick={() => setOpen((value) => !value)}
-          icon={<Icon name={open ? 'alt-arrow-up' : 'alt-arrow-down'} />}
-        >
-          {open ? 'See fewer' : `See ${hidden} more`}
-        </Button>
-      </Layout>
+          <Button
+            emphasis="link"
+            size="md"
+            extendHitArea
+            aria-expanded={open}
+            aria-controls={id}
+            onClick={() => setOpen((value) => !value)}
+            icon={<Icon name={open ? 'alt-arrow-up' : 'alt-arrow-down'} />}
+          >
+            {open ? 'See fewer' : `See ${hidden} more`}
+          </Button>
+        </Layout>
+      </div>
     </Layout>
   );
 }
