@@ -205,6 +205,12 @@ export default function CtaRowSpecimen() {
                 ]}
               />
             </Specimen>
+            <Specimen
+              title={`${surface} · rule until-md (23 Nov 2026)`}
+              note="rule='until-md': the hairline below 768 only, for a see-all that follows cards ending in their own links. At 1440 no rule. Check at 390."
+            >
+              <CtaRow actions={[SEE_WORK]} rule="until-md" />
+            </Specimen>
             <Specimen title={`${surface} · a pair`}>
               <CtaRow actions={[START, SEE_WORK]} rule={false} />
             </Specimen>

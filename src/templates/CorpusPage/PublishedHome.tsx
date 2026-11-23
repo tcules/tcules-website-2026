@@ -63,11 +63,13 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
 }
 
 /* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
-   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay). */
-function link(action: HomeAction | undefined) {
+   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay).
+   `afterLinks`: the band's items end in links of their own, so on a phone, where the link follows
+   them, a hairline sets it apart (CtaRow `rule="until-md"`, owner 23 Nov 2026). */
+function link(action: HomeAction | undefined, afterLinks = false) {
   return action ? (
     <CtaRow
-      rule={false}
+      rule={afterLinks ? 'until-md' : false}
       note={action.description}
       actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
     />
@@ -134,7 +136,7 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
       {...{ id, heading, headingId, lead, surface }}
       data-band="M"
       actionsAt="end"
-      actions={link(section.action)}
+      actions={link(section.action, true)}
     >
       {/* The horizontal cases stack at every width, a `column` (64) apart, as on the overhaul: no
           sideways slider on a phone (owner, 23 Nov 2026). */}
