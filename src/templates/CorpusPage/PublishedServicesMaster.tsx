@@ -34,7 +34,6 @@ function ServicesSection({ section }: { section: ServicesMasterSection }) {
               headingId={headingId}
               marks={section.marks}
             />
-            {section.names.length ? <p>{section.names.join(' · ')}</p> : null}
           </Layout>
         </Section>
       );
