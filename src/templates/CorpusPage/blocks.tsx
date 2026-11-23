@@ -387,6 +387,7 @@ export function QuoteGroupBand({
       {wall ? (
         <TestimonialWall
           items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
+          foldOnPhone={3}
         />
       ) : (
         <QuoteSlider label={band.headingText} quotes={quotes} avatars={avatars} />

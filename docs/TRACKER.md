@@ -25,7 +25,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 - [ ] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026).
 - [ ] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026).
-- [ ] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026).
+- [x] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026). Logged as decisions/2026-11-17-testimonial-wall-folds-on-phone; live on every wall (overhaul phase 2).
 - [ ] **O.4** The client-logo marquee's motion (with O.6): no pause button. Hover or keyboard focus on a logo
       pauses the row and highlights that logo; reduced motion keeps it still, logos wrapped and centred
       (owner, 17 Nov 2026, accepting that this falls short of WCAG 2.2.2).

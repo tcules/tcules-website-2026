@@ -193,8 +193,26 @@ export default function CtaRowSpecimen() {
             <Specimen title={`${surface} · link, rule off`}>
               <CtaRow actions={[START]} rule={false} />
             </Specimen>
+            <Specimen
+              title={`${surface} · the converting ask, with a note (18 Nov 2026)`}
+              note="An action marked converts: true ('Book a free product review') is the blue solid wherever the row stands. The flag rides on the action, so no caller has to forward it."
+            >
+              <CtaRow
+                rule={false}
+                note={NOTE}
+                actions={[
+                  { label: 'Book a free product review', href: ROUTES.contact, converts: true },
+                ]}
+              />
+            </Specimen>
             <Specimen title={`${surface} · a pair`}>
               <CtaRow actions={[START, SEE_WORK]} rule={false} />
+            </Specimen>
+            <Specimen
+              title={`${surface} · phone row (18 Nov 2026)`}
+              note="phone='row': below 768 the lone see-all link sits between two quiet hairlines, the block step (24) above and below; from 768 it is the usual link. Check at 390."
+            >
+              <CtaRow actions={[SEE_WORK]} rule={false} phone="row" />
             </Specimen>
           </Layout>
         </Section>
@@ -228,6 +246,26 @@ export default function CtaRowSpecimen() {
             rule={false}
           />
         }
+      >
+        <Layout as="ol" rowGap="none">
+          {ROWS.map((row, index) => (
+            <ListCard
+              key={row.title}
+              title={row.title}
+              body={row.body}
+              titleAs="h3"
+              marker={{ type: 'number', value: index + 1 }}
+            />
+          ))}
+        </Layout>
+      </ContentSection>
+      <ContentSection
+        arrangement="beside"
+        eyebrow="Footer · phone row, joined"
+        heading="Why teams choose this way of working"
+        headingId="ctarow-in-phone-row"
+        lead="The same ruled ladder, its see-all link the list's last row on a phone."
+        footer={<CtaRow actions={[SEE_WORK]} rule={false} phone="row" joined />}
       >
         <Layout as="ol" rowGap="none">
           {ROWS.map((row, index) => (

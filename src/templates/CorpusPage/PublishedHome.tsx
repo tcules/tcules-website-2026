@@ -63,12 +63,15 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
 }
 
 /* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
-   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay). */
-function link(action: HomeAction | undefined) {
+   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay).
+   `seeAll`: a band's closing "see all" link, which on a phone is the band's last ruled row
+   (CtaRow `phone="row"`, owner 18 Nov 2026); CtaRow ignores it when the action carries a note. */
+function link(action: HomeAction | undefined, seeAll = false) {
   return action ? (
     <CtaRow
       rule={false}
       note={action.description}
+      phone={seeAll ? 'row' : undefined}
       actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
     />
   ) : undefined;
@@ -134,7 +137,7 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
       {...{ id, heading, headingId, lead, surface }}
       data-band="M"
       actionsAt="end"
-      actions={link(section.action)}
+      actions={link(section.action, true)}
     >
       <Layout
         rowGap="gutter"
@@ -268,6 +271,8 @@ function Testimonials({ section }: { section: Extract<Section, { type: 'testimon
       {items.length === 0 ? null : wall ? (
         <TestimonialWall
           items={items}
+          /* Three on a phone, then "See 3 more" (owner, 17 Nov 2026). */
+          foldOnPhone={3}
           avatarPolicy={avatarPolicy === 'individual' ? 'individual' : 'all-or-none'}
         />
       ) : presentation === 'single' || quotes.length === 1 ? (

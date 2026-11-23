@@ -16,7 +16,7 @@ import {
   Section,
   type SectionSurface,
 } from '@/components';
-import { EXTERNAL } from '@/lib/routes';
+import { EXTERNAL, ROUTES } from '@/lib/routes';
 import type { TestimonialAvatar, TestimonialItem } from '@/patterns';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 
@@ -114,6 +114,13 @@ function Work() {
     </ul>
   );
 }
+
+/* Two of the six carry a case link, as on Jatin's boards (the first and the fourth). */
+const LINKED: readonly TestimonialItem[] = ITEMS.map((item, index) =>
+  index === 0 || index === 3
+    ? { ...item, link: { label: `Read the ${item.company} case`, href: ROUTES.caseStudies } }
+    : item,
+);
 
 export default function TestimonialSpecimen() {
   return (
@@ -256,6 +263,18 @@ export default function TestimonialSpecimen() {
             note="from 1024 the middle column drops a section step (Layout stagger)"
           >
             <TestimonialWall items={ITEMS} stagger />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section surface="tint">
+        <Layout rowGap="stack">
+          <h2>5 · Wall · case links and the phone fold (18 Nov 2026)</h2>
+          <Specimen
+            title="TestimonialWall · 6 · link · foldOnPhone={3}"
+            note="item.link: the way on to the client's case, a block under the speaker inside the caption (opt-in per quote). foldOnPhone: below 768 three cards, then a full-width 'See 3 more' button (aria-expanded, aria-controls the wall); the rest stay in the DOM. From 768 unchanged."
+          >
+            <TestimonialWall items={LINKED} foldOnPhone={3} />
           </Specimen>
         </Layout>
       </Section>

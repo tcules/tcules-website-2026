@@ -34,26 +34,42 @@
      under a centred head it reads as the foot of the centred block above it (an accordion at the
      body measure, D-faq) rather than as a 1240 rule under a 666 column. */
   --ctarow-centred-measure: var(--measure-body);
+
+  /* `joined`: how far the phone row closes up — the band's body → foot seam, ContentSection's
+     `stack`, read as the step it is. */
+  --ctarow-row-join: var(--gap-stack);
 }
 
 :root,
 [data-surface='paper'] {
   --ctarow-rule-ink: var(--color-neutral-300); /* decoration */
   --ctarow-note-ink: var(--color-neutral-700); /* 8.15:1 */
+  /* `phone="row"`'s two hairlines: the row rules' quieter step (decisions/2026-11-18-row-rules-one-step-quieter),
+     so the see-all row reads as the list's last row, not a heavier structure line. Decoration. */
+  --ctarow-row-rule-ink: var(--color-neutral-200);
 }
 
 [data-surface='tint'] {
   --ctarow-rule-ink: var(
     --color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
   --ctarow-note-ink: var(--color-neutral-700); /* 7.27:1 */
+  /* `phone="row"`'s two hairlines: the row rules' quieter step (decisions/2026-11-18-row-rules-one-step-quieter),
+     so the see-all row reads as the list's last row, not a heavier structure line. Decoration. */
+  --ctarow-row-rule-ink: var(--color-neutral-200);
 }
 
 [data-surface='ink'] {
   --ctarow-rule-ink: var(--color-neutral-700); /* decoration */
   --ctarow-note-ink: var(--color-neutral-300); /* 11.07:1 */
+  /* `phone="row"`'s two hairlines: the row rules' quieter step (decisions/2026-11-18-row-rules-one-step-quieter),
+     so the see-all row reads as the list's last row, not a heavier structure line. Decoration. */
+  --ctarow-row-rule-ink: var(--color-neutral-800);
 }
 
 [data-surface='blue'] {
   --ctarow-rule-ink: var(--color-brandeis-300); /* decoration */
   --ctarow-note-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  /* `phone="row"`'s two hairlines: the row rules' quieter step (decisions/2026-11-18-row-rules-one-step-quieter),
+     so the see-all row reads as the list's last row, not a heavier structure line. Decoration. */
+  --ctarow-row-rule-ink: var(--color-brandeis-400);
 }

@@ -53,7 +53,10 @@ function WhyBand({
           {...head}
           data-band="M"
           actionsAt="end"
-          actions={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
+          /* The band's "see all": its last ruled row on a phone (CtaRow phone="row"). */
+          actions={
+            s.action ? <CtaRow rule={false} phone="row" actions={[s.action]} /> : undefined
+          }
         >
           <BlockCardSet
             lead="none"

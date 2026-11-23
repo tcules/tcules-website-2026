@@ -8,6 +8,17 @@ import styles from './CtaRow.module.css';
 export type CtaRowAction = {
   label: string;
   href: string;
+  /**
+   * The page's converting ask ("Book a free product review"): the blue solid wherever the row
+   * stands (owner, 18 Nov 2026; decisions/2026-11-18-converting-ask-is-solid), a narrowing of the
+   * in-band-link rule below to every action that is not the conversion. A PAIR keeps its outline and
+   * link.
+   *
+   * It rides on the action, not on the row, so it travels with the one record that defines the ask:
+   * a row-level prop had to be forwarded by every caller, and a caller that passed the action
+   * without forwarding it rendered the conversion as a link.
+   */
+  converts?: boolean;
 };
 
 /**
@@ -43,6 +54,21 @@ type CtaRowCommon = {
   rule?: boolean;
   /** Default `start`. See `CtaRowAlign`. */
   align?: CtaRowAlign;
+  /**
+   * `row` (owner, 18 Nov 2026): below 768 a lone see-all link is the last row of the band's list —
+   * the same link button as every other in-band link, between two hairlines inside the column (never
+   * edge to edge), the rules in the row rules' quiet ink (decisions/2026-11-18-row-rules-one-step-quieter),
+   * the `block` (24) above and below the link. From 768 the row is the usual link. For a band's
+   * section-level "see all" action only; ignored with a note, a pair or a converting action.
+   */
+  phone?: 'row';
+  /**
+   * With `phone="row"`: the band's body ends in a ruled list (ListCard rows, a ruled `Teaser`), and
+   * the see-all row is that list's last row — it closes up the band's `stack` (48) foot seam so its
+   * top hairline IS the last row's, rather than a second rule 48 under it. Ignored from 768 and
+   * without `phone="row"`.
+   */
+  joined?: boolean;
 };
 
 export type CtaRowProps = CtaRowCommon & {
@@ -62,7 +88,8 @@ export type CtaRowProps = CtaRowCommon & {
    * solid stays the page's one main action.
    *
    * Until r7-buttons the row also took `emphasis="solid"` (a solid, blue when it `converts` and ink
-   * when not, with a ghost partner). Both props are gone: there is no in-band solid to render.
+   * when not, with a ghost partner). Both props are gone. The one in-band solid since 18 Nov 2026 is
+   * the converting ask, marked on its action (`CtaRowAction.converts`).
    */
   actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
 };
@@ -98,7 +125,7 @@ export type CtaRowProps = CtaRowCommon & {
  * `actions`, or a template's own row — and never imports one.
  */
 export function CtaRow(props: CtaRowProps) {
-  const { actions, note, rule = true, align = 'start' } = props;
+  const { actions, note, rule = true, align = 'start', phone, joined = false } = props;
   const centred = align === 'center';
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
@@ -128,11 +155,15 @@ export function CtaRow(props: CtaRowProps) {
       </Button>
       {linkTo(second)}
     </Cluster>
+  ) : action.converts ? (
+    <Button as="a" href={action.href} emphasis="solid" size="md" block="until-md">
+      {action.label}
+    </Button>
   ) : (
     linkTo(action)
   );
 
-  return (
+  const row = (
     <Layout rowGap="block" className={centred ? styles.centredBox : undefined}>
       {rule ? <div className={styles.rule} /> : null}
       {/* `between` only when there is a note to sit opposite the actions: a lone action at the far
@@ -150,4 +181,18 @@ export function CtaRow(props: CtaRowProps) {
       </Cluster>
     </Layout>
   );
+
+  /* The phone row: placed beside the usual row and displayed once at any width (`display: none`
+     drops the other from the a11y tree). The link is the same link button; the row only rules it. */
+  if (phone === 'row' && !second && !hasNote && !action.converts) {
+    return (
+      <>
+        <div className={styles.fromMd}>{row}</div>
+        <div className={cx(styles.phoneRow, joined && styles.phoneRowJoined)}>
+          {linkTo(action)}
+        </div>
+      </>
+    );
+  }
+  return row;
 }

@@ -1,10 +1,10 @@
 /* CtaRow — the rule and the note. Type and ink only.
 
    Every value comes from --ctarow-*, declared in tokens/components/cta-row.css. Layout and Cluster
-   own every seam (gap-scale steps, stated in CtaRow.tsx); Button owns the actions entirely. No
-   margin, no padding, no display, no @media, no state.
+   own every seam (gap-scale steps, stated in CtaRow.tsx); Button owns the actions entirely; the phone
+   row (`phone="row"`) only rules the same link below 768.
 
-   Classes: .rule .note .centred .centredBox */
+   Classes: .rule .note .centred .centredBox .fromMd .phoneRow .phoneRowJoined */
 
 /* The hairline above a section-level row (visual-direction § 3.1 item 5). An empty element carrying
    one block-start border rather than an <hr>: it is decoration, not a thematic break a screen reader
@@ -31,4 +31,30 @@
    capped box; nothing here positions it. `ch` resolves against the inherited body composite. */
 .centredBox {
   max-inline-size: var(--ctarow-centred-measure);
+}
+
+/* `phone="row"` (owner, 18 Nov 2026): below 768 the lone link is the last row of the band's list —
+   the link button between two hairlines inside the column, the `block` step (24) above and below it,
+   as the rule → row seam above is. From 768 the usual row, and the phone row is gone. */
+.phoneRow {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .fromMd {
+    display: none;
+  }
+
+  .phoneRow {
+    display: block;
+    padding-block: var(--gap-block);
+    border-block: var(--ctarow-rule-width) solid var(--ctarow-row-rule-ink);
+  }
+
+  /* `joined`: the row closes up the band's foot seam (ContentSection's `stack`, 48, body → foot)
+     plus one hairline, so its top rule lands on the last list row's bottom rule. A pull of the seam,
+     not an outer spacing of its own. */
+  .phoneRowJoined {
+    margin-block-start: calc(-1 * (var(--ctarow-row-join) + var(--ctarow-rule-width)));
+  }
 }
