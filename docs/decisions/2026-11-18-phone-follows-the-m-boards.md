@@ -10,22 +10,25 @@ dbf_status: none
 enforced_by: "Button block, --font-size-display-m, ContentSection MediaSplit order and .headingXl phone swap"
 ---
 
-Below 768, three global changes, each at the component or token that owns it (shipped site-wide in
-overhaul phase 1, 19 Nov 2026):
+Below 768, three global changes, each at the component or token that owns it (shipped site-wide in overhaul
+phase 1, 19 Nov 2026; CtaRow's converting solid in phase 2):
 
 1. **The page's main action runs the full width at 48.** `Button block="until-md"`, set by the slots
-   that place the main action: PageHero's first action, CtaSection's solid and EnquiryForm's submit.
-   From 768 every button is its own size. (CtaRow's solid and its `phone="row"` see-all row are not in
-   phase 1.)
+   that place the main action: PageHero's first action, CtaRow's converting solid
+   (decisions/2026-11-18-converting-ask-is-solid), CtaSection's solid and EnquiryForm's submit. From
+   768 every button is its own size.
 2. **The hero title is 38 / 1.06** (`--font-size-display-m`, was 43 / 1.08). Display is the hero's
    alone, so this is every hero title on a phone.
 3. **A media split reads head, words, then photograph**, and its head is the band's h2 like every other
    band head (`media.head="xl"` is an explicit opt-in, and h2 below 768 either way). From 1024 nothing moves.
+A fourth point, a band's see-all link set apart on a phone (first as a ruled row, then centred), was
+withdrawn by the owner on 23 Nov 2026: the see-all link stays the usual link
+(decisions/2026-11-23-only-see-more-is-centred).
 
 **Why.** The owner noticed the phone layouts reflowed desktop rather than following Jatin's m- boards.
 
 **The mistake it prevents.** A phone page that is the desktop reflowed: a label-width main action, a
-hero title and a split head a step above the boards, a photograph between a heading and its words.
+hero title and a split head a step above the boards, and a photograph between a heading and its words.
 
 **How to apply.** Place the main action with `block="until-md"` in any new slot that carries it. Never restate these per page.
 

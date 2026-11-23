@@ -193,6 +193,24 @@ export default function CtaRowSpecimen() {
             <Specimen title={`${surface} · link, rule off`}>
               <CtaRow actions={[START]} rule={false} />
             </Specimen>
+            <Specimen
+              title={`${surface} · the converting ask, with a note (18 Nov 2026)`}
+              note="An action marked converts: true ('Book a free product review') is the blue solid wherever the row stands. The flag rides on the action, so no caller has to forward it."
+            >
+              <CtaRow
+                rule={false}
+                note={NOTE}
+                actions={[
+                  { label: 'Book a free product review', href: ROUTES.contact, converts: true },
+                ]}
+              />
+            </Specimen>
+            <Specimen
+              title={`${surface} · rule until-md (23 Nov 2026)`}
+              note="rule='until-md': the hairline below 768 only, for a see-all that follows cards ending in their own links. At 1440 no rule. Check at 390."
+            >
+              <CtaRow actions={[SEE_WORK]} rule="until-md" />
+            </Specimen>
             <Specimen title={`${surface} · a pair`}>
               <CtaRow actions={[START, SEE_WORK]} rule={false} />
             </Specimen>

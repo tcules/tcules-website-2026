@@ -4,7 +4,7 @@
    own every seam (gap-scale steps, stated in CtaRow.tsx); Button owns the actions entirely. No
    margin, no padding, no display, no @media, no state.
 
-   Classes: .rule .note .centred .centredBox */
+   Classes: .rule .untilMd .note .centred .centredBox */
 
 /* The hairline above a section-level row (visual-direction § 3.1 item 5). An empty element carrying
    one block-start border rather than an <hr>: it is decoration, not a thematic break a screen reader
@@ -12,6 +12,14 @@
    box — the band's column, the media split's copy column, or the centred cap. */
 .rule {
   border-block-start: var(--ctarow-rule-width) solid var(--ctarow-rule-ink);
+}
+
+/* `rule="until-md"`: the rule on a phone only. Not drawn, it is no grid item, so Layout's `block`
+   gap above the actions goes with it. */
+@media (min-width: 768px) {
+  .untilMd {
+    display: none;
+  }
 }
 
 .note {
