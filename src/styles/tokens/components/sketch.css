@@ -3,7 +3,7 @@
    plate language EngagementOptions and TracePlates set: dot field, quiet frames, one blue subject.
 
    Naming: --skt-{part}-{role}
-     parts  plate · field · frame · quiet · copy · line · accent · region · region-copy · dash · soft · chip · lift · handle · glide · move
+     parts  plate · field · frame · quiet · copy · label · line · accent · lit · region · region-copy · dash · soft · chip · lift · handle · glide · move
      roles  ground · ink · fill · width · radius · under · duration · easing
 
    No state tokens. A sketch is decorative; a STORY sketch has a rest and a solved state (its link
@@ -25,9 +25,14 @@
   /* The drawing's width in units: the full 320 here, set per drawing by Sketch on a bare one. */
   --skt-units: 320;
   --skt-scale: 1;
+  /* An infographic label's point, as shares of the plate: set per label by the component. */
+  --skt-label-x: 0%;
+  --skt-label-y: 0%;
   /* The one dash, in the drawing's own units (SVG user space): something not built yet, a trail, a
      gap. The same 6 4 as the isometric illustrations and the other flat families. */
   --skt-dash: 6 4;
+  /* The dotted edge, AreaMark's "fix" drawn in a drawing (round caps on a zero dash, 5 apart). */
+  --skt-dot-dash: 0 5;
   /* The field's dot: an optical size, and the edge it softens over so it is not jagged. */
   --skt-dot-radius: var(--border-width-hairline);
   --skt-dot-soft: var(--border-width-hairline);
@@ -66,11 +71,15 @@
   --skt-accent: var(--color-brandeis-500); /* 6.17:1 */
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100); /* decoration */
+  --skt-lit-fill: var(--color-brandeis-200); /* a lit ground holding frames */
   --skt-region-copy-ink: var(--color-brandeis-300); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
   --skt-chip-fill: var(--color-paper-deep); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-700);
   --skt-lift-under: var(--color-neutral-200); /* the flat offset under what floats */
+  /* An infographic's labels (owner, 19 Nov 2026): text, so 4.5:1 or better on the frame fill. */
+  --skt-label-ink: var(--color-neutral-700);
+  --skt-label-accent-ink: var(--color-brandeis-500);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -84,11 +93,15 @@
   --skt-accent: var(--color-brandeis-500);
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100);
+  --skt-lit-fill: var(--color-brandeis-200); /* a lit ground holding frames */
   --skt-region-copy-ink: var(--color-brandeis-300); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
   --skt-chip-fill: var(--color-paper); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-700);
   --skt-lift-under: var(--color-neutral-300); /* the flat offset under what floats */
+  /* An infographic's labels (owner, 19 Nov 2026): text, so 4.5:1 or better on the frame fill. */
+  --skt-label-ink: var(--color-neutral-700);
+  --skt-label-accent-ink: var(--color-brandeis-500);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -106,11 +119,17 @@
   --skt-accent: var(--color-brandeis-300); /* 7.3:1 on neutral-950, 6.3:1 on the 900 plate */
   --skt-accent-on: var(--color-neutral-950);
   --skt-region-fill: var(--color-brandeis-950); /* decoration: a halo, a lit region */
+  /* A lit ground holding frames: the blue a glyph takes on ink (owner, 19 Nov 2026), 7.3:1 on the
+     950 frames set on it, where the 950 region read as no ground at all. */
+  --skt-lit-fill: var(--color-brandeis-300);
   --skt-region-copy-ink: var(--color-brandeis-400); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-900); /* a part not yet placed */
   --skt-chip-fill: var(--color-neutral-900); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-200);
   --skt-lift-under: var(--color-neutral-800); /* the flat offset under what floats */
+  /* An infographic's labels (owner, 19 Nov 2026): text, so 4.5:1 or better on the frame fill. */
+  --skt-label-ink: var(--color-neutral-200);
+  --skt-label-accent-ink: var(--color-brandeis-300);
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
@@ -124,9 +143,13 @@
   --skt-accent: var(--color-white);
   --skt-accent-on: var(--color-brandeis-600);
   --skt-region-fill: var(--color-brandeis-400);
+  --skt-lit-fill: var(--color-brandeis-200); /* a lit ground holding frames */
   --skt-region-copy-ink: var(--color-brandeis-200); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-300); /* a part not yet placed */
   --skt-chip-fill: var(--color-brandeis-600); /* a glyph's chip */
   --skt-lift-ink: var(--color-white);
   --skt-lift-under: var(--color-brandeis-700); /* the flat offset under what floats */
+  /* An infographic's labels (owner, 19 Nov 2026): text, so 4.5:1 or better on the frame fill. */
+  --skt-label-ink: var(--color-white);
+  --skt-label-accent-ink: var(--color-white);
 }

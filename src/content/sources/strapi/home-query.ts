@@ -6,6 +6,9 @@ import {
   PUBLISHED_CTA,
   PUBLISHED_HERO,
   PUBLISHED_FIELDS,
+  PUBLISHED_PRODUCTSTAGES,
+  PUBLISHED_CHATTHREAD,
+  PUBLISHED_FREETOOLS,
 } from './published-page-fields';
 
 export const HOME_QUERY = `
@@ -40,6 +43,7 @@ ${PUBLISHED_ENGAGEMENTOPTIONS}
       }
       ... on ComponentResourceOtherResources {
         id heading anchorId description resourcesSurface: surface resourcePresentation: presentation
+        action { ...PublishedAction }
         items { id icon resolved }
         resources {
           documentId title slug description readingTime resourceType { name slug }
@@ -48,6 +52,9 @@ ${PUBLISHED_ENGAGEMENTOPTIONS}
       }
 ${PUBLISHED_CTA}
 ${PUBLISHED_FAQSECTION}
+${PUBLISHED_PRODUCTSTAGES}
+${PUBLISHED_CHATTHREAD}
+${PUBLISHED_FREETOOLS}
     }
   }
 }

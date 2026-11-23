@@ -34,7 +34,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 ### New components
 
-- [ ] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch.
+- [x] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch. Live from Strapi (`shared.chat-thread`), Home first.
 - [ ] **O.5a** Retire `VoiceLedger`: `/expertise/healthtech`'s hard-parts band moves to the existing ruled
       tile set it already looks like; About's unused code path, the specimen and its token layer go.
 - [x] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`. On every live logo band (decisions/2026-11-23-client-logos-are-the-ticker); service, expertise, audit, About and Careers heroes still need their logos.
@@ -43,7 +43,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 ### Component updates
 
-- [ ] **O.9** `ListCard`: the stage rows (stage drawing, link on the right) and the "first step" strip under them.
+- [x] **O.9** `ListCard`: the stage rows (stage drawing, link on the right) and the "first step" strip under them. Live as `Stages`; replaces the situation gateway (decisions/2026-11-23-stages-replace-the-situation-gateway).
 - [ ] **O.10** `EngagementOptions` `plans`: prices, one highlighted plan.
 - [ ] **O.11** A legend marker for keep / fix / rebuild (MVP "Your prototype is the brief").
 

@@ -85,7 +85,7 @@ export function Focus({ x, y, glyph, size }: { x: number; y: number; glyph: Icon
 
 /**
  * One transform-only move, made when the link the drawing sits in is hovered or focused (live scenes
- * only). x/y in drawing units; s, sx, sy scale; turn in degrees; (ox, oy) the origin in drawing units.
+ * only); a still scene holds it made, its end state. x/y in drawing units; s, sx, sy scale; turn in degrees; (ox, oy) the origin in drawing units.
  */
 export function Move({
   x = 0,

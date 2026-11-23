@@ -108,6 +108,11 @@ const SPECIMENS = [
         note: 'one review score as five stars — filled, half, empty — glyph passed in, md and sm, 4 surfaces',
       },
       {
+        href: '/design/area-mark',
+        name: 'AreaMark',
+        note: 'the keep / fix / rebuild key — solid, dotted, dashed edge, mono word, legend and swatch-alone forms, 4 surfaces',
+      },
+      {
         href: '/design/stat',
         name: 'Stat',
         note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',
@@ -220,7 +225,7 @@ const SPECIMENS = [
       {
         href: '/design/list-card',
         name: 'ListCard',
-        note: 'the ruled row — 2 arrangements, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns, the photo form, the rail)',
+        note: 'the ruled row — 3 arrangements (split, stacked, hanging on 4 surfaces), the two-up checklist, 3 marker fills, linked states, 4 surfaces, the ReadDown set (1 or 2 columns, the photo form, the rail)',
       },
       {
         href: '/design/block-card',
@@ -291,6 +296,11 @@ const SPECIMENS = [
         href: '/design/claim-set',
         name: 'ClaimSet',
         note: "a page's hard parts — tabs on a stage (one slide moving as one piece, autoplay with no control), four of five without an example, two claims, and the page layout, ruled",
+      },
+      {
+        href: '/design/chat-thread',
+        name: 'ChatThread',
+        note: "the client's line, then Tcules' reply, as messages — the five board bands, one exchange, long lines, empty sides, the phone column, paper, tint, ink and blue",
       },
       {
         href: '/design/case-spread',

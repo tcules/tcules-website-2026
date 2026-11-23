@@ -628,6 +628,7 @@ export function mapBand(
       return {
         ...head,
         type: 'resources',
+        action: action(section.action),
         surface: section.resourcesSurface ?? undefined,
         presentation: section.resourcePresentation,
         lead: text(section.description),
@@ -719,6 +720,91 @@ export function mapBand(
           return answer ? [{ question, answerHtml: answer }] : [];
         }),
       };
+    case 'ComponentSharedProductStages': {
+      const stages = rows(section.stages).flatMap((stage) => {
+        const title = text(stage.title);
+        const body = text(stage.body);
+        const link = action(stage.link);
+        if (!title || !body || !link) {
+          warn(`${key} has a stage without its title, body or link; not shown`);
+          return [];
+        }
+        const drawing = text(stage.drawing);
+        if (drawing && !isSketchName(drawing)) warn(`${key} stage "${title}" has an unknown drawing "${drawing}"`);
+        return [
+          {
+            title,
+            line: text(stage.line),
+            body,
+            link,
+            scene: drawing && isSketchName(drawing) ? drawing : undefined,
+          },
+        ];
+      });
+      if (!stages.length) {
+        warn(`${key} has no stages; not shown`);
+        return;
+      }
+      const closingAction = action(section.closingAction);
+      return {
+        ...head,
+        type: 'stages',
+        surface: section.stagesSurface ?? undefined,
+        lead: text(section.description),
+        action: action(section.action),
+        stages,
+        close: closingAction
+          ? { line: text(section.closingLine), action: closingAction }
+          : undefined,
+      };
+    }
+    case 'ComponentSharedChatThread': {
+      const exchanges = rows(section.exchanges).flatMap((exchange) => {
+        const client = text(exchange.client);
+        const reply = text(exchange.reply);
+        return client && reply ? [{ client, reply }] : [];
+      });
+      if (!exchanges.length) {
+        warn(`${key} has no exchanges; not shown`);
+        return;
+      }
+      return {
+        ...head,
+        type: 'chat',
+        surface: section.chatSurface ?? undefined,
+        lead: text(section.description),
+        note: text(section.note),
+        action: action(section.action),
+        exchanges,
+      };
+    }
+    case 'ComponentSharedFreeTools': {
+      const cards = rows(section.toolCards).flatMap((card) => {
+        const resolved = (card.resolved ?? {}) as Record<string, unknown>;
+        const title = text(resolved.title as string | undefined);
+        const body = text(resolved.description as string | undefined);
+        const href = actionHref(resolved.href as string | undefined);
+        if (!title || !body || !href) {
+          warn(`${key} card ${card.id} has no published Tool or guide; not shown`);
+          return [];
+        }
+        /* A Tool brings its own label ("Try the tool"); a guide without one reads as a guide. */
+        const label =
+          text(resolved.ctaText as string | undefined) ?? (resolved.kind === 'tool' ? 'Try the tool' : 'Read the guide');
+        return [{ title, body, link: { label, href } }];
+      });
+      if (!cards.length) {
+        warn(`${key} has no cards; not shown`);
+        return;
+      }
+      return {
+        ...head,
+        type: 'tools',
+        surface: section.toolsSurface ?? undefined,
+        lead: text(section.description),
+        cards,
+      };
+    }
     default:
       warn(`${key} is an unsupported section`);
   }

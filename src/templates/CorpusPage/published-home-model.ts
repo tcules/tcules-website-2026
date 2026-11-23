@@ -145,6 +145,8 @@ export type HomeSection = SectionHead &
         type: 'resources';
         presentation?: 'cards' | 'rows' | null;
         lead?: string;
+        /** The head's link to every resource ("See all insights"; the overhaul boards, 18 Nov 2026). */
+        action?: HomeAction;
         items: {
           id: string;
           title: string;
@@ -200,6 +202,29 @@ export type HomeSection = SectionHead &
         contacts: { label: string; value: string; href?: string }[];
       }
     | { type: 'faq'; eyebrow?: string; lead?: string; items: AccordionItem[] }
+    | {
+        /** The overhaul's stage rows, each with its drawing and service link, then the first-step
+            strip (O.9). Replaces the situation gateway on Home and How we work (owner, 23 Nov 2026). */
+        type: 'stages';
+        lead?: string;
+        action?: HomeAction;
+        stages: { title: string; line?: string; body: string; link: HomeAction; scene?: SketchName }[];
+        close?: { line?: string; action: HomeAction };
+      }
+    | {
+        /** The first-call conversation: the client's line, then Tcules' reply (O.5). */
+        type: 'chat';
+        lead?: string;
+        note?: string;
+        action?: HomeAction;
+        exchanges: { client: string; reply: string }[];
+      }
+    | {
+        /** Free tools and guides, each card with its one drawing (`toolSceneFor`). */
+        type: 'tools';
+        lead?: string;
+        cards: { title: string; body: string; link: HomeAction }[];
+      }
   );
 
 export type HomePageModel = { hero: HomeHero; sections: HomeSection[] };

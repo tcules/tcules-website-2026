@@ -139,6 +139,7 @@
 @import 'components/star-rating.css';
 @import 'components/process-flow.css';
 @import 'components/stat.css';
+@import 'components/area-mark.css';
 @import 'components/thread.css';
 @import 'components/service-page.css';
 @import 'components/corpus-page.css';
@@ -164,6 +165,7 @@
 @import 'components/filter-panel.css';
 @import 'components/teaser.css';
 @import 'components/bento.css';
+@import 'components/chat-thread.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

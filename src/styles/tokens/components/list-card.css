@@ -174,12 +174,36 @@
   /* A row's thumbnail below md (cmp-services fix round 1): small enough that the copy core keeps its
      192 minimum beside it in a 326 phone column (326 - 24 - 96 = 206), so the row stays a row. */
   --lcrd-thumbnail-inline-sm: 96px;
+  /* The stage drawing (17 Nov 2026, the service boards' stage rows): a 16:9 plate 200 wide from 768,
+     the boards' drawing size. */
+  --lcrd-stage-inline-md: 200px;
+  /* Below 768 (owner, 18 Nov 2026, Jatin's phone board) the plate runs the row's width at 2:1: lower
+     than 16:9, so three stage cards and their words do not become three screens. */
+  --lcrd-stage-ratio-sm: 2 / 1;
+
+  /* The Stages set's phone rail (owner, 18 Nov 2026, Jatin's phone board): component geometry, the
+     board's measures. The inset is the rail's column: the ring at its start, the copy 14 clear of it.
+     The ring is open (its stroke the rail's width); the end dot, filled, is a step larger, so the
+     last step reads as the destination. Its top centres it on the strip's first line: the phone
+     island's 24 block inset (Island's --isl-inset-strip-block below 768, by value) plus 2, the
+     optical correction that lands an 18 dot on the h4 note's first line box (23.4 at h4-m). */
+  --lcrd-rail-inset: 28px;
+  --lcrd-rail-width: var(--border-width-2);
+  --lcrd-rail-ring-size: 14px;
+  --lcrd-rail-end-size: 18px;
+  --lcrd-rail-end-top: 26px;
+  --lcrd-rail-radius: var(--radius-full);
 
   /* A tile's icon marker: the em of the title beside it (owner, 7 Oct 2026 — the 32 that stood
      alone above the title was far too big; size it to the title, from a token). The marker is set
      in the title's role for the size step, so 1em is 22 beside an h5 and 28 beside an h4, and it
      follows the roles' breakpoint steps by itself. Read by `.tile .marker > svg`. */
   --lcrd-marker-icon-size-tile: 1em;
+  /* A hanging row's icon (arrangement="hanging", owner 18 Nov 2026): bare, the em of the title it
+     hangs beside, centred on the title's first line. Its distance to the copy is not a token here:
+     it is the gap scale's `text` (16), named on the row's Cluster, so it IS --gap-text. Read by
+     `.hanging .marker > svg`. */
+  --lcrd-marker-icon-size-hanging: 1em;
   --lcrd-thumbnail-ratio: var(--ratio-standard);
   /* The thumbnail's corner: 8, no frame, for every kind (visual-direction § 5.3, fdn-media, 6 Oct
      2026) — the photograph radius every image box now takes, so a row's 160px thumbnail and the
@@ -217,6 +241,9 @@
   /* The row's end arrow (`cue="arrow"`, owner 4 Nov 2026, the glossary's term rows): how far it moves
      on hover. A hover move, not a layout distance — the ramp, said so here as button.css does. */
   --lcrd-cue-shift: var(--space-4); /* optical: the hover move */
+  /* The phone timeline's stage to stage: `column` (64) under each stage's link, Jatin's m- boards —
+     at 32 the next stage's plate read as the previous stage's picture. Phone-only. */
+  --lcrd-stage-gap-m: var(--gap-column);
 }
 
 /* The md correction re-measured at the h4 role's breakpoint steps (final fix round, 6 Oct 2026),
@@ -262,6 +289,7 @@
   --lcrd-ground-pressed: var(--color-neutral-100);
   --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper);
+  --lcrd-rail-ink: var(--color-brandeis-500); /* 6.17:1 — the rail */
 }
 
 /* ── Surface: tint ──────────────────────────────────────────────────────────────
@@ -285,6 +313,7 @@
   --lcrd-ground-pressed: var(--color-neutral-200);
   --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --lcrd-ring-gap-color: var(--color-paper-deep);
+  --lcrd-rail-ink: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 /* ── Surface: ink ───────────────────────────────────────────────────────────────
@@ -309,6 +338,7 @@
   --lcrd-ground-pressed: var(--color-neutral-800);
   --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --lcrd-ring-gap-color: var(--color-neutral-950);
+  --lcrd-rail-ink: var(--color-brandeis-300); /* 7.32:1 */
 }
 
 /* ── Surface: blue ──────────────────────────────────────────────────────────────
@@ -321,7 +351,9 @@
   --lcrd-date-ink: var(--color-white); /* 6.23:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
-  --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */
+  --lcrd-neutral-number-ink: var(
+    --color-brandeis-200
+  ); /* 3.78:1 — no grey reads on blue; equals accent */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-cue-ink: var(--color-brandeis-100); /* 4.91:1 — the end arrow at rest; it takes --lcrd-link-ink on hover */
@@ -331,4 +363,5 @@
   --lcrd-ground-pressed: var(--color-brandeis-700);
   --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */
   --lcrd-ring-gap-color: var(--color-brandeis-500);
+  --lcrd-rail-ink: var(--color-white); /* 6.23:1 */
 }

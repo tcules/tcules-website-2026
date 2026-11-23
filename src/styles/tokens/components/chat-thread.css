@@ -1,0 +1,132 @@
+/* ══ Component layer — ChatThread ═══════════════════════════════════════════════
+   Tier 2. A short conversation: the client's line, then Tcules' reply, as messages. Built to
+   docs/specs/ChatThread.md (status proposed, tracker O.5; restyled 18 Nov 2026 on the owner's
+   note: grey is "them", blue is "us", an avatar for them, the Tcules mark white on blue for us;
+   18 Nov the "us" bubble turned light, brandeis-100 with dark text, the disc kept solid blue;
+   18 Nov later: "make the us avatar white circle with a black T mark" and "use brandeis-50 for us
+   bubbles", so the disc is white with the mark in neutral-950 and the bubble brandeis-50).
+
+   Naming: --chat-{speaker}-{part}
+     speakers: client (them) | reply (us)
+     parts:    ground | ink | avatar-ground | avatar-ink | avatar-edge
+
+   Set the way the messaging apps set it (iMessage, Messenger, WhatsApp, Intercom): them in a soft
+   warm bubble (paper-deep on paper, paper on tint) with no edge, us in the lightest brand blue with
+   dark text (brandeis-50; 100 on tint, where 50 is 1.01:1 to the band and vanishes), each with a round
+   avatar foot-aligned to its bubble on its own side, the corner nearest the avatar pulled in as
+   the tail. No borders on a bubble: the fill against the ground is its only edge. The one edge in
+   the thread is the white "us" disc's hairline ring, and only where the ground is as light as the
+   disc (paper); elsewhere the ring is transparent. The
+   avatars are decoration; the speaker's name is announced in the text itself.
+
+   Every surface restates every token so a thread nested inside another surface cannot inherit
+   the wrong ground from its outer ancestor. */
+
+:root {
+  /* How wide a message may grow, as a share of the thread's own width: one per side, since the
+     two sides part only by what each leaves free. 75% from 768, the messaging apps' measure. Below
+     768 (owner, 18 Nov 2026: "narrower on narrow screens so it remains apparent which message
+     belongs to which side"), Jatin's m- boards: a message and its avatar together take 84% of the
+     thread for them and 76% for us, so them leaves 16% free on the end side and us 24% on the start
+     side, and the two columns of speech visibly step. A size, not a distance. */
+  --chat-client-measure: 75%;
+  --chat-reply-measure: 75%;
+  /* The bubble's inset: its own air against its edge. Optical, so it reads the space ramp
+     (gap-scale rule 1): 12 above and below a 24px line makes a 48 single-line bubble, 16 at the
+     sides. */
+  --chat-bubble-inset-block: var(--space-12);
+  --chat-bubble-inset-inline: var(--space-16);
+  /* 12 on three corners, 4 on the tail corner nearest the avatar (owner, 18 Nov 2026: 24 read
+     too rounded). A soft slab at every length rather than a pill. */
+  --chat-bubble-radius: var(--radius-12);
+  --chat-bubble-radius-tail: var(--radius-4);
+  /* Both voices in the sans body at 16 (body ceiling), on a chat's tighter 1.5 leading (the
+     lead-lg ratio, 24px) rather than body's reading 1.6: short lines of speech, not an article. */
+  --chat-bubble-font: var(--font-weight-regular) var(--font-size-body) / var(--line-height-lead-lg)
+    var(--font-family-sans);
+  /* The avatar: a 32 disc, 24 below 768 (the m- boards' 22, on the ramp). The inset sizes the
+     drawing inside it: the person glyph at 20 (16 on a phone), the logomark at 16 tall (12).
+     Optical, so the space ramp. */
+  --chat-avatar-size: var(--space-32);
+  --chat-client-avatar-inset: var(--space-6);
+  --chat-reply-avatar-inset: var(--space-8);
+  /* The white "us" disc's ring, where a surface paints one: a hairline drawn inside the disc. */
+  --chat-avatar-edge-width: var(--border-width-hairline);
+  /* Visually hidden speaker name: the 1px clip box. */
+  --chat-hidden-size: var(--space-1);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --chat-avatar-size: var(--space-24);
+    --chat-client-avatar-inset: var(--space-4);
+    --chat-reply-avatar-inset: var(--space-6);
+    /* The board's share is the message plus its avatar, so the avatar and its 8 come off it. */
+    --chat-client-measure: calc(84% - var(--chat-avatar-size) - var(--gap-tight));
+    --chat-reply-measure: calc(76% - var(--chat-avatar-size) - var(--gap-tight));
+  }
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────────────
+   Each message's text is normal text and clears 4.5:1 on its own bubble (ratios beside each ink).
+   The avatars are aria-hidden decoration; their drawings still clear 3:1 on their discs. */
+:root,
+[data-surface='paper'] {
+  /* Them on paper-deep (owner, 18 Nov 2026: "paper-deep for them bubble"), the boards' plate:
+     1.12:1 against the paper band, a quiet warm step rather than a grey. */
+  --chat-client-ground: var(--color-paper-deep);
+  --chat-client-ink: var(--color-neutral-900); /* 13.06:1 on the bubble */
+  --chat-client-avatar-ground: var(--color-neutral-200);
+  --chat-client-avatar-ink: var(--color-neutral-600); /* 3.69:1 */
+  --chat-reply-ground: var(--color-brandeis-50); /* 1.11:1 to the band, the same step as them */
+  --chat-reply-ink: var(--color-neutral-900); /* 13.2:1 on the bubble */
+  /* Us: a white disc, the Tcules mark black on it (owner, 18 Nov 2026). White on paper is 1.01:1,
+     so the disc takes a neutral-200 hairline ring (1.33:1, decoration) to hold its round. */
+  --chat-reply-avatar-ground: var(--color-white);
+  --chat-reply-avatar-ink: var(--color-neutral-950); /* 17.26:1 */
+  --chat-reply-avatar-edge: var(--color-neutral-200);
+}
+
+[data-surface='tint'] {
+  /* The band IS paper-deep, so the bubble inverts to paper: the same 1.12:1 step the other way,
+     as the boards set their plate on a deep band. */
+  --chat-client-ground: var(--color-paper);
+  --chat-client-ink: var(--color-neutral-900); /* 14.62:1 on the bubble */
+  --chat-client-avatar-ground: var(--color-neutral-300);
+  --chat-client-avatar-ink: var(--color-neutral-700); /* 5.27:1 */
+  /* brandeis-50 is 1.01:1 on paper-deep and would vanish; 100 is 1.12:1, the step them takes. */
+  --chat-reply-ground: var(--color-brandeis-100);
+  --chat-reply-ink: var(--color-neutral-900); /* 11.63:1 on the bubble */
+  /* The white disc already parts from paper-deep (1.13:1), as the paper bubble does: no ring. */
+  --chat-reply-avatar-ground: var(--color-white);
+  --chat-reply-avatar-ink: var(--color-neutral-950); /* 17.26:1 */
+  --chat-reply-avatar-edge: transparent;
+}
+
+[data-surface='ink'] {
+  --chat-client-ground: var(--color-neutral-800);
+  --chat-client-ink: var(--color-white); /* 11.92:1 on the bubble */
+  --chat-client-avatar-ground: var(--color-neutral-700);
+  --chat-client-avatar-ink: var(--color-neutral-300); /* 5.27:1 */
+  --chat-reply-ground: var(--color-brandeis-50);
+  --chat-reply-ink: var(--color-neutral-900); /* 13.2:1 on the bubble */
+  --chat-reply-avatar-ground: var(--color-white);
+  --chat-reply-avatar-ink: var(--color-neutral-950); /* 17.26:1 */
+  --chat-reply-avatar-edge: transparent;
+}
+
+[data-surface='blue'] {
+  /* The band is brandeis-500 itself: "them" turns white, the neutral voice against the brand
+     ground, and "us" takes brandeis-200 so the light blue still parts from the white bubble
+     (brandeis-50 against white is 1.07:1, one voice). The "us" disc is white like them's, told
+     apart by the black mark; white on blue needs no ring. */
+  --chat-client-ground: var(--color-white);
+  --chat-client-ink: var(--color-neutral-900); /* 14.75:1 on the bubble */
+  --chat-client-avatar-ground: var(--color-white);
+  --chat-client-avatar-ink: var(--color-neutral-600); /* 4.97:1 */
+  --chat-reply-ground: var(--color-brandeis-200);
+  --chat-reply-ink: var(--color-neutral-900); /* 8.95:1 on the bubble */
+  --chat-reply-avatar-ground: var(--color-white);
+  --chat-reply-avatar-ink: var(--color-neutral-950); /* 17.26:1 */
+  --chat-reply-avatar-edge: transparent;
+}

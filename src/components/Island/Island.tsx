@@ -29,9 +29,11 @@ export type IslandProps = {
    * `default`: the island's own inset (48). `band`: the band's own air (96; 64 and 32 below 768), for
    * an island on a `flush` band whose texture runs through that air (owner, 31 Oct 2026, About's
    * studio links). `form`: the default inset, but 16 at the sides below 768, for the island that
-   * holds the enquiry form (owner, 5 Nov 2026).
+   * holds the enquiry form (owner, 5 Nov 2026). `strip`: a thinner block inset (32; 24 below 768) and
+   * the default sides, for a one-row island of a note and an action — CtaRow's `frame="strip"`
+   * (owner, 18 Nov 2026).
    */
-  inset?: 'default' | 'band' | 'form';
+  inset?: 'default' | 'band' | 'form' | 'strip';
   children: ReactNode;
 };
 
@@ -60,7 +62,9 @@ export function Island({ surface, inset = 'default', children }: IslandProps) {
           ? `${styles.island} ${styles.insetBand}`
           : inset === 'form'
             ? `${styles.island} ${styles.insetForm}`
-            : styles.island
+            : inset === 'strip'
+              ? `${styles.island} ${styles.insetStrip}`
+              : styles.island
       }
       data-surface={surface}
     >

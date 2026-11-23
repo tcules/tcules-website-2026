@@ -233,6 +233,7 @@ export type CmsHomeSection = Band &
         description: Text;
         resourcesSurface: Surface;
         resourcePresentation: Maybe<'cards' | 'rows'>;
+        action: Maybe<CmsAction>;
         items: Entries<{ id: string; icon: Text; resolved: Maybe<ResolvedResource> }>;
         resources: Entries<{
           documentId: string;
@@ -300,6 +301,37 @@ export type CmsHomeSection = Band &
           answer: unknown;
           isActive: Maybe<boolean>;
         }>;
+      }
+    | {
+        __typename: 'ComponentSharedProductStages';
+        description: Text;
+        stagesSurface: Surface;
+        action: Maybe<CmsAction>;
+        stages: Entries<{
+          id: string;
+          title: Text;
+          line: Text;
+          body: Text;
+          drawing: Text;
+          link: Maybe<CmsAction>;
+        }>;
+        closingLine: Text;
+        closingAction: Maybe<CmsAction>;
+      }
+    | {
+        __typename: 'ComponentSharedChatThread';
+        description: Text;
+        chatSurface: Surface;
+        note: Text;
+        action: Maybe<CmsAction>;
+        exchanges: Entries<{ id: string; client: Text; reply: Text }>;
+      }
+    | {
+        __typename: 'ComponentSharedFreeTools';
+        description: Text;
+        toolsSurface: Surface;
+        /** Each card resolved by the CMS from its picked Tool or guide (tcules-cms-2026#3). */
+        toolCards: Entries<{ id: string; resolved: unknown }>;
       }
   );
 

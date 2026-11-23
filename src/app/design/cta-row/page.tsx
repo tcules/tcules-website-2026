@@ -214,6 +214,16 @@ export default function CtaRowSpecimen() {
             <Specimen title={`${surface} · a pair`}>
               <CtaRow actions={[START, SEE_WORK]} rule={false} />
             </Specimen>
+            <Specimen
+              title={`${surface} · frame strip (18 Nov 2026)`}
+              note="The service boards' first-step strip: a paper Island with the turbulent field in its light-blue ink (TextureFlow flow='turbulent' ink='soft'), quieter behind the h4 note, and the blue solid. Its block inset is the Island's thinner strip step (32; 24 below 768; owner, 18 Nov 2026), its sides the default 48 (24 below 768). The island is paper on every band; on paper the field alone marks it. Wraps the action under the note on a phone. The field needs WebGL with a GPU, so a headless capture shows the plain paper island."
+            >
+              <CtaRow
+                frame="strip"
+                note="The first step is the same at every stage."
+                actions={[{ label: 'Book a free product review', href: ROUTES.contact }]}
+              />
+            </Specimen>
           </Layout>
         </Section>
       ))}

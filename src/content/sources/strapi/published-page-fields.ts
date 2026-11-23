@@ -35,6 +35,31 @@ export const PUBLISHED_FAQSECTION = `
       }
 `;
 
+/* The overhaul's three bands (CMS tcules-cms-2026#3): Stages, the first-call chat and the free tools. */
+export const PUBLISHED_PRODUCTSTAGES = `
+      ... on ComponentSharedProductStages {
+        id heading anchorId description stagesSurface: surface
+        action { ...PublishedAction }
+        stages { id title line body drawing link { ...PublishedAction } }
+        closingLine closingAction { ...PublishedAction }
+      }
+`;
+
+export const PUBLISHED_CHATTHREAD = `
+      ... on ComponentSharedChatThread {
+        id heading anchorId description chatSurface: surface note
+        action { ...PublishedAction }
+        exchanges { id client reply }
+      }
+`;
+
+export const PUBLISHED_FREETOOLS = `
+      ... on ComponentSharedFreeTools {
+        id heading anchorId description toolsSurface: surface
+        toolCards: cards { id resolved }
+      }
+`;
+
 export const PUBLISHED_CTA = `
       ... on ComponentSharedCta {
         id heading anchorId eyebrow description descriptionRich disclaimer ctaSurface: surface ctaSide: mediaSide isEnabled ctaType ctaPresentation: presentation island
