@@ -15,6 +15,7 @@ import { TESTIMONIAL_AVATAR } from '@/lib/image-sizes';
 import { curlQuotes, withQuoteMarks } from '@/lib/quote-marks';
 
 import styles from './Testimonial.module.css';
+import { WallFold } from './WallFold';
 
 /**
  * The speaker's portrait for a circular avatar: the asset record without the fields the card
@@ -51,6 +52,13 @@ export type TestimonialItem = {
    * designs"). Always the page's data, never a pattern's.
    */
   avatar?: TestimonialAvatar;
+  /**
+   * The way on to this client's case ("Read the Doodle case"), under the speaker (owner, 18 Nov
+   * 2026, from Jatin's boards: "links to respective case studies missing from the testimonial
+   * item"). Optional and opt-in: only a quote whose work has a case page carries one. `href` comes
+   * from `@/lib/routes` at the content seam, never written out there.
+   */
+  link?: { label: string; href: string };
 };
 
 /**
@@ -122,6 +130,8 @@ export type TestimonialCardProps = {
   as?: 'li' | 'div';
   /** Stretch to the row's height, the attribution pinned to the foot (a row of peers). */
   fill?: boolean;
+  /** The wall's fold class on the card's root (`foldOnPhone`); placement only. */
+  className?: string;
 };
 
 /**
@@ -135,6 +145,7 @@ export function TestimonialCard({
   frame = 'box',
   as: Root = 'div',
   fill = false,
+  className,
 }: TestimonialCardProps) {
   if (!valid(item)) return null;
   /* Every testimonial carries its star rating (owner, 12 Oct 2026); say so when one arrives without. */
@@ -142,8 +153,17 @@ export function TestimonialCard({
     warn(`"${item.name}" has no rating; every testimonial shows one.`);
   const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
   const quiet = size === 'sm';
+  const speaker = (
+    <>
+      {item.avatar ? <Avatar avatar={item.avatar} size={quiet ? 'sm' : 'md'} /> : null}
+      <Layout rowGap="inline" className={styles.who}>
+        <span className={styles.name}>{item.name}</span>
+        <span className={styles.role}>{role}</span>
+      </Layout>
+    </>
+  );
   return (
-    <Root className={cx(styles.item, fill && styles.fill)}>
+    <Root className={cx(styles.item, fill && styles.fill, className)}>
       <Layout
         as="figure"
         rowGap={quiet ? 'text' : 'block'}
@@ -169,19 +189,41 @@ export function TestimonialCard({
             className={styles.quoteProse}
           />
         </blockquote>
-        <Cluster
-          as="figcaption"
-          nowrap
-          colGap="text"
-          align="center"
-          className={cx(styles.attribution, frame === 'box' && styles.attributionRuled)}
-        >
-          {item.avatar ? <Avatar avatar={item.avatar} size={quiet ? 'sm' : 'md'} /> : null}
-          <Layout rowGap="inline" className={styles.who}>
-            <span className={styles.name}>{item.name}</span>
-            <span className={styles.role}>{role}</span>
+        {item.link ? (
+          /* With a case link: the speaker's row, then the link a `block` under it, both in the
+             caption so the card's foot stays one part (and pins as one in a row of peers). */
+          <Layout
+            as="figcaption"
+            rowGap="block"
+            className={cx(styles.attribution, frame === 'box' && styles.attributionRuled)}
+          >
+            <Cluster nowrap colGap="text" align="center">
+              {speaker}
+            </Cluster>
+            <div>
+              <Button
+                as="a"
+                href={item.link.href}
+                emphasis="link"
+                size={quiet ? 'sm' : 'md'}
+                extendHitArea
+                icon={<Icon name="arrow-right" />}
+              >
+                {item.link.label}
+              </Button>
+            </div>
           </Layout>
-        </Cluster>
+        ) : (
+          <Cluster
+            as="figcaption"
+            nowrap
+            colGap="text"
+            align="center"
+            className={cx(styles.attribution, frame === 'box' && styles.attributionRuled)}
+          >
+            {speaker}
+          </Cluster>
+        )}
       </Layout>
     </Root>
   );
@@ -267,6 +309,12 @@ export type TestimonialWallProps = {
    * columns: a single row of peers stays level.
    */
   stagger?: boolean;
+  /**
+   * Below 768, show this many cards and a full-width "See N more" toggle for the rest (owner, 17 Nov
+   * 2026, Jatin's m- boards: 3, overriding the no-hidden-cards rule for testimonials only). Opt-in;
+   * from 768 the wall is unchanged. Ignored when the wall has no more cards than this.
+   */
+  foldOnPhone?: number;
 };
 
 /**
@@ -281,6 +329,7 @@ export function TestimonialWall({
   columns,
   stagger = false,
   avatarPolicy = 'all-or-none',
+  foldOnPhone,
 }: TestimonialWallProps) {
   const valids = items.filter(valid);
   /* A wall carries portraits on every card or on none: three of six with faces read as unevenly
@@ -297,9 +346,19 @@ export function TestimonialWall({
     columns ??
     (accepted.length <= 2 ? (accepted.length as 1 | 2) : accepted.length === 4 ? 2 : 3);
   const key = (item: TestimonialItem, index: number) => item.id ?? `${index}-${item.name}`;
+  const fold =
+    foldOnPhone !== undefined && foldOnPhone > 0 && accepted.length > foldOnPhone
+      ? foldOnPhone
+      : undefined;
+  /* Past the fold: hidden below 768 until the toggle opens it. The runs are contiguous, so on a
+     phone (one column, the runs in order) the first cards in the DOM are the first written. */
+  const beyond = (index: number) =>
+    fold !== undefined && index >= fold ? styles.beyond : undefined;
+  const folded = (wall: ReactNode) =>
+    fold === undefined ? wall : <WallFold hidden={accepted.length - fold}>{wall}</WallFold>;
 
   if (accepted.length <= count) {
-    return (
+    return folded(
       <Layout
         as="ul"
         columns={{ lg: count }}
@@ -308,14 +367,23 @@ export function TestimonialWall({
         className={styles.wall}
       >
         {accepted.map((item, index) => (
-          <TestimonialCard key={key(item, index)} item={item} as="li" fill />
+          <TestimonialCard
+            key={key(item, index)}
+            item={item}
+            as="li"
+            fill
+            className={beyond(index)}
+          />
         ))}
-      </Layout>
+      </Layout>,
     );
   }
 
   const runs = partition(accepted, count);
-  return (
+  const starts = runs.map((_, column) =>
+    runs.slice(0, column).reduce((sum, run) => sum + run.length, 0),
+  );
+  return folded(
     <Layout
       columns={{ lg: runs.length }}
       colGap="gutter"
@@ -324,13 +392,18 @@ export function TestimonialWall({
       className={styles.wall}
     >
       {runs.map((run, column) => (
-        <Layout as="ul" key={column} rowGap="gutter">
+        <Layout as="ul" key={column} rowGap="gutter" className={beyond(starts[column]!)}>
           {run.map((item, index) => (
-            <TestimonialCard key={key(item, index)} item={item} as="li" />
+            <TestimonialCard
+              key={key(item, index)}
+              item={item}
+              as="li"
+              className={beyond(starts[column]! + index)}
+            />
           ))}
         </Layout>
       ))}
-    </Layout>
+    </Layout>,
   );
 }
 

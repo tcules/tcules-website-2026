@@ -53,7 +53,8 @@ function WhyBand({
           {...head}
           data-band="M"
           actionsAt="end"
-          actions={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
+          /* The cards end in their own links: a hairline over the see-all on a phone. */
+          actions={s.action ? <CtaRow rule="until-md" actions={[s.action]} /> : undefined}
         >
           <BlockCardSet
             lead="none"
