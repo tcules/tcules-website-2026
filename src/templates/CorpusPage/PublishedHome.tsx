@@ -145,11 +145,12 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
         colGap="gutter"
         columns={horizontal ? 1 : { base: 1, md: 2, lg: 3 }}
       >
-        {section.cards.map(({ id: key, bodyHtml, href, image, ctaLabel, ...card }, index) =>
+        {section.cards.map(({ id: key, bodyHtml, href, image, ctaLabel, kind, ...card }, index) =>
           horizontal && href && image ? (
             <CaseCard
               key={key}
               {...card}
+              kind={kind}
               href={href}
               image={image}
               bodyHtml={bodyHtml ? [bodyHtml] : undefined}
@@ -160,6 +161,8 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
             <Layout as="ul" key={key}>
               <BlockCard
                 {...card}
+                /* A block card has no tag slot: its eyebrow keeps the type after the client. */
+                eyebrow={[card.eyebrow, kind].filter(Boolean).join(' · ') || undefined}
                 size={covered ? 'sm' : 'md'}
                 titleAs="h3"
                 bodyHtml={bodyHtml ? [bodyHtml] : undefined}

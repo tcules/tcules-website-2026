@@ -83,6 +83,8 @@ export type ResolvedCase = {
   id?: string;
   title: Text;
   eyebrow: Text;
+  /** The placement's Type ("New product"), from tcules-cms-2026#2. Absent until that deploys. */
+  type?: Text;
   description: Text;
   descriptionFormat: Maybe<'text' | 'markdown'>;
   href: Text;

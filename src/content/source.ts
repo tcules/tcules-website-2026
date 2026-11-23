@@ -68,6 +68,7 @@ import {
 } from './sources/strapi/published-service';
 import { getPublishedCaseStudy } from './sources/strapi/published-case';
 import { getPublishedHome } from './sources/strapi/home';
+import { withClientLogos } from './client-logos';
 import { getPublishedPageSeo } from './sources/strapi/page-seo';
 import { getPublishedNavigation } from './sources/strapi/site-chrome';
 import { getPublishedSiteIdentity } from './sources/strapi/site-identity';
@@ -134,8 +135,9 @@ const toolsSource: ToolContentSource = toolSource;
 /** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
 const corpusPagesSource: CorpusContentSource = corpusSource;
 
-export const getPublishedAboutPage = getPublishedAbout;
-export const getPublishedServicesMasterPage = getPublishedServicesMaster;
+/* Pages that show client logos show Home's one list (./client-logos). */
+export const getPublishedAboutPage = withClientLogos(getPublishedAbout, { hero: true });
+export const getPublishedServicesMasterPage = withClientLogos(getPublishedServicesMaster);
 /** `/glossary`: the Glossary Master single type on the new CMS, its terms through their relations. */
 export const getGlossaryMasterPage = getPublishedGlossaryMaster;
 /** `/tools`: the Tool Master single type on the new CMS, its tools through their relations. */
@@ -154,7 +156,7 @@ export const getSiteIdentity = getPublishedSiteIdentity;
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
 export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesSource);
-export const getCaseStudyIndex = getPublishedCaseIndex;
+export const getCaseStudyIndex = withClientLogos(getPublishedCaseIndex);
 export const getCaseCoverFallback = (slug: string) => CASE_COVERS[slug];
 export const getResourceDetail = getPublishedResource;
 /** `/privacy-policy` and `/terms-of-use`: each its own legal single type on the new CMS, with its SEO. */
@@ -168,17 +170,17 @@ export const getAuthorShareProfile = getPublishedAuthorShareProfile;
 export const getGlossaryDetail = getPublishedGlossary;
 export const getGlossaryDetailSeo = getPublishedGlossarySeo;
 /** A Service detail page (`/services/{slug}`) and the published slugs, from the new CMS. */
-export const getServiceDetail = getPublishedService;
+export const getServiceDetail = withClientLogos(getPublishedService, { hero: true });
 export const listServiceSlugs = listPublishedServiceSlugs;
 /** The Expertise Master (`/expertise`) from the new CMS. */
-export const getExpertiseMasterPage = getPublishedExpertiseMaster;
+export const getExpertiseMasterPage = withClientLogos(getPublishedExpertiseMaster);
 /** The Audit Master (`/audits`) from the new CMS, its audit cards through their Audit relations. */
 export const getAuditMasterPage = getPublishedAuditMaster;
 /** An Audit detail page (`/audits/{slug}`) and the published slugs, from the new CMS. */
-export const getAuditDetail = getPublishedAudit;
+export const getAuditDetail = withClientLogos(getPublishedAudit, { hero: true });
 export const listAuditSlugs = listPublishedAuditSlugs;
 /** An Expertise detail page (`/expertise/{slug}`) and the published slugs, from the new CMS. */
-export const getExpertiseDetail = getPublishedExpertise;
+export const getExpertiseDetail = withClientLogos(getPublishedExpertise, { hero: true });
 export const listExpertiseSlugs = listPublishedExpertiseSlugs;
 export const getCaseStudyDetail = getPublishedCaseStudy;
 
@@ -513,13 +515,17 @@ export const getPublishedClientMasterPage = getPublishedClientMaster;
 export const getPublishedLabPage = getPublishedLab;
 export const getPublishedLabJoinPage = getPublishedLabJoin;
 
-export const getPublishedCareersPage = getPublishedCareers;
+export const getPublishedCareersPage = withClientLogos(getPublishedCareers, { hero: true });
 
 export const getPublishedMatterPage = getPublishedMatter;
 
-export const getPublishedWhyPage=getPublishedWhy;
+export const getPublishedWhyPage = withClientLogos(getPublishedWhy);
 
-export const getPublishedWorkMasterPage = getPublishedWorkMaster;
+/* How we work: the list under the hero, as on the overhaul; its own logo band is not drawn again. */
+export const getPublishedWorkMasterPage = withClientLogos(getPublishedWorkMaster, {
+  hero: true,
+  drop: 'work-logos',
+});
 export const getPublishedWorkPage = getPublishedWorkDetail;
 export const getSitemapMasterPage = getPublishedSitemap;
 
