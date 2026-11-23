@@ -36,6 +36,8 @@ type HomeCaseCard = {
   id: string;
   title: string;
   eyebrow?: string;
+  /** What kind of case this is here ("New product"): a small tag on CaseCard's eyebrow line. */
+  kind?: string;
   body?: string;
   bodyHtml?: string;
   href?: string;

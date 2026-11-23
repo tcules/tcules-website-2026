@@ -904,13 +904,13 @@ export function SharedSectionView({ section, ctx }: { section: Section; ctx: Ctx
           surface={section.surface}
           aria-labelledby={section.headingId}
         >
+          {/* The client logos as the slow ticker (owner, 23 Nov 2026; decisions/2026-11-23-client-logos-are-the-ticker). */}
           <LogoGrid
+            arrangement="ticker"
             marks={section.marks}
             context={section.heading}
             contextAs="h2"
             headingId={section.headingId}
-            edges="closed"
-            density={section.compact ? 'compact' : 'default'}
           />
         </Band>
       );

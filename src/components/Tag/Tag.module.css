@@ -122,6 +122,22 @@
   background-color: var(--tag-mark-bg);
 }
 
+/* ── Mark · sm, the slim mark ──────────────────────────────────────────────────
+   The case card's kind (owner, 19 Nov 2026: "tags of some kind … not chips, they're too fat"). The
+   mark's ground and no edge, so it is still unmistakably inert; what changes is the box and the
+   voice. A 20 minimum (one 13.2 micro line plus a few px of ground) and the micro MONO role, so on a
+   mono eyebrow line it reads as another word of that line in a quiet box, not as a pill beside it.
+   The inline-end padding gives back the trailing letter-space, as the filter's does. Declared after
+   `.mark` and outranking `.tag`'s minimums by source order at equal specificity. */
+.sm {
+  min-block-size: var(--tag-size-sm);
+  min-inline-size: var(--tag-size-sm);
+  padding-inline-end: calc(var(--gap-tight) - var(--tag-label-trim));
+  font: var(--text-micro);
+  letter-spacing: var(--text-micro-tracking);
+  text-transform: var(--text-mono-case);
+}
+
 /* ── Variant · filter · rest ───────────────────────────────────────────────────
    An edge with no ground. NO background is declared here and none is declared on hover, because
    --tag-filter-bg and --tag-filter-bg-hover do not exist — the chip is an outline and a label

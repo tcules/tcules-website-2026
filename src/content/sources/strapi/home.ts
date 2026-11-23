@@ -300,6 +300,8 @@ function caseCard(value: ResolvedCase | null | undefined, index: number) {
     id: value?.id ?? String(index),
     title,
     eyebrow: text(value?.eyebrow),
+    /* The case's Type in this placement: the small tag beside the eyebrow (owner, 23 Nov 2026). */
+    kind: text(value?.type),
     body,
     bodyHtml:
       value?.descriptionFormat === 'markdown' ? markdown(body, 'case description') : undefined,

@@ -26,6 +26,15 @@ export type TagVariant = 'mark' | 'filter' | 'link';
    review comments, which is the hard constraint expressed as a type. */
 type MarkTag = {
   variant?: 'mark';
+  /**
+   * `md` (default): the 24 box in the caption's sans — a hero's or a card's taxonomy row.
+   * `sm`: the SLIM mark (owner, 19 Nov 2026, the case card's kind: "tags of some kind … not chips,
+   * they're too fat"). A 20 box in the micro mono, uppercase by role, so it sits on an eyebrow line
+   * as one more word of it rather than as a pill beside it. Same ground, no edge, no states: only
+   * the size and the voice change. A closed vocabulary only ("New product", "Redesign"); free text
+   * stays `md`, whose sans keeps the author's case.
+   */
+  size?: 'md' | 'sm';
   href?: never;
   selected?: never;
   icon?: never;
@@ -36,6 +45,7 @@ type MarkTag = {
    control. */
 type FilterTag = {
   variant: 'filter';
+  size?: never;
   /**
    * The destination. A query-string rewrite on the same route today; this component neither
    * builds it nor parses it. Paths come from `@/lib/routes`, never written out at the call site.
@@ -71,6 +81,7 @@ type FilterTag = {
    row of places to go, not a row of queries. Its own size, the one exception to the tag's one box. */
 type LinkTag = {
   variant: 'link';
+  size?: never;
   /** The page it goes to. Paths come from `@/lib/routes` or the content seam. */
   href: string;
   selected?: never;
@@ -115,7 +126,7 @@ function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Tag: ${message}`);
 }
 
-export function Tag({ variant = 'mark', href, selected, icon, children }: TagProps) {
+export function Tag({ variant = 'mark', size = 'md', href, selected, icon, children }: TagProps) {
   /* A blank label renders NOTHING, matching BlockCard's handling of a whitespace title. The
      alternative is a 24 x 24 empty box — and for the filter, a focusable control with no
      accessible name, which is a target a keyboard user can reach and cannot identify. Returning
@@ -138,7 +149,7 @@ export function Tag({ variant = 'mark', href, selected, icon, children }: TagPro
   }
   if (variant === 'mark') {
     return (
-      <span className={cx(styles.tag, styles.mark)}>
+      <span className={cx(styles.tag, styles.mark, size === 'sm' && styles.sm)}>
         <span className={styles.label}>{children}</span>
       </span>
     );

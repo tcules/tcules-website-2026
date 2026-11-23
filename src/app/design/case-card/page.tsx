@@ -9,7 +9,8 @@ const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
 /* Stress copy and a kit photograph standing in for a product capture: a specimen route does not
    import content. */
 const CASE = {
-  eyebrow: 'Northwind · Product design',
+  eyebrow: 'Northwind',
+  kind: 'Redesign',
   title: 'One way into the workflow builder',
   body: 'Users could start from a template, ask the AI for help or start from scratch, and each felt like a separate path. We brought all three into one starting point.',
   href: '#',
@@ -52,6 +53,12 @@ export default function CaseCardSpecimen() {
             <CaseCard {...CASE} reverse />
           </Specimen>
           <Specimen
+            title="eyebrow only · no kind"
+            note="a case with no kind keeps the plain mono eyebrow; with one, the kind is a slim Tag (size sm) a tight step after the client (owner, 19 Nov 2026: not a chip)"
+          >
+            <CaseCard {...CASE} kind={undefined} eyebrow="Northwind · Product design" />
+          </Specimen>
+          <Specimen
             title="a story with its own link"
             note="stress: a link inside the story cannot sit inside the card's anchor, so the card is a still frame and the cue is the one real link (BlockCard's linkScope cta)"
           >
@@ -64,12 +71,13 @@ export default function CaseCardSpecimen() {
             />
           </Specimen>
           <Specimen
-            title="no eyebrow · long claim · two paragraphs"
+            title="no eyebrow · no kind · long claim · two paragraphs"
             note="stress: a title with no client before a colon carries no eyebrow; a long claim balances; the story grows and the cue stays a block under it, the group centred on the cover"
           >
             <CaseCard
               {...CASE}
               eyebrow={undefined}
+              kind={undefined}
               title="An enterprise suite of forty modules that finally reads as one product to the people who use it every day"
               body={undefined}
               bodyHtml={[
@@ -93,7 +101,10 @@ export default function CaseCardSpecimen() {
         <Section key={surface} surface={surface}>
           <Layout rowGap="stack">
             {index === 0 ? <h2>2 · Four surfaces</h2> : null}
-            <Specimen title={surface} note="the card's inks on this surface; it has no ground of its own">
+            <Specimen
+              title={surface}
+              note="the card's inks on this surface; it has no ground of its own"
+            >
               <CaseCard {...CASE} />
             </Specimen>
           </Layout>
