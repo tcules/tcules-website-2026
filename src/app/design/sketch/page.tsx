@@ -195,6 +195,14 @@ const L1_OUTCOME: readonly SketchName[] = [
 ];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 /** The scenes with a STORY drawing: the six the home bento shows, and Audits (About's eighth tile). */
+/** The overhaul pages' band figures beside rows, on the 16:9 plate since round 11 (owner, 19 Nov 2026). */
+const OVERHAUL_FIGURES: readonly SketchName[] = [
+  'ov-mvp-development-prototype-brief',
+  'ov-mvp-development-underneath',
+];
+/** The engagement infographic's two compositions, each on its own shape: wide 16:9, phone 4:5. */
+const ENGAGEMENT_WIDE: SketchName = 'ov-how-we-work-engagement';
+const ENGAGEMENT_PHONE: SketchName = 'ov-how-we-work-engagement-phone';
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
 
 export default function SketchSpecimen() {
@@ -370,6 +378,31 @@ export default function SketchSpecimen() {
                   <code>{name}</code>
                 </Layout>
               ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.11 · the overhaul band figures · ${surface}`}
+            note="Round 11, 19 Nov 2026: MVP's prototype brief (keep / fix / rebuild areas on a landscape screen) and its demo on a lit foundation, beside their rows; How we work's engagement chart (months across, specialists as cells, the designer one unbroken line, the pause dashed), full width over its six facts, beside its phone composition on the 4:5 plate. Each scene is drawn on its own shape."
+          >
+            <Layout rowGap="stack">
+              <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+                {OVERHAUL_FIGURES.map((name) => (
+                  <Layout key={name} rowGap="tight">
+                    <Sketch name={name} />
+                    <code>{name}</code>
+                  </Layout>
+                ))}
+              </Layout>
+              <Layout columns={{ base: 1, lg: [2, 1] }} colGap="gutter" rowGap="gutter">
+                <Layout rowGap="tight">
+                  <Sketch name={ENGAGEMENT_WIDE} />
+                  <code>{ENGAGEMENT_WIDE} (its phone composition below 768)</code>
+                </Layout>
+                <Layout rowGap="tight">
+                  <Sketch name={ENGAGEMENT_PHONE} />
+                  <code>{ENGAGEMENT_PHONE}</code>
+                </Layout>
+              </Layout>
             </Layout>
           </Specimen>
         </Section>

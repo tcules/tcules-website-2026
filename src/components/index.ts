@@ -90,6 +90,8 @@ export { Chip, type ChipProps } from './Chip';
 export {
   BAR_PATH,
   Logo,
+  LOGOMARK_PATHS,
+  LOGOMARK_VIEWBOX,
   WORDMARK_PATHS,
   WORDMARK_VIEWBOX,
   type LogoProps,
@@ -165,3 +167,7 @@ export { Stat, type StatAlign, type StatElement, type StatProps, type StatSize }
 /* StarRating is one review's score as five stars, a mark like Stat's numeral; it takes the star glyph
    as a node (home round 2, 10 Oct 2026). Never an aggregate platform score: that is RatingBadge. */
 export { StarRating, type StarRatingProps, type StarRatingSize } from './StarRating';
+
+/* AreaMark is the keep / fix / rebuild key (17 Nov 2026, the MVP board): a swatch whose edge says the
+   verdict, and its mono word — one mark for a legend and for an item beside it. */
+export { AreaMark, type AreaMarkProps, type AreaVerdict } from './AreaMark';

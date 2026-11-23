@@ -38,7 +38,8 @@
  * bare <li> — the list element belongs to the caller, as a Layout with rowGap="none", because the
  * row finishes itself with its own block-end rule and a gap would break the ladder. It is a pattern
  * for the usual two reasons (it consumes a content shape, and it arranges with Cluster and Layout).
- * Its two SET MODES live in its folder: `Steps` (a method, an <ol> of numbered rows) and `ReadDown`
+ * Its SET MODES live in its folder: `Steps` (a method, an <ol> of numbered rows), `Stages` (the stage
+ * rows and their strip, on a phone timeline below 768) and `ReadDown`
  * (the D body, a <ul> of peer rows in one column or two) own the list element because they own the
  * count — the type step and the ceilings — while each row inside them is still the bare <li>.
  * BlockCard is its sibling OBJECT: a borderless tile that fills a parent-owned grid track, with no
@@ -176,18 +177,21 @@ export type {
   ProcessFlowLane,
   ProcessFlowStageHeading,
 } from './ProcessFlow';
-export { ListCard, ReadDown, Steps } from './ListCard';
+export { ListCard, ReadDown, Stages, Steps } from './ListCard';
 export type {
   ListCardProps,
   ListCardMarker,
   ListCardArrangement,
   ListCardForm,
   ListCardFrame,
+  ListCardRule,
   ListCardNumberTone,
   ListCardSize,
   ListCardTitleElement,
   Step,
   StepsProps,
+  Stage,
+  StagesProps,
   ReadDownRow,
   ReadDownProps,
   ReadDownColumns,
@@ -517,3 +521,8 @@ export {
 /* Collage — a band's words in one corner and six studio photographs round them in an L (owner,
    3 Nov 2026: the About page's "The Ahmedabad studio"). */
 export { Collage, type CollagePhoto, type CollagePhotos, type CollageProps } from './Collage';
+
+/* ChatThread (tracker O.5, 17 Nov 2026): a short conversation, the client's line then Tcules'
+   reply, set as messages. An ol of exchanges with each speaker named for screen readers. Spec:
+   docs/specs/ChatThread.md (proposed). */
+export { ChatThread, type ChatThreadExchange, type ChatThreadProps } from './ChatThread';

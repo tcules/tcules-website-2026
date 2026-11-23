@@ -5,6 +5,29 @@
  * Named here so SketchName covers them; which item takes which is content/sources/offer-scenes-pages.ts.
  */
 export const PAGE_SCENE_NAMES = [
+  /* The overhaul pages' stage plates and figures (components/Sketch/ov-*.tsx, 19 Nov 2026). */
+  'ov-home-stage-starting',
+  'ov-home-stage-growing',
+  'ov-home-stage-established',
+  'ov-product-design-stage-starting',
+  'ov-product-design-stage-growing',
+  'ov-product-design-stage-established',
+  'ov-mvp-development-stage-idea',
+  'ov-mvp-development-stage-ai-prototype',
+  'ov-mvp-development-stage-paying',
+  'ov-mvp-development-underneath',
+  'ov-mvp-development-prototype-brief',
+  'ov-product-modernisation-stage-starting',
+  'ov-product-modernisation-stage-growing',
+  'ov-product-modernisation-stage-established',
+  'ov-b2b-saas-stage-starting',
+  'ov-b2b-saas-stage-growing',
+  'ov-b2b-saas-stage-established',
+  'ov-how-we-work-stage-new',
+  'ov-how-we-work-stage-growing',
+  'ov-how-we-work-stage-established',
+  'ov-how-we-work-engagement',
+  'ov-how-we-work-engagement-phone',
   /* /expertise/ai-products-developer-tools */
   'wyg-ai-products-developer-tools-first-working-result',
   'wyg-ai-products-developer-tools-documentation-beside-work',

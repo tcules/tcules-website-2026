@@ -1,6 +1,13 @@
 import type { ReactNode } from 'react';
 
 import type { PageSceneName } from '@/lib/page-scenes';
+import { SCENES as OV_FIGURES } from './ov-figures';
+import { SCENES as OV_HOME } from './ov-home';
+import { SCENES as OV_PRODUCT_DESIGN } from './ov-product-design';
+import { SCENES as OV_MVP_DEVELOPMENT } from './ov-mvp-development';
+import { SCENES as OV_PRODUCT_MODERNISATION } from './ov-product-modernisation';
+import { SCENES as OV_B2B_SAAS } from './ov-b2b-saas';
+import { SCENES as OV_HOW_WE_WORK } from './ov-how-we-work';
 import { SCENES as P_AI_PRODUCTS_DEVELOPER_TOOLS } from './wyg-ai-products-developer-tools';
 import { SCENES as P_B2B_SAAS_WORKFLOW_SOFTWARE } from './wyg-b2b-saas-workflow-software';
 import { SCENES as P_CLIMATETECH_ENERGY } from './wyg-climatetech-energy';
@@ -60,6 +67,13 @@ import { SCENES as P_WHY_TCULES } from './wyg-why-tcules';
 
 /** Every level-2 page's What-you-get scenes, one file per page (components/Sketch/wyg-*.tsx). */
 export const PAGES: Partial<Record<PageSceneName, () => ReactNode>> = {
+  ...OV_FIGURES,
+  ...OV_HOME,
+  ...OV_PRODUCT_DESIGN,
+  ...OV_MVP_DEVELOPMENT,
+  ...OV_PRODUCT_MODERNISATION,
+  ...OV_B2B_SAAS,
+  ...OV_HOW_WE_WORK,
   ...P_HOME,
   ...P_HOW_WE_WORK,
   ...P_WHY_TCULES,

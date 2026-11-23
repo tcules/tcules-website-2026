@@ -1,0 +1,56 @@
+/* ══ Component layer — AreaMark ═══════════════════════════════════════════════════
+   Tier 1. The keep / fix / rebuild key (17 Nov 2026, the MVP board's "Your prototype is the brief we
+   build from"): a swatch whose edge says the verdict, and its mono word.
+
+   Naming: --amk-{verdict}-{part}-{role}
+     verdicts  keep · fix · rebuild
+     parts     swatch · edge · label
+
+   The three are told apart by LINE STYLE (solid, dotted, dashed) as well as ink, so they never rest
+   on colour alone. Every edge clears 3:1 against its ground (non-text, WCAG 1.4.11); the label
+   clears 4.5:1 (text). No state tokens: nothing responds to a pointer. Every surface block declares
+   every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The board's swatch: 44 × 14, a pill-ish box at the 4 radius, the 2 edge the drawing uses. */
+  --amk-swatch-inline: 44px;
+  --amk-swatch-block: 14px;
+  --amk-swatch-radius: var(--radius-4);
+  --amk-edge-width: var(--border-width-2);
+  --amk-label-text: var(--text-eyebrow);
+  --amk-label-tracking: var(--text-eyebrow-tracking);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --amk-keep-edge-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --amk-fix-edge-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --amk-rebuild-edge-ink: var(--color-neutral-500); /* 3.16:1 — non-text floor */
+  --amk-label-ink: var(--color-brandeis-500); /* 6.17:1 */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --amk-keep-edge-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --amk-fix-edge-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --amk-rebuild-edge-ink: var(--color-neutral-600); /* 4.39:1; neutral-500 fails at 2.82 */
+  --amk-label-ink: var(--color-brandeis-500); /* 5.51:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --amk-keep-edge-ink: var(--color-brandeis-300); /* 7.32:1 — blue lifts on ink */
+  --amk-fix-edge-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --amk-rebuild-edge-ink: var(--color-neutral-500); /* 5.41:1 */
+  --amk-label-ink: var(--color-brandeis-300); /* 7.32:1 */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --amk-keep-edge-ink: var(--color-white); /* 6.23:1 */
+  --amk-fix-edge-ink: var(--color-white); /* 6.23:1 */
+  --amk-rebuild-edge-ink: var(--color-brandeis-200); /* 3.78:1 — non-text */
+  --amk-label-ink: var(--color-white); /* 6.23:1 */
+}

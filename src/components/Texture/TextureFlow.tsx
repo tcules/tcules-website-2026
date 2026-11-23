@@ -30,6 +30,12 @@ export type TextureFlowProps = {
    * field on an open band (Section `density="open"`, which raises the band so it shows).
    */
   bleed?: boolean;
+  /**
+   * `soft` draws the field in the surface's lighter ink (--tex-flow-ink-soft): a subtle field for a
+   * small paper island, such as CtaRow's first-step strip (owner, 18 Nov 2026: "paper color and light
+   * blue texture"). Default `full`: --tex-flow-ink, the shipped strength.
+   */
+  ink?: 'full' | 'soft';
 };
 
 /* The grid's rows as GLSL: the same cells Texture draws (pixel-grid.json), so the moving field and
@@ -171,6 +177,7 @@ export function TextureFlow({
   flow = 'resolve',
   feather = false,
   bleed = false,
+  ink = 'full',
 }: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
@@ -397,7 +404,12 @@ export function TextureFlow({
       key={generation}
       ref={ref}
       aria-hidden="true"
-      className={cx(styles.texture, styles.flow, bleed && styles.flowBleed)}
+      className={cx(
+        styles.texture,
+        styles.flow,
+        ink === 'soft' && styles.flowSoft,
+        bleed && styles.flowBleed,
+      )}
     />
   );
 }

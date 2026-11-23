@@ -1,4 +1,4 @@
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { Button, Cluster, Icon, Island, Layout, TextureFlow } from '@/components';
 import { cx } from '@/lib/cx';
 import { leavesSite } from '@/lib/href';
 
@@ -60,6 +60,37 @@ type CtaRowCommon = {
   rule?: boolean | 'until-md';
   /** Default `start`. See `CtaRowAlign`. */
   align?: CtaRowAlign;
+  /**
+   * `strip` (17 Nov 2026, the service boards' "The first step is the same at every stage."): the row
+   * as its own bounded strip under a ruled ladder of stage rows, and its ONE action the blue solid,
+   * because on those boards the strip IS the band's ask (Jatin's boards, owner 17 Nov 2026; the
+   * in-band-link rule below still holds for every other CtaRow). Since 18 Nov 2026 the strip is a
+   * paper `Island` carrying the turbulent field in its light-blue ink (`TextureFlow flow="turbulent"
+   * ink="soft"`), faded out toward the note so it gathers behind the action (19 Nov 2026) (owner: "use
+   * the island component with a subtle texture on it. paper color and light blue texture"); it was a
+   * hand-drawn white box with an accent hairline.
+   * The note is in the title voice. Its block inset is the island's thinner `strip` one (owner,
+   * 18 Nov 2026: "thinner block padding"), the sides the default. `rule` is ignored: the island's own edge closes the ladder.
+   * Default `none`.
+   */
+  frame?: 'none' | 'strip';
+  /**
+   * `row` (owner, 18 Nov 2026): below 768 a lone see-all link is the last row of the band's list —
+   * the same link button as every other in-band link, between two hairlines inside the column (never
+   * edge to edge), the rules in the row rules' quiet ink (decisions/2026-11-18-row-rules-one-step-quieter),
+   * the `block` (24) above and below the link. From 768 the row is the usual link. For a band's
+   * section-level "see all" action only; ignored with a note, a pair, a converting action or the
+   * strip. A pattern candidate (owner, 18 Nov 2026: "once the designs are finalized maybe we can make
+   * this a pattern").
+   */
+  phone?: 'row';
+  /**
+   * With `phone="row"`: the band's body ends in a ruled list (ListCard rows, a ruled `Teaser`), and
+   * the see-all row is that list's last row — it closes up the band's `stack` (48) foot seam so its
+   * top hairline IS the last row's, rather than a second rule 48 under it. Ignored from 768 and
+   * without `phone="row"`.
+   */
+  joined?: boolean;
 };
 
 export type CtaRowProps = CtaRowCommon & {
@@ -116,7 +147,15 @@ export type CtaRowProps = CtaRowCommon & {
  * `actions`, or a template's own row — and never imports one.
  */
 export function CtaRow(props: CtaRowProps) {
-  const { actions, note, rule = true, align = 'start' } = props;
+  const {
+    actions,
+    note,
+    rule = true,
+    align = 'start',
+    frame = 'none',
+    phone,
+    joined = false,
+  } = props;
   const centred = align === 'center';
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
@@ -154,7 +193,49 @@ export function CtaRow(props: CtaRowProps) {
     linkTo(action)
   );
 
-  return (
+  if (frame === 'strip') {
+    const solid = (
+      <Button as="a" href={action.href} emphasis="solid" size="md" block="until-md">
+        {action.label}
+      </Button>
+    );
+    /* A paper island with the turbulent field in its light ink: a formless call-to-action island
+       (decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). The field rises from
+       clear paper at the start to its strength at the end (`fade="start"`, owner 19 Nov 2026: the
+       strip "doesn't look very good"): run edge to edge through a ~100-tall box, the fine hatch read
+       as a grey screen over the whole island, dulling the one bright object on the tint band, and the
+       note's calm hole (`data-texture-calm`, feathered 160 in a box that short) left it patchy. Now
+       the note sits on clean paper and the field gathers behind the action. Note and action `block`
+       apart; the Cluster wraps the action under the note on a phone. The solid is the board's: the
+       strip is the band's ask. */
+    return (
+      <Island surface="paper" inset="strip">
+        <TextureFlow flow="turbulent" ink="soft" fade="start" />
+        <Cluster
+          colGap="block"
+          rowGap="block"
+          align="center"
+          justify={hasNote ? 'between' : 'start'}
+        >
+          {hasNote ? (
+            <p className={styles.stripNote}>{note}</p>
+          ) : null}
+          {/* A lone solid is a direct item of the row, so on a phone its full width is the island's
+              (a wrapper sized to its content would hold it at the label's width). */}
+          {second ? (
+            <Cluster colGap="block" rowGap="text" align="center">
+              {solid}
+              {linkTo(second)}
+            </Cluster>
+          ) : (
+            solid
+          )}
+        </Cluster>
+      </Island>
+    );
+  }
+
+  const row = (
     <Layout rowGap="block" className={centred ? styles.centredBox : undefined}>
       {rule ? <div className={cx(styles.rule, rule === 'until-md' && styles.untilMd)} /> : null}
       {/* `between` only when there is a note to sit opposite the actions: a lone action at the far
@@ -172,4 +253,18 @@ export function CtaRow(props: CtaRowProps) {
       </Cluster>
     </Layout>
   );
+
+  /* The phone row: placed beside the usual row and displayed once at any width (`display: none`
+     drops the other from the a11y tree). The link is the same link button; the row only rules it. */
+  if (phone === 'row' && !second && !hasNote && !action.converts) {
+    return (
+      <>
+        <div className={styles.fromMd}>{row}</div>
+        <div className={cx(styles.phoneRow, joined && styles.phoneRowJoined)}>
+          {linkTo(action)}
+        </div>
+      </>
+    );
+  }
+  return row;
 }

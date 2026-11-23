@@ -14,7 +14,7 @@ import {
   TextureShape,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import type { ArticleSceneName, GlossarySceneName } from '@/lib/sketches';
+import type { ArticleSceneName, GlossarySceneName, ToolSceneName } from '@/lib/sketches';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
@@ -69,7 +69,19 @@ export type BlockCardMedia =
    * item, in data. Decorative like every cover; no type is drawn on it. A glossary term's own scene
    * is a cover too (4 Nov 2026): it is drawn for that one term, as an article's is for one article.
    */
-  | { type: 'sketch'; name: ArticleSceneName | GlossarySceneName };
+  | {
+      type: 'sketch';
+      /**
+       * A free tool's or guide's own scene (19 Nov 2026, `toolSceneFor`) is a cover too. A cover never
+       * moves (owner, 19 Nov 2026): the same drawing is that resource's featured image inside the
+       * article or tool, so it is a still thumbnail, showing the drawing's END state as the resource
+       * does (owner, 19 Nov 2026: motion on the tiles, the static end state inside resources; every
+       * still Sketch is its end state, so nothing is set here). Only a drawing on a card that links
+       * to another site page (a service, gateway or offer tile: Bento, Gateway) makes the hover move.
+       * There is deliberately no flag to turn motion on here.
+       */
+      name: ArticleSceneName | GlossarySceneName | ToolSceneName;
+    };
 
 /**
  * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
@@ -475,7 +487,7 @@ function SketchMedia({
   name,
   play = false,
 }: {
-  name: ArticleSceneName | GlossarySceneName;
+  name: ArticleSceneName | GlossarySceneName | ToolSceneName;
   play?: boolean;
 }) {
   return (

@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { cx } from '@/lib/cx';
 
@@ -11,6 +11,7 @@ import { L1_TERMS } from './l1-terms';
 import { TERMS } from './terms';
 import { OFFER, OFFER_DRAWN } from './offer';
 import { PAGES } from './wyg';
+import { INFOGRAPHICS, type SketchLabel } from './ov-figures';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
 import type { SketchName } from '@/lib/sketches';
@@ -87,10 +88,35 @@ export type SketchProps = {
    * needs no flag: it is always its end state.
    */
   end?: boolean;
+  /**
+   * `wide` (default): the 320 × 180 drawing on its 16:9 plate. `portrait` (19 Nov 2026, the overhaul
+   * pages' figures beside rows, MVP's "Your demo works" and "Your prototype is the brief"): a 240 × 300
+   * drawing on a 4:5 plate, the media split's own ratio, its dot field on the same 20-unit grid. A
+   * plate only: the bare frame crops to a drawing's own edge whatever its shape.
+   */
+  shape?: 'wide' | 'portrait';
+  /**
+   * The plate fills its parent's box, whatever its shape, instead of setting its own height from the
+   * drawing's ratio (round 10, owner 19 Nov 2026: MVP's brief drawing "need not be this tall", it is as
+   * tall as the rows beside it). The drawing centres at the scale the box's shorter side allows and
+   * the dot field runs on to the plate's edges on the same grid. The parent must be a size container
+   * (`container-type: size`), as ContentSection's `media.headAbove` box is. A plate only.
+   */
+  fill?: boolean;
 };
 
 const W = 320;
 const H = 180;
+/** The portrait plate's drawing, 4:5 on the same 20-unit grid. */
+const PORTRAIT_W = 240;
+const PORTRAIT_H = 300;
+
+/** Every infographic's phone composition, by its own name, with its labels: drawn 240 × 300. */
+const PHONE: ReadonlyMap<string, readonly SketchLabel[]> = new Map(
+  Object.values(INFOGRAPHICS).flatMap((infographic) =>
+    infographic?.phone ? [[infographic.phone.name, infographic.phone.labels] as const] : [],
+  ),
+);
 
 /**
  * The still scenes' drawn edge in the 320 × 180 drawing, for the bare frame: the one shared area every
@@ -112,8 +138,104 @@ const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number
  * in the grammar's two weights, 1 and 2, at every size (owner, 26 Oct 2026, S2). The dot field is the
  * plate's CSS background and the drawings use no ids, so any number can share a page.
  */
-export function Sketch({ name, frame = 'plate', story = false, end = false }: SketchProps) {
+export function Sketch(props: SketchProps) {
+  /* A PHONE COMPOSITION named on its own (a specimen showing it beside its wide chart) is still drawn
+     on its own shape, the portrait plate, with its own labels: a scene's shape belongs to the scene,
+     never to the caller, so a portrait drawing cannot land on a 16:9 plate. */
+  const phoneLabels =
+    props.name && (props.frame ?? 'plate') === 'plate' ? PHONE.get(props.name) : undefined;
+  if (phoneLabels) {
+    return (
+      <Labelled labels={phoneLabels} w={PORTRAIT_W} h={PORTRAIT_H}>
+        <Plate {...props} shape="portrait" />
+      </Labelled>
+    );
+  }
+  const infographic =
+    props.name && (props.frame ?? 'plate') === 'plate' && props.name in INFOGRAPHICS
+      ? INFOGRAPHICS[props.name as keyof typeof INFOGRAPHICS]
+      : undefined;
+  if (!infographic || !props.name) return <Plate {...props} />;
+  /* An INFOGRAPHIC (owner, 19 Nov 2026, How we work's engagement chart: "because it is an infographic,
+     we can add labels"): the one kind of flat drawing that carries words, as short labels in the
+     site's mono label voice set over the plate, at a fixed type size at every width rather than
+     scaled with the drawing. Its phone composition, when it has one, replaces it below 768, where the
+     wide chart's labels would not fit. Decorative as a whole, as every Sketch is: the words around
+     it carry the meaning. */
+  const wide = (
+    <Labelled labels={infographic.labels} w={W} h={H}>
+      <Plate {...props} />
+    </Labelled>
+  );
+  if (!infographic.phone) return wide;
+  return (
+    <div>
+      <div className={styles.fromMd}>{wide}</div>
+      <div className={styles.untilMd}>
+        <Labelled labels={infographic.phone.labels} w={PORTRAIT_W} h={PORTRAIT_H}>
+          <Plate name={infographic.phone.name} shape="portrait" />
+        </Labelled>
+      </div>
+    </div>
+  );
+}
+
+/** The plate with its labels over it, each placed by its point in the drawing's units. */
+function Labelled({
+  labels,
+  w,
+  h,
+  children,
+}: {
+  labels: readonly SketchLabel[];
+  w: number;
+  h: number;
+  children: ReactNode;
+}) {
+  return (
+    <div className={styles.labelled} aria-hidden="true">
+      {children}
+      {labels.map((label) => (
+        <span
+          key={`${label.x},${label.y}`}
+          className={cx(
+            styles.label,
+            label.align === 'start'
+              ? styles.labelStart
+              : label.align === 'end'
+                ? styles.labelEnd
+                : styles.labelMiddle,
+            label.accent && styles.labelAccent,
+          )}
+          /* The label's point as shares of the plate, which scales with its box. */
+          style={
+            {
+              '--skt-label-x': `${(label.x / w) * 100}%`,
+              '--skt-label-y': `${(label.y / h) * 100}%`,
+            } as CSSProperties
+          }
+        >
+          {label.lines.map((line) => (
+            <span key={line} className={styles.labelLine}>
+              {line}
+            </span>
+          ))}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Plate({
+  name,
+  frame = 'plate',
+  story = false,
+  end = false,
+  shape = 'wide',
+  fill = false,
+}: SketchProps) {
   const bare = frame === 'bare';
+  const portrait = !bare && shape === 'portrait';
   const storyDrawing = name ? STORY[name] : undefined;
   /* A scene moves where it is asked to; anywhere else it is held at its END state (a story scene
      solved, every other scene moved: its routes drawn, its GrowIn parts present, its Move parts moved),
@@ -140,12 +262,14 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
           (DRAWN[name] ??
             OFFER_DRAWN[name as keyof typeof OFFER_DRAWN] ??
             L1_SPECIALISTS_DRAWN[name as keyof typeof L1_SPECIALISTS_DRAWN]))) ||
-    ([0, 0, W, H] as const);
+    (portrait ? ([0, 0, PORTRAIT_W, PORTRAIT_H] as const) : ([0, 0, W, H] as const));
   return (
     <svg
       className={cx(
         styles.sketch,
         bare && styles.bare,
+        portrait && styles.portrait,
+        !bare && fill && styles.fill,
         /* Every scene not asked to move is held finished: its routes drawn, what arrives there,
            what lights lit, what moves moved (a plate never moves, owner 25 Oct 2026; its end state
            inside a resource, owner 19 Nov 2026). */

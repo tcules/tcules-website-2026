@@ -53,6 +53,22 @@ export function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
   );
 }
 
+/**
+ * Hop's moving form, for a scene that moves in a link: the same route from a port at x1 to the
+ * arrowhead's tip at x2, on y, drawn along its length (TraceIn) with its head arriving as it lands
+ * (GrowIn), so at rest only the port is drawn. Held still it is Hop, finished.
+ */
+export function HopIn({ x1, x2, y }: { x1: number; x2: number; y: number }) {
+  const left = x2 < x1;
+  return (
+    <>
+      <circle className={styles.node} cx={x1} cy={y} r="2.5" />
+      <TraceIn d={`M${x1},${y} L${left ? x2 + 7 : x2 - 7},${y}`} />
+      <GrowIn>{left ? <ArrowLeft x={x2} y={y} /> : <ArrowRight x={x2} y={y} />}</GrowIn>
+    </>
+  );
+}
+
 /** A line of copy from x, `w` long; `quiet` for the lighter ink. */
 export function Copy({
   x,

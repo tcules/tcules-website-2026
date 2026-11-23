@@ -79,6 +79,9 @@
 --tex-ink-soft:var(--color-brandeis-400);
 /* TextureFlow's moving field (owner, 23 Oct 2026): the hard ink, as on every surface but ink. */
 --tex-flow-ink:var(--color-brandeis-500);
+/* TextureFlow `ink="soft"` (owner, 18 Nov 2026, the first-step strip: "paper color and light blue
+   texture"): the light blue the soft placements already take on paper (16 Oct 2026), 400. */
+--tex-flow-ink-soft:var(--color-brandeis-400);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -94,6 +97,7 @@
 --tex-ink:var(--color-neutral-400);
 --tex-ink-soft:var(--color-neutral-900);
 --tex-flow-ink:var(--color-neutral-400);
+--tex-flow-ink-soft:var(--color-neutral-300);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -106,6 +110,7 @@
 /* The moving field on the ink island (the open close, owner 29 Oct 2026): the island's mid-grey
    grain, as TextureFrame takes it there. The hard 500 blue all but vanished on neutral-900. */
 --tex-flow-ink:var(--color-neutral-500);
+--tex-flow-ink-soft:var(--color-neutral-600);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -118,4 +123,5 @@
 --tex-ink-soft:var(--color-brandeis-200);
 /* The approved field on the blue island (owner, 23 Oct 2026): white. */
 --tex-flow-ink:var(--color-white);
+--tex-flow-ink-soft:var(--color-brandeis-300);
 }

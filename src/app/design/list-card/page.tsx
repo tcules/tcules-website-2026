@@ -1,11 +1,74 @@
 import type { ReactNode } from 'react';
 
 import { Cluster, Layout, Section, type MediaImage, type SectionSurface } from '@/components';
-import { ListCard, ReadDown, type ListCardMarker, type ReadDownRow } from '@/patterns';
+import {
+  CtaRow,
+  ListCard,
+  ReadDown,
+  Stages,
+  type ListCardMarker,
+  type ReadDownRow,
+} from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
+
+/* Stage rows (17 Nov 2026, the service boards' "Start from wherever your product is"). Board copy. */
+const STAGES = [
+  {
+    title: 'A new product',
+    body: [
+      'An idea, or a prototype you built with AI.',
+      'We find who it is for and what to build first, then take it to a first release.',
+    ],
+    cta: 'Design-led MVP Development',
+    href: ROUTES.mvpDevelopment,
+  },
+  {
+    title: 'A growing product',
+    body: [
+      'Customers are arriving faster than design can keep up.',
+      'We work inside your team and design ahead of each release.',
+    ],
+    cta: 'Product Design',
+    href: ROUTES.productDesign,
+  },
+  {
+    title: 'An established product',
+    body: [
+      'A product customers have used for years.',
+      'We learn the reasons behind its quirks, then improve it one workflow at a time.',
+    ],
+    cta: 'Product Modernisation',
+    href: ROUTES.productModernisation,
+  },
+] as const;
+
+const STAGE_SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink', 'blue'];
+
+/* Hanging rows (§ 12c): the home page's "why" rows, plus a wrapping title and an icon-less row. */
+const HANGING: readonly { title: string; body: string; marker?: ListCardMarker }[] = [
+  {
+    title: 'Fluent in SaaS',
+    body: 'Roles, permissions and data-heavy screens need no explaining to us.',
+    marker: { type: 'icon', name: 'layers' },
+  },
+  {
+    title: 'Seen products like yours, across fintech, health and logistics',
+    body: 'Designers who have done this before lead your work and do it.',
+    marker: { type: 'icon', name: 'code' },
+  },
+  {
+    title: 'With you throughout',
+    body: 'Work often runs for months, some for years, usually with the same designers as the product grows.',
+    marker: { type: 'icon', name: 'checklist' },
+  },
+  {
+    title: 'A row with no icon',
+    body: 'Renders as stacked: the copy on the row edge.',
+  },
+];
 
 /* ReadDown rows (specimen § 12): one long body against short ones, so the level rules can be seen. */
 const READ_DOWN: readonly ReadDownRow[] = [
@@ -277,6 +340,15 @@ const NESTED_SURFACE_TOKENS = {
   ],
 } as const;
 
+const CHECKLIST = [
+  'Noticing what is really going on before reaching for a fix.',
+  'Explaining a choice plainly, and taking good critique well.',
+  'Curiosity about unfamiliar fields.',
+  'Care for real content and awkward edge cases, the empty views and the errors most of all.',
+  'Knowing where AI tools tend to go wrong.',
+  'Ownership, with progress shown as you go.',
+] as const;
+
 function Rows({ ordered = false, children }: { ordered?: boolean; children: ReactNode }) {
   return (
     <Layout as={ordered ? 'ol' : 'ul'} rowGap="none">
@@ -460,6 +532,33 @@ export default function ListCardSpecimenPage() {
               </Rows>
             </Specimen>
           </Layout>
+          <Specimen
+            title={`rule="start" · a row opened by its rule`}
+            note="A row that follows a block of another kind (About's 'Who leads your work' under the founders' cards) opens on its rule, as a tile does, and keeps no inset after its copy: it separates from what came before and closes nothing (owner, 19 Nov 2026). Split at full width."
+          >
+            <Rows>
+              <ListCard rule="start" titleAs="h3" title={TERMS[0].title} body={TERMS[0].body} />
+            </Rows>
+          </Specimen>
+          <Specimen
+            title={`rule="none" · hanging rows in a grid, no rules`}
+            note="A row laid in a grid of rows, several to a line: no rule and no inset, the Layout's `column` (64) is both seams, the glyph inline with the title and the words under the title (owner, 19 Nov 2026, About's 'How Tcules works with clients')."
+          >
+            <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="column" rowGap="column">
+              {(['chat-round-dots', 'flag', 'clock-circle'] as const).map((glyph, index) => (
+                <ListCard
+                  key={glyph}
+                  size="sm"
+                  titleAs="h3"
+                  title={TERMS[index]?.title ?? glyph}
+                  body={TERMS[index]?.body}
+                  arrangement="hanging"
+                  rule="none"
+                  marker={{ type: 'icon', name: glyph }}
+                />
+              ))}
+            </Layout>
+          </Specimen>
           <Specimen
             title="bodyHtml · a body with a link and a second paragraph"
             note="For a corpus item whose body carries a link or more than one paragraph, which `body` would flatten. One entry per paragraph, trusted inline HTML built from a parsed tree; the paragraphs sit a `text` apart and take the row's own body role. An unlinked row only: a linked row is one anchor, and a link inside it would be an anchor in an anchor."
@@ -759,8 +858,15 @@ export default function ListCardSpecimenPage() {
             note="Owner, 7 Oct 2026; edge removed 9 Oct 2026. No edge on any side; 24 inside on every side, which is where the ground under the pointer sits when linked, at the 8 radius. Boxed tiles sit a gutter apart both ways. Clickable, so the set runs the full column under its head — never beside a head or a photograph."
           >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
-              {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
-                <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+              {/* Both sets name Design systems, so the key is the tile's place in the six. */}
+              {[...BOXED, ...LINKED.slice(0, 3)].map((tile, index) => (
+                <ListCard
+                  key={`${index}-${tile.title}`}
+                  form="tile"
+                  frame="box"
+                  titleAs="h3"
+                  {...tile}
+                />
               ))}
             </Layout>
           </Specimen>
@@ -1634,6 +1740,136 @@ export default function ListCardSpecimenPage() {
           </Specimen>
         </Section>
       ))}
+
+      {STAGE_SURFACES.map((surface) => (
+        <Section key={`hanging-${surface}`} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>12c · Hanging rows, on {surface}</h2>
+              <p className={s.specNote}>
+                arrangement hanging (owner, 18 Nov 2026, the &ldquo;why&rdquo; rows): the bare
+                icon on the title&rsquo;s line at the title&rsquo;s em, the title beside it a
+                text (16) away, the body under the title on its edge, never under the glyph. One
+                arrangement at every width, so the 326 frame is the same shape. md, a four-row
+                sm set, a long title that wraps, and a row with no icon.
+              </p>
+            </Layout>
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              <Rows>
+                {HANGING.map((item) => (
+                  <ListCard key={item.title} titleAs="h3" arrangement="hanging" {...item} />
+                ))}
+              </Rows>
+              <div className={s.trackMobile}>
+                <Rows>
+                  {HANGING.map((item) => (
+                    <ListCard
+                      key={item.title}
+                      titleAs="h3"
+                      arrangement="hanging"
+                      size="sm"
+                      {...item}
+                    />
+                  ))}
+                </Rows>
+              </div>
+            </Layout>
+          </Layout>
+        </Section>
+      ))}
+
+      {STAGE_SURFACES.map((surface) => (
+        <Section key={`checklist-${surface}`} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>12d · A two-up checklist, on {surface}</h2>
+              <p className={s.specNote}>
+                columns 2 (owner, 19 Nov 2026, /careers&rsquo; &ldquo;What we look for&rdquo;):
+                hanging sm rows with the bare check-circle tick, two up from 1024. Each row fills its
+                grid row so the rules close on one line across both columns, the second column
+                opens on the set&rsquo;s top edge as the first does, and a bodiless title runs to
+                the column. The fourth row&rsquo;s long title wraps at 1024 and its neighbour&rsquo;s
+                rule stays level with it.
+              </p>
+            </Layout>
+            <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="column" rowGap="none">
+              {CHECKLIST.map((title) => (
+                <ListCard
+                  key={title}
+                  titleAs="h3"
+                  arrangement="hanging"
+                  size="sm"
+                  columns={2}
+                  title={title}
+                  marker={{ type: 'icon', name: 'check-circle' }}
+                />
+              ))}
+            </Layout>
+          </Layout>
+        </Section>
+      ))}
+
+      {STAGE_SURFACES.map((surface) => (
+        <Section key={`stage-${surface}`} surface={surface}>
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h2>12b · Stages, on {surface}</h2>
+              <p className={s.specNote}>
+                The Stages set mode: marker type stage (the empty plate until the drawings are
+                made), arrangement stacked, actionAt end, and the CtaRow strip passed as its
+                end. From 768 the ruled ladder with the strip a stack under it. Below 768
+                (owner, 18 Nov 2026, Jatin&rsquo;s phone board) the phone timeline: a rail at
+                the column&rsquo;s start, an open ring at each stage, each plate the full width
+                at 2:1 over the title, words and link, and the strip the last step on a filled
+                dot, its button the full width. The last specimen has no end, so the rail stops
+                at the last ring.
+              </p>
+            </Layout>
+            <Stages
+              stages={STAGES.map((stage) => ({
+                title: stage.title,
+                bodyHtml: stage.body,
+                href: stage.href,
+                ctaLabel: stage.cta,
+              }))}
+              end={
+                <CtaRow
+                  frame="strip"
+                  note="The first step is the same at every stage."
+                  actions={[{ label: 'Book a free product review', href: ROUTES.contact }]}
+                />
+              }
+            />
+          </Layout>
+        </Section>
+      ))}
+
+      <Section>
+        <Layout rowGap="stack">
+          <h2>12c · Stages without an end, and one row with a titleIcon</h2>
+          <Stages
+            stages={STAGES.slice(0, 2).map((stage) => ({
+              title: stage.title,
+              bodyHtml: stage.body,
+              href: stage.href,
+              ctaLabel: stage.cta,
+            }))}
+          />
+          <Layout as="ul" rowGap="none">
+            <ListCard
+              titleAs="h3"
+              title={STAGES[2].title}
+              bodyHtml={STAGES[2].body}
+              arrangement="stacked"
+              marker={{ type: 'stage' }}
+              href={STAGES[2].href}
+              ctaLabel={STAGES[2].cta}
+              actionAt="end"
+              titleIcon="layers"
+            />
+          </Layout>
+        </Layout>
+      </Section>
 
       <Section>
         <Layout rowGap="block">

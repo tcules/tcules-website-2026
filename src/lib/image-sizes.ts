@@ -212,6 +212,9 @@ export const PROOF_PORTRAIT = '64px';
  */
 export const TESTIMONIAL_AVATAR = '48px';
 
+/** ChatThread's client avatar: a fixed 32 disc at the foot of the client's bubble (18 Nov 2026). */
+export const CHAT_AVATAR = '32px';
+
 /**
  * The SiteNav rail card: about 300 beside the rail from 1024, the sheet's column below it.
  * PROVISIONAL — the rail card's width is the rail's, and SiteNav confirms this when it moves onto
