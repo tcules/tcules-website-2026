@@ -26,7 +26,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [ ] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026).
 - [ ] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026).
 - [x] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026). Logged as decisions/2026-11-17-testimonial-wall-folds-on-phone; live on every wall (overhaul phase 2).
-- [ ] **O.4** The client-logo marquee's motion (with O.6): no pause button. Hover or keyboard focus on a logo
+- [x] **O.4** The client-logo marquee's motion (with O.6): no pause button. Hover or keyboard focus on a logo
       pauses the row and highlights that logo; reduced motion keeps it still, logos wrapped and centred
       (owner, 17 Nov 2026, accepting that this falls short of WCAG 2.2.2).
 - [ ] **O.4a** decisions/2026-10-19-hover-is-a-move is scoped to cards with an interactive flat drawing;
@@ -37,7 +37,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [ ] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch.
 - [ ] **O.5a** Retire `VoiceLedger`: `/expertise/healthtech`'s hard-parts band moves to the existing ruled
       tile set it already looks like; About's unused code path, the specimen and its token layer go.
-- [ ] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`.
+- [x] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`. On every live logo band (decisions/2026-11-23-client-logos-are-the-ticker); service, expertise, audit, About and Careers heroes still need their logos.
 - [ ] **O.7** The six sides of a B2B product: the wheel and its six annotated sides (SaaS).
 - [ ] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
 

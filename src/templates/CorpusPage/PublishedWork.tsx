@@ -149,12 +149,26 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
   );
 }
 export function PublishedWork({ page }: { page: WorkPageModel }) {
+  /* The page's client logos run as the hero's ticker, as on the overhaul's How we work (owner,
+     23 Nov 2026; decisions/2026-11-23-client-logos-are-the-ticker): the CMS's logo band moves up into
+     the hero and is not drawn again further down. A hero with logos of its own keeps them. */
+  const logos = page.sections.find(
+    (s): s is Extract<WorkSection, { type: 'work-logos' }> => s.type === 'work-logos',
+  );
+  const lift = Boolean(logos?.marks.length) && !page.hero.recognition?.marks.length;
+  const hero =
+    lift && logos
+      ? {
+          ...page.hero,
+          recognition: { id: logos.id, title: logos.heading, marks: logos.marks, compact: true },
+        }
+      : page.hero;
   return (
     <>
-      <PublishedHero hero={page.hero} />
-      {page.sections.map((s) => (
-        <WorkBand key={s.key} s={s} route={page.route} />
-      ))}
+      <PublishedHero hero={hero} />
+      {page.sections.map((s) =>
+        lift && s === logos ? null : <WorkBand key={s.key} s={s} route={page.route} />,
+      )}
     </>
   );
 }

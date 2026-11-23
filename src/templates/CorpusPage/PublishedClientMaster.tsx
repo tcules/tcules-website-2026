@@ -20,13 +20,13 @@ function ClientSection({ section }: { section: ClientMasterSection }) {
     case 'client-logos':
       return (
         <Section id={id} data-band="H" aria-labelledby={headingId}>
+          {/* The client logos as the slow ticker (owner, 23 Nov 2026; decisions/2026-11-23-client-logos-are-the-ticker). */}
           <LogoGrid
+            arrangement="ticker"
             context={heading}
             contextAs="h2"
             headingId={headingId}
             marks={section.marks}
-            edges="closed"
-            density={section.compact ? 'compact' : 'default'}
           />
         </Section>
       );

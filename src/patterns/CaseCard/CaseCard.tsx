@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-import { Button, Cluster, Icon, Layout, Media, Prose, type MediaImage } from '@/components';
+import { Button, Cluster, Icon, Layout, Media, Prose, Tag, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
 import { CASE_CARD_COVER } from '@/lib/image-sizes';
 
@@ -9,6 +9,11 @@ import styles from './CaseCard.module.css';
 export type CaseCardProps = {
   /** A short label above the claim: the client, optionally its discipline ("Doodle · Product design"). */
   eyebrow?: string;
+  /**
+   * What kind of case it is ("New product", "Redesign"): a slim mark (Tag `size="sm"`) on the
+   * eyebrow's line, after the client (owner, 19 Nov 2026: "tags of some kind … not chips").
+   */
+  kind?: string;
   /** The case's claim ("Meeting times people will actually keep"). */
   title: string;
   /** Default `h3`: a case under the band's h2. */
@@ -60,6 +65,7 @@ const filled = (value: unknown): value is string =>
  */
 export function CaseCard({
   eyebrow,
+  kind,
   title,
   titleAs: Title = 'h3',
   body,
@@ -91,7 +97,8 @@ export function CaseCard({
        block inset. The claim is ONE group (owner, 18 Nov 2026: "move the link closer to the body
        so it reads as one block"): the cue a `block` under the story rather than pinned to the
        cover's foot, and the group centred on the cover's height from 1024, so its air splits evenly
-       above and below instead of pooling between the body and a stranded link. */
+       above and below instead of pooling between the body and a stranded link (top-aligned left
+       all of it under the link, the same hole moved). */
     <Layout
       columns={{ base: 1, lg: [7, 5] }}
       reverse={reverse ? { lg: true } : undefined}
@@ -106,7 +113,17 @@ export function CaseCard({
       </span>
       <Layout rowGap="block" className={styles.copy}>
         <Layout rowGap="text">
-          {filled(eyebrow) ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
+          {/* The client stays the eyebrow's words; the kind is a slim mark on the same line, a
+              `tight` step after it, so the line still reads as one piece of metadata. It wraps
+              under the client, never beside the claim. */}
+          {filled(kind) ? (
+            <Cluster colGap="tight" rowGap="tight">
+              {filled(eyebrow) ? <span className={styles.eyebrow}>{eyebrow}</span> : null}
+              <Tag size="sm">{kind}</Tag>
+            </Cluster>
+          ) : filled(eyebrow) ? (
+            <span className={styles.eyebrow}>{eyebrow}</span>
+          ) : null}
           <Title id={titleId} className={styles.title}>
             {ownLinks && !ctaLabel ? <a href={href}>{title}</a> : title}
           </Title>

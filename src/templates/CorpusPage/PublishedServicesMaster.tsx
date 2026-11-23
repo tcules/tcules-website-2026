@@ -26,13 +26,13 @@ function ServicesSection({ section }: { section: ServicesMasterSection }) {
       return (
         <Section id={id} data-band="H" surface={surface}>
           <Layout rowGap="stack">
+            {/* The client logos as the slow ticker (owner, 23 Nov 2026; decisions/2026-11-23-client-logos-are-the-ticker). */}
             <LogoGrid
+              arrangement="ticker"
               context={heading}
               contextAs="h2"
               headingId={headingId}
               marks={section.marks}
-              density={section.compact ? 'compact' : 'default'}
-              edges="closed"
             />
             {section.names.length ? <p>{section.names.join(' · ')}</p> : null}
           </Layout>

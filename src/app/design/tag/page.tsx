@@ -165,6 +165,24 @@ export default function TagSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title="The slim mark — size sm, on an eyebrow line"
+            note="Owner, 19 Nov 2026 (the case card's kind): a tag, not a chip. The mark's ground and no edge, so still inert, in a 20 box and the 11px micro mono, uppercase by role, so it reads as one more word of a mono eyebrow line. Here after a client eyebrow, a `tight` step apart (Cluster), and beside the md mark it replaces."
+          >
+            <Layout rowGap="block">
+              <Cluster colGap="tight" rowGap="tight">
+                <span className={s.eyebrow}>Auxentios</span>
+                <Tag size="sm">New product</Tag>
+              </Cluster>
+              <Cluster colGap="text" rowGap="text">
+                <Tag size="sm">New product</Tag>
+                <Tag size="sm">Redesign</Tag>
+                <Tag size="sm">Established product</Tag>
+                <Tag>New product</Tag>
+              </Cluster>
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="A mark beside a chip — the collision that matters"
             note="An inert mark can never be mistaken for a SELECTED filter, because a held chip is a reversal to the far end of the ramp and a mark is a tint at 1.12:1. Two adjacent instances also prove the gap: Cluster owns it on both axes and neither tag contributes a margin, so these are exactly --gap-text apart with no collapsing and no double gap."
           >

@@ -37,13 +37,13 @@ function WhyBand({
     case 'why-logos':
       return (
         <Section id={s.id} data-band="H" surface={s.surface} aria-labelledby={s.headingId}>
+          {/* The client logos as the slow ticker (owner, 23 Nov 2026; decisions/2026-11-23-client-logos-are-the-ticker). */}
           <LogoGrid
+            arrangement="ticker"
             context={s.heading}
             contextAs="h2"
             headingId={s.headingId}
             marks={s.marks}
-            edges="closed"
-            density="compact"
           />
         </Section>
       );
