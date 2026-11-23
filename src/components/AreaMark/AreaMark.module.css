@@ -1,0 +1,42 @@
+/* AreaMark — every value from --amk-*, declared in tokens/components/area-mark.css per surface.
+   The mark is one inline control-like unit (swatch, then its word), so it sizes its own two children
+   the way Button sizes its icon and label: an inline-flex with the `tight` step between them. That is
+   the unit's own anatomy, not an arrangement of page content. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-tight);
+  vertical-align: middle;
+}
+
+.swatch {
+  flex: none;
+  display: block;
+  inline-size: var(--amk-swatch-inline);
+  block-size: var(--amk-swatch-block);
+  border-width: var(--amk-edge-width);
+  border-radius: var(--amk-swatch-radius);
+}
+
+.keep .swatch {
+  border-style: solid;
+  border-color: var(--amk-keep-edge-ink);
+}
+
+.fix .swatch {
+  border-style: dotted;
+  border-color: var(--amk-fix-edge-ink);
+}
+
+.rebuild .swatch {
+  border-style: dashed;
+  border-color: var(--amk-rebuild-edge-ink);
+}
+
+.label {
+  font: var(--amk-label-text);
+  letter-spacing: var(--amk-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--amk-label-ink);
+  white-space: nowrap;
+}

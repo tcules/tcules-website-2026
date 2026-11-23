@@ -21,7 +21,7 @@ export const PUBLISHED_ENGAGEMENTOPTIONS = `
       ... on ComponentSharedEngagementOptions {
         id heading anchorId engagementSurface: surface engagementSide: mediaSide engagementDescription: description engagementPresentation: presentation
         action { ...PublishedAction }
-        options { id title eyebrow focused body icon scope anchorId facts { title body } illustration { source scene image { ...PublishedImage } }
+        options { id title priceUnit eyebrow focused body icon scope anchorId facts { title body } illustration { source scene image { ...PublishedImage } }
           checklist { body } action { ...PublishedAction } }
         terms { body }
         closing { heading body actions { ...PublishedAction } proof { eyebrow card { resolved } } }
@@ -32,6 +32,31 @@ export const PUBLISHED_FAQSECTION = `
       ... on ComponentSharedFaqSection {
         id heading anchorId eyebrow description faqSurface: surface faqSide: mediaSide navigationLabel
         faqs { documentId question answer isActive }
+      }
+`;
+
+/* The overhaul's three bands (CMS tcules-cms-2026#3): Stages, the first-call chat and the free tools. */
+export const PUBLISHED_PRODUCTSTAGES = `
+      ... on ComponentSharedProductStages {
+        id heading anchorId description stagesSurface: surface
+        action { ...PublishedAction }
+        stages { id title line body drawing link { ...PublishedAction } }
+        closingLine closingAction { ...PublishedAction }
+      }
+`;
+
+export const PUBLISHED_CHATTHREAD = `
+      ... on ComponentSharedChatThread {
+        id heading anchorId description chatSurface: surface note
+        action { ...PublishedAction }
+        exchanges { id client reply }
+      }
+`;
+
+export const PUBLISHED_FREETOOLS = `
+      ... on ComponentSharedFreeTools {
+        id heading anchorId description toolsSurface: surface
+        toolCards: cards { id resolved }
       }
 `;
 

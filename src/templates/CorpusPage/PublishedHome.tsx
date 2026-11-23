@@ -13,12 +13,14 @@ import {
 import { HOME_ARENA, HOME_AI_SCENES } from '@/lib/home-illustrations';
 import { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
-import { sketchForRoute } from '@/lib/sketches';
+import { sketchForRoute, toolSceneFor } from '@/lib/sketches';
+import { placeholderImage } from '@/lib/placeholders';
 import { heroTrail } from '@/lib/trail';
 import {
   Accordion,
   BlockCard,
   Breadcrumbs,
+  ChatThread,
   CaseCard,
   ContentSection,
   CtaRow,
@@ -33,9 +35,11 @@ import {
   Proof,
   ReadDown,
   Slider,
+  Stages,
   Teaser,
   TestimonialWall,
   TEASER_FORMAT_ICON,
+  type BlockCardMedia,
   type HeroMedia,
   type EnquiryContextBase,
   type PageHeroProps,
@@ -50,6 +54,16 @@ import type {
   HomeSection as Section,
 } from './published-home-model';
 import { labelWithoutArrow } from './text';
+
+/* A free tool's card takes that tool's one drawing, the same on every page and on its /tools tile
+   (`toolSceneFor`: owner, 19 Nov 2026). A tool with no drawing keeps the labelled placeholder plate
+   rather than borrowing another's. Still: it is also the resource's featured image. */
+function toolMedia(href: string): BlockCardMedia {
+  const name = toolSceneFor(href);
+  return name
+    ? { type: 'sketch', name }
+    : { type: 'image', image: { ...placeholderImage('/_overhaul', 'tool-drawing'), alt: '' } };
+}
 
 function ReviewBadge({ rating }: { rating: HomeRating }) {
   const { mark, ...props } = rating;
@@ -613,6 +627,81 @@ export function PublishedSection({
           />
         </ContentSection>
       );
+    case 'stages':
+      return (
+        <ContentSection {...head} lead={section.lead} surface={section.surface ?? 'tint'}>
+          {/* A link that introduces the stages stays above them at every width (owner, 18 Nov
+              2026), so it is the body's first row, not a head action a phone would move after. */}
+          {section.action ? <CtaRow rule={false} actions={[section.action]} /> : null}
+          {/* The stage rows from 768 and the phone timeline below it, then the first-step strip
+              (O.9; the overhaul's StagesBand). */}
+          <Stages
+            stages={section.stages.map((stage) => ({
+              title: stage.title,
+              bodyHtml: stage.line ? [stage.line, stage.body] : [stage.body],
+              href: stage.link.href,
+              ctaLabel: stage.link.label,
+              scene: stage.scene,
+            }))}
+            end={
+              section.close ? (
+                <CtaRow frame="strip" note={section.close.line} actions={[section.close.action]} />
+              ) : undefined
+            }
+          />
+        </ContentSection>
+      );
+    case 'chat':
+      return (
+        <ContentSection
+          {...head}
+          lead={section.lead}
+          arrangement="beside"
+          actions={
+            section.action ? (
+              <CtaRow
+                rule={false}
+                note={section.note}
+                /* The page's converting ask is the blue solid wherever it stands (owner, 18 Nov
+                   2026; decisions/2026-11-18-converting-ask-is-solid). */
+                actions={[{ ...section.action, converts: section.action.href === ROUTES.contact }]}
+              />
+            ) : undefined
+          }
+        >
+          <ChatThread label={section.heading} exchanges={section.exchanges} />
+        </ContentSection>
+      );
+    case 'tools':
+      return (
+        <ContentSection {...head} lead={section.lead} surface={section.surface ?? 'tint'}>
+          <Layout
+            as="ul"
+            rowGap="gutter"
+            colGap="gutter"
+            columns={{
+              base: 1,
+              md: 2,
+              lg: section.cards.length >= 4 ? 4 : section.cards.length === 3 ? 3 : 2,
+            }}
+          >
+            {section.cards.map((card) => (
+              <BlockCard
+                key={card.title}
+                title={card.title}
+                body={card.body}
+                href={card.link.href}
+                ctaLabel={card.link.label}
+                /* One tool takes the whole row, its drawing beside its words (owner, 19 Nov 2026). */
+                orientation={section.cards.length === 1 ? 'horizontal' : 'vertical'}
+                cue="cta"
+                /* The tool's one drawing, the same on every page (`toolSceneFor`). */
+                media={toolMedia(card.link.href)}
+              />
+            ))}
+          </Layout>
+        </ContentSection>
+      );
     case 'cases':
       return <CaseCards section={section} />;
     case 'offer':
@@ -645,7 +734,24 @@ export function PublishedSection({
     case 'resources': {
       const rows = section.presentation !== 'cards';
       return (
-        <ContentSection {...head} data-band="K" lead={section.lead}>
+        <ContentSection
+          {...head}
+          data-band="K"
+          lead={section.lead}
+          actionsAt="end"
+          /* "See all insights": in the head from 768; on a phone the list's last row, its hairline
+             the last row's own (Jatin's m- boards, 18 Nov 2026). */
+          actions={
+            section.action ? (
+              <CtaRow
+                rule={false}
+                phone="row"
+                joined={rows}
+                actions={[{ ...section.action, label: labelWithoutArrow(section.action.label) }]}
+              />
+            ) : undefined
+          }
+        >
           <Layout
             as="ul"
             rowGap={rows ? 'none' : 'gutter'}

@@ -1,0 +1,104 @@
+/* ChatThread — the client's line and Tcules' reply, as messages (docs/specs/ChatThread.md).
+
+   Every value is a --chat-* token (tokens/components/chat-thread.css) or a shared type role.
+   No display:grid or display:flex: Layout stacks the exchanges and the two lines of each, Cluster
+   sets a message beside its avatar. The rules below size and paint the children inside those
+   primitives and arrange nothing by themselves. No margins. No media query: the one width step
+   (the bubbles' measures and the avatar on a phone) lives in the token layer. */
+
+/* The list is a list of turns, not a bulleted list. */
+.root,
+.exchange {
+  list-style: none;
+  padding: 0;
+}
+
+/* The message's row takes the thread's width, so the bubble's measure is a share of it. */
+.line {
+  inline-size: 100%;
+}
+
+.bubble {
+  min-inline-size: 0;
+  padding-block: var(--chat-bubble-inset-block);
+  padding-inline: var(--chat-bubble-inset-inline);
+  border-radius: var(--chat-bubble-radius);
+  font: var(--chat-bubble-font);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+/* Them: start side, a soft warm ground with no edge, its tail at the foot of the start edge,
+   beside its avatar. */
+.client {
+  max-inline-size: var(--chat-client-measure);
+  color: var(--chat-client-ink);
+  background: var(--chat-client-ground);
+  border-end-start-radius: var(--chat-bubble-radius-tail);
+}
+
+/* Us: end side, a light brand blue with dark text, its tail at the foot of the end edge. */
+.reply {
+  max-inline-size: var(--chat-reply-measure);
+  color: var(--chat-reply-ink);
+  background: var(--chat-reply-ground);
+  border-end-end-radius: var(--chat-bubble-radius-tail);
+}
+
+/* The speaker's avatar: a fixed disc at the foot of the bubble (the Cluster aligns the row's end
+   edges, so the disc sits level with the bubble's last line). It never shrinks. The glyph inside
+   fills the disc's content box, so the inset is what sizes it; an SVG centres its own drawing in
+   its box, so no arrangement is needed to centre it. */
+.avatar {
+  display: block;
+  flex: none;
+  inline-size: var(--chat-avatar-size);
+  block-size: var(--chat-avatar-size);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.avatar > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* Them: the neutral person glyph on a neutral disc. A photograph, when given, fills the disc
+   edge to edge (Media inside rules nothing; the disc clips it), so the inset drops to zero. */
+.clientAvatar {
+  padding: var(--chat-client-avatar-inset);
+  color: var(--chat-client-avatar-ink);
+  background: var(--chat-client-avatar-ground);
+}
+
+.portrait {
+  padding: 0;
+}
+
+/* Us: the Tcules logomark, black on a white disc. The ring is an inset shadow so it takes no room
+   from the disc's size; it is transparent wherever the ground already parts from white. */
+.replyAvatar {
+  padding: var(--chat-reply-avatar-inset);
+  background: var(--chat-reply-avatar-ground);
+  box-shadow: inset 0 0 0 var(--chat-avatar-edge-width) var(--chat-reply-avatar-edge);
+}
+
+.logomark {
+  fill: var(--chat-reply-avatar-ink);
+}
+
+/* Visually hidden, still announced: the speaker's name before each message. Not display:none —
+   that would remove it from the accessibility tree. The negative margin pulls the 1px clip box
+   out of the flow; it is not outer spacing. */
+.speaker {
+  position: absolute;
+  inline-size: var(--chat-hidden-size);
+  block-size: var(--chat-hidden-size);
+  margin: calc(-1 * var(--chat-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

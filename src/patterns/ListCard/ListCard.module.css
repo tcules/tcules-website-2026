@@ -17,9 +17,10 @@
      the visually-hidden hint's clip technique, not outer spacing.
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
-   No responsive type or distance override, and no media query on the row. (The two in this file
-   belong to the ReadDown set mode at its foot: one follows its two-column arrangement, the other
-   gates its rail texture to 1440, the rest size its photo box.) The split collapses when
+   No responsive type or distance override, and no media query on the row's type. (The ones in this
+   file change an ARRANGEMENT at 768: the stage plate and the end action wrap under the copy below it,
+   and the Stages set draws its phone rail; the ReadDown set mode's at its foot follow its two-column
+   arrangement, gate its rail texture to 1440 and size its photo box.) The split collapses when
    the ROW runs out of room for its two minimum tracks — a wrapping Cluster, not a viewport
    boundary — and the type composites step in the shared type layer.
    No container query either. It was the fallback for reading the row's own width, and it is not
@@ -69,6 +70,23 @@
   border-block-end: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
   border-radius: var(--lcrd-radius);
   box-shadow: var(--lcrd-shadow);
+}
+
+/* A row opened by its rule (`rule="start"`, owner 19 Nov 2026): the tile's edge on a row. The rule
+   heads the row, the gutter inset under it as on every row, none after the copy: the space after a
+   row that closes nothing is the set's, not the row's. */
+.ruleStart .frame {
+  padding-block: var(--gap-gutter) 0;
+  border-block-end: none;
+  border-block-start: var(--lcrd-rule-width) solid var(--lcrd-rule-ink);
+}
+
+/* A row in a grid of rows (`rule="none"`, owner 19 Nov 2026): no rule and no inset; the set's Layout
+   seam is the only distance between items, as ReadDown's two columns set them. */
+.ruleNone .frame {
+  padding-block: 0;
+  border-block-start: none;
+  border-block-end: none;
 }
 
 /* ── The tile form (1 Oct 2026) ────────────────────────────────────────────────────
@@ -264,6 +282,88 @@
      ground. The same width and inks as BlockCard's cover rule, duplicated on purpose in this layer. */
   border: var(--lcrd-thumbnail-rule-width) solid var(--lcrd-thumbnail-rule-ink);
   border-radius: var(--lcrd-thumbnail-radius);
+}
+
+/* The stage drawing's box (`marker: { type: 'stage' }`, 17 Nov 2026). Below 768 (owner, 18 Nov 2026,
+   Jatin's phone board) the plate takes the row's whole line at the phone plate's 2:1, a card of its
+   own above the copy, so picture, title and words share one right edge; the row's Cluster wraps the
+   copy under it. From 768 the 16:9 plate at its 200. Sketch's plate paints the whole box; its drawing
+   is centred in it at its own ratio. overflow clips the plate to the radius. */
+.stage {
+  display: block;
+  flex: 1 1 100%;
+  inline-size: 100%;
+  aspect-ratio: var(--lcrd-stage-ratio-sm);
+  overflow: hidden;
+  border-radius: var(--lcrd-thumbnail-radius);
+}
+
+.stage > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+@media (min-width: 768px) {
+  .stage {
+    flex: 0 0 auto;
+    inline-size: var(--lcrd-stage-inline-md);
+    aspect-ratio: var(--lcrd-thumbnail-ratio);
+  }
+}
+
+/* Beside a hanging glyph the row never wraps (its Cluster is `nowrap`), so the core gives up its
+   192 floor and takes what the glyph leaves. */
+.coreBeside {
+  min-inline-size: 0;
+}
+
+/* Beside a stage plate (from 768) the core takes everything the plate leaves, from a zero basis, so
+   the wrapping row never wraps there; below 768 the plate has already taken the line. */
+.coreStage {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+/* `actionAt="end"`: the copy takes the row; the action keeps its own width at the end. Below 768 the
+   copy takes the whole line, so the action always sits under it (owner, 18 Nov 2026). */
+.endCopy {
+  flex: 1 1 100%;
+  min-inline-size: 0;
+}
+
+@media (min-width: 768px) {
+  .endCopy {
+    flex: 1 1 var(--lcrd-content-min-xs);
+    min-inline-size: min(100%, var(--lcrd-content-min-xs));
+  }
+}
+
+/* `titleIcon`: the glyph inline before the title's first word, centred on its lower-case letters. */
+.titleIcon {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--lcrd-marker-ink);
+}
+
+/* `arrangement="hanging"` (owner, 18 Nov 2026): the icon hangs on the title's first line. The marker
+   is set in the title's own role for the size step, so its one line box is the title's line box and
+   the glyph — the title's em — centres in it on the lower-case letters, as `titleIcon` does. The
+   distance to the copy is the row Cluster's `text` seam; the copy keeps its own edge, so the body
+   runs under the title and never under the glyph. Three parts outrank Icon's size class. */
+.sizeMd.hanging .markerIcon {
+  font: var(--lcrd-title-text-md);
+}
+
+.sizeSm.hanging .markerIcon {
+  font: var(--lcrd-title-text-sm);
+}
+
+.hanging .markerIcon > svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: var(--lcrd-marker-icon-size-hanging);
+  height: var(--lcrd-marker-icon-size-hanging);
 }
 
 /* An end image (`markerPosition="end"`) is supplementary: below 768 it would squeeze the copy beside
@@ -622,5 +722,120 @@
   .root .link:hover .cue,
   .root .link:focus-visible .cue {
     transform: none;
+  }
+}
+
+/* ══ Stages · the stage set's phone timeline (owner, 18 Nov 2026, Jatin's phone board) ══════════════
+   Below 768 the stage rows hang on one vertical rail at the column's start: an open ring at each
+   stage's top edge, and, where the set has an `end` (the first-step strip), a filled dot level with
+   the strip's first line, the rail's last step. Decoration only: drawn with pseudo-elements, so it
+   is never announced and takes no focus. The rail is segments, not one line: each row draws from
+   under its ring to its own bottom edge and the end from its top edge to its dot, so the rows abut
+   (rowGap none) and the line is continuous whatever any row's height. Every value is --lcrd-rail-*.
+
+   The rows drop their rule and their top inset on the rail: the rail is the separation, and a rule
+   under each card would be a second one. From 768 the set is the ruled ladder it has always been,
+   the strip a `stack` (48) under the last rule, and nothing below draws. */
+.stagesEnd {
+  min-inline-size: 0;
+}
+
+@media (min-width: 768px) {
+  /* The strip is a footer under the ladder: the band's body → footer seam, owned by the set. */
+  .stagesEnd {
+    padding-block-start: var(--gap-stack);
+  }
+}
+
+@media (max-width: 767px) {
+  .stagesSet {
+    padding-inline-start: var(--lcrd-rail-inset);
+  }
+
+  .stages .frame {
+    padding-block: 0 var(--lcrd-stage-gap-m);
+    border-block-end: none;
+  }
+
+  .stages > .root,
+  .stagesEnd {
+    position: relative;
+  }
+
+  /* The open ring at each stage's top edge. */
+  .stages > .root::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: calc(-1 * var(--lcrd-rail-inset));
+    inline-size: var(--lcrd-rail-ring-size);
+    block-size: var(--lcrd-rail-ring-size);
+    border-radius: var(--lcrd-rail-radius);
+    box-shadow: inset 0 0 0 var(--lcrd-rail-width) var(--lcrd-rail-ink);
+  }
+
+  /* The rail from under the ring to the row's bottom edge. */
+  .stages > .root::after,
+  .stagesEnd::before {
+    content: '';
+    position: absolute;
+    inset-block: var(--lcrd-rail-ring-size) 0;
+    inset-inline-start: calc(
+      -1 * var(--lcrd-rail-inset) + (var(--lcrd-rail-ring-size) - var(--lcrd-rail-width)) / 2
+    );
+    inline-size: var(--lcrd-rail-width);
+    background: var(--lcrd-rail-ink);
+  }
+
+  /* Without an end the rail stops at the last ring. */
+  .stagesOpen > .root:last-child::after {
+    content: none;
+  }
+
+  /* The end: the rail from the strip's top edge down to the filled dot. */
+  .stagesEnd::before {
+    inset-block: 0 auto;
+    block-size: var(--lcrd-rail-end-top);
+  }
+
+  .stagesEnd::after {
+    content: '';
+    position: absolute;
+    inset-block-start: var(--lcrd-rail-end-top);
+    inset-inline-start: calc(
+      -1 * var(--lcrd-rail-inset) - (var(--lcrd-rail-end-size) - var(--lcrd-rail-ring-size)) / 2
+    );
+    inline-size: var(--lcrd-rail-end-size);
+    block-size: var(--lcrd-rail-end-size);
+    border-radius: var(--lcrd-rail-radius);
+    background: var(--lcrd-rail-ink);
+  }
+}
+
+/* A hanging set's first row starts on the set's top edge, as Steps and ReadDown do: the rules sit
+   between rows and after the last, so the 32 above the first title was air with no rule to head,
+   and the band's head-to-body seam read as 24 + 32 (owner, 18 Nov 2026: "the gap between the title
+   and the body below it also too much"). */
+.hanging:first-child .frame {
+  padding-block-start: 0;
+}
+
+/* `columns={2}` (owner, 19 Nov 2026): rows laid two up from 1440 (one column below, where the longer titles would wrap). Each row fills its grid row (the
+   Layout stretches the cell) so the closing rules sit on one line across both columns whatever one
+   title wraps to; a hanging set opens the SECOND column on the top edge as well as the first; and a
+   bodiless title takes the column, which is already narrower than a one-column row's sentence. */
+.twoUp,
+.twoUp .frame {
+  block-size: 100%;
+}
+
+.twoUp .title.titleSentence,
+.twoUp .titleSentence .title {
+  max-inline-size: none;
+}
+
+@media (min-width: 1440px) {
+  .hanging.twoUp:nth-child(2) .frame {
+    padding-block-start: 0;
   }
 }

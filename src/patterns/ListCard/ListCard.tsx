@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
 
 import {
+  AreaMark,
+  type AreaVerdict,
   Button,
   Cluster,
   Icon,
@@ -9,9 +11,10 @@ import {
   type IconName,
   type MediaImage,
   Sketch,
+  type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import type { ArticleSceneName } from '@/lib/sketches';
+import { drawingMoves, type ArticleSceneName } from '@/lib/sketches';
 import { LIST_CARD_THUMBNAIL } from '@/lib/image-sizes';
 
 import styles from './ListCard.module.css';
@@ -43,6 +46,9 @@ export type ListCardMarker =
   /** `tone` (owner, 7 Oct 2026): `accent` (default) sets the numeral blue; `neutral` sets it in a
       quiet grey, for a set whose band already carries its accent elsewhere. */
   | { type: 'number'; value: number; tone?: ListCardNumberTone }
+  /** A checklist's tick is this marker with `check-circle`, bare in the marker ink: the one tick
+      the plans, the close's points and Contrast already set (owner, 19 Nov 2026: the light-blue
+      square on paper-deep "always looks bad"; the `frame: 'square'` option of 18 Nov is gone). */
   | { type: 'icon'; name: IconName }
   | { type: 'thumbnail'; image: MediaImage }
   /** `sketch` (13 Oct 2026, the insights hub): a DRAWN thumbnail — the scene drawn for this article
@@ -55,11 +61,32 @@ export type ListCardMarker =
       both strings ("14", "Nov 2026") and passes the ISO value for `dateTime`. Without `dateTime`
       (a date not yet set: "—", "Date TBC") it renders as text, not a `<time>`, so a ledger
       with one undated row keeps every row's copy on one edge. */
-  | { type: 'date'; dateTime?: string; day: string; label: string };
+  | { type: 'date'; dateTime?: string; day: string; label: string }
+  /** `stage` (17 Nov 2026, the service boards' "Start from wherever your product is" rows): the
+      stage's own drawing on its plate, a 16:9 box 200 wide from 768. Below 768 (owner, 18 Nov 2026,
+      Jatin's phone board, superseding the 96 square) the plate runs the row's whole width at 2:1 and
+      the title, body and action follow under it: each stage is a card-shaped drawing and its words,
+      never a swipe shelf. `Stages` sets them on the phone timeline. `scene`
+      absent: the EMPTY plate, the placeholder until the stage is drawn. Decorative (Sketch is
+      aria-hidden); the title names the stage. Rows only. */
+  | { type: 'stage'; scene?: SketchName };
 
 export type ListCardNumberTone = 'accent' | 'neutral';
 
-export type ListCardArrangement = 'split' | 'stacked';
+/**
+ * A row's title/body geometry.
+ *
+ *   split    title and body side by side while the row's own width holds both; the default.
+ *   stacked  the body under the title at every width; the marker beside the copy, wrapping above it
+ *            in a column too narrow for both.
+ *   hanging  (owner, 18 Nov 2026, the "why" rows) the icon marker hangs on the title's line, the
+ *            title beside it and the body under the title, aligned to the title's edge, never under
+ *            the glyph. One arrangement at every width: the marker never wraps above the copy. The
+ *            glyph is the title's em in the marker ink, bare, and stands a `text` (16) from the copy
+ *            rather than the row's `block` (24), because it is a hanging bullet of the title rather
+ *            than a column of its own. Meant for an icon marker; a row with none renders as stacked.
+ */
+export type ListCardArrangement = 'split' | 'stacked' | 'hanging';
 
 /**
  * Where the item sits, which decides where its rule and marker go (1 Oct 2026).
@@ -114,6 +141,23 @@ export type ListCardTitleElement = 'span' | 'h3' | 'h4';
 export type ListCardFrame = 'none' | 'box';
 
 /**
+ * Which edge of a ROW carries its rule (owner, 19 Nov 2026, About's "Who leads your work").
+ *
+ *   end    the default: the rule CLOSES the row, so every row of a ladder ends on the same line as
+ *          its neighbour.
+ *   start  the rule OPENS the row, as a tile's does: for a row that follows a block of a different
+ *          kind (a note under a set of profile cards), where the rule's job is to separate it from
+ *          what came before and nothing follows it to close against. The rule heads the row, so the
+ *          row keeps its `gutter` inset under the rule and none after its copy, where the set's
+ *          Layout owns the seam. Ignored on a tile, whose rule always opens it.
+ *   none   no rule and no inset (owner, 19 Nov 2026, About's "How Tcules works with clients": "icons
+ *          inline with titles, remove the rules"): a row laid in a GRID of rows, several to a line,
+ *          where the set's Layout seam is the only distance between items, as ReadDown's two columns
+ *          already set them (a ruled row only when one item stands per row, owner 31 Oct 2026).
+ */
+export type ListCardRule = 'end' | 'start' | 'none';
+
+/**
  * A closed content record. There is no `children`, `className` or DOM-attribute spread: allowing
  * any of them would reopen nested controls, call-site geometry and a second source for the action.
  */
@@ -125,6 +169,8 @@ type ListCardFormProps =
       arrangement?: ListCardArrangement;
       /** A row is never boxed. See `ListCardFrame`. */
       frame?: never;
+      /** Which edge carries the row's rule. See `ListCardRule`. */
+      rule?: ListCardRule;
     }
   | {
       /** An item in a grid track. See `ListCardForm`. */
@@ -133,6 +179,8 @@ type ListCardFormProps =
       arrangement?: never;
       /** The tile's finish. Defaults to `none`. See `ListCardFrame`. */
       frame?: ListCardFrame;
+      /** A tile's rule always opens it. */
+      rule?: never;
     };
 
 export type ListCardProps = ListCardFormProps & {
@@ -205,6 +253,46 @@ export type ListCardProps = ListCardFormProps & {
    * tile, without a destination, and beside an action, which carries its own arrow.
    */
   cue?: 'arrow';
+  /**
+   * Where a ROW's action stands (17 Nov 2026, the service boards' stage rows). `foot` (default): under
+   * the copy, as it always has. `end`: at the row's inline end, centred on the row, while the copy and
+   * the action fit on one line; where they do not (a phone column) it wraps under the copy, a `block`
+   * down, at the copy's edge. Below 768 it always wraps (owner, 18 Nov 2026: "the link under the
+   * body, not on the right"): a short label beside a phone column left one row's action on the right
+   * and the next under its copy. Still the one anchor's span, so still one focus stop. Ignored on a
+   * tile and without an action.
+   */
+  actionAt?: 'foot' | 'end';
+  /**
+   * A glyph inline before the title's first word (owner, 17 Nov 2026: an icon may sit inline with a
+   * ROW title, superseding "an icon heads its card" for rows). Decorative (the title names the
+   * subject), sized to the title's em, in the marker ink. Rows only: a tile's glyph heads it
+   * (`marker: { type: 'icon' }`).
+   */
+  titleIcon?: IconName;
+  /**
+   * A verdict the row states (owner, 18 Nov 2026, the MVP board's keep / fix / rebuild rows): the
+   * eyebrow becomes the AreaMark legend, its swatch then its word in the accent, so the row carries
+   * the same key as the drawing it explains. The eyebrow's quiet neutral is right for a KIND label
+   * ("Podcast · 25 Aug 2026"); a verdict is a mark, and marks are blue. Needs `eyebrow` (the word);
+   * without one the swatch stands alone over the title.
+   */
+  verdict?: AreaVerdict;
+  /**
+   * The set's columns from 1440, passed by the set as `size` is (owner, 19 Nov 2026, /careers' "What we
+   * look for": a wrapped title in one column pushed its neighbour's rule off the line, and the second
+   * column's first row kept the 32 above it that the first column's had lost). A row cannot see its
+   * siblings, so the caller that lays them two up says so. Rows only.
+   *
+   *   2  each row fills its grid row, so the rules close on one line across both columns; a hanging
+   *      set opens BOTH columns on the set's top edge, as its first row does in one; and a bodiless
+   *      title runs to the column rather than the 40ch sentence measure, the column being the measure.
+   *
+   * Two up only from 1440 (owner, 19 Nov 2026: "can keep the dividers as long as items don't wrap to 2
+   * lines and break alignment"): at 1024 a 448 column wraps the longer titles, so the set stays one column
+   * until each title holds one line. Absent, one column: unchanged.
+   */
+  columns?: 1 | 2;
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -218,7 +306,16 @@ function warn(message: string) {
 }
 
 /** The marker slot. Blank thumbnail sources collapse rather than leaving a broken-image frame. */
-function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }) {
+function Marker({
+  marker,
+  form,
+  href,
+}: {
+  marker: ListCardMarker;
+  form: ListCardForm;
+  /** The row's destination: a stage drawing in a link to a page moves on the row's hover. */
+  href?: string;
+}) {
   if (marker.type === 'number') {
     /* At least two digits, not exactly two: the expected 01–12 align, while an out-of-range 100
        stays honest rather than being truncated. The <ol> announces position, so the visual copy
@@ -262,6 +359,17 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
     return (
       <span className={cx(styles.marker, styles.thumbnail)}>
         <Sketch name={marker.name} />
+      </span>
+    );
+  }
+
+  if (marker.type === 'stage') {
+    return (
+      <span className={cx(styles.marker, styles.stage)}>
+        {/* A stage row leads into a page (a service, How we work), so its drawing moves on the row's
+            one hover, the problem at rest and solved at its end (owner, 19 Nov 2026); a row that is
+            not a link, or leads to a resource, holds it still at its end (`drawingMoves`). */}
+        <Sketch name={marker.scene} story={drawingMoves(href)} />
       </span>
     );
   }
@@ -340,6 +448,7 @@ export function ListCard({
   form = 'row',
   arrangement = 'split',
   frame = 'none',
+  rule = 'end',
   titleAs: Title = 'span',
   size,
   href,
@@ -347,6 +456,10 @@ export function ListCard({
   ctaLabel,
   markerPosition = 'start',
   cue,
+  actionAt = 'foot',
+  titleIcon,
+  verdict,
+  columns,
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -381,6 +494,7 @@ export function ListCard({
 
   const destination = href?.trim() ? href : undefined;
   const isSplit = !isTile && arrangement === 'split';
+  const isHanging = !isTile && arrangement === 'hanging';
   const leaves = destination !== undefined && external;
 
   if (ctaLabel !== undefined && ctaLabel.trim().length === 0) {
@@ -422,6 +536,14 @@ export function ListCard({
 
   const titleNode = (className: string | undefined) => (
     <Title className={className}>
+      {titleIcon && form !== 'tile' ? (
+        <>
+          <span className={styles.titleIcon}>
+            <Icon name={titleIcon} size="lg" />
+          </span>
+          {'\u00a0'}
+        </>
+      ) : null}
       {title}
       {leavesGlyph}
     </Title>
@@ -434,7 +556,12 @@ export function ListCard({
      label in the title's track. `extra` is the split's sizing class, which belongs to whatever sits
      in the title's track: the title alone, or the group. */
   const headNode = (extra?: string) =>
-    eyebrow?.trim() ? (
+    verdict ? (
+      <Layout rowGap="text" className={extra}>
+        <AreaMark verdict={verdict} label={eyebrow} />
+        {titleNode(styles.title)}
+      </Layout>
+    ) : eyebrow?.trim() ? (
       <Layout rowGap="text" className={extra}>
         <span className={styles.eyebrow}>{eyebrow}</span>
         {titleNode(styles.title)}
@@ -470,14 +597,14 @@ export function ListCard({
   if (marker && marker.type === 'icon') {
     tileHead = (
       <Layout rowGap="text">
-        <Marker marker={marker} form={form} />
+        <Marker marker={marker} form={form} href={destination} />
         {tileCopy}
       </Layout>
     );
   } else if (marker) {
     tileHead = (
       <Cluster colGap="block" rowGap="block" align="start">
-        <Marker marker={marker} form={form} />
+        <Marker marker={marker} form={form} href={destination} />
         <div
           className={cx(
             styles.tileCopy,
@@ -518,17 +645,35 @@ export function ListCard({
     </Layout>
   );
 
+  const isStage = marker !== undefined && marker.type === 'stage';
   const hasPicture =
-    marker !== undefined && (marker.type === 'thumbnail' || marker.type === 'sketch');
+    marker !== undefined &&
+    (marker.type === 'thumbnail' || marker.type === 'sketch' || marker.type === 'stage');
   const trailing = markerPosition === 'end' && hasPicture;
-  const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
+  const markerNode = marker ? <Marker marker={marker} form={form} href={destination} /> : null;
   /* An end arrow stays on the copy's line at every width: wrapped under the copy it would point at
      nothing. A picture marker keeps the wrap it needs on a phone. */
   const row = (
-    <Cluster colGap="block" rowGap="block" align="start" nowrap={cue === 'arrow' && !hasPicture}>
+    <Cluster
+      colGap={isHanging ? 'text' : 'block'}
+      /* A stage row wraps below 768 (owner, 18 Nov 2026, Jatin's phone board): the drawing takes the
+         whole line and the copy follows a `text` (16) under it, the picture and its words one card.
+         From 768 the plate keeps its 200 and the core takes the rest, so it never wraps there. */
+      rowGap={isStage ? 'text' : 'block'}
+      align="start"
+      nowrap={(cue === 'arrow' && !hasPicture) || isHanging}
+    >
       {trailing ? null : markerNode}
-      <div className={styles.core}>
-        {action ? (
+      <div
+        className={cx(styles.core, isHanging && styles.coreBeside, isStage && styles.coreStage)}
+      >
+        {action && actionAt === 'end' ? (
+          /* The action at the row's end while copy and action fit one line; wrapped, under the copy. */
+          <Cluster colGap="stack" rowGap="block" align="center" justify="between">
+            <div className={styles.endCopy}>{rowCopy}</div>
+            {action}
+          </Cluster>
+        ) : action ? (
           <Layout rowGap="block">
             {rowCopy}
             {action}
@@ -554,9 +699,13 @@ export function ListCard({
         styles.root,
         SIZE_CLASS[step],
         isTile && styles.tile,
+        !isTile && rule === 'start' && styles.ruleStart,
+        !isTile && rule === 'none' && styles.ruleNone,
         boxed && styles.boxed,
         action !== null && styles.withAction,
         trailing && styles.markerEnd,
+        isHanging && styles.hanging,
+        !isTile && columns === 2 && styles.twoUp,
       )}
       /* A row with a picture (a thumbnail or a drawn scene beside its copy) is a horizontal media
          row: it takes a whole row of any grid it is set in (owner, 29 Oct 2026: "either 1 item takes
