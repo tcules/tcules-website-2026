@@ -209,10 +209,10 @@ export default function CtaRowSpecimen() {
               <CtaRow actions={[START, SEE_WORK]} rule={false} />
             </Specimen>
             <Specimen
-              title={`${surface} · phone row (18 Nov 2026)`}
-              note="phone='row': below 768 the lone see-all link sits between two quiet hairlines, the block step (24) above and below; from 768 it is the usual link. Check at 390."
+              title={`${surface} · phone, centred (23 Nov 2026)`}
+              note="phone='centred': below 768 the lone see-all link is centred, bare, as the testimonial wall's See 3 more; from 768 it is the usual link. Check at 390."
             >
-              <CtaRow actions={[SEE_WORK]} rule={false} phone="row" />
+              <CtaRow actions={[SEE_WORK]} rule={false} phone="centred" />
             </Specimen>
           </Layout>
         </Section>
@@ -261,11 +261,11 @@ export default function CtaRowSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="beside"
-        eyebrow="Footer · phone row, joined"
+        eyebrow="Footer · phone, centred"
         heading="Why teams choose this way of working"
         headingId="ctarow-in-phone-row"
-        lead="The same ruled ladder, its see-all link the list's last row on a phone."
-        footer={<CtaRow actions={[SEE_WORK]} rule={false} phone="row" joined />}
+        lead="The same ruled ladder, its see-all link centred under it on a phone."
+        footer={<CtaRow actions={[SEE_WORK]} rule={false} phone="centred" />}
       >
         <Layout as="ol" rowGap="none">
           {ROWS.map((row, index) => (

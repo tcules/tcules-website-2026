@@ -55,20 +55,13 @@ type CtaRowCommon = {
   /** Default `start`. See `CtaRowAlign`. */
   align?: CtaRowAlign;
   /**
-   * `row` (owner, 18 Nov 2026): below 768 a lone see-all link is the last row of the band's list —
-   * the same link button as every other in-band link, between two hairlines inside the column (never
-   * edge to edge), the rules in the row rules' quiet ink (decisions/2026-11-18-row-rules-one-step-quieter),
-   * the `block` (24) above and below the link. From 768 the row is the usual link. For a band's
-   * section-level "see all" action only; ignored with a note, a pair or a converting action.
+   * `centred` (owner, 23 Nov 2026; decisions/2026-11-23-see-all-centred-on-a-phone): below 768 a lone
+   * see-all link is centred under the band's body, bare, exactly as the testimonial wall's "See 3
+   * more" sits under its cards. No hairlines: the ruled row it replaces (18 Nov) was rejected. From
+   * 768 the row is the usual link. For a band's section-level "see all" action only; ignored with a
+   * note, a pair or a converting action.
    */
-  phone?: 'row';
-  /**
-   * With `phone="row"`: the band's body ends in a ruled list (ListCard rows, a ruled `Teaser`), and
-   * the see-all row is that list's last row — it closes up the band's `stack` (48) foot seam so its
-   * top hairline IS the last row's, rather than a second rule 48 under it. Ignored from 768 and
-   * without `phone="row"`.
-   */
-  joined?: boolean;
+  phone?: 'centred';
 };
 
 export type CtaRowProps = CtaRowCommon & {
@@ -125,7 +118,7 @@ export type CtaRowProps = CtaRowCommon & {
  * `actions`, or a template's own row — and never imports one.
  */
 export function CtaRow(props: CtaRowProps) {
-  const { actions, note, rule = true, align = 'start', phone, joined = false } = props;
+  const { actions, note, rule = true, align = 'start', phone } = props;
   const centred = align === 'center';
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
@@ -182,14 +175,14 @@ export function CtaRow(props: CtaRowProps) {
     </Layout>
   );
 
-  /* The phone row: placed beside the usual row and displayed once at any width (`display: none`
-     drops the other from the a11y tree). The link is the same link button; the row only rules it. */
-  if (phone === 'row' && !second && !hasNote && !action.converts) {
+  /* The phone copy: placed beside the usual row and displayed once at any width (`display: none`
+     drops the other from the a11y tree). The same link button, centred by Layout. */
+  if (phone === 'centred' && !second && !hasNote && !action.converts) {
     return (
       <>
         <div className={styles.fromMd}>{row}</div>
-        <div className={cx(styles.phoneRow, joined && styles.phoneRowJoined)}>
-          {linkTo(action)}
+        <div className={styles.phoneOnly}>
+          <Layout justifyItems="center">{linkTo(action)}</Layout>
         </div>
       </>
     );

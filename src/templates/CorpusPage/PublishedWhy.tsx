@@ -53,9 +53,9 @@ function WhyBand({
           {...head}
           data-band="M"
           actionsAt="end"
-          /* The band's "see all": its last ruled row on a phone (CtaRow phone="row"). */
+          /* The band's "see all": centred under the cards on a phone (CtaRow phone="centred"). */
           actions={
-            s.action ? <CtaRow rule={false} phone="row" actions={[s.action]} /> : undefined
+            s.action ? <CtaRow rule={false} phone="centred" actions={[s.action]} /> : undefined
           }
         >
           <BlockCardSet

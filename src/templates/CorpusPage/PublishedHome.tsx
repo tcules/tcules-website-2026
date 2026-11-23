@@ -64,14 +64,14 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
 
 /* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
    rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay).
-   `seeAll`: a band's closing "see all" link, which on a phone is the band's last ruled row
-   (CtaRow `phone="row"`, owner 18 Nov 2026); CtaRow ignores it when the action carries a note. */
+   `seeAll`: a band's closing "see all" link, which on a phone is centred under the band's body
+   (CtaRow `phone="centred"`, owner 23 Nov 2026); CtaRow ignores it when the action carries a note. */
 function link(action: HomeAction | undefined, seeAll = false) {
   return action ? (
     <CtaRow
       rule={false}
       note={action.description}
-      phone={seeAll ? 'row' : undefined}
+      phone={seeAll ? 'centred' : undefined}
       actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
     />
   ) : undefined;
@@ -139,11 +139,12 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
       actionsAt="end"
       actions={link(section.action, true)}
     >
+      {/* The horizontal cases stack at every width, a `column` (64) apart, as on the overhaul: no
+          sideways slider on a phone (owner, 23 Nov 2026). */}
       <Layout
-        rowGap="gutter"
+        rowGap={horizontal ? 'column' : 'gutter'}
         colGap="gutter"
         columns={horizontal ? 1 : { base: 1, md: 2, lg: 3 }}
-        scroll={horizontal ? 'until-md' : undefined}
       >
         {section.cards.map(({ id: key, bodyHtml, href, image, ctaLabel, ...card }, index) =>
           horizontal && href && image ? (
