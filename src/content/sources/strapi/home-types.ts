@@ -199,6 +199,7 @@ export type CmsHomeSection = Band &
           title: Text;
           eyebrow: Text;
           focused: Maybe<boolean>;
+          priceUnit?: Text;
           body: Text;
           icon: Text;
           scope: Text;

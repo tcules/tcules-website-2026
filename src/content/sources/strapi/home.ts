@@ -538,7 +538,8 @@ export function mapBand(
                 {
                   title: plan ?? title,
                   eyebrow: plan ? undefined : text(option.eyebrow),
-                  price: plan ? { amount: title } : undefined,
+                  /* The CMS's optional price unit ("a month") sits quiet after the price (tcules-cms-2026#4). */
+                  price: plan ? { amount: title, unit: text(option.priceUnit) } : undefined,
                   /* `focused` (Mihir, 19 Nov 2026) highlights the one plan in blue. */
                   featured: section.engagementPresentation === 'plans' && option.focused === true,
                   anchorId: text(option.anchorId),
