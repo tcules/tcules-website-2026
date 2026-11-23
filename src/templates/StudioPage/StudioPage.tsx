@@ -315,7 +315,7 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         surface="tint"
         align="center"
       >
-        <TestimonialWall items={c.testimonials.items} />
+        <TestimonialWall items={c.testimonials.items} foldOnPhone={3} />
       </ContentSection>
 
       <ContentSection id="company-record" heading={c.record.heading} headingId="company-record-heading">

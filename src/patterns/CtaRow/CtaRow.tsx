@@ -8,6 +8,17 @@ import styles from './CtaRow.module.css';
 export type CtaRowAction = {
   label: string;
   href: string;
+  /**
+   * The page's converting ask ("Book a free product review"): the blue solid wherever the row
+   * stands (owner, 18 Nov 2026; decisions/2026-11-18-converting-ask-is-solid), a narrowing of the
+   * in-band-link rule below to every action that is not the conversion. A PAIR keeps its outline and
+   * link.
+   *
+   * It rides on the action, not on the row, so it travels with the one record that defines the ask:
+   * a row-level prop had to be forwarded by every caller, and a caller that passed the action
+   * without forwarding it rendered the conversion as a link.
+   */
+  converts?: boolean;
 };
 
 /**
@@ -39,8 +50,14 @@ type CtaRowCommon = {
    * head and its ask): there is no body for the rule to close, so it sits a `stack` under the lead
    * and reads as the same underline. The row cannot see what is above it, so the placing caller
    * states it; ContentSection's `footer` doc says so.
+   *
+   * `until-md` (owner, 23 Nov 2026; decisions/2026-11-23-only-see-more-is-centred): the rule below 768
+   * only, for a head's see-all link that a stacked band moves after its body on a phone, when that
+   * body's last item ends in a link of its own ("Read the Phoenix case", then "See all case
+   * studies"). The rule says the set has ended, so the two links do not read as one card's. From 768
+   * the link is back in the head, where a rule would underline the lead.
    */
-  rule?: boolean;
+  rule?: boolean | 'until-md';
   /** Default `start`. See `CtaRowAlign`. */
   align?: CtaRowAlign;
 };
@@ -62,7 +79,8 @@ export type CtaRowProps = CtaRowCommon & {
    * solid stays the page's one main action.
    *
    * Until r7-buttons the row also took `emphasis="solid"` (a solid, blue when it `converts` and ink
-   * when not, with a ghost partner). Both props are gone: there is no in-band solid to render.
+   * when not, with a ghost partner). Both props are gone. The one in-band solid since 18 Nov 2026 is
+   * the converting ask, marked on its action (`CtaRowAction.converts`).
    */
   actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
 };
@@ -128,13 +146,17 @@ export function CtaRow(props: CtaRowProps) {
       </Button>
       {linkTo(second)}
     </Cluster>
+  ) : action.converts ? (
+    <Button as="a" href={action.href} emphasis="solid" size="md" block="until-md">
+      {action.label}
+    </Button>
   ) : (
     linkTo(action)
   );
 
   return (
     <Layout rowGap="block" className={centred ? styles.centredBox : undefined}>
-      {rule ? <div className={styles.rule} /> : null}
+      {rule ? <div className={cx(styles.rule, rule === 'until-md' && styles.untilMd)} /> : null}
       {/* `between` only when there is a note to sit opposite the actions: a lone action at the far
           end of a 1240 row reads as stranded, so without a note the link starts the row. Centred
           rows centre everything. `center` on the cross axis, so the link's label sits on the

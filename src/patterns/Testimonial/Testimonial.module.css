@@ -3,7 +3,8 @@
    Layout and Cluster own every relationship: the card's stack, the attribution row, the wall's
    columns and the pair. This module owns the card's ground, its inset and the parts' type and ink.
    The inset is padding inside the card's own box and the attribution's rule is its own top edge:
-   neither spaces the card from anything. No margin, no breakpoint, no state. */
+   neither spaces the card from anything. No margin; the one breakpoint and state are the wall's
+   phone fold, below. */
 
 .item,
 .wall,
@@ -146,4 +147,22 @@
 
 .card:not(.box) .role {
   color: var(--tsm-role-ink-quiet);
+}
+
+/* The wall's phone fold (`foldOnPhone`, owner 17 Nov 2026): below 768 the cards past the fold are
+   not drawn until the toggle opens the wall; from 768 the toggle is not drawn and nothing folds. */
+.fold {
+  min-inline-size: 0;
+}
+
+@media (max-width: 767.98px) {
+  .fold:not([data-open]) .beyond {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .foldToggle {
+    display: none;
+  }
 }

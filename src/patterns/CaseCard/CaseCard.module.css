@@ -83,6 +83,15 @@
   padding-block: var(--gap-gutter);
 }
 
+/* Stacked (below 1024) the claim no longer sits against the cover's height, so its end inset only
+   pads the seam to the next case: 32 more on top of the set's own gap (owner, 23 Nov 2026). The
+   start inset stays, the claim's air under its cover. */
+@media (max-width: 1023.98px) {
+  .copy {
+    padding-block-end: 0;
+  }
+}
+
 .eyebrow {
   font: var(--ccd-eyebrow-text);
   letter-spacing: var(--ccd-eyebrow-tracking);

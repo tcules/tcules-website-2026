@@ -63,11 +63,13 @@ function ReviewBadge({ rating }: { rating: HomeRating }) {
 }
 
 /* The link control draws its own arrow, so an authored trailing "→" ("See all industries →") goes
-   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay). */
-function link(action: HomeAction | undefined) {
+   rather than printing twice (text.ts `labelWithoutArrow`; presentation only, the words stay).
+   `afterLinks`: the band's items end in links of their own, so on a phone, where the link follows
+   them, a hairline sets it apart (CtaRow `rule="until-md"`, owner 23 Nov 2026). */
+function link(action: HomeAction | undefined, afterLinks = false) {
   return action ? (
     <CtaRow
-      rule={false}
+      rule={afterLinks ? 'until-md' : false}
       note={action.description}
       actions={[{ ...action, label: labelWithoutArrow(action.label) }]}
     />
@@ -134,13 +136,14 @@ function CaseCards({ section }: { section: Extract<Section, { type: 'cases' }> }
       {...{ id, heading, headingId, lead, surface }}
       data-band="M"
       actionsAt="end"
-      actions={link(section.action)}
+      actions={link(section.action, true)}
     >
+      {/* The horizontal cases stack at every width, a `column` (64) apart, as on the overhaul: no
+          sideways slider on a phone (owner, 23 Nov 2026). */}
       <Layout
-        rowGap="gutter"
+        rowGap={horizontal ? 'column' : 'gutter'}
         colGap="gutter"
         columns={horizontal ? 1 : { base: 1, md: 2, lg: 3 }}
-        scroll={horizontal ? 'until-md' : undefined}
       >
         {section.cards.map(({ id: key, bodyHtml, href, image, ctaLabel, ...card }, index) =>
           horizontal && href && image ? (
@@ -257,8 +260,12 @@ function Testimonials({ section }: { section: Extract<Section, { type: 'testimon
       data-band="G"
       headingSize={wall ? undefined : 'eyebrow'}
       align="center"
+      /* On a wall the Clutch score heads the quotes, under the heading (owner, 23 Nov 2026, as on
+         the overhaul: "move the clutch rating badge above the testimonials"). A slider or a single
+         quote keeps it as the footer. */
+      score={wall && rating ? <ReviewBadge rating={rating} /> : undefined}
       footer={
-        rating ? (
+        rating && !wall ? (
           <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
             <ReviewBadge rating={rating} />
           </Cluster>
@@ -268,6 +275,8 @@ function Testimonials({ section }: { section: Extract<Section, { type: 'testimon
       {items.length === 0 ? null : wall ? (
         <TestimonialWall
           items={items}
+          /* Three on a phone, then "See 3 more" (owner, 17 Nov 2026). */
+          foldOnPhone={3}
           avatarPolicy={avatarPolicy === 'individual' ? 'individual' : 'all-or-none'}
         />
       ) : presentation === 'single' || quotes.length === 1 ? (
