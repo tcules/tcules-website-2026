@@ -19,7 +19,9 @@ export function WallFold({ hidden, children }: { hidden: number; children: React
       <div id={id} data-open={open || undefined} className={styles.fold}>
         {children}
       </div>
-      <Layout justifyItems="start" className={styles.foldToggle}>
+      {/* Centred under the wall (owner, 23 Nov 2026): the toggle belongs to the whole set, not to
+          its first column. */}
+      <Layout justifyItems="center" className={styles.foldToggle}>
         {/* The link button every in-band "see more" takes (owner, 18 Nov 2026: "the link button
             instead of the blocky outline button"), still a real <button> with aria-expanded. */}
         <Button

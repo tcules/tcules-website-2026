@@ -341,7 +341,8 @@ const WALL_FROM = 6;
  * text. Under the slider it sits BELOW the quotes in a fixed place, outside the turning row, so it
  * never moves with a slide: the head then the voice is the band's path, a badge between them would
  * stack its star over the quote's five, and below it is where the wall already carries it, so the
- * score has one place whatever the count.
+ * score has one place whatever the count. On a WALL it heads the quotes instead, under the heading
+ * (owner, 23 Nov 2026, as on the overhaul: "move the clutch rating badge above the testimonials").
  *
  * A quote awaiting client sign-off renders as written; the flag is a comment in the source.
  */
@@ -366,7 +367,7 @@ export function QuoteGroupBand({
   const ratingBlock = band.blocks.find((block) => ratingOf(block) !== undefined);
   const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
   const wall = quotes.length >= WALL_FROM;
-  const footer = rating ? (
+  const footer = rating && !wall ? (
     <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
       <ScoreBadge rating={rating} />
     </Cluster>
@@ -382,6 +383,7 @@ export function QuoteGroupBand({
       surface={surface}
       align="center"
       lead={lead ? plain(lead.runs) : undefined}
+      score={wall && rating ? <ScoreBadge rating={rating} /> : undefined}
       footer={footer}
     >
       {wall ? (

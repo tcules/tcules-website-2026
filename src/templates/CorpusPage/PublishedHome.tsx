@@ -260,8 +260,12 @@ function Testimonials({ section }: { section: Extract<Section, { type: 'testimon
       data-band="G"
       headingSize={wall ? undefined : 'eyebrow'}
       align="center"
+      /* On a wall the Clutch score heads the quotes, under the heading (owner, 23 Nov 2026, as on
+         the overhaul: "move the clutch rating badge above the testimonials"). A slider or a single
+         quote keeps it as the footer. */
+      score={wall && rating ? <ReviewBadge rating={rating} /> : undefined}
       footer={
-        rating ? (
+        rating && !wall ? (
           <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
             <ReviewBadge rating={rating} />
           </Cluster>
