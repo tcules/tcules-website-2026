@@ -654,8 +654,9 @@ export function PublishedSection({
         </ContentSection>
       );
     case 'drawing-rows': {
-      /* The overhaul's rows band with a drawing (tcules-cms-2026#5): the heading over the whole band,
-         the drawing beside its rows under it (owner, 19 Nov 2026), head, drawing, rows on a phone. */
+      /* The overhaul's rows band with a drawing (tcules-cms-2026#5): the drawing beside the words, the
+         heading in the words' column over its rows (owner, 24 Nov 2026: over the whole band the title
+         sat "constrained to the left half"; supersedes the 19 Nov head above). Head, drawing, rows on a phone. */
       const rowsAction = section.action
         ? { ...section.action, converts: section.action.href === ROUTES.contact }
         : undefined;
@@ -667,14 +668,14 @@ export function PublishedSection({
           arrangement="media"
           media={
             section.scene
-              ? { drawing: <Sketch name={section.scene} />, side: 'start', headAbove: true }
+              ? { drawing: <Sketch name={section.scene} />, side: 'start', figureFirst: true }
               : {
                   image: {
                     ...placeholderImage('/_overhaul', 'drawing'),
                     alt: 'Drawing to come',
                   },
                   side: 'start',
-                  headAbove: true,
+                  figureFirst: true,
                 }
           }
           actions={

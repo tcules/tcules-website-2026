@@ -105,7 +105,8 @@ export type ContentSectionMedia = (
    * explains, rather than after them (owner, 18 Nov 2026, Jatin's m- boards: MVP's "Your prototype
    * is the brief" drawing, whose keep / fix / rebuild rows are its legend). From 1024 the split is
    * unchanged. Placed twice and displayed once at any width, as the head's actions are. A photograph
-   * placement only.
+   * or a drawing (owner, 24 Nov 2026: with MVP's drawing bands' head beside their rows, a phone set
+   * the drawing after the band's button).
    */
   figureFirst?: boolean;
   /**
@@ -1078,7 +1079,8 @@ function MediaSplit({
   if (image === undefined) {
     /* A flat figure beside the words (see ContentSectionMedia): halves, the copy column first in the
        DOM so a phone reads the words before the figure; `side="start"` mirrors it from 1024. Top
-       edges shared, nothing pinned: the figure has no height the copy should stretch to. */
+       edges shared, nothing pinned: the figure has no height the copy should stretch to.
+       `figureFirst`: below 1024 the drawing between the head and the words, as for a photograph. */
     return (
       <Layout
         columns={{ lg: [1, 1] }}
@@ -1087,8 +1089,16 @@ function MediaSplit({
         reverse={media.side === 'start' ? { lg: true } : undefined}
         align="start"
       >
-        <Layout rowGap="stack">{copy}</Layout>
-        {media.drawing}
+        {media.figureFirst ? (
+          <Layout rowGap={tight ? 'block' : 'stack'}>
+            {headText}
+            <div className={styles.untilLg}>{media.drawing}</div>
+            {body}
+          </Layout>
+        ) : (
+          <Layout rowGap="stack">{copy}</Layout>
+        )}
+        {media.figureFirst ? <div className={styles.fromLg}>{media.drawing}</div> : media.drawing}
       </Layout>
     );
   }
