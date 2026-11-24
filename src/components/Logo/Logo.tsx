@@ -12,26 +12,13 @@ import styles from './Logo.module.css';
  */
 export type LogoSize = 'sm' | 'md' | 'lg';
 
-/**
- * What paints the bar above the "u".
- *
- *   mono    --logo-ink, so the bar joins the letterforms and the mark is one colour — neutral-950
- *           on paper and tint, white on ink and blue. THE DEFAULT, because it is what the brand
- *           asks for everywhere the site draws the mark: ch02 v1.0 says that in UI chrome — nav,
- *           footer, favicon and anything at that size — "the whole wordmark is neutral-950", and
- *           that on blue and on ink "it is white throughout".
- *   accent  the bar in brandeis-500, via --logo-bar. For the mark at MARKETING SCALE on paper or
- *           tint only (ch02: "on paper at marketing scale the letters stay neutral-950 and the bar
- *           is brandeis-500"). On ink and blue --logo-bar is the wordmark's own ink, so accent
- *           there renders exactly as mono — safe, but never the reason to pass it.
- */
-export type LogoVariant = 'accent' | 'mono';
+/* The mark is one colour, the bar above the "u" included: neutral-950 on paper and tint, white on ink
+   and blue. A blue bar on the black mark is no longer valid for any use (owner, 17 Nov 2026), which
+   retired the old `accent` variant; ch02 v1.0 still describes it until its next update. */
 
 export type LogoProps = {
   /** Height role. Defaults to `md` (24). Width follows from the mark's own proportions. */
   size?: LogoSize;
-  /** Bar treatment. Defaults to `mono` — the chrome treatment; `accent` is marketing scale only. */
-  variant?: LogoVariant;
   /**
    * Accessible name. Pass `""` to render the mark decoratively, for the common case where a
    * wrapping link already carries the name — otherwise a screen reader announces "Tcules,
@@ -87,15 +74,9 @@ export const BAR_PATH = 'M351.86 0.139648H225.23V27.1396H351.86V0.139648Z';
  * It sets no outer spacing. The letterforms read --logo-ink — neutral-950 on paper and tint, white
  * on ink and blue, as ch02 names them — so the mark is correct in the header, in the ink footer and
  * on a blue pivot without being told which, and does not take the colour of a link that wraps it.
- * By default (mono) the bar does too; `accent` reads --logo-bar, which is brandeis-500 on the light
- * grounds and white on the dark ones — see tokens/components/logo.css.
+ * The bar above the "u" takes the same ink, so the mark is one colour on every ground.
  */
-export function Logo({
-  size = 'md',
-  variant = 'mono',
-  title = 'Tcules',
-  className,
-}: LogoProps) {
+export function Logo({ size = 'md', title = 'Tcules', className }: LogoProps) {
   const decorative = title === '';
 
   return (
@@ -113,11 +94,11 @@ export function Logo({
       {WORDMARK_PATHS.map((d) => (
         <path key={d} className={styles.mark} d={d} />
       ))}
-      {/* The fill comes from a CLASS, not a `fill="…"` presentation attribute. A var() inside an
+      {/* The bar, in the mark's own ink. The fill comes from a CLASS, not a `fill="…"` presentation attribute. A var() inside an
           SVG presentation attribute is not reliably resolved (and does not react to a change in
           the property) in Chrome, so the bar would silently render unpainted. A real CSS
           declaration resolves it. */}
-      <path className={variant === 'mono' ? styles.barMono : styles.bar} d={BAR_PATH} />
+      <path className={styles.mark} d={BAR_PATH} />
     </svg>
   );
 }
