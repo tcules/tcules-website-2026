@@ -16,6 +16,7 @@ type Job = {
   choiceValue: string;
 };
 type Photo = { image: CmsImage; zoom: number };
+type Surface = 'paper' | 'tint' | null;
 type Section = {
   __typename: string;
   heading: string;
@@ -25,8 +26,15 @@ type Section = {
   descriptionRich?: string;
   body?: string;
   editorialPresentation?: string;
+  editorialSurface?: Surface;
+  checklistSurface?: Surface;
+  jobsSurface?: Surface;
   sheetPresentation?: string;
-  blocks?: { kind: string; prose?: { body: string } }[];
+  blocks?: {
+    kind: string;
+    prose?: { body: string };
+    links?: { links: Parameters<typeof action>[0][] } | null;
+  }[];
   listEntries?: { title?: string; body: string; icon?: string }[];
   action?: Parameters<typeof action>[0];
   closing?: string;
@@ -119,10 +127,18 @@ export function mapCareers(page: CareersRecord | null) {
         art: image(section.media),
         html: markdownToHtml(section.body, 'Careers'),
         descriptionHtml: markdownInlineToHtml(section.descriptionRich ?? section.description),
-        blocks: (section.blocks ?? []).map((block) => {
+        blocks: (section.blocks ?? []).flatMap((block) => {
+          if (block.kind === 'links') return [];
           if (block.kind !== 'prose') throw Error('Unsupported Careers flow');
-          return markdownToHtml(block.prose?.body, 'Careers');
+          return [markdownToHtml(block.prose?.body, 'Careers')];
         }),
+        /* An editorial band's link block is its one onward link (O.22, "See how we use AI"). */
+        link: (section.blocks ?? [])
+          .flatMap((block) => (block.kind === 'links' ? (block.links?.links ?? []) : []))
+          .map((link) => action(link))
+          .find(Boolean),
+        surface:
+          (section.editorialSurface ?? section.checklistSurface ?? section.jobsSurface) || undefined,
         items: (section.listEntries ?? []).map((entry) => ({
           title: entry.title,
           bodyHtml: markdownInlineToHtml(entry.body),
