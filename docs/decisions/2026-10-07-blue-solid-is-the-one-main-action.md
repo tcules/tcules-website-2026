@@ -6,7 +6,7 @@ area: [components, colour]
 source: "Owner review, 7 Oct 2026 (corrected 8 Oct)"
 supersedes: []
 dbf: ["ch02 §7"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/review-7-oct-2026-outcome.md"
 ---
