@@ -6,7 +6,7 @@ area: [illustration, layout]
 source: "Devagya, 5 Nov 2026, illustration run: \"pick elements from the expertise hub illustration and build new ideas around it. the goal is to have relevant, clear, straightforward drawings that are elegant, beautiful, polished\"; \"all expertise pages should have an illustration and not stock images\"; on batch 1, direction \"A\" (polish, keep them simple); on the cards, \"for now we'll just replace the stock images with illustrations\"; the set approved as drawn"
 supersedes: []
 dbf: [ch05 §4]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "structure (src/lib/service-illustrations.ts HERO_ILLUSTRATIONS; HubBands DestinationGroupsBand reads it before any photograph)"
 ---
 

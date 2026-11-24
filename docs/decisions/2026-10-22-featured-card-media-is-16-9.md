@@ -6,7 +6,7 @@ area: [cards, imagery]
 source: "Owner, 22 Oct 2026: Design Hub review doc, finding 1 (\"supersedes. 16:9 everywhere.\")"
 supersedes: [2026-09-28-first-card-featured-from-four]
 dbf: ["ch05 §9"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

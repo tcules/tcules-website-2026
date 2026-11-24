@@ -6,7 +6,7 @@ area: [imagery]
 source: "Owner (Devagya), 26 Oct 2026, home \"Products we know well\" review (tracker 2.30)"
 supersedes: []
 dbf: [ch05 §3]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 

@@ -6,7 +6,7 @@ area: [imagery, components]
 source: "Devagya, 1 Nov 2026, /how-we-work review: \"images don't have rounded corners?\" Asked whether captures should change: \"Round every image\""
 supersedes: []
 dbf: ["ch05 §6"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: token
 ---
 

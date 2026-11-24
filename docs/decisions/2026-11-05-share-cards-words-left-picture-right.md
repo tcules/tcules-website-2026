@@ -6,7 +6,7 @@ area: [imagery, type, layout]
 source: "Owner (Devagya), share-card review on /design/share-cards, 4–5 Nov 2026 (feat/og-images, tracker 6.6)"
 supersedes: []
 dbf: ["ch10 Part C", "ch05 §6a"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "structure (src/app/_og/: resolve.ts picks the picture, render.tsx draws the one layout)"
 ---
 Every page's share card (Open Graph and Twitter image) is generated at build from the page itself, in one

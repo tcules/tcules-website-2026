@@ -6,7 +6,7 @@ area: [proof, components]
 source: "Owner, 1 Nov 2026, reviewing /insights/authors on feat/insights-rich-text (\"rounded square photos here and 'about the author', circle photos in bylines, testimonials\")"
 supersedes: []
 dbf: ["ch05 §6"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 

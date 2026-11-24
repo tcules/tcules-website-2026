@@ -6,7 +6,7 @@ area: [illustration]
 source: "Owner review, 28 Sep 2026 (service-line illustrations, rounds 1–4)"
 supersedes: []
 dbf: ["ch05 §4d"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/illustration-drawing-standard.md"
 ---

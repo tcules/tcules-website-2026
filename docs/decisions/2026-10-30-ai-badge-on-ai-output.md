@@ -6,7 +6,7 @@ area: [illustration]
 source: "Devagya, 30 Oct 2026, \"keep the AI badge\" (Tcules Banner Themes round 3, decision 1; docs/research/illustration-evolution-2026-10-30.md § 5)"
 supersedes: []
 dbf: [ch05 §4b]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

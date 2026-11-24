@@ -6,7 +6,7 @@ area: [illustration]
 source: "Owner, 15 Oct 2026"
 supersedes: []
 dbf: ["ch05 §4"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/sketch-vs-illustration.md"
 ---

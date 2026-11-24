@@ -6,7 +6,7 @@ area: [illustration]
 source: Owner, annotated screenshot of the hitl-approve-button cover, 19 Nov 2026 ("black is the current direction you consider to be down ... the correct direction is the green arrow")
 supersedes: []
 dbf: [ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

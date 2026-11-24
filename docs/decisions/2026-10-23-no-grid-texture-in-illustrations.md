@@ -6,7 +6,7 @@ area: [illustration]
 source: "Owner, 23 Oct 2026 (enquiry close illustration)"
 supersedes: []
 dbf: [ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 
