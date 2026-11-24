@@ -95,10 +95,7 @@ export function SiteFooter({
           <Layout className={styles.brandIdentity} rowGap="block" align="center">
             {/* The mark carries its own name here. Unlike the header's, it is not inside a link,
                 so nothing else announces it. */}
-            {/* Mono on every ground, the light ones included: the footer is UI chrome, where ch02
-                v1.0 makes the whole wordmark neutral-950 — and white on ink and blue. The accent
-                bar is for the mark at marketing scale, which this is not. */}
-            <Logo size="lg" variant="mono" />
+            <Logo size="lg" />
             <p className={styles.tagline}>{brand.tagline}</p>
           </Layout>
 
@@ -344,7 +341,7 @@ export function SiteFooter({
           mark paints outside the document and cannot be scrolled to. Decorative — the wordmark is
           already announced once at the top of the band, and twice is noise. */}
       <div className={styles.watermark} aria-hidden="true">
-        <Logo size="lg" variant="mono" title="" />
+        <Logo size="lg" title="" />
       </div>
     </Section>
   );

@@ -563,10 +563,8 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
             tabIndex={sheetOpen ? -1 : undefined}
           >
             {/* title="" — the link above carries the accessible name, so the mark is decorative
-                and a screen reader is not made to say "Tcules" twice. variant="mono" is the
-                default and is written anyway, because here it is a brand rule rather than a
-                default: in UI chrome the whole wordmark is neutral-950 (ch02 v1.0). */}
-            <Logo size="md" variant="mono" title="" />
+                and a screen reader is not made to say "Tcules" twice. */}
+            <Logo size="md" title="" />
           </Link>
 
           <Cluster as="ul" className={styles.items} colGap="inline" nowrap>
