@@ -1,5 +1,6 @@
 import { cache } from 'react';
 
+import { isSketchName } from '@/components/Sketch';
 import { ROUTES } from '@/lib/routes';
 import type { DataTableProps, LogoGridMark } from '@/patterns';
 import type { WorkPageModel, WorkSection } from '@/templates/CorpusPage/published-work-model';
@@ -18,6 +19,7 @@ type Surface = 'paper' | 'tint' | null | undefined;
 type Flow = {
   kind: string;
   prose?: { body: Text } | null;
+  links?: { links: Entries<CmsAction> } | null;
   table?: {
     columns: Entries<{ heading: Text }>;
     rows: Entries<{ heading: Text; cells: Entries<{ body: Text }> }>;
@@ -34,6 +36,9 @@ type Custom = {
   comparisonSurface?: Surface;
   sheetSurface?: Surface;
   situationSurface?: Surface;
+  illustratedPresentation?: Text;
+  illustration?: { source?: Text; scene?: Text } | null;
+  editorialPresentation?: Text;
   clients?: Entries<{
     documentId: string;
     name: Text;
@@ -115,6 +120,7 @@ function mapSection(
           },
         ];
       }
+      if (block.kind === 'links') return [];
       warn(`${key} block ${i} (${block.kind}) is not supported here; not shown`);
       return [];
     });
@@ -155,6 +161,29 @@ function mapSection(
 
     case 'ComponentSharedIllustratedSection': {
       if (!needsHeading()) return;
+      /* A section drawing with its entries (O.20, the overhaul's "The engagement moves with your
+         product"): the drawing across the band, the entries as a set of tiles under it. Keyed to the
+         content, so a section without a drawing keeps the situation cards. */
+      const scene = s.illustration?.source === 'scene' ? text(s.illustration.scene) : undefined;
+      if (scene) {
+        if (!isSketchName(scene)) warn(`${key} drawing "${scene}" is not a known scene; not drawn`);
+        const facts = rows(s.entries).flatMap((entry) => {
+          const title = text(entry.title);
+          return title ? [{ title, body: text(entry.body) }] : [];
+        });
+        if (!facts.length) {
+          warn(`${key} has no entries; not shown`);
+          return;
+        }
+        return {
+          ...head,
+          type: 'work-facts',
+          surface: surface(s.situationSurface),
+          lead: text(s.description),
+          scene: isSketchName(scene) ? scene : undefined,
+          items: facts,
+        };
+      }
       const paths = rows(s.entries).flatMap((entry, i) => {
         const title = text(entry.title);
         if (!title) {
@@ -206,11 +235,18 @@ function mapSection(
         warn(`${key} has no content; not shown`);
         return;
       }
+      /* "Head beside" (O.20, the overhaul's "How we use AI in our own work"): the heading in its own
+         column, the words beside it, a link block as the band's one onward link under them. */
+      const links = rows(s.blocks).flatMap((block) =>
+        block.kind === 'links' ? rows(block.links?.links).flatMap((link) => action(link) ?? []) : [],
+      );
       return {
         ...head,
         type: 'work-flow',
         surface: surface(s.editorialSurface ?? s.comparisonSurface),
         lead: text(s.description),
+        beside: s.editorialPresentation === 'head_beside',
+        action: links[0],
         blocks,
       };
     }
