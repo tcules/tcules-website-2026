@@ -9,6 +9,7 @@ import {
   PUBLISHED_PRODUCTSTAGES,
   PUBLISHED_CHATTHREAD,
   PUBLISHED_FREETOOLS,
+  PUBLISHED_OTHERRESOURCES,
 } from './published-page-fields';
 
 export const HOME_QUERY = `
@@ -41,15 +42,7 @@ ${PUBLISHED_ENGAGEMENTOPTIONS}
         expertises { title expertise { documentId name slug } }
         destinations { title href }
       }
-      ... on ComponentResourceOtherResources {
-        id heading anchorId description resourcesSurface: surface resourcePresentation: presentation
-        action { ...PublishedAction }
-        items { id icon resolved }
-        resources {
-          documentId title slug description readingTime resourceType { name slug }
-          thumbnail { title description readingTime omitReadingTime scene image { ...PublishedImage } relatedImage { ...PublishedImage } }
-        }
-      }
+${PUBLISHED_OTHERRESOURCES}
 ${PUBLISHED_CTA}
 ${PUBLISHED_FAQSECTION}
 ${PUBLISHED_PRODUCTSTAGES}

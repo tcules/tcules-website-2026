@@ -509,6 +509,17 @@ export function mapBand(
                     route !== ROUTES.home && item.avatarIsPlaceholder
                       ? undefined
                       : mapUploadImage(item.avatar, publicGraphqlUrl()),
+                  /* "Read the Doodle case" under the speaker (tcules-cms-2026#5; Jatin's boards: "links
+                     to respective case studies"). The label names the company unless the CMS sets
+                     one, for a case about another client. */
+                  ...(text(item.caseStudy?.slug)
+                    ? {
+                        link: {
+                          label: text(item.caseLinkLabel) ?? `Read the ${company} case`,
+                          href: caseStudyPath(text(item.caseStudy?.slug)!),
+                        },
+                      }
+                    : {}),
                 },
               ]
             : [];
@@ -757,6 +768,40 @@ export function mapBand(
         close: closingAction
           ? { line: text(section.closingLine), action: closingAction }
           : undefined,
+      };
+    }
+    case 'ComponentSharedDrawingRows': {
+      const rowsOut = rows(section.rows).flatMap((row) => {
+        const title = text(row.title);
+        if (!title) return [];
+        const glyph = icon(row.icon);
+        if (row.icon && !glyph) warn(`${key} row "${title}" has an unknown icon "${row.icon}"`);
+        return [
+          {
+            title,
+            body: text(row.body),
+            label: text(row.label),
+            verdict: row.verdict ?? undefined,
+            icon: glyph,
+          },
+        ];
+      });
+      if (!rowsOut.length) {
+        warn(`${key} has no rows; not shown`);
+        return;
+      }
+      const drawing = text(section.drawing);
+      if (drawing && !isSketchName(drawing)) warn(`${key} has an unknown drawing "${drawing}"`);
+      return {
+        ...head,
+        type: 'drawing-rows',
+        ground: section.rowsSurface ?? undefined,
+        lead: text(section.description),
+        scene: drawing && isSketchName(drawing) ? drawing : undefined,
+        noteHtml: markdownInlineToHtml(section.note) || undefined,
+        statement: text(section.statement),
+        action: action(section.action),
+        rows: rowsOut,
       };
     }
     case 'ComponentSharedChatThread': {

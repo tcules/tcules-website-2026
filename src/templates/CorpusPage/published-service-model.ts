@@ -1,4 +1,4 @@
-import type { MediaImage } from '@/components';
+import type { IconName, MediaImage } from '@/components';
 import type { CorpusBlock } from '@/lib/corpus-types';
 import type { InlineRun } from '@/lib/inline';
 import type { SketchName } from '@/lib/sketches';
@@ -61,6 +61,8 @@ export type ServiceWhyCard = {
   image?: MediaImage;
   /** The card's points, in order, joined into its one paragraph. */
   body: string;
+  /** A Solar glyph the CMS names, drawn before the upload. */
+  icon?: IconName;
 };
 
 export type ServiceCaseCard = {
@@ -78,6 +80,9 @@ export type ServiceCaseCard = {
 export type PublishedServiceSection =
   | Extract<HomeSection, { type: 'testimonials' | 'engagement' | 'industries' | 'faq' | 'cta' }>
   | (Head & { type: 'cases'; lead?: string; action?: HomeAction; cards: ServiceCaseCard[] })
+  /** A band drawn exactly as Home draws it: Stages, the chat thread, free tools, insights, rows
+      beside a drawing and the wide alternating cases (the overhaul's service pages). */
+  | { key: string; type: 'published'; band: HomeSection }
   | (Head & {
       type: 'offer';
       presentation: 'illustrated' | 'plain' | 'read_down' | 'catalogue';
@@ -100,6 +105,8 @@ export type PublishedServiceSection =
   | (Head & {
       type: 'service-cards';
       variant: 'single' | 'two';
+      /** Plain ruled rows with an arrow (the overhaul's onward links), single grid only. */
+      rows?: boolean;
       lead?: string;
       before: CorpusBlock[];
       after: CorpusBlock[];
