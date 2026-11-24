@@ -267,6 +267,14 @@ type CtaSplitProps = {
    */
   quote?: CtaQuote;
   /**
+   * The words' note (owner, 19 Nov 2026, /careers: "'no matching role' text is kind of a note, so we
+   * can add a line above it and format it like a note (smaller and subtler)"): an aside to the ask,
+   * not a second lede. It closes the words' column on a hairline, at the caption role in the
+   * surface's muted ink, as the contact hours note and the MVP source note are set. Rich text where
+   * its link is part of the sentence. Island only; absent renders no element and no seam.
+   */
+  note?: CtaParagraph;
+  /**
    * The island the close sits on (owner, 16 Oct 2026, the home enquiry close; ALWAYS since 29 Oct
    * 2026): the copy and the form on a floating island of this surface, the form on a paper panel
    * inside it. Default `blue`; `ink` the other. The band takes paper unless `surface` says otherwise
@@ -743,6 +751,16 @@ function CtaPoints({
     );
   }
   return list;
+}
+
+/** The words' note (`note`): a hairline, then the caption line under it, a `text` apart. */
+function CtaNote({ note }: { note?: CtaParagraph }) {
+  if (note == null || (typeof note === 'string' && note.trim().length === 0)) return null;
+  return (
+    <div className={styles.noteFrame}>
+      <p className={styles.note}>{note}</p>
+    </div>
+  );
 }
 
 /**
@@ -1317,6 +1335,7 @@ export function CtaSection(props: CtaSectionProps) {
         <CtaPoints shape="stack" markers={markers} points={points} />
         {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
         {ratingRow}
+        <CtaNote note={props.note} />
       </Layout>
     );
     const halvesPanel = (
@@ -1384,6 +1403,7 @@ export function CtaSection(props: CtaSectionProps) {
                     <CtaPoints shape="stack" markers={markers} points={points} />
                     {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
                     {ratingRow}
+                    <CtaNote note={props.note} />
                   </Layout>
                   {quote ? <CtaQuoteBlock quote={quote} /> : null}
                 </Layout>
@@ -1424,6 +1444,7 @@ export function CtaSection(props: CtaSectionProps) {
                 <CtaPoints shape="stack" markers={markers} points={points} />
                 {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
                 {ratingRow}
+                <CtaNote note={props.note} />
               </Layout>
             </Layout>
             {panel}
@@ -1463,6 +1484,7 @@ export function CtaSection(props: CtaSectionProps) {
               <CtaPoints shape="stack" markers={markers} points={points} />
               {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
               {ratingRow}
+              <CtaNote note={props.note} />
             </Layout>
             {quote ? <CtaQuoteBlock quote={quote} /> : null}
           </Layout>

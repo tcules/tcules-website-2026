@@ -165,6 +165,7 @@
   --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
+  --cta-note-ink: var(--color-neutral-600); /* 4.92:1 — the words' note, Prose's muted ink by value (token rule 6) */
   --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
   /* The quote block: the testimonial card's grounds and inks, by value (token rule 6). */
   --cta-quote-ground: var(--color-paper-deep);
@@ -183,6 +184,7 @@
   --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */ /* 5.51:1 */
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-300); /* decoration; the paper step, quieter on the deeper ground (owner, 19 Nov 2026) */
+  --cta-note-ink: var(--color-neutral-700); /* 7.27:1 — the words' note; neutral-600 fails on tint */
   --cta-panel-ground: var(--color-paper); /* declared for self-containment; no panel is tint (29 Oct 2026) */
   --cta-quote-ground: var(--color-paper);
   --cta-quote-ink: var(--color-neutral-800);
@@ -200,6 +202,7 @@
   --cta-mark-ink: var(--color-brandeis-300); /* the lede's mark */ /* 7.32:1 */
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
+  --cta-note-ink: var(--color-neutral-400); /* 8.05:1 — the words' note */
   --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
   /* One step off the island's neutral-900, as the island is off the footer's 950. */
   --cta-quote-ground: var(--color-neutral-800);
@@ -218,6 +221,7 @@
   --cta-mark-ink: var(--color-brandeis-100); /* the lede's mark */ /* 4.91:1 — AA floor */
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
+  --cta-note-ink: var(--color-brandeis-100); /* 4.91:1 — the words' note, AA floor */
   --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
   /* Blue is never a panel (index.css § Blue): a paper block with paper inks, as the testimonial
      card sets itself on blue. */

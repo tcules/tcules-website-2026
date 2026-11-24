@@ -21,8 +21,9 @@ ${PUBLISHED_HERO}
         actions { name href isExternal }
       }
       ... on ComponentSharedEditorialSection {
-        heading anchorId editorialPresentation: presentation
-        blocks { kind prose { body } links { links { name href } } }
+        heading anchorId editorialPresentation: presentation editorialSurface: surface
+        media { ...PublishedImage }
+        blocks { kind prose { body } links { links { name href isExternal } } }
       }
       ... on ComponentSharedOfferSheetSection {
         heading description anchorId sheetPresentation: presentation
@@ -30,10 +31,10 @@ ${PUBLISHED_HERO}
         action { name href isExternal }
       }
       ... on ComponentSharedChecklistSection {
-        heading anchorId closing entries { text icon }
+        heading anchorId closing checklistSurface: surface entries { text icon }
       }
       ... on ComponentSharedJobListing {
-        heading description anchorId
+        heading description anchorId jobsSurface: surface
         jobs { documentId title department employmentType location isActive publishedAt choiceValue }
       }
       ... on ComponentSharedCta {
