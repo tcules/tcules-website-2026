@@ -18,6 +18,10 @@ export type CareersPageModel = {
     blocks: string[];
     items: { title?: string; bodyHtml: string; icon?: IconName }[];
     action?: HomeAction;
+    /** An editorial band's one onward link, from its link block. */
+    link?: HomeAction;
+    /** The band's ground, as the CMS sets it; paper when unset. */
+    surface?: 'paper' | 'tint';
     closingHtml: string;
     entries: { text: string; icon?: IconName }[];
     jobs: {

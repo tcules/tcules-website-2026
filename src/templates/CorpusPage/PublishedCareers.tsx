@@ -15,6 +15,7 @@ import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { ENDPOINTS } from '@/lib/routes';
 import type { CareersPageModel } from './published-careers-model';
 import { PublishedHero } from './PublishedHome';
+import { labelWithoutArrow } from './text';
 export function PublishedCareers({
   page,
   fallbackMedia,
@@ -49,16 +50,54 @@ export function PublishedCareers({
                 </Collage>
               </Section>
             );
-          case 'ComponentSharedEditorialSection':
+          case 'ComponentSharedEditorialSection': {
+            /* The overhaul's text bands (O.22): words beside a studio photograph ("media"), or
+               beside the heading with the band's one link under them ("head beside"). */
+            const link = section.link ? (
+              <CtaRow
+                rule={false}
+                actions={[{ ...section.link, label: labelWithoutArrow(section.link.label) }]}
+              />
+            ) : undefined;
+            const words = (
+              <ContentSectionText>
+                <Prose html={section.blocks.join('')} />
+              </ContentSectionText>
+            );
+            if (section.editorialPresentation === 'media' && section.art)
+              return (
+                <ContentSection
+                  key={section.key}
+                  {...head}
+                  surface={section.surface ?? 'paper'}
+                  data-band="C-media"
+                  arrangement="media"
+                  media={{ image: section.art, side: 'end' }}
+                  actions={link}
+                >
+                  {words}
+                </ContentSection>
+              );
+            if (section.editorialPresentation === 'head_beside')
+              return (
+                <ContentSection
+                  key={section.key}
+                  {...head}
+                  surface={section.surface ?? 'paper'}
+                  data-band="C-text"
+                  arrangement="beside"
+                  footer={link}
+                >
+                  {words}
+                </ContentSection>
+              );
             return (
               <ContentSection
                 key={section.key}
                 {...head}
-                surface="paper"
+                surface={section.surface ?? 'paper'}
                 data-band="C-text"
-                arrangement={
-                  section.editorialPresentation === 'head_beside' ? 'beside' : 'stacked'
-                }
+                arrangement="stacked"
               >
                 {section.editorialPresentation === 'peer_columns' ? (
                   <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="text">
@@ -77,6 +116,7 @@ export function PublishedCareers({
                 )}
               </ContentSection>
             );
+          }
           case 'ComponentSharedOfferSheetSection':
             return (
               <OfferSheet
@@ -94,27 +134,36 @@ export function PublishedCareers({
               />
             );
           case 'ComponentSharedChecklistSection':
+            /* The overhaul's two-up checklist (O.22; owner, 19 Nov 2026): the heading over the band,
+               the qualities in two columns from 1280 at the size for a set of four rows or more,
+               the closing note under them. */
             return (
               <ContentSection
                 key={section.key}
                 {...head}
-                data-band="list-beside"
-                arrangement="beside"
+                surface={section.surface ?? 'paper'}
+                data-band="D-rows"
               >
-                <Layout as="ul" rowGap="none">
-                  {section.entries.map((entry, i) => (
-                    <ListCard
-                      key={i}
-                      size="md"
-                      titleAs="h3"
-                      title={entry.text}
-                      marker={entry.icon ? { type: 'icon', name: entry.icon } : undefined}
-                    />
-                  ))}
+                <Layout rowGap="block">
+                  <Layout as="ul" columns={{ base: 1, xl: 2 }} colGap="column" rowGap="none">
+                    {section.entries.map((entry, i) => (
+                      <ListCard
+                        key={i}
+                        size="sm"
+                        columns={2}
+                        titleAs="h3"
+                        title={entry.text}
+                        arrangement={entry.icon ? 'hanging' : undefined}
+                        marker={entry.icon ? { type: 'icon', name: entry.icon } : undefined}
+                      />
+                    ))}
+                  </Layout>
+                  {section.closingHtml ? (
+                    <ContentSectionText>
+                      <Prose html={section.closingHtml} />
+                    </ContentSectionText>
+                  ) : null}
                 </Layout>
-                <ContentSectionText>
-                  <Prose html={section.closingHtml} />
-                </ContentSectionText>
               </ContentSection>
             );
           case 'ComponentSharedJobListing':
@@ -122,19 +171,18 @@ export function PublishedCareers({
               <OfferSheet
                 key={section.key}
                 {...head}
+                surface={section.surface ?? 'paper'}
+                /* The count of open roles as the lead (the overhaul's "4 roles"), counted from the
+                   active jobs so it never goes stale; the CMS description replaces it when set. */
+                lead={
+                  section.description ||
+                  `${section.jobs.length} ${section.jobs.length === 1 ? 'role' : 'roles'}`
+                }
                 arrangement="rows"
                 items={section.jobs.map((job) => ({
                   id: job.documentId,
                   title: job.title,
                   facts: [job.department, job.employmentType, job.location],
-                  icon:
-                    job.department === 'Design'
-                      ? 'ruler-pen'
-                      : job.department === 'Engineering'
-                        ? 'code-square'
-                        : job.department === 'Marketing and visual communication'
-                          ? 'palette'
-                          : undefined,
                   href: '#apply',
                   choice: job.choiceValue,
                 }))}
@@ -153,8 +201,9 @@ export function PublishedCareers({
                 island={section.island === 'ink' ? 'ink' : 'blue'}
                 islandArrangement="halves"
                 islandTexture="flow"
-                footnote={section.disclaimer}
-                footnoteIcon="info-circle"
+                /* The "no matching role" line is a note to the ask, on a hairline under the lead
+                   (owner, 19 Nov 2026), not a footnote under the band. */
+                note={section.disclaimer}
                 /* Set to ink in the CMS, the application close is the ink band, with no drawing
                    (decisions/2026-11-18-enquiry-close-is-an-ink-band; owner, 20 Nov 2026). */
                 {...(section.island === 'ink'
