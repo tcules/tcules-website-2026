@@ -6,7 +6,7 @@ area: [motion, imagery, components]
 source: "Devagya, 18 Nov 2026, reviewing figure 7 on /insights/what-an-ai-agent-console-should-show (fix/animated-figures): picked \"Below the image\" over Clip's corner placement; P1 of the article bug report (animated figures froze on most screens, no pause)"
 supersedes: []
 dbf: [ch05 §2]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "Media (MediaMotion renders the control for every `animated` record) + review"
 ---
 

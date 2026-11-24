@@ -6,7 +6,7 @@ area: [colour, layout]
 source: "Owner, 5 Oct 2026"
 supersedes: []
 dbf: ["ch02 §8"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/ui-kit-direction-oct-2026.md"
 ---

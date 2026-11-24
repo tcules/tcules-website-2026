@@ -6,7 +6,7 @@ area: [cards, imagery]
 source: Owner ruling, 29 Sep 2026; docs/dbf-ch05-amendments.md item 5a
 supersedes: []
 dbf: [ch05 §2, ch05 §9]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 legacy: dbf-ch05-amendments 5a
 ---

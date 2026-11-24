@@ -6,7 +6,7 @@ area: [components, iconography]
 source: "Devagya, insights finder rounds 28–29 Oct 2026, approved built 29 Oct 2026 (design/insights-filters)"
 supersedes: []
 dbf: ["ch04 Choosing a glyph"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "tokens (--tag-filter-*-pressed, --tag-filter-glyph-ink-pressed, --tag-glyph-size in tokens/components/tag.css)"
 ---
 

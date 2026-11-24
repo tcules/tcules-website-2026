@@ -6,7 +6,7 @@ area: [illustration]
 source: "Devagya, 5 Nov 2026, illustration run (TRACKER 2.61), seen on the drawn and reviewed set: \"the rules have changed a lot. now we're able to use real life shapes and elements\"; \"all older rules are loose. consistency is appreciated\""
 supersedes: [2026-10-23-illustration-lines-follow-iso-axes, 2026-09-28-illustration-aspect-limit, 2026-09-28-illustrations-face-left-read-left-to-right]
 dbf: [ch05 §4, ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

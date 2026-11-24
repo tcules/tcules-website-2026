@@ -6,7 +6,7 @@ area: [cards, imagery]
 source: Owner ruling, 29 Sep 2026, on the case-study index; docs/dbf-ch05-amendments.md item 5b
 supersedes: []
 dbf: [ch05 §6, ch05 §9, ch05 §12]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 legacy: dbf-ch05-amendments 5b
 ---

@@ -6,7 +6,7 @@ area: [colour, type, layout]
 source: Owner, social carousel canvas review 16 Nov 2026 (direction A · Folio, https://claude.ai/artifact/QWobY2XgMkhCTL45T6dHf3), built and approved on /design/social 17 to 24 Nov 2026
 supersedes: [2026-09-25-social-families-told-by-eyebrow]
 dbf: [ch10 §A2, ch10 §A4, ch10 §A6, ch10 §B2, ch10 §B3, ch10 §B4]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 
