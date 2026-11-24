@@ -1,3 +1,4 @@
+import type { SketchName } from '@/components';
 import type { DataTableProps, GatewayPath, LogoGridMark, OfferSheetItem } from '@/patterns';
 import type { HomeHero, HomeSection, HomeAction } from './published-home-model';
 type Head = {
@@ -16,7 +17,16 @@ export type WorkSection =
         | {
             type: 'work-flow';
             lead?: string;
+            /** The heading in its own column, the words beside it (editorial "head beside"). */
+            beside?: boolean;
+            action?: HomeAction;
             blocks: ({ html: string } | { table: DataTableProps })[];
+          }
+        | {
+            type: 'work-facts';
+            lead?: string;
+            scene?: SketchName;
+            items: { title: string; body?: string }[];
           }
         | {
             type: 'work-offer';
