@@ -7,5 +7,4 @@ export {
   WORDMARK_VIEWBOX,
   type LogoProps,
   type LogoSize,
-  type LogoVariant,
 } from './Logo';
