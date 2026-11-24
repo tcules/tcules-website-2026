@@ -23,11 +23,13 @@ import {
   ChatThread,
   CaseCard,
   ContentSection,
+  ContentSectionText,
   CtaRow,
   CtaSection,
   EngagementOptions,
   EnquiryForm,
   GatewayPaths,
+  ListCard,
   LogoGrid,
   OfferParts,
   OfferSheet,
@@ -651,6 +653,60 @@ export function PublishedSection({
           />
         </ContentSection>
       );
+    case 'drawing-rows': {
+      /* The overhaul's rows band with a drawing (tcules-cms-2026#5): the heading over the whole band,
+         the drawing beside its rows under it (owner, 19 Nov 2026), head, drawing, rows on a phone. */
+      const rowsAction = section.action
+        ? { ...section.action, converts: section.action.href === ROUTES.contact }
+        : undefined;
+      return (
+        <ContentSection
+          {...head}
+          surface={section.ground ?? section.surface}
+          lead={section.lead}
+          arrangement="media"
+          media={
+            section.scene
+              ? { drawing: <Sketch name={section.scene} />, side: 'start', headAbove: true }
+              : {
+                  image: {
+                    ...placeholderImage('/_overhaul', 'drawing'),
+                    alt: 'Drawing to come',
+                  },
+                  side: 'start',
+                  headAbove: true,
+                }
+          }
+          actions={
+            rowsAction ? (
+              <CtaRow rule={false} phone="row" joined={!section.noteHtml} actions={[rowsAction]} />
+            ) : undefined
+          }
+          coda={section.statement}
+        >
+          <Layout as="ul" rowGap="none">
+            {section.rows.map((row) => (
+              <ListCard
+                key={row.title}
+                title={row.title}
+                titleAs="h3"
+                eyebrow={row.label}
+                verdict={row.verdict}
+                body={row.body}
+                arrangement="hanging"
+                marker={row.icon ? { type: 'icon', name: row.icon } : undefined}
+              />
+            ))}
+          </Layout>
+          {/* The source line is a note, not body text (owner, 18 Nov 2026): Prose's small print. */}
+          {section.noteHtml ? (
+            <ContentSectionText>
+              <Prose html={`<p><small>${section.noteHtml}</small></p>`} />
+            </ContentSectionText>
+          ) : null}
+        </ContentSection>
+      );
+    }
     case 'chat':
       return (
         <ContentSection

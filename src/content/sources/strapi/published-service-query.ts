@@ -6,6 +6,11 @@ import {
   PUBLISHED_FIELDS,
   PUBLISHED_HERO,
   PUBLISHED_TESTIMONIALSECTION,
+  PUBLISHED_PRODUCTSTAGES,
+  PUBLISHED_CHATTHREAD,
+  PUBLISHED_FREETOOLS,
+  PUBLISHED_OTHERRESOURCES,
+  PUBLISHED_DRAWINGROWS,
 } from './published-page-fields';
 
 /** The Why section and the Industry Grid as every page owner's zone selects them (Service, Audit Master). */
@@ -13,7 +18,7 @@ export const PUBLISHED_WHYSECTION = `
       ... on ComponentSharedWhySection {
         id heading anchorId whySurface: surface cta { ...PublishedAction }
         whyCards: cards {
-          id variant title points { text }
+          id variant title icon points { text }
           illustration { url width height alternativeText formats }
           media { url width height alternativeText formats }
         }
@@ -42,7 +47,7 @@ export const SHARED_SECTION_MEMBERS = `
         markOverrides { client { documentId } media { url width height alternativeText } density width height }
       }
       ... on ComponentSharedServiceCard {
-        id heading anchorId description variant serviceSurface: surface
+        id heading anchorId description variant serviceSurface: surface singleGridPresentation
         singleGridContent { id title description href illustration { ...ServiceIllustration } service { slug } }
         twoGridContent {
           id ctaText detail { label body }
@@ -89,6 +94,11 @@ ${PUBLISHED_TESTIMONIALSECTION}
 ${PUBLISHED_ENGAGEMENTOPTIONS}
 ${PUBLISHED_FAQSECTION}
 ${PUBLISHED_CTA}
+${PUBLISHED_PRODUCTSTAGES}
+${PUBLISHED_CHATTHREAD}
+${PUBLISHED_FREETOOLS}
+${PUBLISHED_OTHERRESOURCES}
+${PUBLISHED_DRAWINGROWS}
 `;
 
 /** The named fragments `SHARED_SECTION_MEMBERS` spreads, with the shared page fields. */

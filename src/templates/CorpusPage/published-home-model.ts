@@ -212,6 +212,26 @@ export type HomeSection = SectionHead &
         close?: { line?: string; action: HomeAction };
       }
     | {
+        /** Rows beside a drawing (tcules-cms-2026#5; the overhaul's RowsBand with a drawing): MVP's
+            "what sits underneath" on ink and "the prototype is the brief" with its keep / fix /
+            rebuild legend. */
+        type: 'drawing-rows';
+        /** Its own ground, ink included (the shared head's `surface` is paper or tint only). */
+        ground?: 'paper' | 'tint' | 'ink';
+        lead?: string;
+        scene?: SketchName;
+        noteHtml?: string;
+        statement?: string;
+        action?: HomeAction;
+        rows: {
+          label?: string;
+          verdict?: 'keep' | 'fix' | 'rebuild';
+          title: string;
+          body?: string;
+          icon?: IconName;
+        }[];
+      }
+    | {
         /** The first-call conversation: the client's line, then Tcules' reply (O.5). */
         type: 'chat';
         lead?: string;

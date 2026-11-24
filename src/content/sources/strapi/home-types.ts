@@ -182,6 +182,9 @@ export type CmsHomeSection = Band &
           quoteHtml: Text;
           rating: Maybe<number>;
           ratingIsPlaceholder: Maybe<boolean>;
+          /** The case this quote comes from (tcules-cms-2026#5), published only. */
+          caseStudy?: Maybe<{ slug: Text; title: Text }>;
+          caseLinkLabel?: Text;
           avatarIsPlaceholder: Maybe<boolean>;
           avatar: Maybe<StrapiUploadFile>;
         }>;
@@ -318,6 +321,23 @@ export type CmsHomeSection = Band &
         }>;
         closingLine: Text;
         closingAction: Maybe<CmsAction>;
+      }
+    | {
+        __typename: 'ComponentSharedDrawingRows';
+        description: Text;
+        rowsSurface: Maybe<'paper' | 'tint' | 'ink'>;
+        drawing: Text;
+        note: Text;
+        statement: Text;
+        action: Maybe<CmsAction>;
+        rows: Entries<{
+          id: string;
+          label: Text;
+          verdict: Maybe<'keep' | 'fix' | 'rebuild'>;
+          title: Text;
+          body: Text;
+          icon: Text;
+        }>;
       }
     | {
         __typename: 'ComponentSharedChatThread';
