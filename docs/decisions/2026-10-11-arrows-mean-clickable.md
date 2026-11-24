@@ -6,7 +6,7 @@ area: [iconography]
 source: "Owner review, 11 Oct 2026"
 supersedes: []
 dbf: ["ch04 §7"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/home-review-patterns-oct-2026.md"
 ---
