@@ -6,7 +6,7 @@ area: [layout, type, colour]
 source: Owner reviews of /design/social, 17 Nov 2026 (notes #8 to #32)
 supersedes: []
 dbf: [ch10 §B2, ch10 §A5, ch10 §A8]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

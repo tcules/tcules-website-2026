@@ -6,7 +6,7 @@ area: [cards, imagery]
 source: "Owner, 5 Oct 2026"
 supersedes: ["2026-09-28-which-cards-carry-an-image"]
 dbf: ["ch05 §9", "ch05 §12"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/ui-kit-direction-oct-2026.md"
 ---

@@ -6,7 +6,7 @@ area: [illustration]
 source: "Devagya, 5 Nov 2026, on the /services hero pilot: \"the laptop is fully blue which i don't like. that could have a light body with just the screen in dark blue\"; on the healthtech pilot: \"blue phone is fine\""
 supersedes: []
 dbf: [ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

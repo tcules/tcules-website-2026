@@ -6,11 +6,11 @@ document, and they cross-link to each other.
 | File | Chapter | Version |
 |---|---|---|
 | `00 Cover and Contents.html` | Cover, contents, reading conventions | 0.1 |
-| `02 Colour.html` | Palettes, surface model, roles, proportion, pairing | 1.0 |
+| `02 Colour.html` | Palettes, surface model, roles, proportion, pairing | 1.1 |
 | `03 Typography.html` | Families, roles, measure, hierarchy | 0.2 |
-| `04 Iconography.html` | Solar Bold, sizes, colour, meaning | 0.2 |
-| `05 Imagery.html` | Client work, photography, illustration, placements | 1.0 |
-| `10 Social media.html` | Posts and share previews | 1.0 |
+| `04 Iconography.html` | Solar Bold, sizes, colour, meaning | 0.3 |
+| `05 Imagery.html` | Client work, photography, illustration, placements | 1.1 |
+| `10 Social media.html` | Posts and share previews | 1.1 |
 
 Every other file here is a dependency of those six: `dbf.css` and `dbf-social.css` style them,
 `doc-page.js` is the paged-document shell, `image-slot.js` backs the image placeholders in 05, and the

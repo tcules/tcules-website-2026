@@ -6,7 +6,7 @@ area: [imagery, cards, illustration]
 source: "Devagya, 26 Oct 2026, product-design service page mock rounds 1–4 (https://claude.ai/artifact/8d5ZWF4hQTMkJ57iZDc4Em), approved to build; branch design/service-page-pd"
 supersedes: ["2026-09-24-cover-may-be-ui-cut-out-or-illustration"]
 dbf: [ch05 §9a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 

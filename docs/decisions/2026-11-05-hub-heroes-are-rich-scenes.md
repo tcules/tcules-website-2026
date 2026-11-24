@@ -6,7 +6,7 @@ area: [illustration]
 source: "Devagya, 5 Nov 2026, on the /services hero pilot: \"far too simple. look at the expertise hub page, it shows many different aspects in one screen. so something similar for the hub page\"; on /why-tcules: \"an important page so we need to ensure that it isn't very simple and conveys the messaging we need to\""
 supersedes: []
 dbf: [ch05 §4]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 
