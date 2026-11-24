@@ -3,7 +3,7 @@ title: "How we work takes the overhaul; its AI band is paragraphs, its terms kee
 date: 2026-11-24
 status: active
 area: [components, content]
-source: "Owner, 24 Nov 2026: How we work next (\"yes\"). \"How we use AI in our own work\": \"Overhaul paragraphs\". \"The terms when you outsource UX design to Tcules\": \"Keep the drawings\"."
+source: "Owner, 24 Nov 2026: How we work next (\"yes\"). Four-across grids: \"Global: four across\". \"How we use AI in our own work\": \"Overhaul paragraphs\". \"The terms when you outsource UX design to Tcules\": \"Keep the drawings\"."
 supersedes: []
 dbf: []
 dbf_status: none
@@ -20,6 +20,10 @@ not the live icon rows.
 
 **The terms keep their drawings** with the overhaul's copy. The overhaul set them as text-only tiles,
 which tracker O.15 would have had to give a shape later.
+
+**A grid of four or more text tiles reads four across** on every How we work page, as the overhaul sets
+its tile sets (owner, 24 Nov 2026: "Global: four across"). /how-we-work/ai-native-product-design's four
+decisions become one row with it.
 
 **Why.** The overhaul is the final copy and order; the terms already had the shape O.15 asks for.
 
