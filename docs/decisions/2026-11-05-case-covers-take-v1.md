@@ -6,7 +6,7 @@ area: [imagery, cards]
 source: "Devagya, 3 Nov 2026, Scissors cover round (V1 picked for every case cover); covers delivered and Kirana ruled 5 Nov 2026, branch design/case-covers-v1"
 supersedes: []
 dbf: [ch05 §9a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

@@ -6,7 +6,7 @@ area: [illustration]
 source: "Owner, 28 Sep 2026"
 supersedes: []
 dbf: ["ch05 §4c"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/illustration-examples-not-assets.md"
 ---

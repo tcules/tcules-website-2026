@@ -6,7 +6,7 @@ area: [illustration, imagery]
 source: Owner, 16 Nov 2026 ("any sketch scene that is relevant for the content can be used") and review 17 Nov 2026 (the borrowed hero illustrations "aren't 100% relevant so I think we can draw new ones that are more relevant to the title of the post"; concepts approved in words, then drawn)
 supersedes: []
 dbf: [ch05 §4d, ch05 §9, ch10 §A7]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

@@ -6,7 +6,7 @@ area: [proof, components]
 source: "Owner, 1 Nov 2026, reviewing /insights/* on feat/insights-rich-text (\"no avatar circle?\"; then \"overturn and show initials for no photos\")"
 supersedes: [2026-10-11-avatars-are-photos-or-nothing]
 dbf: ["ch05 §6"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 

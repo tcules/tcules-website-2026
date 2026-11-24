@@ -6,7 +6,7 @@ area: [illustration]
 source: "Owner review, 16 Oct 2026 (enquiry close, round 7)"
 supersedes: []
 dbf: ["ch05 §4a"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/review-15-oct-2026-queue.md"
 ---

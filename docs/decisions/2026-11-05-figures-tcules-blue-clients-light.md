@@ -6,7 +6,7 @@ area: [illustration]
 source: "Devagya, 5 Nov 2026, illustration run, on the drawn heroes and the /why-tcules band: \"blue figurines are Tcules people. white/light blue figurines are clients etc. white/lb figurines should have white/lb hands outlined in blue\"; \"white figurines have thicker hands than blue ones. match the weight\"; \"the blue figures should have a white outline so they can read separate from other blue elements that overlap\"; \"we cant have 4 blue people in one frame. we can have 3 pairs so it shows that we work directly with the client\""
 supersedes: [2026-10-30-illustrations-carry-people]
 dbf: [ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

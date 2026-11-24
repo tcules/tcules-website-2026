@@ -6,7 +6,7 @@ area: [illustration, colour]
 source: "Owner, 23 Oct 2026 (enquiry close illustration, PR feat/enquiry-close-flow)"
 supersedes: [2026-09-25-no-illustrations-on-blue]
 dbf: [ch05 §4a]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 

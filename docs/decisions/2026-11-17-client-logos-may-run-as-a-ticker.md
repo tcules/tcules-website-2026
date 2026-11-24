@@ -6,7 +6,7 @@ area: [proof, components, motion]
 source: "Owner, 17 Nov 2026 (page overhaul planning, Jatin's 9-page canvas; PR feat/logo-marquee)"
 supersedes: [2026-10-07-boxed-logo-grid]
 dbf: [ch05 §10]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 ---
 
