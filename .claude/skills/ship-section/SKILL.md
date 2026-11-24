@@ -15,8 +15,8 @@ fixture, a mapper trick or a title-matched lookup (owner, 19 Nov 2026). The chec
 priority order, is the rollout doc (claude.ai/artifact/9WE2XuEn5j31owHTQtgZf1); tick an item there when it
 is live.
 
-Devagya does two things per section: looks at it on staging, and merges. Mihir reviews and deploys CMS
-pull requests. Everything else is Claude's.
+Devagya does two things per section: looks at it on staging, and merges, CMS pull requests included
+(Devagya merges and deploys them; owner, 24 Nov 2026). Everything else is Claude's.
 
 ## Where things are
 
@@ -43,7 +43,7 @@ pull requests. Everything else is Claude's.
    - Help text goes on every new field. The field also goes into the edit layout and
      `types/generated/*`.
    - Run `npm test`, and the same suite on the base branch: report only failures the change introduced.
-   - Open the PR against the migration branch for Mihir. Merging changes nothing on the live site,
+   - Open the PR against the migration branch for Devagya to merge and deploy. Merging changes nothing on the live site,
      because no query asks for the field yet.
 3. **Wait for the deploy.** Confirm the field in the live schema before any website change that queries
    it can render. A GraphQL query naming a field the CMS lacks fails the whole page.
