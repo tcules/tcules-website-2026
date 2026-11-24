@@ -1,7 +1,7 @@
 ---
 title: 'new-cms is production and main is staging; new-cms comes down by merge, main goes up by PR'
 date: 2026-11-17
-status: active
+status: superseded
 area: [process]
 source: 'Owner, 17 Nov 2026, in a session on whether main should connect to the CMS: "new-cms should remain the production branch with main acting as staging", "we don''t want to block \"/design\" route so i''d rather keep it deleted on production", and Mihir keeps committing to new-cms directly'
 supersedes: []

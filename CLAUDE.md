@@ -24,9 +24,9 @@ stash, reset, rebase or check out over changes, and never delete a folder or wor
 it for unsaved work and asking. If anything is in the way, say so and carry on with the person's work.
 Then give a catch-up of five lines or fewer: what merged recently, what's open (`gh pr list` if `gh` is
 installed, otherwise `git log origin/main`), and the latest "Handoff" note on this branch's pull request.
-If `origin/new-cms` has commits `origin/main` lacks (`git rev-list --count origin/main..origin/new-cms`),
-say so in the catch-up and offer to open the sync PR (`new-cms` into `main`, merged with a merge commit; owner,
-17 Nov 2026; decisions/2026-11-17-new-cms-is-production-main-is-staging).
+`new-cms` is production and `main` is staging, and every change goes to both as two PRs. Neither branch is
+ever merged into the other, so there's no sync to offer (owner, 24 Nov 2026;
+decisions/2026-11-24-every-change-is-two-prs).
 
 **Designers and gtm aren't technical.** Never ask them to rebase, stash, reset, merge or force-push;
 describe what is happening to their work, offer plain choices, and do the git work for them.
