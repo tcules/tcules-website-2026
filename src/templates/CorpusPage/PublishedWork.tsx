@@ -1,4 +1,4 @@
-import { Layout, Media, Prose, Section } from '@/components';
+import { Layout, Media, Prose, Section, Sketch } from '@/components';
 import {
   ContentSection,
   ContentSectionText,
@@ -7,6 +7,7 @@ import {
   DataTable,
   EnquiryForm,
   GatewayPaths,
+  ListCard,
   LogoGrid,
   OfferSheet,
 } from '@/patterns';
@@ -14,6 +15,7 @@ import { ENDPOINTS } from '@/lib/routes';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import { INK_CLOSE_DRESS, inkCloseProps, isInkClose } from './ink-close';
 import { PublishedEngagement, PublishedHero, PublishedSection } from './PublishedHome';
+import { labelWithoutArrow } from './text';
 import type { WorkPageModel, WorkSection } from './published-work-model';
 function WorkBand({ s, route }: { s: WorkSection; route: string }) {
   const head = { id: s.id, heading: s.heading, headingId: s.headingId };
@@ -55,15 +57,60 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
           {...head}
           surface={s.surface}
           arrangement={s.list ? 'list' : 'grid'}
-          across={s.list ? 3 : 2}
+          /* A grid of four or more reads four across, as the overhaul's "What stays the same" (O.20). */
+          across={s.list ? 3 : s.items.length >= 4 ? 4 : 2}
           lead={s.lead}
           items={s.items}
           note={s.action ? <CtaRow rule={false} actions={[s.action]} /> : undefined}
         />
       );
+    case 'work-facts':
+      /* The overhaul's drawn facts (O.20, owner 19 Nov 2026, round 11): head, the drawing across the
+         content width, then the facts as tiles, three across from 1024, two from 768, one on a phone. */
+      return (
+        <ContentSection {...head} surface={s.surface} lead={s.lead} data-band="D-facts">
+          {s.scene ? <Sketch name={s.scene} /> : null}
+          <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
+            {s.items.map((item) => (
+              <ListCard
+                key={item.title}
+                form="tile"
+                size="sm"
+                titleAs="h3"
+                title={item.title}
+                body={item.body}
+              />
+            ))}
+          </Layout>
+        </ContentSection>
+      );
     case 'work-flow': {
       const hasTable = s.blocks.some((block) => 'table' in block);
       const prose = s.blocks.flatMap((block) => ('html' in block ? [block.html] : []));
+      if (s.beside && !hasTable)
+        /* Head beside (O.20, the overhaul's "How we use AI in our own work"): the words beside the
+           heading, the band's one link under them. */
+        return (
+          <ContentSection
+            {...head}
+            surface={s.surface}
+            lead={s.lead}
+            data-band="C-text"
+            arrangement="beside"
+            footer={
+              s.action ? (
+                <CtaRow
+                  rule={false}
+                  actions={[{ ...s.action, label: labelWithoutArrow(s.action.label) }]}
+                />
+              ) : undefined
+            }
+          >
+            <ContentSectionText>
+              <Prose html={prose.join('')} />
+            </ContentSectionText>
+          </ContentSection>
+        );
       return (
         <ContentSection
           {...head}
@@ -141,7 +188,7 @@ function WorkBand({ s, route }: { s: WorkSection; route: string }) {
       section={
         s as Exclude<
           WorkSection,
-          { type: 'work-logos' | 'work-situations' | 'work-flow' | 'work-offer' }
+          { type: 'work-logos' | 'work-situations' | 'work-flow' | 'work-offer' | 'work-facts' }
         >
       }
       route={route}
