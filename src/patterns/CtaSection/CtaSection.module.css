@@ -426,6 +426,23 @@
   }
 }
 
+/* The words' note (`note`): opened by the neutral hairline the ruled points take, the caption role
+   in the surface's muted ink. The frame carries the rule at the LEDE's measure, set in the lede's
+   font so its `ch` is the lede's, so rule and lede end on one edge; the line under it wraps inside.
+   The rule-to-words distance is the note's own inset under its border, `text` (16). */
+.noteFrame {
+  max-inline-size: var(--cta-lede-measure);
+  padding-block-start: var(--gap-text);
+  border-block-start: var(--cta-rule-width) solid var(--cta-rule-ink);
+  font: var(--cta-lead-text);
+}
+
+.note {
+  font: var(--text-caption);
+  color: var(--cta-note-ink);
+  text-wrap: var(--text-running-wrap);
+}
+
 /* The island's footnote (`footnote`): one plain line under the island on the band's ground, in the
    band's own ink, at the body's measure. */
 .footnote {

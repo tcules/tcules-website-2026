@@ -63,8 +63,8 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [x] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation Live from Strapi (decisions/2026-11-24-service-pages-take-the-overhaul).
 - [ ] **O.19** B2B SaaS expertise (after O.7, O.8)
 - [x] **O.20** How we work Live from Strapi (decisions/2026-11-24-how-we-work-takes-the-overhaul).
-- [ ] **O.21** About
-- [ ] **O.22** Careers
+- [ ] **O.21** About (deferred until Jatin's update; owner, 24 Nov 2026)
+- [x] **O.22** Careers Live from Strapi (decisions/2026-11-24-careers-takes-the-overhaul).
 - [ ] **O.23** Contact (after the form decision below)
 
 ### On hold
