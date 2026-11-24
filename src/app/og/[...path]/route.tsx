@@ -24,9 +24,16 @@ export async function generateStaticParams() {
   );
 }
 
+/** Every card id starts with this (`card.ts`: `tcules-og-{type}-{slug}-{version}-{hash}`). */
+const CARD_ID_PREFIX = 'tcules-og-';
+
 export async function GET(_request: Request, { params }: RouteContext<'/og/[...path]'>) {
   const { path } = await params;
-  const page = `/${path.slice(0, -1).join('/')}`;
+  /* A link without an id, typed or pasted by hand as /og/<page path>, draws that page's card. Read
+     blindly, its last segment would be taken as the id and every /og/services/<line> would draw the
+     /services card (owner, 24 Nov 2026). */
+  const hasId = path.at(-1)?.startsWith(CARD_ID_PREFIX) ?? false;
+  const page = `/${(hasId ? path.slice(0, -1) : path).join('/')}`;
   /* Any id draws the page's CURRENT card: an id from before a new drawing or title still unfurls,
      with today's picture, rather than failing a re-fetch. */
   return renderShareCard(await shareCardFor(page));
