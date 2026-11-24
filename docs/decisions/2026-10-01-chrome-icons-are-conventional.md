@@ -6,7 +6,7 @@ area: [iconography]
 source: "Owner, 1 Oct 2026"
 supersedes: []
 dbf: ["ch04 §2", "ch04 §3"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "review"
 legacy: "memory/chrome-icons-are-conventional.md"
 ---

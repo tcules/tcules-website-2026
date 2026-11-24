@@ -6,7 +6,7 @@ area: [iconography, cards, layout]
 source: "Owner review, 29 Oct 2026 (feat/new-copy, home \"Selected thinking from the studio\")"
 supersedes: [2026-10-29-resource-rows-carry-format-icons]
 dbf: [ch04 Choosing a glyph]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "structure (Teaser `metaAside` meta column and copy stack; TEASER_FORMAT_ICON in src/patterns/Teaser/Teaser.tsx)"
 ---
 

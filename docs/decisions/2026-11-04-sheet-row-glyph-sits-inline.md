@@ -6,7 +6,7 @@ area: [iconography, cards]
 source: "Owner, building /clients \"What clients have asked us to do\", 4 Nov 2026 (feat/2-58-clients)"
 supersedes: []
 dbf: [ch04 Choosing a glyph]
-dbf_status: pending
+dbf_status: applied
 enforced_by: "structure (OfferSheet `arrangement=\"rows\"`, item `icon`; OfferBands SHEET_GLYPHS)"
 ---
 

@@ -6,7 +6,7 @@ area: [forms, iconography]
 source: "Jatin, feedback session 26 Oct 2026 (asked for 'an icon that shows the speed over checkbox'); Devagya picked the bolt over a stopwatch, then bolt-circle over the bare bolt ('it probably looks better'), 28 Oct 2026. Seen rendered and approved by Devagya, 28 Oct 2026."
 supersedes: []
 dbf: ["ch04 Choosing a glyph"]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 
