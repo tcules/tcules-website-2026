@@ -17,12 +17,10 @@
    colour, which is how the nav's wordmark once went blue on hover (SiteNav spec §12.28). The
    wordmark is not text; it is one fixed artwork per ground. Hence --logo-ink.
 
-   ── Why the bar is a second token ──────────────────────────────────────────────
-   variant="accent" — marketing scale on a light ground — paints the bar brandeis-500, the one
-   coloured value the brand allows in the mark. On ink and blue the brand allows none, so
-   --logo-bar there is the wordmark's own ink and accent renders exactly as mono. variant="mono"
-   is the default and what chrome renders; it paints the bar --logo-ink and never reads
-   --logo-bar at all.
+   ── The bar ───────────────────────────────────────────────────────────────────
+   The bar above the "u" takes --logo-ink like the letterforms: the mark is one colour on every
+   ground. The brandeis-500 bar (the old variant="accent", --logo-bar) is retired: a blue bar on
+   the black mark is no longer valid for any use (owner, 17 Nov 2026).
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
@@ -40,11 +38,9 @@
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────
-   neutral-950, as ch02 names it — deliberately not Section's neutral-900 paper ink. The bar is
-   the brand blue, for variant="accent" at marketing scale. */
+   neutral-950, as ch02 names it — deliberately not Section's neutral-900 paper ink. */
 :root,[data-surface="paper"]{
 --logo-ink:var(--color-neutral-950);
---logo-bar:var(--color-brandeis-500);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -52,15 +48,12 @@
    a tint panel nested inside an ink section does not take ink's white. */
 [data-surface="tint"]{
 --logo-ink:var(--color-neutral-950);
---logo-bar:var(--color-brandeis-500);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   White throughout (ch02): the bar is the wordmark's own ink, so accent and mono render the
-   same mark here. Replaces the brandeis-300 lift this layer used to make. */
+   White throughout (ch02). Replaces the brandeis-300 lift this layer used to make. */
 [data-surface="ink"]{
 --logo-ink:var(--color-white);
---logo-bar:var(--color-white);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -68,5 +61,4 @@
    this surface used to take is gone. */
 [data-surface="blue"]{
 --logo-ink:var(--color-white);
---logo-bar:var(--color-white);
 }

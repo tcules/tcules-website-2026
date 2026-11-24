@@ -46,14 +46,3 @@
   fill: var(--logo-ink);
 }
 
-/* variant="accent" — the bar above the "u" in brand colour, for the mark at marketing scale on a
-   light ground. Remapped per surface in the token layer, where the dark grounds take ink. */
-.bar {
-  fill: var(--logo-bar);
-}
-
-/* variant="mono", the default — the bar joins the letterforms, so the whole mark is one colour.
-   The chrome treatment ch02 asks for: neutral-950 on the light grounds, white on the dark ones. */
-.barMono {
-  fill: var(--logo-ink);
-}

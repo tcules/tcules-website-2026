@@ -1,7 +1,7 @@
 ---
 title: Social content families are told apart by the eyebrow and row pattern, not by ground
 date: 2026-09-25
-status: active
+status: superseded
 area: [colour, type]
 source: Owner, DBF consistency pass 25 Sep 2026; recorded in ch10 v1.0 §F2 decision 02
 supersedes: []
