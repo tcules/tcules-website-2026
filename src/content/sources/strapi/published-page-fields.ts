@@ -12,7 +12,7 @@ export const PUBLISHED_CASESTUDYCARDS = `
 export const PUBLISHED_TESTIMONIALSECTION = `
       ... on ComponentSharedTestimonialSection {
         id heading anchorId voicesSurface: surface voicesSide: mediaSide testimonialPresentation: presentation avatarPolicy
-        testimonials { documentId name role company quoteHtml rating ratingIsPlaceholder avatarIsPlaceholder avatar { url alternativeText width height formats } }
+        testimonials { documentId name role company quoteHtml rating ratingIsPlaceholder avatarIsPlaceholder avatar { url alternativeText width height formats } caseStudy { slug title } caseLinkLabel }
         rating { ...PublishedRating }
       }
 `;
@@ -57,6 +57,29 @@ export const PUBLISHED_FREETOOLS = `
       ... on ComponentSharedFreeTools {
         id heading anchorId description toolsSurface: surface
         toolCards: cards { id resolved }
+      }
+`;
+
+/* Rows beside a drawing (tcules-cms-2026#5): MVP's "what sits underneath" and "the prototype is the brief". */
+export const PUBLISHED_DRAWINGROWS = `
+      ... on ComponentSharedDrawingRows {
+        id heading anchorId description rowsSurface: surface drawing note statement
+        action { ...PublishedAction }
+        rows { id label verdict title body icon }
+      }
+`;
+
+/* The insights band ("Thinking from our own projects", "Notes on product design"): Home and, since
+   tcules-cms-2026#5, service and expertise pages. */
+export const PUBLISHED_OTHERRESOURCES = `
+      ... on ComponentResourceOtherResources {
+        id heading anchorId description resourcesSurface: surface resourcePresentation: presentation
+        action { ...PublishedAction }
+        items { id icon resolved }
+        resources {
+          documentId title slug description readingTime resourceType { name slug }
+          thumbnail { title description readingTime omitReadingTime scene image { ...PublishedImage } relatedImage { ...PublishedImage } }
+        }
       }
 `;
 

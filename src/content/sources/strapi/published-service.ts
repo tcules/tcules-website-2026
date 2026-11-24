@@ -11,10 +11,11 @@ import type {
   ServiceArt,
   ServiceOfferCard,
 } from '@/templates/CorpusPage/published-service-model';
+import type { HomeSection } from '@/templates/CorpusPage/published-home-model';
 
 import { parseBlocks } from '../corpus/parse-body';
 import { parseInline } from '../corpus/parse-inline';
-import { action, actionHref, illustration, image, mapBand, mapHero, rows, text } from './home';
+import { action, actionHref, icon, illustration, image, mapBand, mapHero, rows, text } from './home';
 import type {
   CmsAction,
   CmsHero,
@@ -102,6 +103,8 @@ type ServiceOnlySection = Band &
         description: Text;
         variant: 'single_grid_content' | 'two_grid_content' | null;
         serviceSurface: Surface;
+        /** `rows` (tcules-cms-2026#5): plain ruled rows with an arrow, the overhaul's onward links. */
+        singleGridPresentation?: Text;
         singleGridContent: Entries<CmsTile>;
         twoGridContent: Entries<{
           id: string;
@@ -152,6 +155,8 @@ type ServiceOnlySection = Band &
           id: string;
           variant: 'illustration' | 'media' | null;
           title: Text;
+          /** A Solar name (tcules-cms-2026#5), used before an upload. */
+          icon?: Text;
           points: Entries<{ text: Text }>;
           illustration: StrapiUploadFile | null;
           media: StrapiUploadFile | null;
@@ -516,6 +521,7 @@ export function mapSharedSection(
         type: 'service-cards',
         surface: section.serviceSurface ?? undefined,
         variant: two ? 'two' : 'single',
+        rows: !two && text(section.singleGridPresentation) === 'rows',
         lead: text(section.description),
         before: flow(section.before),
         after: flow(section.after),
@@ -571,8 +577,10 @@ export function mapSharedSection(
           }
           const variant = card.variant === 'media' ? 'media' : 'illustration';
           const picture = upload(variant === 'media' ? card.media : card.illustration);
-          if (!picture) warn(`${key} why card "${title}" has no ${variant} upload`);
-          return [{ id: card.id, title, variant, image: picture, body }];
+          if (!picture && !card.icon) warn(`${key} why card "${title}" has no ${variant} upload`);
+          const glyph = icon(card.icon);
+          if (card.icon && !glyph) warn(`${key} why card "${title}" has an unknown icon "${card.icon}"`);
+          return [{ id: card.id, title, variant, image: picture, body, icon: glyph }];
         }),
       };
     case 'ComponentSharedComparisonSection':
@@ -645,6 +653,9 @@ export function mapSharedSection(
       };
     }
     case 'ComponentSharedCaseStudyCards':
+      /* The wide alternating cards (the overhaul's Selected work): Home's band, client and tag
+         included, so a service page draws them exactly as Home does. */
+      if (section.casePresentation === 'horizontal_alternating') return published(mapBand(section, route));
       return {
         ...head,
         type: 'cases',
@@ -736,6 +747,13 @@ export function mapSharedSection(
         case 'faq':
         case 'cta':
           return mapped;
+        /* The overhaul's bands (tcules-cms-2026#3, #5): drawn as Home draws them. */
+        case 'stages':
+        case 'chat':
+        case 'tools':
+        case 'resources':
+        case 'drawing-rows':
+          return published(mapped);
         case undefined:
           return undefined;
         default:
@@ -744,6 +762,11 @@ export function mapSharedSection(
       }
     }
   }
+}
+
+/** A Home band a service page draws through Home's own renderer (`PublishedSection`). */
+function published(band: HomeSection | undefined): PublishedServiceSection | undefined {
+  return band ? { key: band.key, type: 'published', band } : undefined;
 }
 
 /** Slugs are relative paths below /services, nested for specialists: `product-design/ux-research`. */

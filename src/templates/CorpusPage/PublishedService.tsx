@@ -396,6 +396,21 @@ function ctaTracks(cells: number): 3 | 4 {
  * routes as the set's CTA cards. `two`: split tiles, each with its labelled second area and action.
  */
 function ServiceCards({ section, ctx }: { section: Of<'service-cards'>; ctx: Ctx }) {
+  /* The overhaul's onward links ("Product design services you can hire on their own", "Where an MVP
+     goes next"): the heading beside one ruled row each, with the arrow cue, as the boards set it. */
+  if (section.rows) {
+    return (
+      <ContentSection {...head(section)} surface={section.surface} arrangement="beside">
+        <Layout as="ul" rowGap="none">
+          {section.tiles.flatMap((tile) =>
+            tile.href
+              ? [<ListCard key={tile.id} title={tile.title} href={tile.href} cue="arrow" />]
+              : [],
+          )}
+        </Layout>
+      </ContentSection>
+    );
+  }
   const { lead, rest } = leadAndRest(section.lead, section.before);
   const n = section.tiles.length;
   const cta: BentoCta | undefined =
@@ -530,13 +545,17 @@ function Stages({ section, ctx }: { section: Of<'stages'>; ctx: Ctx }) {
  */
 function Why({ section, ctx }: { section: Of<'why'>; ctx: Ctx }) {
   const cards = section.cards.map((card) => ({ ...card, title: card.title.replace(/\.$/, '') }));
-  if (cards.length && cards.every((card) => !card.image && WHY_GLYPHS[card.title])) {
+  /* A card's glyph: the one the CMS names (tcules-cms-2026#5), else the shared list's own by title
+     when the card has no upload. */
+  const glyphOf = (card: (typeof cards)[number]) =>
+    card.icon ?? (card.image ? undefined : WHY_GLYPHS[card.title]);
+  if (cards.length && cards.every((card) => glyphOf(card))) {
     return (
       <OfferSheet
         {...head(section)}
         surface={section.surface}
         arrangement="list"
-        items={cards.map((card) => ({ ...card, icon: WHY_GLYPHS[card.title] }))}
+        items={cards.map((card) => ({ ...card, image: undefined, icon: glyphOf(card) }))}
         note={actionsOf(section.action)}
       />
     );
@@ -922,6 +941,8 @@ export function SharedSectionView({ section, ctx }: { section: Section; ctx: Ctx
       ) : (
         <PublishedSection section={section} route={ctx.route} />
       );
+    case 'published':
+      return <PublishedSection section={section.band} route={ctx.route} />;
     default:
       return <PublishedSection section={section} route={ctx.route} />;
   }
