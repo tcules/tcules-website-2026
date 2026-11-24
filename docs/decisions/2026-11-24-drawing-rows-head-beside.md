@@ -18,6 +18,12 @@ heading over the whole band, where a heading kept to its reading width sat over 
 Below 1024 the order stays head, drawing, rows: `figureFirst` places the drawing under the head, as it
 already did for a photograph, so the drawing never falls after the band's button.
 
+**Why.** The heading keeps its reading width, so over the whole band it covered only the drawing's half
+and read as the drawing's caption rather than the rows' heading.
+
+**The mistake it prevents.** A head set above a split whose measure is narrower than the split, leaving it
+stranded over one half.
+
 **How to apply.** A band of rows (or words) beside one drawing takes the plain media split with the head
 in the words' column; reach for `headAbove` only for a photograph band whose head must span both halves.
 Pass `figureFirst` when the drawing explains the rows, so a phone reads head, drawing, rows.
