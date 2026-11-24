@@ -6,7 +6,7 @@ area: [imagery, layout]
 source: Owner review of /design/social, 17 Nov 2026 ("we need single frames for text posts so text posts aren't plain text"; "text only posts cant look like an inner frame. they need to carry the look of a cover")
 supersedes: []
 dbf: [ch10 §C1, ch10 §B3]
-dbf_status: pending
+dbf_status: applied
 enforced_by: review
 ---
 

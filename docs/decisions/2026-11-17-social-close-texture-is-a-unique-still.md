@@ -6,7 +6,7 @@ area: [motion, imagery]
 source: Owner review of /design/social, 17 Nov 2026 ("we can't use the moving texture in the bg but i think lets keep it so every export has a unique texture"; "the texture could be made subtler so the text reads cleanly")
 supersedes: []
 dbf: [ch10 §A8]
-dbf_status: pending
+dbf_status: applied
 enforced_by: script
 ---
 
