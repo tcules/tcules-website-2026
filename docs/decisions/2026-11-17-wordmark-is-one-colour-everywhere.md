@@ -5,8 +5,8 @@ status: active
 area: [iconography, colour]
 source: Owner, 17 Nov 2026 ("use full black logo everywhere. blue on top of black is no longer valid for any uses")
 supersedes: []
-dbf: [ch02, ch10 §A6, ch04]
-dbf_status: pending
+dbf: [ch02, ch10 §A6]
+dbf_status: applied
 enforced_by: typecheck
 ---
 
