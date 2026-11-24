@@ -60,7 +60,7 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 ### Pages
 
 - [ ] **O.17** Home
-- [ ] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation
+- [x] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation Live from Strapi (decisions/2026-11-24-service-pages-take-the-overhaul).
 - [ ] **O.19** B2B SaaS expertise (after O.7, O.8)
 - [ ] **O.20** How we work
 - [ ] **O.21** About
