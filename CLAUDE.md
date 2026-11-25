@@ -422,7 +422,8 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   29 Oct 2026; decisions/2026-10-29-media-rows-take-a-whole-row).
 - **Two tinted bands are never adjacent**, the close included: where two would meet, one drops to paper.
 - **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
-  inline beside the title. A tile led by its own drawing carries no glyph at all (owner, 19 Oct 2026;
+  inline beside the title. A ROW is different: its glyph may sit inline before its title (owner,
+  17 Nov 2026; decisions/2026-11-17-row-title-may-carry-inline-icon). A tile led by its own drawing carries no glyph at all (owner, 19 Oct 2026;
   decisions/2026-10-19-drawn-tile-carries-no-icon). No ground exists only on hover, so no card
   carries an inset for one (owner, 19 Oct 2026; decisions/2026-10-19-no-hover-only-grounds).
 - **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
