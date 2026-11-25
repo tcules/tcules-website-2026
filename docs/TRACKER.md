@@ -23,45 +23,54 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 ### Rulings (each logged with `/decide` in the PR that applies it)
 
-- [ ] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026).
-- [ ] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026).
+- [x] **O.1** Pricing may be shown. Supersedes the "plans without prices" design direction (owner, 17 Nov 2026). Logged as decisions/2026-11-19-three-ways-are-priced-plans.
+- [x] **O.2** An icon may sit inline with a row's title (owner, 17 Nov 2026). Built as ListCard `titleIcon`; logged as decisions/2026-11-17-row-title-may-carry-inline-icon.
 - [x] **O.3** Testimonials on phone may show three and a "See 3 more" button (owner, 17 Nov 2026). Logged as decisions/2026-11-17-testimonial-wall-folds-on-phone; live on every wall (overhaul phase 2).
 - [x] **O.4** The client-logo marquee's motion (with O.6): no pause button. Hover or keyboard focus on a logo
       pauses the row and highlights that logo; reduced motion keeps it still, logos wrapped and centred
       (owner, 17 Nov 2026, accepting that this falls short of WCAG 2.2.2).
-- [ ] **O.4a** decisions/2026-10-19-hover-is-a-move is scoped to cards with an interactive flat drawing;
-      it does not govern the marquee, buttons or other controls (owner, 17 Nov 2026).
+- [x] **O.4a** decisions/2026-10-19-hover-is-a-move is scoped to cards with an interactive flat drawing;
+      it does not govern the marquee, buttons or other controls (owner, 17 Nov 2026). Logged as
+      decisions/2026-11-17-hover-is-a-move-for-drawn-cards.
 
 ### New components
 
 - [x] **O.5** Chat thread: the client's line, then Tcules' reply, as a conversation. Built from scratch. Live from Strapi (`shared.chat-thread`), Home first.
-- [ ] **O.5a** Retire `VoiceLedger`: `/expertise/healthtech`'s hard-parts band moves to the existing ruled
-      tile set it already looks like; About's unused code path, the specimen and its token layer go.
-- [x] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`. On every live logo band (decisions/2026-11-23-client-logos-are-the-ticker); service, expertise, audit, About and Careers heroes still need their logos.
-- [ ] **O.7** The six sides of a B2B product: the wheel and its six annotated sides (SaaS).
+- [x] **O.5a** Retire `VoiceLedger`: `/expertise/healthtech`'s hard-parts band moves to the existing ruled
+      tile set it already looks like; About's unused code path, the specimen and its token layer go. Done
+      17 Nov: the component, specimen and tokens are gone; healthtech renders ListTiles.
+- [x] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`. On every live logo band (decisions/2026-11-23-client-logos-are-the-ticker). No hero needs logos (owner, 25 Nov 2026).
+- [-] **O.7** ~~The six sides of a B2B product: the wheel and its six annotated sides (SaaS).~~ Dropped: the
+      autonomy ladder (O.8) replaces it (owner, 25 Nov 2026).
 - [ ] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
 
 ### Component updates
 
 - [x] **O.9** `ListCard`: the stage rows (stage drawing, link on the right) and the "first step" strip under them. Live as `Stages`; replaces the situation gateway (decisions/2026-11-23-stages-replace-the-situation-gateway).
-- [ ] **O.10** `EngagementOptions` `plans`: prices, one highlighted plan.
-- [ ] **O.11** A legend marker for keep / fix / rebuild (MVP "Your prototype is the brief").
+- [x] **O.10** `EngagementOptions` `plans`: prices, one highlighted plan. Live (decisions/2026-11-19-three-ways-are-priced-plans).
+- [x] **O.11** A legend marker for keep / fix / rebuild (MVP "Your prototype is the brief"). Built as `AreaMark`
+      (/design/area-mark) and ListCard `verdict`; live on MVP.
 
 ### To design
 
-- [ ] **O.12** MVP "Your demo works": our own drawing.
-- [ ] **O.13** MVP "Your prototype is the brief": our own drawing.
-- [ ] **O.14** How we work "The engagement moves with your product": our own drawing, and a lighter
-      arrangement than the 2 × 3 ruled facts.
-- [ ] **O.15** The text-only tile sets (What stays the same, The terms, What we believe, How Tcules works
-      with clients, What happens after you get in touch): give each set a shape.
-- [ ] **O.16** Stage drawings (about 10 unique across the six stage bands) and the four free-tool drawings.
+- [x] **O.12** MVP "Your demo works": our own drawing. `ov-mvp-development-underneath`, live on MVP.
+- [x] **O.13** MVP "Your prototype is the brief": our own drawing. `ov-mvp-development-prototype-brief`, live on MVP.
+- [~] **O.14** How we work "The engagement moves with your product": our own drawing, and a lighter
+      arrangement than the 2 × 3 ruled facts. Live (drawing across the band, six tiles under it); the
+      drawing needs improving (owner, 25 Nov 2026).
+- [x] **O.15** The text-only tile sets on How we work: give each set a shape. The terms keep their drawings
+      (decisions/2026-11-24-how-we-work-takes-the-overhaul); What stays the same stays text only
+      (decisions/2026-11-25-what-stays-the-same-is-text-only). About's sets move to its new design (O.21)
+      and Contact's to its own work (O.23) (owner, 25 Nov 2026).
+- [x] **O.16** Stage drawings (about 10 unique across the six stage bands) and the four free-tool drawings.
+      All 22 overhaul scenes are drawn (stages for every page, SaaS included); the tool drawings are in
+      `wyg-tool-*`.
 
 ### Pages
 
 - [x] **O.17** Home Live from Strapi (23 Nov 2026).
 - [x] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation Live from Strapi (decisions/2026-11-24-service-pages-take-the-overhaul).
-- [ ] **O.19** B2B SaaS expertise (after O.7, O.8)
+- [ ] **O.19** B2B SaaS expertise (after O.8; its stage drawings are done)
 - [x] **O.20** How we work Live from Strapi (decisions/2026-11-24-how-we-work-takes-the-overhaul).
 - [ ] **O.21** About (deferred until Jatin's update; owner, 24 Nov 2026)
 - [x] **O.22** Careers Live from Strapi (decisions/2026-11-24-careers-takes-the-overhaul).
