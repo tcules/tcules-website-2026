@@ -125,10 +125,18 @@ const opens = (item: SiteNavItem) => item.form === 'mega';
 /** Custom properties written from here. Cast once, as Layout does, rather than at every call. */
 const vars = (record: Record<string, string | number>) => record as CSSProperties;
 
-export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNavProps) {
+export function SiteNav({
+  items,
+  cta: siteCta,
+  ctaSecondary,
+  pageCtas,
+  surface = 'paper',
+}: SiteNavProps) {
   /* `?? '/'` for the Pages-Router case the hook documents, where it can be null before the router
      initialises. Nothing here should crash because a path is not known yet. */
   const pathname = usePathname() ?? '/';
+  /* The page's own offer where the CMS lists one, else the site's: one offer either way. */
+  const cta = pageCtas?.find((entry) => entry.path === pathname)?.cta ?? siteCta;
 
   /**
    * Open/closed state, STAMPED WITH THE PATH IT WAS SET ON.

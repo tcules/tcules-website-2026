@@ -2,6 +2,7 @@ import { Layout, Section } from '@/components';
 import { getNavigation } from '@/content';
 import { SiteNav } from '@/patterns';
 import type { SiteNavProps } from '@/patterns';
+import { ROUTES } from '@/lib/routes';
 
 import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
@@ -88,6 +89,18 @@ export default async function SiteNavSpecimenPage() {
             note="Work navigates and gets no chevron; the four sections open the plate. Below 1024 the items and the CTA disappear and the toggle appears: one breakpoint changing WHAT is in the bar, not how big anything is."
           >
             <SiteNav {...nav} />
+          </Specimen>
+
+          <Specimen
+            title="A page's own offer"
+            note="The CMS lists a button for one page (Nav button on specific pages, 25 Nov 2026): on /careers the offer is Apply to Tcules, which scrolls to the application form. Here it is listed for this specimen's own path, so the bar shows it in place of the site's offer. Every page not listed keeps the site's."
+          >
+            <SiteNav
+              {...nav}
+              pageCtas={[
+                { path: ROUTES.designSiteNav, cta: { label: 'Apply to Tcules', href: '#apply', status: 'live' } },
+              ]}
+            />
           </Specimen>
 
           <Specimen

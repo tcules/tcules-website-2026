@@ -144,6 +144,12 @@ export type SiteNavProps = {
    */
   ctaSecondary?: SiteNavLink;
   /**
+   * The offer on specific pages, in place of `cta` (CMS "Nav button on specific pages", 25 Nov 2026):
+   * `/careers` asks to apply rather than to book a product review. Matched on the exact path; every
+   * other page keeps `cta`.
+   */
+  pageCtas?: readonly { path: string; cta: SiteNavLink }[];
+  /**
    * The ground the bar, the plate and the sheet paint. Defaults to `paper`.
    *
    * One prop for all three on purpose: a header whose plate is a different surface from its bar

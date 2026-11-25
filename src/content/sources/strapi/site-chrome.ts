@@ -41,6 +41,7 @@ type NavConfiguration = {
   }>;
   cta?: NavLink | null;
   ctaSecondary?: NavLink | null;
+  pageButtons?: Entries<{ path: Text; button: NavLink | null }>;
 };
 type FooterConfiguration = {
   tagline: Text;
@@ -173,6 +174,11 @@ function mapNavigation(config: NavConfiguration | null | undefined): SiteNavProp
     items,
     cta: navLink(config.cta),
     ctaSecondary: navLink(config.ctaSecondary),
+    pageCtas: rows(config.pageButtons).flatMap((entry) => {
+      const path = text(entry.path);
+      const cta = navLink(entry.button);
+      return path && cta ? [{ path, cta }] : [];
+    }),
     surface: surface(config.surface),
   };
 }
