@@ -671,7 +671,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
   }, [formType]);
   /* The latest intent, for the view event, which subscribes once and must not re-fire on a change. */
   const intentNow = useRef(intent);
-  intentNow.current = intent;
+  useEffect(() => {
+    intentNow.current = intent;
+  }, [intent]);
   const intentId = idFor('intent');
   /** The dropdown, first of the fields, where the list holds a choice. */
   function intentPicker(look: 'box' | 'line' | 'fill') {
@@ -683,20 +685,16 @@ export function EnquiryForm(props: EnquiryFormProps) {
           id={intentId}
           appearance={look}
           scale={props.fieldScale === 'lg' ? 'lg' : 'md'}
+          options={intentOptions.map((option) => ({ value: option.key, label: option.label }))}
           value={intent}
           disabled={submitting}
-          onChange={(event) => {
-            const next = event.currentTarget.value;
+          indicator={<Icon name="alt-arrow-down" />}
+          check={<Icon name="chrome-check" />}
+          onValueChange={(next) => {
             track('intent_change', { form_type: formType, from: intent ?? '', to: next });
             setPickedIntent(next);
           }}
-        >
-          {intentOptions.map((option) => (
-            <option key={option.key} value={option.key}>
-              {option.label}
-            </option>
-          ))}
-        </Input>
+        />
       </FieldGroup>
     );
   }
@@ -792,6 +790,15 @@ export function EnquiryForm(props: EnquiryFormProps) {
     (props.variant === undefined || props.variant === 'enquiry') &&
     props.dress?.kind === 'card' &&
     props.dress.role !== undefined;
+  /* The role, as the same dropdown as the intent (owner, 25 Nov 2026: "replace the careers chips with
+     the dropdown"): the open roles, General application last, opening on the first role until a
+     role's own link on the page picks it. */
+  const roleGroup =
+    (props.variant === undefined || props.variant === 'enquiry') && props.dress?.kind === 'card'
+      ? props.dress.role
+      : undefined;
+  const roleOptions = roleGroup?.options ?? [];
+  const [roleValue, setRoleValue] = useState<string | undefined>(roleOptions[0]?.value);
   useEffect(() => {
     if (!hasRoleGroup) return;
     function pick(event: MouseEvent) {
@@ -800,12 +807,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       const value = link?.getAttribute(ENQUIRY_ROLE_ATTRIBUTE);
       const form = formRef.current;
       if (!value || !form) return;
-      const chip = Array.from(
-        form.querySelectorAll<HTMLInputElement>('input[name="role"]'),
-      ).find((input) => input.value === value);
-      if (!chip) return;
-      chip.checked = true;
-      saveDraft(form);
+      if (!roleOptions.some((option) => option.value === value)) return;
+      setRoleValue(value);
     }
     document.addEventListener('click', pick);
     return () => document.removeEventListener('click', pick);
@@ -1601,7 +1604,26 @@ export function EnquiryForm(props: EnquiryFormProps) {
           <Layout rowGap="block">
             <Layout rowGap="text">
               {intentPicker('fill')}
-              {dress.role ? renderChoiceGroup(dress.role, 'role') : null}
+              {dress.role ? (
+                <FieldGroup id={idFor('role')} label={dress.role.question} visibleLabel>
+                  <Input
+                    as="select"
+                    id={idFor('role')}
+                    name="role"
+                    appearance="fill"
+                    scale={props.fieldScale === 'lg' ? 'lg' : 'md'}
+                    options={dress.role.options.map((option) => ({
+                      value: option.value,
+                      label: option.label,
+                    }))}
+                    value={roleValue}
+                    disabled={submitting}
+                    indicator={<Icon name="alt-arrow-down" />}
+                    check={<Icon name="chrome-check" />}
+                    onValueChange={setRoleValue}
+                  />
+                </FieldGroup>
+              ) : null}
               {dress.name
                 ? renderField(name, { visibleLabel: true, placeholder: null, look: 'fill' })
                 : null}
