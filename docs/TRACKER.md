@@ -58,11 +58,10 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [~] **O.14** How we work "The engagement moves with your product": our own drawing, and a lighter
       arrangement than the 2 × 3 ruled facts. Live (drawing across the band, six tiles under it); the
       drawing needs improving (owner, 25 Nov 2026).
-- [~] **O.15** The text-only tile sets (What stays the same, The terms, What we believe, How Tcules works
-      with clients, What happens after you get in touch): give each set a shape. The terms keep their
-      drawings (decisions/2026-11-24-how-we-work-takes-the-overhaul). What stays the same shipped as four text
-      tiles across, so it still has no shape. What we believe and How Tcules works with clients wait for About (O.21);
-      What happens after you get in touch waits for Contact (O.23).
+- [x] **O.15** The text-only tile sets on How we work: give each set a shape. The terms keep their drawings
+      (decisions/2026-11-24-how-we-work-takes-the-overhaul); What stays the same stays text only
+      (decisions/2026-11-25-what-stays-the-same-is-text-only). About's sets move to its new design (O.21)
+      and Contact's to its own work (O.23) (owner, 25 Nov 2026).
 - [x] **O.16** Stage drawings (about 10 unique across the six stage bands) and the four free-tool drawings.
       All 22 overhaul scenes are drawn (stages for every page, SaaS included); the tool drawings are in
       `wyg-tool-*`.
