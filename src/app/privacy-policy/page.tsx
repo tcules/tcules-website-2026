@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getPrivacyPolicyDocument, getCaseRefs } from '@/content';
+import { getPrivacyPolicyDocument, getCaseRefs, getPrivacyRequest } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { jsonLdMarkup } from '@/lib/json-ld';
-import { LongformPage } from '@/templates';
+import { LongformPage, PrivacyClose } from '@/templates';
 
 /**
  * `/privacy-policy` — the Privacy Policy single type from the new CMS, as one document in the article shell (legal
@@ -26,7 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPolicyPage() {
   const legal = await getPrivacyPolicyDocument();
   if (!legal) notFound();
-  const caseRefs = await getCaseRefs(caseRoutesIn(legal.page));
+  const [caseRefs, privacyRequest] = await Promise.all([
+    getCaseRefs(caseRoutesIn(legal.page)),
+    getPrivacyRequest(),
+  ]);
   return (
     <>
       {legal.structuredData ? (
@@ -36,6 +39,8 @@ export default async function PrivacyPolicyPage() {
         />
       ) : null}
       <LongformPage page={legal.page} family="article" caseRefs={caseRefs} />
+      {/* The privacy request form, the same close on every legal page (docs/specs/EnquiryForms.md § 3). */}
+      {privacyRequest ? <PrivacyClose close={privacyRequest} route={legal.page.route} /> : null}
     </>
   );
 }

@@ -44,7 +44,7 @@ fragment LegalSeoSettings on SeoSettings {
   defaultImage { url width height alternativeText }
 }
 fragment PublishedAction on ComponentSharedCtaButton {
-  name href description icon isExternal
+  name href description icon isExternal intent { key }
 }
 fragment PublishedImage on ComponentContentImage {
   altText kind panel shadow focusX focusY toneTemperature toneSaturation

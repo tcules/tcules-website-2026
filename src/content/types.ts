@@ -308,6 +308,16 @@ export type ContactFormSubmission = {
   clientContact?: string;
   clientWebsite?: string;
   services?: string;
+  /** What the submission is (docs/specs/EnquiryForms.md § 5): it words the team's email and the
+      sender's acknowledgement. Absent means sales. */
+  formType?: 'sales' | 'careers' | 'privacy';
+  /** The form, page and intent it came from: the CMS's bounded attribution keys only. */
+  submissionContext?: Partial<
+    Record<
+      'originRoute' | 'placement' | 'intent' | 'intentInitial' | 'ctaId' | 'entryRoute',
+      string
+    >
+  >;
 };
 
 export type ContactSubmissionResult = {

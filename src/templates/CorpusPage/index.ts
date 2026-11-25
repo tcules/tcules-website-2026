@@ -5,6 +5,8 @@ export type { OfferPageProps } from './OfferPage';
 export { planOffer, kindOf } from './plan';
 export type { OfferKind, OfferPart, OfferUnit } from './plan';
 export { LongformPage } from './LongformPage';
+export { PrivacyClose } from './PrivacyClose';
+export type { PrivacyCloseProps } from './PrivacyClose';
 export type { LongformFamily, LongformPageProps } from './LongformPage';
 export {
   corpusEnquiryForm,

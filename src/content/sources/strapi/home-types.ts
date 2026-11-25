@@ -13,6 +13,8 @@ export type CmsAction = {
   description: Text;
   icon: Text;
   isExternal: Maybe<boolean>;
+  /** The intent a button to the enquiry form asks for (CMS tcules-cms-2026#7). */
+  intent?: Maybe<{ key: Text }>;
 };
 export type CmsRating = { score: Text; platform: Text; mark: Text; href: Text; detail: Text };
 export type CmsImage = {
@@ -276,6 +278,8 @@ export type CmsHomeSection = Band &
         }>;
         form: Maybe<{
           variant: Maybe<'enquiry' | 'compact'>;
+          purpose?: Maybe<'enquiry' | 'application' | 'privacy'>;
+          defaultIntent?: Maybe<{ key: Text }>;
           submitLabel: Text;
           caption: Text;
           urlLabel: Text;
