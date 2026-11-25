@@ -103,6 +103,25 @@ export default function InputSpecimenPage() {
                 />
               </Layout>
             </Specimen>
+            <Specimen
+              title={'as="select" · box and fill'}
+              note="The enquiry form's intent picker (25 Nov 2026): the field's box, the browser's own arrow and option list."
+            >
+              <Layout rowGap="text">
+                <Layout as="label" rowGap="tight">
+                  <span>What would you like to do?</span>
+                  <Input as="select" defaultValue="pilot">
+                    <option value="project">Discuss a project</option>
+                    <option value="pilot">Start with a pilot</option>
+                    <option value="scope">Scope a project</option>
+                  </Input>
+                </Layout>
+                <Input as="select" appearance="fill" aria-label="What would you like to do?">
+                  <option>Discuss a project</option>
+                  <option>Start with a pilot</option>
+                </Input>
+              </Layout>
+            </Specimen>
             <Specimen title="Invalid and disabled" note="Neither state uses opacity.">
               <Layout rowGap="block">
                 <LabelledInput label="Invalid" invalid />

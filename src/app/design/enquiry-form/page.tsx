@@ -4,7 +4,11 @@ import { Fragment } from 'react';
 import { Button, Cluster, Layout, Media, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
+import type { EnquiryIntent } from '@/lib/enquiry-intents';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { PrivacyClose } from '@/templates';
+
+import { IntentsProvider } from '../../_enquiry/IntentsProvider';
 
 import {
   CHOICE_DRESS,
@@ -207,6 +211,91 @@ function Enquiry({
   );
 }
 
+/* Placeholder intents for the specimen: the CMS's starting list (tcules-cms-2026#7), so the dropdown
+   can be tried here without the CMS. One privacy intent, so the privacy close shows no dropdown. */
+const SPECIMEN_INTENTS: readonly EnquiryIntent[] = [
+  { key: 'discuss-project', label: 'Discuss a project', formType: 'sales', isDefault: true },
+  { key: 'start-pilot', label: 'Start with a pilot', formType: 'sales', isDefault: false },
+  { key: 'scope-project', label: 'Scope a project', formType: 'sales', isDefault: false },
+  { key: 'design-team', label: 'Embedded design team', formType: 'sales', isDefault: false },
+  { key: 'ux-audit', label: 'Discuss a UX audit', formType: 'sales', isDefault: false },
+  { key: 'prototype-review', label: 'Discuss a paid prototype review', formType: 'sales', isDefault: false },
+  { key: 'intro-call', label: 'Request an introductory call', formType: 'sales', isDefault: false },
+  { key: 'privacy-request', label: 'Privacy request', formType: 'privacy', isDefault: true },
+];
+
+/**
+ * The intent dropdown (docs/specs/EnquiryForms.md § 2, § 4): three asks above the form, each naming a
+ * different intent. Pressing one scrolls to the form, selects its intent and focuses the dropdown;
+ * the URL keeps `?intent=`, so a reload or a new tab opens the form on it too.
+ */
+function IntentSpecimen() {
+  return (
+    <IntentsProvider intents={SPECIMEN_INTENTS}>
+      <Section id="intent-asks">
+        <Layout rowGap="block">
+          <h2>The intent dropdown</h2>
+          <p>
+            Each form type lists its intents in the CMS. A form opens on the intent its button
+            named, else the link&rsquo;s <code>?intent=</code>, else the page&rsquo;s default, else
+            the type&rsquo;s. The dropdown shows only when the list holds a choice: the privacy
+            close below has one intent and shows none. Press an ask: the page scrolls to the form,
+            selects that intent and puts focus on the dropdown.
+          </p>
+          <Cluster colGap="block" rowGap="text" align="center">
+            <Button as="a" href="?intent=start-pilot#enquiry">
+              Start with a pilot
+            </Button>
+            <Button as="a" href="?intent=ux-audit#enquiry" emphasis="ghost" tone="neutral">
+              Discuss a UX audit
+            </Button>
+            <Button as="a" href="#enquiry" emphasis="link" tone="neutral">
+              An ask that names no intent
+            </Button>
+          </Cluster>
+        </Layout>
+      </Section>
+      <CtaSection
+        id="enquiry"
+        heading="Tell us what you’re building"
+        body={['The form opens on Scope a project, this specimen’s page default.']}
+        island="blue"
+        islandArrangement="beside"
+        islandTexture="frame"
+        form={
+          <EnquiryForm
+            variant="enquiry"
+            action={ENDPOINTS.enquiry}
+            defaultIntent="scope-project"
+            fieldScale="md"
+            submit="inline"
+            dress={{ kind: 'card', reply: 'We reply in 1 business day' }}
+            context={{
+              originRoute: ROUTES.designEnquiryForm,
+              placement: 'intent-specimen',
+              family: 'design',
+              serviceOrAudit: '',
+              referrer: '',
+              campaign: '',
+            }}
+          />
+        }
+      />
+      <PrivacyClose
+        route={ROUTES.designEnquiryForm}
+        close={{
+          heading: 'Questions about your data?',
+          lead: 'Ask what personal data Tcules holds about you, or ask us to correct or delete it. We reply by email.',
+          island: 'ink',
+          submitLabel: 'Send',
+          success: { heading: 'Request received', body: 'We’ll reply to the email you gave us.' },
+          defaultIntent: 'privacy-request',
+        }}
+      />
+    </IntentsProvider>
+  );
+}
+
 export default function EnquiryFormSpecimenPage() {
   return (
     <>
@@ -234,6 +323,8 @@ export default function EnquiryFormSpecimenPage() {
           </Cluster>
         </Layout>
       </Section>
+
+      <IntentSpecimen />
 
       {/* The island close (owner, 16 Oct 2026): the form's variations inside the real close. */}
       <Section>

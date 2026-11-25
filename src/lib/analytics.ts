@@ -23,6 +23,7 @@ type EventParams = {
   };
   form_view: { form_type: FormType; page: string; trigger: 'cta' | 'scroll'; intent?: string };
   form_start: { form_type: FormType; field_name: string; intent?: string };
+  intent_change: { form_type: FormType; from: string; to: string };
   form_submit_attempt: { form_type: FormType; intent?: string };
   form_validation_error: { form_type: FormType; field_names: string[] };
   submission_accepted: AcceptedParams;

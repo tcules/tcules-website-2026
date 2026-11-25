@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 import { cx } from '@/lib/cx';
 
@@ -51,11 +51,22 @@ type NativeTextareaProps = SharedProps &
     as: 'textarea';
   };
 
-export type InputProps = NativeInputProps | NativeTextareaProps;
+/**
+ * A native `<select>` in the same box (docs/specs/EnquiryForms.md § 4, owner 25 Nov 2026: the
+ * enquiry form's intent picker is a dropdown). Same height, type, rule, focus ring and invalid state
+ * as a text field; the browser keeps its own arrow and its own option list, so every phone opens its
+ * native picker. The options are the caller's children.
+ */
+type NativeSelectProps = SharedProps &
+  Omit<SelectHTMLAttributes<HTMLSelectElement>, 'className'> & {
+    as: 'select';
+  };
+
+export type InputProps = NativeInputProps | NativeTextareaProps | NativeSelectProps;
 
 /**
  * Input — the control box only. Labels, optional flags, validation messages and layout belong to
- * the pattern composing it. Both native variants keep every applicable HTML attribute.
+ * the pattern composing it. All three native variants keep every applicable HTML attribute.
  */
 export function Input({
   as = 'input',
@@ -75,6 +86,7 @@ export function Input({
   const controlClassName = cx(
     styles.control,
     as === 'textarea' && styles.textarea,
+    as === 'select' && styles.select,
     appearance === 'line' && styles.line,
     appearance === 'bare' && styles.bare,
     appearance === 'fill' && styles.fill,
@@ -87,6 +99,16 @@ export function Input({
     return (
       <textarea
         {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+        aria-invalid={nativeInvalid}
+        className={controlClassName}
+      />
+    );
+  }
+
+  if (as === 'select') {
+    return (
+      <select
+        {...(rest as SelectHTMLAttributes<HTMLSelectElement>)}
         aria-invalid={nativeInvalid}
         className={controlClassName}
       />

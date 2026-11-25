@@ -95,6 +95,12 @@
   color: var(--inp-disabled-fg);
 }
 
+/* A select is a field you choose in rather than type in: the pointer says so. Its arrow and option
+   list stay the browser's (`appearance` is left as it is), so a phone opens its own picker. */
+.select {
+  cursor: pointer;
+}
+
 .textarea {
   block-size: auto;
   min-block-size: var(--inp-textarea-min-block);

@@ -544,6 +544,7 @@ function Cta({
     success: form.success,
     nextSteps: form.nextSteps,
     fieldScale: 'md' as const,
+    defaultIntent: form.defaultIntent,
   };
   return (
     <CtaSection

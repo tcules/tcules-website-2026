@@ -843,6 +843,7 @@ function Enquiry({
     caption: form.caption ?? null,
     success: form.success,
     nextSteps: form.nextSteps.length > 0 ? form.nextSteps : undefined,
+    defaultIntent: form.defaultIntent,
     context: {
       originRoute: route,
       placement: section.id ?? 'enquiry',

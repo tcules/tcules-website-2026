@@ -34,6 +34,14 @@ function validWebsite(value: string): boolean {
   }
 }
 
+/** The non-empty attribution values, capped as the CMS caps them; nothing when there are none. */
+function attribution(values: Record<string, string>): Record<string, string> | undefined {
+  const kept = Object.entries(values).filter(([, value]) => value !== '');
+  return kept.length
+    ? Object.fromEntries(kept.map(([key, value]) => [key, value.slice(0, 2048)]))
+    : undefined;
+}
+
 function error(message: string, status = 400) {
   return Response.json(
     { ok: false, error: message },
@@ -50,6 +58,11 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
   }
 
   const get = (name: string) => text(form.get(name));
+  /* What the submission is (docs/specs/EnquiryForms.md § 5). Only a sales submission reaches
+     HubSpot (owner, 25 Nov 2026); every type is kept in the CMS, which emails the team. */
+  const postedType = get('form_type');
+  const formType =
+    postedType === 'careers' || postedType === 'privacy' ? postedType : ('sales' as const);
   const postedKind = get('formKind');
   const kind =
     endpointKind ??
@@ -121,6 +134,15 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
       clientContact: clientContact || undefined,
       clientWebsite: clientWebsite || undefined,
       services: needs.join(', ') || serviceContext || undefined,
+      formType,
+      submissionContext: attribution({
+        originRoute: get('origin_route'),
+        placement: get('placement'),
+        intent: get('enquiry_intent'),
+        intentInitial: get('enquiry_intent_initial'),
+        ctaId: get('cta_id'),
+        entryRoute: get('entry_route'),
+      }),
     };
   }
 
@@ -141,7 +163,7 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
 
   try {
     const { documentId } = await createClientContact(submission);
-    await sendHubSpotEnquiry(request, form, kind, submission, documentId);
+    if (formType === 'sales') await sendHubSpotEnquiry(request, form, kind, submission, documentId);
     return Response.json(
       { ok: true, documentId },
       { status: 201, headers: { 'Cache-Control': 'no-store' } },

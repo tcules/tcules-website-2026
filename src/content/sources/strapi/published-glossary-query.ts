@@ -36,6 +36,6 @@ query PublishedGlossary($slug: String!) {
   }
 }
 fragment GlossaryAction on ComponentSharedCtaButton {
-  name href description icon isExternal
+  name href description icon isExternal intent { key }
 }
 `;
