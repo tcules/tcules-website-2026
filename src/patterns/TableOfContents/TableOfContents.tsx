@@ -216,12 +216,8 @@ export function TableOfContents({ items }: TableOfContentsProps) {
     const clearance = window.matchMedia(RAIL_MEDIA).matches
       ? inset
       : inset + rail.offsetHeight + (parseFloat(style.getPropertyValue('--gap-gutter')) || 0);
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    window.scrollTo({
-      top: window.scrollY + target.getBoundingClientRect().top - clearance,
-      behavior: reduce ? 'auto' : 'smooth',
-    });
+    /* Glides or jumps by the site's one scroll setting (reset.css), reduced motion included. */
+    window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top - clearance });
     window.history.pushState(null, '', href);
     if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
     target.focus({ preventScroll: true });

@@ -59,6 +59,11 @@ html {
   /* Anchor navigation and scroll-into-view land below a future sticky header rather than
      under it. Value is intentionally a literal — this is shell geometry, not spacing rhythm. */
   scroll-padding-block-start: 5rem;
+  /* Every in-page scroll glides: an anchor link, a scroll-into-view, a scrollTo with no behavior of
+     its own (owner, 25 Nov 2026: smooth scroll is a global setting). One setting, so no component
+     states its own. The reduced-motion block below turns it off; the root layout's
+     data-scroll-behavior keeps a change of page instant. */
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 

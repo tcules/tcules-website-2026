@@ -88,8 +88,8 @@ function pageSalesForm(): HTMLFormElement | null {
 /** Bring the form into view and put focus where the reader decides, without opening a keyboard. */
 function goToForm(form: HTMLFormElement) {
   const target = document.getElementById(ANCHORS.enquiry) ?? form;
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  target.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
+  /* Glides or jumps by the site's one scroll setting (reset.css), reduced motion included. */
+  target.scrollIntoView({ block: 'start' });
   try {
     window.history.pushState(
       window.history.state,
