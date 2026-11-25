@@ -27,7 +27,7 @@ click, start, give up or send. This work makes each form know **what the reader 
 | The button is… | What happens |
 | --- | --- |
 | An ask (a call to action) on a page **that has its own form** | Scrolls to the page's form, selects the button's intent in the picker (§ 4), and moves focus to the form's picker group (the phone keyboard stays closed until the reader picks a field). The URL hash becomes `#enquiry`, so the back button returns the reader to where they were |
-| An ask on a page **with no form of its own** | Goes to `/contact`, carrying the intent and where the reader came from in the URL (`/contact?intent=start-pilot&from=/services/product-design&placement=hero`). `/contact` selects that intent and records the origin |
+| An ask on a page **with no form of its own** | Goes to `/contact`, carrying the intent in the URL (`/contact?intent=start-pilot`). The page it came from and the button are kept for 30 minutes in the tab's session storage, because a client-side navigation leaves no referrer. `/contact` selects the intent and records both |
 | The **nav's ask** ("Book a free product review") | Same rule as any ask: scrolls on a page with a form, goes to `/contact` on one without |
 | The nav's **Contact** menu item, and the footer's | Always goes to `/contact`. It names a page and is not an ask (rule already in code since 18 Nov) |
 
@@ -49,7 +49,7 @@ label and how the submission is tagged.
 | Type | Lives on | Fields | Picker | Submit label |
 | --- | --- | --- | --- | --- |
 | **Sales** | Every buyer page and `/contact` | Name, email, "What are you working on?", link (optional). As today | Ways to work with us (§ 4) | As today |
-| **Careers** | `/careers` | As today's application: name, email, link to work (required) | Open roles, plus **General application, always** | As today |
+| **Careers** | `/careers` | As today's application: name, email, link to work (required) | Open roles, plus **General application, always**, as the role chips it has today | As today |
 | **Privacy** | Privacy policy, cookie policy, terms of use | Name, email, "What do you need help with?" | Hidden while it has one option; appears by itself when the CMS gets a second (§ 4) | "Send" |
 
 The privacy form follows the forms-only-on-the-island ruling: the legal pages close on the island,
