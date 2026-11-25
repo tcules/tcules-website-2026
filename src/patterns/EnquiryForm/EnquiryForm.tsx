@@ -13,6 +13,7 @@ import {
   TurnstileWidget,
   type TurnstileWidgetHandle,
 } from '@/components';
+import { conversionFor, type FormType, pressedCtaRecently, track } from '@/lib/analytics';
 import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
@@ -54,6 +55,12 @@ export type EnquiryContextBase = {
 
 type SharedProps = {
   action: string;
+  /**
+   * What the form is for (docs/specs/EnquiryForms.md § 3): `sales` by default, `careers` for an
+   * application, `privacy` for a privacy request. It names the analytics events' `form_type` and
+   * decides the conversion: only a sales submission is a lead.
+   */
+  formType?: FormType;
   onSubmitted?: () => void;
   /**
    * How wide the form sets (cmp-form fix round, 6 Oct 2026). ONE policy for every variant: the form
@@ -583,6 +590,50 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const bounds = props.width === 'measure' ? styles.measure : styles.track;
 
   const idFor = (key: string) => `${instanceId}-${key}`;
+
+  /* The journey's analytics (spec § 6): names and IDs only, never what is typed. */
+  const formType: FormType = props.formType ?? 'sales';
+  const intent = props.variant === 'audit' ? props.context.intent : undefined;
+  const placement = props.variant === 'contact' ? 'contact' : props.context.placement;
+  const startedTracked = useRef(false);
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        track('form_view', {
+          form_type: formType,
+          page: window.location.pathname,
+          trigger: pressedCtaRecently() ? 'cta' : 'scroll',
+          ...(intent ? { intent } : {}),
+        });
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(form);
+    return () => observer.disconnect();
+  }, [formType, intent]);
+  function trackStart(event: FocusEvent<HTMLFormElement>) {
+    if (startedTracked.current) return;
+    const control = event.target;
+    if (
+      !(
+        control instanceof HTMLInputElement ||
+        control instanceof HTMLTextAreaElement ||
+        control instanceof HTMLSelectElement
+      ) ||
+      control.type === 'hidden'
+    )
+      return;
+    startedTracked.current = true;
+    track('form_start', {
+      form_type: formType,
+      field_name: control.name,
+      ...(intent ? { intent } : {}),
+    });
+  }
   const statusId = idFor('status');
   const urlId = idFor('url');
 
@@ -705,6 +756,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submissionInFlight.current) return;
+    track('form_submit_attempt', { form_type: formType, ...(intent ? { intent } : {}) });
 
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
@@ -724,6 +776,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
       if (next[spec.key] && !firstInvalid) firstInvalid = control;
     }
     if (firstInvalid) {
+      track('form_validation_error', {
+        form_type: formType,
+        field_names: validated.filter((spec) => next[spec.key]).map((spec) => spec.name),
+      });
       setMessages(next);
       setLifecycle('invalid');
       firstInvalid.focus();
@@ -751,7 +807,19 @@ export function EnquiryForm(props: EnquiryFormProps) {
         body,
         variant === 'contact' ? 'contact' : 'enquiry',
         token,
+        { lead: formType === 'sales' },
       );
+      if (response.ok) {
+        const accepted = {
+          form_type: formType,
+          page: window.location.pathname,
+          placement,
+          ...(intent ? { intent } : {}),
+        };
+        track('submission_accepted', accepted);
+        const conversion = conversionFor(formType);
+        if (conversion) track(conversion, accepted);
+      }
       if (response.verificationError) setVerificationError(response.verificationError);
       setLifecycle(response.ok ? 'success' : 'error');
     } catch {
@@ -1233,6 +1301,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       'aria-label': props.label ?? 'Send an enquiry',
       'aria-busy': submitting || undefined,
       onSubmit: handleSubmit,
+      onFocus: trackStart,
       onInput: (event: FormEvent<HTMLFormElement>) => saveDraft(event.currentTarget),
       ref: formRef,
     } as const;
@@ -1544,6 +1613,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       }
       aria-busy={submitting || undefined}
       onSubmit={handleSubmit}
+      onFocus={trackStart}
       onInput={(event) => saveDraft(event.currentTarget)}
       ref={formRef}
     >

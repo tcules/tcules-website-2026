@@ -229,6 +229,7 @@ function LabBand({
             form={
               <EnquiryForm
                 variant="enquiry"
+                formType="careers"
                 label={form.label}
                 workLabel={form.workLabel}
                 urlLabel={form.urlLabel}

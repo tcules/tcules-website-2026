@@ -55,6 +55,9 @@ export async function submitProtectedForm(
   body: FormData,
   kind: 'contact' | 'enquiry',
   token: string,
+  /* Whether this submission is a lead: the OpenAI pixel and Tag Manager's lead listener hear only
+     sales submissions (docs/specs/EnquiryForms.md § 6). An application is not a lead. */
+  { lead = true }: { lead?: boolean } = {},
 ) {
   body.set('formKind', kind);
   body.set('turnstileToken', token);
@@ -66,7 +69,7 @@ export async function submitProtectedForm(
   const response = await fetch(ENDPOINTS.clientContact, { method: 'POST', body });
   if (response.ok) {
     // Tracking must not change or delay the result of a successful submission.
-    trackLead(body).catch(() => {});
+    if (lead) trackLead(body).catch(() => {});
     return { ok: true };
   }
 

@@ -631,6 +631,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 size="sm"
                 data-nav-control=""
+                data-cta-placement="nav"
                 className={styles.cta}
               >
                 {cta.label}
@@ -824,6 +825,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 emphasis="ghost"
                 tone="neutral"
                 extendHitArea
+                data-cta-placement="nav-sheet-secondary"
               >
                 {ctaSecondary.label}
               </Button>
@@ -835,6 +837,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
                 title={cta.description}
                 {...(cta.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 extendHitArea
+                data-cta-placement="nav-sheet"
               >
                 {cta.label}
               </Button>
