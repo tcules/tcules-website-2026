@@ -39,6 +39,12 @@ function formDestination(
   if (url.origin !== window.location.origin) return null;
   const atForm = url.hash === anchorHref(ANCHORS.enquiry);
   if (url.pathname === window.location.pathname && atForm) return { kind: 'inline', url };
+  /* Another anchor on this page that holds a form, such as /careers' `#apply`: counted as an ask.
+     Only a sales form is scrolled to by hand; this one is left to the browser. */
+  if (url.pathname === window.location.pathname && url.hash.length > 1) {
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (target?.querySelector('form[data-form-type]')) return { kind: 'inline', url };
+  }
   if (url.pathname === ROUTES.contact && (url.hash === '' || atForm))
     return { kind: 'contact', url };
   return null;

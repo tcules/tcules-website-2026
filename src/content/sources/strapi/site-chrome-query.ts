@@ -17,6 +17,7 @@ export const SITE_NAVIGATION_QUERY = `
         }
         cta { ${NAV_LINK} }
         ctaSecondary { ${NAV_LINK} }
+        pageButtons { path button { ${NAV_LINK} } }
       }
     }
   }
