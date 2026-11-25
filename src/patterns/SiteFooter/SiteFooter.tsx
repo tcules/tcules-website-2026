@@ -111,6 +111,7 @@ export function SiteFooter({
                 href={cta.href}
                 {...externalProps(cta.external)}
                 title={cta.description}
+                data-cta-placement="footer"
               >
                 {cta.icon ? <Icon name={cta.icon} /> : null}
                 {cta.label}

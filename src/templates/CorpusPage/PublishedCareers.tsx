@@ -218,6 +218,7 @@ export function PublishedCareers({
                 form={
                   <EnquiryForm
                     variant="enquiry"
+                    formType="careers"
                     label={form.formLabel}
                     submitLabel={form.submitLabel}
                     workLabel={form.showWork ? undefined : null}

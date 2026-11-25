@@ -5,6 +5,7 @@ import { siteGraphMarkup } from '@/lib/json-ld';
 import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
+import { CtaTracker } from './_analytics/CtaTracker';
 import './globals.css';
 import { TrackingScripts } from './tracking-scripts';
 
@@ -83,6 +84,7 @@ export default async function RootLayout({
         ) : null}
         {nav.available !== false ? <SiteNav {...nav} /> : null}
         <main>{children}</main>
+        <CtaTracker />
         {footer.available !== false ? <SiteFooter {...footer} /> : null}
         {/* The site-wide Organization and WebSite nodes, once per page from SEO Settings. Each
             page's own graph refers to them by @id (lib/json-ld.ts strips the copies it carries). */}
