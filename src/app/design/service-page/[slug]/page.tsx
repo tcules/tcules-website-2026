@@ -38,7 +38,9 @@ export default async function ServicePageSpecimen({
   const story = getIdealServiceStory(slug);
   if (!story) notFound();
 
-  const index = await getCaseStudyIndex();
+  /* Covers come from the CMS when it can be reached. A library card (the DS artifact) has no CMS, so the
+     cases render without their covers rather than failing the whole specimen. */
+  const index = await getCaseStudyIndex().catch(() => null);
   const byHref = new Map((index?.listing.cases ?? []).map((item) => [item.href, item]));
 
   const resolve = (item: StoryCase): StoryCase => {

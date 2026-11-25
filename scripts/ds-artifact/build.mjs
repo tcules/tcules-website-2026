@@ -135,6 +135,7 @@ const common = {
     'next/navigation': join(SHIMS, 'next-navigation.tsx'),
     'next/form': join(SHIMS, 'next-form.tsx'),
     'next/script': join(SHIMS, 'next-script.tsx'),
+    'next/cache': join(SHIMS, 'next-cache.ts'),
   },
   loader: { '.svg': 'dataurl', '.png': 'dataurl', '.webp': 'dataurl', '.jpg': 'dataurl' },
 };
@@ -181,9 +182,12 @@ const bundle = await esbuild.build({
 const bundleJs = bundle.outputFiles.find((f) => f.path.endsWith('.js')).text;
 const bundleCss = bundle.outputFiles.find((f) => f.path.endsWith('.css')).text;
 
-/* Which units really are exports — a folder whose name the barrel does not export gets no card. */
+/* Which units really are exports — a folder whose name the barrel does not export gets no card. The
+   bundle is evaluated against the real React: a module that calls createContext at load (MediaMotion,
+   enquiry-intents-context) throws against an empty stub. */
+const { default: ReactForProbe } = await import("react");
 const exported = new Set(
-  new Function('window', `${bundleJs}; return Object.keys(${NAMESPACE});`)({ React: {}, ReactDOM: {} }),
+  new Function('window', `${bundleJs}; return Object.keys(${NAMESPACE});`)({ React: ReactForProbe, ReactDOM: {} }),
 );
 /* A folder that exports several components under other names (CorpusPage: HomePage, AboutPage…)
    gets a card per PascalCase export of its own index. */
@@ -300,6 +304,14 @@ const nodeStubs = {
       usesCorpus = true;
       return { path: a.path, namespace: 'node-stub' };
     });
+    /* node:crypto: the Strapi source hashes its cache keys (lib/cms/cache-policy). A card reads the fixtures and
+       never reaches it, so a stand-in that hashes nothing is enough for the module to load. */
+    b.onResolve({ filter: /^node:crypto$/ }, () => ({ path: "crypto", namespace: "node-crypto-stub" }));
+    b.onLoad({ filter: /.*/, namespace: "node-crypto-stub" }, () => ({
+      contents: `const createHash = () => { let s = ""; const h = { update: (d) => { s += String(d); return h; }, digest: () => s }; return h; };
+module.exports = { createHash, timingSafeEqual: (a, b) => String(a) === String(b) };`,
+      loader: "js",
+    }));
     b.onLoad({ filter: /.*/, namespace: 'node-stub' }, () => ({
       contents: `const C = () => window.__dsCorpus || {};
 const base = (p) => String(p).split('/').pop();
