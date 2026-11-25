@@ -69,6 +69,18 @@
   /* optical: the inset that sets one --text-body line on its rule in a 44 field (44 - 24 - 6) */
   --inp-line-inset-top: var(--space-14);
   --inp-line-textarea-min-block: 68px; /* two body lines (48) + the 14 and 6 insets */
+  /* as="select" (owner, 25 Nov 2026, after shadcn): the list floats 4 under the trigger, inset 4,
+     its options 40 tall (44 below 768) and inset 8, so 4 + 8 puts an option's words on the trigger
+     value's 12. At most eight options show before it scrolls. */
+  --inp-list-offset: var(--space-4); /* optical: the list's gap from its trigger */
+  --inp-list-inset: var(--space-4); /* optical: the list's own padding around its options */
+  --inp-list-max-block: 336px; /* eight 40 options and the list's insets */
+  --inp-list-shadow: var(--shadow-crop);
+  --inp-option-height: var(--inp-height-md);
+  --inp-option-inset: var(--space-8); /* optical: with the list inset, the trigger's 12 */
+  /* optical: a label that wraps to two lines keeps air above and below it */
+  --inp-option-inset-block: var(--space-8);
+  --inp-option-radius: var(--radius-4);
 }
 
 :root,
@@ -100,6 +112,15 @@
      no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
   --inp-fill-bg: var(--color-paper-deep);
   --inp-fill-bg-focus: var(--color-paper);
+  /* as="select": the open list on paper. A white panel, a neutral-200 edge and the crop shadow lift
+     it off the page; the active option takes neutral-100; the tick and chevron are the field's ink
+     and the brand blue. */
+  --inp-list-bg: var(--color-white);
+  --inp-list-fg: var(--color-neutral-900);
+  --inp-list-rule: var(--color-neutral-200);
+  --inp-list-active-bg: var(--color-neutral-100);
+  --inp-list-check: var(--color-brandeis-500);
+  --inp-list-indicator-fg: var(--color-neutral-600);
 }
 
 [data-surface='tint'] {
@@ -131,6 +152,13 @@
      no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
   --inp-fill-bg: var(--color-paper);
   --inp-fill-bg-focus: var(--color-white);
+  /* as="select" on deep paper: the panel is paper, like the field. */
+  --inp-list-bg: var(--color-paper);
+  --inp-list-fg: var(--color-neutral-900);
+  --inp-list-rule: var(--color-neutral-300);
+  --inp-list-active-bg: var(--color-neutral-100);
+  --inp-list-check: var(--color-brandeis-500);
+  --inp-list-indicator-fg: var(--color-neutral-700);
 }
 
 [data-surface='ink'] {
@@ -162,6 +190,13 @@
      no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
   --inp-fill-bg: var(--color-neutral-800);
   --inp-fill-bg-focus: var(--color-neutral-900);
+  /* as="select" on ink: the panel is the field's neutral-900, blue lifts to 300 as everywhere on ink. */
+  --inp-list-bg: var(--color-neutral-900);
+  --inp-list-fg: var(--color-neutral-50);
+  --inp-list-rule: var(--color-neutral-700);
+  --inp-list-active-bg: var(--color-neutral-800);
+  --inp-list-check: var(--color-brandeis-300);
+  --inp-list-indicator-fg: var(--color-neutral-400);
 }
 
 [data-surface='blue'] {
@@ -198,4 +233,11 @@
      no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
   --inp-fill-bg: var(--color-brandeis-600);
   --inp-fill-bg-focus: var(--color-brandeis-700);
+  /* as="select" on blue: the panel returns to white, like the field. */
+  --inp-list-bg: var(--color-white);
+  --inp-list-fg: var(--color-neutral-900);
+  --inp-list-rule: var(--color-brandeis-200);
+  --inp-list-active-bg: var(--color-brandeis-50);
+  --inp-list-check: var(--color-brandeis-500);
+  --inp-list-indicator-fg: var(--color-neutral-600);
 }

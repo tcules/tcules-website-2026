@@ -1,8 +1,11 @@
-import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 import { cx } from '@/lib/cx';
 
 import styles from './Input.module.css';
+import { SelectControl, type SelectControlProps } from './SelectControl';
+
+export type { InputOption } from './SelectControl';
 
 /* One emphasis and no `emphasis` prop; two APPEARANCES (`appearance`, box and line). There were two
    emphases — standard, and a `quiet` emphasis kept
@@ -52,21 +55,23 @@ type NativeTextareaProps = SharedProps &
   };
 
 /**
- * A native `<select>` in the same box (docs/specs/EnquiryForms.md § 4, owner 25 Nov 2026: the
- * enquiry form's intent picker is a dropdown). Same height, type, rule, focus ring and invalid state
- * as a text field; the browser keeps its own arrow and its own option list, so every phone opens its
- * native picker. The options are the caller's children.
+ * A select in the same box (owner, 25 Nov 2026: "a proper dropdown instead of relying on a native
+ * dropdown", after shadcn): the field's trigger, height, type, rule, focus ring and invalid state on
+ * every appearance, and a list that opens under it. Controlled: `value` and `onValueChange`. The
+ * chevron and the chosen option's tick are the caller's glyphs (`indicator`, `check`), as Button
+ * takes its icon. See SelectControl for the keyboard and the ARIA.
  */
-type NativeSelectProps = SharedProps &
-  Omit<SelectHTMLAttributes<HTMLSelectElement>, 'className'> & {
+type CustomSelectProps = SharedProps &
+  Omit<SelectControlProps, 'className'> & {
     as: 'select';
   };
 
-export type InputProps = NativeInputProps | NativeTextareaProps | NativeSelectProps;
+export type InputProps = NativeInputProps | NativeTextareaProps | CustomSelectProps;
 
 /**
  * Input — the control box only. Labels, optional flags, validation messages and layout belong to
- * the pattern composing it. All three native variants keep every applicable HTML attribute.
+ * the pattern composing it. The input and the textarea keep every applicable HTML attribute; the
+ * select is a field-shaped trigger and list (SelectControl).
  */
 export function Input({
   as = 'input',
@@ -86,7 +91,6 @@ export function Input({
   const controlClassName = cx(
     styles.control,
     as === 'textarea' && styles.textarea,
-    as === 'select' && styles.select,
     appearance === 'line' && styles.line,
     appearance === 'bare' && styles.bare,
     appearance === 'fill' && styles.fill,
@@ -107,8 +111,8 @@ export function Input({
 
   if (as === 'select') {
     return (
-      <select
-        {...(rest as SelectHTMLAttributes<HTMLSelectElement>)}
+      <SelectControl
+        {...(rest as Omit<SelectControlProps, 'className'>)}
         aria-invalid={nativeInvalid}
         className={controlClassName}
       />

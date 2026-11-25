@@ -1,6 +1,7 @@
 import { Input, Layout, Section } from '@/components';
 import { ROUTES } from '@/lib/routes';
 
+import { SelectSpecimen } from '../_specimen/SelectSpecimen';
 import { Specimen } from '../_specimen/Specimen';
 
 function LabelledInput({
@@ -104,22 +105,14 @@ export default function InputSpecimenPage() {
               </Layout>
             </Specimen>
             <Specimen
-              title={'as="select" · box and fill'}
-              note="The enquiry form's intent picker (25 Nov 2026): the field's box, the browser's own arrow and option list."
+              title={'as="select" · box, fill and line'}
+              note="After shadcn's Select (owner, 25 Nov 2026): the field is the trigger; the list opens under it, the chosen option ticked. Keyboard: Down, Up, Enter or Space opens; arrows, Home, End and typed letters move; Enter chooses; Escape or Tab closes. A press outside closes it. The last one has thirteen long options: it scrolls inside the list and opens upward near the foot of the screen."
             >
-              <Layout rowGap="text">
-                <Layout as="label" rowGap="tight">
-                  <span>What would you like to do?</span>
-                  <Input as="select" defaultValue="pilot">
-                    <option value="project">Discuss a project</option>
-                    <option value="pilot">Start with a pilot</option>
-                    <option value="scope">Scope a project</option>
-                  </Input>
-                </Layout>
-                <Input as="select" appearance="fill" aria-label="What would you like to do?">
-                  <option>Discuss a project</option>
-                  <option>Start with a pilot</option>
-                </Input>
+              <Layout rowGap="block">
+                <SelectSpecimen label="Box" />
+                <SelectSpecimen label="Fill" appearance="fill" />
+                <SelectSpecimen label="Line, nothing chosen" appearance="line" empty />
+                <SelectSpecimen label="Long list" long />
               </Layout>
             </Specimen>
             <Specimen title="Invalid and disabled" note="Neither state uses opacity.">
@@ -192,6 +185,11 @@ export default function InputSpecimenPage() {
                   <LabelledInput label="Rest · line" appearance="line" />
                   <LabelledInput label="Invalid · line" appearance="line" invalid />
                   <LabelledInput label="Disabled · line" appearance="line" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <SelectSpecimen label={`Rest · select · ${surface}`} />
+                  <SelectSpecimen label={`Invalid · select · ${surface}`} invalid />
+                  <SelectSpecimen label={`Disabled · select · ${surface}`} disabled />
                 </Layout>
                 <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
                   <LabelledTextarea label="Rest · line textarea" appearance="line" />

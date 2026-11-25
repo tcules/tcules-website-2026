@@ -95,12 +95,6 @@
   color: var(--inp-disabled-fg);
 }
 
-/* A select is a field you choose in rather than type in: the pointer says so. Its arrow and option
-   list stay the browser's (`appearance` is left as it is), so a phone opens its own picker. */
-.select {
-  cursor: pointer;
-}
-
 .textarea {
   block-size: auto;
   min-block-size: var(--inp-textarea-min-block);
@@ -281,4 +275,106 @@
 /* A fill textarea is a compact well: three lines (--inp-fill-textarea-min-block), still growable. */
 .control.fill.textarea {
   min-block-size: var(--inp-fill-textarea-min-block);
+}
+
+/* ── as="select" ─────────────────────────────────────────────────────────────────
+   The trigger is the field (`.control` and its appearance), so a select sits in a column of text
+   fields as one of them; the list is its own floating panel (--inp-list-*). After shadcn's Select:
+   value at the start, chevron at the end, the list the trigger's width, 4 under it (or above it
+   where the screen has no room below), its options inset so their words line up with the
+   trigger's value. No fade and no scale on opening (2026-10-19 hover is a move): the list is there
+   or not; the chevron turns, a transform. */
+.selectRoot {
+  /* The list is placed against this box: `relative` is the anchor, not an arrangement. */
+  position: relative;
+}
+
+.selectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+  text-align: start;
+  cursor: pointer;
+}
+
+.selectTrigger:disabled {
+  cursor: not-allowed;
+}
+
+.selectValue {
+  overflow: hidden;
+  min-inline-size: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Nothing chosen: the placeholder's ink, as an empty text field shows its cue. */
+.selectEmpty .selectValue {
+  color: var(--inp-standard-placeholder-fg);
+}
+
+.selectIndicator {
+  display: inline-flex;
+  flex: none;
+  color: var(--inp-list-indicator-fg);
+  transition: transform var(--inp-transition-duration) var(--inp-transition-easing);
+}
+
+.selectIndicatorOpen {
+  transform: rotate(180deg);
+}
+
+.selectList {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  inset-inline: 0;
+  inset-block-start: calc(100% + var(--inp-list-offset));
+  overflow-y: auto;
+  max-block-size: var(--inp-list-max-block);
+  padding: var(--inp-list-inset);
+  border: var(--inp-rule-width) solid var(--inp-list-rule);
+  border-radius: var(--inp-radius);
+  box-shadow: var(--inp-list-shadow);
+  background: var(--inp-list-bg);
+  overscroll-behavior: contain;
+}
+
+.selectList[hidden] {
+  display: none;
+}
+
+.selectListAbove {
+  inset-block: auto calc(100% + var(--inp-list-offset));
+}
+
+.selectOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-tight);
+  min-block-size: var(--inp-option-height);
+  padding-block: var(--inp-option-inset-block);
+  padding-inline: var(--inp-option-inset);
+  border-radius: var(--inp-option-radius);
+  font: var(--inp-text);
+  color: var(--inp-list-fg);
+  cursor: pointer;
+}
+
+/* The option the arrows or the pointer are on: a soft ground, as shadcn's accent. */
+.selectOptionActive {
+  background: var(--inp-list-active-bg);
+}
+
+.selectCheck {
+  display: inline-flex;
+  flex: none;
+  color: var(--inp-list-check);
+}
+
+@media (max-width: 767px) {
+  .selectOption {
+    min-block-size: var(--inp-height-touch);
+  }
 }
