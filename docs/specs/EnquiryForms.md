@@ -4,11 +4,10 @@
 
 |                     |                                                                                                                                                                                                                                                                                                                       |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scope**           | Behaviour across the site, not one component. Touches `EnquiryForm` (pattern), the buttons that lead to it, `LongformPage` (the legal pages' close), the `/contact` page's form, the API route, Strapi and the GTM data layer                                                                                       |
+| **Scope**           | Site-wide behaviour. Touches `EnquiryForm` (pattern), the buttons that lead to it, `LongformPage` (the legal pages' close), the `/contact` page's form, the API route, Strapi and the GTM data layer                                                                                       |
 | **Status**          | `draft`. Two open questions in § 12, one BLOCKING                                                                                                                                                                                                                                                                     |
-| **Source**          | Jatin's "Form & CTA Experience Prototype" (`tcules-form-experience-live-style.html`, 20 Nov 2026) for the behaviour. Devagya's answers of 25 Nov 2026 for what to take from it. The prototype's visual styling is not used: it says itself that it is "a visual interpretation, not the production site's extracted CSS" |
+| **Source**          | Jatin's "Form & CTA Experience Prototype" (`tcules-form-experience-live-style.html`, 20 Nov 2026) for the behaviour. Devagya's answers of 25 Nov 2026 for what to take from it. The look comes from our design system |
 | **Written**         | 25 Nov 2026, by Claude Code for Devagya                                                                                                                                                                                                                                                                               |
-| **Replaces**        | The enquiry pop-up (branch `design/enquiry-popup`, paused 19 Nov). It will not be built. See § 11                                                                                                                                                                                                                     |
 | **Rulings it keeps** | 2026-10-16 form errors on submit only · 2026-10-19 form choices are chips · 2026-10-28 enquiry card has no title and no placeholders · 2026-10-29 forms only on the island · 2026-11-20 buyer pages close on the form                                                                                              |
 
 ## 1 · The problem, in one paragraph
@@ -23,11 +22,11 @@ click, start, give up or send. This work makes each form know **what the reader 
 
 ## 2 · Behaviour: what a button does
 
-**No pop-up, anywhere.** A button that leads to the form never opens an overlay.
+**Every ask takes the reader to a form on a page.**
 
 | The button is… | What happens |
 | --- | --- |
-| An ask (a call to action) on a page **that has its own form** | Scrolls to the page's form, selects the button's intent in the picker (§ 4), and moves focus to the form's picker group (not to a text field, so a phone keyboard does not open over the form). The URL hash becomes `#enquiry`, so the back button returns the reader to where they were |
+| An ask (a call to action) on a page **that has its own form** | Scrolls to the page's form, selects the button's intent in the picker (§ 4), and moves focus to the form's picker group (the phone keyboard stays closed until the reader picks a field). The URL hash becomes `#enquiry`, so the back button returns the reader to where they were |
 | An ask on a page **with no form of its own** | Goes to `/contact`, carrying the intent and where the reader came from in the URL (`/contact?intent=start-pilot&from=/services/product-design&placement=hero`). `/contact` selects that intent and records the origin |
 | The **nav's ask** ("Book a free product review") | Same rule as any ask: scrolls on a page with a form, goes to `/contact` on one without |
 | The nav's **Contact** menu item, and the footer's | Always goes to `/contact`. It names a page and is not an ask (rule already in code since 18 Nov) |
@@ -51,14 +50,13 @@ label and how the submission is tagged.
 | --- | --- | --- | --- | --- |
 | **Sales** | Every buyer page and `/contact` | Name, email, "What are you working on?", link (optional). As today | Ways to work with us (§ 4) | As today |
 | **Careers** | `/careers` | As today's application: name, email, link to work (required) | Open roles, plus **General application, always** | As today |
-| **Privacy** | Privacy policy, cookie policy, terms of use | Name, email, "What do you need help with?" | **None for now**. Appears by itself if the CMS later gets a second option (§ 4) | "Send" |
-| ~~Partnerships~~ | Parked (Devagya, 25 Nov) | | | |
+| **Privacy** | Privacy policy, cookie policy, terms of use | Name, email, "What do you need help with?" | Hidden while it has one option; appears by itself when the CMS gets a second (§ 4) | "Send" |
 
 The privacy form follows the forms-only-on-the-island ruling: the legal pages close on the island,
 with no drawing. The 28 Oct ruling also holds: the form card carries no title and no placeholders. The
 privacy close's heading and line sit on the island beside the form, as on every other close.
 
-"How did you hear about us?" is unchanged by this work. Devagya is collecting its options.
+"How did you hear about us?" keeps its place; Devagya supplies its options.
 
 ## 4 · The picker
 
@@ -130,8 +128,8 @@ exists and isn't filtered by form or intent.*
 
 ## 6 · Analytics events
 
-Pushed to the GTM data layer that the site already loads. **Nothing the reader types is ever sent,**
-only names and IDs.
+Pushed to the GTM data layer that the site already loads. **Events carry names and IDs only;** what
+the reader types stays in the form.
 
 | Event | Fires when | Parameters |
 | --- | --- | --- |
@@ -180,29 +178,22 @@ deploys.
 - `/design/enquiry-form` gains every case: each type, picker shown and hidden, preselected, changed, errors, on each surface.
 - `npm run verify`, then `npm run build && npm run aria:check`, then `/audit-component EnquiryForm`, then `npm run shots -- enquiry-form`.
 - A data-layer log on the dev server for one journey per type. I'll paste the event list in the PR so the events can be checked without opening GTM.
-- Blast radius: build the base and the branch and diff every page, listing each page that changed.
+- Blast radius: build the base and the branch, diff every page, and list each page that changed.
 
-## 11 · Out of scope
-
-- **The pop-up.** Retired. The branch `design/enquiry-popup` stays on disk until Devagya says to delete it; nothing from it is merged. It carries rulings proposed on 18 and 19 Nov (chip hover tint, focus ring, the phone sheet). They stay proposals, and I won't log them.
-- **Partnerships.** Parked.
-- **The `/contact` page's visual redesign.** `design/contact-forms` (16 to 17 Nov) is ten rounds of redesigning the `/contact` page's bands: the hero's three routes, the proof column, the careers band, and round 10's all-blue enquiry band, paused waiting for Devagya's verdict. Only its form behaviour overlaps with this spec. This work builds on `main` and does not depend on that branch.
-- **"How did you hear about us?" options.** Devagya is collecting them.
-
-## 12 · Open questions
+## 11 · Open questions
 
 1. **BLOCKING. Chips or a dropdown for the picker?** The prototype uses a dropdown. The 2026-10-19 ruling says pick-questions are chips. I recommend **chips**: the ruling stands, every option is visible with no tap to open, and the selected chip shows the reader what they asked for. The cost is height: seven sales chips take two or three rows, more on a phone. A dropdown would supersede the ruling and needs a new one logged.
 2. **The sales intents' wording.** The seven in § 4 are the prototype's. They live in Strapi, so they can change after launch without a deploy, and this does not block the build. Do you want them reviewed first, by you or Jatin?
 
-## 13 · Build order
+## 12 · Build order
 
 Each step ships as two PRs, one to `main` and one to `new-cms`, as every change does.
 
-1. **Analytics events** (§ 6), on the forms as they are. No visual change, so nothing waits on § 12.
+1. **Analytics events** (§ 6), on the forms as they are. No visual change, so nothing waits on § 11.
 2. **Strapi:** the intent collection, the button and page fields, the API (§ 5, § 7).
 3. **Picker and button behaviour** (§ 2, § 4), for sales and careers, including General application.
 4. **Privacy form** on the three legal pages (§ 3).
 
-Each rule above gets logged with `/decide` in the PR that applies it: no pop-up; a button scrolls to the
-page form, else `/contact`; the picker shows only with a choice; careers always offers General
+Each rule above gets logged with `/decide` in the PR that applies it: an ask scrolls to the page form,
+else goes to `/contact`; the picker shows only with a choice; careers always offers General
 application; privacy forms on the legal pages.
