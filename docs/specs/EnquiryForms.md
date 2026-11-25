@@ -5,7 +5,7 @@
 |                     |                                                                                                                                                                                                                                                                                                                       |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Scope**           | Site-wide behaviour. Touches `EnquiryForm` (pattern), the buttons that lead to it, `LongformPage` (the legal pages' close), the `/contact` page's form, the API route, Strapi and the GTM data layer                                                                                       |
-| **Status**          | `draft`. Two open questions in § 11, one BLOCKING                                                                                                                                                                                                                                                                     |
+| **Status**          | `draft`. One open question in § 11                                                                                                                                                                                                                                                                     |
 | **Source**          | Jatin's "Form & CTA Experience Prototype" (`tcules-form-experience-live-style.html`, 20 Nov 2026) for the behaviour. Devagya's answers of 25 Nov 2026 for what to take from it. The look comes from our design system |
 | **Written**         | 25 Nov 2026, by Claude Code for Devagya                                                                                                                                                                                                                                                                               |
 | **Rulings it keeps** | 2026-10-16 form errors on submit only · 2026-10-19 form choices are chips · 2026-10-28 enquiry card has no title and no placeholders · 2026-10-29 forms only on the island · 2026-11-20 buyer pages close on the form                                                                                              |
@@ -97,10 +97,12 @@ the only option, so the picker hides and the form still takes applications.
 A button's intent always beats the page default. A reader's own change always beats both, until the
 page is left.
 
-**How it looks.** Single-select **chips** per the 2026-10-19 ruling, above the fields, with the
-chosen chip filled. The selected chip is the visible echo of what the button promised, so no separate
-"your selected interest" line is needed. Seven sales options wrap to two or three rows. **Confirm in § 12,
-question 1.**
+**How it looks.** A **dropdown** (Devagya, 25 Nov), the form's first row, above the fields: a native
+`<select>` dressed in the form's field style, showing the chosen intent. It reads as the line the
+prototype has ("Your selected interest"), so the reader sees at once what the button promised and can
+change it in one tap. A native select gives every phone its own picker wheel or sheet. This ruling
+covers the intent picker; the 2026-10-19 chips ruling continues to govern the form's other pick
+questions, such as "How did you hear about us?"
 
 ## 5 · What gets recorded with every submission
 
@@ -116,15 +118,20 @@ Added:
 | `cta_id` | The button pressed: `{page}_{placement}_{intent}`, or `direct` when the reader scrolled to the form themselves |
 | `entry_route` | For `/contact` only: the page the reader came from (the `from` parameter) |
 
-All of them reach HubSpot as properties. HubSpot needs new properties for `form_type`, `intent`,
-`intent_initial` and `cta_id` (Devagya creates them; I list the exact names in the PR).
+**Where each type goes.** Every submission is saved as a Strapi client-contact entry, and Strapi's
+notification worker emails the team (`tcules-cms-2026`, `src/utils/client-contact-emails.ts`), with an
+acknowledgement to the sender.
 
-**Where privacy requests go:** to hello@tcules.com like every enquiry, tagged `form_type = privacy` so
-they can be filtered out of sales reports. The site itself sends no email: every submission is saved as
-a Strapi client-contact entry and sent to HubSpot (`src/app/api/_client-contact.ts`). Whatever reaches
-hello@ today is set up in HubSpot or Strapi, outside this repo. A privacy submission takes the same
-path, so it lands wherever enquiries land now. *To check before launch: that this notification
-exists and isn't filtered by form or intent.*
+| Type | Strapi entry | Team email | Sender's acknowledgement | HubSpot |
+| --- | --- | --- | --- | --- |
+| Sales | Yes | "New Client Inquiry", as today | "We've received your enquiry", as today | Yes, with the new fields as properties |
+| Careers | Yes | Subject names the application and the role | Worded for an application | Only sales goes to HubSpot |
+| Privacy | Yes | Subject names the privacy request | Worded for a privacy request | Only sales goes to HubSpot |
+
+The API sends to HubSpot when `form_type` is `sales`, and only then. Careers applications go to HubSpot
+today (they post to the enquiry endpoint); this moves them to Strapi and email alone. HubSpot gains
+properties for `intent`, `intent_initial` and `cta_id` (Devagya creates them; I list the exact names in
+the PR). The team email's recipients per type are § 11, question 1.
 
 ## 6 · Analytics events
 
@@ -135,7 +142,7 @@ the reader types stays in the form.
 | --- | --- | --- |
 | `cta_click` | An ask is pressed | `cta_id`, `placement`, `intent`, `page`, `destination` (`inline` or `contact`) |
 | `form_view` | A form is at least half in view, once per page view | `form_type`, `intent`, `page`, `trigger` (`cta` or `scroll`) |
-| `intent_change` | The reader picks another chip | `form_type`, `from`, `to` |
+| `intent_change` | The reader picks another option in the dropdown | `form_type`, `from`, `to` |
 | `form_start` | First focus or input in a field, once per page view | `form_type`, `intent`, `field_name` |
 | `form_submit_attempt` | Send pressed | `form_type`, `intent` |
 | `form_validation_error` | Send held by errors | `form_type`, `field_names` |
@@ -155,14 +162,15 @@ deploys.
 - **The CTA button component** gains an optional `intent` relation. Empty means the page default.
 - **Pages that carry a form** (service, audit, insight, home and so on) gain an optional `defaultIntent` relation.
 - **Careers roles** stay where they are. The careers form's options are built from them, plus General application.
-- The API accepts `form_type` and the new fields, and rejects an `intent` key it does not know, so a stale link cannot write junk into HubSpot.
+- The API accepts `form_type` and the new fields, and rejects an `intent` key it does not know, so a stale link cannot write an unknown intent into Strapi or HubSpot.
+- **Client contact** gains `formType`, `intent`, `intentInitial`, `ctaId` and `entryRoute`, and the notification emails use `formType` for their subject and acknowledgement (§ 5).
 
 ## 8 · Accessibility
 
-- The picker is a `fieldset` with a `legend` ("What would you like to do?", visually hidden as today), over real radio inputs. Arrow keys move between options.
-- When a button scrolls to the form, focus moves to the picker group, and the selected option is announced. Where there is no picker, focus moves to the form's first field label group without opening a keyboard.
+- The picker is a native `<select>` with a visible label ("What would you like to do?"), so its name and value are announced and every platform's keyboard and screen-reader support comes with it.
+- When a button scrolls to the form, focus moves to the dropdown, and its label and chosen intent are announced. Where there is no picker, focus moves to the form's first field label group without opening a keyboard.
 - Errors stay as ruled: on send only, all at once, focus to the first.
-- Targets for WCAG 2.1 AA: chips at least 24 by 24, contrast as the existing chip tokens on each surface.
+- Targets for WCAG 2.1 AA: the dropdown takes the field height (above 24), its label and value use the field tokens' contrast on each surface, and its focus ring is the field's.
 
 ## 9 · Edge cases to build against
 
@@ -175,25 +183,26 @@ deploys.
 
 ## 10 · Proving it
 
-- `/design/enquiry-form` gains every case: each type, picker shown and hidden, preselected, changed, errors, on each surface.
+- `/design/enquiry-form` gains every case: each type, dropdown shown and hidden, preselected, changed, errors, on each surface.
 - `npm run verify`, then `npm run build && npm run aria:check`, then `/audit-component EnquiryForm`, then `npm run shots -- enquiry-form`.
 - A data-layer log on the dev server for one journey per type. I'll paste the event list in the PR so the events can be checked without opening GTM.
 - Blast radius: build the base and the branch, diff every page, and list each page that changed.
 
-## 11 · Open questions
+## 11 · Open question
 
-1. **BLOCKING. Chips or a dropdown for the picker?** The prototype uses a dropdown. The 2026-10-19 ruling says pick-questions are chips. I recommend **chips**: the ruling stands, every option is visible with no tap to open, and the selected chip shows the reader what they asked for. The cost is height: seven sales chips take two or three rows, more on a phone. A dropdown would supersede the ruling and needs a new one logged.
-2. **The sales intents' wording.** The seven in § 4 are the prototype's. They live in Strapi, so they can change after launch without a deploy, and this does not block the build. Do you want them reviewed first, by you or Jatin?
+1. **Who receives the careers and privacy emails?** Sales notifications go to hello@, Jatin, Rakesh and Dhrumil today. My suggestion: privacy to hello@ alone, careers to hello@ and Jatin. The sales list stays as it is.
 
 ## 12 · Build order
 
-Each step ships as two PRs, one to `main` and one to `new-cms`, as every change does.
+Each step lands on `main` (staging) first.
 
-1. **Analytics events** (§ 6), on the forms as they are. No visual change, so nothing waits on § 11.
+1. **Analytics events** (§ 6), on the forms as they are.
 2. **Strapi:** the intent collection, the button and page fields, the API (§ 5, § 7).
 3. **Picker and button behaviour** (§ 2, § 4), for sales and careers, including General application.
 4. **Privacy form** on the three legal pages (§ 3).
+5. **Review on staging with Jatin and Devagya.** A review list per type: the route, the button to press, what the form should open with, what to change, and where the submission should arrive. Fixes from the review land on `main`.
+6. **Live.** After approval, the `new-cms` PRs, one per step, in the same order. Strapi changes deploy before the site changes that read them.
 
 Each rule above gets logged with `/decide` in the PR that applies it: an ask scrolls to the page form,
-else goes to `/contact`; the picker shows only with a choice; careers always offers General
+else goes to `/contact`; the intent picker is a dropdown and shows only with a choice; HubSpot receives sales submissions only; careers always offers General
 application; privacy forms on the legal pages.
