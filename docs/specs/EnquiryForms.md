@@ -194,6 +194,9 @@ Devagya brings these up when reviewing the forms with Jatin:
 
 1. **Who receives the careers and privacy emails.** They go to hello@, Jatin, Rakesh and Dhrumil, like sales, for now. Claude's suggestion: privacy to hello@ alone, careers to hello@ and Jatin.
 2. **The wording of the seven sales intents** in § 4, which can be edited in Strapi.
+3. **The wording Claude wrote:** the privacy close's heading, line and thank-you, and the careers and privacy emails' subjects and acknowledgements (CMS `client-contact-emails.ts`).
+4. **Careers keeps its role chips** rather than the dropdown.
+5. **The partnership form.** Parked on 25 Nov as a section of `/contact`, not a second form there. To decide: whether it ships, where it lives, its fields, and whether it is a fourth form type with its own emails (it would stay out of HubSpot, as careers and privacy do).
 
 ## 12 · Build order
 
