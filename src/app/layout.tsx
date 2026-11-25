@@ -54,7 +54,9 @@ export default async function RootLayout({
   const trackingEnabled = process.env.RAILWAY_ENVIRONMENT_NAME === 'live';
 
   return (
-    <html lang="en">
+    /* data-scroll-behavior: a change of page lands at its top at once, while scrolls within a page
+       glide (reset.css; Next 16 leaves a global smooth scroll alone unless told). */
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
