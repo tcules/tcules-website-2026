@@ -143,7 +143,12 @@ const REACT = { react: 'React', 'react-dom': 'ReactDOM', 'react-dom/client': 'Re
 
 /** A classic script inlined by consumers must not end or escape its own <script> element. */
 const scriptSafe = (js, label) => {
-  const out = js.replace(/<\/script/gi, '<\\/script').replace(/<!--/g, '<\\!--');
+  /* U+FFFD is refused by the artifact service as a sign of broken text, but a parser can hold it on purpose
+     (an HTML entity decoder in the corpus pages returns it for an invalid code point). Write it as an escape. */
+  const out = js
+    .replace(/<\/script/gi, "<\\/script")
+    .replace(/<!--/g, "<\\!--")
+    .replace(/\uFFFD/g, "\\ufffd");
   if (/<\/script|<!--/i.test(out)) throw new Error(`${label}: still holds </script or <!--`);
   return out;
 };
