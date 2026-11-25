@@ -5,7 +5,7 @@
 |                     |                                                                                                                                                                                                                                                                                                                       |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Scope**           | Site-wide behaviour. Touches `EnquiryForm` (pattern), the buttons that lead to it, `LongformPage` (the legal pages' close), the `/contact` page's form, the API route, Strapi and the GTM data layer                                                                                       |
-| **Status**          | `draft`. One open question in § 11                                                                                                                                                                                                                                                                     |
+| **Status**          | `approved` (Devagya, 25 Nov 2026). Points for the staging review in § 11                                                                                                                                                                                                                                                                     |
 | **Source**          | Jatin's "Form & CTA Experience Prototype" (`tcules-form-experience-live-style.html`, 20 Nov 2026) for the behaviour. Devagya's answers of 25 Nov 2026 for what to take from it. The look comes from our design system |
 | **Written**         | 25 Nov 2026, by Claude Code for Devagya                                                                                                                                                                                                                                                                               |
 | **Rulings it keeps** | 2026-10-16 form errors on submit only · 2026-10-19 form choices are chips · 2026-10-28 enquiry card has no title and no placeholders · 2026-10-29 forms only on the island · 2026-11-20 buyer pages close on the form                                                                                              |
@@ -131,7 +131,7 @@ acknowledgement to the sender.
 The API sends to HubSpot when `form_type` is `sales`, and only then. Careers applications go to HubSpot
 today (they post to the enquiry endpoint); this moves them to Strapi and email alone. HubSpot gains
 properties for `intent`, `intent_initial` and `cta_id` (Devagya creates them; I list the exact names in
-the PR). The team email's recipients per type are § 11, question 1.
+the PR). The team email goes to the same recipients for every type: hello@, Jatin, Rakesh and Dhrumil, as today (Devagya, 25 Nov, for now). Devagya raises the recipients per type at the staging review (§ 12, step 5).
 
 ## 6 · Analytics events
 
@@ -188,9 +188,12 @@ deploys.
 - A data-layer log on the dev server for one journey per type. I'll paste the event list in the PR so the events can be checked without opening GTM.
 - Blast radius: build the base and the branch, diff every page, and list each page that changed.
 
-## 11 · Open question
+## 11 · Points for the staging review
 
-1. **Who receives the careers and privacy emails?** Sales notifications go to hello@, Jatin, Rakesh and Dhrumil today. My suggestion: privacy to hello@ alone, careers to hello@ and Jatin. The sales list stays as it is.
+Devagya brings these up when reviewing the forms with Jatin:
+
+1. **Who receives the careers and privacy emails.** They go to hello@, Jatin, Rakesh and Dhrumil, like sales, for now. Claude's suggestion: privacy to hello@ alone, careers to hello@ and Jatin.
+2. **The wording of the seven sales intents** in § 4, which can be edited in Strapi.
 
 ## 12 · Build order
 
@@ -200,7 +203,7 @@ Each step lands on `main` (staging) first.
 2. **Strapi:** the intent collection, the button and page fields, the API (§ 5, § 7).
 3. **Picker and button behaviour** (§ 2, § 4), for sales and careers, including General application.
 4. **Privacy form** on the three legal pages (§ 3).
-5. **Review on staging with Jatin and Devagya.** A review list per type: the route, the button to press, what the form should open with, what to change, and where the submission should arrive. Fixes from the review land on `main`.
+5. **Review on staging with Jatin and Devagya.** A review list per type: the route, the button to press, what the form should open with, what to change, and where the submission should arrive. The points in § 11 are on the list. Fixes from the review land on `main`.
 6. **Live.** After approval, the `new-cms` PRs, one per step, in the same order. Strapi changes deploy before the site changes that read them.
 
 Each rule above gets logged with `/decide` in the PR that applies it: an ask scrolls to the page form,
