@@ -1,0 +1,194 @@
+/* AutonomyLadder — steps, an arrow, a note and the receipt (docs/specs/AutonomyLadder.md).
+   Layout owns every seam; this module draws the plates, the arrow and the slip, and sets type.
+   No margin anywhere. */
+
+.legend {
+  font: var(--ladder-legend-text);
+  color: var(--ladder-legend-ink);
+}
+
+.swatch {
+  flex: none;
+  inline-size: var(--ladder-swatch-width);
+  block-size: var(--ladder-swatch-height);
+  background: var(--ladder-fill);
+  border-block-start: var(--ladder-level-width) solid var(--ladder-level-ink);
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+}
+
+/* ── The plate: a quiet frame, filled from the bottom to the software's share ─── */
+.plate {
+  position: relative;
+  block-size: var(--ladder-plate-height-sm);
+  overflow: hidden;
+  border: var(--ladder-plate-border) solid var(--ladder-plate-edge);
+  border-radius: var(--ladder-plate-radius);
+  background: var(--ladder-plate-ground);
+}
+
+.fill {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: calc(var(--ladder-share) * 100%);
+  background: var(--ladder-fill);
+  border-block-start: var(--ladder-level-width) solid var(--ladder-level-ink);
+}
+
+/* An empty plate draws no level line: nothing is done by the software there. */
+.empty .fill {
+  border-block-start-width: 0;
+}
+
+.title {
+  font: var(--ladder-title-text);
+  letter-spacing: var(--ladder-title-tracking);
+  color: var(--ladder-title-ink);
+}
+
+.role {
+  font: var(--ladder-role-text);
+  letter-spacing: var(--ladder-role-tracking);
+  color: var(--ladder-role-ink);
+}
+
+.example {
+  font: var(--ladder-example-text);
+  color: var(--ladder-example-ink);
+}
+
+/* ── The arrow: the steps are climbed, left to right. A phone stacks two by two and draws none. */
+.arrow {
+  display: none;
+  position: relative;
+  block-size: var(--ladder-arrow-height);
+}
+
+.arrow::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  block-size: var(--ladder-arrow-width);
+  translate: 0 -50%;
+  background: var(--ladder-arrow-ink);
+}
+
+/* The start dot and the head, both on the line. */
+.arrow::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: var(--ladder-arrow-width);
+  inset-block-start: 50%;
+  inline-size: var(--ladder-arrow-head);
+  block-size: var(--ladder-arrow-head);
+  border-block-start: var(--ladder-arrow-width) solid var(--ladder-arrow-ink);
+  border-inline-end: var(--ladder-arrow-width) solid var(--ladder-arrow-ink);
+  translate: 0 -50%;
+  rotate: 45deg;
+}
+
+.arrow {
+  background: radial-gradient(
+      circle at calc(var(--ladder-arrow-dot) / 2) 50%,
+      var(--ladder-arrow-ink) calc(var(--ladder-arrow-dot) / 2),
+      transparent calc(var(--ladder-arrow-dot) / 2 + var(--ladder-plate-border))
+    )
+    no-repeat;
+}
+
+.note {
+  font: var(--ladder-note-text);
+  color: var(--ladder-note-ink);
+}
+
+.noteLabel {
+  font: var(--ladder-note-label-text);
+  letter-spacing: var(--ladder-note-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--ladder-note-label-ink);
+}
+
+/* ── The receipt: a slip torn along its foot ──────────────────────────────────── */
+.slip {
+  padding: var(--gap-block);
+  padding-block-end: calc(var(--gap-block) + var(--ladder-slip-tooth));
+  background: var(--ladder-slip-ground);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    96% calc(100% - var(--ladder-slip-tooth)),
+    92% 100%,
+    88% calc(100% - var(--ladder-slip-tooth)),
+    84% 100%,
+    80% calc(100% - var(--ladder-slip-tooth)),
+    76% 100%,
+    72% calc(100% - var(--ladder-slip-tooth)),
+    68% 100%,
+    64% calc(100% - var(--ladder-slip-tooth)),
+    60% 100%,
+    56% calc(100% - var(--ladder-slip-tooth)),
+    52% 100%,
+    48% calc(100% - var(--ladder-slip-tooth)),
+    44% 100%,
+    40% calc(100% - var(--ladder-slip-tooth)),
+    36% 100%,
+    32% calc(100% - var(--ladder-slip-tooth)),
+    28% 100%,
+    24% calc(100% - var(--ladder-slip-tooth)),
+    20% 100%,
+    16% calc(100% - var(--ladder-slip-tooth)),
+    12% 100%,
+    8% calc(100% - var(--ladder-slip-tooth)),
+    4% 100%,
+    0 calc(100% - var(--ladder-slip-tooth))
+  );
+}
+
+.slipTitle {
+  font: var(--ladder-slip-title-text);
+  letter-spacing: var(--ladder-slip-title-tracking);
+  color: var(--ladder-slip-title-ink);
+}
+
+/* Each row's term and detail are the dl's two tracks; the row wrapper steps aside for them. */
+.row {
+  display: contents;
+}
+
+.term,
+.detail {
+  padding-block: var(--ladder-cell-pad);
+  border-block-start: var(--ladder-rule-width) dashed var(--ladder-rule-ink);
+  font: var(--ladder-cell-text);
+}
+
+.term {
+  color: var(--ladder-term-ink);
+}
+
+.detail {
+  color: var(--ladder-detail-ink);
+}
+
+.caption {
+  font: var(--ladder-caption-text);
+  color: var(--ladder-caption-ink);
+}
+
+@media (min-width: 768px) {
+  .arrow {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .plate {
+    block-size: var(--ladder-plate-height-lg);
+  }
+}

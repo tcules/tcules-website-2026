@@ -213,6 +213,11 @@ const SPECIMENS = [
         note: 'stages one decision passes through on one blue line — 2 to 12 stages, the return arc, vertical below 1024, 3 surfaces',
       },
       {
+        href: '/design/autonomy-ladder',
+        name: 'AutonomyLadder',
+        note: 'steps of how much the software does on its own, plates filled to its share, an arrow, a note and the AI receipt — tint, paper, ink, three steps, no receipt',
+      },
+      {
         href: '/design/kit/how-we-work',
         name: 'EngagementModel',
         note: 'the "How we work" USP band — one chart over time keyed by three points; full and compact, paper and tint, stress copy',
