@@ -1,10 +1,7 @@
-import { notFound } from 'next/navigation';
-
-import { Layout, Section } from '@/components';
-import { ContentSection, Gateway, GatewayPaths } from '@/patterns';
-import { getCorpusPage, getProposedEyebrows } from '@/content';
-import { ROUTES } from '@/lib/routes';
-import { gatewayBoardItems, gatewayItems, gatewayPaths } from '@/templates';
+import { isSituationFigureName, Layout, Section, SituationFigure } from '@/components';
+import { ContentSection, Gateway, GatewayPaths, type GatewayItem, type GatewayPath } from '@/patterns';
+import { servicePath } from '@/lib/routes';
+import { sketchForRoute } from '@/lib/sketches';
 
 import { Specimen } from '../../_specimen/Specimen';
 import t from '../../_specimen/typeroles.module.css';
@@ -12,8 +9,9 @@ import t from '../../_specimen/typeroles.module.css';
 /**
  * /design/kit/gateway — the home gateway ("What do you need next?").
  *
- * On the real corpus band (read from the content seam, so the words and the links are home's own,
- * never restated here). G.0 is home since round 11 (19 Oct 2026): the `board`, every situation at
+ * On specimen paths: home's gateway left the CMS home for the stages band (owner, 23 Nov 2026), so the
+ * words here are the specimen's, at home's shape — two paths, five services — and the selector
+ * arrangements set each service as one situation. G.0 is home since round 11 (19 Oct 2026): the `board`, every situation at
  * once with its SituationFigure. G.1–G.3 are the round 6–7 selector and its explored alternative,
  * kept as Gateway arrangements.
  */
@@ -28,15 +26,54 @@ function Variation({ id, title, note }: { id: string; title: string; note: strin
   );
 }
 
-export default async function KitGatewayPage() {
-  const page = await getCorpusPage(ROUTES.home);
-  const band = page?.bands.find((b) => b.id === 'product-situations');
-  if (!band) notFound();
-  const items = gatewayItems(band);
-  const board = gatewayBoardItems(band);
-  const paths = gatewayPaths(band);
-  const eyebrow = (await getProposedEyebrows(ROUTES.home))[band.id];
-  const heading = band.headingText;
+/* Two paths at home's shape: a new product, and one already in use. Specimen words. */
+const PATHS: readonly GatewayPath[] = [
+  {
+    id: 'new',
+    eyebrow: 'New product',
+    title: 'Creating a new product',
+    body: ['You have an idea or an early prototype and need a first version people can use.'],
+    links: [
+      { label: 'Design and launch your MVP', href: servicePath('mvp-development') },
+      { label: 'Shape the product before you build', href: servicePath('product-design') },
+    ],
+  },
+  {
+    id: 'existing',
+    eyebrow: 'Existing product',
+    title: 'Improving a product in use',
+    body: ['Customers rely on it, and it has grown harder to use, change or extend.'],
+    links: [
+      { label: 'Modernise an ageing product', href: servicePath('product-modernisation') },
+      { label: 'Bring a design system into line', href: servicePath('design-systems') },
+      { label: 'Add AI features users can check', href: servicePath('ai-product-ux') },
+    ],
+  },
+];
+
+export default function KitGatewayPage() {
+  const heading = 'What do you need next?';
+  const eyebrow = 'Where to start';
+  const paths = PATHS.map((path) => ({
+    ...path,
+    links: path.links.map((link) => ({ ...link, scene: sketchForRoute(link.href) })),
+  }));
+  const items: GatewayItem[] = PATHS.flatMap((path) =>
+    path.links.map((link) => ({
+      id: `${path.id}-${link.href}`,
+      title: link.label,
+      body: path.body?.[0] ?? '',
+      href: link.href,
+      service: link.label,
+    })),
+  );
+  /* The board's drawing is the service's SituationFigure, as home's board drew it (round 11). */
+  const board = items.map((item) => {
+    const scene = sketchForRoute(item.href);
+    return scene && isSituationFigureName(scene)
+      ? { ...item, visual: <SituationFigure name={scene} /> }
+      : item;
+  });
 
   return (
     <>

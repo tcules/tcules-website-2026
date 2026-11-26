@@ -1,23 +1,16 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 
 import {
-  getCorpusPage,
   getInsightsFixturePage,
-  type CorpusPage,
   type InsightsPage,
 } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import {
   AuthorPieces,
-  CorpusBandView,
   ListingClose,
   ListingIndex,
-  glossaryIndex,
-  type CaseView,
 } from '@/templates';
 
-import { caseIndexProps } from '../../_corpus/case-index';
 import { closingOf, insightCards, insightsIndexProps } from '../../_insights/hub';
 
 export const metadata: Metadata = {
@@ -69,26 +62,9 @@ function empty(page: InsightsPage): InsightsPage {
 }
 
 /**
- * The case index thinned: one view, a featured case without its cover, every other case's cover
- * gone, and a group of one — the shapes a group falls back to when the corpus gives it less.
- */
-function sparseCases(views: CaseView[]): CaseView[] {
-  return views.slice(0, 1).map((view) => ({
-    ...view,
-    groups: view.groups.map((group, index) => ({
-      ...group,
-      items: group.items
-        .slice(0, index === view.groups.length - 1 ? 1 : group.items.length)
-        .map((item, at) => (at % 2 === 1 ? { ...item, cover: undefined } : item)),
-    })),
-  }));
-}
-
-/**
  * ListingIndex — the one listing page type (owner, 22 Oct 2026: /insights and /case-studies share
- * one structure) — over both datasets, through the same mappings as the live routes
- * (src/app/_insights/hub.tsx, src/app/_corpus/case-index.tsx), so the specimen and the pages cannot
- * drift.
+ * one structure) — through the same mapping as the live insights hub (src/app/_insights/hub.tsx), so
+ * the specimen and the page cannot drift.
  *
  *   (default)             the insights hub over the stress fixture (src/content/sources/fixtures/
  *                         insights.ts): all seven formats, more items than any section shows, the
@@ -98,15 +74,6 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *                         parameters); ticks, chips and "Show more" stay here, the state kept
  *   ?state=sparse         the live CMS's shape
  *   ?state=empty          nothing published
- *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
- *   ?data=cases&state=sparse   one view, covers missing, a group of one
- *   ?data=cases&state=empty    no cases
- *   ?data=glossary        the glossary hub from its copy (glossaryIndex): the lead beside the rail,
- *                         each group a dictionary of ruled term rows, a group's note under its rows,
- *                         the ask as the close, the FAQ after it
- *   ?data=glossary&state=sparse   one group of one term (the shortest), no lead, no note, no ask
- *   ?data=glossary&state=sizes    groups of two to six terms (the copy's terms reused): one term a
- *                         row at every group size
  *   ?data=author          an author page's pieces (AuthorPieces): a person with covers among many
  *                         pieces, one with many and no covers, one with two and none; then the close
  *                         with its `lead` set, as the authors index sets it
@@ -117,48 +84,6 @@ function sparseCases(views: CaseView[]): CaseView[] {
 export default async function ListingIndexSpecimen({ searchParams }: Props) {
   const query = await searchParams;
   const state = one(query.state);
-
-  if (one(query.data) === 'cases') {
-    const props = await caseIndexProps(query, (views) =>
-      state === 'empty' ? [] : state === 'sparse' ? sparseCases(views) : views,
-    );
-    if (!props) notFound();
-    return <ListingIndex {...props} />;
-  }
-
-  if (one(query.data) === 'glossary') {
-    const corpus = await getCorpusPage(ROUTES.glossary);
-    if (!corpus) notFound();
-    const page: CorpusPage =
-      state === 'sparse'
-        ? {
-            ...corpus,
-            bands: corpus.bands
-              .filter((band) => band.id === 'ai-in-practice')
-              .map((band) => ({ ...band, blocks: band.blocks.slice(0, 1) })),
-          }
-        : state === 'sizes'
-          ? { ...corpus, bands: [...termGroupSizes(corpus), ...corpus.bands.slice(-1)] }
-          : corpus;
-    const index = glossaryIndex(page);
-    return (
-      <ListingIndex
-        breadcrumbs={page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }))}
-        hero={index.hero}
-        label="Glossary"
-        railLabel="Browse the glossary"
-        views={[{ id: 'groups', label: 'Groups', sections: index.sections }]}
-        lead={index.lead}
-        empty="No terms are published yet."
-        closing={index.closing}
-        bands={{
-          afterClose: index.after.map((band) => (
-            <CorpusBandView key={band.id} page={page} band={band} />
-          )),
-        }}
-      />
-    );
-  }
 
   const fixture = await getInsightsFixturePage();
 
@@ -199,25 +124,3 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   return <ListingIndex {...insightsIndexProps(page, query, path)} />;
 }
 
-/** Groups of two to six terms, from the copy's own term lines in order (reused past the last). */
-function termGroupSizes(corpus: CorpusPage): CorpusPage['bands'] {
-  const lines = corpus.bands.flatMap((band) =>
-    band.blocks.filter(
-      (block) =>
-        block.type === 'paragraph' &&
-        block.runs[0]?.type === 'link' &&
-        block.runs[0].href.startsWith('/glossary/'),
-    ),
-  );
-  let at = 0;
-  return [2, 3, 4, 5, 6].map((size) => {
-    const blocks = Array.from({ length: size }, () => lines[at++ % lines.length]!);
-    return {
-      id: `sizes-${size}`,
-      anchored: true,
-      heading: [{ type: 'text' as const, text: `A group of ${size} terms` }],
-      headingText: `A group of ${size} terms`,
-      blocks,
-    };
-  });
-}

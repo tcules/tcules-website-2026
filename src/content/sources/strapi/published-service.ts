@@ -13,8 +13,8 @@ import type {
 } from '@/templates/CorpusPage/published-service-model';
 import type { HomeSection } from '@/templates/CorpusPage/published-home-model';
 
-import { parseBlocks } from '../corpus/parse-body';
-import { parseInline } from '../corpus/parse-inline';
+import { parseBlocks } from '../markdown-blocks/parse-body';
+import { parseInline } from '../markdown-blocks/parse-inline';
 import { action, actionHref, icon, illustration, image, mapBand, mapHero, rows, text } from './home';
 import type {
   CmsAction,

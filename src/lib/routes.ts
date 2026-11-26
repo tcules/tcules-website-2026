@@ -179,10 +179,6 @@ export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${stri
 }
 
 /** Build one canonical audit-detail path without duplicating the route family at call sites. */
-/** A corpus page through its template in the proving ground: `/design/corpus-page/<file-slug>`. */
-export function designCorpusPagePath(fileSlug: string): string {
-  return `${ROUTES.design}/corpus-page/${encodeURIComponent(fileSlug)}`;
-}
 
 /** The designed service page in the proving ground: `/design/service-page/<slug>`. */
 export function designServicePagePath(slug: string): string {

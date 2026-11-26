@@ -14,9 +14,6 @@ import { PublishedSection } from '@/templates/CorpusPage/PublishedHome';
  * `/glossary/{slug}` page; the CTA after the groups as the close; the FAQ and any other band in the
  * Dynamic Zone's order around them. Terms come through each group's Glossary relation. SEO is the
  * SEO Page for `/glossary`. Composition only.
- *
- * The route stays in PASS_1_COMPOSED_ROUTES (src/app/_corpus/composed.tsx) so kinds:check keeps
- * comparing the `_pages/` copy with what renders; it no longer renders through ComposedRoute.
  */
 export const revalidate = 300;
 

@@ -398,19 +398,14 @@ const SPECIMENS = [
         note: 'a case study as a story — chapters with a still marker column, steps, pull quotes, a principle band and annotated figures — at the Benchmark Gensuite case copied locally from Strapi',
       },
       {
-        href: '/design/about-ideal',
-        name: 'StudioPage',
-        note: 'the About page with its copy edited for consumption (fixtures/ideal/about.ts): one idea per band, a different arrangement each — compare with /about',
+        href: '/design/contact-page',
+        name: 'CorpusPage',
+        note: "the CMS page templates; PublishedContact here over the CMS Contact Page (?state=three, ?state=no-form), the others reviewed on their own routes",
       },
       {
         href: '/design/service-page',
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
-      },
-      {
-        href: '/design/corpus-page',
-        name: 'CorpusPage',
-        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, an article, a term or a free tool and the grouped case-study index, each shown with the plan that decided its bands',
       },
       {
         href: '/design/share-cards',

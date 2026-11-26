@@ -1,12 +1,9 @@
 import type { ReactNode } from 'react';
 
 import { Button, Icon, Layout, Section, type MediaImage } from '@/components';
-import { getCorpusPage, getReasonFigure } from '@/content';
-import { inlineToText } from '@/lib/inline';
+import { getReasonFigure } from '@/content';
 import { placeholderCover, placeholderIllustration } from '@/lib/placeholders';
-import { ROUTES } from '@/lib/routes';
 import { CtaRow, Reasons, type ReasonsItem } from '@/patterns';
-import { whyTcules } from '@/templates';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -279,11 +276,6 @@ const OFFER_PROOF: ReasonsItem[] = [
 ];
 
 export default async function ReasonsSpecimen() {
-  const home = await getCorpusPage(ROUTES.home);
-  const band = home?.bands.find((b) => b.id === 'why-tcules');
-  const words = band ? whyTcules(band) : undefined;
-  const opening = band?.blocks.find((block) => block.type === 'paragraph');
-  const lead = opening?.type === 'paragraph' ? inlineToText(opening.runs) : undefined;
   return (
     <>
       <Section>
@@ -606,19 +598,17 @@ export default async function ReasonsSpecimen() {
 
       <Variation
         id="home-beside"
-        title="15 · Beside, words only: home's three reasons (owner, 30 Oct 2026)"
-        note="Home's Why Tcules on the real words. The heading, lead and link in the leading track (5 of 12 from 1024); the three claims read down the trailing one, title (h4) over its sentence with its own links, a stack (48) apart. A section (96) split. No drawing, no figure, no rule: the sentences already name the clients, the live case and the tenures. Below 1024 one column, the head above."
+        title="15 · Beside, words only: three reasons (owner, 30 Oct 2026)"
+        note="Home's Why Tcules shape, on specimen words. The heading, lead and link in the leading track (5 of 12 from 1024); the three claims read down the trailing one, title (h4) over its sentence with its own links, a stack (48) apart. A section (96) split. No drawing, no figure, no rule: the sentences already name the clients, the live case and the tenures. Below 1024 one column, the head above."
       />
-      {words && band ? (
-        <Reasons
-          arrangement="beside"
-          heading={band.headingText}
-          headingId="rsn-home-beside"
-          lead={lead}
-          items={words}
-          action={WHY_LINKS}
-        />
-      ) : null}
+      <Reasons
+        arrangement="beside"
+        heading="Why teams choose a studio that ships"
+        headingId="rsn-home-beside"
+        lead="Three claims a product leader can check for themselves, one at a time."
+        items={items().slice(0, 3)}
+        action={WHY_LINKS}
+      />
 
       <Variation
         id="beside-stress"

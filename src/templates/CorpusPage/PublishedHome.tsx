@@ -105,10 +105,13 @@ export function PublishedHero({
   hero,
   fallbackMedia,
   details,
+  panel,
 }: {
   hero: HomePageModel['hero'];
   fallbackMedia?: HeroMedia;
   details?: Pick<PageHeroProps, 'facts' | 'labels' | 'dates'>;
+  /** What sits in the hero where an image would: Contact's enquiry island (owner, 31 Oct 2026). */
+  panel?: PageHeroProps['panel'];
 }) {
   const { recognition, breadcrumbs, actionsNote, arrangement, media, ...props } = hero;
   const foot = recognition?.marks.length ? (
@@ -139,6 +142,7 @@ export function PublishedHero({
       ))}
       actionsNote={prose(actionsNote)}
       foot={foot}
+      panel={panel}
     />
   );
 }
@@ -463,16 +467,20 @@ export function PublishedEngagement({
   );
 }
 
-function Cta({
+/** A CMS CTA band; exported for a page that sets its form island elsewhere (Contact's hero). */
+export function PublishedCta({
   section,
   route,
   enquiryContext,
   inkFrame = 'band',
+  inBand,
 }: {
   section: Extract<Section, { type: 'cta' }>;
   route: string;
   enquiryContext?: EnquiryContextBase;
   inkFrame?: InkFrame;
+  /** A form island set inside another band (Contact's hero), not as a band of its own. */
+  inBand?: boolean;
 }) {
   const { id, heading, eyebrow, surface, island, points, form, lead, leadHtml, rating } =
     section;
@@ -554,6 +562,7 @@ function Cta({
       markers={ink ? 'tick' : section.markers}
       quote={section.quote}
       islandArrangement={halves ? 'halves' : 'beside'}
+      inBand={inBand}
       frame={
         ink ? (inkFrame === 'band' ? 'band' : undefined) : halves ? section.frame : undefined
       }
@@ -843,7 +852,7 @@ export function PublishedSection({
     }
     case 'cta':
       return (
-        <Cta
+        <PublishedCta
           section={section}
           route={route}
           enquiryContext={enquiryContext}
