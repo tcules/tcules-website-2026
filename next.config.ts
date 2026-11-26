@@ -85,6 +85,31 @@ const nextConfig: NextConfig = {
       ...legacyRedirects,
     ];
   },
+  /**
+   * Pages are kept in this server's route cache and expired by the CMS webhook (app/layout.tsx), and
+   * Next then tells every cache downstream it may keep them too (`s-maxage=300,
+   * stale-while-revalidate` of a year). A webhook cannot reach a CDN's or a browser's copy, so a
+   * publish would stay hidden behind one for minutes, or a year of "stale". Pages and their RSC
+   * payloads therefore go out exactly as they did when they were rendered per request: nobody
+   * downstream keeps them, and every visit asks this server, which answers from its route cache.
+   *
+   * Excluded, because their own headers are right: build assets (`/_next/`), resized images (`/img/`,
+   * immutable), share cards (`/og/`, `opengraph-image`, `twitter-image`), API routes, and any path
+   * with a file extension (public files, favicon, sitemap.xml, robots.txt).
+   */
+  async headers() {
+    const noDownstreamCache = [
+      { key: 'Cache-Control', value: 'private, no-cache, no-store, max-age=0, must-revalidate' },
+    ];
+    return [
+      { source: '/', headers: noDownstreamCache },
+      {
+        source:
+          '/:path((?!_next/|img/|og/|api/)(?!.*(?:opengraph-image|twitter-image))(?!.*\\.\\w+$).+)',
+        headers: noDownstreamCache,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
