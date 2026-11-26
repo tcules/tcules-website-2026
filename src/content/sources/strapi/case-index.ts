@@ -92,9 +92,13 @@ const MARK_MAX_BYTES = 128 * 1024;
 async function maskSource(src: string): Promise<string | undefined> {
   if (new URL(src).origin !== MARK_ASSET_ORIGIN || markSrc(src)) return src;
   try {
+    /* force-cache, not no-store, as /services does: case pages are kept between requests, and a
+       no-store fetch while one renders makes Next fail it with a 500 ("changed from static to dynamic
+       at runtime"), which took down every case study once an SVG mark reached a client grid
+       (26 Nov 2026). An upload's URL carries its hash, so its bytes never change. */
     const response = await fetch(src, {
       redirect: 'error',
-      cache: 'no-store',
+      cache: 'force-cache',
       signal: AbortSignal.timeout(4_000),
     });
     const type = response.headers.get('content-type')?.split(';')[0];
