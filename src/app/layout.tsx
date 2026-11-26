@@ -10,8 +10,19 @@ import { IntentsProvider } from './_enquiry/IntentsProvider';
 import './globals.css';
 import { TrackingScripts } from './tracking-scripts';
 
-// Render the shell per request; published CMS data persists in the tagged Data Cache.
-export const revalidate = 0;
+/*
+ * Every page is rendered once and kept (the Full Route Cache) until a CMS publish expires the data it
+ * read: the Strapi webhook (api/revalidate) calls revalidateTag on the tags the CMS reads carry, and a
+ * prerendered page carries the tags of every read it made, so the next request renders it afresh
+ * (`expire: 0`, never stale). A publish therefore still shows on the next visit, which is what the
+ * per-request shell of 6 Nov was for, without rendering every visit.
+ *
+ * 300 is the safety net, and the lowest value on a route wins, so it covers every page: a render
+ * that met a CMS failure fell back without caching the failed read, so it heals within five minutes
+ * instead of staying until the next publish. Cached CMS data is not refetched by it (owner, 26 Nov
+ * 2026; decisions/2026-11-26-pages-prerendered-publish-expires-them).
+ */
+export const revalidate = 300;
 
 const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN?.trim();
 
