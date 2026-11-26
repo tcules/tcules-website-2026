@@ -359,8 +359,9 @@ refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that
   no id is duplicated. It needs a build.
 - `npm run build && npm run kinds:check` proves every band on a corpus page renders through its kind's
-  one approved component (`kinds.ts`) and that the copy's words reach the page; it lists the kinds still
-  to design. It needs a build.
+  one approved component (`kinds.ts`); it lists the kinds still to design. It does not compare words: all
+  copy comes from the CMS and `_pages` is retired as a copy source (owner, 26 Nov 2026;
+  decisions/2026-11-26-copy-comes-from-the-cms). It needs a build.
 - `npm run shots` catches horizontal overflow and page errors. It needs a server.
 
 None of it sees a child margin, a hand-rolled arrangement, a restated font size, a token name that
