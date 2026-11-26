@@ -5,7 +5,11 @@ import type { OfferScenes } from '@/lib/sketches';
 import { OfferSheet, type HeroMedia } from '@/patterns';
 
 import { LinkActions } from './CopyBands';
-import { ExpertiseDirectoryBand, QuestionLedgerBand } from './ExpertiseSections';
+import {
+  AutonomyLadderBand,
+  ExpertiseDirectoryBand,
+  QuestionLedgerBand,
+} from './ExpertiseSections';
 import { WHY_GLYPHS } from './OfferBands';
 import { PublishedHero } from './PublishedHome';
 import { SharedSectionView, type SharedSectionCtx } from './PublishedService';
@@ -76,6 +80,8 @@ function MasterSection({
       return <ExpertiseDirectoryBand section={section} route={ctx.route} />;
     case 'ledger':
       return <QuestionLedgerBand section={section} />;
+    case 'autonomy-ladder':
+      return <AutonomyLadderBand section={section} />;
     case 'why':
       return <WhyList section={section} />;
     default:

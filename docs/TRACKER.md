@@ -42,7 +42,8 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [x] **O.6** Client-logo marquee: a `ticker` arrangement of `LogoGrid`. On every live logo band (decisions/2026-11-23-client-logos-are-the-ticker). No hero needs logos (owner, 25 Nov 2026).
 - [-] **O.7** ~~The six sides of a B2B product: the wheel and its six annotated sides (SaaS).~~ Dropped: the
       autonomy ladder (O.8) replaces it (owner, 25 Nov 2026).
-- [ ] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
+- [x] **O.8** How much the software does on its own: the autonomy ladder and the AI receipt (SaaS).
+      `AutonomyLadder`, from the Expertise zone's Autonomy Ladder section in Strapi.
 
 ### Component updates
 
@@ -70,7 +71,8 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 
 - [x] **O.17** Home Live from Strapi (23 Nov 2026).
 - [x] **O.18** The service-page skeleton, then Product Design, MVP Development and Product Modernisation Live from Strapi (decisions/2026-11-24-service-pages-take-the-overhaul).
-- [ ] **O.19** B2B SaaS expertise (after O.8; its stage drawings are done)
+- [x] **O.19** B2B SaaS expertise from Strapi, without the framework band until the new framework
+      (decisions/2026-11-26-b2b-saas-takes-the-overhaul-without-its-framework).
 - [x] **O.20** How we work Live from Strapi (decisions/2026-11-24-how-we-work-takes-the-overhaul).
 - [ ] **O.21** About (deferred until Jatin's update; owner, 24 Nov 2026)
 - [x] **O.22** Careers Live from Strapi (decisions/2026-11-24-careers-takes-the-overhaul).
