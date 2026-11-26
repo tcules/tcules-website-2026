@@ -1,6 +1,5 @@
 /**
- * The floor under every check that reads the prerendered HTML in .next/server/app (aria:check,
- * kinds:check).
+ * The floor under the check that reads the prerendered HTML in .next/server/app (aria:check).
  *
  * Those checks can only see a page the build prerendered. From 6 to 26 Nov 2026 the root layout
  * carried `revalidate = 0`, so every route rendered per request and the build wrote ONE html file

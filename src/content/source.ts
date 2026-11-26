@@ -7,7 +7,6 @@ import { getPublishedLab, getPublishedLabJoin } from './sources/strapi/published
 import { getPublishedClientMaster } from './sources/strapi/published-client-master';
 import { getPublishedAuthorMaster } from './sources/strapi/published-author-master';
 import { fixtureSource } from './sources/fixtures';
-import { idealAbout } from './sources/fixtures/ideal/about';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
 import { CASE_STAGES } from './sources/fixtures/case-stages';
 import { CASE_COVERS } from './sources/fixtures/case-covers';
@@ -21,10 +20,7 @@ import { OFFER_SCENES } from './sources/offer-scenes';
 import { CLAIM_FIGURES, CLAIM_FIGURE_SIZE } from './sources/claim-figures';
 import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
 import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
-import type { ContactChannel, ContactFollow } from '@/templates';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
-import { CONTACT_CHANNELS, CONTACT_FOLLOW } from './sources/fixtures/contact-channels';
-import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { careersSource } from './sources/strapi/careers';
 import { getPublishedCaseIndex } from './sources/strapi/case-index';
@@ -75,9 +71,7 @@ import { getPublishedNavigation } from './sources/strapi/site-chrome';
 import { getPublishedSiteIdentity } from './sources/strapi/site-identity';
 import type {
   CaseStory,
-  IdealAboutPage,
   AboutContentSource,
-  CorpusContentSource,
   AuditContentSource,
   CareerContentSource,
   ContentSource,
@@ -133,8 +127,6 @@ const servicesSource: ServiceContentSource = serviceSource;
 const servicesMastersSource: ServicesMasterContentSource = servicesMasterSource;
 const termsOfUsePagesSource: TermsOfUseContentSource = termsOfUseSource;
 const toolsSource: ToolContentSource = toolSource;
-/** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
-const corpusPagesSource: CorpusContentSource = corpusSource;
 
 /* Pages that show client logos show Home's one list (./client-logos). */
 export const getPublishedAboutPage = withClientLogos(getPublishedAbout, { hero: true });
@@ -238,25 +230,12 @@ export const getServicesMasterPage =
 export const getTermsOfUsePage =
   termsOfUsePagesSource.getTermsOfUsePage.bind(termsOfUsePagesSource);
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
-export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
-export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
-export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPagesSource);
 
 /**
  * Star ratings for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER values today
  * (fixtures/testimonial-ratings.ts, owner 10 Oct 2026); each carries `placeholder: true` until a real
  * per-review rating replaces it. An id with no rating is absent, so its quote renders without stars.
  */
-/** The other ways to reach the studio, for the contact page's cards (tracker 2.56). Fixture today. */
-export async function getContactChannels(): Promise<readonly ContactChannel[]> {
-  return CONTACT_CHANNELS;
-}
-
-/** The studio's profiles and address, for the contact page's "Follow us on" island. Fixture today. */
-export async function getContactFollow(): Promise<ContactFollow> {
-  return CONTACT_FOLLOW;
-}
-
 export async function getTestimonialRatings(
   ids: readonly string[],
 ): Promise<Record<string, TestimonialRating>> {
@@ -506,11 +485,6 @@ export type {
   ToolContentSource,
 } from './types';
 
-/** The About page with its copy edited for consumption — the /design/about-ideal worked example. */
-export async function getIdealAboutPage(): Promise<IdealAboutPage> {
-  return idealAbout;
-}
-
 /** The published Authors Master and its ordered native author relations. */
 export const getPublishedAuthorMasterPage = getPublishedAuthorMaster;
 
@@ -525,6 +499,8 @@ export const getPublishedCareersPage = withClientLogos(getPublishedCareers, { he
 export const getPublishedMatterPage = getPublishedMatter;
 
 export const getPublishedWhyPage = withClientLogos(getPublishedWhy);
+/** /contact, from the CMS Contact Page. */
+export { getPublishedContact as getPublishedContactPage } from './sources/strapi/published-contact';
 
 /* How we work: the list under the hero, as on the overhaul; its own logo band is not drawn again. */
 export const getPublishedWorkMasterPage = withClientLogos(getPublishedWorkMaster, {

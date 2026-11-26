@@ -15,8 +15,8 @@ import type { ToolShell } from '@/templates/CorpusPage/LongformShell';
 import type { AuditBlock } from '@/templates/CorpusPage/published-audit-model';
 
 import type { ToolBlock, ToolPage, ToolSection } from '../../types';
-import { parseBlocks } from '../corpus/parse-body';
-import { parseInline } from '../corpus/parse-inline';
+import { parseBlocks } from '../markdown-blocks/parse-body';
+import { parseInline } from '../markdown-blocks/parse-inline';
 import { action, illustration, mapHero, rows, text } from './home';
 import type { CmsAction, CmsHero, CmsIllustration, Entries } from './home-types';
 import { mapAuditBlock, type CmsAuditBlock } from './published-audit';

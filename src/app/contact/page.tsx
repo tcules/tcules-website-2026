@@ -1,50 +1,22 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import {
-  getCaseRefs,
-  getContactChannels,
-  getContactFollow,
-  getCorpusPage,
-  getPageSeo,
-  getTestimonialAvatars,
-  getTestimonialRatings,
-} from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getPageSeo, getPublishedContactPage } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { ROUTES } from '@/lib/routes';
-import { ContactPage as ContactTemplate } from '@/templates';
+import { PublishedContact } from '@/templates/CorpusPage/PublishedContact';
 
 export async function generateMetadata(): Promise<Metadata> {
   return (await getPageSeo(ROUTES.contact)).metadata;
 }
 
-/** The 26 Oct copy through the Contact template (component-map § E /contact). Composition only. */
-async function ContactFromCopy() {
-  const page = await getCorpusPage(ROUTES.contact);
-  if (!page) notFound();
-  const [caseRefs, ratings, avatars, channels, follow] = await Promise.all([
-    getCaseRefs(caseRoutesIn(page)),
-    getTestimonialRatings(page.composition.testimonialIds),
-    getTestimonialAvatars(page.composition.testimonialIds),
-    getContactChannels(),
-    getContactFollow(),
-  ]);
-  return (
-    <ContactTemplate
-      page={page}
-      caseRefs={caseRefs}
-      shared={{}}
-      ratings={ratings}
-      avatars={avatars}
-      channels={channels}
-      follow={follow}
-    />
-  );
-}
-
+/** /contact from the CMS Contact Page. Composition only. */
 export default async function ContactPage() {
-  const { structuredData } = await getPageSeo(ROUTES.contact);
+  const [page, { structuredData }] = await Promise.all([
+    getPublishedContactPage(),
+    getPageSeo(ROUTES.contact),
+  ]);
+  if (!page) notFound();
   return (
     <>
       {structuredData ? (
@@ -53,7 +25,7 @@ export default async function ContactPage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(structuredData) }}
         />
       ) : null}
-      <ContactFromCopy />
+      <PublishedContact page={page} />
     </>
   );
 }

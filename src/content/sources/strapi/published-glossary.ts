@@ -10,8 +10,8 @@ import type {
 import { inlineToText, type InlineRun } from '@/lib/inline';
 import { glossaryPath } from '@/lib/routes';
 
-import { parseBlocks } from '../corpus/parse-body';
-import { parseInline } from '../corpus/parse-inline';
+import { parseBlocks } from '../markdown-blocks/parse-body';
+import { parseInline } from '../markdown-blocks/parse-inline';
 import { action, rows, text } from './home';
 import type { CmsAction, Entries } from './home-types';
 import { getPublishedPageSeo } from './page-seo';

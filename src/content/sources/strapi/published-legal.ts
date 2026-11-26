@@ -5,8 +5,8 @@ import type { CorpusBand, CorpusHero, CorpusPage } from '@/lib/corpus-types';
 import { inlineToText } from '@/lib/inline';
 import { ROUTES } from '@/lib/routes';
 
-import { parseInline } from '../corpus/parse-inline';
-import { slugify } from '../corpus/parse-body';
+import { parseInline } from '../markdown-blocks/parse-inline';
+import { slugify } from '../markdown-blocks/parse-body';
 import { rows, text } from './home';
 import type { CmsHero, Entries } from './home-types';
 import {

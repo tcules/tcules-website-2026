@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { INDEX_RECORD_SLUG } from './site-pages';
 
 import { expertisePath } from '@/lib/routes';
 import type {
@@ -64,7 +65,8 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
  */
 export const getPublishedExpertise = cache(
   async (slug: string): Promise<PublishedExpertisePage | null> => {
-    if (!SLUG.test(slug)) return null;
+    /* `main` is a hub's old index record, never a page of the family (site-pages.ts). */
+    if (!SLUG.test(slug) || slug === INDEX_RECORD_SLUG) return null;
     const route = expertisePath(slug);
     const { expertises } = await publicGraphql<{ expertises: CmsExpertise[] }>(
       PUBLISHED_EXPERTISE_QUERY,
@@ -96,5 +98,7 @@ export const listPublishedExpertiseSlugs = cache(async (): Promise<string[]> => 
     PUBLISHED_EXPERTISE_SLUGS_QUERY,
     'PublishedExpertiseSlugs',
   );
-  return expertises.map(({ slug }) => slug).filter((slug) => SLUG.test(slug));
+  return expertises
+    .map(({ slug }) => slug)
+    .filter((slug) => SLUG.test(slug) && slug !== INDEX_RECORD_SLUG);
 });

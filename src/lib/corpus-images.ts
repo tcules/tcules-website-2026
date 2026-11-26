@@ -38,7 +38,7 @@ export function corpusImage(binding: CorpusMediaBinding): CorpusImage {
   const size = CORPUS_ASSET_SIZES[url];
   if (!size) {
     throw new Error(
-      `Bound asset for "${binding.id}" is not measured (${url}). Run \`npm run corpus:assets\`.`,
+      `Bound asset for "${binding.id}" is not measured (${url}). Add its size to corpus-assets.generated.ts.`,
     );
   }
   const match = CLOUDINARY.exec(url);

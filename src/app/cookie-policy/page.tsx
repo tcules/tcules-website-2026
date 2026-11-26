@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCookiePolicyDocument, getCaseRefs, getPrivacyRequest } from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getCookiePolicyDocument, getPrivacyRequest } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { LongformPage, PrivacyClose } from '@/templates';
 
@@ -23,10 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CookiePolicyPage() {
   const legal = await getCookiePolicyDocument();
   if (!legal) notFound();
-  const [caseRefs, privacyRequest] = await Promise.all([
-    getCaseRefs(caseRoutesIn(legal.page)),
-    getPrivacyRequest(),
-  ]);
+  const privacyRequest = await getPrivacyRequest();
   return (
     <>
       {legal.structuredData ? (
@@ -35,7 +31,7 @@ export default async function CookiePolicyPage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(legal.structuredData) }}
         />
       ) : null}
-      <LongformPage page={legal.page} family="article" caseRefs={caseRefs} />
+      <LongformPage page={legal.page} family="article" caseRefs={{}} />
       {/* The privacy request form, the same close on every legal page (docs/specs/EnquiryForms.md § 3). */}
       {privacyRequest ? <PrivacyClose close={privacyRequest} route={legal.page.route} /> : null}
     </>
