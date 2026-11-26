@@ -33,6 +33,8 @@ import { pathToFileURL } from 'node:url';
 
 import * as esbuild from 'esbuild';
 
+import { prerenderedPages } from './prerendered-floor.mjs';
+
 const ROOT = process.cwd();
 const MATRIX = process.argv.includes('--matrix');
 const APP = join(ROOT, '.next/server/app');
@@ -41,6 +43,9 @@ if (!existsSync(APP)) {
   console.error('kinds:check: no build output in .next/server/app. Run `npm run build` first.');
   process.exit(2);
 }
+/* A build that prerendered (almost) nothing fails here, with the reason, rather than as one
+   "not prerendered" line per corpus page (prerendered-floor.mjs). */
+const prerendered = prerenderedPages(APP, 'kinds:check').length;
 
 const { parseCorpusFile } = await import('../src/content/sources/corpus/load.ts');
 
@@ -161,4 +166,6 @@ if (failures.length > 0) {
   for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
-console.log(`\nkinds:check: ${pages.length} pages, every band on its kind's component.`);
+console.log(
+  `\nkinds:check: ${pages.length} corpus pages (of ${prerendered} prerendered), every band on its kind's component.`,
+);
