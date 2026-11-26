@@ -8,11 +8,12 @@ import { listSitemapFallbackEntries } from './_sitemap/pages';
 
 /**
  * `/sitemap.xml`, from the published Sitemap Master's resolved groups (the same list the `/sitemap`
- * page renders), read from Strapi on each request.
+ * page renders), generated once and kept like every page: a publish expires it through the Sitemap
+ * Master's tags, which depend on every routed model, and five minutes is the safety net.
  * If the master cannot be read or lists nothing, use the published route inventory.
  * Fixed public routes keep the XML available during a CMS outage.
  */
-export const revalidate = 0;
+export const revalidate = 300;
 
 async function entries() {
   try {

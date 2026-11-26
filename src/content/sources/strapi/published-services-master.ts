@@ -305,8 +305,11 @@ export const getPublishedServicesMaster = cache(
           section.marks.map(async (mark) => {
             if (!mark.src || markSrc(mark.src)) return mark;
             try {
+              /* force-cache, not no-store: /services is prerendered and kept, and a no-store fetch
+                 while a kept page re-renders makes Next fail it ("changed from static to dynamic at
+                 runtime"). An upload's URL carries its hash, so its bytes never change. */
               const response = await fetch(mark.src, {
-                cache: 'no-store',
+                cache: 'force-cache',
                 signal: AbortSignal.timeout(8_000),
               });
               const mime = response.headers.get('content-type')?.split(';')[0];
