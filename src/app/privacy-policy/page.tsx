@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getPrivacyPolicyDocument, getCaseRefs } from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getPrivacyPolicyDocument } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { LongformPage } from '@/templates';
 
@@ -26,7 +25,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPolicyPage() {
   const legal = await getPrivacyPolicyDocument();
   if (!legal) notFound();
-  const caseRefs = await getCaseRefs(caseRoutesIn(legal.page));
   return (
     <>
       {legal.structuredData ? (
@@ -35,7 +33,7 @@ export default async function PrivacyPolicyPage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(legal.structuredData) }}
         />
       ) : null}
-      <LongformPage page={legal.page} family="article" caseRefs={caseRefs} />
+      <LongformPage page={legal.page} family="article" caseRefs={{}} />
     </>
   );
 }

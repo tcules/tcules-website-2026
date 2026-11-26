@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { INDEX_RECORD_SLUG } from './site-pages';
 
 import type { CorpusBlock } from '@/lib/corpus-types';
 import { auditPath } from '@/lib/routes';
@@ -12,8 +13,8 @@ import type {
   PublishedAuditSection,
 } from '@/templates/CorpusPage/published-audit-model';
 
-import { parseBlocks, slugify } from '../corpus/parse-body';
-import { parseInline } from '../corpus/parse-inline';
+import { parseBlocks, slugify } from '../markdown-blocks/parse-body';
+import { parseInline } from '../markdown-blocks/parse-inline';
 import { action, actionHref, mapHero, rows, text } from './home';
 import type { CmsAction, CmsHero, CmsIllustration, Entries } from './home-types';
 import { markdownInlineToHtml, markdownToHtml } from './markdown';
@@ -423,7 +424,8 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
  */
 export const getPublishedAudit = cache(
   async (slug: string): Promise<PublishedAuditPage | null> => {
-    if (!SLUG.test(slug)) return null;
+    /* `main` is a hub's old index record, never a page of the family (site-pages.ts). */
+    if (!SLUG.test(slug) || slug === INDEX_RECORD_SLUG) return null;
     const route = auditPath(slug);
     const { audits } = await publicGraphql<{ audits: CmsAudit[] }>(
       PUBLISHED_AUDIT_QUERY,
@@ -454,5 +456,7 @@ export const listPublishedAuditSlugs = cache(async (): Promise<string[]> => {
     PUBLISHED_AUDIT_SLUGS_QUERY,
     'PublishedAuditSlugs',
   );
-  return audits.map(({ slug }) => slug).filter((slug) => SLUG.test(slug));
+  return audits
+    .map(({ slug }) => slug)
+    .filter((slug) => SLUG.test(slug) && slug !== INDEX_RECORD_SLUG);
 });

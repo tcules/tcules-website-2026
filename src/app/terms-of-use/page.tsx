@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getTermsOfUseDocument, getCaseRefs } from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getTermsOfUseDocument } from '@/content';
 import { jsonLdMarkup } from '@/lib/json-ld';
 import { LongformPage } from '@/templates';
 
@@ -23,7 +22,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TermsOfUsePage() {
   const legal = await getTermsOfUseDocument();
   if (!legal) notFound();
-  const caseRefs = await getCaseRefs(caseRoutesIn(legal.page));
   return (
     <>
       {legal.structuredData ? (
@@ -32,7 +30,7 @@ export default async function TermsOfUsePage() {
           dangerouslySetInnerHTML={{ __html: jsonLdMarkup(legal.structuredData) }}
         />
       ) : null}
-      <LongformPage page={legal.page} family="article" caseRefs={caseRefs} />
+      <LongformPage page={legal.page} family="article" caseRefs={{}} />
     </>
   );
 }

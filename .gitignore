@@ -54,9 +54,6 @@ yarn-error.log*
 # Generated, never committed: every PR rewrote them and every merge conflicted (owner, 22 Oct 2026)
 /docs/decisions/INDEX.md
 /docs/vocabulary.md
-# The page-build census (npm run corpus:census), regenerated from _pages on every run
-/docs/page-build/census.json
-/docs/page-build/census.md
 
 # CMS write snapshots (scripts/cms/*): hold live content, never committed
 /snapshots/

@@ -1,4 +1,4 @@
-import { parseBlocks } from '../corpus/parse-body';
+import { parseBlocks } from '../markdown-blocks/parse-body';
 import { expertisePath } from '@/lib/routes';
 import type {
   AutonomyLadderSection,

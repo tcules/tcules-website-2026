@@ -11,9 +11,6 @@ import { PublishedToolsMaster } from '@/templates/CorpusPage/PublishedToolsMaste
  * `/tools`: the Tool Master from the new CMS (its hero and sections, in the editor's order), each tool
  * read through its Tool relation and linked to `/tools/{slug}`, and the published SEO Page for
  * `/tools`. The `(listing)` group keeps this page's error state off the `/tools/{slug}` detail pages.
- *
- * The route stays in PASS_1_COMPOSED_ROUTES (src/app/_corpus/composed.tsx) so kinds:check keeps
- * comparing the `_pages/` copy with what renders; it no longer renders through ComposedRoute.
  */
 
 export const revalidate = 300;

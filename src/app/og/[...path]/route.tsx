@@ -1,5 +1,6 @@
-import { offerSlugs } from '../../_corpus/offer';
-import { longformSlugs } from '../../_corpus/longform';
+import { listServiceSlugs } from '@/content';
+import { servicePath } from '@/lib/routes';
+
 import { renderShareCard, shareCardFor } from '../../_og';
 
 /**
@@ -8,14 +9,17 @@ import { renderShareCard, shareCardFor } from '../../_og';
  * card's id (ch10 C1's versioned name plus a content hash), so a new picture or title changes the URL;
  * the rest is the page's path.
  *
- * Built at build time for every corpus page in both families; a CMS-only insight renders on its
- * first request and is cached like any other route.
+ * Built at build time for every published service; an insight's card renders on its first request
+ * and is kept like any other route.
  */
 export async function generateStaticParams() {
-  const paths = [
-    ...offerSlugs('/services').map((slug) => `/services/${slug}`),
-    ...longformSlugs('/insights').map((slug) => `/insights/${slug}`),
-  ];
+  let paths: string[] = [];
+  try {
+    paths = (await listServiceSlugs()).map((slug) => servicePath(slug));
+  } catch (error) {
+    /* The CMS unreachable at build: every card renders on its first request instead. */
+    console.error(error);
+  }
   return Promise.all(
     paths.map(async (path) => {
       const card = await shareCardFor(path);

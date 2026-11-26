@@ -1,7 +1,7 @@
 ---
 title: "All copy comes from the CMS; _pages is retired as a copy source"
 date: 2026-11-26
-status: active
+status: superseded
 area: [content]
 source: "Devagya, 26 Nov 2026, reviewing PR #334 (kinds:check findings)"
 supersedes: []
