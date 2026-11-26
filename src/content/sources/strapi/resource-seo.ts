@@ -178,7 +178,6 @@ export function entrySeo(
           modifiedTime: page.modificationDate,
         },
         twitter: {
-          card: twitter?.card ?? (twitterFile ? 'summary_large_image' : 'summary'),
           title: text(twitter?.title) ?? text(og?.title) ?? title,
           description: text(twitter?.description) ?? text(og?.description) ?? description,
           site: text(twitter?.siteHandle) ?? text(settings?.twitterSiteHandle),

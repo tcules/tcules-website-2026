@@ -3,7 +3,7 @@ import { cache } from 'react';
 
 import { SITE_ORIGIN } from '@/lib/routes';
 
-import { absoluteAssetUrl } from './image';
+import { absoluteAssetUrl, readableAlt } from './image';
 import { publicGraphql, publicGraphqlUrl } from './public-graphql';
 
 const PAGE_SEO_QUERY = `
@@ -37,7 +37,8 @@ export type ResolvedSeo = {
       images?: (SocialImage | string)[];
     };
     twitter?: {
-      card: 'summary' | 'summary_large_image';
+      /** Ignored: `mapPublishedSeo` always sends the large card. */
+      card?: 'summary' | 'summary_large_image';
       title?: string;
       description?: string;
       site?: string;
@@ -67,13 +68,26 @@ function canonicalUrl(value: string | undefined, path: string): string | undefin
   return pathname === path ? new URL(pathname, SITE_ORIGIN).href : undefined;
 }
 
-/** The CMS resolves a social image as an object, or (Twitter) as its bare URL: both are read. */
+/**
+ * The CMS resolves a social image as an object, or (Twitter) as its bare URL: both are read.
+ *
+ * Returned as a spread, `{ images }` or nothing, because Next lets a route's generated share card
+ * (`opengraph-image.tsx`) through only when the metadata has no `images` key at all. An empty or
+ * undefined key still hides it, so a page whose CMS entry had no upload went out with no image.
+ */
 function socialImages(images: (SocialImage | string)[] | undefined, base: string) {
-  return images?.flatMap((entry) => {
+  const resolved = (images ?? []).flatMap((entry) => {
     const image = typeof entry === 'string' ? { url: entry } : entry;
     const url = absoluteAssetUrl(image.url, base);
-    return url ? [{ ...image, url }] : [];
+    return url ? [{ ...image, url, alt: readableAlt(image.alt) }] : [];
   });
+  return resolved.length > 0 ? { images: resolved } : {};
+}
+
+function withoutImages<T extends { images?: unknown }>(value: T): Omit<T, 'images'> {
+  const rest = { ...value };
+  delete rest.images;
+  return rest;
 }
 
 /** Shared by route-keyed SEO pages and entries with embedded, resolved SEO. */
@@ -111,11 +125,16 @@ export function mapPublishedSeo(
     alternates: { canonical, languages: seo.alternates?.languages },
     robots: canonical && seo.robots ? seo.robots : { index: false },
     openGraph: graph && {
-      ...graph,
+      ...withoutImages(graph),
       url: graphUrl && (!canonical || graphUrl === canonical) ? graphUrl : undefined,
-      images: socialImages(graph.images, assetBase),
+      ...socialImages(graph.images, assetBase),
     },
-    twitter: twitter && { ...twitter, images: socialImages(twitter.images, assetBase) },
+    /* Every page has a 1.91:1 card, uploaded or generated, so X always gets the large card. */
+    twitter: twitter && {
+      ...withoutImages(twitter),
+      card: 'summary_large_image',
+      ...socialImages(twitter.images, assetBase),
+    },
   };
 
   const structuredData = resolved?.structuredData;
