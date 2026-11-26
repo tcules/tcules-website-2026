@@ -2,7 +2,11 @@ import { Fragment } from 'react';
 
 import type { HeroMedia } from '@/patterns';
 
-import { ExpertiseDirectoryBand, QuestionLedgerBand } from './ExpertiseSections';
+import {
+  AutonomyLadderBand,
+  ExpertiseDirectoryBand,
+  QuestionLedgerBand,
+} from './ExpertiseSections';
 import { PublishedHero } from './PublishedHome';
 import {
   SharedSectionView,
@@ -40,6 +44,8 @@ function ExpertiseSection({
       return <ExpertiseDirectoryBand section={section} route={ctx.route} />;
     case 'ledger':
       return <QuestionLedgerBand section={section} />;
+    case 'autonomy-ladder':
+      return <AutonomyLadderBand section={section} />;
     default:
       return <SharedSectionView section={section} ctx={ctx} />;
   }

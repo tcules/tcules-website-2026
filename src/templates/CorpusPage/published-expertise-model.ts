@@ -1,4 +1,5 @@
 import type {
+  AutonomyLadderSection,
   ExpertiseDirectorySection,
   QuestionLedgerSection,
 } from './expertise-sections-model';
@@ -12,7 +13,10 @@ import type { PublishedServiceSection } from './published-service-model';
  * renders through everywhere else.
  */
 export type PublishedExpertiseSection =
-  PublishedServiceSection | ExpertiseDirectorySection | QuestionLedgerSection;
+  | PublishedServiceSection
+  | ExpertiseDirectorySection
+  | QuestionLedgerSection
+  | AutonomyLadderSection;
 
 export type PublishedExpertisePage = {
   slug: string;

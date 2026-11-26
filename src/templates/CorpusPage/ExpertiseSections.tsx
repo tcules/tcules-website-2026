@@ -2,12 +2,18 @@ import { Layout } from '@/components';
 import { placeholderImage } from '@/lib/placeholders';
 import { expertisePath } from '@/lib/routes';
 import { serviceIllustration } from '@/lib/service-illustrations';
-import { BlockCardSet, ContentSection, type BlockCardSetItem } from '@/patterns';
+import {
+  AutonomyLadder,
+  BlockCardSet,
+  ContentSection,
+  type BlockCardSetItem,
+} from '@/patterns';
 
 import { ListTiles } from './blocks';
 import { BandBody } from './CopyBands';
 import styles from './CorpusPage.module.css';
 import type {
+  AutonomyLadderSection,
   ExpertiseDirectorySection,
   QuestionLedgerSection,
 } from './expertise-sections-model';
@@ -88,6 +94,31 @@ export function QuestionLedgerBand({ section }: { section: QuestionLedgerSection
           <BandBody blocks={section.after} labelledBy={section.headingId} />
         ) : null}
       </Layout>
+    </ContentSection>
+  );
+}
+
+/**
+ * The autonomy ladder as the overhaul's B2B SaaS page drew it: the band's head (eyebrow, heading,
+ * lead) over the ladder, its receipt beside it from 1024.
+ */
+export function AutonomyLadderBand({ section }: { section: AutonomyLadderSection }) {
+  return (
+    <ContentSection
+      id={section.id}
+      eyebrow={section.eyebrow}
+      heading={section.heading}
+      headingId={section.headingId}
+      surface={section.surface}
+      data-band="autonomy-ladder"
+      lead={section.lead}
+    >
+      <AutonomyLadder
+        steps={section.steps}
+        legend={section.legend}
+        note={section.note}
+        receipt={section.receipt}
+      />
     </ContentSection>
   );
 }

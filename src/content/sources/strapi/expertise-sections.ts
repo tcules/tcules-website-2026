@@ -1,6 +1,7 @@
 import { parseBlocks } from '../corpus/parse-body';
 import { expertisePath } from '@/lib/routes';
 import type {
+  AutonomyLadderSection,
   ExpertiseDirectorySection,
   QuestionLedgerSection,
 } from '@/templates/CorpusPage/expertise-sections-model';
@@ -12,9 +13,9 @@ import { escapeHtml } from './rich-text';
 type Text = string | null | undefined;
 
 /**
- * The two sections only the Expertise owners' zones hold, as inline fragments to sit beside
+ * The sections only the Expertise owners' zones hold, as inline fragments to sit beside
  * `SHARED_SECTION_MEMBERS` (which spreads `ServiceFlow` and `PublishedImage`). The live schema gives
- * the ledger section no `anchorId`.
+ * the ledger section no `anchorId`. The autonomy ladder is tcules-cms-2026's Autonomy Ladder.
  */
 export const EXPERTISE_SECTION_MEMBERS = `
       ... on ComponentSharedExpertiseDirectory {
@@ -35,6 +36,12 @@ export const EXPERTISE_SECTION_MEMBERS = `
         id heading description
         ledger { entries { question role } }
         after { id kind prose { body } }
+      }
+      ... on ComponentSharedAutonomyLadder {
+        id eyebrow heading anchorId description ladderSurface: surface ladderLegend: legend
+        steps { id title role example share }
+        ladderNote: note { label body }
+        receiptTitle receiptRows { id label body } receiptCaption
       }
 `;
 
@@ -84,6 +91,22 @@ export type CmsQuestionRoleLedger = {
   description: Text;
   ledger: { entries: Entries<{ question: Text; role: Text }> } | null;
   after: Entries<{ id: string; kind: string; prose: { body: Text } | null }>;
+};
+
+export type CmsAutonomyLadder = {
+  __typename: 'ComponentSharedAutonomyLadder';
+  id: string;
+  eyebrow: Text;
+  heading: Text;
+  anchorId: Text;
+  description: Text;
+  ladderSurface: 'paper' | 'tint' | null;
+  ladderLegend: Text;
+  steps: Entries<{ id: string; title: Text; role: Text; example: Text; share: number | null }>;
+  ladderNote: { label: Text; body: Text } | null;
+  receiptTitle: Text;
+  receiptRows: Entries<{ id: string; label: Text; body: Text }>;
+  receiptCaption: Text;
 };
 
 const paragraph = (value: Text) => {
@@ -190,5 +213,64 @@ export function mapQuestionRoleLedger(
       const body = block.kind === 'prose' ? text(block.prose?.body) : undefined;
       return body ? parseBlocks(body) : [];
     }),
+  };
+}
+
+/**
+ * The autonomy ladder: its steps in the editor's order (a step missing a word is left out, with a
+ * warning), the labelled note, and the receipt when it has a title and rows. Fewer than two steps
+ * cannot draw a ladder, so the section is left out.
+ */
+export function mapAutonomyLadder(
+  section: CmsAutonomyLadder,
+  route: string,
+): AutonomyLadderSection | undefined {
+  const warn = (message: string) => console.warn(`New CMS ${route}: ${message}`);
+  const key = `${section.__typename}-${section.id}`;
+  const heading = text(section.heading);
+  const legend = text(section.ladderLegend);
+  if (!heading || !legend) {
+    warn(`${key} has no heading or legend`);
+    return undefined;
+  }
+  const steps = rows(section.steps).flatMap((step) => {
+    const title = text(step.title);
+    const role = text(step.role);
+    const example = text(step.example);
+    if (!title || !role || !example || typeof step.share !== 'number') {
+      warn(`${key} step ${step.id} is incomplete`);
+      return [];
+    }
+    return [{ title, role, example, share: step.share }];
+  });
+  if (steps.length < 2) {
+    warn(`${key} has fewer than two complete steps`);
+    return undefined;
+  }
+  const noteLabel = text(section.ladderNote?.label);
+  const noteBody = text(section.ladderNote?.body);
+  const receiptTitle = text(section.receiptTitle);
+  const receiptRows = rows(section.receiptRows).flatMap((row) => {
+    const term = text(row.label);
+    const detail = text(row.body);
+    return term && detail ? [{ term, detail }] : [];
+  });
+  const id = text(section.anchorId);
+  return {
+    key,
+    id,
+    heading,
+    headingId: `${id ?? key}-heading`,
+    surface: section.ladderSurface ?? undefined,
+    type: 'autonomy-ladder',
+    eyebrow: text(section.eyebrow),
+    lead: text(section.description),
+    legend,
+    steps,
+    note: noteLabel && noteBody ? { label: noteLabel, body: noteBody } : undefined,
+    receipt:
+      receiptTitle && receiptRows.length > 0
+        ? { title: receiptTitle, rows: receiptRows, caption: text(section.receiptCaption) }
+        : undefined,
   };
 }

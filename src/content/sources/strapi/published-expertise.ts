@@ -7,8 +7,10 @@ import type {
 } from '@/templates/CorpusPage/published-expertise-model';
 
 import {
+  mapAutonomyLadder,
   mapExpertiseDirectory,
   mapQuestionRoleLedger,
+  type CmsAutonomyLadder,
   type CmsExpertiseDirectory,
   type CmsQuestionRoleLedger,
 } from './expertise-sections';
@@ -21,7 +23,11 @@ import {
 import { mapSharedSection, type CmsSharedSection } from './published-service';
 import { publicGraphql } from './public-graphql';
 
-type CmsExpertiseSection = CmsSharedSection | CmsExpertiseDirectory | CmsQuestionRoleLedger;
+type CmsExpertiseSection =
+  | CmsSharedSection
+  | CmsExpertiseDirectory
+  | CmsQuestionRoleLedger
+  | CmsAutonomyLadder;
 
 type CmsExpertise = {
   documentId: string;
@@ -42,6 +48,8 @@ function mapSection(
       return mapExpertiseDirectory(section, route);
     case 'ComponentSharedQuestionRoleLedger':
       return mapQuestionRoleLedger(section, route);
+    case 'ComponentSharedAutonomyLadder':
+      return mapAutonomyLadder(section, route);
     default:
       return mapSharedSection(section, route);
   }
