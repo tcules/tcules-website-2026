@@ -92,9 +92,12 @@ const MARK_MAX_BYTES = 128 * 1024;
 async function maskSource(src: string): Promise<string | undefined> {
   if (new URL(src).origin !== MARK_ASSET_ORIGIN || markSrc(src)) return src;
   try {
+    /* force-cache, not no-store: a case study is rendered on its first visit and kept, and a
+       no-store fetch during that render makes Next fail the page with a bare 500 ("changed from
+       static to dynamic at runtime"). An upload's URL carries its hash, so its bytes never change. */
     const response = await fetch(src, {
       redirect: 'error',
-      cache: 'no-store',
+      cache: 'force-cache',
       signal: AbortSignal.timeout(4_000),
     });
     const type = response.headers.get('content-type')?.split(';')[0];
