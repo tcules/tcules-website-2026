@@ -326,6 +326,13 @@ export type {
 
 /* Thread — stages one decision passes through, on one blue line, with a return path (E band). */
 export { Thread, type ThreadProps, type ThreadStage, type ThreadStageHeading } from './Thread';
+/* AutonomyLadder — steps of how much the software does on its own, with an optional receipt. */
+export {
+  AutonomyLadder,
+  type AutonomyLadderProps,
+  type AutonomyStep,
+  type AutonomyReceipt,
+} from './AutonomyLadder';
 
 /**
  * EngagementModel is the "How we work" USP band (r7-howwework, 9 Oct 2026): the engagement model

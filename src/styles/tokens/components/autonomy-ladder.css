@@ -1,0 +1,133 @@
+/* ══ Component layer — AutonomyLadder ══════════════════════════════════════════
+   Tier 2. Steps of how much the software does on its own, each a plate filled to the share of the
+   work the software does, then its name, the person's job at that step and one example; an arrow
+   that says the steps are climbed; an optional note; and an optional receipt beside it, the record
+   every AI action leaves. Built to docs/specs/AutonomyLadder.md (overhaul O.8, 17 Nov 2026;
+   Jatin's Saas-v2 board).
+
+   Naming: --ladder-{part}-{role}
+     parts  plate · fill · level · title · role · example · legend · arrow · note · note-label ·
+            slip · slip-title · term · detail · rule · caption
+
+   The plates follow the kit's flat grammar (ch05, Sketch): a quiet frame, one blue subject — here the
+   fill and its 2-weight top line, which is the only thing that changes from step to step.
+   No state tokens: nothing here responds to a pointer.
+
+   Every surface restates every surface-dependent token.                                        */
+
+:root {
+  /* Component sizes: the plate's height at each width (the board's 130 and 66), a mark's sizes. */
+  /* The share of the work the software does, 0 to 1: set per step by the component. None by default. */
+  --ladder-share: 0;
+  --ladder-plate-height-lg: var(--space-128);
+  --ladder-plate-height-sm: var(--space-64);
+  --ladder-plate-radius: var(--radius-8);
+  --ladder-plate-border: var(--border-width-1);
+  --ladder-level-width: var(--border-width-2);
+  --ladder-swatch-width: var(--space-12);
+  --ladder-swatch-height: var(--space-10);
+  --ladder-arrow-height: var(--space-12);
+  --ladder-arrow-width: var(--border-width-2);
+  --ladder-arrow-dot: var(--space-8);
+  --ladder-arrow-head: var(--space-8);
+  /* The receipt's torn edge: the depth of one tooth, an object's geometry. */
+  --ladder-slip-tooth: var(--space-8);
+  /* The receipt's rows: a dense table's cell padding, the line beneath each. */
+  --ladder-cell-pad: var(--gap-tight);
+  --ladder-rule-width: var(--border-width-1);
+
+  --ladder-title-text: var(--text-h4);
+  --ladder-title-tracking: var(--text-h4-tracking);
+  --ladder-role-text: var(--text-h6);
+  --ladder-role-tracking: var(--text-h6-tracking);
+  --ladder-example-text: var(--text-body-sm);
+  --ladder-legend-text: var(--text-body-sm);
+  --ladder-note-text: var(--text-body);
+  --ladder-note-label-text: var(--text-eyebrow);
+  --ladder-note-label-tracking: var(--text-eyebrow-tracking);
+  --ladder-slip-title-text: var(--text-h4);
+  --ladder-slip-title-tracking: var(--text-h4-tracking);
+  --ladder-cell-text: var(--text-body-sm);
+  --ladder-caption-text: var(--text-body-sm);
+}
+
+:root,
+[data-surface='paper'] {
+  --ladder-plate-ground: var(--color-paper-deep);
+  --ladder-plate-edge: var(--color-neutral-200);
+  --ladder-fill: var(--color-brandeis-100);
+  --ladder-level-ink: var(--color-brandeis-500); /* 6.17:1 — a mark */
+  --ladder-arrow-ink: var(--color-brandeis-500);
+  --ladder-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --ladder-role-ink: var(--color-neutral-900);
+  --ladder-example-ink: var(--color-neutral-700); /* 8.14:1 */
+  --ladder-legend-ink: var(--color-neutral-700);
+  --ladder-note-ink: var(--color-neutral-700);
+  --ladder-note-label-ink: var(--color-brandeis-500);
+  --ladder-slip-ground: var(--color-paper-deep);
+  --ladder-slip-title-ink: var(--color-neutral-900);
+  --ladder-term-ink: var(--color-neutral-700);
+  --ladder-detail-ink: var(--color-neutral-900);
+  --ladder-rule-ink: var(--color-neutral-300);
+  --ladder-caption-ink: var(--color-neutral-700);
+}
+
+[data-surface='tint'] {
+  --ladder-plate-ground: var(--color-paper);
+  --ladder-plate-edge: var(--color-neutral-200);
+  --ladder-fill: var(--color-brandeis-100);
+  --ladder-level-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --ladder-arrow-ink: var(--color-brandeis-500);
+  --ladder-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --ladder-role-ink: var(--color-neutral-900);
+  --ladder-example-ink: var(--color-neutral-700); /* 7.27:1 */
+  --ladder-legend-ink: var(--color-neutral-700);
+  --ladder-note-ink: var(--color-neutral-700);
+  --ladder-note-label-ink: var(--color-brandeis-500);
+  --ladder-slip-ground: var(--color-white); /* the board's receipt on tint */
+  --ladder-slip-title-ink: var(--color-neutral-900);
+  --ladder-term-ink: var(--color-neutral-700);
+  --ladder-detail-ink: var(--color-neutral-900);
+  --ladder-rule-ink: var(--color-neutral-200);
+  --ladder-caption-ink: var(--color-neutral-700);
+}
+
+[data-surface='ink'] {
+  --ladder-plate-ground: var(--color-neutral-900);
+  --ladder-plate-edge: var(--color-neutral-700);
+  --ladder-fill: var(--color-brandeis-900);
+  --ladder-level-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --ladder-arrow-ink: var(--color-brandeis-300);
+  --ladder-title-ink: var(--color-white); /* 17.26:1 */
+  --ladder-role-ink: var(--color-white);
+  --ladder-example-ink: var(--color-neutral-300); /* 11.07:1 */
+  --ladder-legend-ink: var(--color-neutral-300);
+  --ladder-note-ink: var(--color-neutral-300);
+  --ladder-note-label-ink: var(--color-brandeis-300);
+  --ladder-slip-ground: var(--color-neutral-900);
+  --ladder-slip-title-ink: var(--color-white);
+  --ladder-term-ink: var(--color-neutral-300);
+  --ladder-detail-ink: var(--color-white);
+  --ladder-rule-ink: var(--color-neutral-700);
+  --ladder-caption-ink: var(--color-neutral-300);
+}
+
+[data-surface='blue'] {
+  --ladder-plate-ground: var(--color-brandeis-600);
+  --ladder-plate-edge: var(--color-brandeis-400);
+  --ladder-fill: var(--color-brandeis-700);
+  --ladder-level-ink: var(--color-white); /* 6.23:1 */
+  --ladder-arrow-ink: var(--color-white);
+  --ladder-title-ink: var(--color-white);
+  --ladder-role-ink: var(--color-white);
+  --ladder-example-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --ladder-legend-ink: var(--color-brandeis-50);
+  --ladder-note-ink: var(--color-brandeis-50);
+  --ladder-note-label-ink: var(--color-white);
+  --ladder-slip-ground: var(--color-brandeis-600);
+  --ladder-slip-title-ink: var(--color-white);
+  --ladder-term-ink: var(--color-brandeis-50);
+  --ladder-detail-ink: var(--color-white);
+  --ladder-rule-ink: var(--color-brandeis-400);
+  --ladder-caption-ink: var(--color-brandeis-50);
+}
