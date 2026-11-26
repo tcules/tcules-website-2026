@@ -38,7 +38,7 @@ const LAST_SEGMENT_ONLY: ReadonlySet<SitePageFamily> = new Set(['podcast', 'even
  * `main` is the record a collection's index page reads its own copy from, not a page of the family,
  * so it never becomes `/audits/main`.
  */
-export const INDEX_RECORD_SLUG = 'main';
+const INDEX_RECORD_SLUG = 'main';
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
