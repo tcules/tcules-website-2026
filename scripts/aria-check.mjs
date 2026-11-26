@@ -24,16 +24,15 @@
  * Deliberately NOT part of `npm run verify` — verify must stay fast and build-free. Run it before
  * shipping anything interactive.
  */
-import { readFileSync, globSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+
+import { prerenderedPages } from './prerendered-floor.mjs';
 
 const IDREF_ATTRS = ['aria-controls', 'aria-labelledby', 'aria-describedby', 'aria-owns', 'for'];
-const OUT = '.next/server/app/**/*.html';
 
-const files = globSync(OUT);
-if (files.length === 0) {
-  console.error(`FAIL  no prerendered HTML under ${OUT}\n      run \`npm run build\` first — this check reads what the build emitted.`);
-  process.exit(1);
-}
+/* Fails below a floor, not only on zero: a build that prerenders almost nothing leaves this check
+   almost nothing to read (prerendered-floor.mjs). */
+const files = prerenderedPages('.next/server/app', 'aria:check');
 
 const problems = [];
 let refs = 0;

@@ -86,7 +86,8 @@ try {
   );
   await writeFile(
     path.join(fixture, 'app/layout.jsx'),
-    `export const revalidate=0; export default function Layout({children}){return <html><body>{children}</body></html>}`,
+    /* As the site's root layout: pages are prerendered and kept, a webhook expires them, 300 is the net. */
+    `export const revalidate=300; export default function Layout({children}){return <html><body>{children}</body></html>}`,
   );
   await writeFile(
     path.join(fixture, 'app/page.jsx'),
@@ -113,6 +114,8 @@ try {
     `
     import {notFound} from 'next/navigation';
     import {publicGraphql} from '../../../lib/reader';
+    export const revalidate=300;
+    export async function generateStaticParams(){return [{slug:'old'}];}
     export default async function Page({params}){
       const {slug}=await params;
       const data=await publicGraphql('query PublishedTool($slug:String!){tools{slug title}}','PublishedTool',{slug});
@@ -145,7 +148,11 @@ try {
   }
   const read = async (slug) => {
     const response = await fetch(`${base}/tools/${slug}`);
-    return { status: response.status, html: await response.text() };
+    return {
+      status: response.status,
+      html: await response.text(),
+      cache: response.headers.get('x-nextjs-cache'),
+    };
   };
   const event = async (name, slug, token = secret) => {
     const response = await fetch(`${base}/api/revalidate`, {
@@ -175,7 +182,11 @@ try {
   const probeReceipt = await probe.json();
   assert.equal(probeReceipt.test, true);
   assert.equal(probeReceipt.revalidated, false);
-  assert.match((await read('old')).html, /initial/);
+  /* Prerendered at build: the build read it once, and visits are served from the route cache. */
+  assert.equal(counts.get('PublishedTool:old'), 1, 'the build prerenders the page');
+  const prerendered = await read('old');
+  assert.match(prerendered.html, /initial/);
+  assert.equal(prerendered.cache, 'HIT', 'a visit is served from the Full Route Cache');
   await read('old');
   await Promise.all([read('old'), read('old'), read('old')]);
   assert.equal(counts.get('PublishedTool:old'), 1, 'warm route requests must not fetch CMS');
@@ -190,7 +201,10 @@ try {
   assert.equal(await event('entry.update', 'new', 'wrong-secret'), 401);
   assert.match((await read('old')).html, /initial/, 'unauthorized events cannot expire cache');
   assert.equal(await event('entry.update', 'new'), 200);
-  assert.equal((await read('old')).status, 404);
+  /* The webhook expires the prerendered page itself, not only its data: the next visit renders. */
+  const expired = await read('old');
+  assert.equal(expired.status, 404, 'a renamed slug leaves its prerendered page');
+  assert.notEqual(expired.cache, 'HIT', 'an expired page is rendered afresh, never served stale');
   assert.match((await read('new')).html, /renamed/, 'cached 404 must be invalidated');
   const listing = await (await fetch(`${base}/list`)).json();
   assert.ok(listing.tools.some(({ slug }) => slug === 'new'));
@@ -224,7 +238,7 @@ try {
   await event('entry.create', 'created');
   assert.match((await read('created')).html, /newly created/);
   console.log(
-    'PASS: production Next.js Data Cache, native Admin Trigger, warm request counts, scoped listing/detail expiration, cached 404, slug rename, all five events, duplicate events, authentication.',
+    'PASS: production Next.js prerendered pages expired by the webhook, Data Cache, native Admin Trigger, warm request counts, scoped listing/detail expiration, cached 404, slug rename, all five events, duplicate events, authentication.',
   );
   console.log(JSON.stringify(Object.fromEntries(counts), null, 2));
 } catch (error) {
