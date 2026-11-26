@@ -206,9 +206,21 @@ const BREAKS = [
   ' without ',
 ];
 
+/**
+ * A word that opens a phrase: an article, a preposition, a conjunction, a possessive. A cut that ends
+ * on one, or a word or two after one ("…Efficiency by", "…platform into an engaging"), has stopped
+ * inside the phrase, so the last-resort cut goes back to before it.
+ */
+const OPENERS = new Set(
+  'a an the and or of to in on at by for from into with through across over under via our your its their'.split(' '),
+);
+
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
-/** The longest prefix that fits and ends before a break, else the longest whole-word prefix. */
+/**
+ * The longest prefix that fits and ends before a break; else the title whole if it runs only a little
+ * long; else the longest whole-word prefix that ends a sentence or a phrase.
+ */
 function cutAtPhrase(text: string, max: number): string {
   let best = -1;
   for (const mark of BREAKS) {
@@ -224,7 +236,23 @@ function cutAtPhrase(text: string, max: number): string {
   if (text.length <= max + OVERRUN) return text;
   const words = text.slice(0, max + 1).split(' ');
   if (text.length > max) words.pop();
-  return words.join(' ');
+  /* A whole sentence beats part of the next one ("…a prompt problem. It is a"). */
+  const sentence = words.join(' ').lastIndexOf('. ');
+  if (sentence >= MIN_HERO) return words.join(' ').slice(0, sentence);
+  const opens = (word: string | undefined) => word !== undefined && OPENERS.has(word.toLowerCase());
+  const kept = [...words];
+  /* An opener among the last two words starts a phrase the cut has not finished: drop it and what
+     follows, then any opener the drop leaves at the end ("…into an engaging" → "…platform"). */
+  const tail = Math.max(kept.length - 2, 1);
+  for (let i = kept.length - 1; i >= tail; i -= 1) {
+    if (opens(kept[i])) {
+      kept.splice(i);
+      break;
+    }
+  }
+  while (kept.length > 1 && opens(kept.at(-1))) kept.pop();
+  const cut = kept.join(' ');
+  return cut.length >= MIN_HERO ? cut : words.join(' ');
 }
 
 /**
