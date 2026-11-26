@@ -175,15 +175,30 @@ box inside the article, was preferred on 26 Nov. The box variants need more thou
 
 ## Follow-ups from 26 Nov 2026
 
-- [ ] Prerender pages, refreshed by the CMS webhook (#334). Merge after Devagya confirms on Railway:
-      replicas 1, no custom build command, `CMS_REVALIDATION_SECRET` set; then the build log shows
-      `build-preflight: CMS readable`. Its new-cms PR after that.
+- [x] Prerender pages, refreshed by the CMS webhook (#334, new-cms #339). Railway confirmed: replicas 1,
+      default build command, `CMS_REVALIDATION_SECRET` set, build log shows `build-preflight: CMS readable`.
 - [ ] Staging's own Strapi webhook (`<staging>/api/revalidate`, staging's secret). Staging did not pick
       up the B2B SaaS publish; production did. Needed before #334, which keeps pages until a webhook
       expires them.
-- [ ] What `kinds:check` and `aria:check` surface once pages are prerendered (#334): CMS pricing copy
-      differing from `_pages` on about 48 pages (528 lines), 12 catalog, 6 close and 5 outcomes bands on
-      the wrong component, about 20 bands missing; `test:cms-cache` still expects the old 256 KB webhook limit.
+- [-] What `kinds:check` surfaced once pages were prerendered (#334). Dropped: `_pages` and `kinds:check`
+      are removed (#341, new-cms #342; decisions/2026-11-26-pages-corpus-removed).
+- [ ] `npm run test:cms-cache` still expects 413 at the old 256 KB webhook limit; #272 raised it to 8 MB.
+      Update the test.
+- [x] `_pages` removed from both branches; `/contact` and share cards read the CMS (#341, new-cms #342).
+      The CMS Contact Page query made public, published only (tcules-cms-2026 #10). The `main` slug guard
+      from #341 taken out again (#343, new-cms #344): unpublishing in the CMS is the control.
+- [ ] Remove the corpus page templates nothing renders any more: `HomePage`, `AboutPage`, `OfferPage`,
+      their planning code (`plan.ts`, `kinds.ts`, `CopyBands`, `OfferBands`, `BandView`) and whatever
+      only they import. Two PRs (main, new-cms); prove the blast radius (no route changes).
+- [ ] Node 22 on Railway: `sanitize-html@2.18.1` needs Node 22.12+, Railway builds on 20.20.2 because
+      `engines` says `>=20.11.1`. Raise `engines.node` to `>=22.12.0` (two PRs), then check the next
+      staging and production deploys, rich text pages first.
+- [ ] CMS content gaps the build log reports (CMS edits, not code): no client logo for Doodle, Knovos
+      and SafeXpay on `/case-studies`; the six "why" cards have no illustration on about 40 service,
+      expertise and audit pages; `/careers` form success copy is missing; three `/expertise` directory
+      cards (Content, Knowledge & Discovery; EdTech & Learning; ClimateTech & Energy) have no image.
+- [ ] tcules-cms-2026: four tests fail on the deployed branch (`migration/case-study-staging-20261104`):
+      Client Grid, Offer Sheet, Service Card, Shared Hero. They failed before #10.
 - [ ] B2B SaaS: compare the overhaul with the live page band by band, every field, after the content script
       missed the testimonial band's Clutch rating (fixed 26 Nov). The ladder caption's "Hand over, Govern
       and Grow" stays for now (Devagya, 26 Nov).
