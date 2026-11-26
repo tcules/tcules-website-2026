@@ -108,7 +108,6 @@ export function authorSeo(
           images: images(ogImage, og?.imageAlt),
         },
         twitter: {
-          card: twitter?.card ?? 'summary',
           title: text(twitter?.title) ?? title,
           description: text(twitter?.description) ?? description,
           site: text(twitter?.siteHandle) ?? text(settings?.twitterSiteHandle),

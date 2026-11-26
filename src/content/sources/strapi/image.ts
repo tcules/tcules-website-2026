@@ -29,6 +29,16 @@ function text(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
 }
 
+/**
+ * Alt text as a reader may hear it, or undefined. The copy corpus marks an open image slot with a
+ * status in capitals joined by underscores (`IMAGE_ASSET_REQUIRED`), and the import carried some of
+ * those into Strapi's alt fields, where a screen reader read them aloud. A status is never alt text.
+ */
+export function readableAlt(candidate: string | null | undefined): string | undefined {
+  const value = text(candidate);
+  return value && !/^[A-Z0-9]+(?:_[A-Z0-9]+)+$/.test(value) ? value : undefined;
+}
+
 export function positiveDimension(candidate: number | null | undefined): number | undefined {
   return typeof candidate === 'number' && Number.isFinite(candidate) && candidate > 0
     ? candidate
