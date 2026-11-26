@@ -76,13 +76,119 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [x] **O.20** How we work Live from Strapi (decisions/2026-11-24-how-we-work-takes-the-overhaul).
 - [ ] **O.21** About (deferred until Jatin's update; owner, 24 Nov 2026)
 - [x] **O.22** Careers Live from Strapi (decisions/2026-11-24-careers-takes-the-overhaul).
-- [ ] **O.23** Contact (after the form decision below)
+- [ ] **O.23** Contact: built as F.8 in the form system below.
 
 ### On hold
 
-- Enquiry form changes, including the Careers application form on the ink band (owner confirming, 18 Nov).
 - `Accordion`'s circled open/close buttons: not decided.
-- Contact's hero form: the Contact redesign and Jatin's "new Contact page" proposal, both awaiting a decision.
+
+---
+
+## Now: the form system
+
+From the forms review with Jatin on 26 Nov 2026 (Granola: "Website forms system, CTA strategy, and Figma
+seat renewal") and Devagya's answers the same day. The spec it builds on is `docs/specs/EnquiryForms.md`;
+everything in it already on `main` (#322 to #327) stays.
+
+**How it ships.** Every step lands on `main` (staging) only. The complete system, P1 and P2, is reviewed
+with Jatin once, after P2. Nothing goes to `new-cms` (production) before that approval; then one new-cms
+PR per step, in this order.
+
+### P1 · Building blocks
+
+- [ ] **F.1** Shared form store. Sent state per form type, sales and careers kept apart, surviving reloads
+      and other pages; careers stays out of the sales rule. Sales forgets at the end of the next business
+      day (it follows the "We reply within a business day" promise); careers after 30 days (no reply
+      promise yet). The prompt names the date it was sent. The page form and the bottom sheet are one
+      form, typing included; typed text lives in memory on the page only, never in storage. Each
+      submission is tracked once. Storage reads and writes go through one consent check, so the cookie
+      banner (backlog) connects in one line.
+- [ ] **F.2** Remove the intent picker: the page and the button pressed are already captured. Supersedes
+      decisions/2026-11-25-intent-picker-is-a-dropdown with a new `/decide` entry; `intent_change` goes.
+      "Work email" stays as it is.
+- [ ] **F.3** Smarter fields, in the shared controls so every form gets them: `https://` shown at the start
+      of a link field and stripped from a pasted link; the right keyboard and autofill per field; phone
+      with a country code, digits only, validated; a suggestion for a mistyped email domain; spaces
+      trimmed; a file field states its types and size before upload. Errors still show on submit only.
+
+### P1 · Design first (mocks, owner review, then build)
+
+- [ ] **F.4** Sent, and send another: one experience for the page form, the bottom sheet and any later
+      dialog. The sent message, the "You've already sent this, send another?" prompt on a later visit, the
+      CTA showing the form was sent, and "How did you hear about us?" after sending, brought back from
+      `design/enquiry-popup`.
+- [ ] **F.5** Phone: a bottom sheet opens on every CTA, whether or not the page has a form, linked to the
+      page's form when it has one. The submit button stays in a footer; the sheet fits the space above the
+      keyboard and the field being typed in stays in view.
+- [ ] **F.6** Laptop: CTAs scroll to the page's form, as now. Jatin decides whether a dialog replaces that.
+      If yes, it opens on every CTA, form on the page or not, linked to the page's form exactly as the
+      bottom sheet is, and arrives as a switch on top of F.1 and F.4.
+- [ ] **F.7** Careers application experience, designed from scratch. Assumed fields until Jatin gives the
+      real ones: CV, portfolio link, phone, two or three qualifying questions, the role. How the role is
+      chosen (chips, a dropdown or something else) is decided in this design. Jatin decides the fields.
+- [ ] **F.8** Contact page: port the overhaul's design. Its hero form is the page form the bottom sheet
+      links to. Job applicants are led to Careers: a clear route on the page before the form, and
+      Contact's form is sales only, so applications stop arriving as "New client inquiry".
+- [ ] **F.9** Emails per form type (CMS `client-contact-emails.ts`). Internal notifications with their own
+      subject, labels and fields for sales, careers and privacy (today a careers application arrives as
+      "New client inquiry", with client labels, the role as a slug, the portfolio twice and three "Not
+      provided" rows: Jatin's sample in #tcules-website, 26 Nov). Designed HTML acknowledgements for clients
+      and candidates. A proposed list of which email goes to whom, Jatin on every one, for Devagya to send
+      to Jatin.
+
+### P1 · Build, then waiting on Jatin
+
+- [ ] **F.10** Private CV storage: a private R2 bucket, not the public media bucket. Code plus a one-page
+      setup sheet (bucket, a token scoped to it, Railway variables, a lifecycle rule that deletes CVs after
+      six months) for Devagya and Jatin to follow, as Jatin owns Cloudflare. Six months is a proposal;
+      Jatin decides. Until it is set up, the careers form works on staging with uploads off.
+- [ ] **F.11** Analytics catch-up: events for the bottom sheet opening and closing, the "already sent"
+      prompt and send another; `intent_change` removed (F.2).
+
+### P2 · CTAs inside Insights articles (after P1)
+
+The options and variations are on the overhaul canvas (`insight-cta`, `insight-cta-var`). Approach B, one
+box inside the article, was preferred on 26 Nov. The box variants need more thought before any build.
+
+- [ ] **F.12** The box inside the article: variants that suit the content best. Not the author card (B2):
+      it promises a conversation with the author we cannot keep (Jatin, 26 Nov).
+- [ ] **F.13** Strapi rich-text support so editors place the box where it fits.
+- [ ] **F.14** Links in the text that jump to the form carry a marker (A1's down-arrow ring).
+- [ ] **F.15** The phone's bottom bar steps aside while the box or the form at the end is on screen.
+- [ ] **F.16** Insights rich-text layout improvements.
+
+### Then
+
+- [ ] **F.17** One review of the whole system with Jatin on staging. After approval, a new-cms PR per step.
+
+### Waiting on others
+
+- Jatin: the careers fields; dialog yes or no; the email recipient list; how long CVs are kept; the
+  Cloudflare setup with Devagya.
+- Cookie consent banner (backlog): F.1 is built ready for it.
+
+### Not now
+
+- Google Sheets copy of careers applications: skipped for now (Devagya, 26 Nov).
+
+---
+
+## Follow-ups from 26 Nov 2026
+
+- [ ] Prerender pages, refreshed by the CMS webhook (#334). Merge after Devagya confirms on Railway:
+      replicas 1, no custom build command, `CMS_REVALIDATION_SECRET` set; then the build log shows
+      `build-preflight: CMS readable`. Its new-cms PR after that.
+- [ ] Staging's own Strapi webhook (`<staging>/api/revalidate`, staging's secret). Staging did not pick
+      up the B2B SaaS publish; production did. Needed before #334, which keeps pages until a webhook
+      expires them.
+- [ ] What `kinds:check` and `aria:check` surface once pages are prerendered (#334): CMS pricing copy
+      differing from `_pages` on about 48 pages (528 lines), 12 catalog, 6 close and 5 outcomes bands on
+      the wrong component, about 20 bands missing; `test:cms-cache` still expects the old 256 KB webhook limit.
+- [ ] B2B SaaS: compare the overhaul with the live page band by band, every field, after the content script
+      missed the testimonial band's Clutch rating (fixed 26 Nov). The ladder caption's "Hand over, Govern
+      and Grow" stays for now (Devagya, 26 Nov).
+- [ ] `new-cms` has no branch protection; 46 commits reached it without a PR. Protecting it like `main`
+      is Devagya's call, after telling Mihir.
 
 ---
 
@@ -91,7 +197,8 @@ Strapi is updated when the designs go to production (owner, 17 Nov 2026).
 - [ ] Level-2 sub-services, 26 pages (`/services/<line>/<service>`), from existing components (owner, 4 Nov 2026).
 - [ ] Branded case study cards, an experiment on Linear's concept (owner, 3 Nov 2026).
 - [ ] Tools in the listings, looking like tools rather than standard cards (owner, 3 Nov 2026).
-- [ ] CTA modal: the enquiry form in a dialog on desktop, a bottom sheet on mobile (owner, 5 Nov 2026).
+- [-] CTA modal: the enquiry form in a dialog on desktop, a bottom sheet on mobile (owner, 5 Nov 2026).
+      Moved into the form system as F.5 and F.6.
 - [ ] Cookie consent banner: not designed yet (owner, 31 Oct 2026).
 - [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
       for learning about Tcules on the site · the reply-style form redesigned as an AI chat window.
