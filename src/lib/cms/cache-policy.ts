@@ -35,6 +35,7 @@ export const CMS_QUERY_MODELS: Record<string, string> = {
   PublishedLabJoin: 'future-interfaces-lab-join',
   PublishedMatter: 'matter-design-system',
   PublishedWhy: 'why-tcules',
+  PublishedContact: 'contact-page',
   PublishedWorkMaster: 'how-we-work-master',
   PublishedHowWeWorkDetail: 'how-we-work',
   PublishedSitemap: 'sitemap-master',
@@ -52,7 +53,7 @@ export const CMS_QUERY_MODELS: Record<string, string> = {
 export const ROUTED_MODELS = [
   'home',
   'about',
-  'contact',
+  'contact-page',
   'service',
   'service-master',
   'audit',

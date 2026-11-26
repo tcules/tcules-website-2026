@@ -6,12 +6,10 @@ import {
   getAuthorShareProfile,
   getCaseCoverFallback,
   getCaseStudyDetail,
-  getCorpusPage,
   getPageSeo,
   getResourceDetail,
 } from '@/content';
 import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
-import { inlineToText } from '@/lib/inline';
 import {
   auditPath,
   blogPath,
@@ -23,6 +21,7 @@ import {
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { shareCard, type ShareCard, type ShareSource } from './card';
+import { headlineFor } from './headline';
 import { isCutOut, type ShareMedia } from './media';
 
 /**
@@ -151,8 +150,8 @@ async function pictureFor(
 }
 
 /**
- * The share card for a path, from the page's own words: the corpus page's H1 and eyebrow where the
- * copy authors the page, else the CMS entry's title. A path neither knows takes the home card, so no
+ * The share card for a path, from the page's own words: its CMS hero's H1 and eyebrow, read through
+ * the reader its route renders with, else the CMS entry's title. A path neither knows takes the home card, so no
  * link ever unfurls without an image.
  */
 export async function shareCardFor(path: string): Promise<ShareCard> {
@@ -176,13 +175,13 @@ export async function shareCardFor(path: string): Promise<ShareCard> {
         })
       : null,
   ]);
-  const page = await getCorpusPage(path);
-  if (page && resource?.kind !== 'event' && resource?.kind !== 'podcast') {
+  const headline = isResource || isCaseStudy || authorSlug ? null : await headlineFor(path);
+  if (headline) {
     return shareCard({
       path,
-      title: page.hero.titleText,
-      eyebrow: page.hero.eyebrow ? inlineToText(page.hero.eyebrow) : null,
-      name: page.name,
+      title: headline.title,
+      eyebrow: headline.eyebrow,
+      name: headline.name,
       cut: HERO_CUTS[path],
       ...(await pictureFor(path, resource, caseStudy)),
     });

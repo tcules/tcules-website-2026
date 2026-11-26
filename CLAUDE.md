@@ -269,7 +269,6 @@ Re-export from the tier barrel (`src/components/index.ts`) so call sites import
 
 Keep component previews outside the website router. Add standalone previews in
 `.design-sync/previews/` and verify components on the public pages that use them.
-For corpus bands, use the review list from `npm run corpus:census`.
 
 ## Routes are named once
 
@@ -358,9 +357,6 @@ derived widths and generated registry are current; `npm run photos:tone && npm r
 refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that
   no id is duplicated. It needs a build.
-- `npm run build && npm run kinds:check` proves every band on a corpus page renders through its kind's
-  one approved component (`kinds.ts`) and that the copy's words reach the page; it lists the kinds still
-  to design. It needs a build.
 - `npm run shots` catches horizontal overflow and page errors. It needs a server.
 
 None of it sees a child margin, a hand-rolled arrangement, a restated font size, a token name that

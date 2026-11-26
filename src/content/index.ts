@@ -13,6 +13,7 @@ export {
   getPublishedCareersPage,
   getPublishedMatterPage,
   getPublishedWhyPage,
+  getPublishedContactPage,
   getPublishedWorkMasterPage,
   getPublishedWorkPage,
   getSitemapMasterPage,
@@ -56,7 +57,6 @@ export {
   getExpertiseDetail,
   listExpertiseSlugs,
   getCaseStory,
-  getIdealAboutPage,
   createClientContact,
   getExpertisePage,
   getFutureInterfacesLabJoinPage,
@@ -71,11 +71,7 @@ export {
   getServicesMasterPage,
   getTermsOfUsePage,
   getToolPage,
-  getCorpusPage,
-  listCorpusPages,
   getTestimonialRatings,
-  getContactChannels,
-  getContactFollow,
   getTestimonialAvatars,
   getOfferScenes,
   getClaimFigure,
@@ -85,7 +81,6 @@ export {
   getCaseIndustries,
   getCaseStages,
 } from './source';
-export { getCaseRefs, getCorpusBindings, getInsightRefs } from './corpus-refs';
 export type {
   Page,
   PageBlock,
@@ -190,7 +185,6 @@ export type {
   MatterDesignSystemContentSource,
   CaseStudyPage,
   CaseStory,
-  IdealAboutPage,
   CaseStoryChapter,
   CaseStoryFigure,
   CaseStoryPart,
@@ -265,5 +259,4 @@ export type {
   CorpusBand,
   CorpusCaseRef,
   CorpusInsightRef,
-  CorpusContentSource,
 } from './corpus-types';

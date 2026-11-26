@@ -52,13 +52,10 @@ export type {
   CaseStoryPartProps,
   CaseStoryProps,
 } from './CaseStory';
-export { StudioPage } from './StudioPage';
-export type { StudioPageContent, StudioPageProps } from './StudioPage';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {
   AboutPage,
-  ContactPage,
   CorpusBandView,
   HomePage,
   PlainPage,
@@ -81,10 +78,6 @@ export {
 } from './CorpusPage';
 export type {
   AboutPageProps,
-  ContactChannel,
-  ContactChannelKind,
-  ContactFollow,
-  ContactPageProps,
   CorpusBandViewProps,
   HomePageProps,
   PlainPageProps,

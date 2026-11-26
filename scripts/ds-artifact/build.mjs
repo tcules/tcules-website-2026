@@ -256,7 +256,7 @@ try{Promise.resolve(typeof P==='function'?P({params:Promise.resolve({}),searchPa
 
 /* The compiled preview goes in preview.js beside the card (a preview may load ./x.js), so the
    html stays far under the type's 256 KB cap however much fixture data a preview carries. */
-const previewHtml = ({ group, height, css, corpus }) =>
+const previewHtml = ({ group, height, css }) =>
   `<!-- @dsCard group="${group}" height=${height} width=1280 -->
 <!doctype html>
 <html><head><meta charset="utf-8">
@@ -265,38 +265,30 @@ const previewHtml = ({ group, height, css, corpus }) =>
 <style>${cssToSite(css, '../../').replace(/<\/style/gi, '<\\/style')}</style>
 </head><body>
 <div id="root"></div>
-${corpus ? '<script src="../corpus.js"></script>\n' : ''}<script src="./preview.js"></script>
+<script src="./preview.js"></script>
 </body></html>
 `;
 
 const ownedPreviews = join(ROOT, '.design-sync/previews');
-/* @content's corpus source reads _pages/*.md with node:fs. In a preview, fs is a stub over a
-   snapshot of that folder (components/corpus.js, loaded only by the cards that read it), so the
-   corpus templates preview with the real copy rather than not at all. */
-let usesCorpus = false;
+/* A module that reaches node:fs or node:path in a preview gets an empty stand-in: the site reads no
+   files at runtime since _pages was retired (owner, 26 Nov 2026; decisions/2026-11-26-pages-corpus-removed). */
 const nodeStubs = {
   name: 'node-stubs',
   setup(b) {
-    b.onResolve({ filter: /^node:(fs|path)$/ }, (a) => {
-      usesCorpus = true;
-      return { path: a.path, namespace: 'node-stub' };
-    });
+    b.onResolve({ filter: /^node:(fs|path)(\/promises)?$/ }, (a) => ({ path: a.path, namespace: 'node-stub' }));
     b.onLoad({ filter: /.*/, namespace: 'node-stub' }, () => ({
-      contents: `const C = () => window.__dsCorpus || {};
-const base = (p) => String(p).split('/').pop();
+      contents: `const base = (p) => String(p).split('/').pop();
 module.exports = {
-  readdirSync: () => Object.keys(C()),
-  readFileSync: (p) => { const t = C()[base(p)]; if (t == null) throw new Error('not in the corpus snapshot: ' + p); return t; },
-  existsSync: (p) => base(p) in C() || base(p) === '_pages',
+  readdirSync: () => [],
+  readFileSync: (p) => { throw new Error('no files in a preview: ' + p); },
+  readFile: async (p) => { throw new Error('no files in a preview: ' + p); },
+  existsSync: () => false,
   join: (...p) => p.join('/'), resolve: (...p) => p.join('/'), dirname: (p) => p, basename: base,
 };`,
       loader: 'js',
     }));
   },
 };
-const corpusDir = join(ROOT, '_pages');
-const corpus = Object.fromEntries(readdirSync(corpusDir).filter((f) => f.endsWith('.md')).map((f) => [f, readFileSync(join(corpusDir, f), 'utf8')]));
-write(join(PROJECT, 'components/corpus.js'), scriptSafe(`window.__dsCorpus = ${JSON.stringify(corpus)};\n`, 'corpus.js'));
 
 let live = 0;
 const floor = [];
@@ -309,7 +301,6 @@ import { createElement as h } from 'react';
 ` +
       `window.__dsPage = () => h('div', { style: { display: 'grid', gap: 48, padding: 32 } }, ...Object.keys(S).filter((k) => /^[A-Z]/.test(k)).map((k) => h(S[k], { key: k })));
 `;
-    usesCorpus = false;
     try {
       const r = await esbuild.build({
         ...common,
@@ -327,7 +318,7 @@ import { createElement as h } from 'react';
       });
       const js = r.outputFiles.find((f) => f.path.endsWith('.js')).text;
       const css = r.outputFiles.find((f) => f.path.endsWith('.css'))?.text ?? '';
-      html = previewHtml({ group: u.group, height: 640, css, corpus: usesCorpus });
+      html = previewHtml({ group: u.group, height: 640, css });
       if (Buffer.byteLength(html) > 256 * 1024) {
         notes.push(`${u.name}: preview css is ${Math.round(Buffer.byteLength(html) / 1024)} KB, over the 256 KB cap — floor card instead`);
         html = undefined;
