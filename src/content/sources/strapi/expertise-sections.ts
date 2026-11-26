@@ -38,9 +38,9 @@ export const EXPERTISE_SECTION_MEMBERS = `
         after { id kind prose { body } }
       }
       ... on ComponentSharedAutonomyLadder {
-        id eyebrow heading anchorId description ladderSurface: surface legend
+        id eyebrow heading anchorId description ladderSurface: surface ladderLegend: legend
         steps { id title role example share }
-        note { label body }
+        ladderNote: note { label body }
         receiptTitle receiptRows { id label body } receiptCaption
       }
 `;
@@ -101,9 +101,9 @@ export type CmsAutonomyLadder = {
   anchorId: Text;
   description: Text;
   ladderSurface: 'paper' | 'tint' | null;
-  legend: Text;
+  ladderLegend: Text;
   steps: Entries<{ id: string; title: Text; role: Text; example: Text; share: number | null }>;
-  note: { label: Text; body: Text } | null;
+  ladderNote: { label: Text; body: Text } | null;
   receiptTitle: Text;
   receiptRows: Entries<{ id: string; label: Text; body: Text }>;
   receiptCaption: Text;
@@ -228,7 +228,7 @@ export function mapAutonomyLadder(
   const warn = (message: string) => console.warn(`New CMS ${route}: ${message}`);
   const key = `${section.__typename}-${section.id}`;
   const heading = text(section.heading);
-  const legend = text(section.legend);
+  const legend = text(section.ladderLegend);
   if (!heading || !legend) {
     warn(`${key} has no heading or legend`);
     return undefined;
@@ -247,8 +247,8 @@ export function mapAutonomyLadder(
     warn(`${key} has fewer than two complete steps`);
     return undefined;
   }
-  const noteLabel = text(section.note?.label);
-  const noteBody = text(section.note?.body);
+  const noteLabel = text(section.ladderNote?.label);
+  const noteBody = text(section.ladderNote?.body);
   const receiptTitle = text(section.receiptTitle);
   const receiptRows = rows(section.receiptRows).flatMap((row) => {
     const term = text(row.label);
