@@ -81,6 +81,9 @@
   /* optical: a label that wraps to two lines keeps air above and below it */
   --inp-option-inset-block: var(--space-8);
   --inp-option-radius: var(--radius-4);
+  /* A searchable list (F.3) is wider than a short trigger ("+44"): wide enough for most country names
+     on one line, still inside a 358 phone column from the field's start. */
+  --inp-list-search-min-inline: 288px;
 }
 
 :root,
@@ -121,6 +124,8 @@
   --inp-list-active-bg: var(--color-neutral-100);
   --inp-list-check: var(--color-brandeis-500);
   --inp-list-indicator-fg: var(--color-neutral-600);
+  /* The searchable list's filter field (F.3): its cue, 4.97:1 on the white list. */
+  --inp-list-placeholder-fg: var(--color-neutral-600);
 }
 
 [data-surface='tint'] {
@@ -159,6 +164,8 @@
   --inp-list-active-bg: var(--color-neutral-100);
   --inp-list-check: var(--color-brandeis-500);
   --inp-list-indicator-fg: var(--color-neutral-700);
+  /* The searchable list's filter field (F.3): its cue, 8.14:1 on the paper list. */
+  --inp-list-placeholder-fg: var(--color-neutral-700);
 }
 
 [data-surface='ink'] {
@@ -197,6 +204,8 @@
   --inp-list-active-bg: var(--color-neutral-800);
   --inp-list-check: var(--color-brandeis-300);
   --inp-list-indicator-fg: var(--color-neutral-400);
+  /* The searchable list's filter field (F.3): its cue, 6.88:1 on the neutral-900 list. */
+  --inp-list-placeholder-fg: var(--color-neutral-400);
 }
 
 [data-surface='blue'] {
@@ -240,4 +249,6 @@
   --inp-list-active-bg: var(--color-brandeis-50);
   --inp-list-check: var(--color-brandeis-500);
   --inp-list-indicator-fg: var(--color-neutral-600);
+  /* The searchable list's filter field (F.3): its cue, 4.97:1 on the white list. */
+  --inp-list-placeholder-fg: var(--color-neutral-600);
 }

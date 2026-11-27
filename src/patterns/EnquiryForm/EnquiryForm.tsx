@@ -1,7 +1,7 @@
 'use client';
 
 import type { FocusEvent, FormEvent, ReactNode } from 'react';
-import { useContext, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 
 import {
   Button,
@@ -16,6 +16,9 @@ import {
 import { conversionFor, type FormType, pressedCtaRecently, track } from '@/lib/analytics';
 import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
+import { suggestEmail } from '@/lib/email-suggest';
+import { loadPhoneKit, type PhoneKit } from '@/lib/phone';
+import { guessRegion } from '@/lib/phone-region';
 import {
   clearDraft,
   type Draft,
@@ -353,6 +356,25 @@ function normaliseUrl(value: string): string {
 }
 
 /**
+ * The link field shows `https://` before the value (F.3), so the value is the rest of the address: a
+ * pasted or typed `https://` or `http://` is taken off, and the send puts `https://` back
+ * (normaliseUrl). An `http://` address is sent as `https://`.
+ */
+function stripScheme(value: string): string {
+  return value.replace(/^\s*https?:\/\//i, '').trim();
+}
+
+/** Whether the rest of an address after `https://` makes a link: a host with a dot in it. */
+function validLink(value: string): boolean {
+  try {
+    const url = new URL(normaliseUrl(value));
+    return url.hostname.includes('.') && !url.hostname.endsWith('.');
+  } catch {
+    return false;
+  }
+}
+
+/**
  * One field's frame: a hidden label, an optional hint, the control and its message (r7-form, owner
  * 7 Oct 2026).
  *
@@ -387,6 +409,9 @@ type FieldGroupProps = {
   hint?: { id: string; text: string };
   /** Present when the field validates: the id of its message row, and the message. */
   validation?: { id: string; message: string };
+  /** Help under the control that is not an error (the email field's typo suggestion, F.3). Shown in
+      the message row's live region; pass it only while there is something to say. */
+  suggestion?: ReactNode;
   /**
    * The control takes whatever height its group is stretched to (the chip form's message field,
    * which runs down to where the chip half beside it ends). Visible label only: the label row stays
@@ -403,6 +428,7 @@ function FieldGroup({
   optional = false,
   hint,
   validation,
+  suggestion,
   fill = false,
   children,
 }: FieldGroupProps) {
@@ -415,6 +441,8 @@ function FieldGroup({
           <span>{message}</span>
         </Cluster>
       ) : null}
+      {/* In the same live region, so it is announced as it appears; the message comes first. */}
+      {suggestion}
     </div>
   ) : null;
   const labelRow = (
@@ -437,7 +465,7 @@ function FieldGroup({
     return (
       <Layout rowGap="tight" fillLast>
         {labelRow}
-        <Layout rowGap={message ? 'tight' : undefined} fillFirst>
+        <Layout rowGap={message || suggestion ? 'tight' : undefined} fillFirst>
           {children}
           {messageRow}
         </Layout>
@@ -449,7 +477,7 @@ function FieldGroup({
        message row is mounted (it is the live region) and must cost nothing, so with no message the
        group states no row gap and the empty row is zero tall. A visible label always opens a
        `tight` above its control. */
-    <Layout rowGap={message || visibleLabel ? 'tight' : undefined}>
+    <Layout rowGap={message || visibleLabel || suggestion ? 'tight' : undefined}>
       {visibleLabel ? (
         labelRow
       ) : (
@@ -472,9 +500,8 @@ function FieldGroup({
 /** A field's message for its current value: empty, malformed, or none. Submit sets it; editing only clears it. */
 function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
   if (control.value.trim() === '') return spec.empty;
-  if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
-    return spec.type === 'url' ? 'Enter a valid link' : 'Enter a valid email';
-  }
+  if (spec.type === 'url') return validLink(control.value) ? '' : 'Enter a valid link';
+  if (control instanceof HTMLInputElement && control.validity.typeMismatch) return 'Enter a valid email';
   return '';
 }
 
@@ -483,6 +510,9 @@ function listOf(items: readonly string[]): string {
   if (items.length < 2) return items.join('');
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
 }
+
+/** The typed inputs a send trims (F.3). */
+const TRIMMED = new Set(['text', 'email', 'tel', 'url', 'search']);
 
 /** The reassurance line beside (or under) the submit. One sentence, said once, and kept at the
     submit by ruling (owner, 7 Oct 2026): the promise belongs where the decision to send is made. */
@@ -507,9 +537,25 @@ type FieldSpec = {
   type?: 'text' | 'email' | 'tel' | 'url';
   as?: 'textarea';
   autoComplete?: string;
+  /** The keyboard and the phone's typing help for the field (F.3). */
+  keys?: {
+    inputMode?: 'text' | 'email' | 'url' | 'tel' | 'numeric';
+    autoCapitalize?: 'off' | 'words' | 'sentences';
+    spellCheck?: boolean;
+    enterKeyHint?: 'next' | 'send' | 'done';
+  };
   /** The message when a send finds the field empty. */
   empty: string;
 };
+
+/* What each kind of field asks of a phone's keyboard (F.3): names and companies capitalise words,
+   addresses never capitalise or correct, free text writes sentences with spelling help. */
+const KEYS = {
+  name: { autoCapitalize: 'words', spellCheck: false, enterKeyHint: 'next' },
+  address: { inputMode: 'email', autoCapitalize: 'off', spellCheck: false, enterKeyHint: 'next' },
+  link: { inputMode: 'url', autoCapitalize: 'off', spellCheck: false, enterKeyHint: 'next' },
+  prose: { autoCapitalize: 'sentences', spellCheck: true },
+} as const satisfies Record<string, FieldSpec['keys']>;
 
 const FIELD = {
   name: (name: string): FieldSpec => ({
@@ -517,6 +563,7 @@ const FIELD = {
     label: 'Name',
     name,
     autoComplete: 'name',
+    keys: KEYS.name,
     empty: 'Enter your name',
   }),
   email: (name: string): FieldSpec => ({
@@ -525,6 +572,7 @@ const FIELD = {
     name,
     type: 'email',
     autoComplete: 'email',
+    keys: KEYS.address,
     empty: 'Enter your email',
   }),
   /** The link, where it is asked for (`urlRequired`). Its label is the set's `urlLabel`. */
@@ -534,6 +582,7 @@ const FIELD = {
     name: 'url',
     type: 'url',
     autoComplete: 'url',
+    keys: KEYS.link,
     empty: 'Add a link',
   }),
   company: {
@@ -541,6 +590,7 @@ const FIELD = {
     label: 'Company',
     name: 'clientCompany',
     autoComplete: 'organization',
+    keys: KEYS.name,
     empty: 'Enter your company',
   } satisfies FieldSpec,
   phone: {
@@ -548,7 +598,8 @@ const FIELD = {
     label: 'Phone',
     name: 'clientContact',
     type: 'tel',
-    autoComplete: 'tel',
+    autoComplete: 'tel-national',
+    keys: { inputMode: 'tel', enterKeyHint: 'next' },
     empty: 'Enter your phone number',
   } satisfies FieldSpec,
   work: {
@@ -556,6 +607,7 @@ const FIELD = {
     label: 'What are you working on?',
     name: 'what_are_you_working_on',
     as: 'textarea',
+    keys: KEYS.prose,
     empty: 'Add a line about it',
   } satisfies FieldSpec,
   message: {
@@ -563,6 +615,7 @@ const FIELD = {
     label: 'What would you like to talk about?',
     name: 'clientComments',
     as: 'textarea',
+    keys: KEYS.prose,
     empty: 'Add a message',
   } satisfies FieldSpec,
 };
@@ -599,6 +652,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
+  /* The email field's suggestion for a mistyped domain (F.3), offered when the reader leaves the
+     field: help, not an error, so it is the one thing a form says before a send
+     (decisions/2026-11-27-smarter-form-fields). */
+  const [emailSuggestion, setEmailSuggestion] = useState('');
   /* The chip groups' answers, for what the form SAYS about them (the message field's example, the
      reply line). The inputs stay uncontrolled: the form posts what the DOM holds. `picked` is in the
      order the needs were checked, so the latest pick's prompt wins. */
@@ -681,6 +738,55 @@ export function EnquiryForm(props: EnquiryFormProps) {
       field_name: control.name,
     });
   }
+  /* The phone field's country codes and check (F.3), fetched only for a form that asks for a phone,
+     once it comes near the screen or the field is touched; never with the page. The country opens
+     on the visitor's region. */
+  const asksPhone = variant === 'contact';
+  const [phoneKit, setPhoneKit] = useState<PhoneKit | undefined>(undefined);
+  const [phoneRegion, setPhoneRegion] = useState<string | undefined>(undefined);
+  function wantPhoneKit() {
+    loadPhoneKit()
+      .then((kit) => {
+        setPhoneKit(kit);
+        setPhoneRegion((current) => {
+          if (current) return current;
+          const guess = guessRegion(
+            navigator.languages ?? [navigator.language],
+            Intl.DateTimeFormat().resolvedOptions().timeZone,
+          );
+          return kit.countries.some((country) => country.value === guess) ? guess : undefined;
+        });
+      })
+      .catch(() => {
+        /* Offline or blocked: the field still takes digits, checked by count on send. */
+      });
+  }
+  useEffect(() => {
+    const form = formRef.current;
+    if (!asksPhone || !form || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        wantPhoneKit();
+      },
+      { rootMargin: '600px 0px' },
+    );
+    observer.observe(form);
+    return () => observer.disconnect();
+  }, [asksPhone]);
+  /** The phone field's message: empty, not a number in the chosen country, or none. */
+  function phoneMessage(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
+    const digits = control.value.replace(/\D/g, '');
+    if (digits === '') return spec.empty;
+    if (phoneKit && !phoneRegion) return 'Choose your country code';
+    if (phoneKit && phoneRegion) return phoneKit.check(digits, phoneRegion).valid ? '' : 'Enter a valid phone number';
+    return digits.length >= 6 && digits.length <= 15 ? '' : 'Enter a valid phone number';
+  }
+  /** A field's message on send: the phone has its own check, every other field the shared one. */
+  function check(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
+    return spec.type === 'tel' ? phoneMessage(spec, control) : messageFor(spec, control);
+  }
   const statusId = idFor('status');
   const urlId = idFor('url');
 
@@ -722,8 +828,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
     return subscribeDraft(draftKey, instanceId, (next) => {
       if (formRef.current) applyDraft(formRef.current, next);
     });
-    // applyDraft reads only the form and state setters.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftKey, instanceId]);
 
   /* A link elsewhere on the page that names a role (`ENQUIRY_ROLE_ATTRIBUTE`, /careers' open roles):
@@ -802,14 +906,21 @@ export function EnquiryForm(props: EnquiryFormProps) {
        line beside the submit says how many need a look, and focus moves to the first of them so a
        keyboard or screen-reader user lands on the problem with its name and its message. */
     const form = event.currentTarget;
+    /* Spaces trimmed from every typed field (F.3), and from inside an email address. */
+    for (const control of Array.from(form.elements)) {
+      if (control instanceof HTMLTextAreaElement) control.value = control.value.trim();
+      else if (control instanceof HTMLInputElement && TRIMMED.has(control.type))
+        control.value =
+          control.type === 'email' ? control.value.replace(/\s+/g, '') : control.value.trim();
+    }
     const next: FieldMessages = { ...EMPTY_MESSAGES };
     let firstInvalid: HTMLElement | null = null;
     for (const spec of validated) {
       const control = form.elements.namedItem(spec.name);
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
-      if (spec.type === 'url') control.value = normaliseUrl(control.value);
-      next[spec.key] = messageFor(spec, control);
+      if (spec.type === 'url') control.value = stripScheme(control.value);
+      next[spec.key] = check(spec, control);
       if (next[spec.key] && !firstInvalid) firstInvalid = control;
     }
     if (firstInvalid) {
@@ -827,6 +938,21 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
     const body = new FormData(form);
     body.set('destination_page', window.location.pathname);
+    /* The link as a full address: the field shows `https://` and holds the rest (F.3). */
+    const link = body.get('url');
+    if (typeof link === 'string' && link !== '') body.set('url', normaliseUrl(stripScheme(link)));
+    /* The phone as one international number, the country folded in ("+44 7911 123456"). */
+    const phone = body.get('clientContact');
+    if (typeof phone === 'string' && phone !== '') {
+      const digits = phone.replace(/\D/g, '');
+      const checked = phoneKit && phoneRegion ? phoneKit.check(digits, phoneRegion) : undefined;
+      const code = phoneKit?.countries.find((country) => country.value === phoneRegion)?.short;
+      body.set(
+        'clientContact',
+        checked?.valid ? checked.international : code ? `${code} ${digits}` : digits,
+      );
+    }
+    body.delete('phone_country');
     submissionCount.current += 1;
     const submissionId = `${instanceId}:${submissionCount.current}`;
     submissionInFlight.current = true;
@@ -931,6 +1057,23 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? [work, FIELD.name('name'), FIELD.email('email')]
         : rows.flatMap((row) => (row === 'url' ? (urlRequired ? [urlField] : []) : row));
 
+  /** The link field's control, wherever it is drawn: `https://` shown before the value, a pasted or
+      typed scheme taken off, the right keyboard (F.3). */
+  const linkInput = {
+    type: 'text' as const,
+    affix: 'https://',
+    autoComplete: 'url',
+    ...KEYS.link,
+    autoCorrect: 'off',
+    onInput: (event: FormEvent<HTMLInputElement>) => {
+      const control = event.currentTarget;
+      if (/^\s*https?:\/\//i.test(control.value)) control.value = stripScheme(control.value);
+    },
+    onBlur: (event: FocusEvent<HTMLInputElement>) => {
+      event.currentTarget.value = stripScheme(event.currentTarget.value);
+    },
+  };
+
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(
     spec: FieldSpec,
@@ -958,12 +1101,36 @@ export function EnquiryForm(props: EnquiryFormProps) {
       scale: props.fieldScale ?? 'md',
       invalid: Boolean(messages[spec.key]),
       'aria-describedby': messageId,
+      ...spec.keys,
+      ...(spec.keys?.autoCapitalize === 'off' ? { autoCorrect: 'off' } : {}),
     } as const;
     /* Never ADDS a message: only a send does. Once a send has flagged this field, its message
        clears the moment the value becomes valid. */
     const clearIfFixed = (control: HTMLInputElement | HTMLTextAreaElement) => {
-      if (messages[spec.key] && !messageFor(spec, control)) setMessage(spec.key, '');
+      if (messages[spec.key] && !check(spec, control)) setMessage(spec.key, '');
     };
+
+    /* The email's typo suggestion, accepted with one press (F.3). */
+    const suggestion =
+      spec.key === 'email' && emailSuggestion ? (
+        <span className={styles.suggestion}>
+          <button
+            type="button"
+            className={styles.suggestionButton}
+            onClick={() => {
+              const control = document.getElementById(id);
+              if (!(control instanceof HTMLInputElement)) return;
+              control.value = emailSuggestion;
+              setEmailSuggestion('');
+              clearIfFixed(control);
+              if (control.form) saveDraft(control.form);
+              control.focus();
+            }}
+          >
+            Did you mean {emailSuggestion}?
+          </button>
+        </span>
+      ) : undefined;
 
     return (
       <FieldGroup
@@ -973,6 +1140,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         visibleLabel={dressed.visibleLabel}
         fill={dressed.fill}
         validation={{ id: messageId, message: messages[spec.key] }}
+        suggestion={suggestion}
       >
         {spec.as === 'textarea' ? (
           <Input
@@ -981,19 +1149,76 @@ export function EnquiryForm(props: EnquiryFormProps) {
             rows={dressed.look === 'bare' ? 4 : undefined}
             onInput={(event) => clearIfFixed(event.currentTarget)}
           />
+        ) : spec.type === 'tel' ? (
+          /* The country code beside the number (F.3): a searchable list of codes, opening on the
+             visitor's region, then digits only. The two are one value, so they sit a `tight` apart, side by
+             side at every width. */
+          <Layout columns={{ base: ['auto', 1] }} colGap="tight">
+            <Input
+              as="select"
+              name="phone_country"
+              aria-label="Country code"
+              options={phoneKit?.countries ?? []}
+              value={phoneRegion}
+              onValueChange={(region) => {
+                setPhoneRegion(region);
+                const control = document.getElementById(id);
+                if (control instanceof HTMLInputElement) clearIfFixed(control);
+              }}
+              placeholder="Code"
+              search={{ label: 'Find your country', placeholder: 'Country or code', empty: 'No country matches' }}
+              appearance={shared.appearance}
+              scale={shared.scale === 'lg' ? 'lg' : 'md'}
+              disabled={submitting}
+              indicator={<Icon name="alt-arrow-down" />}
+              check={<Icon name="chrome-check" />}
+            />
+            <Input
+              {...shared}
+              type="tel"
+              onFocus={wantPhoneKit}
+              onPaste={(event) => {
+                /* A pasted international number sets the country and keeps the rest. */
+                const pasted = event.clipboardData.getData('text');
+                const split = phoneKit?.split(pasted);
+                if (!split) return;
+                event.preventDefault();
+                setPhoneRegion(split.region);
+                event.currentTarget.value = split.national;
+                clearIfFixed(event.currentTarget);
+                if (event.currentTarget.form) saveDraft(event.currentTarget.form);
+              }}
+              onInput={(event) => {
+                const control = event.currentTarget;
+                const digits = control.value.replace(/\D/g, '');
+                if (digits !== control.value) control.value = digits;
+                clearIfFixed(control);
+              }}
+            />
+          </Layout>
+        ) : spec.type === 'url' ? (
+          <Input
+            {...shared}
+            {...linkInput}
+            onInput={(event) => {
+              linkInput.onInput(event);
+              clearIfFixed(event.currentTarget);
+            }}
+          />
         ) : (
           <Input
             {...shared}
             type={spec.type ?? 'text'}
-            {...(spec.type === 'url'
+            {...(spec.key === 'email'
               ? {
-                  inputMode: 'url' as const,
-                  onBlur: (event: FocusEvent<HTMLInputElement>) => {
-                    event.currentTarget.value = normaliseUrl(event.currentTarget.value);
-                  },
+                  onBlur: (event: FocusEvent<HTMLInputElement>) =>
+                    setEmailSuggestion(suggestEmail(event.currentTarget.value) ?? ''),
                 }
               : {})}
-            onInput={(event) => clearIfFixed(event.currentTarget)}
+            onInput={(event) => {
+              if (emailSuggestion && spec.key === 'email') setEmailSuggestion('');
+              clearIfFixed(event.currentTarget);
+            }}
           />
         )}
       </FieldGroup>
@@ -1010,17 +1235,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
       <FieldGroup key="url" id={urlId} label={urlLabel} optional visibleLabel={visibleLabel}>
         <Input
           id={urlId}
-          type="url"
-          inputMode="url"
           name="url"
-          autoComplete="url"
+          {...linkInput}
           placeholder={placeholder}
           appearance={look}
           scale={props.fieldScale ?? 'md'}
           disabled={submitting}
-          onBlur={(event) => {
-            event.currentTarget.value = normaliseUrl(event.currentTarget.value);
-          }}
         />
       </FieldGroup>
     );
@@ -1101,17 +1321,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <FieldGroup key="url" id={urlId} label={urlLabel} optional>
           <Input
             id={urlId}
-            type="url"
-            inputMode="url"
             name="url"
-            autoComplete="url"
+            {...linkInput}
             placeholder={`${urlLabel} (optional)`}
             appearance={appearance}
             scale={props.fieldScale ?? 'md'}
             disabled={submitting}
-            onBlur={(event) => {
-              event.currentTarget.value = normaliseUrl(event.currentTarget.value);
-            }}
           />
         </FieldGroup>
       );

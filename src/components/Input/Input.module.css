@@ -378,3 +378,167 @@
     min-block-size: var(--inp-height-touch);
   }
 }
+
+/* ── affix (F.3) ────────────────────────────────────────────────────────────────
+   Fixed words at the start of the value ("https://"). The wrapper is the box (`.control` and its
+   appearance); the input inside it is bare and fills the rest. `display: flex` sets the affix and
+   the value on one line inside the control's own box, as the select trigger does; it is not an
+   arrangement of siblings. The affix touches the value: they read as one address. The wrapper
+   mirrors the field's states with :focus-within, since the focus is on the input inside it. */
+.affixed {
+  display: flex;
+  align-items: center;
+  cursor: text;
+}
+
+.affix {
+  flex: none;
+  color: var(--inp-standard-placeholder-fg);
+  white-space: nowrap;
+}
+
+.line .affix,
+.bare .affix {
+  color: var(--inp-line-placeholder-fg);
+}
+
+/* A field whose placeholder is its only visible cue ("Website (optional)") shows the cue at rest and
+   the affix once the reader is in it or has typed: "https://Website (optional)" would read as one
+   address. A field with no placeholder (a visible label above it) always shows the affix. */
+.affixed:not(:focus-within):has(.affixInput:placeholder-shown) .affix {
+  display: none;
+}
+
+.affixInput {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+.affixInput:focus {
+  outline: none;
+}
+
+.affixInput::placeholder {
+  opacity: 1;
+  color: var(--inp-standard-placeholder-fg);
+}
+
+.line .affixInput::placeholder,
+.bare .affixInput::placeholder {
+  color: var(--inp-line-placeholder-fg);
+}
+
+.control.affixed:not(.invalid):focus-within {
+  border-color: var(--inp-standard-rule-hover);
+}
+
+.control.affixed:has(.affixInput:focus-visible) {
+  box-shadow:
+    0 0 0 var(--inp-ring-offset) var(--inp-standard-ring-gap-color),
+    0 0 0 calc(var(--inp-ring-offset) + var(--inp-ring-width)) var(--inp-standard-ring-color);
+}
+
+.control.line.affixed:not(.invalid):focus-within {
+  border-color: var(--inp-line-rule-focus);
+  box-shadow: 0 var(--inp-rule-width) 0 0 var(--inp-line-rule-focus);
+}
+
+/* An invalid line keeps its underline language under keyboard focus: the danger rule, the gap, then
+   the ring, as .control.line.invalid:focus-visible draws it. */
+.control.line.affixed.invalid:has(.affixInput:focus-visible) {
+  box-shadow:
+    0 var(--inp-rule-width) 0 0 var(--inp-line-invalid-rule),
+    0 calc(var(--inp-rule-width) + var(--inp-ring-offset)) 0 0
+      var(--inp-standard-ring-gap-color),
+    0 calc(var(--inp-rule-width) + var(--inp-ring-offset) + var(--inp-ring-width)) 0 0
+      var(--inp-line-rule-focus);
+}
+
+/* A bare field draws no ring: its composing container's :focus-within is the indicator. */
+.control.bare.affixed:has(.affixInput:focus-visible) {
+  box-shadow: none;
+}
+
+.control.fill.affixed:focus-within {
+  background: var(--inp-fill-bg-focus);
+  border-color: var(--inp-line-rule-focus);
+}
+
+.control.fill.affixed.invalid:focus-within {
+  border-color: var(--inp-standard-invalid-rule);
+}
+
+/* Disabled, last: an unavailable field reads unavailable whatever else it is. */
+.control.affixed.affixedDisabled,
+.control.affixed.affixedDisabled:hover {
+  cursor: not-allowed;
+  border-color: var(--inp-disabled-rule);
+  background: var(--inp-disabled-bg);
+  color: var(--inp-disabled-fg);
+}
+
+.control.line.affixed.affixedDisabled {
+  box-shadow: var(--inp-shadow);
+  border-color: var(--inp-line-disabled-rule);
+  background: var(--inp-line-bg);
+  color: var(--inp-line-disabled-fg);
+}
+
+.affixedDisabled .affix,
+.affixedDisabled .affixInput::placeholder {
+  color: inherit;
+}
+
+/* ── searchable select (F.3) ────────────────────────────────────────────────────
+   A long list (the phone field's countries) opens with a filter field at its top: type and the
+   list narrows, so nobody scrolls for their country. The field stays at the top while the options
+   scroll under it (`sticky` inside the list's own scroll box). Its words line up with the options'.
+   The list drops its top inset so the field meets the list's edge and nothing shows above it. */
+.selectListSearch {
+  min-inline-size: var(--inp-list-search-min-inline);
+  padding-block-start: 0;
+}
+
+.selectSearch {
+  position: sticky;
+  z-index: 1;
+  inset-block-start: 0;
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--inp-option-height);
+  padding-inline: var(--inp-option-inset);
+  border: 0;
+  border-block-end: var(--inp-rule-width) solid var(--inp-list-rule);
+  border-radius: 0;
+  background: var(--inp-list-bg);
+  font: var(--inp-text);
+  color: var(--inp-list-fg);
+}
+
+.selectSearch::placeholder {
+  opacity: 1;
+  color: var(--inp-list-placeholder-fg);
+}
+
+.selectSearch:focus {
+  outline: none;
+}
+
+.selectNote {
+  padding-block: var(--inp-option-inset-block);
+  padding-inline: var(--inp-option-inset);
+  font: var(--inp-text);
+  color: var(--inp-list-placeholder-fg);
+}
+
+@media (max-width: 767px) {
+  .selectSearch {
+    min-block-size: var(--inp-height-touch);
+  }
+}

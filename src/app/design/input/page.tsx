@@ -53,6 +53,32 @@ function LabelledTextarea({
   );
 }
 
+/** A link field under a visible label: the affix always shows, since no placeholder is its cue. */
+function LabelledLink({
+  label,
+  invalid = false,
+  disabled = false,
+  appearance,
+}: {
+  label: string;
+  invalid?: boolean;
+  disabled?: boolean;
+  appearance?: 'box' | 'line' | 'fill';
+}) {
+  return (
+    <Layout as="label" rowGap="tight">
+      <span>{label}</span>
+      <Input
+        affix="https://"
+        defaultValue="acme.com"
+        invalid={invalid}
+        disabled={disabled}
+        appearance={appearance}
+      />
+    </Layout>
+  );
+}
+
 export default function InputSpecimenPage() {
   return (
     <>
@@ -115,6 +141,27 @@ export default function InputSpecimenPage() {
                 <SelectSpecimen label="Long list" long />
               </Layout>
             </Specimen>
+            <Specimen
+              title="affix · the link field's https://"
+              note="Fixed words inside the box before the value (F.3), in the placeholder's ink. With a placeholder as the field's only cue, the affix waits until the field is focused or filled; under a visible label it always shows. Focus, invalid and disabled are the field's own."
+            >
+              <Layout rowGap="text">
+                <Input affix="https://" aria-label="Website" placeholder="Website (optional)" />
+                <Input affix="https://" aria-label="Website, filled" defaultValue="acme.com" appearance="fill" />
+                <Input affix="https://" aria-label="Website, line" defaultValue="acme.com/app" appearance="line" />
+                <Input affix="https://" aria-label="Website, invalid" defaultValue="acme" invalid />
+                <Input affix="https://" aria-label="Website, disabled" defaultValue="acme.com" disabled />
+              </Layout>
+            </Specimen>
+            <Specimen
+              title={'as="select" search · country codes'}
+              note="A long list opens with a filter field (F.3): type a name or a code and the list narrows, best match first; a code matches from its start, so 91 finds India and not Bolivia +591. The closed field shows the code alone. Escape returns to the field; Tab closes."
+            >
+              <Layout rowGap="block">
+                <SelectSpecimen label="Country code" searchable />
+                <SelectSpecimen label="Country code, line" appearance="line" searchable empty />
+              </Layout>
+            </Specimen>
             <Specimen title="Invalid and disabled" note="Neither state uses opacity.">
               <Layout rowGap="block">
                 <LabelledInput label="Invalid" invalid />
@@ -168,7 +215,7 @@ export default function InputSpecimenPage() {
           <Section surface={surface}>
             <Specimen
               title={`Surface · ${surface}`}
-              note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined. Every surface-dependent token renders in this band. On blue the line invalid rule is danger-300, a change of hue rather than a heavier pale rule, and the line disabled field reads its own brandeis-300 / 400 tokens."
+              note="Identical markup on all four: rest, invalid and disabled, as an input and as a textarea, boxed and lined, with the link affix and the searchable select. Every surface-dependent token renders in this band. On blue the line invalid rule is danger-300, a change of hue rather than a heavier pale rule, and the line disabled field reads its own brandeis-300 / 400 tokens."
             >
               <Layout rowGap="stack">
                 <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
@@ -190,6 +237,16 @@ export default function InputSpecimenPage() {
                   <SelectSpecimen label={`Rest · select · ${surface}`} />
                   <SelectSpecimen label={`Invalid · select · ${surface}`} invalid />
                   <SelectSpecimen label={`Disabled · select · ${surface}`} disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <LabelledLink label="Rest · affix" />
+                  <LabelledLink label="Invalid · affix · line" appearance="line" invalid />
+                  <LabelledLink label="Disabled · affix · fill" appearance="fill" disabled />
+                </Layout>
+                <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
+                  <SelectSpecimen label={`Rest · search · ${surface}`} searchable />
+                  <SelectSpecimen label={`Invalid · search · ${surface}`} searchable invalid />
+                  <SelectSpecimen label={`Disabled · search · ${surface}`} searchable disabled />
                 </Layout>
                 <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
                   <LabelledTextarea label="Rest · line textarea" appearance="line" />

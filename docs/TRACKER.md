@@ -109,10 +109,12 @@ PR per step, in this order.
       Intent removed entirely (Devagya, 27 Nov): decisions/2026-11-27-enquiries-carry-no-intent; #351. The site
       no longer reads it; the CMS's intent collection and fields go in tcules-cms-2026 #11 once this is live.
       "Work email" stays as it is.
-- [ ] **F.3** Smarter fields, in the shared controls so every form gets them: `https://` shown at the start
+- [x] **F.3** Smarter fields, in the shared controls so every form gets them: `https://` shown at the start
       of a link field and stripped from a pasted link; the right keyboard and autofill per field; phone
       with a country code, digits only, validated; a suggestion for a mistyped email domain; spaces
       trimmed; a file field states its types and size before upload. Errors still show on submit only.
+      Built (decisions/2026-11-27-smarter-form-fields). The file rule is ready for F.7's CV field; the
+      phone field shows today only on the contact form variant, which no live page uses yet (F.8).
 
 ### P1 · Design first (mocks, owner review, then build)
 

@@ -30,6 +30,8 @@
   --enq-cell-inset-inline: var(--gap-block);
   --enq-divider-width: var(--border-width-hairline);
   --enq-focus-ring-width: var(--border-width-2);
+  /* The email suggestion's underline (F.3), set off its words as the site's links are (globals.css). */
+  --enq-suggestion-underline-offset: 0.2em;
 }
 
 :root,

@@ -368,3 +368,32 @@
   font: var(--text-label);
   letter-spacing: var(--text-label-tracking);
 }
+
+/* The email field's suggestion for a mistyped domain (F.3): help, not an error, so it takes the
+   hint's ink and never the danger ink. The whole line is the button that accepts it. */
+.suggestion {
+  min-inline-size: 0;
+  color: var(--enq-hint-ink);
+  font: var(--text-caption);
+}
+
+.suggestionButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: var(--enq-suggestion-underline-offset);
+  cursor: pointer;
+}
+
+.suggestionButton:focus {
+  outline: none;
+}
+
+.suggestionButton:focus-visible {
+  outline: var(--enq-focus-ring-width) solid currentColor;
+  outline-offset: var(--focus-ring-offset);
+}
