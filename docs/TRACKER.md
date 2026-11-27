@@ -96,13 +96,14 @@ PR per step, in this order.
 
 ### P1 · Building blocks
 
-- [ ] **F.1** Shared form store. Sent state per form type, sales and careers kept apart, surviving reloads
+- [x] **F.1** Shared form store. Sent state per form type, sales and careers kept apart, surviving reloads
       and other pages; careers stays out of the sales rule. Sales forgets at the end of the next business
       day (it follows the "We reply within a business day" promise); careers after 30 days (no reply
       promise yet). The prompt names the date it was sent. The page form and the bottom sheet are one
       form, typing included; typed text lives in memory on the page only, never in storage. Each
       submission is tracked once. Storage reads and writes go through one consent check, so the cookie
-      banner (backlog) connects in one line.
+      banner (backlog) connects in one line. Built in `lib/form-store`, `lib/form-sent` and `lib/storage`
+      (decisions/2026-11-27-form-store-sent-and-drafts; #350).
 - [ ] **F.2** Remove the intent picker: the page and the button pressed are already captured. Supersedes
       decisions/2026-11-25-intent-picker-is-a-dropdown with a new `/decide` entry; `intent_change` goes.
       "Work email" stays as it is.

@@ -28,9 +28,9 @@ The form is the default card that the copy's `conversion` names (email, what you
 "If the content suggests to use the default form then we should use that." It is not the chip form.
 
 After a send, the panel shows the page's own three steps from `next-steps`, word for word. Step 01's
-numeral takes the accent as the current step, and the later numerals stay neutral. On every enquiry
-form, what someone types or picks is kept in session storage, per placement, until the enquiry sends,
-so leaving the page doesn't lose it ("do #1", 31 Oct 2026).
+numeral takes the accent as the current step, and the later numerals stay neutral. (This entry also
+kept every form's draft in session storage, "do #1", 31 Oct 2026. That part is superseded by
+2026-11-27-form-store-sent-and-drafts: drafts now live in memory on the page only.)
 
 **Why.** The page exists for the form. A placeholder image beside the hero pushed the form about 950px
 down at 1440.

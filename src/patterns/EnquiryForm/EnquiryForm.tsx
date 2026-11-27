@@ -16,6 +16,15 @@ import {
 import { conversionFor, type FormType, pressedCtaRecently, track } from '@/lib/analytics';
 import { submitProtectedForm } from '@/lib/client-contact-submit';
 import { cx } from '@/lib/cx';
+import {
+  clearDraft,
+  type Draft,
+  firstOnPage,
+  markSent,
+  readDraft,
+  subscribeDraft,
+  writeDraft,
+} from '@/lib/form-store';
 import { EnquiryIntentsContext } from '@/lib/enquiry-intents-context';
 import {
   INTENT_EVENT,
@@ -595,6 +604,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const successRef = useRef<HTMLDivElement>(null);
   const submittedCallbackFired = useRef(false);
   const submissionInFlight = useRef(false);
+  /* Numbers each send, so an accepted submission is counted once (F.1). */
+  const submissionCount = useRef(0);
   const turnstile = useRef<TurnstileWidgetHandle>(null);
   const [verificationError, setVerificationError] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
@@ -705,6 +716,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         observer.disconnect();
+        /* One view per form type per page, whichever placement the reader saw first. */
+        if (!firstOnPage(`form_view:${formType}`)) return;
         track('form_view', {
           form_type: formType,
           page: window.location.pathname,
@@ -728,6 +741,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
     )
       return;
     startedTracked.current = true;
+    if (!firstOnPage(`form_start:${formType}`)) return;
     track('form_start', {
       form_type: formType,
       field_name: control.name,
@@ -737,50 +751,47 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const statusId = idFor('status');
   const urlId = idFor('url');
 
-  /* The draft (owner, 31 Oct 2026, the contact page pass): what someone has typed or picked is kept
-     in their own browser's session storage while they look around, and comes back when they return
-     to this form. One key per form placement; it is dropped once the enquiry sends. A per-viewer
-     convenience, so every read and write is guarded: private windows and blocked storage simply
-     start empty. Hidden context is never saved, it is the page's. */
-  const draftKey = `tcules:enquiry-draft:${props.action}:${
-    props.variant === 'contact'
-      ? 'contact'
-      : `${props.context.originRoute}:${props.context.placement}`
-  }`;
+  /* The draft (docs/TRACKER.md F.1, replacing the 31 Oct 2026 session-storage draft): what the reader
+     has typed or picked lives in memory on this page only (lib/form-store), never in storage. Every
+     placement of a form of this type on the page shares it, so the page's form and the phone's sheet
+     are one form, typing included. Hidden context is never part of it, it is the placement's. */
+  const draftKey = formType;
 
-  useEffect(() => {
-    const form = formRef.current;
-    if (!form) return;
-    let saved: Record<string, string[]> | null = null;
-    try {
-      const raw = window.sessionStorage.getItem(draftKey);
-      saved = raw ? (JSON.parse(raw) as Record<string, string[]>) : null;
-    } catch {
-      saved = null;
-    }
-    if (!saved) return;
+  /** Put a draft's values into this placement's controls, leaving the one being typed in alone. */
+  function applyDraft(form: HTMLFormElement, draft: Draft | undefined) {
     const restoredNeeds: string[] = [];
+    let restoredStage = '';
     for (const control of Array.from(form.elements)) {
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
       if (control.type === 'hidden' || !control.name) continue;
-      const values = saved[control.name];
-      if (!values) continue;
+      const values = draft?.[control.name] ?? [];
       if (
         control instanceof HTMLInputElement &&
         (control.type === 'checkbox' || control.type === 'radio')
       ) {
         control.checked = values.includes(control.value);
         if (control.checked && control.name === 'needs') restoredNeeds.push(control.value);
-        if (control.checked && control.name === 'stage') setStageValue(control.value);
-      } else {
+        if (control.checked && control.name === 'stage') restoredStage = control.value;
+      } else if (control !== document.activeElement && control.value !== (values[0] ?? '')) {
         control.value = values[0] ?? '';
       }
     }
-    if (restoredNeeds.length > 0) setPicked(restoredNeeds);
-    // Restore once, on mount: the key is fixed for a placement.
+    setPicked(restoredNeeds);
+    setStageValue(restoredStage);
+  }
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    const draft = readDraft(draftKey);
+    if (draft) applyDraft(form, draft);
+    return subscribeDraft(draftKey, instanceId, (next) => {
+      if (formRef.current) applyDraft(formRef.current, next);
+    });
+    // applyDraft reads only the form and state setters.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [draftKey, instanceId]);
 
   /* A link elsewhere on the page that names a role (`ENQUIRY_ROLE_ATTRIBUTE`, /careers' open roles):
      following it picks that chip here, so a reader who found their role does not pick it twice. The
@@ -812,12 +823,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
     }
     document.addEventListener('click', pick);
     return () => document.removeEventListener('click', pick);
-    // saveDraft reads only the form and the fixed draft key.
+    // roleOptions is fixed for a placement.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasRoleGroup]);
 
   function saveDraft(form: HTMLFormElement) {
-    const draft: Record<string, string[]> = {};
+    const draft: Draft = {};
     for (const control of Array.from(form.elements)) {
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
@@ -831,28 +842,17 @@ export function EnquiryForm(props: EnquiryFormProps) {
         draft[control.name] = [control.value];
       }
     }
-    try {
-      if (Object.keys(draft).length === 0) window.sessionStorage.removeItem(draftKey);
-      else window.sessionStorage.setItem(draftKey, JSON.stringify(draft));
-    } catch {
-      /* Storage blocked or full: the form works the same without a draft. */
-    }
+    writeDraft(draftKey, draft, instanceId);
   }
 
   useEffect(() => {
     if (lifecycle !== 'success') return;
-    try {
-      window.sessionStorage.removeItem(draftKey);
-    } catch {
-      /* Nothing to clear where storage is blocked. */
-    }
-
     successRef.current?.focus();
     if (!submittedCallbackFired.current) {
       submittedCallbackFired.current = true;
       onSubmitted?.();
     }
-  }, [lifecycle, onSubmitted, draftKey]);
+  }, [lifecycle, onSubmitted]);
 
   function setMessage(field: keyof FieldMessages, message: string) {
     setMessages((current) => ({ ...current, [field]: message }));
@@ -895,6 +895,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
     const body = new FormData(form);
     body.set('destination_page', window.location.pathname);
+    submissionCount.current += 1;
+    const submissionId = `${instanceId}:${submissionCount.current}`;
     submissionInFlight.current = true;
     setVerificationError('');
     setLifecycle('submitting');
@@ -915,6 +917,13 @@ export function EnquiryForm(props: EnquiryFormProps) {
         { lead: formType === 'sales' },
       );
       if (response.ok) {
+        /* Sent: the draft goes for every placement, and the browser remembers the send for the
+           type's own time (lib/form-sent). Privacy requests are not remembered. */
+        clearDraft(draftKey);
+        if (formType === 'sales' || formType === 'careers') markSent(formType);
+      }
+      /* Counted once per submission (F.1), however many placements of the form are on the page. */
+      if (response.ok && firstOnPage(`submission_accepted:${submissionId}`)) {
         const accepted = {
           form_type: formType,
           page: window.location.pathname,
