@@ -47,6 +47,13 @@ type SharedProps = {
 type NativeInputProps = SharedProps &
   Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> & {
     as?: 'input';
+    /**
+     * Fixed words at the start of the value, inside the box (F.3): the link field's `https://`, so a
+     * reader sees the address is taken care of and types only the rest. Not part of the value: the
+     * composing pattern adds it back when it sends. Set in the placeholder's ink, and hidden from
+     * assistive technology, since the label already names the field.
+     */
+    affix?: string;
   };
 
 type NativeTextareaProps = SharedProps &
@@ -119,11 +126,23 @@ export function Input({
     );
   }
 
-  return (
-    <input
-      {...(rest as InputHTMLAttributes<HTMLInputElement>)}
-      aria-invalid={nativeInvalid}
-      className={controlClassName}
-    />
-  );
+  const { affix, ...inputProps } = rest as InputHTMLAttributes<HTMLInputElement> & {
+    affix?: string;
+  };
+  if (affix) {
+    /* The box moves to a wrapper so the affix sits inside it; the input inside is bare and the
+       wrapper takes the field's hover, focus, invalid and disabled states from it. */
+    return (
+      <span
+        className={cx(controlClassName, styles.affixed, inputProps.disabled && styles.affixedDisabled)}
+      >
+        <span className={styles.affix} aria-hidden="true">
+          {affix}
+        </span>
+        <input {...inputProps} aria-invalid={nativeInvalid} className={styles.affixInput} />
+      </span>
+    );
+  }
+
+  return <input {...inputProps} aria-invalid={nativeInvalid} className={controlClassName} />;
 }

@@ -24,6 +24,9 @@ export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFoo
     if (inFlight.current) return;
 
     const form = event.currentTarget;
+    /* Spaces taken out of the address before it is checked (F.3): a pasted address often carries one. */
+    const email = form.elements.namedItem('email');
+    if (email instanceof HTMLInputElement) email.value = email.value.replace(/\s+/g, '');
     if (!form.reportValidity()) return;
     const data = new FormData(form);
     inFlight.current = true;
@@ -85,6 +88,11 @@ export function NewsletterForm({ action, fieldLabel, placeholder, cta }: SiteFoo
             type="email"
             name="email"
             autoComplete="email"
+            inputMode="email"
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+            enterKeyHint="send"
             placeholder={placeholder}
             required
             readOnly={submitting}
