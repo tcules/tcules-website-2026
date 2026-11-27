@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { noteCtaPress, track } from '@/lib/analytics';
@@ -9,6 +10,7 @@ import {
   type IntentEventDetail,
   saveEntry,
 } from '@/lib/enquiry-intents';
+import { enterPage } from '@/lib/form-store';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 
 /*
@@ -114,6 +116,13 @@ function goToForm(form: HTMLFormElement) {
 }
 
 export function EnquiryLinks() {
+  /* Every navigation is a new page for the forms: drafts and once-per-page events start again
+     (lib/form-store). */
+  const pathname = usePathname();
+  useEffect(() => {
+    enterPage();
+  }, [pathname]);
+
   useEffect(() => {
     function onClick(event: MouseEvent) {
       const target = event.target instanceof Element ? event.target : null;

@@ -1,3 +1,5 @@
+import { readStorage, writeStorage } from './storage';
+
 type VisitAttribution = {
   landingPage: string;
   referrer: string;
@@ -11,7 +13,7 @@ let currentVisit: VisitAttribution | undefined;
 export function captureHubSpotVisit(): VisitAttribution {
   if (currentVisit) return currentVisit;
   try {
-    const stored: unknown = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? 'null');
+    const stored: unknown = JSON.parse(readStorage('session', STORAGE_KEY) ?? 'null');
     if (
       stored &&
       typeof stored === 'object' &&
@@ -48,11 +50,8 @@ export function captureHubSpotVisit(): VisitAttribution {
     // Direct visits have no referrer.
   }
   currentVisit = { landingPage: landing.href, referrer, campaign: campaign.toString() };
-  try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(currentVisit));
-  } catch {
-    // Attribution must never prevent a form submission.
-  }
+  // Attribution must never prevent a form submission; lib/storage never throws.
+  writeStorage('session', STORAGE_KEY, JSON.stringify(currentVisit));
   return currentVisit;
 }
 

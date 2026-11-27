@@ -1,4 +1,5 @@
 import { ANCHORS, anchorHref, ROUTES } from './routes';
+import { readStorage, writeStorage } from './storage';
 
 /*
  * Enquiry intents (docs/specs/EnquiryForms.md § 2, § 4): what a reader wants to do, in their words.
@@ -57,16 +58,13 @@ const ENTRY_TTL_MS = 30 * 60_000;
 export type EnquiryEntry = { from: string; ctaId: string; at: number };
 
 export function saveEntry(entry: Omit<EnquiryEntry, 'at'>) {
-  try {
-    window.sessionStorage.setItem(ENTRY_KEY, JSON.stringify({ ...entry, at: Date.now() }));
-  } catch {
-    /* Storage blocked: the submission goes without its entry page. */
-  }
+  /* Storage blocked or declined: the submission goes without its entry page. */
+  writeStorage('session', ENTRY_KEY, JSON.stringify({ ...entry, at: Date.now() }));
 }
 
 export function readEntry(): EnquiryEntry | undefined {
   try {
-    const raw = window.sessionStorage.getItem(ENTRY_KEY);
+    const raw = readStorage('session', ENTRY_KEY);
     const entry = raw ? (JSON.parse(raw) as EnquiryEntry) : undefined;
     return entry && Date.now() - entry.at < ENTRY_TTL_MS ? entry : undefined;
   } catch {
