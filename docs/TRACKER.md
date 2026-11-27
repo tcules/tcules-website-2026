@@ -104,8 +104,10 @@ PR per step, in this order.
       submission is tracked once. Storage reads and writes go through one consent check, so the cookie
       banner (backlog) connects in one line. Built in `lib/form-store`, `lib/form-sent` and `lib/storage`
       (decisions/2026-11-27-form-store-sent-and-drafts; #350).
-- [ ] **F.2** Remove the intent picker: the page and the button pressed are already captured. Supersedes
+- [x] **F.2** Remove the intent picker: the page and the button pressed are already captured. Supersedes
       decisions/2026-11-25-intent-picker-is-a-dropdown with a new `/decide` entry; `intent_change` goes.
+      Intent removed entirely (Devagya, 27 Nov): decisions/2026-11-27-enquiries-carry-no-intent. The site
+      no longer reads it; the CMS's intent collection and fields go in tcules-cms-2026 once this is live.
       "Work email" stays as it is.
 - [ ] **F.3** Smarter fields, in the shared controls so every form gets them: `https://` shown at the start
       of a link field and stripped from a pasted link; the right keyboard and autofill per field; phone

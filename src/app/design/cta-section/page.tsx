@@ -114,7 +114,7 @@ const SKETCH_TO_SHIPPED = {
 const AUDIT_FORM_PROPS = {
   ...ENQUIRY_FORM_PROPS,
   variant: 'audit',
-  context: { ...FORM_CONTEXT, intent: 'free-audit' },
+  context: FORM_CONTEXT,
 } as const;
 
 const REJECTIONS = [

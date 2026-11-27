@@ -19,12 +19,10 @@ type EventParams = {
     page: string;
     destination: 'inline' | 'contact';
     band?: string;
-    intent?: string;
   };
-  form_view: { form_type: FormType; page: string; trigger: 'cta' | 'scroll'; intent?: string };
-  form_start: { form_type: FormType; field_name: string; intent?: string };
-  intent_change: { form_type: FormType; from: string; to: string };
-  form_submit_attempt: { form_type: FormType; intent?: string };
+  form_view: { form_type: FormType; page: string; trigger: 'cta' | 'scroll' };
+  form_start: { form_type: FormType; field_name: string };
+  form_submit_attempt: { form_type: FormType };
   form_validation_error: { form_type: FormType; field_names: string[] };
   submission_accepted: AcceptedParams;
   generate_lead: AcceptedParams;
@@ -35,7 +33,8 @@ type AcceptedParams = {
   form_type: FormType;
   page: string;
   placement: string;
-  intent?: string;
+  /** The button pressed to reach the form; absent when the reader scrolled to it. */
+  cta_id?: string;
 };
 
 export type AnalyticsEvent = keyof EventParams;

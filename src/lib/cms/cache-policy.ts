@@ -48,8 +48,7 @@ export const CMS_QUERY_MODELS: Record<string, string> = {
   PublishedSiteNavigation: 'navigation',
   PublishedSiteFooter: 'footer',
   PublishedSiteIdentity: 'seo-settings',
-  /* Enquiry intents (every form, through the root layout) and the legal pages' privacy close. */
-  EnquiryIntents: 'enquiry-intent',
+  /* The legal pages' privacy close. */
   PrivacyRequest: 'privacy-request',
 };
 
@@ -101,7 +100,6 @@ export const CMS_MODELS = new Set([
   'topic',
   'resource-type',
   'file',
-  'enquiry-intent',
   'privacy-request',
 ]);
 
@@ -140,9 +138,6 @@ const RELATION_FIELDS: Record<string, string> = {
   testimonial: 'testimonial',
   testimonials: 'testimonial',
   faqs: 'faq',
-  /* A button's and a form's intent: a renamed intent refreshes every page that names it. */
-  intent: 'enquiry-intent',
-  defaultIntent: 'enquiry-intent',
   jobs: 'job',
   industry: 'industry',
   industries: 'industry',

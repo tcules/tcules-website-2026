@@ -138,8 +138,6 @@ export async function submitClientContact(request: Request, endpointKind?: FormK
       submissionContext: attribution({
         originRoute: get('origin_route'),
         placement: get('placement'),
-        intent: get('enquiry_intent'),
-        intentInitial: get('enquiry_intent_initial'),
         ctaId: get('cta_id'),
         entryRoute: get('entry_route'),
       }),

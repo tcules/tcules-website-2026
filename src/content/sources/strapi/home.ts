@@ -3,7 +3,6 @@ import { cache } from 'react';
 import type { ClipRendition, ClipSource, MediaImage } from '@/components';
 import { isSketchName } from '@/components/Sketch';
 import { iconNames, type IconName } from '@/lib/icon-glyphs';
-import { withIntent } from '@/lib/enquiry-intents';
 import { caseStudyPath, expertisePath, ROUTES } from '@/lib/routes';
 import type {
   EngagementScope,
@@ -125,10 +124,7 @@ export function icon(value: string | null | undefined): IconName | undefined {
 
 export function action(value: CmsAction | null | undefined) {
   const label = text(value?.name);
-  const authored = actionHref(value?.href);
-  /* A button to the enquiry form carries the intent it asks for in its link (`?intent=`), so the
-     form opens with it chosen, with or without a script (docs/specs/EnquiryForms.md § 2). */
-  const href = authored ? withIntent(authored, text(value?.intent?.key)) : authored;
+  const href = actionHref(value?.href);
   if (label && href)
     return { label, href, icon: icon(value?.icon), description: text(value?.description) };
   if (value) warn('an authored action is missing its label or a valid href');
@@ -689,7 +685,6 @@ export function mapBand(
               scheduleHref: actionHref(form.scheduleHref),
               reply: text(form.replyLabel),
               success: { heading: successHeading, body: successBody },
-              defaultIntent: text(form.defaultIntent?.key),
               nextSteps: rows(form.successSteps).flatMap((step) => {
                 const label = text(step.label);
                 return label ? [{ label, detail: text(step.detail) }] : [];

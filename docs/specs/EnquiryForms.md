@@ -1,5 +1,11 @@
 # Enquiry forms: types, pickers, buttons and tracking
 
+> **Superseded in part, 27 Nov 2026.** Enquiries carry no intent (decisions/2026-11-27-enquiries-carry-no-intent;
+> docs/TRACKER.md F.2). Everything here about intents is retired: the picker (§ 4), `?intent=` and the
+> intent preselection (§ 2), `intent` and `intent_initial` (§ 5), the intent parameters and
+> `intent_change` (§ 6), the Enquiry Intent collection and `defaultIntent` (§ 7), and the intent edge
+> cases (§ 9). Form types, `cta_id`, `entry_route`, the privacy form and HubSpot for sales only stand.
+
 ## 0 · Front matter
 
 |                     |                                                                                                                                                                                                                                                                                                                       |

@@ -4,11 +4,8 @@ import { Fragment } from 'react';
 import { Button, Cluster, Layout, Media, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
 import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
-import type { EnquiryIntent } from '@/lib/enquiry-intents';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { PrivacyClose } from '@/templates';
-
-import { IntentsProvider } from '../../_enquiry/IntentsProvider';
 
 import {
   CHOICE_DRESS,
@@ -197,7 +194,7 @@ function Enquiry({
     <EnquiryForm
       variant="audit"
       action={action}
-      context={{ ...CONTEXT, intent: 'free-audit' }}
+      context={CONTEXT}
       scheduleHref={ROUTES.contact}
     />
   ) : (
@@ -211,46 +208,28 @@ function Enquiry({
   );
 }
 
-/* Placeholder intents for the specimen: the CMS's starting list (tcules-cms-2026#7), so the dropdown
-   can be tried here without the CMS. One privacy intent, so the privacy close shows no dropdown. */
-const SPECIMEN_INTENTS: readonly EnquiryIntent[] = [
-  { key: 'discuss-project', label: 'Discuss a project', formType: 'sales', isDefault: true },
-  { key: 'start-pilot', label: 'Start with a pilot', formType: 'sales', isDefault: false },
-  { key: 'scope-project', label: 'Scope a project', formType: 'sales', isDefault: false },
-  { key: 'design-team', label: 'Embedded design team', formType: 'sales', isDefault: false },
-  { key: 'ux-audit', label: 'Discuss a UX audit', formType: 'sales', isDefault: false },
-  { key: 'prototype-review', label: 'Discuss a paid prototype review', formType: 'sales', isDefault: false },
-  { key: 'intro-call', label: 'Request an introductory call', formType: 'sales', isDefault: false },
-  { key: 'privacy-request', label: 'Privacy request', formType: 'privacy', isDefault: true },
-];
-
 /**
- * The intent dropdown (docs/specs/EnquiryForms.md § 2, § 4): three asks above the form, each naming a
- * different intent. Pressing one scrolls to the form, selects its intent and focuses the dropdown;
- * the URL keeps `?intent=`, so a reload or a new tab opens the form on it too.
+ * Asks lead to the page's form (docs/specs/EnquiryForms.md § 2): pressing one scrolls to the form and
+ * puts focus on it without opening a phone keyboard. The button pressed travels with the submission
+ * as `cta_id`; there is no intent to choose (decisions/2026-11-27-enquiries-carry-no-intent).
  */
-function IntentSpecimen() {
+function AskSpecimen() {
   return (
-    <IntentsProvider intents={SPECIMEN_INTENTS}>
-      <Section id="intent-asks">
+    <>
+      <Section id="enquiry-asks">
         <Layout rowGap="block">
-          <h2>The intent dropdown</h2>
+          <h2>Asks lead to the form</h2>
           <p>
-            Each form type lists its intents in the CMS. A form opens on the intent its button
-            named, else the link&rsquo;s <code>?intent=</code>, else the page&rsquo;s default, else
-            the type&rsquo;s. The dropdown shows only when the list holds a choice: the privacy
-            close below has one intent and shows none. Press an ask: the page scrolls to the form,
-            selects that intent and puts focus on the dropdown.
+            Press an ask: the page scrolls to the form below and puts focus on it. The button
+            pressed is sent with the enquiry as <code>cta_id</code>. The privacy close after it is
+            the legal pages&rsquo; form.
           </p>
           <Cluster colGap="block" rowGap="text" align="center">
-            <Button as="a" href="?intent=start-pilot#enquiry">
+            <Button as="a" href="#enquiry">
               Start with a pilot
             </Button>
-            <Button as="a" href="?intent=ux-audit#enquiry" emphasis="ghost" tone="neutral">
+            <Button as="a" href="#enquiry" emphasis="ghost" tone="neutral">
               Discuss a UX audit
-            </Button>
-            <Button as="a" href="#enquiry" emphasis="link" tone="neutral">
-              An ask that names no intent
             </Button>
           </Cluster>
         </Layout>
@@ -258,7 +237,7 @@ function IntentSpecimen() {
       <CtaSection
         id="enquiry"
         heading="Tell us what you’re building"
-        body={['The form opens on Scope a project, this specimen’s page default.']}
+        body={['Where the asks above lead.']}
         island="blue"
         islandArrangement="beside"
         islandTexture="frame"
@@ -266,13 +245,12 @@ function IntentSpecimen() {
           <EnquiryForm
             variant="enquiry"
             action={ENDPOINTS.enquiry}
-            defaultIntent="scope-project"
             fieldScale="md"
             submit="inline"
             dress={{ kind: 'card', reply: 'We reply in 1 business day' }}
             context={{
               originRoute: ROUTES.designEnquiryForm,
-              placement: 'intent-specimen',
+              placement: 'ask-specimen',
               family: 'design',
               serviceOrAudit: '',
               referrer: '',
@@ -289,10 +267,9 @@ function IntentSpecimen() {
           island: 'ink',
           submitLabel: 'Send',
           success: { heading: 'Request received', body: 'We’ll reply to the email you gave us.' },
-          defaultIntent: 'privacy-request',
         }}
       />
-    </IntentsProvider>
+    </>
   );
 }
 
@@ -324,7 +301,7 @@ export default function EnquiryFormSpecimenPage() {
         </Layout>
       </Section>
 
-      <IntentSpecimen />
+      <AskSpecimen />
 
       {/* The island close (owner, 16 Oct 2026): the form's variations inside the real close. */}
       <Section>
@@ -590,7 +567,8 @@ export default function EnquiryFormSpecimenPage() {
           <p>
             Enquiry posts <code>origin_route</code>, <code>placement</code>, <code>family</code>
             , <code>service_or_audit</code>, <code>referrer</code>, and <code>campaign</code>.
-            Audit adds <code>intent</code>; compact posts the enquiry context with{' '}
+            Every form adds <code>form_type</code>, and <code>cta_id</code> when an ask led to it;
+            compact posts the enquiry context with{' '}
             <code>name</code> in place of <code>url</code>. Empty referrer and campaign values
             remain present rather than being dropped.
           </p>
@@ -738,7 +716,7 @@ export default function EnquiryFormSpecimenPage() {
           <EnquiryForm
             variant="audit"
             action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
-            context={{ ...CONTEXT, intent: 'free-audit' }}
+            context={CONTEXT}
             scheduleHref={ROUTES.contact}
           />
         }

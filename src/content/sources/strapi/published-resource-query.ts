@@ -54,7 +54,7 @@ query PublishedResource($slug: String!) {
     cta {
       id heading anchorId eyebrow description descriptionRich disclaimer ctaSurface: surface ctaSide: mediaSide
       isEnabled ctaType ctaPresentation: presentation island
-      form { variant purpose defaultIntent { key } submitLabel caption urlLabel scheduleHref successHeading successBody replyLabel successSteps { label detail } }
+      form { variant purpose submitLabel caption urlLabel scheduleHref successHeading successBody replyLabel successSteps { label detail } }
       points { text } contactLinks { key value href }
       button { ...PublishedAction } secondaryButton { ...PublishedAction }
       media { ...PublishedImage }
