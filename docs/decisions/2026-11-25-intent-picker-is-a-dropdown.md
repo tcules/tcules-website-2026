@@ -1,7 +1,7 @@
 ---
 title: The enquiry form's pickers are a dropdown (the site's own, after shadcn), shown only when there is a choice
 date: 2026-11-25
-status: proposed
+status: superseded
 area: [forms, components]
 source: Devagya, 25 Nov 2026 ("dropdown for the picker"; "pages that don't really have options should not show … the picker"; "build a proper dropdown instead of relying on a native dropdown. take inspiration from shadcn"; "replace the careers chips with the dropdown"); docs/specs/EnquiryForms.md § 4
 supersedes: []

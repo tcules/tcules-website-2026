@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 
-import { getEnquiryIntents, getNavigation, getSiteIdentity } from '@/content';
+import { getNavigation, getSiteIdentity } from '@/content';
 import { siteGraphMarkup } from '@/lib/json-ld';
 import { SITE_ORIGIN } from '@/lib/routes';
 import { SiteFooter, SiteNav } from '@/patterns';
 
 import { EnquiryLinks } from './_enquiry/EnquiryLinks';
-import { IntentsProvider } from './_enquiry/IntentsProvider';
 import './globals.css';
 import { TrackingScripts } from './tracking-scripts';
 
@@ -57,11 +56,7 @@ const FONTS_CSS =
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const [{ nav, footer }, identity, intents] = await Promise.all([
-    getNavigation(),
-    getSiteIdentity(),
-    getEnquiryIntents(),
-  ]);
+  const [{ nav, footer }, identity] = await Promise.all([getNavigation(), getSiteIdentity()]);
   const trackingEnabled = process.env.RAILWAY_ENVIRONMENT_NAME === 'live';
 
   return (
@@ -100,12 +95,10 @@ export default async function RootLayout({
             <TrackingScripts />
           </>
         ) : null}
-        <IntentsProvider intents={intents}>
-          {nav.available !== false ? <SiteNav {...nav} /> : null}
-          <main>{children}</main>
-          <EnquiryLinks />
-          {footer.available !== false ? <SiteFooter {...footer} /> : null}
-        </IntentsProvider>
+        {nav.available !== false ? <SiteNav {...nav} /> : null}
+        <main>{children}</main>
+        <EnquiryLinks />
+        {footer.available !== false ? <SiteFooter {...footer} /> : null}
         {/* The site-wide Organization and WebSite nodes, once per page from SEO Settings. Each
             page's own graph refers to them by @id (lib/json-ld.ts strips the copies it carries). */}
         {identity ? (

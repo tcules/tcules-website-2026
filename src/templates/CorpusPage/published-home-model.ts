@@ -197,8 +197,6 @@ export type HomeSection = SectionHead &
           emailLabel?: 'Work email';
           success: { heading: string; body: string };
           nextSteps: EnquiryNextStep[];
-          /** The intent the form opens with when no button names one (CMS `defaultIntent`). */
-          defaultIntent?: string;
         };
         actions: readonly HomeAction[];
         contacts: { label: string; value: string; href?: string }[];

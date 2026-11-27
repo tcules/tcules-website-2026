@@ -1,55 +1,19 @@
 import { cache } from 'react';
 
-import type { EnquiryIntent, IntentFormType } from '@/lib/enquiry-intents';
-
 import { text } from './home';
 import { publicGraphql } from './public-graphql';
 
-/* Enquiry intents and the privacy request form (CMS tcules-cms-2026#7; docs/specs/EnquiryForms.md). */
-
-const ENQUIRY_INTENTS_QUERY = `
-query EnquiryIntents {
-  enquiryIntents(sort: ["order:asc"], pagination: { limit: 100 }) { key label formType isDefault }
-}`;
+/* The privacy request form the legal pages close on (CMS tcules-cms-2026#7; docs/specs/EnquiryForms.md). */
 
 const PRIVACY_REQUEST_QUERY = `
 query PrivacyRequest {
   privacyRequest {
     close {
       heading description island isEnabled
-      form { submitLabel successHeading successBody defaultIntent { key } }
+      form { submitLabel successHeading successBody }
     }
   }
 }`;
-
-type CmsIntent = { key: string | null; label: string | null; formType: string | null; isDefault: boolean | null };
-
-const FORM_TYPES: readonly IntentFormType[] = ['sales', 'privacy'];
-
-/**
- * Every published intent, in the CMS's order. A form with none still works: it records no intent and
- * shows no dropdown. So a CMS that cannot answer leaves the forms as they were rather than taking
- * every page down with it, and says so in the server log.
- */
-export const getPublishedEnquiryIntents = cache(async (): Promise<EnquiryIntent[]> => {
-  try {
-    const { enquiryIntents } = await publicGraphql<{ enquiryIntents: CmsIntent[] | null }>(
-      ENQUIRY_INTENTS_QUERY,
-      'EnquiryIntents',
-    );
-    return (enquiryIntents ?? []).flatMap((intent) => {
-      const key = text(intent.key);
-      const label = text(intent.label);
-      const formType = FORM_TYPES.find((type) => type === intent.formType);
-      return key && label && formType
-        ? [{ key, label, formType, isDefault: intent.isDefault === true }]
-        : [];
-    });
-  } catch (error) {
-    console.warn('[enquiry-intents] the CMS did not return the intents', error);
-    return [];
-  }
-});
 
 /** The close every legal page ends on: one heading, one line and the privacy request form. */
 export type PrivacyRequestClose = {
@@ -58,7 +22,6 @@ export type PrivacyRequestClose = {
   island: 'ink' | 'blue';
   submitLabel: string;
   success: { heading: string; body: string };
-  defaultIntent?: string;
 };
 
 type CmsPrivacyRequest = {
@@ -71,7 +34,6 @@ type CmsPrivacyRequest = {
       submitLabel: string | null;
       successHeading: string | null;
       successBody: string | null;
-      defaultIntent: { key: string | null } | null;
     } | null;
   } | null;
 };
@@ -98,6 +60,5 @@ export const getPublishedPrivacyRequest = cache(async (): Promise<PrivacyRequest
     island: close.island === 'blue' ? 'blue' : 'ink',
     submitLabel,
     success: { heading: successHeading, body: successBody },
-    defaultIntent: text(close.form?.defaultIntent?.key),
   };
 });

@@ -86,7 +86,7 @@ export const PUBLISHED_OTHERRESOURCES = `
 export const PUBLISHED_CTA = `
       ... on ComponentSharedCta {
         id heading anchorId eyebrow description descriptionRich disclaimer ctaSurface: surface ctaSide: mediaSide isEnabled ctaType ctaPresentation: presentation island
-        form { variant purpose defaultIntent { key } submitLabel caption urlLabel scheduleHref successHeading successBody replyLabel successSteps { label detail } }
+        form { variant purpose submitLabel caption urlLabel scheduleHref successHeading successBody replyLabel successSteps { label detail } }
         points { text } contactLinks { key value href }
         ctaQuote: quote { kind testimonial { name role company quoteHtml shortQuote } }
         button { ...PublishedAction } secondaryButton { ...PublishedAction }
@@ -117,7 +117,7 @@ export const PUBLISHED_HERO = `
 
 export const PUBLISHED_FIELDS = `
 fragment PublishedAction on ComponentSharedCtaButton {
-  name href description icon isExternal intent { key }
+  name href description icon isExternal
 }
 fragment PublishedRating on ComponentNavigationRating {
   score platform mark href detail

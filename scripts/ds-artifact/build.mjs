@@ -188,8 +188,7 @@ const bundleJs = bundle.outputFiles.find((f) => f.path.endsWith('.js')).text;
 const bundleCss = bundle.outputFiles.find((f) => f.path.endsWith('.css')).text;
 
 /* Which units really are exports — a folder whose name the barrel does not export gets no card. The
-   bundle is evaluated against the real React: a module that calls createContext at load (MediaMotion,
-   enquiry-intents-context) throws against an empty stub. */
+   bundle is evaluated against the real React: a module that calls createContext at load (MediaMotion) throws against an empty stub. */
 const { default: ReactForProbe } = await import("react");
 const exported = new Set(
   new Function('window', `${bundleJs}; return Object.keys(${NAMESPACE});`)({ React: ReactForProbe, ReactDOM: {} }),

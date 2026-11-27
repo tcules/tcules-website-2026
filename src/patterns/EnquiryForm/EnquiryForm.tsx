@@ -25,13 +25,7 @@ import {
   subscribeDraft,
   writeDraft,
 } from '@/lib/form-store';
-import { EnquiryIntentsContext } from '@/lib/enquiry-intents-context';
-import {
-  INTENT_EVENT,
-  intentFromSearch,
-  type IntentEventDetail,
-  readEntry,
-} from '@/lib/enquiry-intents';
+import { PRESS_EVENT, type PressEventDetail, readEntry } from '@/lib/enquiry-entry';
 import { ENQUIRY_ROLE_ATTRIBUTE } from '@/lib/enquiry-pick';
 import { ROUTES } from '@/lib/routes';
 
@@ -81,12 +75,6 @@ type SharedProps = {
    * decides the conversion: only a sales submission is a lead.
    */
   formType?: FormType;
-  /**
-   * The intent this form opens with when the reader arrives without a button or a link that names
-   * one: the page's own default from the CMS (an insight article on audits opens on "Discuss a UX
-   * audit"). Without it the form opens on its type's default intent.
-   */
-  defaultIntent?: string;
   onSubmitted?: () => void;
   /**
    * How wide the form sets (cmp-form fix round, 6 Oct 2026). ONE policy for every variant: the form
@@ -284,7 +272,7 @@ type EnquiryVariantProps = SharedProps & {
    * job. Every other form keeps its optional link field.
    */
   asksUrl?: boolean;
-  context: EnquiryContextBase & { intent?: never };
+  context: EnquiryContextBase;
   scheduleHref?: string;
   /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
   dress?: EnquiryDress;
@@ -293,7 +281,7 @@ type EnquiryVariantProps = SharedProps & {
 type AuditVariantProps = SharedProps & {
   variant: 'audit';
   urlLabel?: AuditUrlLabel;
-  context: EnquiryContextBase & { intent: string };
+  context: EnquiryContextBase;
   scheduleHref: string;
   dress?: never;
 };
@@ -320,7 +308,7 @@ type ContactVariantProps = SharedProps & {
 type CompactVariantProps = SharedProps & {
   variant: 'compact';
   urlLabel?: never;
-  context: EnquiryContextBase & { intent?: never };
+  context: EnquiryContextBase;
   scheduleHref?: never;
   dress?: never;
 };
@@ -632,27 +620,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const placement = props.variant === 'contact' ? 'contact' : props.context.placement;
   const startedTracked = useRef(false);
 
-  /* The intent (docs/specs/EnquiryForms.md § 4): what the reader asked for, from the CMS's list for
-     this form's type. It opens on, in order, the intent the pressed button named, the link's
-     `?intent=`, the page's default, the type's default. The dropdown shows only when the list holds a
-     choice; with one intent it is recorded silently. Careers lists its roles in its own group. */
-  const allIntents = useContext(EnquiryIntentsContext);
-  const intentOptions =
-    formType === 'sales' || formType === 'privacy'
-      ? allIntents.filter((option) => option.formType === formType)
-      : [];
-  const known = (key: string | undefined) =>
-    key && intentOptions.some((option) => option.key === key) ? key : undefined;
-  const openingIntent =
-    known(props.defaultIntent) ??
-    intentOptions.find((option) => option.isDefault)?.key ??
-    intentOptions[0]?.key;
-  /* Read in the browser only, and after hydration: the server renders the page's own default. */
-  const urlIntent = useSyncExternalStore(
-    subscribeNever,
-    () => intentFromSearch(window.location.search),
-    () => undefined,
-  );
+  /* Where the reader came from (F.2): the button pressed to reach this form, or for /contact the page
+     an ask sent them from. Read in the browser only, after hydration. There is no intent to choose:
+     the page and the button already say what the enquiry is about. */
   const entryFrom = useSyncExternalStore(
     subscribeNever,
     () => (window.location.pathname === ROUTES.contact ? (readEntry()?.from ?? '') : ''),
@@ -663,52 +633,17 @@ export function EnquiryForm(props: EnquiryFormProps) {
     () => (window.location.pathname === ROUTES.contact ? (readEntry()?.ctaId ?? '') : ''),
     () => '',
   );
-  /* A press on a link to this form, and the reader's own pick. A press is a fresh statement of what
-     they want, so it clears an earlier pick. */
-  const [pressed, setPressed] = useState<IntentEventDetail | undefined>(undefined);
-  const [chosenIntent, setPickedIntent] = useState<string | undefined>(undefined);
-  const intentInitial = known(pressed?.intent) ?? known(urlIntent) ?? openingIntent;
-  const intent = known(chosenIntent) ?? intentInitial;
-  const ctaId = pressed?.ctaId ?? entryCta;
+  const [pressedCta, setPressedCta] = useState<string | undefined>(undefined);
+  const ctaId = pressedCta ?? entryCta;
   const entryRoute = entryFrom;
   useEffect(() => {
     if (formType !== 'sales') return;
-    function onIntent(event: Event) {
-      setPressed((event as CustomEvent<IntentEventDetail>).detail);
-      setPickedIntent(undefined);
+    function onPress(event: Event) {
+      setPressedCta((event as CustomEvent<PressEventDetail>).detail.ctaId);
     }
-    window.addEventListener(INTENT_EVENT, onIntent);
-    return () => window.removeEventListener(INTENT_EVENT, onIntent);
+    window.addEventListener(PRESS_EVENT, onPress);
+    return () => window.removeEventListener(PRESS_EVENT, onPress);
   }, [formType]);
-  /* The latest intent, for the view event, which subscribes once and must not re-fire on a change. */
-  const intentNow = useRef(intent);
-  useEffect(() => {
-    intentNow.current = intent;
-  }, [intent]);
-  const intentId = idFor('intent');
-  /** The dropdown, first of the fields, where the list holds a choice. */
-  function intentPicker(look: 'box' | 'line' | 'fill') {
-    if (intentOptions.length < 2) return null;
-    return (
-      <FieldGroup id={intentId} label="What would you like to do?" visibleLabel={look === 'fill'}>
-        <Input
-          as="select"
-          id={intentId}
-          appearance={look}
-          scale={props.fieldScale === 'lg' ? 'lg' : 'md'}
-          options={intentOptions.map((option) => ({ value: option.key, label: option.label }))}
-          value={intent}
-          disabled={submitting}
-          indicator={<Icon name="alt-arrow-down" />}
-          check={<Icon name="chrome-check" />}
-          onValueChange={(next) => {
-            track('intent_change', { form_type: formType, from: intent ?? '', to: next });
-            setPickedIntent(next);
-          }}
-        />
-      </FieldGroup>
-    );
-  }
   useEffect(() => {
     const form = formRef.current;
     if (!form || typeof IntersectionObserver === 'undefined') return;
@@ -722,7 +657,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
           form_type: formType,
           page: window.location.pathname,
           trigger: pressedCtaRecently() ? 'cta' : 'scroll',
-          ...(intentNow.current ? { intent: intentNow.current } : {}),
         });
       },
       { threshold: 0.5 },
@@ -733,8 +667,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
   function trackStart(event: FocusEvent<HTMLFormElement>) {
     if (startedTracked.current) return;
     const control = event.target;
-    /* A start is the reader going to write: focus in a text field. The dropdown is not counted here,
-       because an ask puts focus on it for the reader; a change to it is `intent_change`. */
+    /* A start is the reader going to write: focus in a text field. The careers role dropdown is not
+       counted here, since picking a role is not writing. */
     if (
       !(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) ||
       control.type === 'hidden'
@@ -745,7 +679,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
     track('form_start', {
       form_type: formType,
       field_name: control.name,
-      ...(intent ? { intent } : {}),
     });
   }
   const statusId = idFor('status');
@@ -801,8 +734,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
     (props.variant === undefined || props.variant === 'enquiry') &&
     props.dress?.kind === 'card' &&
     props.dress.role !== undefined;
-  /* The role, as the same dropdown as the intent (owner, 25 Nov 2026: "replace the careers chips with
-     the dropdown"): the open roles, General application last, opening on the first role until a
+  /* The role, as a dropdown (owner, 25 Nov 2026: "replace the careers chips with the dropdown"): the open roles, General application last, opening on the first role until a
      role's own link on the page picks it. */
   const roleGroup =
     (props.variant === undefined || props.variant === 'enquiry') && props.dress?.kind === 'card'
@@ -861,7 +793,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submissionInFlight.current) return;
-    track('form_submit_attempt', { form_type: formType, ...(intent ? { intent } : {}) });
+    track('form_submit_attempt', { form_type: formType });
 
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
     const fallbackSubmitter =
@@ -928,7 +860,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           form_type: formType,
           page: window.location.pathname,
           placement,
-          ...(intent ? { intent } : {}),
+          ...(ctaId ? { cta_id: ctaId } : {}),
         };
         track('submission_accepted', accepted);
         const conversion = conversionFor(formType);
@@ -1387,16 +1319,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
       </Layout>
     );
 
-  /* What the submission is and what it asked for (spec § 5): its type, the intent it was sent with and
-     the one it opened with, the button that brought the reader, and for /contact the page they came
-     from. Rendered on every variant, the contact form's included. */
-  const intentContext = (
+  /* What the submission is and how the reader reached it (F.2): its type, the button pressed, and for
+     /contact the page they came from. Rendered on every variant, the contact form's included. */
+  const submissionContext = (
     <>
       <input type="hidden" name="form_type" value={formType} />
-      {intent ? <input type="hidden" name="enquiry_intent" value={intent} /> : null}
-      {intentInitial ? (
-        <input type="hidden" name="enquiry_intent_initial" value={intentInitial} />
-      ) : null}
       {ctaId ? <input type="hidden" name="cta_id" value={ctaId} /> : null}
       {entryRoute ? <input type="hidden" name="entry_route" value={entryRoute} /> : null}
     </>
@@ -1412,9 +1339,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <input type="hidden" name="service_or_audit" value={props.context.serviceOrAudit} />
         <input type="hidden" name="referrer" value={props.context.referrer} />
         <input type="hidden" name="campaign" value={props.context.campaign} />
-        {props.variant === 'audit' ? (
-          <input type="hidden" name="intent" value={props.context.intent} />
-        ) : null}
       </>
     );
 
@@ -1514,7 +1438,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
       return (
         <form {...formAttrs}>
           <Layout rowGap="block">
-            {intentPicker('fill')}
             <Layout
               columns={{ lg: [1, 1] }}
               reverse={{ lg: true }}
@@ -1580,7 +1503,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           </Layout>
           <TurnstileWidget ref={turnstile} />
           {hiddenContext}
-          {intentContext}
+          {submissionContext}
         </form>
       );
     }
@@ -1612,7 +1535,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
         <form {...formAttrs}>
           <Layout rowGap="block">
             <Layout rowGap="text">
-              {intentPicker('fill')}
               {dress.role ? (
                 <FieldGroup id={idFor('role')} label={dress.role.question} visibleLabel>
                   <Input
@@ -1664,7 +1586,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           </Layout>
           <TurnstileWidget ref={turnstile} />
           {hiddenContext}
-          {intentContext}
+          {submissionContext}
         </form>
       );
     }
@@ -1672,7 +1594,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
     return (
       <form {...formAttrs}>
         <Layout rowGap="block">
-          {intentPicker('fill')}
           <Cluster nowrap colGap="text" align="start">
             {/* Decorative: the name beside it says who this is. */}
             <img
@@ -1749,7 +1670,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         </Layout>
         <TurnstileWidget ref={turnstile} />
         {hiddenContext}
-          {intentContext}
+          {submissionContext}
       </form>
     );
   }
@@ -1782,7 +1703,6 @@ export function EnquiryForm(props: EnquiryFormProps) {
           more field. A message, when there is one, opens its own `tight` under its field. */}
       <Layout rowGap="block">
         <Layout rowGap="text">
-          {intentPicker(appearance)}
           {rows.map(renderRow)}
         </Layout>
         {actions}
@@ -1790,7 +1710,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
 
       <TurnstileWidget ref={turnstile} />
       {hiddenContext}
-          {intentContext}
+          {submissionContext}
     </form>
   );
 }

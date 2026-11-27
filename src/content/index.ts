@@ -44,7 +44,6 @@ export {
   getPrivacyPolicyDocument,
   getTermsOfUseDocument,
   getCookiePolicyDocument,
-  getEnquiryIntents,
   getPrivacyRequest,
   getAuthorDetail,
   getAuthorShareProfile,
@@ -247,7 +246,7 @@ export type {
   SitePageFamily,
   SitePagesContentSource,
 } from './types';
-export type { PrivacyRequestClose } from './sources/strapi/enquiry-intents';
+export type { PrivacyRequestClose } from './sources/strapi/privacy-request';
 export type {
   CorpusPage,
   CorpusSeo,

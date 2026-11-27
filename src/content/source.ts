@@ -1,4 +1,4 @@
-import { getPublishedEnquiryIntents, getPublishedPrivacyRequest } from './sources/strapi/enquiry-intents';
+import { getPublishedPrivacyRequest } from './sources/strapi/privacy-request';
 import { getPublishedWorkMaster, getPublishedWorkDetail, getPublishedSitemap } from './sources/strapi/published-work';
 import{getPublishedWhy}from'./sources/strapi/published-why';
 import { getPublishedMatter } from './sources/strapi/published-matter';
@@ -157,8 +157,6 @@ export const getPrivacyPolicyDocument = getPublishedPrivacyPolicy;
 export const getTermsOfUseDocument = getPublishedTermsOfUse;
 /** `/cookie-policy`: the Cookie Policy single type on the new CMS, with its SEO. */
 export const getCookiePolicyDocument = getPublishedCookiePolicy;
-/** Every enquiry intent, for the root layout to provide to every form (docs/specs/EnquiryForms.md § 4). */
-export const getEnquiryIntents = getPublishedEnquiryIntents;
 /** The privacy request close the legal pages end on. */
 export const getPrivacyRequest = getPublishedPrivacyRequest;
 export const getAuthorDetail = getPublishedAuthor;

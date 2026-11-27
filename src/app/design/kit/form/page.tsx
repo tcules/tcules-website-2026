@@ -201,11 +201,11 @@ export default function KitFormPage() {
               nextSteps={ENQUIRY_STEPS}
             />
           </Specimen>
-          <Specimen title="audit" note="The audit wording, and the intent field it posts.">
+          <Specimen title="audit" note="The audit wording.">
             <EnquiryForm
               variant="audit"
               action={action()}
-              context={{ ...context('kit-variants'), intent: 'free-audit' }}
+              context={context('kit-variants')}
               scheduleHref={ROUTES.contact}
             />
           </Specimen>

@@ -4,28 +4,23 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { noteCtaPress, track } from '@/lib/analytics';
-import {
-  INTENT_EVENT,
-  INTENT_PARAM,
-  type IntentEventDetail,
-  saveEntry,
-} from '@/lib/enquiry-intents';
+import { PRESS_EVENT, type PressEventDetail, saveEntry } from '@/lib/enquiry-entry';
 import { enterPage } from '@/lib/form-store';
 import { ANCHORS, anchorHref, ROUTES } from '@/lib/routes';
 
 /*
  * What a press on an ask does (docs/specs/EnquiryForms.md § 2), mounted once in the root layout.
  *
- *   An ask on a page with its own sales form   scrolls to that form, selects the button's intent
- *                                               and puts focus on the form's dropdown. No pop-up.
- *   An ask on a page without one                goes to /contact as its link says, carrying the
- *                                               intent in `?intent=`; the page it came from is
- *                                               kept for the /contact form in session storage.
+ *   An ask on a page with its own sales form   scrolls to that form and puts focus on it, without
+ *                                               opening a phone keyboard. No pop-up.
+ *   An ask on a page without one                goes to /contact as its link says; the page it
+ *                                               came from and the button are kept for the /contact
+ *                                               form in session storage.
  *   The nav's and the footer's Contact item     always goes to /contact: it names a page.
  *
- * Every ask stays a real link (`?intent=…#enquiry`, `/contact?intent=…`), so a new tab, a modified
- * click, a crawler or a page whose script never loaded still reaches a form with the intent chosen.
- * Every press is counted (`cta_click`).
+ * Every ask stays a real link (`#enquiry`, `/contact`), so a new tab, a modified click, a crawler or
+ * a page whose script never loaded still reaches a form. Every press is counted (`cta_click`), and the
+ * button is what attributes the enquiry: there is no intent (decisions/2026-11-27-enquiries-carry-no-intent).
  */
 
 /** Where a link leads, if to an enquiry form: this page's own (`#enquiry`) or /contact. */
@@ -101,17 +96,11 @@ function goToForm(form: HTMLFormElement) {
   } catch {
     /* History unavailable: the reader is at the form all the same. */
   }
-  /* After the form has taken the intent, so the dropdown is announced with the one asked for. */
+  /* The form itself takes focus, so the next Tab lands in its first field and a phone keyboard stays
+     shut until the reader picks one. */
   window.requestAnimationFrame(() => {
-    const picker = form.querySelector<HTMLSelectElement>('select');
-    if (picker) {
-      picker.focus({ preventScroll: true });
-    } else {
-      /* No choice to make: the form itself takes focus, so the next Tab lands in its first field
-         and a phone keyboard stays shut until the reader picks one. */
-      if (!form.hasAttribute('tabindex')) form.setAttribute('tabindex', '-1');
-      form.focus({ preventScroll: true });
-    }
+    if (!form.hasAttribute('tabindex')) form.setAttribute('tabindex', '-1');
+    form.focus({ preventScroll: true });
   });
 }
 
@@ -133,8 +122,7 @@ export function EnquiryLinks() {
 
       const page = window.location.pathname;
       const { placement, band } = placementOf(anchor);
-      const intent = destination.url.searchParams.get(INTENT_PARAM) ?? undefined;
-      const ctaId = `${page}_${placement}${intent ? `_${intent}` : ''}`;
+      const ctaId = `${page}_${placement}`;
       const menu = placement === 'nav-menu' || placement === 'footer-menu';
       const form = menu ? null : pageSalesForm();
       track('cta_click', {
@@ -143,7 +131,6 @@ export function EnquiryLinks() {
         page,
         destination: form ? 'inline' : destination.kind,
         ...(band ? { band } : {}),
-        ...(intent ? { intent } : {}),
       });
 
       /* A press meant for another tab or window is the browser's to handle. */
@@ -161,8 +148,8 @@ export function EnquiryLinks() {
         event.preventDefault();
         event.stopPropagation();
         noteCtaPress();
-        const detail: IntentEventDetail = { intent, ctaId };
-        window.dispatchEvent(new CustomEvent(INTENT_EVENT, { detail }));
+        const detail: PressEventDetail = { ctaId };
+        window.dispatchEvent(new CustomEvent(PRESS_EVENT, { detail }));
         goToForm(form);
         return;
       }
