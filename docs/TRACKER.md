@@ -113,7 +113,7 @@ PR per step, in this order.
       of a link field and stripped from a pasted link; the right keyboard and autofill per field; phone
       with a country code, digits only, validated; a suggestion for a mistyped email domain; spaces
       trimmed; a file field states its types and size before upload. Errors still show on submit only.
-      Built (decisions/2026-11-27-smarter-form-fields). The file rule is ready for F.7's CV field; the
+      Built (decisions/2026-11-27-smarter-form-fields; #352). The file rule is ready for F.7's CV field; the
       phone field shows today only on the contact form variant, which no live page uses yet (F.8).
 
 ### P1 · Design first (mocks, owner review, then build)
